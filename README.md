@@ -1,0 +1,2 @@
+# Compara
+The Compara project
