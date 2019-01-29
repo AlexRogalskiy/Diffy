@@ -78,7 +78,7 @@
         <integration-tests.skip>true</integration-tests.skip>
 
         <jsonpath.version>2.2.0</jsonpath.version>
-        <jackson.version>2.9.6</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
 
         <log4j.version>1.2.17</log4j.version>
         <junit.version>4.12</junit.version>
