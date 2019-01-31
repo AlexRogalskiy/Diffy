@@ -23,32 +23,20 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
 
 import java.util.Objects;
 
 /**
  * Custom string utilities implementation
  */
+@UtilityClass
 public final class StringUtils {
 
     /**
      * Default regular expression (only alpha-numeric characters)
      */
     public static final String DEFAULT_ALPHANUMERIC_PATTERN = "[^a-zA-Z0-9]";
-
-    /**
-     * Default logger instance
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
-
-    /**
-     * Default private constructor
-     */
-    private StringUtils() {
-        // PRIVATE EMPTY CONSTRUCTOR
-    }
 
     /**
      * Returns string with replaced values by pattern

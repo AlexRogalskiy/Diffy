@@ -23,9 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -36,19 +35,8 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sa
 /**
  * Custom reflection utilities implementation
  */
-public final class ReflectionUtils {
-
-    /**
-     * Default logger instance
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionUtils.class);
-
-    /**
-     * Default private constructor
-     */
-    private ReflectionUtils() {
-        // PRIVATE EMPTY CONSTRUCTOR
-    }
+@UtilityClass
+public class ReflectionUtils {
 
     /**
      * Returns property value of an object

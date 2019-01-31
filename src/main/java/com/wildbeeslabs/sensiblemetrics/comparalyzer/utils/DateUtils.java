@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,19 +37,8 @@ import java.util.Date;
 /**
  * Custom date utilities implementation
  */
-public final class DateUtils {
-
-    /**
-     * Default logger instance
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DateUtils.class);
-
-    /**
-     * Default private constructor
-     */
-    private DateUtils() {
-        // PRIVATE EMPTY CONSTRUCTOR
-    }
+@UtilityClass
+public class DateUtils {
 
     public static LocalDate toLocalDateViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

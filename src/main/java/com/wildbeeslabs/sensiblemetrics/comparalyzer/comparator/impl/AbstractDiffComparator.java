@@ -29,9 +29,8 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -43,15 +42,11 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sa
 /**
  * Abstract difference comparator implementation
  */
+@Slf4j
 @Data
 @EqualsAndHashCode
 @ToString
 public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
-
-    /**
-     * Default logger instance
-     */
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     /**
      * Default comparator instance {@link Comparator}
@@ -151,7 +146,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void setComparator(final String property, final Comparator<?> comparator) {
         Objects.requireNonNull(property);
-        getLogger().debug(String.format("AbstractDiffComparator: storing property with name={%s}, comparator={%s}", property, comparator));
+        log.debug(String.format("AbstractDiffComparator: storing property with name={%s}, comparator={%s}", property, comparator));
         this.getPropertyComparatorMap().put(sanitize(property), comparator);
     }
 
@@ -173,7 +168,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param property - initial property name {@link String}
      */
     public void removeComparator(final String property) {
-        getLogger().debug(String.format("AbstractDiffComparator: removing comparator for property={%s}", property));
+        log.debug(String.format("AbstractDiffComparator: removing comparator for property={%s}", property));
         this.getPropertyComparatorMap().remove(sanitize(property));
     }
 
@@ -261,14 +256,5 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     protected Set<String> getFieldsSet(final Class<? extends T> clazz) {
         return Sets.newHashSet(this.getFieldsList(clazz));
-    }
-
-    /**
-     * Returns Logger instance {@link Logger}
-     *
-     * @return Logger instance
-     */
-    protected Logger getLogger() {
-        return LOGGER;
     }
 }

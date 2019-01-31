@@ -28,7 +28,7 @@ import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffComparatorTest;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DefaultDiffEntry;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.factory.DefaultDiffComparatorFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.LocalDateTime;

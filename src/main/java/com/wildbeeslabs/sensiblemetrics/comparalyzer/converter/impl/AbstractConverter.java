@@ -24,20 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.impl;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.Converter;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 /**
  * Abstract converter implementation from {@link T} to {@link R}
  */
 public abstract class AbstractConverter<T, R> implements Converter<T, R> {
-
-    /**
-     * Default Logger instance
-     */
-    protected final Logger LOGGER = LogManager.getLogger(getClass());
-
-    protected Logger getLogger() {
-        return LOGGER;
-    }
 }

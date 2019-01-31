@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.impl;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +33,7 @@ import java.util.Objects;
 /**
  * Default date converter implementation
  */
+@Slf4j
 public class DateConverter extends AbstractConverter<String, Date> {
 
     /**
@@ -58,7 +61,7 @@ public class DateConverter extends AbstractConverter<String, Date> {
         try {
             new SimpleDateFormat(this.format).parse(value);
         } catch (ParseException e) {
-            getLogger().error(String.format("ERROR: cannot format input string={%s} by format={%s}", value, this.format));
+            log.error(String.format("ERROR: cannot format input string={%s} by format={%s}", value, this.format));
         }
         return null;
     }

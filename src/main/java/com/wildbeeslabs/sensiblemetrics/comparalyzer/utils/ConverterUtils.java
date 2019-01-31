@@ -24,8 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.Converter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -34,19 +34,9 @@ import java.util.Objects;
 /**
  * Custom converter utilities implementation
  */
-public final class ConverterUtils {
-
-    /**
-     * Default logger instance
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConverterUtils.class);
-
-    /**
-     * Default private constructor
-     */
-    private ConverterUtils() {
-        // PRIVATE EMPTY CONSTRUCTOR
-    }
+@Slf4j
+@UtilityClass
+public class ConverterUtils {
 
     /**
      * Returns converted value {@link T} by converter instance {@link Converter}
@@ -77,11 +67,11 @@ public final class ConverterUtils {
             method = toType.getMethod(parserMethod, String.class);
             return method.invoke(toType, value);
         } catch (NoSuchMethodException e) {
-            LOGGER.error(String.format("ERROR: cannot find method={%s} in type={%s},", parserMethod, toType));
+            log.error(String.format("ERROR: cannot find method={%s} in type={%s},", parserMethod, toType));
         } catch (IllegalAccessException e) {
-            LOGGER.error(String.format("ERROR: cannot access method={%s} in type={%s},", parserMethod, toType));
+            log.error(String.format("ERROR: cannot access method={%s} in type={%s},", parserMethod, toType));
         } catch (InvocationTargetException e) {
-            LOGGER.error(String.format("ERROR: cannot convert value=${%s} to type={%s},", value, toType));
+            log.error(String.format("ERROR: cannot convert value=${%s} to type={%s},", value, toType));
         }
         return null;
     }

@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl;
 
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +41,6 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    @Builder.Default
     private static final long serialVersionUID = -8477472621769483552L;
 
     /**

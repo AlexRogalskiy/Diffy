@@ -23,11 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,6 +38,7 @@ import java.util.Objects;
 /**
  * Default difference comparator implementation
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -105,7 +107,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                             resultList.add(createDiffEntry(firstValue, lastValue, property));
                         }
                     } catch (IllegalAccessException e) {
-                        getLogger().error(String.format("ERROR: cannot get value of field={%s}", property));
+                        log.error(String.format("ERROR: cannot get value of field={%s}", property));
                     }
                 });
         return (S) resultList;

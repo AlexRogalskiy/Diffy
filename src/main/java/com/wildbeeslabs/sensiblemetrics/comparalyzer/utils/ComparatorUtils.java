@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.experimental.UtilityClass;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,19 +33,8 @@ import java.util.Objects;
 /**
  * Custom comparator utilities implementation
  */
-public final class ComparatorUtils {
-
-    /**
-     * Default logger instance
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComparatorUtils.class);
-
-    /**
-     * Default private constructor
-     */
-    private ComparatorUtils() {
-        // PRIVATE EMPTY CONSTRUCTOR
-    }
+@UtilityClass
+public class ComparatorUtils {
 
     /**
      * Default comparable comparator implementation {@link T}

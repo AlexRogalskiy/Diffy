@@ -23,10 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.factory;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DeliveryInfoDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
 
 import java.util.Comparator;
 
