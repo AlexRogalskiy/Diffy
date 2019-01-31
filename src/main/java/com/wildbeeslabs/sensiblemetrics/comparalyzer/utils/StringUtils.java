@@ -24,14 +24,16 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
 /**
  * Custom string utilities implementation
  */
+@Slf4j
 @UtilityClass
-public final class StringUtils {
+public class StringUtils {
 
     /**
      * Default regular expression (only alpha-numeric characters)

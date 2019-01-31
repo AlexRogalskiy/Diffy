@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Comparator analyzer application to operate on raw objects
@@ -33,12 +32,8 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  * @since 2019-01-28
  */
+@Slf4j
 public class ComparaLyzer {
-
-    /**
-     * Default logger instance
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComparaLyzer.class);
 
     /**
      * Initial entry point of comparalyzer analyzer application

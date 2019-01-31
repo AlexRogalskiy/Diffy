@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,10 +34,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Custom date utilities implementation
  */
+@Slf4j
 @UtilityClass
 public class DateUtils {
 
@@ -98,8 +101,9 @@ public class DateUtils {
         return calendar.getTime();
     }
 
-    public static Date toDate2() throws ParseException {
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    public static Date toDate(final String dateFormat) throws ParseException {
+        Objects.requireNonNull(dateFormat);
+        final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         return formatter.parse(formatter.format(new Date()));
     }
 

@@ -24,12 +24,11 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import lombok.extern.slf4j.Slf4j;
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.*;
 import net.andreinc.mockneat.types.enums.StringType;
 import net.andreinc.mockneat.unit.objects.Reflect;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -39,12 +38,8 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils.toDa
 /**
  * Abstract delivery info unit test
  */
+@Slf4j
 public abstract class AbstractDeliveryInfoDiffComparatorTest {
-
-    /**
-     * Default logger instance
-     */
-    private final Logger LOGGER = LogManager.getLogger(getClass());
 
     /**
      * Default mockNeat instance
@@ -105,10 +100,6 @@ public abstract class AbstractDeliveryInfoDiffComparatorTest {
         deliveryInfoComparable.setCreatedAt(toDate(mockUnitLocalDate.val()));
         deliveryInfoComparable.setUpdatedAt(toDate(mockUnitLocalDate.val()));
         return deliveryInfoComparable;
-    }
-
-    protected Logger getLogger() {
-        return LOGGER;
     }
 
     protected MockNeat getMockNeat() {

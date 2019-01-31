@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ import java.util.Objects;
 /**
  * Custom comparator utilities implementation
  */
+@Slf4j
 @UtilityClass
 public class ComparatorUtils {
 

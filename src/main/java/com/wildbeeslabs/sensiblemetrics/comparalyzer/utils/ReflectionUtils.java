@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.*;
@@ -35,6 +36,7 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sa
 /**
  * Custom reflection utilities implementation
  */
+@Slf4j
 @UtilityClass
 public class ReflectionUtils {
 

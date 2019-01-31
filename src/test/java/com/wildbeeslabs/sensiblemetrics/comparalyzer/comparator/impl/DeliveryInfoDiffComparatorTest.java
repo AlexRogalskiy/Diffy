@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffComparatorTest;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.factory.DefaultDiffComparatorFactory;
