@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

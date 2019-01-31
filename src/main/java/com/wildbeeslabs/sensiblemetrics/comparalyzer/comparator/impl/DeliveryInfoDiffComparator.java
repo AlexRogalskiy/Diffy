@@ -21,23 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import java.io.Serializable;
+import java.util.Comparator;
 
 /**
- * Difference comparator declaration
+ * Delivery info difference comparator implementation
  */
-public interface DiffComparator<T> extends Serializable {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class DeliveryInfoDiffComparator extends DefaultDiffComparator<DeliveryInfo> {
 
     /**
-     * Returns collection of difference entries {@link S} with properties marked for comparison by initial arguments {@link T}
-     *
-     * @param first - initial first argument to be compared {@link T}
-     * @param last  - initial last argument to be compared with {@link T}
-     * @return collection of entries {@link S} with compared properties
+     * Default explicit serialVersionUID for interoperability
      */
-    <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last);
+    private static final long serialVersionUID = 436117742331557518L;
+
+    /**
+     * Creates delivery information difference comparator
+     */
+    public DeliveryInfoDiffComparator() {
+        super(DeliveryInfo.class);
+    }
+
+    /**
+     * Creates delivery information difference comparator with comparator instance {@link Comparator}
+     *
+     * @param comparator - initial comparator instance {@link Comparator}
+     */
+    public DeliveryInfoDiffComparator(final Comparator<? super DeliveryInfo> comparator) {
+        super(DeliveryInfo.class, comparator);
+    }
 }

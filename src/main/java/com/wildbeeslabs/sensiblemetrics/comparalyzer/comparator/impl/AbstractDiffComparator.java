@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
 import com.google.common.collect.Sets;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -65,14 +65,10 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * Default property map {@link Map} by names {@link String} and values {@link Comparator}
      */
     private final Map<String, Comparator<?>> propertyComparatorMap = new HashMap<>();
-//    /**
-//     * Default collection of properties {@link Map} to compare by with related property types {@link Class}
-//     */
-//    private final Map<String, Class<?>> propertyTypeMap = new HashMap<>();
     /**
      * Default collection of properties {@link Map} to compare by with related property types {@link Class}
      */
-    private final Map<String, Field> propertyFieldMap = new HashMap<>();
+    private final Map<String, Field> propertyMap = new HashMap<>();
     /**
      * Default collection of properties {@link Set} to compare by
      */
@@ -98,9 +94,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
         this.comparator = Objects.nonNull(comparator)
                 ? comparator
                 : ComparableComparator.getInstance();
-        //this.propertyTypeMap.putAll(this.getFieldsClassMap(this.clazz));
         this.propertySet.addAll(this.getFieldsList(this.clazz));
-        this.propertyFieldMap.putAll(this.getFieldsMap(this.clazz));
+        this.propertyMap.putAll(this.getFieldsMap(this.clazz));
     }
 
     /**

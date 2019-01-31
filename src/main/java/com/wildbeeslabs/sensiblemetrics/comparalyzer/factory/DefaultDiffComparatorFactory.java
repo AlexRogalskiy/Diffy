@@ -25,8 +25,8 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.factory;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.impl.DefaultDiffComparator;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.impl.DeliveryInfoDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DefaultDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DeliveryInfoDiffComparator;
 
 import java.util.Comparator;
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
@@ -95,12 +95,12 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {
         final List<DiffEntry<?>> resultList = new ArrayList<>();
         getPropertySet().stream()
-                //.filter(property -> getPropertyFieldMap().containsKey(property))
+                //.filter(property -> getPropertyMap().containsKey(property))
                 .forEach(property -> {
                     try {
-                        getPropertyFieldMap().get(property).setAccessible(true);
-                        final Object firstValue = getPropertyFieldMap().get(property).get(first);
-                        final Object lastValue = getPropertyFieldMap().get(property).get(last);
+                        getPropertyMap().get(property).setAccessible(true);
+                        final Object firstValue = getPropertyMap().get(property).get(first);
+                        final Object lastValue = getPropertyMap().get(property).get(last);
                         if (0 != Objects.compare(firstValue, lastValue, getPropertyComparator(property))) {
                             resultList.add(createDiffEntry(firstValue, lastValue, property));
                         }
