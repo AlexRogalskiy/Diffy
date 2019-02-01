@@ -43,6 +43,7 @@ public class DeliveryInfo implements Serializable {
     private Long id;
     private Integer type;
     private String description;
+    private String gid;
     private Date createdAt;
     private Date updatedAt;
 }

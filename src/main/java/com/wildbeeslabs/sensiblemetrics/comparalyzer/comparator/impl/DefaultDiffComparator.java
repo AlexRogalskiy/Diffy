@@ -97,7 +97,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {
         final List<DiffEntry<?>> resultList = new ArrayList<>();
         getPropertySet().stream()
-                //.filter(property -> getPropertyMap().containsKey(property))
+                .filter(property -> getPropertyMap().containsKey(property))
                 .forEach(property -> {
                     try {
                         getPropertyMap().get(property).setAccessible(true);
