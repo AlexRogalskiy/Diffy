@@ -41,6 +41,11 @@ import java.util.Objects;
 public class InstanceMatcher extends AbstractMatcher<Object> {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 296097385512552875L;
+
+    /**
      * Default matchable class instance {@link Class}
      */
     private final Class<?> matchableClazz;
@@ -69,13 +74,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
 
     @Override
     public boolean matches(final Object value) {
-        if (Objects.isNull(value)) {
-            return false;
-        }
-        if (!getMatchableClazz().isInstance(value)) {
-            return false;
-        }
-        return true;
+        return (!Objects.isNull(value) && getMatchableClazz().isInstance(value));
     }
 
     @SuppressWarnings("unchecked")

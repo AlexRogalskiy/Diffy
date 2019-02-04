@@ -96,10 +96,15 @@ public class DateUtils {
         return calendar.getTime();
     }
 
-    public static Date toDate(final String dateFormat) throws ParseException {
+    public static Date toDate(final String date, final String dateFormat) {
         Objects.requireNonNull(dateFormat);
-        final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-        return formatter.parse(formatter.format(new Date()));
+        try {
+            final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+            return formatter.parse(date);
+        } catch (ParseException e) {
+            log.error(String.format("ERROR: cannot parse date by format={%s}", dateFormat));
+        }
+        return null;
     }
 
     public static LocalDate now() {

@@ -44,9 +44,15 @@ import java.util.Objects;
 public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> implements TypeSafeMatcher<T> {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -4312818637038122609L;
+
+    /**
      * Default method type instance
      */
     private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("matchesSafe", 1, 0);
+
     /**
      * Default class instance of value {@link T}
      */

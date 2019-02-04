@@ -23,13 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 
+import java.io.Serializable;
+
 /**
  * Matcher interface declaration for instance {@link T}
  *
  * @param <T>
  */
 @FunctionalInterface
-public interface Matcher<T> {
+public interface Matcher<T> extends Serializable {
 
     /**
      * Returns binary flag depending on initial argument value by comparison {@link T}

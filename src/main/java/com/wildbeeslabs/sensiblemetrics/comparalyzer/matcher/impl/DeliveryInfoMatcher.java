@@ -44,6 +44,11 @@ import java.util.function.Function;
 public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 5301800742465906044L;
+
+    /**
      * Determines delivery info "Type" field matcher {@link Matcher}
      */
     public static Function<Integer, Matcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
@@ -118,7 +123,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
      * Default private delivery info constructor
      */
     private DeliveryInfoMatcher() {
-        addMatcher(InstanceMatcher.getMatcher(DeliveryInfo.class));
+        withMatcher(InstanceMatcher.getMatcher(DeliveryInfo.class));
     }
 
     public DeliveryInfoMatcher withType(final Integer type) {
@@ -156,7 +161,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
      *
      * @return delivery info matcher instance {@link DeliveryInfoMatcher}
      */
-    public static DeliveryInfoMatcher getMatcher() {
+    public static DeliveryInfoMatcher getInstance() {
         return new DeliveryInfoMatcher();
     }
 }

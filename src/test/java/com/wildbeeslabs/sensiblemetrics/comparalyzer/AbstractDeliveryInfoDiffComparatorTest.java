@@ -85,9 +85,9 @@ public abstract class AbstractDeliveryInfoDiffComparatorTest {
     protected final MockUnitString numbersMockUnitString = strings().types(NUMBERS);
 
     /**
-     * Default delivery info comparator {@link Comparator}
+     * Default delivery info comparator instance {@link Comparator}
      */
-    protected static final Comparator<? super DeliveryInfo> deliveryInfoComparator = Comparator
+    protected static final Comparator<? super DeliveryInfo> DEFAULT_COMPARATOR = Comparator
             .comparing(DeliveryInfo::getId)
             .thenComparing(DeliveryInfo::getType)
             .thenComparing(DeliveryInfo::getDescription)

@@ -41,6 +41,11 @@ import java.util.*;
 public abstract class AbstractMatcher<T> implements Matcher<T> {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 4127438327874076332L;
+
+    /**
      * Default collection of matchers for value {@link T}
      */
     private final List<Matcher<? super T>> matchers = new ArrayList<>();
@@ -54,7 +59,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     public AbstractMatcher(final Iterable<Matcher<? super T>> matchers) {
-        setMatchers(matchers);
+        withMatchers(matchers);
     }
 
     /**
@@ -78,10 +83,11 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      *
      * @param matchers - collection of matchers {@link Matcher} to be removed from matchers collection
      */
-    public void removeMatchers(final Iterable<Matcher<? super T>> matchers) {
+    public AbstractMatcher<T> withoutMatchers(final Iterable<Matcher<? super T>> matchers) {
         Optional.ofNullable(matchers)
                 .orElse(Collections.emptyList())
-                .forEach(property -> removeMatcher(property));
+                .forEach(property -> withoutMatcher(property));
+        return this;
     }
 
     /**
@@ -89,10 +95,11 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      *
      * @param matcher - matcher to be added to matchers collection
      */
-    public void removeMatcher(final Matcher<? super T> matcher) {
+    public AbstractMatcher<T> withoutMatcher(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
             getMatchers().remove(matcher);
         }
+        return this;
     }
 
     /**
@@ -100,11 +107,12 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      *
      * @param matchers - collection of matchers {@link Matcher} to be added to matchers collection
      */
-    public void setMatchers(final Iterable<Matcher<? super T>> matchers) {
+    public AbstractMatcher<T> withMatchers(final Iterable<Matcher<? super T>> matchers) {
         getMatchers().clear();
         Optional.ofNullable(matchers)
                 .orElse(Collections.emptyList())
-                .forEach(property -> addMatcher(property));
+                .forEach(property -> withMatcher(property));
+        return this;
     }
 
     /**
@@ -112,9 +120,10 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      *
      * @param matcher - matcher to be added to matchers collection
      */
-    public void addMatcher(final Matcher<? super T> matcher) {
+    public AbstractMatcher<T> withMatcher(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
             getMatchers().add(matcher);
         }
+        return this;
     }
 }

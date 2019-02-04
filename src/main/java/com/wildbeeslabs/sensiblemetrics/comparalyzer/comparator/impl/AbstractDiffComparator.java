@@ -49,6 +49,11 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sa
 public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 412171656598855542L;
+
+    /**
      * Default comparator instance {@link Comparator}
      */
     private final Comparator<? super T> comparator;
@@ -120,7 +125,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      *
      * @param propertyList - collection of properties to be added to compare collection
      */
-    public void includeProperties(final List<String> propertyList) {
+    public void includeProperties(final Iterable<String> propertyList) {
         getPropertySet().clear();
         Optional.ofNullable(propertyList)
                 .orElse(Collections.emptyList())
@@ -177,7 +182,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      *
      * @param propertyList - initial list of properties to be removed (@link List)
      */
-    protected void removeComparators(final List<String> propertyList) {
+    protected void removeComparators(final Iterable<String> propertyList) {
         Optional.ofNullable(propertyList)
                 .orElse(Collections.emptyList())
                 .forEach(property -> removeComparator(property));

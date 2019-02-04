@@ -44,6 +44,11 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher<T> implements TypeSafeMatcher<T> {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 1150403660115920086L;
+
+    /**
      * Default method type instance
      */
     private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("valueOf", 1, 0);

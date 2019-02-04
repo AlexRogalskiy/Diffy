@@ -30,7 +30,6 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.factory.DefaultDiffComparatorFactory;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.DeliveryInfoMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -105,7 +104,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
     public void testCompareDifferentEntitiesWithExcludedProperties() {
         final List<String> excludedProperties = Arrays.asList("id", "createdAt", "updatedAt");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
+        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_COMPARATOR);
         diffComparator.excludeProperties(excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
@@ -145,7 +144,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
     public void testCompareDifferentEntitiesWithIncludedProperties() {
         final List<String> includedProperties = Arrays.asList("id", "type", "description");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
+        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_COMPARATOR);
         diffComparator.includeProperties(includedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
@@ -184,7 +183,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
     public void testDiffComparatorEntryWithExcludedProperties() {
         final List<String> excludedProperties = Arrays.asList("id", "type");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
+        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_COMPARATOR);
         diffComparator.excludeProperties(excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
@@ -216,7 +215,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
     public void testDiffComparatorEntryWithIncludedProperties() {
         final List<String> includedProperties = Arrays.asList("id", "createdAt");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
+        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_COMPARATOR);
         diffComparator.includeProperties(includedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
@@ -580,16 +579,5 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
                 .build();
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
-    }
-
-    @Test
-    public void testCompareDifferentEntitiesByMatcher() {
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getMatcher()
-                .withType(mockUnitInt.val())
-                .withGid(alphaNumbericMockUnitString.val())
-                .withCreatedDate(mockUnitLocalDate.toUtilDate().val())
-                .withUpdatedDate(mockUnitLocalDate.toUtilDate().val());
-        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfoFirst()));
-        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfoLast()));
     }
 }
