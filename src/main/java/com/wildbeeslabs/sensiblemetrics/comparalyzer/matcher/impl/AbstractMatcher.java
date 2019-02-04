@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 /**
- * Abstract matcher implementation for instance {@link T}
+ * Abstract matcher implementation by input object instance
  */
 @Slf4j
 @Data
@@ -46,11 +46,11 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     private static final long serialVersionUID = 4127438327874076332L;
 
     /**
-     * Default collection of matchers for value {@link T}
+     * Default collection of matchers for input value
      */
     private final List<Matcher<? super T>> matchers = new ArrayList<>();
     /**
-     * Default collection of failed matchers for value {@link T}
+     * Default collection of failed matchers for input value
      */
     private final List<Matcher<? super T>> failedMatchers = new ArrayList<>();
 
@@ -63,9 +63,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Returns binary flag depending on initial argument value by comparison {@link T}
+     * Returns binary flag depending on initial argument value by comparison
      *
-     * @param value - initial input value {@link T}
+     * @param value - initial input value
      * @return true - if input value matches, false - otherwise
      */
     @Override

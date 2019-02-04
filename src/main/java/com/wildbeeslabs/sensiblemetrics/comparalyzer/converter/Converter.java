@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter;
 
 /**
- * Custom converter interface declaration (from {@link T} to {@link R})
+ * Custom converter interface declaration
  *
  * @param <T>
  * @param <R>
@@ -33,10 +33,10 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter;
 public interface Converter<T, R> {
 
     /**
-     * Returns converted value {@link R} of input argument {@link String}
+     * Returns converted value of input argument {@link String}
      *
-     * @param value - initial argument value {@link T}
-     * @return converted input value {@ link R}
+     * @param value - initial argument value
+     * @return converted input value
      */
     R convert(final T value);
 }

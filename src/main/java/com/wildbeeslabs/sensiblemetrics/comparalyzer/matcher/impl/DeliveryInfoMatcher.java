@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Custom matcher implementation for delivery information instance {@link DeliveryInfo}
+ * Custom delivery info matcher implementation {@link DeliveryInfo}
  */
 @Slf4j
 @Data
@@ -109,6 +109,16 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     };
 
     /**
+     * Determines delivery info "Gid" field matcher {@link Matcher}
+     */
+    public static Function<Matcher<? super String>, Matcher<? super DeliveryInfo>> FIELD_GID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, String>(matcher) {
+        @Override
+        protected String valueOf(final DeliveryInfo value) {
+            return value.getGid();
+        }
+    };
+
+    /**
      * Returns binary flag depending on initial argument value by comparison {@link DeliveryInfo}
      *
      * @param value - initial input value {@link DeliveryInfo}
@@ -146,13 +156,18 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
         return this;
     }
 
-    public DeliveryInfoMatcher withUpdatedDate(final Matcher<? super Date> matcher) {
+    public DeliveryInfoMatcher withUpdatedDateMatcher(final Matcher<? super Date> matcher) {
         getMatchers().add(FIELD_UPDATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
-    public DeliveryInfoMatcher withType(final Matcher<? super Integer> matcher) {
+    public DeliveryInfoMatcher withTypeMatcher(final Matcher<? super Integer> matcher) {
         getMatchers().add(FIELD_TYPE_MATCHER.apply(matcher));
+        return this;
+    }
+
+    public DeliveryInfoMatcher withGidMatcher(final Matcher<? super String> matcher) {
+        getMatchers().add(FIELD_GID_MATCHER.apply(matcher));
         return this;
     }
 

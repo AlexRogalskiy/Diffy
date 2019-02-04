@@ -35,7 +35,12 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -102,5 +107,37 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffComparatorT
 
         this.deliveryInfo.setType(10);
         assertFalse(deliveryInfoMatcher.matches(this.deliveryInfo));
+    }
+
+    @Test
+    public void testDeliveryInfoListByCustomGidAndTypeMatcher() {
+        final Matcher<? super String> gidMatcher = new AbstractTypeSafeMatcher<String>() {
+            @Override
+            public boolean matchesSafe(final String value) {
+                return String.valueOf(value).substring(0, 4).equalsIgnoreCase("test");
+            }
+        };
+        final Matcher<? super Integer> typeMatcher = new AbstractTypeSafeMatcher<Integer>() {
+            @Override
+            public boolean matchesSafe(final Integer value) {
+                return 100 < value && value < 1000;
+            }
+        };
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+                .withGidMatcher(gidMatcher)
+                .withTypeMatcher(typeMatcher);
+
+        final List<DeliveryInfo> deliveryInfoList = Arrays.asList(
+                getDeliveryInfoUnit().val(),
+                getDeliveryInfoUnit().val(),
+                getDeliveryInfoUnit().val(),
+                getDeliveryInfoUnit().val()
+        );
+        assertEquals(deliveryInfoList.size(), 4);
+        assertTrue(deliveryInfoList.stream().noneMatch(entity -> deliveryInfoMatcher.matches(entity)));
+
+        this.deliveryInfo.setGid("test" + UUID.randomUUID());
+        this.deliveryInfo.setType(150);
+        assertTrue(deliveryInfoMatcher.matches(this.deliveryInfo));
     }
 }

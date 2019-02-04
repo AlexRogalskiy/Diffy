@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 import java.io.Serializable;
 
 /**
- * Matcher interface declaration for instance {@link T}
+ * Matcher interface declaration by input object instance
  *
  * @param <T>
  */
@@ -34,9 +34,9 @@ import java.io.Serializable;
 public interface Matcher<T> extends Serializable {
 
     /**
-     * Returns binary flag depending on initial argument value by comparison {@link T}
+     * Returns binary flag depending on initial argument value by comparison
      *
-     * @param value - initial input value {@link T}
+     * @param value - initial input value
      * @return true - if input value matches, false - otherwise
      */
     boolean matches(final T value);

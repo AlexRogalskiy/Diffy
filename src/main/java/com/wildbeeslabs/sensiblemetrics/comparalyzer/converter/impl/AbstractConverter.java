@@ -30,7 +30,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Abstract converter implementation from {@link T} to {@link R}
+ * Abstract converter implementation
  */
 @Slf4j
 @Data

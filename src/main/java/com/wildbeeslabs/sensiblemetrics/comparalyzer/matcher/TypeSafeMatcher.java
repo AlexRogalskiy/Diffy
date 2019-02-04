@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 
 /**
- * Type safe matcher interface declaration for instance {@link T}
+ * Type safe matcher interface declaration by input object instance
  *
  * @param <T>
  */
@@ -32,9 +32,9 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 public interface TypeSafeMatcher<T> extends Matcher<T> {
 
     /**
-     * Returns binary flag depending on initial argument value by comparison {@link T}
+     * Returns binary flag depending on initial argument value by comparison
      *
-     * @param value - initial input value {@link T}
+     * @param value - initial input value
      * @return true - if input value matches, false - otherwise
      */
     default boolean matches(final T value) {
@@ -42,9 +42,9 @@ public interface TypeSafeMatcher<T> extends Matcher<T> {
     }
 
     /**
-     * Returns binary flag depending on initial argument value by type safe comparison {@link T}
+     * Returns binary flag depending on initial argument value by type safe comparison
      *
-     * @param value - initial input value {@link T}
+     * @param value - initial input value
      * @return true - if input value matches, false - otherwise
      */
     boolean matchesSafe(final T value);

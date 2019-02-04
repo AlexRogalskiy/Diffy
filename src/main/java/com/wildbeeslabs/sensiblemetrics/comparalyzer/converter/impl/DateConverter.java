@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * Default date converter implementation
+ * Default date converter implementation {@link Date}
  */
 @Slf4j
 @Data
@@ -43,12 +43,12 @@ import java.util.Objects;
 public class DateConverter extends AbstractConverter<String, Date> {
 
     /**
-     * Default date format
+     * Default date format pattern
      */
     private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 
     /**
-     * Default date format
+     * Initial date format pattern
      */
     private final String format;
 

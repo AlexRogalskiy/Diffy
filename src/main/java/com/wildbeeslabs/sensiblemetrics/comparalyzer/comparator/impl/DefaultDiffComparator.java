@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default difference comparator implementation for value {@link T}
+ * Default difference comparator implementation by input object instance
  */
 @Slf4j
 @Data
@@ -69,11 +69,11 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     }
 
     /**
-     * Returns default difference entry {@link DefaultDiffEntry}
+     * Returns new default difference entry {@link DefaultDiffEntry}
      *
-     * @param first        - initial first argument
-     * @param last         - initial last argument
-     * @param propertyName - initial property name
+     * @param first        - initial first argument to be compared
+     * @param last         - initial last argument to be compared with
+     * @param propertyName - initial property name {@link String}
      * @return default difference entry {@link DefaultDiffEntry}
      */
     protected DefaultDiffEntry createDiffEntry(final Object first, final Object last, final String propertyName) {
@@ -86,12 +86,12 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     }
 
     /**
-     * Returns iterable collection of difference entries {@link DefaultDiffEntry}
+     * Returns iterable collection of difference entries {@link DiffEntry}
      *
      * @param <S>
-     * @param first - initial first argument to be compared {@link DefaultDiffEntry}
-     * @param last  - initial last argument to be compared with {@link DefaultDiffEntry}
-     * @return collection of difference entries {@link DefaultDiffEntry}
+     * @param first - initial first argument to be compared
+     * @param last  - initial last argument to be compared with
+     * @return collection of difference entries {@link DiffEntry}
      */
     @Override
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {

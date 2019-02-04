@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 
 /**
- * Custom type instance matcher implementation for instance {@link Object}
+ * Custom instance matcher implementation by object instance {@link Object}
  */
 @Slf4j
 @Data

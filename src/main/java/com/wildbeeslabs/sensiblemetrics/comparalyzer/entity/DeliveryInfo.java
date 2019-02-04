@@ -30,6 +30,9 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Custom delivery info instance
+ */
 @Data
 @EqualsAndHashCode
 @ToString

@@ -29,7 +29,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Default integer converter implementation
+ * Default integer converter implementation {@link Integer}
  */
 @Slf4j
 @Data

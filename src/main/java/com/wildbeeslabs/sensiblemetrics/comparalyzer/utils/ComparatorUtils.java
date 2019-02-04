@@ -39,7 +39,7 @@ import java.util.Objects;
 public class ComparatorUtils {
 
     /**
-     * Default comparable comparator implementation {@link T}
+     * Default comparable comparator implementation
      *
      * @param <T>
      */
@@ -121,11 +121,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of initial arguments {@link T} comparison by {@link Comparator}
+     * Returns numeric result of initial arguments comparison by {@link Comparator}
      *
      * @param <T>
-     * @param first - initial first argument {@link T}
-     * @param last  - initial last argument {@link T}
+     * @param first - initial first argument
+     * @param last  - initial last argument
      * @return numeric value of comparison
      */
     public static <T> int compare(final T first, final T last) {
@@ -133,11 +133,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of initial arguments {@link T} comparison by {@link Comparator}
+     * Returns numeric result by initial comparator instance {@link Comparator}
      *
      * @param <T>
-     * @param first      - initial first argument {@link T}
-     * @param last       - initial last argument {@link T}
+     * @param first      - initial first argument
+     * @param last       - initial last argument
      * @param comparator - initial comparator instance {@link Comparator}
      * @return numeric value of comparison
      */
@@ -146,11 +146,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe integer arguments {@link T} comparison
+     * Returns numeric result by null-safe integer arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link T}
-     * @param last  - initial last argument {@link T}
+     * @param first - initial first argument
+     * @param last  - initial last argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -159,11 +159,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe long arguments {@link T} comparison
+     * Returns numeric result by null-safe long arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link T}
-     * @param last  - initial last argument {@link T}
+     * @param first - initial first argument
+     * @param last  - initial last argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -172,11 +172,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe float arguments {@link T} comparison
+     * Returns numeric result by null-safe float arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link T}
-     * @param last  - initial last argument {@link T}
+     * @param first - initial first argument
+     * @param last  - initial last argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -185,11 +185,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe double arguments {@link T} comparison
+     * Returns numeric result by null-safe double arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link T}
-     * @param last  - initial last argument {@link T}
+     * @param first - initial first argument
+     * @param last  - initial last argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -198,11 +198,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe numeric arguments as bigDecimal {@link T} comparison
+     * Returns numeric result by null-safe BigDecimal-like arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link T}
-     * @param last  - initial last argument {@link T}
+     * @param first - initial first argument
+     * @param last  - initial last argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -211,7 +211,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe bigDecimal arguments {@link BigDecimal} comparison
+     * Returns numeric result by null-safe {@link BigDecimal} arguments comparison
      *
      * @param <T>
      * @param first - initial first argument {@link BigDecimal}
@@ -224,7 +224,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe object arguments as string {@link T} comparison
+     * Returns numeric result by null-safe string-like arguments comparison
      *
      * @param <T>
      * @param first - initial first argument {@link BigDecimal}
@@ -237,7 +237,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe string arguments {@link String} comparison
+     * Returns numeric result by null-safe {@link String} arguments comparison
      *
      * @param first - initial first argument {@link String}
      * @param last  - initial last argument {@link String}
@@ -250,11 +250,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns numeric result of null-safe object arguments {@link T} comparison
+     * Returns numeric result by null-safe general arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link T}
-     * @param last  - initial last argument {@link T}
+     * @param first - initial first argument
+     * @param last  - initial last argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */

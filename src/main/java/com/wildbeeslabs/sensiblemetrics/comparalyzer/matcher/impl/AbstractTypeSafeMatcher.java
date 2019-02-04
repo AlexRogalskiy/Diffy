@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 
 /**
- * Abstract type safe matcher implementation for instance {@link T}
+ * Abstract type safe matcher implementation for input instance
  *
  * @param <T>
  */
@@ -54,7 +54,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("matchesSafe", 1, 0);
 
     /**
-     * Default class instance of value {@link T}
+     * Default class instance of input value
      */
     private final Class<? extends T> clazz;
 
@@ -84,9 +84,9 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     }
 
     /**
-     * Returns binary flag depending on initial argument value by type safe comparison {@link T}
+     * Returns binary flag depending on initial argument value by type safe comparison
      *
-     * @param value - initial input value {@link T}
+     * @param value - initial input value
      * @return true - if input value matches, false - otherwise
      */
     public final boolean matches(final T value) {

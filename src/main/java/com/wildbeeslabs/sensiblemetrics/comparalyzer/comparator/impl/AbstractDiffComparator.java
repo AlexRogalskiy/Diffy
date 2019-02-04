@@ -40,7 +40,7 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtil
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
 /**
- * Abstract difference comparator implementation for value {@link T}
+ * Abstract difference comparator implementation by input object instance
  */
 @Slf4j
 @Data
@@ -101,10 +101,10 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     /**
      * Excludes properties from compare collection
      *
-     * @param propertyList - collection of properties to be updated in exclude compare collection
+     * @param properties - collection of properties to be updated in exclude compare collection
      */
-    public void excludeProperties(final List<String> propertyList) {
-        Optional.ofNullable(propertyList)
+    public void excludeProperties(final List<String> properties) {
+        Optional.ofNullable(properties)
                 .orElse(Collections.emptyList())
                 .forEach(property -> excludeProperty(property));
     }
@@ -121,19 +121,18 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Adds properties to compare collection
+     * Adds iterable collection of property names {@link Iterable} to compare collection
      *
-     * @param propertyList - collection of properties to be added to compare collection
+     * @param properties - collection of properties to be added to compare collection
      */
-    public void includeProperties(final Iterable<String> propertyList) {
-        getPropertySet().clear();
-        Optional.ofNullable(propertyList)
+    public void includeProperties(final Iterable<String> properties) {
+        Optional.ofNullable(properties)
                 .orElse(Collections.emptyList())
                 .forEach(property -> includeProperty(property));
     }
 
     /**
-     * Adds property to compare collection
+     * Adds property name {@link String} to compare collection
      *
      * @param property - property to be added to compare collection
      */
@@ -144,19 +143,31 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Updates property with related comparator instance {@link Comparator}
+     * Sets iterable collection of property names {@link Iterable} to compare collection
+     *
+     * @param properties - collection of properties to be added to compare collection
+     */
+    public void setProperties(final Iterable<String> properties) {
+        getPropertySet().clear();
+        Optional.ofNullable(properties)
+                .orElse(Collections.emptyList())
+                .forEach(property -> includeProperty(property));
+    }
+
+    /**
+     * Updates property name {@link String} by related comparator instance {@link Comparator}
      *
      * @param property   - initial property name {@link String}
      * @param comparator -  initial comparator instance {@link Comparator}
      */
     public void setComparator(final String property, final Comparator<?> comparator) {
         Objects.requireNonNull(property);
-        log.debug(String.format("AbstractDiffComparator: storing property with name={%s}, comparator={%s}", property, comparator));
+        log.debug(String.format("{%s}: storing property by name={%s}, comparator={%s}", getClass().getName(), property, comparator));
         this.getPropertyComparatorMap().put(sanitize(property), comparator);
     }
 
     /**
-     * Updates properties {@link Map} with related comparator instances {@link Comparator}
+     * Updates properties {@link Map} by related comparator instances {@link Comparator}
      *
      * @param propertyMap - initial property map {@link Map} with names {@link String} and comparators {@link Comparator}
      */
@@ -168,31 +179,31 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Removes property comparator from compare collection
+     * Removes comparator from compare collection by property name {@link String}
      *
      * @param property - initial property name {@link String}
      */
     public void removeComparator(final String property) {
-        log.debug(String.format("AbstractDiffComparator: removing comparator for property={%s}", property));
+        log.debug(String.format("{%s}: removing comparator for property={%s}", getClass().getName(), property));
         this.getPropertyComparatorMap().remove(sanitize(property));
     }
 
     /**
-     * Removes property comparators {@link List} from compare collection
+     * Removes comparators from compare collection by iterable collection of property names {@link List}
      *
-     * @param propertyList - initial list of properties to be removed (@link List)
+     * @param properties - initial collection of property names to be removed (@link List)
      */
-    protected void removeComparators(final Iterable<String> propertyList) {
-        Optional.ofNullable(propertyList)
+    protected void removeComparators(final Iterable<String> properties) {
+        Optional.ofNullable(properties)
                 .orElse(Collections.emptyList())
                 .forEach(property -> removeComparator(property));
     }
 
     /**
-     * Returns numeric result of initial entities comparison by property value
+     * Returns numeric result of initial arguments comparison by property name {@link String}
      *
-     * @param first      - initial first argument to be compared {@link T}
-     * @param last       - initial last argument to be compared to {@link T}
+     * @param first      - initial first argument to be compared
+     * @param last       - initial last argument to be compared with
      * @param property   - initial property name {@link String}
      * @param comparator - initial argument comparator instance {@link Comparator}
      * @return numeric result of initial arguments comparison
@@ -207,7 +218,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Returns property comparator instance {@link Comparator}
+     * Returns comparator instance {@link Comparator} by property name {@link String}
      *
      * @param property - initial property name {@link String}
      * @return property comparator {@link Comparator}}
@@ -217,7 +228,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Returns list of field names {@link List} by class instance {@link Class}
+     * Returns collection of property names {@link List} by class instance {@link Class}
      *
      * @param clazz - initial class to reflect {@link Class}
      * @return list of field names {@link List}
@@ -230,7 +241,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Returns map of fields {@link Map} with names {@link String} and types {@link Class} by class instance {@link Class}
+     * Returns collection of properties {@link Map} by names {@link String} and related types {@link Class} of input class instance {@link Class}
      *
      * @param clazz - initial class to reflect {@link Class}
      * @return map of fields {@link Map} by names {@link String} and types {@link Class}
@@ -242,7 +253,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Returns map of fields {@link Map} with names {@link String} and types {@link Class} by class instance {@link Class}
+     * Returns collection of properties {@link Map} by names {@link String} and related fields {@link Field} of class instance {@link Class}
      *
      * @param clazz - initial class to reflect {@link Class}
      * @return map of fields {@link Map} by names {@link String} and types {@link Class}
@@ -254,7 +265,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Returns set of field names {@link Set} by class instance {@link Class}
+     * Returns collection of unique property names {@link Set} by class instance {@link Class}
      *
      * @param clazz - initial argument class {@link Class}
      * @return set of field names {@link Set}

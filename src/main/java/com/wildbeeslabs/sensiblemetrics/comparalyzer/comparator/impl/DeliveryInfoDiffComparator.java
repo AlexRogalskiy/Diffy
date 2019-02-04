@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Comparator;
 
 /**
- * Custom difference comparator implementation for delivery information value {@link DeliveryInfo}
+ * Custom difference comparator implementation by delivery info instance {@link DeliveryInfo}
  */
 @Slf4j
 @Data

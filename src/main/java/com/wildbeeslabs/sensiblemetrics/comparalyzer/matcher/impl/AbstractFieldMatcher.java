@@ -32,7 +32,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Abstract field matcher implementation for instance {@link T} and field value of {@link E}
+ * Abstract field matcher implementation by input object instance and field value
  *
  * @param <T>
  * @param <E>
@@ -66,9 +66,9 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
     }
 
     /**
-     * Returns binary flag depending on initial argument value by field type safe comparison {@link T}
+     * Returns binary flag depending on initial argument value by field type safe comparison
      *
-     * @param value - initial input value {@link T}
+     * @param value - initial input argument
      * @return true - if field value matches, false - otherwise
      */
     public boolean matchesSafe(final T value) {
@@ -76,10 +76,10 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
     }
 
     /**
-     * Returns field value {@link E} by input argument instance {@link T}
+     * Returns field value by input argument instance
      *
-     * @param value - initial input instance {@link T}
-     * @return field value {@link E}
+     * @param value - initial input argument
+     * @return field value
      */
     protected abstract E valueOf(final T value);
 }
