@@ -73,7 +73,7 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
     /**
      * Returns field value {@link E} by input argument instance {@link T}
      *
-     * @param value - initial input insatnce {@link T}
+     * @param value - initial input instance {@link T}
      * @return field value {@link E}
      */
     protected abstract E valueOf(final T value);

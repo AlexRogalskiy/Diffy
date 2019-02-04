@@ -84,6 +84,16 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     };
 
     /**
+     * Determines delivery info "Updated date" matcher {@link Matcher}
+     */
+    public static Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_UPDATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
+        @Override
+        protected Date valueOf(final DeliveryInfo value) {
+            return value.getUpdatedAt();
+        }
+    };
+
+    /**
      * Determines delivery info "Type" field matcher {@link Matcher}
      */
     public static Function<Matcher<? super Integer>, Matcher<? super DeliveryInfo>> FIELD_TYPE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Integer>(matcher) {
@@ -93,11 +103,20 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
         }
     };
 
+    /**
+     * Returns binary flag depending on initial argument value by comparison {@link DeliveryInfo}
+     *
+     * @param value - initial input value {@link DeliveryInfo}
+     * @return true - if input value matches, false - otherwise
+     */
     @Override
     public boolean matches(final DeliveryInfo value) {
         return getMatchers().stream().allMatch(matcher -> matcher.matches(value));
     }
 
+    /**
+     * Default private delivery info constructor
+     */
     private DeliveryInfoMatcher() {
         addMatcher(InstanceMatcher.getMatcher(DeliveryInfo.class));
     }
@@ -117,8 +136,13 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
         return this;
     }
 
-    public DeliveryInfoMatcher withUpdatedDate(final Date updatedDate) {
-        getMatchers().add(DELIVERY_UPDATED_DATE_MATCHER.apply(updatedDate));
+    public DeliveryInfoMatcher withUpdatedDate(final Date createdDate) {
+        getMatchers().add(DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
+        return this;
+    }
+
+    public DeliveryInfoMatcher withUpdatedDate(final Matcher<? super Date> matcher) {
+        getMatchers().add(FIELD_UPDATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
@@ -127,6 +151,11 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
         return this;
     }
 
+    /**
+     * Returns delivery info matcher instance {@link DeliveryInfoMatcher}
+     *
+     * @return delivery info matcher instance {@link DeliveryInfoMatcher}
+     */
     public static DeliveryInfoMatcher getMatcher() {
         return new DeliveryInfoMatcher();
     }
