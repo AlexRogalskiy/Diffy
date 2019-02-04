@@ -70,6 +70,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      */
     @Override
     public boolean matches(final T value) {
+        getFailedMatchers().clear();
         getMatchers().forEach(matcher -> {
             if (!matcher.matches(value)) {
                 getFailedMatchers().add(matcher);

@@ -89,6 +89,26 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     };
 
     /**
+     * Determines delivery info "ID" matcher {@link Matcher}
+     */
+    public static Function<Matcher<? super Long>, Matcher<? super DeliveryInfo>> FIELD_ID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Long>(matcher) {
+        @Override
+        protected Long valueOf(final DeliveryInfo value) {
+            return value.getId();
+        }
+    };
+
+    /**
+     * Determines delivery info "Created date" matcher {@link Matcher}
+     */
+    public static Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_CREATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
+        @Override
+        protected Date valueOf(final DeliveryInfo value) {
+            return value.getCreatedAt();
+        }
+    };
+
+    /**
      * Determines delivery info "Updated date" matcher {@link Matcher}
      */
     public static Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_UPDATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
@@ -153,6 +173,16 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
 
     public DeliveryInfoMatcher withUpdatedDate(final Date createdDate) {
         getMatchers().add(DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
+        return this;
+    }
+
+    public DeliveryInfoMatcher withIdMatcher(final Matcher<? super Long> matcher) {
+        getMatchers().add(FIELD_ID_MATCHER.apply(matcher));
+        return this;
+    }
+
+    public DeliveryInfoMatcher withCreatedDateMatcher(final Matcher<? super Date> matcher) {
+        getMatchers().add(FIELD_CREATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
