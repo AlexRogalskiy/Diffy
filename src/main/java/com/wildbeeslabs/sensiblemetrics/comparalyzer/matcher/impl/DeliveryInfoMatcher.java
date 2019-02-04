@@ -44,9 +44,9 @@ import java.util.function.Function;
 public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
 
     /**
-     * Determines whether delivery info contains type
+     * Determines delivery info "Type" field matcher {@link Matcher}
      */
-    public static Function<Integer, Matcher<? super DeliveryInfo>> TYPE_MATCHER = type -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static Function<Integer, Matcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(type, value.getType());
@@ -54,9 +54,9 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     };
 
     /**
-     * Determines whether delivery info contains gid
+     * Determines delivery info "Gid" field matcher {@link Matcher}
      */
-    public static Function<String, Matcher<? super DeliveryInfo>> GID_MATCHER = gid -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static Function<String, Matcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(gid, value.getGid());
@@ -64,9 +64,9 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     };
 
     /**
-     * Determines whether delivery info contains created date
+     * Determines delivery info "Created date" matcher {@link Matcher}
      */
-    public static Function<Date, Matcher<? super DeliveryInfo>> CREATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(date, value.getCreatedAt());
@@ -74,12 +74,22 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     };
 
     /**
-     * Determines whether delivery info contains updated date
+     * Determines delivery info "Updated date" matcher {@link Matcher}
      */
-    public static Function<Date, Matcher<? super DeliveryInfo>> UPDATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(date, value.getUpdatedAt());
+        }
+    };
+
+    /**
+     * Determines delivery info "Type" field matcher {@link Matcher}
+     */
+    public static Function<Matcher<? super Integer>, Matcher<? super DeliveryInfo>> FIELD_TYPE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Integer>(matcher) {
+        @Override
+        protected Integer valueOf(final DeliveryInfo value) {
+            return value.getType();
         }
     };
 
@@ -93,22 +103,27 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     }
 
     public DeliveryInfoMatcher withType(final Integer type) {
-        getMatchers().add(TYPE_MATCHER.apply(type));
+        getMatchers().add(DELIVERY_TYPE_MATCHER.apply(type));
         return this;
     }
 
     public DeliveryInfoMatcher withGid(final String gid) {
-        getMatchers().add(GID_MATCHER.apply(gid));
+        getMatchers().add(DELIVERY_GID_MATCHER.apply(gid));
         return this;
     }
 
     public DeliveryInfoMatcher withCreatedDate(final Date createdDate) {
-        getMatchers().add(CREATED_DATE_MATCHER.apply(createdDate));
+        getMatchers().add(DELIVERY_CREATED_DATE_MATCHER.apply(createdDate));
         return this;
     }
 
     public DeliveryInfoMatcher withUpdatedDate(final Date updatedDate) {
-        getMatchers().add(CREATED_DATE_MATCHER.apply(updatedDate));
+        getMatchers().add(DELIVERY_UPDATED_DATE_MATCHER.apply(updatedDate));
+        return this;
+    }
+
+    public DeliveryInfoMatcher withType(final Matcher<? super Integer> matcher) {
+        getMatchers().add(FIELD_TYPE_MATCHER.apply(matcher));
         return this;
     }
 

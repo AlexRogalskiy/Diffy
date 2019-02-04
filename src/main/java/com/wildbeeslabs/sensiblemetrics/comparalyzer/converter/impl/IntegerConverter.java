@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntConverter extends AbstractConverter<String, Integer> {
+public class IntegerConverter extends AbstractConverter<String, Integer> {
 
     /**
      * Returns integer value {@link Integer} by input argument {@link String}

@@ -23,13 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.Matcher;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matcher;
 
 /**
  * Abstract field matcher implementation for instance {@link T} and field value of {@link E}
@@ -46,14 +46,14 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
     /**
      * Default method type instance
      */
-    private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("fieldValueOf", 1, 0);
+    private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("valueOf", 1, 0);
     /**
      * Default field instance matcher {@link Matcher}
      */
     private final Matcher<? super E> matcher;
 
     /**
-     * Default abstract type safe matcher constructor
+     * Default abstract type safe matcher constructor with input field matcher {@link Matcher}
      */
     public AbstractFieldMatcher(final Matcher<? super E> matcher) {
         super(DEFAULT_TYPE);
@@ -67,7 +67,7 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
      * @return true - if field value matches, false - otherwise
      */
     public boolean matchesSafe(final T value) {
-        return getMatcher().matches(this.fieldValueOf(value));
+        return getMatcher().matches(this.valueOf(value));
     }
 
     /**
@@ -76,5 +76,5 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
      * @param value - initial input insatnce {@link T}
      * @return field value {@link E}
      */
-    protected abstract E fieldValueOf(final T value);
+    protected abstract E valueOf(final T value);
 }

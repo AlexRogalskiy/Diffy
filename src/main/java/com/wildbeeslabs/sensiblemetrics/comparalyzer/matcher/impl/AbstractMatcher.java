@@ -57,6 +57,12 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
         setMatchers(matchers);
     }
 
+    /**
+     * Returns binary flag depending on initial argument value by comparison {@link T}
+     *
+     * @param value - initial input value {@link T}
+     * @return true - if input value matches, false - otherwise
+     */
     @Override
     public boolean matches(final T value) {
         getMatchers().forEach(matcher -> {
