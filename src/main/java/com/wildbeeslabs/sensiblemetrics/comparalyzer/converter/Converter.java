@@ -24,7 +24,10 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter;
 
 /**
- * Converter interface declaration from {@link T} to {@link R}
+ * Custom converter interface declaration (from {@link T} to {@link R})
+ *
+ * @param <T>
+ * @param <R>
  */
 @FunctionalInterface
 public interface Converter<T, R> {

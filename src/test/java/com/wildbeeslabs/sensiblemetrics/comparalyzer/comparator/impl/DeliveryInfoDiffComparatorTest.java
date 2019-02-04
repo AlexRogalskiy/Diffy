@@ -30,6 +30,11 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.factory.DefaultDiffComparatorFactory;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.DeliveryInfoMatcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
@@ -46,6 +51,10 @@ import static org.junit.Assert.*;
 /**
  * Delivery info difference comparator unit test
  */
+@Slf4j
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComparatorTest {
 
     /**
@@ -63,7 +72,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
     @Test
     public void testCompareDifferentEntitiesWithAllProperties() {
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -72,20 +81,20 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         assertThat(valueChangeList.size(), lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length));
 
         assertEquals(valueChangeList.get(1).getPropertyName(), "description");
-        assertEquals(valueChangeList.get(1).getFirst(), this.deliveryInfoFirst.getDescription());
-        assertEquals(valueChangeList.get(1).getLast(), this.deliveryInfoLast.getDescription());
-        assertNotEquals(this.deliveryInfoFirst.getDescription(), this.deliveryInfoLast.getDescription());
+        assertEquals(valueChangeList.get(1).getFirst(), getDeliveryInfoFirst().getDescription());
+        assertEquals(valueChangeList.get(1).getLast(), getDeliveryInfoLast().getDescription());
+        assertNotEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
 
         assertEquals(valueChangeList.get(valueChangeList.size() - 1).getPropertyName(), "updatedAt");
-        assertEquals(valueChangeList.get(valueChangeList.size() - 1).getFirst(), this.deliveryInfoFirst.getUpdatedAt());
-        assertEquals(valueChangeList.get(valueChangeList.size() - 1).getLast(), this.deliveryInfoLast.getUpdatedAt());
-        assertNotEquals(this.deliveryInfoFirst.getUpdatedAt(), this.deliveryInfoLast.getUpdatedAt());
+        assertEquals(valueChangeList.get(valueChangeList.size() - 1).getFirst(), getDeliveryInfoFirst().getUpdatedAt());
+        assertEquals(valueChangeList.get(valueChangeList.size() - 1).getLast(), getDeliveryInfoLast().getUpdatedAt());
+        assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
     }
 
     @Test
     public void testCompareEqualEntitiesWithAllProperties() {
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoFirst);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -98,7 +107,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
         diffComparator.excludeProperties(excludedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -109,24 +118,24 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("createdAt")
-                .first(this.deliveryInfoFirst.getCreatedAt())
-                .last(this.deliveryInfoLast.getCreatedAt())
+                .first(getDeliveryInfoFirst().getCreatedAt())
+                .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("type")
-                .first(this.deliveryInfoFirst.getType())
-                .last(this.deliveryInfoLast.getType())
+                .first(getDeliveryInfoFirst().getType())
+                .last(getDeliveryInfoLast().getType())
                 .build();
         assertTrue(valueChangeList.contains(entry));
 
@@ -138,7 +147,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
         diffComparator.includeProperties(includedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -149,24 +158,24 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("createdAt")
-                .first(this.deliveryInfoFirst.getCreatedAt())
-                .last(this.deliveryInfoLast.getCreatedAt())
+                .first(getDeliveryInfoFirst().getCreatedAt())
+                .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("updatedAt")
-                .first(this.deliveryInfoFirst.getUpdatedAt())
-                .last(this.deliveryInfoLast.getUpdatedAt())
+                .first(getDeliveryInfoFirst().getUpdatedAt())
+                .last(getDeliveryInfoLast().getUpdatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertTrue(valueChangeList.contains(entry));
     }
@@ -177,7 +186,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
         diffComparator.excludeProperties(excludedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -188,19 +197,19 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("description")
-                .first(this.deliveryInfoFirst.getDescription())
-                .last(this.deliveryInfoLast.getDescription())
+                .first(getDeliveryInfoFirst().getDescription())
+                .last(getDeliveryInfoLast().getDescription())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getDescription(), this.deliveryInfoLast.getDescription());
+        assertNotEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
     }
 
     @Test
@@ -209,7 +218,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, deliveryInfoComparator);
         diffComparator.includeProperties(includedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -220,19 +229,19 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("updatedAt")
-                .first(this.deliveryInfoFirst.getUpdatedAt())
-                .last(this.deliveryInfoLast.getUpdatedAt())
+                .first(getDeliveryInfoFirst().getUpdatedAt())
+                .last(getDeliveryInfoLast().getUpdatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("createdAt")
-                .first(this.deliveryInfoFirst.getCreatedAt())
-                .last(this.deliveryInfoLast.getCreatedAt())
+                .first(getDeliveryInfoFirst().getCreatedAt())
+                .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getCreatedAt(), this.deliveryInfoLast.getCreatedAt());
+        assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
     }
 
     @Test
@@ -241,7 +250,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.excludeProperties(excludedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -251,8 +260,8 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("type")
-                .first(this.deliveryInfoFirst.getType())
-                .last(this.deliveryInfoLast.getType())
+                .first(getDeliveryInfoFirst().getType())
+                .last(getDeliveryInfoLast().getType())
                 .build();
         assertTrue(valueChangeList.contains(entry));
 
@@ -261,11 +270,11 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertFalse(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getId(), this.deliveryInfoLast.getId());
+        assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
     }
 
     @Test
@@ -276,7 +285,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
         diffComparator.excludeProperties(excludedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -286,36 +295,36 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getId(), this.deliveryInfoLast.getId());
+        assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("createdAt")
-                .first(this.deliveryInfoFirst.getCreatedAt())
-                .last(this.deliveryInfoLast.getCreatedAt())
+                .first(getDeliveryInfoFirst().getCreatedAt())
+                .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("type")
-                .first(this.deliveryInfoFirst.getType())
-                .last(this.deliveryInfoLast.getType())
+                .first(getDeliveryInfoFirst().getType())
+                .last(getDeliveryInfoLast().getType())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("description")
-                .first(this.deliveryInfoFirst.getDescription())
-                .last(this.deliveryInfoLast.getDescription())
+                .first(getDeliveryInfoFirst().getDescription())
+                .last(getDeliveryInfoLast().getDescription())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getDescription(), this.deliveryInfoLast.getDescription());
+        assertNotEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
     }
 
     @Test
@@ -326,7 +335,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
         diffComparator.excludeProperties(excludedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -336,25 +345,25 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getId(), this.deliveryInfoLast.getId());
+        assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("description")
-                .first(this.deliveryInfoFirst.getDescription())
-                .last(this.deliveryInfoLast.getDescription())
+                .first(getDeliveryInfoFirst().getDescription())
+                .last(getDeliveryInfoLast().getDescription())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("createdAt")
-                .first(this.deliveryInfoFirst.getCreatedAt())
-                .last(this.deliveryInfoLast.getCreatedAt())
+                .first(getDeliveryInfoFirst().getCreatedAt())
+                .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
     }
@@ -365,7 +374,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -375,26 +384,26 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getId(), this.deliveryInfoLast.getId());
+        assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("description")
-                .first(this.deliveryInfoFirst.getDescription())
-                .last(this.deliveryInfoLast.getDescription())
+                .first(getDeliveryInfoFirst().getDescription())
+                .last(getDeliveryInfoLast().getDescription())
                 .build();
-        assertNotEquals(this.deliveryInfoFirst.getDescription(), this.deliveryInfoLast.getDescription());
+        assertNotEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("updatedAt")
-                .first(this.deliveryInfoFirst.getUpdatedAt())
-                .last(this.deliveryInfoLast.getUpdatedAt())
+                .first(getDeliveryInfoFirst().getUpdatedAt())
+                .last(getDeliveryInfoLast().getUpdatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
     }
@@ -405,7 +414,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.excludeProperties(excludedProperties);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -415,25 +424,25 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("createdAt")
-                .first(this.deliveryInfoFirst.getCreatedAt())
-                .last(this.deliveryInfoLast.getCreatedAt())
+                .first(getDeliveryInfoFirst().getCreatedAt())
+                .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getCreatedAt(), this.deliveryInfoLast.getCreatedAt());
+        assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("description")
-                .first(this.deliveryInfoFirst.getDescription())
-                .last(this.deliveryInfoLast.getDescription())
+                .first(getDeliveryInfoFirst().getDescription())
+                .last(getDeliveryInfoLast().getDescription())
                 .build();
         assertFalse(valueChangeList.contains(entry));
     }
@@ -441,7 +450,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
     @Test
     public void testCompareDifferentEntitiesAreNonEqual() {
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -455,13 +464,13 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
     @Test
     public void testCompareDifferentEntitiesWithIncludedPropertiesAndNonEqualStringComparator() {
         final List<String> includedProperties = Arrays.asList("id", "type", "createdAt");
-        this.deliveryInfoFirst.setDescription(null);
-        this.deliveryInfoLast.setDescription(null);
+        getDeliveryInfoFirst().setDescription(null);
+        getDeliveryInfoLast().setDescription(null);
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
         diffComparator.setComparator("_identCode", (Comparator<String>) (o1, o2) -> o1.substring(0, 5).compareToIgnoreCase(o2.substring(0, 5)));
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -471,28 +480,28 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getId(), this.deliveryInfoLast.getId());
+        assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("updatedAt")
-                .first(this.deliveryInfoFirst.getUpdatedAt())
-                .last(this.deliveryInfoLast.getUpdatedAt())
+                .first(getDeliveryInfoFirst().getUpdatedAt())
+                .last(getDeliveryInfoLast().getUpdatedAt())
                 .build();
-        assertNotEquals(this.deliveryInfoFirst.getUpdatedAt(), this.deliveryInfoLast.getUpdatedAt());
+        assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("description")
-                .first(this.deliveryInfoFirst.getDescription())
-                .last(this.deliveryInfoLast.getDescription())
+                .first(getDeliveryInfoFirst().getDescription())
+                .last(getDeliveryInfoLast().getDescription())
                 .build();
-        assertEquals(this.deliveryInfoFirst.getDescription(), this.deliveryInfoLast.getDescription());
+        assertEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
         assertFalse(valueChangeList.contains(entry));
     }
 
@@ -503,10 +512,10 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
-        this.deliveryInfoFirst.setDescription(defaultDeliveryDescription.concat(UUID.randomUUID().toString()));
-        this.deliveryInfoLast.setDescription(defaultDeliveryDescription.concat(UUID.randomUUID().toString()));
+        getDeliveryInfoFirst().setDescription(defaultDeliveryDescription.concat(UUID.randomUUID().toString()));
+        getDeliveryInfoLast().setDescription(defaultDeliveryDescription.concat(UUID.randomUUID().toString()));
         diffComparator.setComparator("description", (Comparator<String>) (o1, o2) -> o1.substring(0, 5).compareToIgnoreCase(o2.substring(0, 5)));
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -516,25 +525,25 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("updatedAt")
-                .first(this.deliveryInfoFirst.getUpdatedAt())
-                .last(this.deliveryInfoLast.getUpdatedAt())
+                .first(getDeliveryInfoFirst().getUpdatedAt())
+                .last(getDeliveryInfoLast().getUpdatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getUpdatedAt(), this.deliveryInfoLast.getUpdatedAt());
+        assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("description")
-                .first(this.deliveryInfoFirst.getDescription())
-                .last(this.deliveryInfoLast.getDescription())
+                .first(getDeliveryInfoFirst().getDescription())
+                .last(getDeliveryInfoLast().getDescription())
                 .build();
         assertFalse(valueChangeList.contains(entry));
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("id")
-                .first(this.deliveryInfoFirst.getId())
-                .last(this.deliveryInfoLast.getId())
+                .first(getDeliveryInfoFirst().getId())
+                .last(getDeliveryInfoLast().getId())
                 .build();
         assertTrue(valueChangeList.contains(entry));
     }
@@ -547,7 +556,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         diffComparator.includeProperties(includedProperties);
         diffComparator.setComparator("createdAt", Comparator.comparingInt((Date d) -> LocalDateTime.fromDateFields(d).getHourOfDay()));
         diffComparator.setComparator("updatedAt", Comparator.comparingInt((Date d) -> LocalDateTime.fromDateFields(d).getDayOfMonth()));
-        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(this.deliveryInfoFirst, this.deliveryInfoLast);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -557,19 +566,30 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
                 .propertyName("createdAt")
-                .first(this.deliveryInfoFirst.getCreatedAt())
-                .last(this.deliveryInfoLast.getCreatedAt())
+                .first(getDeliveryInfoFirst().getCreatedAt())
+                .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
         assertFalse(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getCreatedAt(), this.deliveryInfoLast.getCreatedAt());
+        assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
 
         entry = DefaultDiffEntry
                 .builder()
                 .propertyName("updatedAt")
-                .first(this.deliveryInfoFirst.getUpdatedAt())
-                .last(this.deliveryInfoLast.getUpdatedAt())
+                .first(getDeliveryInfoFirst().getUpdatedAt())
+                .last(getDeliveryInfoLast().getUpdatedAt())
                 .build();
         assertTrue(valueChangeList.contains(entry));
-        assertNotEquals(this.deliveryInfoFirst.getUpdatedAt(), this.deliveryInfoLast.getUpdatedAt());
+        assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
+    }
+
+    @Test
+    public void testCompareDifferentEntitiesByMatcher() {
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getMatcher()
+                .withType(mockUnitInt.val())
+                .withGid(alphaNumbericMockUnitString.val())
+                .withCreatedDate(mockUnitLocalDate.toUtilDate().val())
+                .withUpdatedDate(mockUnitLocalDate.toUtilDate().val());
+        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfoFirst()));
+        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfoLast()));
     }
 }

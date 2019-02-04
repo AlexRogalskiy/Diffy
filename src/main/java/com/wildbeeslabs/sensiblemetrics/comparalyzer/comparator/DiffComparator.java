@@ -28,7 +28,7 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
 import java.io.Serializable;
 
 /**
- * Difference comparator declaration
+ * Difference comparator declaration for value {@link T}
  */
 public interface DiffComparator<T> extends Serializable {
 

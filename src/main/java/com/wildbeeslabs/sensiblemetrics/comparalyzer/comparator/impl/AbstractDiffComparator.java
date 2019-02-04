@@ -40,7 +40,7 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtil
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
 /**
- * Abstract difference comparator implementation
+ * Abstract difference comparator implementation for value {@link T}
  */
 @Slf4j
 @Data

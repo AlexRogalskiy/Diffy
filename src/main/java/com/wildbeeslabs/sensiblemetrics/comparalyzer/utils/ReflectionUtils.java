@@ -23,6 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
@@ -30,6 +33,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
@@ -185,5 +189,62 @@ public class ReflectionUtils {
      */
     public static boolean isNotStaticOrFinalOrAccessible(final Field field, boolean includeFinalFields, boolean includeAccessibleFields) {
         return isNotStaticOrFinal(field, includeFinalFields) && (!includeAccessibleFields || field.isAccessible());
+    }
+
+    /**
+     * Returns method type instance {@link ReflectionMethodType}
+     *
+     * @return class instance by input type
+     */
+    public static ReflectionMethodType getMethodType(final String methodName, int numberOfParameters, int typedParameter) {
+        return new ReflectionMethodType(methodName, numberOfParameters, typedParameter);
+    }
+
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class ReflectionMethodType {
+
+        private final String methodName;
+        private final int numberOfParameters;
+        private final int typeParameter;
+
+        public ReflectionMethodType(final String methodName, int numberOfParameters, int typedParameter) {
+            this.methodName = methodName;
+            this.numberOfParameters = numberOfParameters;
+            this.typeParameter = typedParameter;
+        }
+
+        public Class<?> getType(final Class<?> clazz) {
+            for (Class c = clazz; c != Object.class; c = c.getSuperclass()) {
+                final Optional<Method> methodOptional = Stream.of(c.getDeclaredMethods()).filter(method -> hasSignature(method)).findFirst();
+                if (methodOptional.isPresent()) {
+                    return getParameterType(methodOptional.get());
+                }
+            }
+            throw new RuntimeException(String.format("ERROR: cannot determine correct type for method={%s}", getMethodName()));
+        }
+
+        /**
+         * Return binary flag depending on initial method signature {@link Method}
+         *
+         * @param method - initial method instance {@link Method}
+         * @return true - if method signature matches, false - otherwise
+         */
+        private boolean hasSignature(final Method method) {
+            return method.getName().equals(getMethodName())
+                    && (method.getParameterTypes().length == getNumberOfParameters())
+                    && !method.isSynthetic();
+        }
+
+        /**
+         * Returns method input parameter type {@link Class}
+         *
+         * @param method - initial method instance {@link Method}
+         * @return parameter type {@link Class}
+         */
+        private Class<?> getParameterType(final Method method) {
+            return method.getParameterTypes()[getTypeParameter()];
+        }
     }
 }

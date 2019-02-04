@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * Custom converter utilities implementation
+ * Custom converter utilities implementation {@link Converter}
  */
 @Slf4j
 @UtilityClass

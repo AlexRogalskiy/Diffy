@@ -23,9 +23,18 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.impl;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Default integer converter implementation
  */
+@Slf4j
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class IntConverter extends AbstractConverter<String, Integer> {
 
     /**

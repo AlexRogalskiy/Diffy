@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.Objects;
 
 /**
- * Custom comparator utilities implementation
+ * Custom comparator utilities implementation {@link Comparator}
  */
 @Slf4j
 @UtilityClass

@@ -27,12 +27,14 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
 
 /**
- * Delivery info difference comparator implementation
+ * Custom difference comparator implementation for delivery information value {@link DeliveryInfo}
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

@@ -40,10 +40,28 @@ public class DeliveryInfo implements Serializable {
      */
     private static final long serialVersionUID = 8170421693292671905L;
 
+    /**
+     * Default ID
+     */
     private Long id;
+    /**
+     * Default type
+     */
     private Integer type;
+    /**
+     * Default description / comments
+     */
     private String description;
+    /**
+     * Default global ID
+     */
     private String gid;
+    /**
+     * Default created timestamp
+     */
     private Date createdAt;
+    /**
+     * Default updated timestamp
+     */
     private Date updatedAt;
 }

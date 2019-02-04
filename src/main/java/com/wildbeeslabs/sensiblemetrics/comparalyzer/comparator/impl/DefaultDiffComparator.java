@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default difference comparator implementation
+ * Default difference comparator implementation for value {@link T}
  */
 @Slf4j
 @Data

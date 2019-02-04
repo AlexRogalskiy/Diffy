@@ -21,20 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.impl;
-
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.Converter;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 
 /**
- * Abstract converter implementation from {@link T} to {@link R}
+ * Matcher interface declaration for instance {@link T}
+ *
+ * @param <T>
  */
-@Slf4j
-@Data
-@EqualsAndHashCode
-@ToString
-public abstract class AbstractConverter<T, R> implements Converter<T, R> {
+@FunctionalInterface
+public interface Matcher<T> {
+
+    /**
+     * Returns binary flag depending on initial argument value by comparison {@link T}
+     *
+     * @param value - initial input value {@link T}
+     * @return true - if input value matches, false - otherwise
+     */
+    boolean matches(final T value);
 }

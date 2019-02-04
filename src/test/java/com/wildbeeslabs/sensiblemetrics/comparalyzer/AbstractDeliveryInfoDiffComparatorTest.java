@@ -24,24 +24,18 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.*;
-import net.andreinc.mockneat.types.enums.MarkovChainType;
-import net.andreinc.mockneat.types.enums.StringType;
-import net.andreinc.mockneat.unit.objects.Reflect;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 
-import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils.toDate;
-import static net.andreinc.mockneat.types.enums.MarkovChainType.LOREM_IPSUM;
-import static net.andreinc.mockneat.types.enums.StringType.ALPHA_NUMERIC;
-import static net.andreinc.mockneat.types.enums.StringType.LETTERS;
-import static net.andreinc.mockneat.types.enums.StringType.NUMBERS;
+import static net.andreinc.mockneat.types.enums.StringType.*;
 import static net.andreinc.mockneat.unit.objects.Filler.filler;
-import static net.andreinc.mockneat.unit.seq.LongSeq.longSeq;
-import static net.andreinc.mockneat.unit.text.Markovs.markovs;
 import static net.andreinc.mockneat.unit.text.Strings.strings;
 import static net.andreinc.mockneat.unit.time.LocalDates.localDates;
 import static net.andreinc.mockneat.unit.types.Doubles.doubles;
@@ -53,6 +47,9 @@ import static net.andreinc.mockneat.unit.types.Longs.longs;
  * Abstract delivery info unit test
  */
 @Slf4j
+@Data
+@EqualsAndHashCode
+@ToString
 public abstract class AbstractDeliveryInfoDiffComparatorTest {
 
     /**
@@ -88,7 +85,7 @@ public abstract class AbstractDeliveryInfoDiffComparatorTest {
     protected final MockUnitString numbersMockUnitString = strings().types(NUMBERS);
 
     /**
-     * Default delivery info comparator
+     * Default delivery info comparator {@link Comparator}
      */
     protected static final Comparator<? super DeliveryInfo> deliveryInfoComparator = Comparator
             .comparing(DeliveryInfo::getId)
@@ -97,7 +94,11 @@ public abstract class AbstractDeliveryInfoDiffComparatorTest {
             .thenComparing(DeliveryInfo::getCreatedAt)
             .thenComparing(DeliveryInfo::getUpdatedAt);
 
-
+    /**
+     * Default delivery info unit {@link MockUnit}
+     *
+     * @return delivery info unit {@link MockUnit}
+     */
     protected MockUnit<DeliveryInfo> getDeliveryInfoUnit() {
         return filler(() -> new DeliveryInfo())
                 .setter(DeliveryInfo::setId, mockUnitLong)
