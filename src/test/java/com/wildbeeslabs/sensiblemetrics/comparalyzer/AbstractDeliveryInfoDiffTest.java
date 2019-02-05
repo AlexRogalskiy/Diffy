@@ -51,7 +51,8 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .thenComparing(DeliveryInfo::getType)
             .thenComparing(DeliveryInfo::getDescription)
             .thenComparing(DeliveryInfo::getCreatedAt)
-            .thenComparing(DeliveryInfo::getUpdatedAt);
+            .thenComparing(DeliveryInfo::getUpdatedAt)
+            .thenComparing(DeliveryInfo::getBalance);
 
     /**
      * Default delivery info unit {@link MockUnit}
@@ -64,6 +65,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
                 .setter(DeliveryInfo::setType, mockUnitInt)
                 .setter(DeliveryInfo::setDescription, lettersMockUnitString)
                 .setter(DeliveryInfo::setCreatedAt, mockUnitLocalDate.toUtilDate())
-                .setter(DeliveryInfo::setUpdatedAt, mockUnitLocalDate.toUtilDate());
+                .setter(DeliveryInfo::setUpdatedAt, mockUnitLocalDate.toUtilDate())
+                .setter(DeliveryInfo::setBalance, mockUnitDouble);
     }
 }

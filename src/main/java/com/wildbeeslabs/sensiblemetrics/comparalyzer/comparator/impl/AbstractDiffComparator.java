@@ -26,9 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
 
@@ -64,14 +62,17 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     /**
      * Default property map {@link Map} by names {@link String} and values {@link Comparator}
      */
+    @Getter(AccessLevel.PROTECTED)
     private final Map<String, Comparator<?>> propertyComparatorMap = new HashMap<>();
     /**
      * Default collection of properties {@link Map} to compare by with related property types {@link Class}
      */
+    @Getter(AccessLevel.PROTECTED)
     private final Map<String, Field> propertyMap = new HashMap<>();
     /**
      * Default collection of properties {@link Set} to compare by
      */
+    @Getter(AccessLevel.PROTECTED)
     private final Set<String> propertySet = new HashSet<>();
 
     /**
@@ -94,8 +95,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
         this.comparator = Objects.nonNull(comparator)
                 ? comparator
                 : ComparableComparator.getInstance();
-        this.propertySet.addAll(this.getFieldsList(this.clazz));
         this.propertyMap.putAll(this.getFieldsMap(this.clazz));
+        this.propertySet.addAll(this.propertyMap.keySet());
     }
 
     /**
@@ -126,6 +127,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param properties - collection of properties to be added to compare collection
      */
     public void includeProperties(final Iterable<String> properties) {
+        getPropertySet().clear();
         Optional.ofNullable(properties)
                 .orElse(Collections.emptyList())
                 .forEach(property -> includeProperty(property));
@@ -140,18 +142,6 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
         if (Objects.nonNull(property)) {
             getPropertySet().add(property);
         }
-    }
-
-    /**
-     * Sets iterable collection of property names {@link Iterable} to compare collection
-     *
-     * @param properties - collection of properties to be added to compare collection
-     */
-    public void setProperties(final Iterable<String> properties) {
-        getPropertySet().clear();
-        Optional.ofNullable(properties)
-                .orElse(Collections.emptyList())
-                .forEach(property -> includeProperty(property));
     }
 
     /**

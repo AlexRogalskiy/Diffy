@@ -67,4 +67,8 @@ public class DeliveryInfo implements Serializable {
      * Default updated timestamp
      */
     private Date updatedAt;
+    /**
+     * Default balance
+     */
+    private double balance;
 }

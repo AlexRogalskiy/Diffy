@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator.DeliveryInfoDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
@@ -35,6 +36,7 @@ import java.util.Comparator;
  * Default difference comparator factory implementation
  */
 @Slf4j
+@UtilityClass
 public class DefaultDiffComparatorFactory {
 
     /**

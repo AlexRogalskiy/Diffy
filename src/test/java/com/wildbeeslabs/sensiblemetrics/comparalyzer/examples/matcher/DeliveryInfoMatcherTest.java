@@ -63,9 +63,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     public void testDeliveryInfoByMatcher() {
+        final String DATE_FORMAT = "dd/MM/yyyy";
         DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
                 .withType(mockUnitInt.val())
-                .withGid(alphaNumbericMockUnitString.val())
+                .withGid(alphaNumericMockUnitString.val())
                 .withCreatedDate(mockUnitLocalDate.toUtilDate().val())
                 .withUpdatedDate(mockUnitLocalDate.toUtilDate().val());
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
@@ -73,13 +74,14 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
                 .withType(5)
                 .withGid("TEST")
-                .withCreatedDate(DateUtils.toDate("17/06/2013", "dd/MM/yyyy"))
-                .withUpdatedDate(DateUtils.toDate("27/09/2018", "dd/MM/yyyy"));
+                .withCreatedDate(DateUtils.toDate("17/06/2013", DATE_FORMAT))
+                .withUpdatedDate(DateUtils.toDate("27/09/2018", DATE_FORMAT));
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
     @Test
     public void testDeliveryInfoByCustomDateMatcher() {
+        final String DATE_FORMAT = "dd/MM/yyyy";
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
@@ -89,13 +91,13 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         };
         final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
 
-        this.deliveryInfo.setCreatedAt(DateUtils.toDate("07/06/2013", "dd/MM/yyyy"));
-        this.deliveryInfo.setUpdatedAt(DateUtils.toDate("17/06/2018", "dd/MM/yyyy"));
-        assertTrue(deliveryInfoMatcher.matches(this.deliveryInfo));
+        getDeliveryInfo().setCreatedAt(DateUtils.toDate("07/06/2013", DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("17/06/2018", DATE_FORMAT));
+        assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
-        this.deliveryInfo.setCreatedAt(DateUtils.toDate("17/06/2013", "dd/MM/yyyy"));
-        this.deliveryInfo.setUpdatedAt(DateUtils.toDate("27/06/2018", "dd/MM/yyyy"));
-        assertFalse(deliveryInfoMatcher.matches(this.deliveryInfo));
+        getDeliveryInfo().setCreatedAt(DateUtils.toDate("17/06/2013", DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("27/06/2018", DATE_FORMAT));
+        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
     @Test
@@ -108,25 +110,29 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         };
         final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
 
-        this.deliveryInfo.setType(1);
-        assertTrue(deliveryInfoMatcher.matches(this.deliveryInfo));
+        getDeliveryInfo().setType(1);
+        assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
-        this.deliveryInfo.setType(10);
-        assertFalse(deliveryInfoMatcher.matches(this.deliveryInfo));
+        getDeliveryInfo().setType(10);
+        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
     @Test
     public void testDeliveryInfoListByCustomGidAndTypeMatcher() {
+        final String GID_PREFIX = "test";
+        final Integer LOWER_TYPE_BOUND = 100;
+        final Integer UPPER_TYPE_BOUND = 1000;
+
         final Matcher<? super String> gidMatcher = new AbstractTypeSafeMatcher<String>() {
             @Override
             public boolean matchesSafe(final String value) {
-                return String.valueOf(value).substring(0, 4).equalsIgnoreCase("test");
+                return String.valueOf(value).substring(0, 4).equalsIgnoreCase(GID_PREFIX);
             }
         };
         final Matcher<? super Integer> typeMatcher = new AbstractTypeSafeMatcher<Integer>() {
             @Override
             public boolean matchesSafe(final Integer value) {
-                return 100 < value && value < 1000;
+                return LOWER_TYPE_BOUND < value && value < UPPER_TYPE_BOUND;
             }
         };
         final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
@@ -139,11 +145,11 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
                 getDeliveryInfoUnit().val(),
                 getDeliveryInfoUnit().val()
         );
-        assertEquals(deliveryInfoList.size(), 4);
+        assertEquals(4, deliveryInfoList.size());
         assertTrue(deliveryInfoList.stream().noneMatch(entity -> deliveryInfoMatcher.matches(entity)));
 
-        this.deliveryInfo.setGid("test" + UUID.randomUUID());
-        this.deliveryInfo.setType(150);
-        assertTrue(deliveryInfoMatcher.matches(this.deliveryInfo));
+        getDeliveryInfo().setGid(GID_PREFIX + UUID.randomUUID());
+        getDeliveryInfo().setType(150);
+        assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 }

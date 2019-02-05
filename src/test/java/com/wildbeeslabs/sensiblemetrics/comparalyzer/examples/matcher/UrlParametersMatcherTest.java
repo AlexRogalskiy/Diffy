@@ -27,7 +27,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     @Before
     public void setUp() {
-        this.urlString = alphaNumbericMockUnitString.val();
+        this.urlString = alphaNumericMockUnitString.val();
     }
 
     @Test

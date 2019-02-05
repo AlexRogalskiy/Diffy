@@ -77,7 +77,7 @@ public abstract class AbstractDiffTest {
     /**
      * Default mockNeat unit string instances
      */
-    protected final MockUnitString alphaNumbericMockUnitString = strings().types(ALPHA_NUMERIC);
+    protected final MockUnitString alphaNumericMockUnitString = strings().types(ALPHA_NUMERIC);
     protected final MockUnitString lettersMockUnitString = strings().types(LETTERS);
     protected final MockUnitString numbersMockUnitString = strings().types(NUMBERS);
 }
