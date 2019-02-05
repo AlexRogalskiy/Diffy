@@ -23,7 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -32,10 +31,8 @@ import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.*;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 
 import static net.andreinc.mockneat.types.enums.StringType.*;
-import static net.andreinc.mockneat.unit.objects.Filler.filler;
 import static net.andreinc.mockneat.unit.text.Strings.strings;
 import static net.andreinc.mockneat.unit.time.LocalDates.localDates;
 import static net.andreinc.mockneat.unit.types.Doubles.doubles;
@@ -44,13 +41,13 @@ import static net.andreinc.mockneat.unit.types.Ints.ints;
 import static net.andreinc.mockneat.unit.types.Longs.longs;
 
 /**
- * Abstract delivery info unit test
+ * Abstract difference unit test
  */
 @Slf4j
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractDeliveryInfoDiffComparatorTest {
+public abstract class AbstractDiffTest {
 
     /**
      * Default mockNeat instance
@@ -83,29 +80,5 @@ public abstract class AbstractDeliveryInfoDiffComparatorTest {
     protected final MockUnitString alphaNumbericMockUnitString = strings().types(ALPHA_NUMERIC);
     protected final MockUnitString lettersMockUnitString = strings().types(LETTERS);
     protected final MockUnitString numbersMockUnitString = strings().types(NUMBERS);
-
-    /**
-     * Default delivery info comparator instance {@link Comparator}
-     */
-    protected static final Comparator<? super DeliveryInfo> DEFAULT_COMPARATOR = Comparator
-            .comparing(DeliveryInfo::getId)
-            .thenComparing(DeliveryInfo::getType)
-            .thenComparing(DeliveryInfo::getDescription)
-            .thenComparing(DeliveryInfo::getCreatedAt)
-            .thenComparing(DeliveryInfo::getUpdatedAt);
-
-    /**
-     * Default delivery info unit {@link MockUnit}
-     *
-     * @return delivery info unit {@link MockUnit}
-     */
-    protected MockUnit<DeliveryInfo> getDeliveryInfoUnit() {
-        return filler(() -> new DeliveryInfo())
-                .setter(DeliveryInfo::setId, mockUnitLong)
-                .setter(DeliveryInfo::setType, mockUnitInt)
-                .setter(DeliveryInfo::setDescription, lettersMockUnitString)
-                .setter(DeliveryInfo::setCreatedAt, mockUnitLocalDate.toUtilDate())
-                .setter(DeliveryInfo::setUpdatedAt, mockUnitLocalDate.toUtilDate());
-    }
 }
 

@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffComparatorTest;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.matcher.DeliveryInfoMatcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.Matcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.AbstractTypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,9 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * Delivery info matcher unit test
@@ -51,7 +49,7 @@ import static org.junit.Assert.assertFalse;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffComparatorTest {
+public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     /**
      * Default delivery info instance

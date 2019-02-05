@@ -25,10 +25,10 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffComparatorTest;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.factory.DefaultDiffComparatorFactory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,7 +54,7 @@ import static org.junit.Assert.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComparatorTest {
+public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest {
 
     /**
      * Default delivery information entities
