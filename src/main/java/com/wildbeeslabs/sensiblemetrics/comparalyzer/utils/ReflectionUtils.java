@@ -56,13 +56,13 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns property value of an object argument {@link T}
+     * Returns property value of an object argument by name {@link String}
      *
      * @param <T>
-     * @param value        - initial argument {@link T} to get property value from
+     * @param value        - initial argument to get property value from
      * @param propertyName - initial property name {@link String}
      * @param clazz        - initial class to be casted to {@link Class}
-     * @return property value {@link T}
+     * @return property value
      */
     public static <T> T getProperty(final T value, final String propertyName, final Class<? extends T> clazz) {
         try {
@@ -82,7 +82,7 @@ public class ReflectionUtils {
      * @param <T>
      * @param value - initial argument to be casted {@link Object}
      * @param clazz - initial class to be casted to {@link Class}
-     * @return object casted to class {@link T}
+     * @return casted object
      */
     public static <T> T safeCast(final Object value, final Class<? extends T> clazz) {
         Objects.requireNonNull(clazz);

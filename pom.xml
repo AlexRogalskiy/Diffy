@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wildbeeslabs.sensiblemetrics.compara</groupId>
-    <artifactId>Comparalyzer</artifactId>
+    <groupId>com.wildbeeslabs.sensiblemetrics.comparalyzer</groupId>
+    <artifactId>Comparalyzer-core</artifactId>
     <version>1.0.0-RELEASE</version>
     <packaging>jar</packaging>
 
@@ -102,7 +102,6 @@
     <properties>
         <main.basedir>${basedir}/../..</main.basedir>
         <profileProperties>src/test/resource/test.properties</profileProperties>
-        <start-class>com.wildbeeslabs.sensiblemetrics.comparalyzer.AppLoader</start-class>
 
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -260,7 +259,6 @@
                         <archive>
                             <manifest>
                                 <addClasspath>true</addClasspath>
-                                <mainClass>${start-class}</mainClass>
                                 <classpathPrefix>dependency-jars/</classpathPrefix>
                             </manifest>
                         </archive>
@@ -337,11 +335,6 @@
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>3.1.0</version>
                     <configuration>
-                        <archive>
-                            <manifest>
-                                <mainClass>com.wildbeeslabs.sensiblemetrics.comparalyzer.AppLoader</mainClass>
-                            </manifest>
-                        </archive>
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
                         </descriptorRefs>
@@ -403,7 +396,7 @@
                             <Bundle-Version>${project.version}</Bundle-Version>
                             <Import-Package>*</Import-Package>
                             <Private-Package>com.wildbeeslabs.sensiblemetrics.comparalyzer.*</Private-Package>
-                            <Export-Package>com.wildbeeslabs.sensiblemetrics.*;-noimport:=true</Export-Package>
+                            <Export-Package>com.wildbeeslabs.sensiblemetrics.comparalyzer.*;-noimport:=true</Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
                         </instructions>
                     </configuration>

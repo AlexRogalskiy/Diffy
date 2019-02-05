@@ -1,12 +1,46 @@
-# Compara
+# Comparalyzer
 
-The Compara project
+The Comparalyzer project
 
-***Technical description:***
+## Features
+
+* Any object can be used despite the references dependency graph
+* Finds the differences between two objects
+* Returns the object's difference in an easy iterable structure
+* Requires no changes to your existing class hierarchy
+* Provides a simple configurable API
+* No extra runtime dependencies
+
+## Installation
+
+***Using with Maven:***
+
+```xml
+<dependency>
+    <groupId>com.wildbeeslabs.sensiblemetrics.Comparalyzer</groupId>
+    <artifactId>Comparalyzer-core</artifactId>
+    <version>1.0.0-RELEASE</version>
+</dependency>
+```
+
+***Using with Gradle:***
+
+```groovy
+compile 'com.wildbeeslabs.sensiblemetrics.Comparalyzer:1.0.0-RELEASE'
+```
+
+***Packaging:***
+
+Package the application with all the dependencies:
+```java
+mvn clean compile assembly:single
+```
+
+## Technical description
 
 As a result represents an iterable structure of fields difference entries of any given object (by applying object custom comparator / fields custom comparators if provided).
 
-```aidl
+```java
 // First object to be compared by
 Object object1 = new Object();
 // Last object to be compared with
@@ -22,7 +56,7 @@ Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(object1, object
 
 *Initial objects to compare:*
 
-```aidl
+```java
 DeliveryInfo deliveryInfo1 = new DeliveryInfo();
 deliveryInfo1.setId(...);
 deliveryInfo1.setType(...);
@@ -40,7 +74,7 @@ deliveryInfo2.setUpdatedAt(...)
 
 *Compare two objects by default fields (all):*
 
-```aidl
+```java
 DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
 Iterable<DefaultDiffEntry> iterableDiff = diffComparator.diffCompare(deliveryInfo1, deliveryInfo2);
 ...
@@ -52,7 +86,7 @@ assertThat(changeList.size(), lessThanOrEqualTo(getAllFields(DeliveryInfo.class)
 
 *Compare two equal objects by default fields (all):*
 
-```aidl
+```java
 DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
 Iterable<DefaultDiffEntry> iterableDiff = diffComparator.diffCompare(deliveryInfo1, deliveryInfo1);
 ...
@@ -62,7 +96,7 @@ assertEquals(changeList.size(), 0);
 
 *Compare two objects with excluded fields ("id", "createdAt", "updatedAt"):*
 
-```aidl
+```java
 List<String> excludedProperties = Arrays.asList("id", "createdAt", "updatedAt");
 ...
 DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -90,7 +124,7 @@ assertTrue(changeList.contains(entry));
 
 *Compare two objects with included fields ("id", "type", "description"):*
 
-```aidl
+```java
 List<String> includedProperties = Arrays.asList("id", "type", "description");
 ...
 DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -118,7 +152,7 @@ assertTrue(changeList.contains(entry));
 
 *Compare two objects with included fields ("id", "type", "description"):*
 
-```aidl
+```java
 List<String> includedProperties = Arrays.asList("id", "type", "description");
 ...
 DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -146,7 +180,7 @@ assertTrue(changeList.contains(entry));
 
 *Compare two objects with included ("id", "createdAt", "updatedAt", "description") / excluded fields ("createdAt", "updatedAt", "type"):*
 
-```aidl
+```java
 List<String> includedProperties = Arrays.asList("id", "createdAt", "updatedAt", "description");
 List<String> excludedProperties = Arrays.asList("createdAt", "updatedAt", "type");
 ...
@@ -176,7 +210,7 @@ assertFalse(changeList.contains(entry));
 
 *Compare two objects with included ("id", "type") / excluded ("description", "createdAt", "updatedAt") fields (non-intersected):*
 
-```aidl
+```java
 List<String> includedProperties = Arrays.asList("id", "type");
 List<String> excludedProperties = Arrays.asList("description", "createdAt", "updatedAt");
 ...
@@ -206,7 +240,7 @@ assertFalse(changeList.contains(entry));
 
 *Compare two objects with included fields ("id", "type", "createdAt") and custom string field comparator:*
 
-```aidl
+```java
 List<String> includedProperties = Arrays.asList("id", "type", "createdAt");
 ...
 DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -237,7 +271,7 @@ assertEquals(deliveryInfo1.getGid(), deliveryInfo2.getGid());
 
 *Compare two objects with included fields ("createdAt", "updatedAt") and custom date field comparator:*
 
-```aidl
+```java
 List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
 ...
 DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -269,7 +303,7 @@ assertNotEquals(deliveryInfo1.getUpdatedAt(), deliveryInfo2.getUpdatedAt());
 
 *Assert object by general matcher:*
 
-```aidl
+```java
 DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
         .withType(5)
         .withGid("TEST")
@@ -280,7 +314,7 @@ assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
 *Assert object by custom date matcher:*
 
-```aidl
+```java
 Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
       @Override
       public boolean matchesSafe(final DeliveryInfo value) {
@@ -298,9 +332,14 @@ this.deliveryInfo.setUpdatedAt(DateUtils.toDate("27/06/2018", "dd/MM/yyyy"));
 assertFalse(deliveryInfoMatcher.matches(this.deliveryInfo));
 ```
 
-***Installation:***
+## Contribution
 
-Package the application with all the dependencies:
-```aidl
-mvn clean compile assembly:single
-```
+If you discovered a bug or have just an idea for a new feature development, please don't hesitate to contact our team at
+[Pull Request](https://help.github.com/articles/using-pull-requests)
+
+More information regarding a contribution involvement process can be found at:
+[here](https://github.com/SQiShER/java-object-diff/blob/master/CONTRIBUTING.md)
+
+---
+Powered by *IntelliJ IDEA* IDE
+[![IntelliJ IDEA](https://www.jetbrains.com/idea/docs/logo_intellij_idea.png)](https://www.jetbrains.com/idea/)

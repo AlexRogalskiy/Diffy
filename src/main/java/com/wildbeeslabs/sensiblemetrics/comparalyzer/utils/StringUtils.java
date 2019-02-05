@@ -41,12 +41,12 @@ public class StringUtils {
     public static final String DEFAULT_ALPHANUMERIC_PATTERN = "[^a-zA-Z0-9]";
 
     /**
-     * Returns string with replaced values by pattern
+     * Returns string value {@link String} with replaced values by pattern
      *
-     * @param initialValue - initial argument value
-     * @param pattern      - initial pattern to be replaced by
-     * @param replaceValue - initial value replacement by pattern occurrences
-     * @return string with replaced values by pattern
+     * @param initialValue - initial argument value {@link String}
+     * @param pattern      - initial pattern to be replaced by {@link String}
+     * @param replaceValue - initial value replacement by pattern occurrences {@link String}
+     * @return string with replaced by pattern values {@link String}
      */
     public static String replaceAll(final String initialValue, final String pattern, final String replaceValue) {
         Objects.requireNonNull(initialValue);
@@ -54,10 +54,10 @@ public class StringUtils {
     }
 
     /**
-     * Returns string sanitized by default regex pattern {@see DEFAULT_ALPHANUMERIC_PATTERN}
+     * Returns string value sanitized by default regex pattern {@link String}
      *
-     * @param initialValue - initial argument value
-     * @return string stripped by default regex pattern
+     * @param initialValue - initial argument value {@link String}
+     * @return string value stripped by default regex pattern {@link String}
      */
     public static String sanitize(final String initialValue) {
         return replaceAll(initialValue, DEFAULT_ALPHANUMERIC_PATTERN, org.apache.commons.lang3.StringUtils.EMPTY).trim();

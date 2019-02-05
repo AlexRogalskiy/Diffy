@@ -39,13 +39,13 @@ import java.util.Objects;
 public class ConverterUtils {
 
     /**
-     * Returns converted value {@link T} by converter instance {@link Converter}
+     * Returns converted value by converter instance {@link Converter}
      *
-     * @param value     - initial argument value to be converted {@link T}
+     * @param value     - initial argument value to be converted
      * @param converter - initial converter to process on {@link Converter}
      * @param <T>
      * @param <R>
-     * @return converted value {@link T}
+     * @return converted value
      */
     public static <T, R> R convert(final T value, final Converter<T, R> converter) {
         Objects.requireNonNull(converter);
