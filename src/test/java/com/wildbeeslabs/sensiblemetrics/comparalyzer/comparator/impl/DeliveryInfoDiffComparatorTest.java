@@ -30,7 +30,6 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.factory.DefaultDiffComparatorFactory;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -44,6 +43,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils.now;
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils.toDate;
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.getAllFields;
 import static org.hamcrest.CoreMatchers.not;
@@ -579,7 +579,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         diffComparator.includeProperties(includedProperties);
         diffComparator.setComparator("createdAt", (Comparator<Date>) (d1, d2) -> Math.abs(d1.getTime() - d2.getTime()) <= DIFF_DELTA ? 0 : d1.compareTo(d2));
 
-        final LocalDate initialDate = DateUtils.now();
+        final LocalDate initialDate = now();
         getDeliveryInfoFirst().setCreatedAt(toDate(initialDate));
         getDeliveryInfoLast().setCreatedAt(toDate(initialDate.plus(1, ChronoUnit.DAYS)));
 

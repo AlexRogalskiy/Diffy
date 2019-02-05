@@ -34,6 +34,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     public void assertMatches() {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = urlString;
+
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
         assertTrue(urlParametersMatcher.matchesSafe(testString));
     }
@@ -42,6 +43,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     public void assertLengthMismatch() {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3&arg4=val4";
+
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
@@ -50,6 +52,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     public void assertNamesMismatch() {
         final String urlString = "arg1=val1&arg22=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
+
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
@@ -58,6 +61,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     public void assertValuesMismatch() {
         final String urlString = "arg1=val1&arg2=val22&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
+
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }

@@ -27,7 +27,6 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffTes
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.Matcher;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.AbstractTypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -40,6 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils.toDate;
 import static org.junit.Assert.*;
 
 /**
@@ -74,8 +74,8 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
                 .withType(5)
                 .withGid("TEST")
-                .withCreatedDate(DateUtils.toDate("17/06/2013", DATE_FORMAT))
-                .withUpdatedDate(DateUtils.toDate("27/09/2018", DATE_FORMAT));
+                .withCreatedDate(toDate("17/06/2013", DATE_FORMAT))
+                .withUpdatedDate(toDate("27/09/2018", DATE_FORMAT));
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
@@ -91,12 +91,12 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         };
         final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
 
-        getDeliveryInfo().setCreatedAt(DateUtils.toDate("07/06/2013", DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("17/06/2018", DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DATE_FORMAT));
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
-        getDeliveryInfo().setCreatedAt(DateUtils.toDate("17/06/2013", DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("27/06/2018", DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DATE_FORMAT));
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
