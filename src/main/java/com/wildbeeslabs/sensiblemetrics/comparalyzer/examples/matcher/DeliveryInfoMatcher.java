@@ -21,10 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.Matcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.AbstractFieldMatcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.AbstractMatcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.AbstractTypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl.InstanceMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

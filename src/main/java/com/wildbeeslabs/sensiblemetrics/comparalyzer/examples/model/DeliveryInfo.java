@@ -21,43 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
-import java.util.Comparator;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
- * Custom difference comparator implementation by delivery info instance {@link DeliveryInfo}
+ * Custom delivery info instance
  */
-@Slf4j
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class DeliveryInfoDiffComparator extends DefaultDiffComparator<DeliveryInfo> {
+@EqualsAndHashCode
+@ToString
+public class DeliveryInfo implements Serializable {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 436117742331557518L;
+    private static final long serialVersionUID = 8170421693292671905L;
 
     /**
-     * Creates delivery information difference comparator
+     * Default ID
      */
-    public DeliveryInfoDiffComparator() {
-        super(DeliveryInfo.class);
-    }
-
+    private Long id;
     /**
-     * Creates delivery information difference comparator with comparator instance {@link Comparator}
-     *
-     * @param comparator - initial comparator instance {@link Comparator}
+     * Default type
      */
-    public DeliveryInfoDiffComparator(final Comparator<? super DeliveryInfo> comparator) {
-        super(DeliveryInfo.class, comparator);
-    }
+    private Integer type;
+    /**
+     * Default description / comments
+     */
+    private String description;
+    /**
+     * Default global ID
+     */
+    private String gid;
+    /**
+     * Default created timestamp
+     */
+    private Date createdAt;
+    /**
+     * Default updated timestamp
+     */
+    private Date updatedAt;
 }

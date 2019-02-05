@@ -21,50 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.entity;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator;
 
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DefaultDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.Comparator;
 
 /**
- * Custom delivery info instance
+ * Custom difference comparator implementation by delivery info instance {@link DeliveryInfo}
  */
+@Slf4j
 @Data
-@EqualsAndHashCode
-@ToString
-public class DeliveryInfo implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class DeliveryInfoDiffComparator extends DefaultDiffComparator<DeliveryInfo> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 8170421693292671905L;
+    private static final long serialVersionUID = 436117742331557518L;
 
     /**
-     * Default ID
+     * Creates delivery information difference comparator
      */
-    private Long id;
+    public DeliveryInfoDiffComparator() {
+        super(DeliveryInfo.class);
+    }
+
     /**
-     * Default type
+     * Creates delivery information difference comparator with comparator instance {@link Comparator}
+     *
+     * @param comparator - initial comparator instance {@link Comparator}
      */
-    private Integer type;
-    /**
-     * Default description / comments
-     */
-    private String description;
-    /**
-     * Default global ID
-     */
-    private String gid;
-    /**
-     * Default created timestamp
-     */
-    private Date createdAt;
-    /**
-     * Default updated timestamp
-     */
-    private Date updatedAt;
+    public DeliveryInfoDiffComparator(final Comparator<? super DeliveryInfo> comparator) {
+        super(DeliveryInfo.class, comparator);
+    }
 }

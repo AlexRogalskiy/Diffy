@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffComparatorTest;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.factory.DefaultDiffComparatorFactory;
 import lombok.Data;
@@ -145,7 +145,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         final List<String> includedProperties = Arrays.asList("id", "type", "description");
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_COMPARATOR);
-        diffComparator.includeProperties(includedProperties);
+        diffComparator.setProperties(includedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
@@ -216,7 +216,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         final List<String> includedProperties = Arrays.asList("id", "createdAt");
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_COMPARATOR);
-        diffComparator.includeProperties(includedProperties);
+        diffComparator.setProperties(includedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
@@ -372,7 +372,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         final List<String> includedProperties = Arrays.asList("id", "type", "createdAt", "id", "type");
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.includeProperties(includedProperties);
+        diffComparator.setProperties(includedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
 
@@ -467,7 +467,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         getDeliveryInfoLast().setDescription(null);
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.includeProperties(includedProperties);
+        diffComparator.setProperties(includedProperties);
         diffComparator.setComparator("_identCode", (Comparator<String>) (o1, o2) -> o1.substring(0, 5).compareToIgnoreCase(o2.substring(0, 5)));
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         assertNotNull(iterable);
@@ -510,7 +510,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         final List<String> includedProperties = Arrays.asList("id", "type", "description", "createdAt");
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.includeProperties(includedProperties);
+        diffComparator.setProperties(includedProperties);
         getDeliveryInfoFirst().setDescription(defaultDeliveryDescription.concat(UUID.randomUUID().toString()));
         getDeliveryInfoLast().setDescription(defaultDeliveryDescription.concat(UUID.randomUUID().toString()));
         diffComparator.setComparator("description", (Comparator<String>) (o1, o2) -> o1.substring(0, 5).compareToIgnoreCase(o2.substring(0, 5)));
@@ -552,7 +552,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffComp
         final List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.includeProperties(includedProperties);
+        diffComparator.setProperties(includedProperties);
         diffComparator.setComparator("createdAt", Comparator.comparingInt((Date d) -> LocalDateTime.fromDateFields(d).getHourOfDay()));
         diffComparator.setComparator("updatedAt", Comparator.comparingInt((Date d) -> LocalDateTime.fromDateFields(d).getDayOfMonth()));
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());

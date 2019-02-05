@@ -24,7 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffComparatorTest;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.matcher.DeliveryInfoMatcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.Matcher;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils;
 import lombok.Data;
@@ -64,11 +65,18 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffComparatorT
 
     @Test
     public void testDeliveryInfoByMatcher() {
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
                 .withType(mockUnitInt.val())
                 .withGid(alphaNumbericMockUnitString.val())
                 .withCreatedDate(mockUnitLocalDate.toUtilDate().val())
                 .withUpdatedDate(mockUnitLocalDate.toUtilDate().val());
+        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
+
+        deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+                .withType(5)
+                .withGid("TEST")
+                .withCreatedDate(DateUtils.toDate("17/06/2013", "dd/MM/yyyy"))
+                .withUpdatedDate(DateUtils.toDate("27/09/2018", "dd/MM/yyyy"));
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 

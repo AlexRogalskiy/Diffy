@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entity.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

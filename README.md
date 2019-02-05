@@ -267,6 +267,37 @@ assertTrue(changeList.contains(entry));
 assertNotEquals(deliveryInfo1.getUpdatedAt(), deliveryInfo2.getUpdatedAt());
 ```
 
+*Assert object by general matcher:*
+
+```aidl
+DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        .withType(5)
+        .withGid("TEST")
+        .withCreatedDate(DateUtils.toDate("17/06/2013", "dd/MM/yyyy"))
+        .withUpdatedDate(DateUtils.toDate("27/09/2018", "dd/MM/yyyy"));
+assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
+```
+
+*Assert object by custom date matcher:*
+
+```aidl
+Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
+      @Override
+      public boolean matchesSafe(final DeliveryInfo value) {
+            return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
+                   && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
+      }
+};
+...
+this.deliveryInfo.setCreatedAt(DateUtils.toDate("07/06/2013", "dd/MM/yyyy"));
+this.deliveryInfo.setUpdatedAt(DateUtils.toDate("17/06/2018", "dd/MM/yyyy"));
+assertTrue(deliveryInfoMatcher.matches(this.deliveryInfo));
+...
+this.deliveryInfo.setCreatedAt(DateUtils.toDate("17/06/2013", "dd/MM/yyyy"));
+this.deliveryInfo.setUpdatedAt(DateUtils.toDate("27/06/2018", "dd/MM/yyyy"));
+assertFalse(deliveryInfoMatcher.matches(this.deliveryInfo));
+```
+
 ***Installation:***
 
 Package the application with all the dependencies:
