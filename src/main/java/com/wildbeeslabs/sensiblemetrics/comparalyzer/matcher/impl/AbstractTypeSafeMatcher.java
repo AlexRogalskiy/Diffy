@@ -66,7 +66,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     }
 
     /**
-     * Default abstract type safe matcher constructor with reflection method type instance {@link ReflectionUtils.ReflectionMethodType}
+     * Default abstract type safe matcher constructor with reflection method type instance
      */
     public AbstractTypeSafeMatcher(final ReflectionUtils.ReflectionMethodType methodType) {
         this.clazz = (Class<? extends T>) (Objects.isNull(methodType) ? DEFAULT_TYPE : methodType).getType(this.getClass());

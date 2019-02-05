@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.wildbeeslabs.sensiblemetrics.comparalyzer</groupId>
-    <artifactId>Comparalyzer-core</artifactId>
+    <artifactId>comparalyzer-core</artifactId>
     <version>1.0.0-RELEASE</version>
     <packaging>jar</packaging>
 
@@ -296,7 +296,7 @@
                         <debug>true</debug>
                         <debuglevel>lines,vars,source</debuglevel>
                         <optimize>false</optimize>
-                        <verbose>true</verbose>
+                        <verbose>false</verbose>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>${project.reporting.outputEncoding}</encoding>

@@ -1,9 +1,8 @@
 site_name: Comparalyzer Documentation
-repo_url: https://gitlab.com/AlexRogalskiy/Compara
+repo_url: https://gitlab.com/AlexRogalskiy/Comparalyzer
 pages:
 - Home: index.md
-- Using with Maven: maven.md
+- Dependency Management: dependency.md
 - Getting Started: getting-started.md
 - User Guide:
   - User Guide: user-guide.md
-- Merging: merging.md
