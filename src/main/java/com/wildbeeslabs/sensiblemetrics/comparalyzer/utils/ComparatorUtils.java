@@ -106,6 +106,7 @@ public class ComparatorUtils {
      *
      * @return default comparator instance {@link Comparator}
      */
+    @SuppressWarnings("unchecked")
     public static Comparator<? super Object> getDefaultComparator() {
         return new DefaultComparator();
     }
@@ -116,6 +117,7 @@ public class ComparatorUtils {
      * @param <T>
      * @return default comparator instance {@link Comparator}
      */
+    @SuppressWarnings("unchecked")
     public static <T> Comparator<? super T> getDefaultComparableComparator() {
         return new DefaultComparableComparator();
     }

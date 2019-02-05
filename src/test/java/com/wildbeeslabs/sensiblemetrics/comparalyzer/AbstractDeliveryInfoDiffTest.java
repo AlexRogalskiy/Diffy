@@ -49,6 +49,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
     protected static final Comparator<? super DeliveryInfo> DEFAULT_COMPARATOR = Comparator
             .comparing(DeliveryInfo::getId)
             .thenComparing(DeliveryInfo::getType)
+            .thenComparing(DeliveryInfo::getGid)
             .thenComparing(DeliveryInfo::getDescription)
             .thenComparing(DeliveryInfo::getCreatedAt)
             .thenComparing(DeliveryInfo::getUpdatedAt)
@@ -63,6 +64,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
         return filler(() -> new DeliveryInfo())
                 .setter(DeliveryInfo::setId, mockUnitLong)
                 .setter(DeliveryInfo::setType, mockUnitInt)
+                .setter(DeliveryInfo::setGid, alphaNumericMockUnitString)
                 .setter(DeliveryInfo::setDescription, lettersMockUnitString)
                 .setter(DeliveryInfo::setCreatedAt, mockUnitLocalDate.toUtilDate())
                 .setter(DeliveryInfo::setUpdatedAt, mockUnitLocalDate.toUtilDate())

@@ -6,7 +6,7 @@
 
     <groupId>com.wildbeeslabs.sensiblemetrics.comparalyzer</groupId>
     <artifactId>comparalyzer-core</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>Comparator Analyzer</name>
@@ -65,7 +65,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.7</version>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -226,12 +226,6 @@
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.0.1</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.1.0</version>
                     <configuration>
@@ -359,9 +353,6 @@
                         <includes>
                             <include>**/*IT.java</include>
                         </includes>
-                        <excludes>
-                            <exclude>com.demo.alertmanager.*</exclude>
-                        </excludes>
                     </configuration>
                     <executions>
                         <execution>
@@ -396,7 +387,8 @@
                             <Bundle-Version>${project.version}</Bundle-Version>
                             <Import-Package>*</Import-Package>
                             <Private-Package>com.wildbeeslabs.sensiblemetrics.comparalyzer.*</Private-Package>
-                            <Export-Package>com.wildbeeslabs.sensiblemetrics.comparalyzer.*;-noimport:=true</Export-Package>
+                            <Export-Package>com.wildbeeslabs.sensiblemetrics.comparalyzer.*;-noimport:=true
+                            </Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
                         </instructions>
                     </configuration>
@@ -449,7 +441,7 @@
                     </executions>
                     <configuration>
                         <excludes>
-                            <exclude>**/entry/**</exclude>
+                            <exclude>**/examples/**</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -701,7 +693,7 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <version>${hamcrest.version}</version>
-            <!--<scope>test</scope>-->
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>

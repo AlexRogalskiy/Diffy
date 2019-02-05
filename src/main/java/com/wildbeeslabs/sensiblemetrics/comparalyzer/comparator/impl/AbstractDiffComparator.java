@@ -198,6 +198,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param comparator - initial argument comparator instance {@link Comparator}
      * @return numeric result of initial arguments comparison
      */
+    @SuppressWarnings("unchecked")
     protected int compare(final T first, final T last, final String property, final Comparator<? super Object> comparator) {
         if (Objects.isNull(property)) {
             return getComparator().compare(first, last);
@@ -213,6 +214,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param property - initial property name {@link String}
      * @return property comparator {@link Comparator}}
      */
+    @SuppressWarnings("unchecked")
     protected <T> Comparator<? super T> getPropertyComparator(final String property) {
         return (Comparator<? super T>) getPropertyComparatorMap().getOrDefault(sanitize(property), ComparatorUtils.getDefaultComparator());
     }
