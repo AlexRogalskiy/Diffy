@@ -13,5 +13,5 @@ The Сomparalyzer dependency can be simply acquired by adding the following code
 ## Gradle
 
 ```groovy
-compile 'com.wildbeeslabs.sensiblemetrics.Comparalyzer:1.0.0-RELEASE'
+compile 'com.wildbeeslabs.sensiblemetrics.comparalyzer:comparalyzer-core:1.0.0-RELEASE'
 ```
