@@ -16,7 +16,7 @@ Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(object1, object
 
 ## Examples
 
-*Create initial objects to be compared:*
+#### Create initial objects to be compared
 
 ```java
 DeliveryInfo deliveryInfo1 = new DeliveryInfo();
@@ -34,7 +34,7 @@ deliveryInfo2.setCreatedAt(...);
 deliveryInfo2.setUpdatedAt(...)
 ```
 
-*Compare two objects by default fields (all fields will be included):*
+#### Compare two objects by default fields (all fields will be included)
 
 ```java
 DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -46,7 +46,7 @@ assertThat(changeList.size(), greaterThanOrEqualTo(0));
 assertThat(changeList.size(), lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length));
 ```
 
-*Compare two equal objects by default fields (all fields will be included):*
+#### Compare two equal objects by default fields (all fields will be included)
 
 ```java
 DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -56,7 +56,7 @@ List<DefaultDiffEntry> changeList = Lists.newArrayList(iterableDiff);
 assertEquals(changeList.size(), 0);
 ```
 
-*Compare two objects with excluded fields ("id", "createdAt", "updatedAt"):*
+#### Compare two objects with excluded fields ("id", "createdAt", "updatedAt")
 
 ```java
 List<String> excludedProperties = Arrays.asList("id", "createdAt", "updatedAt");
@@ -84,7 +84,7 @@ entry = DefaultDiffEntry
 assertTrue(changeList.contains(entry));
 ```
 
-*Compare two objects with included fields ("id", "type", "description"):*
+#### Compare two objects with included fields ("id", "type", "description")
 
 ```java
 List<String> includedProperties = Arrays.asList("id", "type", "description");
@@ -112,7 +112,7 @@ entry = DefaultDiffEntry
 assertTrue(changeList.contains(entry));
 ```
 
-*Compare two objects with included fields ("id", "type", "description"):*
+#### Compare two objects with included fields ("id", "type", "description")
 
 ```java
 List<String> includedProperties = Arrays.asList("id", "type", "description");
@@ -140,7 +140,7 @@ entry = DefaultDiffEntry
 assertTrue(changeList.contains(entry));
 ```
 
-*Compare two objects with included ("id", "createdAt", "updatedAt", "description") / excluded fields ("createdAt", "updatedAt", "type"):*
+#### Compare two objects with included ("id", "createdAt", "updatedAt", "description") / excluded fields ("createdAt", "updatedAt", "type")
 
 ```java
 List<String> includedProperties = Arrays.asList("id", "createdAt", "updatedAt", "description");
@@ -170,7 +170,7 @@ entry = DefaultDiffEntry
 assertFalse(changeList.contains(entry));
 ```
 
-*Compare two objects with included ("id", "type") / excluded ("description", "createdAt", "updatedAt") fields (non-intersected):*
+#### Compare two objects with included ("id", "type") / excluded ("description", "createdAt", "updatedAt") fields (non-intersected)
 
 ```java
 List<String> includedProperties = Arrays.asList("id", "type");
@@ -200,7 +200,7 @@ entry = DefaultDiffEntry
 assertFalse(changeList.contains(entry));
 ```
 
-*Compare two objects with included fields ("id", "type", "createdAt") and custom string field comparator:*
+#### Compare two objects with included fields ("id", "type", "createdAt") and custom string field comparator
 
 ```java
 List<String> includedProperties = Arrays.asList("id", "type", "createdAt");
@@ -231,7 +231,7 @@ assertFalse(changeList.contains(entry));
 assertEquals(deliveryInfo1.getGid(), deliveryInfo2.getGid());
 ```
 
-*Compare two objects with included fields ("createdAt", "updatedAt") and custom date field comparator:*
+#### Compare two objects with included fields ("createdAt", "updatedAt") and custom date field comparator
 
 ```java
 List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
@@ -263,7 +263,7 @@ assertTrue(changeList.contains(entry));
 assertNotEquals(deliveryInfo1.getUpdatedAt(), deliveryInfo2.getUpdatedAt());
 ```
 
-*Assert object by general matcher:*
+#### Assert object by general matcher
 
 ```java
 DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
@@ -274,7 +274,7 @@ DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
 assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
 ```
 
-*Assert object by custom date matcher:*
+#### Assert object by custom date matcher
 
 ```java
 Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {

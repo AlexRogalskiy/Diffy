@@ -27,7 +27,7 @@ The `Matcher` package contains the matchers classes that work as predicates to f
 
 The `Utils` package contains helper service classes to support the object comparison by applying particular comparator / converter instances.
 
-### Configuration API
+## Configuration API
 
 The following sections describes the different parts of the configuration API:
 

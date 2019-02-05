@@ -1,6 +1,6 @@
 ## General Description
 
-*Comparalyzer* is a simple library to provide the differences between two Java objects.
+`Comparalyzer` is a simple library to provide the differences between two Java objects.
 
 ## Introduction
 
