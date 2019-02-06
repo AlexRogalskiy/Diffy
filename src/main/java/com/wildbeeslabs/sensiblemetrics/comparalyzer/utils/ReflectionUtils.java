@@ -222,7 +222,7 @@ public class ReflectionUtils {
     }
 
     public static Set<Class<?>> typesOf(final Object... values) {
-        final Object[] traversableType = Optional.ofNullable(values).orElse(new Object[]{});
+        final Object[] traversableType = Optional.ofNullable(values).orElseGet(() -> new Object[]{});
         final Set<Class<?>> types = new HashSet<>(traversableType.length);
         Stream.of(traversableType).filter(Objects::nonNull).forEach(type -> types.add(type.getClass()));
         return types;
@@ -236,7 +236,7 @@ public class ReflectionUtils {
      * @return true - if shared type is assigned by input collection of argument types, fales - otherwise
      */
     public static boolean allAssignableFrom(final Class<?> sharedType, final Iterable<? extends Class<?>> types) {
-        final Iterable<? extends Class<?>> traversableType = Optional.ofNullable(types).orElse(Collections.emptyList());
+        final Iterable<? extends Class<?>> traversableType = Optional.ofNullable(types).orElseGet(Collections::emptyList);
         return !StreamSupport.stream(traversableType.spliterator(), false).anyMatch(type -> !sharedType.isAssignableFrom(type));
     }
 

@@ -110,7 +110,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void excludeProperties(final List<String> properties) {
         Optional.ofNullable(properties)
-                .orElse(Collections.emptyList())
+                .orElseGet(Collections::emptyList)
                 .forEach(property -> excludeProperty(property));
     }
 
@@ -133,7 +133,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public void includeProperties(final Iterable<String> properties) {
         getPropertySet().clear();
         Optional.ofNullable(properties)
-                .orElse(Collections.emptyList())
+                .orElseGet(Collections::emptyList)
                 .forEach(property -> includeProperty(property));
     }
 
@@ -167,7 +167,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void setComparators(final Map<String, Comparator<?>> propertyMap) {
         Optional.ofNullable(propertyMap)
-                .orElse(Collections.emptyMap())
+                .orElseGet(Collections::emptyMap)
                 .entrySet()
                 .forEach(entry -> setComparator(entry.getKey(), entry.getValue()));
     }
@@ -189,7 +189,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     protected void removeComparators(final Iterable<String> properties) {
         Optional.ofNullable(properties)
-                .orElse(Collections.emptyList())
+                .orElseGet(Collections::emptyList)
                 .forEach(property -> removeComparator(property));
     }
 

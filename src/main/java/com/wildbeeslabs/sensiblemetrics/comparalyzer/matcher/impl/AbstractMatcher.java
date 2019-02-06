@@ -91,7 +91,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      */
     public AbstractMatcher<T> withoutMatchers(final Iterable<Matcher<? super T>> matchers) {
         Optional.ofNullable(matchers)
-                .orElse(Collections.emptyList())
+                .orElseGet(Collections::emptyList)
                 .forEach(property -> withoutMatcher(property));
         return this;
     }
@@ -116,7 +116,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     public AbstractMatcher<T> withMatchers(final Iterable<Matcher<? super T>> matchers) {
         getMatchers().clear();
         Optional.ofNullable(matchers)
-                .orElse(Collections.emptyList())
+                .orElseGet(Collections::emptyList)
                 .forEach(property -> withMatcher(property));
         return this;
     }
