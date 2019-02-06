@@ -39,7 +39,7 @@ import static org.junit.Assert.assertTrue;
  * Url parameters matcher unit test
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

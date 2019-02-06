@@ -44,7 +44,7 @@ import static net.andreinc.mockneat.unit.types.Longs.longs;
  * Abstract difference unit test
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

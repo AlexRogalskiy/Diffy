@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
  * @param <T>
  * @param <R>
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

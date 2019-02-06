@@ -39,7 +39,7 @@ import java.util.Objects;
  * Custom date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

@@ -28,7 +28,7 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
  *
  * @param <T>
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @FunctionalInterface

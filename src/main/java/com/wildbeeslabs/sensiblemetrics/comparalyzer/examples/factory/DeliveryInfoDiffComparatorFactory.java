@@ -35,7 +35,7 @@ import java.util.Comparator;
  * Default difference comparator factory implementation
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

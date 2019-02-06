@@ -41,7 +41,7 @@ import static net.andreinc.mockneat.unit.objects.Filler.filler;
  * Abstract delivery info difference unit test
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

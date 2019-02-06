@@ -42,7 +42,7 @@ import java.util.function.Function;
  * Custom delivery info matcher implementation {@link DeliveryInfo}
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

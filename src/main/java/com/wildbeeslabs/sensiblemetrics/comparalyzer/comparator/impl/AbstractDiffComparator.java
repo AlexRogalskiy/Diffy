@@ -41,7 +41,7 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtil
  * Abstract difference comparator implementation by input object instance
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

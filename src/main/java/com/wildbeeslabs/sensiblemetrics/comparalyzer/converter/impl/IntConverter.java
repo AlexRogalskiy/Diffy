@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
  * Default integer converter implementation {@link Integer}
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

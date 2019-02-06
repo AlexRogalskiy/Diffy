@@ -39,7 +39,7 @@ import java.util.Objects;
  * Default difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

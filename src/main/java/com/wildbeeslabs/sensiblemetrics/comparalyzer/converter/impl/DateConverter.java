@@ -37,7 +37,7 @@ import java.util.Objects;
  * Default date converter implementation {@link Date}
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

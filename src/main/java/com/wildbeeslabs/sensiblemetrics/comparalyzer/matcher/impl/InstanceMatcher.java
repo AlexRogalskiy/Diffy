@@ -36,7 +36,7 @@ import java.util.Objects;
  * Custom instance matcher implementation by object instance {@link Object}
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j

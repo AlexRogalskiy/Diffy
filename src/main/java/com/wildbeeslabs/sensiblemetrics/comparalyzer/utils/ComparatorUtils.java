@@ -37,7 +37,7 @@ import java.util.Objects;
  * Custom comparator utilities implementation {@link Comparator}
  *
  * @author Alexander Rogalskiy
- * @version %I%, %G%
+ * @version 1.1
  * @since 1.0
  */
 @Slf4j
