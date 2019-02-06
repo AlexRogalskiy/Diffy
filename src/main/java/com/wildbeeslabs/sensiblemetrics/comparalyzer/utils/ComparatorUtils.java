@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import com.google.common.collect.Iterables;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,6 +52,8 @@ public class ComparatorUtils {
      *
      * @param <T>
      */
+    @EqualsAndHashCode
+    @ToString
     public static class DefaultComparableComparator<T extends Comparable<? super T>> implements Comparator<T>, Serializable {
 
         /**
@@ -64,7 +69,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument
          * @param last  - initial last argument
-         * @return numeric result of two entries comparison
+         * @return numeric result of two objects comparison
          */
         @Override
         public int compare(final T first, final T last) {
@@ -73,8 +78,10 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default comparator implementation {@link Object}
+     * Default object comparator implementation {@link Object}
      */
+    @EqualsAndHashCode
+    @ToString
     public static class DefaultComparator implements Comparator<Object>, Serializable {
 
         /**
@@ -90,7 +97,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument {@link Object}
          * @param last  - initial last argument {@link Object}
-         * @return numeric result of two entries comparison
+         * @return numeric result of two objects comparison
          */
         @Override
         public int compare(final Object first, final Object last) {
@@ -107,8 +114,10 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default comparator implementation {@link Class}
+     * Default class comparator implementation {@link Class}
      */
+    @EqualsAndHashCode
+    @ToString
     public static class DefaultClassComparator implements Comparator<Class<?>>, Serializable {
 
         /**
@@ -124,7 +133,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument {@link Class}
          * @param last  - initial last argument {@link Class}
-         * @return numeric result of two entries comparison
+         * @return numeric result of two objects comparison
          */
         @Override
         public int compare(final Class<?> first, final Class<?> last) {
@@ -138,8 +147,11 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default comparator implementation {@link Class}
+     * Default iterable comparator implementation {@link Iterable}
      */
+    @Data
+    @EqualsAndHashCode
+    @ToString
     public static class DefaultIterableComparator<T> implements Comparator<Iterable<T>>, Serializable {
 
         /**
@@ -148,12 +160,12 @@ public class ComparatorUtils {
         private static final long serialVersionUID = 6254436821300471761L;
 
         /**
-         * Custom comparator type instance
+         * Custom comparator instance {@link Comparator}
          */
         private final Comparator<? super T> comparator;
 
         /**
-         * Default iterable comparator constructor
+         * Default iterable comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
@@ -169,7 +181,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument {@link Iterable}
          * @param last  - initial last argument {@link Iterable}
-         * @return numeric result of two iterable collections comparison
+         * @return numeric result of two iterable objects comparison
          */
         @Override
         public int compare(final Iterable<T> first, final Iterable<T> last) {
@@ -192,7 +204,7 @@ public class ComparatorUtils {
             final Iterator<T> iteratorLast = last.iterator();
             int temp;
             while (iteratorFirst.hasNext()) {
-                temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), this.comparator);
+                temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), getComparator());
                 if (0 != temp) {
                     return temp;
                 }
@@ -202,9 +214,9 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns default object comparator instance {@link Comparator}
+     * Returns object {@link Object} comparator instance {@link Comparator}
      *
-     * @return default comparator instance {@link Comparator}
+     * @return object {@link Object} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
     public static Comparator<? super Object> getDefaultComparator() {
@@ -212,10 +224,10 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns default comparable comparator instance {@link Comparator}
+     * Returns comparable {@link Comparable} comparator instance {@link Comparator}
      *
      * @param <T>
-     * @return default comparator instance {@link Comparator}
+     * @return comparable {@link Comparable} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
     public static <T> Comparator<? super T> getDefaultComparableComparator() {
@@ -223,9 +235,9 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns default class comparator instance {@link Comparator}
+     * Returns class {@link Class} comparator instance {@link Comparator}
      *
-     * @return default comparator instance {@link Comparator}
+     * @return class {@link Class} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
     public static Comparator<? super Class<?>> getDefaultClassComparator() {
@@ -233,9 +245,9 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns default class comparator instance {@link Comparator}
+     * Returns iterable {@link Iterable} comparator instance {@link Comparator}
      *
-     * @return default comparator instance {@link Comparator}
+     * @return iterable {@link Iterable} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
     public static <T> Comparator<? super Iterable<T>> getDefaultIterableComparator(final Comparator<? super T> comparator) {
@@ -246,8 +258,8 @@ public class ComparatorUtils {
      * Returns numeric result of initial arguments comparison by {@link Comparator}
      *
      * @param <T>
-     * @param first - initial first argument
-     * @param last  - initial last argument
+     * @param first - initial first input argument
+     * @param last  - initial last input argument
      * @return numeric value of comparison
      */
     public static <T> int compare(final T first, final T last) {
@@ -258,8 +270,8 @@ public class ComparatorUtils {
      * Returns numeric result by initial comparator instance {@link Comparator}
      *
      * @param <T>
-     * @param first      - initial first argument
-     * @param last       - initial last argument
+     * @param first      - initial first input argument
+     * @param last       - initial last input argument
      * @param comparator - initial comparator instance {@link Comparator}
      * @return numeric value of comparison
      */
@@ -271,8 +283,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe integer arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument
-     * @param last  - initial last argument
+     * @param first - initial first input argument
+     * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -284,8 +296,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe long arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument
-     * @param last  - initial last argument
+     * @param first - initial first input argument
+     * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -297,8 +309,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe float arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument
-     * @param last  - initial last argument
+     * @param first - initial first input argument
+     * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -310,8 +322,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe double arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument
-     * @param last  - initial last argument
+     * @param first - initial first input argument
+     * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -323,8 +335,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe BigDecimal-like arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument
-     * @param last  - initial last argument
+     * @param first - initial first input argument
+     * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -336,8 +348,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe {@link BigDecimal} arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link BigDecimal}
-     * @param last  - initial last argument {@link BigDecimal}
+     * @param first - initial first input argument {@link BigDecimal}
+     * @param last  - initial last input argument {@link BigDecimal}
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -349,8 +361,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe string-like arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument {@link BigDecimal}
-     * @param last  - initial last argument {@link BigDecimal}
+     * @param first - initial first input argument {@link BigDecimal}
+     * @param last  - initial last input argument {@link BigDecimal}
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -361,8 +373,8 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe {@link String} arguments comparison
      *
-     * @param first - initial first argument {@link String}
-     * @param last  - initial last argument {@link String}
+     * @param first - initial first input argument {@link String}
+     * @param last  - initial last input argument {@link String}
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
@@ -375,8 +387,8 @@ public class ComparatorUtils {
      * Returns numeric result by null-safe general arguments comparison
      *
      * @param <T>
-     * @param first - initial first argument
-     * @param last  - initial last argument
+     * @param first - initial first input argument
+     * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
