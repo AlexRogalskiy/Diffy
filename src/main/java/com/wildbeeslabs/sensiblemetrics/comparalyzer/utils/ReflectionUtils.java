@@ -30,10 +30,16 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
+import java.io.Serializable;
 import java.lang.reflect.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
@@ -43,6 +49,160 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sa
 @Slf4j
 @UtilityClass
 public class ReflectionUtils {
+
+    /**
+     * Default primitive wrapper types {@link Set}
+     */
+    private static final Set<Class<?>> PRIMITIVE_WRAPPER_TYPES = getPrimitiveWrapperTypes();
+    /**
+     * Default primitive numeric types {@link Collection}
+     */
+    private static final Collection<Class<?>> PRIMITIVE_NUMERIC_TYPES = getPrimitiveNumericTypes();
+    /**
+     * Default collection of extendable simple types {@link Collection}
+     */
+    @SuppressWarnings("unchecked")
+    private static final Collection<Class<?>> EXTENDABLE_SIMPLE_TYPES = Arrays.asList(
+            BigDecimal.class,
+            BigInteger.class,
+            CharSequence.class, // String, StringBuilder, etc.
+            Calendar.class, // GregorianCalendar, etc.
+            Date.class, // java.sql.Date, java.util.Date, java.util.Time, etc.
+            Enum.class // enums
+
+    );
+    /**
+     * Default collection of final simple types {@link List}
+     */
+    @SuppressWarnings("unchecked")
+    private static final Collection<Class<? extends Serializable>> FINAL_SIMPLE_TYPES = Arrays.asList(
+            Class.class,
+            URI.class,
+            URL.class,
+            Locale.class,
+            UUID.class
+    );
+
+    /**
+     * Returns collection of primitive wrapper types {@link Set}
+     *
+     * @return collection of primitive wrapper types {@link Set}
+     */
+    private static Set<Class<?>> getPrimitiveWrapperTypes() {
+        final Set<Class<?>> wrapperTypes = new HashSet<Class<?>>();
+        wrapperTypes.add(Boolean.class);
+        wrapperTypes.add(Character.class);
+        wrapperTypes.add(Byte.class);
+        wrapperTypes.add(Short.class);
+        wrapperTypes.add(Integer.class);
+        wrapperTypes.add(Long.class);
+        wrapperTypes.add(Float.class);
+        wrapperTypes.add(Double.class);
+        wrapperTypes.add(Void.class);
+        return wrapperTypes;
+    }
+
+    /**
+     * Returns binary flag based on input class instance {@link Class}
+     *
+     * @param clazz - initial class instance {@link Class}
+     * @return true - if input class is primitive numeric type, false - otherwise
+     */
+    public static boolean isPrimitiveNumericType(final Class<?> clazz) {
+        return PRIMITIVE_NUMERIC_TYPES.contains(clazz);
+    }
+
+    /**
+     * Returns binary flag based on input class instance {@link Class}
+     *
+     * @param clazz - initial class instance {@link Class}
+     * @return true - if input class is comparable type, false - otherwise
+     */
+    public static boolean isComparableType(final Class<?> clazz) {
+        return Comparable.class.isAssignableFrom(clazz);
+    }
+
+    public static boolean isSimpleType(final Class<?> clazz) {
+        if (Objects.isNull(clazz)) {
+            return false;
+        } else if (isPrimitiveType(clazz)) {
+            return true;
+        } else if (isPrimitiveWrapperType(clazz)) {
+            return true;
+        }
+        for (final Class<?> type : FINAL_SIMPLE_TYPES) {
+            if (type.equals(clazz)) {
+                return true;
+            }
+        }
+        for (final Class<?> type : EXTENDABLE_SIMPLE_TYPES) {
+            if (type.isAssignableFrom(clazz)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPrimitiveType(final Class<?> clazz) {
+        return Objects.nonNull(clazz) && clazz.isPrimitive();
+    }
+
+    public static boolean isPrimitiveWrapperType(final Class<?> clazz) {
+        return Objects.nonNull(clazz) && PRIMITIVE_WRAPPER_TYPES.contains(clazz);
+    }
+
+    public static <T> T freshInstanceOf(final Class<T> clazz) {
+        if (Objects.isNull(clazz)) {
+            return null;
+        }
+        final Constructor<T> constructor;
+        try {
+            constructor = clazz.getDeclaredConstructor();
+        } catch (final NoSuchMethodException e) {
+            log.error("ERROR: missing default constructor for type {}. Assuming standard default values for primitive properties.", clazz.getName());
+            return null;
+        }
+        final boolean accessibility = constructor.isAccessible();
+        try {
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            constructor.setAccessible(accessibility);
+        }
+    }
+
+    public static Set<Class<?>> typesOf(final Object... values) {
+        final Object[] traversableType = Optional.ofNullable(values).orElse(new Object[]{});
+        final Set<Class<?>> types = new HashSet<>(traversableType.length);
+        Stream.of(traversableType).filter(Objects::nonNull).forEach(type -> types.add(type.getClass()));
+        return types;
+    }
+
+    public static boolean allAssignableFrom(final Class<?> sharedType, final Iterable<? extends Class<?>> types) {
+        final Iterable<? extends Class<?>> traversableType = Optional.ofNullable(types).orElse(Collections.emptyList());
+        return !StreamSupport.stream(traversableType.spliterator(), false).anyMatch(type -> !sharedType.isAssignableFrom(type));
+    }
+
+    /**
+     * Returns collection of primitive numeric types {@link Collection}
+     *
+     * @return collection of primitive numeric types {@link Collection}
+     */
+    private static Collection<Class<?>> getPrimitiveNumericTypes() {
+        final Collection<Class<?>> numericTypes = new HashSet<Class<?>>();
+        numericTypes.add(char.class);
+        numericTypes.add(byte.class);
+        numericTypes.add(short.class);
+        numericTypes.add(int.class);
+        numericTypes.add(long.class);
+        numericTypes.add(float.class);
+        numericTypes.add(double.class);
+        numericTypes.add(boolean.class);
+        numericTypes.add(void.class);
+        return numericTypes;
+    }
 
     /**
      * Returns property value of an object
@@ -200,6 +360,9 @@ public class ReflectionUtils {
         return new ReflectionMethodType(methodName, numberOfParameters, typedParameter);
     }
 
+    /**
+     * Custom reflection method type implementation
+     */
     @Data
     @EqualsAndHashCode
     @ToString

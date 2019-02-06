@@ -93,11 +93,41 @@ public class ComparatorUtils {
             }
             if (Objects.isNull(first)) {
                 return -1;
-            }
-            if (Objects.isNull(last)) {
+            } else if (Objects.isNull(last)) {
                 return 1;
             }
             return first.toString().compareTo(last.toString());
+        }
+    }
+
+    /**
+     * Default comparator implementation {@link Class}
+     */
+    public static class DefaultClassComparator implements Comparator<Class<?>>, Serializable {
+
+        /**
+         * Default explicit serialVersionUID for interoperability
+         */
+        private static final long serialVersionUID = -6134543546347035055L;
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link Class}
+         * @param last  - initial last argument {@link Class}
+         * @return numeric result of two entries comparison
+         */
+        @Override
+        public int compare(final Class<?> first, final Class<?> last) {
+            if (first.isAssignableFrom(last)) {
+                return 1;
+            } else if (last.isAssignableFrom(first)) {
+                return -1;
+            }
+            return 0;
         }
     }
 
@@ -120,6 +150,16 @@ public class ComparatorUtils {
     @SuppressWarnings("unchecked")
     public static <T> Comparator<? super T> getDefaultComparableComparator() {
         return new DefaultComparableComparator();
+    }
+
+    /**
+     * Returns default class comparator instance {@link Comparator}
+     *
+     * @return default comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<? super Class<?>> getDefaultClassComparator() {
+        return new DefaultClassComparator();
     }
 
     /**
