@@ -24,14 +24,13 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.Matcher;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
-
-import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.getMatchableClass;
 
 /**
  * Custom instance matcher implementation by object instance {@link Object}
@@ -63,7 +62,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
      *              or one of its subclasses.
      */
     public InstanceMatcher(final Class<?> clazz) {
-        this.matchableClazz = getMatchableClass(clazz);
+        this.matchableClazz = ReflectionUtils.getMatchableClass(clazz);
     }
 
     @Override

@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
@@ -35,14 +36,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.*;
-import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
 /**
  * Abstract difference comparator implementation by input object instance
  *
  * @author Alexander Rogalskiy
- * @version     %I%, %G%
- * @since       1.0
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data
@@ -157,7 +157,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public void setComparator(final String property, final Comparator<?> comparator) {
         Objects.requireNonNull(property);
         log.debug(String.format("{%s}: storing property by name={%s}, comparator={%s}", getClass().getName(), property, comparator));
-        this.getPropertyComparatorMap().put(sanitize(property), comparator);
+        this.getPropertyComparatorMap().put(StringUtils.sanitize(property), comparator);
     }
 
     /**
@@ -179,7 +179,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void removeComparator(final String property) {
         log.debug(String.format("{%s}: removing comparator for property={%s}", getClass().getName(), property));
-        this.getPropertyComparatorMap().remove(sanitize(property));
+        this.getPropertyComparatorMap().remove(StringUtils.sanitize(property));
     }
 
     /**
@@ -220,7 +220,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     @SuppressWarnings("unchecked")
     protected <T> Comparator<? super T> getPropertyComparator(final String property) {
-        return (Comparator<? super T>) getPropertyComparatorMap().getOrDefault(sanitize(property), ComparatorUtils.getDefaultComparator());
+        return (Comparator<? super T>) getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), ComparatorUtils.getDefaultComparator());
     }
 
     /**
