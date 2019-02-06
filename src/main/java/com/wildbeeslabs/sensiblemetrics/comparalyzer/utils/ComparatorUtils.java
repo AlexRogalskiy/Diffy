@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
+import com.google.common.collect.Iterables;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +31,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -140,7 +140,7 @@ public class ComparatorUtils {
     /**
      * Default comparator implementation {@link Class}
      */
-    public static class DefaultIterableComparator<T> implements Comparator<List<T>>, Serializable {
+    public static class DefaultIterableComparator<T> implements Comparator<Iterable<T>>, Serializable {
 
         /**
          * Default explicit serialVersionUID for interoperability
@@ -167,12 +167,12 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument {@link List}
-         * @param last  - initial last argument {@link List}
+         * @param first - initial first argument {@link Iterable}
+         * @param last  - initial last argument {@link Iterable}
          * @return numeric result of two iterable collections comparison
          */
         @Override
-        public int compare(final List<T> first, final List<T> last) {
+        public int compare(final Iterable<T> first, final Iterable<T> last) {
             if (first == last) {
                 return 0;
             }
@@ -180,9 +180,12 @@ public class ComparatorUtils {
                 return -1;
             } else if (Objects.isNull(last)) {
                 return 1;
-            } else if (first.size() < last.size()) {
+            }
+            int firstSize = Iterables.size(first);
+            int lastSize = Iterables.size(last);
+            if (firstSize < lastSize) {
                 return -1;
-            } else if (first.size() > last.size()) {
+            } else if (firstSize > lastSize) {
                 return 1;
             }
             final Iterator<T> iteratorFirst = first.iterator();
@@ -235,7 +238,7 @@ public class ComparatorUtils {
      * @return default comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super List<T>> getDefaultIterableComparator(final Comparator<? super T> comparator) {
+    public static <T> Comparator<? super Iterable<T>> getDefaultIterableComparator(final Comparator<? super T> comparator) {
         return new DefaultIterableComparator(comparator);
     }
 
