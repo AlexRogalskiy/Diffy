@@ -457,7 +457,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     }
 
     @Test
-    public void testCompareByGidComparator() {
+    public void testCompareByNonEqualGidFieldAndComparator() {
         final List<String> includedProperties = Arrays.asList("id", "type", "createdAt", "description");
 
         getDeliveryInfoFirst().setDescription(null);
@@ -510,7 +510,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     }
 
     @Test
-    public void testCompareGidFieldByStringComparator() {
+    public void testCompareByEqualsGidFieldAndComparator() {
         final List<String> includedProperties = Arrays.asList("id", "type", "gid", "createdAt");
 
         final String DEFAULT_GID_PREFIX = "TEST_";
@@ -554,7 +554,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     }
 
     @Test
-    public void testCompareByDateComparators() {
+    public void testCompareByDateFieldsAndComparators() {
         final List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -587,7 +587,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     }
 
     @Test
-    public void testCompareByDateComparator() {
+    public void testCompareByDateFieldAndComparator() {
         final int DEFAULT_DIFFERENCE_DELTA = 24 * 60 * 60 * 1000;
         final List<String> includedProperties = Arrays.asList("createdAt");
 
@@ -612,7 +612,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     }
 
     @Test
-    public void testCompareByBalanceComparator() {
+    public void testCompareByBalanceFieldAndComparator() {
         final double DEFAULT_DIFFERENCE_DELTA = 0.0001;
         final List<String> includedProperties = Arrays.asList("balance");
 
@@ -636,7 +636,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     }
 
     @Test
-    public void testCompareByAddressInfo() {
+    public void testCompareByNonEqualAddressField() {
         final List<String> includedProperties = Arrays.asList("addresses");
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
@@ -663,5 +663,17 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
                 .last(getDeliveryInfoLast().getAddresses())
                 .build();
         assertTrue(valueChangeList.contains(entry));
+    }
+
+    @Test
+    public void testCompareByEqualAddressField() {
+        final List<String> includedProperties = Arrays.asList("addresses");
+
+        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
+        diffComparator.includeProperties(includedProperties);
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
+
+        final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
+        assertThat(valueChangeList, empty());
     }
 }
