@@ -33,6 +33,11 @@ import java.util.*;
 
 /**
  * Abstract matcher implementation by input object instance
+ *
+ * @param <T>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data

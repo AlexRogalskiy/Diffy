@@ -28,13 +28,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
-
 /**
- * Default date converter implementation {@link Date}
+ * Default integer converter implementation {@link Integer}
  *
  * @author Alexander Rogalskiy
  * @version %I%, %G%
@@ -44,35 +39,16 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DateConverter extends AbstractConverter<String, Date> {
+public class IntConverter extends AbstractConverter<String, Integer> {
 
     /**
-     * Default date format pattern
-     */
-    private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
-
-    /**
-     * Initial date format pattern
-     */
-    private final String format;
-
-    public DateConverter(final String format) {
-        this.format = Objects.isNull(format) ? DEFAULT_DATE_FORMAT : format;
-    }
-
-    /**
-     * Returns date value {@link Date} by input argument {@link String}
+     * Returns integer value {@link Integer} by input argument {@link String}
      *
      * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Date}
+     * @return converted integer value {@link Integer}
      */
     @Override
-    public Date convert(final String value) {
-        try {
-            new SimpleDateFormat(getFormat()).parse(value);
-        } catch (ParseException e) {
-            log.error(String.format("ERROR: cannot format input string={%s} by format={%s}", value, getFormat()));
-        }
-        return null;
+    public Integer convert(final String value) {
+        return Integer.valueOf(value);
     }
 }

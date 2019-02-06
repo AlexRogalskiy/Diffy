@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,32 +37,20 @@ import java.util.Objects;
 
 /**
  * Custom date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @UtilityClass
 public class DateUtils {
 
-    public static LocalDate toLocalDateViaInstant(final Date dateToConvert) {
-        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    public static LocalDate toLocalDateViaMilisecond(final Date dateToConvert) {
-        return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-
-    public static LocalDate toLocalDateViaSqlDate(final Date dateToConvert) {
+    public static LocalDate toLocalDateBySql(final Date dateToConvert) {
         return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
 
-    public static LocalDateTime toLocalDateTimeViaInstant(final Date dateToConvert) {
-        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-    }
-
-    public static LocalDateTime toLocalDateTimeViaMilisecond(final Date dateToConvert) {
-        return Instant.ofEpochMilli(dateToConvert.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-    }
-
-    public static LocalDateTime toLocalDateTimeViaSqlTimestamp(final Date dateToConvert) {
+    public static LocalDateTime toLocalDateTimeBySql(final Date dateToConvert) {
         return new java.sql.Timestamp(dateToConvert.getTime()).toLocalDateTime();
     }
 
@@ -71,11 +58,11 @@ public class DateUtils {
         return java.util.Date.from(dateToConvert.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public Date toDate(final LocalDateTime dateToConvert) {
+    public Date toDateBySql(final LocalDateTime dateToConvert) {
         return java.sql.Timestamp.valueOf(dateToConvert);
     }
 
-    public static Date toDateViaInstant(final LocalDateTime dateToConvert) {
+    public static Date toDate(final LocalDateTime dateToConvert) {
         return java.util.Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
     }
 
@@ -108,6 +95,10 @@ public class DateUtils {
     }
 
     public static LocalDate now() {
-        return LocalDate.now();
+        return now(ZoneId.systemDefault());
+    }
+
+    public static LocalDate now(final ZoneId zone) {
+        return LocalDate.now(ZoneId.systemDefault());
     }
 }

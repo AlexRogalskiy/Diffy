@@ -36,7 +36,11 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default difference comparator implementation by input object instance
+ * Default difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data
@@ -71,8 +75,8 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     /**
      * Returns new default difference entry {@link DefaultDiffEntry}
      *
-     * @param first        - initial first argument to be compared
-     * @param last         - initial last argument to be compared with
+     * @param first        - initial first argument to be compared {@link Object}
+     * @param last         - initial last argument to be compared with {@link Object}
      * @param propertyName - initial property name {@link String}
      * @return default difference entry {@link DefaultDiffEntry}
      */
@@ -95,8 +99,9 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
      */
     @Override
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {
-        final List<DiffEntry<?>> resultList = new ArrayList<>();
-        getPropertySet().stream()
+        final List<DiffEntry<?>> result = new ArrayList<>();
+        getPropertySet()
+                .stream()
                 .filter(property -> getPropertyMap().containsKey(property))
                 .forEach(property -> {
                     try {
@@ -104,12 +109,12 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                         final Object firstValue = getPropertyMap().get(property).get(first);
                         final Object lastValue = getPropertyMap().get(property).get(last);
                         if (0 != Objects.compare(firstValue, lastValue, getPropertyComparator(property))) {
-                            resultList.add(createDiffEntry(firstValue, lastValue, property));
+                            result.add(createDiffEntry(firstValue, lastValue, property));
                         }
                     } catch (IllegalAccessException e) {
-                        log.error(String.format("ERROR: cannot get value of field={%s}", property));
+                        log.error(String.format("ERROR: cannot get value of field={%s}, message={%s}", property, e.getMessage()));
                     }
                 });
-        return (S) resultList;
+        return (S) result;
     }
 }

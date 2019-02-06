@@ -29,6 +29,9 @@ import java.io.Serializable;
  * Matcher interface declaration by input object instance
  *
  * @param <T>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @FunctionalInterface
 public interface Matcher<T> extends Serializable {

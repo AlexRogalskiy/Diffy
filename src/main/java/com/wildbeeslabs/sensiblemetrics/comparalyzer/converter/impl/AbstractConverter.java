@@ -31,6 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract converter implementation
+ *
+ * @param <T>
+ * @param <R>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data

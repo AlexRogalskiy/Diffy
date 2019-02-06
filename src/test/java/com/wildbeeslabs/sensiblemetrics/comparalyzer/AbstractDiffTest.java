@@ -42,6 +42,10 @@ import static net.andreinc.mockneat.unit.types.Longs.longs;
 
 /**
  * Abstract difference unit test
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data
@@ -50,35 +54,35 @@ import static net.andreinc.mockneat.unit.types.Longs.longs;
 public abstract class AbstractDiffTest {
 
     /**
-     * Default mockNeat instance
+     * Default mock instance
      */
-    private final MockNeat mockNeat = MockNeat.threadLocal();
+    protected final MockNeat mock = MockNeat.threadLocal();
     /**
-     * Default mockNeat unit numeric instances
+     * Default numeric mock instances
      */
-    protected final MockUnitInt mockUnitThousand = ints().range(1, 999);
-    protected final MockUnitInt mockUnitMonth = ints().range(1, 12);
-    protected final MockUnitInt mockUnitCode = ints().bound(10);
-    protected final MockUnitInt mockUnitInt = ints().bound(1000000);
-    protected final MockUnitLong mockUnitLong = longs().bound(10000000);
-    protected final MockUnitInt mockUnitByte = ints().bound(255);
-    protected final MockUnitInt mockUnitShort = ints().bound(15000);
-    protected final MockUnitInt rangeMockUnitInt = ints().range(1000, 5000);
-    protected final MockUnitLong rangeMockUnitLong = longs().range(100000, 500000);
-    protected final MockUnitDouble mockUnitDouble = doubles().bound(50000);
-    protected final MockUnitFloat mockUnitFloat = floats().bound(5000);
+    protected final MockUnitInt thousandMock = ints().range(1, 999);
+    protected final MockUnitInt monthMock = ints().range(1, 12);
+    protected final MockUnitInt codeMock = ints().bound(10);
+    protected final MockUnitInt intMock = ints().bound(1000000);
+    protected final MockUnitLong longMock = longs().bound(10000000);
+    protected final MockUnitInt byteMock = ints().bound(255);
+    protected final MockUnitInt shortMock = ints().bound(15000);
+    protected final MockUnitInt intRangeMock = ints().range(1000, 5000);
+    protected final MockUnitLong longRangeMock = longs().range(100000, 500000);
+    protected final MockUnitDouble doubleMock = doubles().bound(50000);
+    protected final MockUnitFloat floatMock = floats().bound(5000);
     /**
-     * Default mockNeat unit localdate instances
+     * Default local date mock instances
      */
-    protected final MockUnitLocalDate mockUnitLocalDate = localDates();
-    protected final MockUnitLocalDate yearMockUnitLocalDate = localDates().thisYear();
-    protected final MockUnitLocalDate pastMockUnitLocalDate = localDates().past(LocalDate.now().minusYears(3));
-    protected final MockUnitLocalDate futureMockUnitLocalDate = localDates().future(LocalDate.now().plusYears(3));
+    protected final MockUnitLocalDate localDateMock = localDates();
+    protected final MockUnitLocalDate yearLocalDateMock = localDates().thisYear();
+    protected final MockUnitLocalDate pastLocalDateMock = localDates().past(LocalDate.now().minusYears(3));
+    protected final MockUnitLocalDate futureLocalDateMock = localDates().future(LocalDate.now().plusYears(3));
     /**
-     * Default mockNeat unit string instances
+     * Default string mock instances
      */
-    protected final MockUnitString alphaNumericMockUnitString = strings().types(ALPHA_NUMERIC);
-    protected final MockUnitString lettersMockUnitString = strings().types(LETTERS);
-    protected final MockUnitString numbersMockUnitString = strings().types(NUMBERS);
+    protected final MockUnitString alphaNumericStringMock = strings().types(ALPHA_NUMERIC);
+    protected final MockUnitString lettersStringMock = strings().types(LETTERS);
+    protected final MockUnitString numbersStringMock = strings().types(NUMBERS);
 }
 

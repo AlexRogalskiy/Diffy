@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.factory;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.factory;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DefaultDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator.DeliveryInfoDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,28 +40,26 @@ import java.util.Comparator;
  */
 @Slf4j
 @UtilityClass
-public class DefaultDiffComparatorFactory {
+public class DeliveryInfoDiffComparatorFactory {
 
     /**
-     * Creates difference comparator {@link DiffComparator} by class instance {@link Class}
+     * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
      *
-     * @param <T>
-     * @param clazz - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
-     * @return difference comparator {@link DiffComparator}
+     * @param <E>
+     * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
      */
-    public static <T, E extends DiffComparator<T>> E create(final Class<? extends T> clazz) {
-        return (E) new DefaultDiffComparator<>(clazz);
+    public static <E extends DiffComparator<DeliveryInfo>> E create() {
+        return (E) new DeliveryInfoDiffComparator();
     }
 
     /**
-     * Creates difference comparator {@link DiffComparator} by class instance {@link Class} with comparator instance {@link Comparator}
+     * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
      *
-     * @param <T>
-     * @param clazz      - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
+     * @param <E>
      * @param comparator - initial comparator instance {@link Comparator}
-     * @return difference comparator {@link DiffComparator}
+     * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
      */
-    public static <T, E extends DiffComparator<T>> E create(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
-        return (E) new DefaultDiffComparator<>(clazz, comparator);
+    public static <E extends DiffComparator<DeliveryInfo>> E create(final Comparator<? super DeliveryInfo> comparator) {
+        return (E) new DeliveryInfoDiffComparator(comparator);
     }
 }

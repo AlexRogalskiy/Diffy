@@ -21,30 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+
+import java.io.Serializable;
 
 /**
- * Default integer converter implementation {@link Integer}
+ * Custom address info model
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
-@Slf4j
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class IntegerConverter extends AbstractConverter<String, Integer> {
+@EqualsAndHashCode
+@ToString
+public class AddressInfo implements Serializable {
 
     /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
+     * Default explicit serialVersionUID for interoperability
      */
-    @Override
-    public Integer convert(final String value) {
-        return Integer.valueOf(value);
-    }
+    private static final long serialVersionUID = -6518611464972728811L;
+
+    /**
+     * Default ID
+     */
+    private Long id;
+    /**
+     * Default city name
+     */
+    private String city;
+    /**
+     * Default country name
+     */
+    private String country;
+    /**
+     * Default state/province name
+     */
+    private String stateOrProvince;
+    /**
+     * Default postal code
+     */
+    private String postalCode;
+    /**
+     * Default street name
+     */
+    private String street;
 }

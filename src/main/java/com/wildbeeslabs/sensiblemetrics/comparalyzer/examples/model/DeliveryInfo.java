@@ -25,13 +25,19 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Singular;
 import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Custom delivery info instance
+ * Custom delivery info model
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Data
 @EqualsAndHashCode
@@ -71,4 +77,9 @@ public class DeliveryInfo implements Serializable {
      * Default balance
      */
     private double balance;
+    /**
+     * Default address info {@link AddressInfo} collection {@link List}
+     */
+    @Singular
+    private List<AddressInfo> addresses;
 }

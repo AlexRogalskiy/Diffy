@@ -31,6 +31,10 @@ import lombok.ToString;
 
 /**
  * Default difference entry implementation
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Builder
 @Data

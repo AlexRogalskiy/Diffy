@@ -31,8 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.getMatchableClass;
+
 /**
  * Custom instance matcher implementation by object instance {@link Object}
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data
@@ -57,19 +63,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
      *              or one of its subclasses.
      */
     public InstanceMatcher(final Class<?> clazz) {
-        this.matchableClazz = matchableClass(clazz);
-    }
-
-    private Class<?> matchableClass(final Class<?> expectedClass) {
-        if (boolean.class.equals(expectedClass)) return Boolean.class;
-        if (byte.class.equals(expectedClass)) return Byte.class;
-        if (char.class.equals(expectedClass)) return Character.class;
-        if (double.class.equals(expectedClass)) return Double.class;
-        if (float.class.equals(expectedClass)) return Float.class;
-        if (int.class.equals(expectedClass)) return Integer.class;
-        if (long.class.equals(expectedClass)) return Long.class;
-        if (short.class.equals(expectedClass)) return Short.class;
-        return expectedClass;
+        this.matchableClazz = getMatchableClass(clazz);
     }
 
     @Override

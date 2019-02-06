@@ -29,6 +29,11 @@ import java.io.Serializable;
 
 /**
  * Difference comparator declaration by input object instance
+ *
+ * @param <T>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 public interface DiffComparator<T> extends Serializable {
 

@@ -1,6 +1,7 @@
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.matcher;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDiffTest;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.matcher.UrlParametersMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,6 +14,10 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Url parameters matcher unit test
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data
@@ -21,13 +26,13 @@ import static org.junit.Assert.assertTrue;
 public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     /**
-     * Default url parameters instance
+     * Default url parameters string
      */
     private String urlString;
 
     @Before
     public void setUp() {
-        this.urlString = alphaNumericMockUnitString.val();
+        this.urlString = getAlphaNumericStringMock().val();
     }
 
     @Test

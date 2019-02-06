@@ -27,6 +27,9 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
  * Type safe matcher interface declaration by input object instance
  *
  * @param <T>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @FunctionalInterface
 public interface TypeSafeMatcher<T> extends Matcher<T> {

@@ -39,6 +39,10 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sa
 
 /**
  * Abstract difference comparator implementation by input object instance
+ *
+ * @author Alexander Rogalskiy
+ * @version     %I%, %G%
+ * @since       1.0
  */
 @Slf4j
 @Data

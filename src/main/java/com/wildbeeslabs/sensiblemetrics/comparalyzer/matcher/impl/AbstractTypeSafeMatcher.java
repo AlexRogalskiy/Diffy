@@ -36,6 +36,9 @@ import java.util.Objects;
  * Abstract type safe matcher implementation for input instance
  *
  * @param <T>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data

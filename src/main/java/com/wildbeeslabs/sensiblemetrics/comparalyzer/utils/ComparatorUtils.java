@@ -29,10 +29,16 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * Custom comparator utilities implementation {@link Comparator}
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @UtilityClass
@@ -132,6 +138,67 @@ public class ComparatorUtils {
     }
 
     /**
+     * Default comparator implementation {@link Class}
+     */
+    public static class DefaultIterableComparator<T> implements Comparator<List<T>>, Serializable {
+
+        /**
+         * Default explicit serialVersionUID for interoperability
+         */
+        private static final long serialVersionUID = 6254436821300471761L;
+
+        /**
+         * Custom comparator type instance
+         */
+        private final Comparator<? super T> comparator;
+
+        /**
+         * Default iterable comparator constructor
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultIterableComparator(final Comparator<? super T> comparator) {
+            this.comparator = comparator;
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link List}
+         * @param last  - initial last argument {@link List}
+         * @return numeric result of two iterable collections comparison
+         */
+        @Override
+        public int compare(final List<T> first, final List<T> last) {
+            if (first == last) {
+                return 0;
+            }
+            if (Objects.isNull(first)) {
+                return -1;
+            } else if (Objects.isNull(last)) {
+                return 1;
+            } else if (first.size() < last.size()) {
+                return -1;
+            } else if (first.size() > last.size()) {
+                return 1;
+            }
+            final Iterator<T> iteratorFirst = first.iterator();
+            final Iterator<T> iteratorLast = last.iterator();
+            int temp;
+            while (iteratorFirst.hasNext()) {
+                temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), this.comparator);
+                if (0 != temp) {
+                    return temp;
+                }
+            }
+            return 0;
+        }
+    }
+
+    /**
      * Returns default object comparator instance {@link Comparator}
      *
      * @return default comparator instance {@link Comparator}
@@ -160,6 +227,16 @@ public class ComparatorUtils {
     @SuppressWarnings("unchecked")
     public static Comparator<? super Class<?>> getDefaultClassComparator() {
         return new DefaultClassComparator();
+    }
+
+    /**
+     * Returns default class comparator instance {@link Comparator}
+     *
+     * @return default comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Comparator<? super List<T>> getDefaultIterableComparator(final Comparator<? super T> comparator) {
+        return new DefaultIterableComparator(comparator);
     }
 
     /**

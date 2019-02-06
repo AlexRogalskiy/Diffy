@@ -30,6 +30,10 @@ import java.util.Objects;
 
 /**
  * Custom string utilities implementation
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @UtilityClass

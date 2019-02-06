@@ -28,6 +28,9 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter;
  *
  * @param <T>
  * @param <R>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @FunctionalInterface
 public interface Converter<T, R> {

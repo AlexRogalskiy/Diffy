@@ -33,6 +33,10 @@ import java.util.Objects;
 
 /**
  * Custom converter utilities implementation {@link Converter}
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @UtilityClass

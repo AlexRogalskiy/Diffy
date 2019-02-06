@@ -10,19 +10,19 @@
     <packaging>jar</packaging>
 
     <name>Comparator Analyzer</name>
-    <url>https://github.com/AlexRogalskiy/Compara</url>
-    <description>Compara core API</description>
+    <url>https://github.com/AlexRogalskiy/Comparalyzer</url>
+    <description>Comparalyzer core API</description>
     <inceptionYear>2019</inceptionYear>
 
     <issueManagement>
-        <url>https://github.com/AlexRogalskiy/Compara/issues</url>
+        <url>https://github.com/AlexRogalskiy/Comparalyzer/issues</url>
         <system>GitLab Issues</system>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://gitlab.com/AlexRogalskiy/Compara.git</connection>
-        <url>scm:git:git://gitlab.com/AlexRogalskiy/Compara.git</url>
-        <developerConnection>scm:git:git://gitlab.com/AlexRogalskiy/Compara.git</developerConnection>
+        <connection>scm:git:git://gitlab.com/AlexRogalskiy/Comparalyzer.git</connection>
+        <url>scm:git:git://gitlab.com/AlexRogalskiy/Comparalyzer.git</url>
+        <developerConnection>scm:git:git://gitlab.com/AlexRogalskiy/Comparalyzer.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -34,16 +34,6 @@
         <license>
             <name>MIT License</name>
             <url>http://www.opensource.org/licenses/mit-license.php</url>
-            <distribution>repo</distribution>
-        </license>
-        <license>
-            <name>GPL v2 with ClassPath Exception</name>
-            <url>http://openjdk.java.net/legal/gplv2+ce.html</url>
-            <distribution>repo</distribution>
-        </license>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -85,7 +75,7 @@
             <name>Alexander Rogalsky</name>
             <email>alexander.rogalsky@yandex.ru</email>
             <url>https://github.com/AlexRogalskiy</url>
-            <organization>Wildbees Labs, Saint-Petersburg (RU)</organization>
+            <organization>Wildbees Labs, Inc., Saint-Petersburg (RU)</organization>
             <organizationUrl>http://www.wildbeeslabs.com</organizationUrl>
             <roles>
                 <role>developer</role>
@@ -100,7 +90,7 @@
     </organization>
 
     <properties>
-        <main.basedir>${basedir}/../..</main.basedir>
+        <main.basedir>${project.basedir}/../..</main.basedir>
         <profileProperties>src/test/resource/test.properties</profileProperties>
 
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
@@ -767,17 +757,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- Commons library dependencies -->

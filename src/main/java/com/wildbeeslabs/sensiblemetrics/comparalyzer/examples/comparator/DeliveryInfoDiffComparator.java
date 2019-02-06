@@ -34,6 +34,10 @@ import java.util.Comparator;
 
 /**
  * Custom difference comparator implementation by delivery info instance {@link DeliveryInfo}
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data

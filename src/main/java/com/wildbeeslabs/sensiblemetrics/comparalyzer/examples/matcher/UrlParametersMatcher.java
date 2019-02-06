@@ -37,6 +37,10 @@ import java.util.stream.Collectors;
 
 /**
  * Custom delivery info matcher implementation {@link DeliveryInfo}
+ *
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 @Slf4j
 @Data

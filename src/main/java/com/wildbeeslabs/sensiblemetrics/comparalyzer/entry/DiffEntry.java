@@ -27,6 +27,11 @@ import java.io.Serializable;
 
 /**
  * Difference entry declaration
+ *
+ * @param <T>
+ * @author Alexander Rogalskiy
+ * @version %I%, %G%
+ * @since 1.0
  */
 public interface DiffEntry<T> extends Serializable {
 
