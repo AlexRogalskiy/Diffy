@@ -37,8 +37,8 @@ public interface TypeSafeMatcher<T> extends Matcher<T> {
     /**
      * Returns binary flag depending on initial argument value by comparison
      *
-     * @param value - initial input value
-     * @return true - if input value matches, false - otherwise
+     * @param value - initial input argument value
+     * @return true - if initial value matches input argument, false - otherwise
      */
     default boolean matches(final T value) {
         return matchesSafe(value);
@@ -47,8 +47,8 @@ public interface TypeSafeMatcher<T> extends Matcher<T> {
     /**
      * Returns binary flag depending on initial argument value by type safe comparison
      *
-     * @param value - initial input value
-     * @return true - if input value matches, false - otherwise
+     * @param value - initial input argument value
+     * @return true - if initial value matches input argument, false - otherwise
      */
     boolean matchesSafe(final T value);
 }

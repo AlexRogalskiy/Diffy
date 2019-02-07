@@ -73,7 +73,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     }
 
     /**
-     * Returns new default difference entry {@link DefaultDiffEntry}
+     * Creates new default difference entry {@link DefaultDiffEntry}
      *
      * @param first        - initial first argument to be compared {@link Object}
      * @param last         - initial last argument to be compared with {@link Object}

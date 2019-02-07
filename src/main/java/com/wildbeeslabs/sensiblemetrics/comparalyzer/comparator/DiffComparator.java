@@ -28,21 +28,22 @@ import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
 import java.io.Serializable;
 
 /**
- * Difference comparator declaration by input object instance
+ * Difference comparator declaration
  *
  * @param <T>
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
+@FunctionalInterface
 public interface DiffComparator<T> extends Serializable {
 
     /**
-     * Returns collection of difference entries with properties marked for comparison by initial arguments
+     * Returns iterable collection of difference entries {@link Iterable} with properties marked by initial arguments comparison
      *
-     * @param first - initial first argument to be compared
+     * @param first - initial first argument to be compared by
      * @param last  - initial last argument to be compared with
-     * @return collection of entries with compared properties
+     * @return iterable collection of difference entries {@link Iterable}
      */
     <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last);
 }

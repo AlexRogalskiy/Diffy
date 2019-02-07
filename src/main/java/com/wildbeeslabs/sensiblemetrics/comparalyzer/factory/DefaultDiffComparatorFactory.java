@@ -42,7 +42,7 @@ import java.util.Comparator;
 public class DefaultDiffComparatorFactory {
 
     /**
-     * Creates difference comparator {@link DiffComparator} by class instance {@link Class}
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}
      *
      * @param <T>
      * @param clazz - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
@@ -53,7 +53,7 @@ public class DefaultDiffComparatorFactory {
     }
 
     /**
-     * Creates difference comparator {@link DiffComparator} by class instance {@link Class} with comparator instance {@link Comparator}
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} with comparator instance {@link Comparator}
      *
      * @param <T>
      * @param clazz      - initial class instance {@link Class} to initialize comparator {@link DiffComparator}

@@ -21,44 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffMatchEntry;
+
+import java.io.Serializable;
 
 /**
- * Default difference entry implementation
+ * Difference matcher interface declaration
  *
+ * @param <T>
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Builder
-@Data
-@EqualsAndHashCode
-@ToString
-public class DefaultDiffEntry implements DiffEntry<Object> {
+@FunctionalInterface
+public interface DiffMatcher<T> extends Serializable {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Returns iterable collection of difference match entries {@link Iterable} by initial arguments match comparison
+     *
+     * @param value - initial input argument to be matched by
+     * @return iterable collection of difference match entries {@link Iterable}
      */
-    private static final long serialVersionUID = -8477472621769483552L;
-
-    /**
-     * Default property name {@link String}
-     */
-    private String propertyName;
-
-    /**
-     * Default property value of first argument {@link Object}
-     */
-    private Object first;
-
-    /**
-     * Default property value of last argument {@link Object}
-     */
-    private Object last;
+    <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatches(final T value);
 }

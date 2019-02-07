@@ -23,14 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.MatchEntry;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.MatchDescription;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Default match entry implementation
+ * Default difference match entry implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -40,7 +41,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode
 @ToString
-public class DefaultMatchEntry implements MatchEntry<Object> {
+public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -48,11 +49,12 @@ public class DefaultMatchEntry implements MatchEntry<Object> {
     private static final long serialVersionUID = 5902509374305990063L;
 
     /**
-     * Default property name {@link String}
+     * Default match description {@link MatchDescription}
      */
-    private String propertyName;
+    private MatchDescription description;
+
     /**
-     * Default property value of input argument {@link Object}
+     * Default property value to be matched {@link Object}
      */
     private Object value;
 }

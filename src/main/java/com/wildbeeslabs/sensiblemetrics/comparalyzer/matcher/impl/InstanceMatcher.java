@@ -58,8 +58,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
     /**
      * Default instance matcher constructor with class instance {@link Class}
      *
-     * @param clazz The predicate evaluates to true for instances of this class
-     *              or one of its subclasses.
+     * @param clazz - initial input class argument instance {@link Class}
      */
     public InstanceMatcher(final Class<?> clazz) {
         this.matchableClazz = ReflectionUtils.getMatchableClass(clazz);
@@ -70,8 +69,15 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
         return (!Objects.isNull(value) && getMatchableClazz().isInstance(value));
     }
 
+    /**
+     * Returns new matcher instance {@link Matcher} by input class instance {@link Class}
+     *
+     * @param <T>
+     * @param clazz - initial input class argument instance {@link Class}
+     * @return matcher instance {@link Matcher}
+     */
     @SuppressWarnings("unchecked")
-    public static <T> Matcher<T> getMatcher(final Class<? extends T> type) {
-        return (Matcher<T>) new InstanceMatcher(type);
+    public static <T> Matcher<T> getMatcher(final Class<? extends T> clazz) {
+        return (Matcher<T>) new InstanceMatcher(clazz);
     }
 }

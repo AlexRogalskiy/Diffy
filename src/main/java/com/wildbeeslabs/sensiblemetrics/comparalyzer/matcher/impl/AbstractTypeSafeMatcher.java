@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 
 /**
- * Abstract type safe matcher implementation for input instance
+ * Abstract type safe matcher implementation by input class instance {@link Class}
  *
  * @param <T>
  * @author Alexander Rogalskiy
@@ -57,7 +57,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("matchesSafe", 1, 0);
 
     /**
-     * Default class instance of input value
+     * Default input argument class instance
      */
     private final Class<? extends T> clazz;
 
@@ -69,7 +69,9 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     }
 
     /**
-     * Default abstract type safe matcher constructor with reflection method type instance
+     * Default abstract type safe matcher constructor with input reflection method type instance
+     *
+     * @param methodType - initial input reflection type argument
      */
     @SuppressWarnings("unchecked")
     public AbstractTypeSafeMatcher(final ReflectionUtils.ReflectionMethodType methodType) {
@@ -79,7 +81,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     /**
      * Default abstract type safe matcher constructor with class instance {@link Class}
      *
-     * @param clazz
+     * @param clazz - initial input class instance {@link Class}
      */
     @SuppressWarnings("unchecked")
     public AbstractTypeSafeMatcher(final Class<? extends T> clazz) {
@@ -91,8 +93,8 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     /**
      * Returns binary flag depending on initial argument value by type safe comparison
      *
-     * @param value - initial input value
-     * @return true - if input value matches, false - otherwise
+     * @param value - initial input argument value
+     * @return true - if initial value matches input argument, false - otherwise
      */
     public final boolean matches(final T value) {
         return Objects.nonNull(value) && getClazz().isInstance(value) && this.matchesSafe(value);

@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 /**
- * Abstract matcher implementation by input object instance
+ * Abstract matcher implementation
  *
  * @param <T>
  * @author Alexander Rogalskiy
@@ -51,27 +51,35 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     private static final long serialVersionUID = 4127438327874076332L;
 
     /**
-     * Default collection of matchers for input value
+     * Default collection of matchers {@link List}
      */
     private final List<Matcher<? super T>> matchers = new ArrayList<>();
     /**
-     * Default collection of failed matchers for input value
+     * Default collection of failed matchers {@link List}
      */
     private final List<Matcher<? super T>> failedMatchers = new ArrayList<>();
 
+    /**
+     * Default abstract matcher constructor
+     */
     public AbstractMatcher() {
         this(null);
     }
 
+    /**
+     * Default abstract matcher constructor with input iterable collection of matchers {@link Iterable}
+     *
+     * @param matchers - initial input iterable collection of matchers {@link Iterable}
+     */
     public AbstractMatcher(final Iterable<Matcher<? super T>> matchers) {
         withMatchers(matchers);
     }
 
     /**
-     * Returns binary flag depending on initial argument value by comparison
+     * Returns binary flag by initial argument comparison
      *
-     * @param value - initial input value
-     * @return true - if input value matches, false - otherwise
+     * @param value - initial input argument value to be matched
+     * @return true - if initial value matches input argument, false - otherwise
      */
     @Override
     public boolean matches(final T value) {
@@ -85,9 +93,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Removes matchers {@link Matcher} from matchers collection {@link List}
+     * Removes input iterable collection of matchers {@link Matcher} from current matchers collection {@link List}
      *
-     * @param matchers - collection of matchers {@link Matcher} to be removed from matchers collection
+     * @param matchers - initial input collection of matchers {@link Iterable}
      */
     public AbstractMatcher<T> withoutMatchers(final Iterable<Matcher<? super T>> matchers) {
         Optional.ofNullable(matchers)
@@ -97,9 +105,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Removes matcher {@link Matcher} from matchers collection {@link List}
+     * Removes input matcher {@link Matcher} from current matchers collection {@link List}
      *
-     * @param matcher - matcher to be added to matchers collection
+     * @param matcher - initial input matcher argument {@link Matcher}
      */
     public AbstractMatcher<T> withoutMatcher(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
@@ -109,9 +117,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Adds collection of matchers {@link Matcher} to matchers collection {@link List}
+     * Adds input iterable collection of matchers {@link Iterable} to current matchers collection {@link List}
      *
-     * @param matchers - collection of matchers {@link Matcher} to be added to matchers collection
+     * @param matchers - initial input collection of matchers {@link Iterable}
      */
     public AbstractMatcher<T> withMatchers(final Iterable<Matcher<? super T>> matchers) {
         getMatchers().clear();
@@ -122,9 +130,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Adds matcher {@link Matcher} to matchers collection {@link List}
+     * Adds input matcher {@link Matcher} to current matchers collection {@link List}
      *
-     * @param matcher - matcher to be added to matchers collection
+     * @param matcher - initial input matcher argument {@link Matcher}
      */
     public AbstractMatcher<T> withMatcher(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {

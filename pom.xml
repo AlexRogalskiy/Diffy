@@ -256,6 +256,8 @@
                             </goals>
                             <configuration>
                                 <outputDirectory>${project.build.directory}/dependency-jars/</outputDirectory>
+                                <includeScope>compile</includeScope>
+                                <excludeScope>test</excludeScope>
                                 <overWriteReleases>false</overWriteReleases>
                                 <overWriteSnapshots>false</overWriteSnapshots>
                                 <overWriteIfNewer>true</overWriteIfNewer>

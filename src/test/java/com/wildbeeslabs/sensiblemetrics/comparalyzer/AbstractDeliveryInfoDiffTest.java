@@ -101,7 +101,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
     protected MockUnit<DeliveryInfo> getDeliveryInfoUnit(int addressListSize) {
         return filler(() -> new DeliveryInfo())
                 .setter(DeliveryInfo::setId, getLongMock())
-                .setter(DeliveryInfo::setType, getIntMock())
+                .setter(DeliveryInfo::setType, getCodeMock())
                 .setter(DeliveryInfo::setGid, getAlphaNumericStringMock())
                 .setter(DeliveryInfo::setDescription, getLettersStringMock())
                 .setter(DeliveryInfo::setCreatedAt, getLocalDateMock().toUtilDate())

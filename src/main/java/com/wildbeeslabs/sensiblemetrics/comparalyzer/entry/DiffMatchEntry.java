@@ -26,24 +26,24 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry;
 import java.io.Serializable;
 
 /**
- * Match entry declaration
+ * Difference match entry declaration
  *
  * @param <T>
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public interface MatchEntry<T> extends Serializable {
+public interface DiffMatchEntry<T> extends Serializable {
 
     /**
-     * Returns property name {@link String} to compare by
+     * Returns match description {@link MatchDescription}
      *
-     * @return property name
+     * @return match description {@link MatchDescription}
      */
-    String getPropertyName();
+    MatchDescription getDescription();
 
     /**
-     * Returns property value of input argument
+     * Returns property value to be matched
      *
      * @return property value
      */
