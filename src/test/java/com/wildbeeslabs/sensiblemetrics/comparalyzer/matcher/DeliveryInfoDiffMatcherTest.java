@@ -43,6 +43,7 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.DateUtils.toDa
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Delivery info difference matcher unit test
@@ -107,6 +108,12 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
         diffMatchEntryList = Lists.newArrayList(iterable);
         assertThat(diffMatchEntryList, not(empty()));
+
+        DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
+                .builder()
+                .value(getDeliveryInfo())
+                .build();
+        assertFalse(diffMatchEntryList.contains(entry));
     }
 
     @Test
@@ -121,6 +128,12 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
         assertThat(diffMatchEntryList, not(empty()));
+
+        DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
+                .builder()
+                .value(getDeliveryInfo())
+                .build();
+        assertFalse(diffMatchEntryList.contains(entry));
 
         // Update delivery info type matcher
         matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
@@ -161,6 +174,13 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
         assertThat(diffMatchEntryList, not(empty()));
+
+        DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
+                .builder()
+                .value(getDeliveryInfo())
+                .build();
+        assertFalse(diffMatchEntryList.contains(entry));
+
 
         // Update delivery info type
         getDeliveryInfo().setType(1001);
