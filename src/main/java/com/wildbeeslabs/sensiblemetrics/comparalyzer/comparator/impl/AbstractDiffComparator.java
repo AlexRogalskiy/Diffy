@@ -108,7 +108,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      *
      * @param properties - collection of properties to be updated in exclude compare collection
      */
-    public void excludeProperties(final List<String> properties) {
+    public void excludeProperties(final Iterable<String> properties) {
         Optional.ofNullable(properties)
                 .orElseGet(Collections::emptyList)
                 .forEach(property -> excludeProperty(property));

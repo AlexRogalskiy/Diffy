@@ -53,6 +53,41 @@ public class DefaultDiffComparatorFactory {
     }
 
     /**
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterable collections of included/excluded properties {@link Iterable}
+     *
+     * @param <T>
+     * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
+     * @param includeProperties - initial iterable collection of included properties {@link Iterable}
+     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @return difference comparator {@link DiffComparator}
+     */
+    public static <T, E extends DiffComparator<T>> E create(
+            final Class<? extends T> clazz,
+            final Iterable<String> includeProperties,
+            final Iterable<String> excludeProperties) {
+        final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz);
+        defaultDiffComparator.includeProperties(includeProperties);
+        defaultDiffComparator.excludeProperties(excludeProperties);
+        return (E) defaultDiffComparator;
+    }
+
+    /**
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterable collection of excluded properties {@link Iterable}
+     *
+     * @param <T>
+     * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
+     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @return difference comparator {@link DiffComparator}
+     */
+    public static <T, E extends DiffComparator<T>> E create(
+            final Class<? extends T> clazz,
+            final Iterable<String> excludeProperties) {
+        final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz);
+        defaultDiffComparator.excludeProperties(excludeProperties);
+        return (E) defaultDiffComparator;
+    }
+
+    /**
      * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} with comparator instance {@link Comparator}
      *
      * @param <T>
@@ -62,5 +97,44 @@ public class DefaultDiffComparatorFactory {
      */
     public static <T, E extends DiffComparator<T>> E create(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
         return (E) new DefaultDiffComparator<>(clazz, comparator);
+    }
+
+    /**
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterable collections of included/excluded properties {@link Iterable}
+     *
+     * @param <T>
+     * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
+     * @param comparator        - initial comparator instance {@link Comparator}
+     * @param includeProperties - initial iterable collection of included properties {@link Iterable}
+     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @return difference comparator {@link DiffComparator}
+     */
+    public static <T, E extends DiffComparator<T>> E create(
+            final Class<? extends T> clazz,
+            final Comparator<? super T> comparator,
+            final Iterable<String> includeProperties,
+            final Iterable<String> excludeProperties) {
+        final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz, comparator);
+        defaultDiffComparator.includeProperties(includeProperties);
+        defaultDiffComparator.excludeProperties(excludeProperties);
+        return (E) defaultDiffComparator;
+    }
+
+    /**
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterable collection of excluded properties {@link Iterable}
+     *
+     * @param <T>
+     * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
+     * @param comparator        - initial comparator instance {@link Comparator}
+     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @return difference comparator {@link DiffComparator}
+     */
+    public static <T, E extends DiffComparator<T>> E create(
+            final Class<? extends T> clazz,
+            final Comparator<? super T> comparator,
+            final Iterable<String> excludeProperties) {
+        final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz, comparator);
+        defaultDiffComparator.excludeProperties(excludeProperties);
+        return (E) defaultDiffComparator;
     }
 }

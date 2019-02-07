@@ -110,8 +110,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByExcludedPropertiesAndDefaultComparator() {
         final List<String> excludedProperties = Arrays.asList("id", "createdAt", "updatedAt");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
-        diffComparator.excludeProperties(excludedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -149,8 +148,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByIncludedPropertiesAndDefaultComparator() {
         final List<String> includedProperties = Arrays.asList("id", "type", "description");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
-        diffComparator.includeProperties(includedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -187,8 +185,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByExcludedProperties() {
         final List<String> excludedProperties = Arrays.asList("id", "type");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
-        diffComparator.excludeProperties(excludedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -218,8 +215,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByIncludedProperties() {
         final List<String> includedProperties = Arrays.asList("id", "createdAt");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
-        diffComparator.includeProperties(includedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -249,8 +245,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByNonExistingProperty() {
         final List<String> excludedProperties = Arrays.asList("id", "country", "createdAt", "updatedAt");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.excludeProperties(excludedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -282,9 +277,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         final List<String> includedProperties = Arrays.asList("id", "createdAt", "updatedAt", "description");
         final List<String> excludedProperties = Arrays.asList("createdAt", "updatedAt", "type");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.includeProperties(includedProperties);
-        diffComparator.excludeProperties(excludedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, includedProperties, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -331,9 +324,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         final List<String> includedProperties = Arrays.asList("id", "type", "balance");
         final List<String> excludedProperties = Arrays.asList("description", "createdAt", "updatedAt");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.includeProperties(includedProperties);
-        diffComparator.excludeProperties(excludedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, includedProperties, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -409,8 +400,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByExcludedDuplicateProperties() {
         final List<String> excludedProperties = Arrays.asList("id", "type", "description", "type", "type", "id");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
-        diffComparator.excludeProperties(excludedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -445,7 +435,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     public void testCompareByDefaultComparator() {
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -639,8 +629,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByNonEqualAddressField() {
         final List<String> includedProperties = Arrays.asList("addresses");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
-        diffComparator.includeProperties(includedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
@@ -669,8 +658,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByEqualAddressField() {
         final List<String> includedProperties = Arrays.asList("addresses");
 
-        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR);
-        diffComparator.includeProperties(includedProperties);
+        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
