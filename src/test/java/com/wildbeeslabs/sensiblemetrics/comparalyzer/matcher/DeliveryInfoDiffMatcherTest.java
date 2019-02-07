@@ -109,7 +109,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         diffMatchEntryList = Lists.newArrayList(iterable);
         assertThat(diffMatchEntryList, not(empty()));
 
-        DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
+        // Check diff match entry exists
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
                 .builder()
                 .value(getDeliveryInfo())
                 .build();
@@ -129,7 +130,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
         assertThat(diffMatchEntryList, not(empty()));
 
-        DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
+        // Check diff match entry exists
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
                 .builder()
                 .value(getDeliveryInfo())
                 .build();
@@ -175,7 +177,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
         assertThat(diffMatchEntryList, not(empty()));
 
-        DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
+        // Check diff match entry exists
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
                 .builder()
                 .value(getDeliveryInfo())
                 .build();
