@@ -21,42 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import java.io.Serializable;
 
 /**
- * Default difference entry implementation
+ * Match entry declaration
  *
+ * @param <T>
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Builder
-@Data
-@EqualsAndHashCode
-@ToString
-public class DefaultDiffEntry implements DiffEntry<Object> {
+public interface MatchEntry<T> extends Serializable {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Returns property name {@link String} to compare by
+     *
+     * @return property name
      */
-    private static final long serialVersionUID = -8477472621769483552L;
+    String getPropertyName();
 
     /**
-     * Default property name {@link String}
+     * Returns property value of input argument
+     *
+     * @return property value
      */
-    private String propertyName;
-    /**
-     * Default property value of first argument {@link Object}
-     */
-    private Object first;
-    /**
-     * Default property value of last argument {@link Object}
-     */
-    private Object last;
+    T getValue();
 }

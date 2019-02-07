@@ -32,6 +32,8 @@ import net.andreinc.mockneat.abstraction.*;
 
 import java.time.LocalDate;
 
+import static net.andreinc.mockneat.types.enums.IPv4Type.CLASS_A;
+import static net.andreinc.mockneat.types.enums.IPv4Type.CLASS_C;
 import static net.andreinc.mockneat.types.enums.StringType.*;
 import static net.andreinc.mockneat.unit.text.Strings.strings;
 import static net.andreinc.mockneat.unit.time.LocalDates.localDates;
@@ -54,7 +56,7 @@ import static net.andreinc.mockneat.unit.types.Longs.longs;
 public abstract class AbstractDiffTest {
 
     /**
-     * Default mock instance
+     * Default mock instance (using threadlocal implementation)
      */
     protected final MockNeat mock = MockNeat.threadLocal();
     /**
@@ -84,5 +86,9 @@ public abstract class AbstractDiffTest {
     protected final MockUnitString alphaNumericStringMock = strings().types(ALPHA_NUMERIC);
     protected final MockUnitString lettersStringMock = strings().types(LETTERS);
     protected final MockUnitString numbersStringMock = strings().types(NUMBERS);
+    /**
+     * Default ip mock instances
+     */
+    protected final MockUnitString ipv4ClassA = mock.ipv4s().types(CLASS_A, CLASS_C);
 }
 
