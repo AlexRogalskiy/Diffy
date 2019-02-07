@@ -72,8 +72,8 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Before
     public void setUp() {
-        this.deliveryInfoFirst = getDeliveryInfoUnit().val();
-        this.deliveryInfoLast = getDeliveryInfoUnit().val();
+        this.deliveryInfoFirst = getDeliveryInfoMock().val();
+        this.deliveryInfoLast = getDeliveryInfoMock().val();
     }
 
     @Test

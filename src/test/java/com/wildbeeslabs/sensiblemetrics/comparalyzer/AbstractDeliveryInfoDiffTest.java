@@ -89,8 +89,8 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      *
      * @return delivery info mock unit instance {@link MockUnit}
      */
-    protected MockUnit<DeliveryInfo> getDeliveryInfoUnit() {
-        return getDeliveryInfoUnit(DEFAULT_ADDRESS_INFO_LIST_SIZE);
+    protected MockUnit<DeliveryInfo> getDeliveryInfoMock() {
+        return getDeliveryInfoMock(DEFAULT_ADDRESS_INFO_LIST_SIZE);
     }
 
     /**
@@ -98,16 +98,16 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      *
      * @return delivery info mock unit instance {@link MockUnit}
      */
-    protected MockUnit<DeliveryInfo> getDeliveryInfoUnit(int addressListSize) {
+    protected MockUnit<DeliveryInfo> getDeliveryInfoMock(int addressListSize) {
         return filler(() -> new DeliveryInfo())
                 .setter(DeliveryInfo::setId, getLongMock())
-                .setter(DeliveryInfo::setType, getCodeMock())
+                .setter(DeliveryInfo::setType, getIntMock())
                 .setter(DeliveryInfo::setGid, getAlphaNumericStringMock())
                 .setter(DeliveryInfo::setDescription, getLettersStringMock())
                 .setter(DeliveryInfo::setCreatedAt, getLocalDateMock().toUtilDate())
                 .setter(DeliveryInfo::setUpdatedAt, getLocalDateMock().toUtilDate())
                 .setter(DeliveryInfo::setBalance, getDoubleMock())
-                .setter(DeliveryInfo::setAddresses, getAddressInfoUnit().list(addressListSize));
+                .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
     }
 
     /**
@@ -115,7 +115,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      *
      * @return address info unit {@link MockUnit}
      */
-    protected MockUnit<AddressInfo> getAddressInfoUnit() {
+    protected MockUnit<AddressInfo> getAddressInfoMock() {
         return filler(() -> new AddressInfo())
                 .setter(AddressInfo::setId, getLongMock())
                 .setter(AddressInfo::setCity, getLettersStringMock())

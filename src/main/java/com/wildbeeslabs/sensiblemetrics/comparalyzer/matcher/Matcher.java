@@ -23,11 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.description.MatchDescription;
 
 import java.io.Serializable;
 
-import static com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
+import static com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.description.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
 
 /**
  * Matcher interface declaration by input object instance

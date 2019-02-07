@@ -70,7 +70,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Before
     public void setUp() {
-        this.deliveryInfo = getDeliveryInfoUnit().val();
+        this.deliveryInfo = getDeliveryInfoMock().val();
     }
 
     @Test
@@ -125,6 +125,10 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
                 return value.getType() > 1000 && value.getType() < 5000;
             }
         };
+
+        // Update delivery info type
+        getDeliveryInfo().setType(getCodeMock().val());
+
         DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
@@ -168,6 +172,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             }
         };
 
+        // Update delivery info type
+        getDeliveryInfo().setType(getCodeMock().val());
         // Update delivery info created / updated dates
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));

@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.entry;
 
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.description.MatchDescription;
+
 import java.io.Serializable;
 
 /**

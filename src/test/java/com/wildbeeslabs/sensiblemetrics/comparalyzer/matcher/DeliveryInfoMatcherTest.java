@@ -72,7 +72,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Before
     public void setUp() {
-        this.deliveryInfo = getDeliveryInfoUnit().val();
+        this.deliveryInfo = getDeliveryInfoMock().val();
     }
 
     @Test
@@ -158,10 +158,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
                 .withTypeMatcher(typeMatcher);
 
         final List<DeliveryInfo> deliveryInfoList = Arrays.asList(
-                getDeliveryInfoUnit().val(),
-                getDeliveryInfoUnit().val(),
-                getDeliveryInfoUnit().val(),
-                getDeliveryInfoUnit().val()
+                getDeliveryInfoMock().val(),
+                getDeliveryInfoMock().val(),
+                getDeliveryInfoMock().val(),
+                getDeliveryInfoMock().val()
         );
         assertEquals(4, deliveryInfoList.size());
         assertTrue(deliveryInfoList.stream().noneMatch(entity -> deliveryInfoMatcher.matches(entity)));

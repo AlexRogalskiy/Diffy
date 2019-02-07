@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.description.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.matcher.Matcher;
