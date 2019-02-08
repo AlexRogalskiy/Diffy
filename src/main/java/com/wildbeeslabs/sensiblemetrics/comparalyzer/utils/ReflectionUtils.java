@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -417,8 +419,7 @@ public class ReflectionUtils {
     }
 
     private static boolean hasGetOrIsPrefix(final Method rawMethod) {
-        return rawMethod.getName().startsWith("get") ||
-                rawMethod.getName().startsWith("is");
+        return rawMethod.getName().startsWith("get") || rawMethod.getName().startsWith("is");
     }
 
     private static boolean hasNoParameters(final Method rawMethod) {
@@ -501,6 +502,72 @@ public class ReflectionUtils {
             return Collections.emptyList();
         }
         return Lists.<Type[]>newArrayList(((ParameterizedType) type).getActualTypeArguments());
+    }
+
+    public static Optional<Type> isConcreteType(final Type javaType) {
+        if (javaType instanceof Class || javaType instanceof ParameterizedType) {
+            return Optional.of(javaType);
+        } else if (javaType instanceof WildcardType) {
+            final WildcardType wildcardType = (WildcardType) javaType;
+            if (wildcardType.getLowerBounds().length == 0) {
+                for (final Type type : wildcardType.getUpperBounds()) {
+                    if (type instanceof Class && type.equals(Object.class)) {
+                        continue;
+                    }
+                    return Optional.of(type);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static Class extractClass(final Type javaType) {
+        if (javaType instanceof ParameterizedType && ((ParameterizedType) javaType).getRawType() instanceof Class) {
+            return (Class) ((ParameterizedType) javaType).getRawType();
+        } else if (javaType instanceof GenericArrayType) {
+            return Object[].class;
+        } else if (javaType instanceof Class) {
+            return (Class) javaType;
+        }
+        throw new RuntimeException(String.format("ERROR: cannot get class by type={%s}", javaType));
+    }
+
+    public static boolean isAnnotationPresentInHierarchy(final Class<?> clazz, final Class<? extends Annotation> annotationClazz) {
+        Class<?> current = clazz;
+        while (Objects.nonNull(current) && current != Object.class) {
+            if (current.isAnnotationPresent(annotationClazz)) {
+                return true;
+            }
+            current = current.getSuperclass();
+        }
+        return false;
+    }
+
+    public static List<Type> calculateHierarchyDistance(final Class<?> clazz) {
+        final List<Type> interfaces = new ArrayList<>();
+        final List<Type> parents = new ArrayList<>();
+        Class<?> current = clazz;
+        while (Objects.nonNull(current) && current != Object.class) {
+            if (clazz != current) {
+                parents.add(current);
+            }
+            for (final Class i : current.getInterfaces()) {
+                if (!interfaces.contains(i)) {
+                    interfaces.add(i);
+                }
+            }
+            current = current.getSuperclass();
+        }
+        parents.addAll(interfaces);
+        return parents;
+    }
+
+    public static <T> T getAnnotationValue(final Annotation annotation, final String propertyName) {
+        return (T) invokeGetter(annotation, propertyName);
+    }
+
+    public static Set<Annotation> getAnnotations(final Member member) {
+        return Collections.unmodifiableSet(Sets.newHashSet(((AccessibleObject) member).getAnnotations()));
     }
 
     /**
