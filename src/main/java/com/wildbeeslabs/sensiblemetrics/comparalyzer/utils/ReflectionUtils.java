@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -404,6 +405,102 @@ public class ReflectionUtils {
      */
     public static ReflectionMethodType getMethodType(final String methodName, int numberOfParameters, int typedParameter) {
         return new ReflectionMethodType(methodName, numberOfParameters, typedParameter);
+    }
+
+    public static boolean isGetter(final Method rawMethod) {
+        return hasGetOrIsPrefix(rawMethod) &&
+                hasNoParameters(rawMethod) &&
+                returnsSomething(rawMethod) &&
+                isNotStatic(rawMethod) &&
+                //isNotAbstract(rawMethod) &&
+                isNotNative(rawMethod);
+    }
+
+    private static boolean hasGetOrIsPrefix(final Method rawMethod) {
+        return rawMethod.getName().startsWith("get") ||
+                rawMethod.getName().startsWith("is");
+    }
+
+    private static boolean hasNoParameters(final Method rawMethod) {
+        return rawMethod.getParameterTypes().length == 0;
+    }
+
+    private static boolean returnsSomething(final Method rawMethod) {
+        return rawMethod.getGenericReturnType() != void.class;
+    }
+
+    private static boolean isNotAbstract(final Method rawMethod) {
+        return !Modifier.isAbstract(rawMethod.getModifiers());
+    }
+
+    private static boolean isNotStatic(final Method rawMethod) {
+        return !Modifier.isStatic(rawMethod.getModifiers());
+    }
+
+    private static boolean isNotNative(final Method rawMethod) {
+        return !Modifier.isNative(rawMethod.getModifiers());
+    }
+
+    public static boolean isSubClass(final Method parent, final Method toCheck) {
+        return parent.getDeclaringClass().isAssignableFrom(toCheck.getDeclaringClass());
+    }
+
+    public static boolean sameMethodName(final Method parent, final Method toCheck) {
+        return parent.getName().equals(toCheck.getName());
+    }
+
+    public static boolean returnTypeCovariant(final Method parent, final Method toCheck) {
+        return parent.getReturnType().isAssignableFrom(toCheck.getReturnType());
+    }
+
+    public static boolean sameArguments(final Method parent, final Method toCheck) {
+        return Arrays.equals(parent.getParameterTypes(), toCheck.getParameterTypes());
+    }
+
+    public static void setAccessible(final Member rawMember) {
+        if (!isPublic(rawMember)) {
+            ((AccessibleObject) rawMember).setAccessible(true);
+        }
+    }
+
+    public static boolean isPublic(final Member member) {
+        return Modifier.isPublic(member.getModifiers()) && Modifier.isPublic(member.getDeclaringClass().getModifiers());
+    }
+
+    public static Object invokeGetter(final Object target, final String getterName) {
+        Objects.requireNonNull(target);
+        Objects.requireNonNull(getterName);
+        try {
+            final Method m = target.getClass().getMethod(getterName);
+            return m.invoke(target);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("ERROR: cannot invoke getter={%s} for target={%s}, message={%s}", getterName, target, e.getMessage()));
+        }
+    }
+
+    public static List<Field> getAllPersistentFields(final Class clazz) {
+        return Arrays.stream(Optional.ofNullable(getAllFields(clazz)).orElseGet(() -> new Field[]{})).filter(ReflectionUtils::isPersistentField).collect(Collectors.toList());
+    }
+
+    private static boolean isPersistentField(final Field field) {
+        return !Modifier.isTransient(field.getModifiers()) &&
+                !Modifier.isStatic(field.getModifiers()) &&
+                !field.getName().equals("this$0");
+    }
+
+    private static boolean isPrivate(final Member member) {
+        return Modifier.isPrivate(member.getModifiers());
+    }
+
+    private static boolean isProtected(final Member member) {
+        return Modifier.isProtected(member.getModifiers());
+    }
+
+    public static List<Type[]> getypeArguments(final Type type) {
+        if (!(type instanceof ParameterizedType)) {
+            return Collections.emptyList();
+        }
+        return Lists.<Type[]>newArrayList(((ParameterizedType) type).getActualTypeArguments());
     }
 
     /**

@@ -65,6 +65,11 @@ import static org.junit.Assert.*;
 public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest {
 
     /**
+     * Default date time format pattern
+     */
+    private final String DEFAULT_DATETIME_FORMAT = "dd/MM/yyyy hh:mm:ss";
+
+    /**
      * Default delivery information models
      */
     private DeliveryInfo deliveryInfoFirst;
@@ -547,6 +552,11 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByDateFieldsAndComparators() {
         final List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
 
+        getDeliveryInfoFirst().setCreatedAt(toDate("07/06/2013 12:13:14", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoFirst().setUpdatedAt(toDate("17/06/2018 14:13:12", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoLast().setCreatedAt(toDate("01/05/2013 15:01:01", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoLast().setUpdatedAt(toDate("17/07/2018 16:17:17", DEFAULT_DATETIME_FORMAT));
+
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
         diffComparator.setComparator("createdAt", Comparator.comparingInt((Date d) -> LocalDateTime.fromDateFields(d).getHourOfDay()));
@@ -563,7 +573,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
                 .first(getDeliveryInfoFirst().getCreatedAt())
                 .last(getDeliveryInfoLast().getCreatedAt())
                 .build();
-        assertFalse(valueChangeList.contains(entry));
+        assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
 
         entry = DefaultDiffEntry
@@ -572,7 +582,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
                 .first(getDeliveryInfoFirst().getUpdatedAt())
                 .last(getDeliveryInfoLast().getUpdatedAt())
                 .build();
-        assertTrue(valueChangeList.contains(entry));
+        assertFalse(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
     }
 

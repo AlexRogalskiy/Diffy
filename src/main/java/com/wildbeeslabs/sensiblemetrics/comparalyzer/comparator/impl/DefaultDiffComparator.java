@@ -35,6 +35,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.setAccessible;
+
 /**
  * Default difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
  *
@@ -105,7 +107,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                 .filter(property -> getPropertyMap().containsKey(property))
                 .forEach(property -> {
                     try {
-                        getPropertyMap().get(property).setAccessible(true);
+                        setAccessible(getPropertyMap().get(property));
                         final Object firstValue = getPropertyMap().get(property).get(first);
                         final Object lastValue = getPropertyMap().get(property).get(last);
                         if (0 != Objects.compare(firstValue, lastValue, getPropertyComparator(property))) {
