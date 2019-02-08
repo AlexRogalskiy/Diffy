@@ -60,6 +60,34 @@ public class ReflectionUtils {
      * Default primitive numeric types {@link Collection}
      */
     private static final Collection<Class<?>> DEFAULT_PRIMITIVE_NUMERIC_TYPES = getDefaultPrimitiveNumericTypes();
+    /**
+     * Default collection of extendable simple types {@link Collection}
+     */
+    @SuppressWarnings("unchecked")
+    private static final Collection<Class<?>> EXTENDABLE_SIMPLE_TYPES = Arrays.asList(
+            BigDecimal.class,
+            BigInteger.class,
+            CharSequence.class,
+            ThreadLocal.class,
+            Calendar.class,
+            Date.class,
+            Enum.class,
+            Number.class,
+            Process.class
+    );
+    /**
+     * Default collection of final simple types {@link List}
+     */
+    @SuppressWarnings("unchecked")
+    private static final Collection<Class<? extends Serializable>> FINAL_SIMPLE_TYPES = Arrays.asList(
+            Class.class,
+            URI.class,
+            URL.class,
+            Currency.class,
+            Locale.class,
+            UUID.class,
+            String.class
+    );
 
     /**
      * Returns collection of primitive wrapper types {@link Set}
@@ -100,31 +128,6 @@ public class ReflectionUtils {
     }
 
     /**
-     * Default collection of extendable simple types {@link Collection}
-     */
-    @SuppressWarnings("unchecked")
-    private static final Collection<Class<?>> EXTENDABLE_SIMPLE_TYPES = Arrays.asList(
-            BigDecimal.class,
-            BigInteger.class,
-            CharSequence.class,
-            Calendar.class,
-            Date.class,
-            Enum.class
-
-    );
-    /**
-     * Default collection of final simple types {@link List}
-     */
-    @SuppressWarnings("unchecked")
-    private static final Collection<Class<? extends Serializable>> FINAL_SIMPLE_TYPES = Arrays.asList(
-            Class.class,
-            URI.class,
-            URL.class,
-            Locale.class,
-            UUID.class
-    );
-
-    /**
      * Returns matchable class instance {@link Class} by input argument class type
      *
      * @param expectedClass - initial argument class instance {@link Class}
@@ -153,15 +156,21 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns binary flag based on input class instance {@link Class}
+     * Returns binary flag based on input comparable class instance {@link Class}
      *
-     * @param clazz - initial class instance {@link Class}
+     * @param clazz - initial comparable class instance {@link Class}
      * @return true - if input class is of comparable type, false - otherwise
      */
     public static boolean isComparableType(final Class<?> clazz) {
         return Comparable.class.isAssignableFrom(clazz);
     }
 
+    /**
+     * Returns binary flag base on input simple class instance {@link Class}
+     *
+     * @param clazz - initial simple class instance {@link Class}
+     * @return true - if input class is of simple type, false - otherwise
+     */
     public static boolean isSimpleType(final Class<?> clazz) {
         if (Objects.isNull(clazz)) {
             return false;
@@ -221,11 +230,15 @@ public class ReflectionUtils {
         }
     }
 
+    /**
+     * Returns traversable collection of types {@link Set} by input collection of object values
+     *
+     * @param values - initial input collection of object values
+     * @return traversable collection of types {@link Set}
+     */
     public static Set<Class<?>> typesOf(final Object... values) {
         final Object[] traversableType = Optional.ofNullable(values).orElseGet(() -> new Object[]{});
-        final Set<Class<?>> types = new HashSet<>(traversableType.length);
-        Stream.of(traversableType).filter(Objects::nonNull).forEach(type -> types.add(type.getClass()));
-        return types;
+        return Stream.of(traversableType).filter(Objects::nonNull).map(type -> type.getClass()).collect(Collectors.toSet());
     }
 
     /**
@@ -405,12 +418,25 @@ public class ReflectionUtils {
         private final int numberOfParameters;
         private final int typeParameter;
 
+        /**
+         * Default reflection method type constructor with initial method name {@link String}, number of input parameters and their types
+         *
+         * @param methodName         - initial input method name {@link String}
+         * @param numberOfParameters - initial input number of parameters
+         * @param typedParameter     - initial input index of positional parameter
+         */
         public ReflectionMethodType(final String methodName, int numberOfParameters, int typedParameter) {
             this.methodName = methodName;
             this.numberOfParameters = numberOfParameters;
             this.typeParameter = typedParameter;
         }
 
+        /**
+         * Returns method parameter type {@link Class} by initial class instance {@link Class}
+         *
+         * @param clazz - initial class instance {@link Class}
+         * @return method parameter type {@link Class}
+         */
         public Class<?> getType(final Class<?> clazz) {
             for (Class c = clazz; c != Object.class; c = c.getSuperclass()) {
                 final Optional<Method> methodOptional = Stream.of(c.getDeclaredMethods()).filter(method -> hasSignature(method)).findFirst();
