@@ -357,7 +357,7 @@ public class ReflectionUtils {
      * @param classes - collection of classes to reflect on {@link List}
      * @return array of fields {@link Field} of the supplied list of classes
      */
-    private static Field[] getAllFields(final List<Class<?>> classes) {
+    public static Field[] getAllFields(final List<Class<?>> classes) {
         final Set<Field> fields = new HashSet<>();
         Optional.of(classes).orElseGet(Collections::emptyList).forEach(clazz -> fields.addAll(Arrays.asList(clazz.getDeclaredFields())));
         return fields.toArray(new Field[fields.size()]);
@@ -425,80 +425,6 @@ public class ReflectionUtils {
                 isNotStatic(rawMethod) &&
                 //isNotAbstract(rawMethod) &&
                 isNotNative(rawMethod);
-    }
-
-    /**
-     * Return binary flag whether method has prefix "get/is"
-     *
-     * @param rawMethod - initial method type {@link Method}
-     * @return true - if method has a prefix, false - otherwise
-     */
-    private static boolean hasGetOrIsPrefix(final Method rawMethod) {
-        return rawMethod.getName().startsWith("get") || rawMethod.getName().startsWith("is");
-    }
-
-    /**
-     * Return binary flag whether method has input parameters
-     *
-     * @param rawMethod - initial method type {@link Method}
-     * @return true - if method has input parameters, false - otherwise
-     */
-    private static boolean hasNoParameters(final Method rawMethod) {
-        return rawMethod.getParameterTypes().length == 0;
-    }
-
-    /**
-     * Return binary flag whether method returns value
-     *
-     * @param rawMethod - initial method type {@link Method}
-     * @return true - if method returns value, false - otherwise
-     */
-    private static boolean returnsSomething(final Method rawMethod) {
-        return rawMethod.getGenericReturnType() != void.class;
-    }
-
-    /**
-     * Return binary flag whether method is not abstract
-     *
-     * @param rawMethod - initial method type {@link Method}
-     * @return true - if method is not abstract, false - otherwise
-     */
-    private static boolean isNotAbstract(final Method rawMethod) {
-        return !Modifier.isAbstract(rawMethod.getModifiers());
-    }
-
-    /**
-     * Return binary flag whether method is not static
-     *
-     * @param rawMethod - initial method type {@link Method}
-     * @return true - if method is not static, false - otherwise
-     */
-    private static boolean isNotStatic(final Method rawMethod) {
-        return !Modifier.isStatic(rawMethod.getModifiers());
-    }
-
-    /**
-     * Return binary flag whether method is not native
-     *
-     * @param rawMethod - initial method type {@link Method}
-     * @return true - if method is not native, false - otherwise
-     */
-    private static boolean isNotNative(final Method rawMethod) {
-        return !Modifier.isNative(rawMethod.getModifiers());
-    }
-
-    /**
-     * Return binary flag whether method has is been overridden
-     *
-     * @param parent  - initial parent method type {@link Method}
-     * @param toCheck - initial method type to be checked {@link Method}
-     * @return true - if method is been overridden, false - otherwise
-     */
-    private static boolean isOverridden(final Method parent, final Method toCheck) {
-        return isSubClass(parent, toCheck) &&
-                sameMethodName(parent, toCheck) &&
-                returnTypeCovariant(parent, toCheck) &&
-                sameArguments(parent, toCheck);
     }
 
     /**
@@ -596,6 +522,199 @@ public class ReflectionUtils {
     }
 
     /**
+     * Returns iterable collection of type arguments {@link List} by input type instance {@link Type}
+     *
+     * @param type - input type instance {@link Type}
+     * @return collection of type arguments {@link List}
+     */
+    public static List<Type[]> getTypeArguments(final Type type) {
+        if (!(type instanceof ParameterizedType)) {
+            return Collections.emptyList();
+        }
+        return Lists.<Type[]>newArrayList(((ParameterizedType) type).getActualTypeArguments());
+    }
+
+    /**
+     * Return optional type {@link Type} by input java type {@link Type}
+     *
+     * @param javaType - initial java type instance {@link Type}
+     * @return optinal type {@link Type}
+     */
+    public static Optional<Type> isConcreteType(final Type javaType) {
+        if (javaType instanceof Class || javaType instanceof ParameterizedType) {
+            return Optional.of(javaType);
+        }
+        if (javaType instanceof WildcardType) {
+            final WildcardType wildcardType = (WildcardType) javaType;
+            if (wildcardType.getLowerBounds().length == 0) {
+                for (final Type type : wildcardType.getUpperBounds()) {
+                    if (type instanceof Class && type.equals(Object.class)) {
+                        continue;
+                    }
+                    return Optional.of(type);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Returns class instance {@link Class} by input java type {@link Type}
+     *
+     * @param javaType - initial java type instance {@link Type}
+     * @return class instance {@link Class}
+     */
+    public static Class extractClass(final Type javaType) {
+        if (javaType instanceof ParameterizedType && ((ParameterizedType) javaType).getRawType() instanceof Class) {
+            return (Class) ((ParameterizedType) javaType).getRawType();
+        } else if (javaType instanceof GenericArrayType) {
+            return Object[].class;
+        } else if (javaType instanceof Class) {
+            return (Class) javaType;
+        }
+        throw new RuntimeException(String.format("ERROR: cannot get class by type={%s}", javaType));
+    }
+
+    /**
+     * Returns binary flag based on annotation type by input class instance {@link Class}
+     *
+     * @param clazz           - initial input class instance {@link Class}
+     * @param annotationClazz - initial input annotation class instance {@link Class}
+     * @return true - if annotation is present, false - otherwise
+     */
+    public static boolean isAnnotationPresentInHierarchy(final Class<?> clazz, final Class<? extends Annotation> annotationClazz) {
+        Class<?> current = clazz;
+        while (Objects.nonNull(current) && current != Object.class) {
+            if (current.isAnnotationPresent(annotationClazz)) {
+                return true;
+            }
+            current = current.getSuperclass();
+        }
+        return false;
+    }
+
+    /**
+     * Returns collection of types {@link List} in class hierarchy by input class instance {@link Class}
+     *
+     * @param clazz - initial input class instance {@link Class}
+     * @return collection of types {@link List} in class hierarchy
+     */
+    public static List<Type> calculateHierarchyDistance(final Class<?> clazz) {
+        final List<Type> interfaces = new ArrayList<>();
+        final List<Type> parents = new ArrayList<>();
+        Class<?> current = clazz;
+        while (Objects.nonNull(current) && current != Object.class) {
+            if (clazz != current) {
+                parents.add(current);
+            }
+            for (final Class i : current.getInterfaces()) {
+                if (!interfaces.contains(i)) {
+                    interfaces.add(i);
+                }
+            }
+            current = current.getSuperclass();
+        }
+        parents.addAll(interfaces);
+        return parents;
+    }
+
+    /**
+     * Returns annotation value by annotation instance {@link Annotation} and property name {@link String}
+     *
+     * @param annotation   - initial input annotation instance {@link Annotation}
+     * @param propertyName - initial input property name {@link String}
+     * @param <T>
+     * @return annotation value
+     */
+    public static <T> T getAnnotationValue(final Annotation annotation, final String propertyName) {
+        return (T) invokeGetter(annotation, propertyName);
+    }
+
+    /**
+     * Returns collection of annotations {@link Set} by input member instance {@link Member}
+     *
+     * @param member - initial input member instance {@link Member}
+     * @return collection of annotations {@link Set}
+     */
+    public static Set<Annotation> getAnnotations(final Member member) {
+        return Collections.unmodifiableSet(Sets.newHashSet(((AccessibleObject) member).getAnnotations()));
+    }
+
+    /**
+     * Return binary flag whether method has prefix "get/is"
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method has a prefix, false - otherwise
+     */
+    private static boolean hasGetOrIsPrefix(final Method rawMethod) {
+        return rawMethod.getName().startsWith("get") || rawMethod.getName().startsWith("is");
+    }
+
+    /**
+     * Return binary flag whether method has input parameters
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method has input parameters, false - otherwise
+     */
+    private static boolean hasNoParameters(final Method rawMethod) {
+        return rawMethod.getParameterTypes().length == 0;
+    }
+
+    /**
+     * Return binary flag whether method returns value
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method returns value, false - otherwise
+     */
+    private static boolean returnsSomething(final Method rawMethod) {
+        return rawMethod.getGenericReturnType() != void.class;
+    }
+
+    /**
+     * Return binary flag whether method is not abstract
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method is not abstract, false - otherwise
+     */
+    private static boolean isNotAbstract(final Method rawMethod) {
+        return !Modifier.isAbstract(rawMethod.getModifiers());
+    }
+
+    /**
+     * Return binary flag whether method is not static
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method is not static, false - otherwise
+     */
+    private static boolean isNotStatic(final Method rawMethod) {
+        return !Modifier.isStatic(rawMethod.getModifiers());
+    }
+
+    /**
+     * Return binary flag whether method is not native
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method is not native, false - otherwise
+     */
+    private static boolean isNotNative(final Method rawMethod) {
+        return !Modifier.isNative(rawMethod.getModifiers());
+    }
+
+    /**
+     * Return binary flag whether method has is been overridden
+     *
+     * @param parent  - initial parent method type {@link Method}
+     * @param toCheck - initial method type to be checked {@link Method}
+     * @return true - if method is been overridden, false - otherwise
+     */
+    private static boolean isOverridden(final Method parent, final Method toCheck) {
+        return isSubClass(parent, toCheck) &&
+                sameMethodName(parent, toCheck) &&
+                returnTypeCovariant(parent, toCheck) &&
+                sameArguments(parent, toCheck);
+    }
+
+    /**
      * Return binary flag whether field is persistent
      *
      * @param field - initial field instance {@link Field}
@@ -625,85 +744,6 @@ public class ReflectionUtils {
      */
     private static boolean isProtected(final Member member) {
         return Modifier.isProtected(member.getModifiers());
-    }
-
-    /**
-     * Returns iterable collection of type arguments {@link List} by input type instance {@link Type}
-     *
-     * @param type - input type instance {@link Type}
-     * @return collection of type arguments {@link List}
-     */
-    public static List<Type[]> getTypeArguments(final Type type) {
-        if (!(type instanceof ParameterizedType)) {
-            return Collections.emptyList();
-        }
-        return Lists.<Type[]>newArrayList(((ParameterizedType) type).getActualTypeArguments());
-    }
-
-    public static Optional<Type> isConcreteType(final Type javaType) {
-        if (javaType instanceof Class || javaType instanceof ParameterizedType) {
-            return Optional.of(javaType);
-        } else if (javaType instanceof WildcardType) {
-            final WildcardType wildcardType = (WildcardType) javaType;
-            if (wildcardType.getLowerBounds().length == 0) {
-                for (final Type type : wildcardType.getUpperBounds()) {
-                    if (type instanceof Class && type.equals(Object.class)) {
-                        continue;
-                    }
-                    return Optional.of(type);
-                }
-            }
-        }
-        return Optional.empty();
-    }
-
-    public static Class extractClass(final Type javaType) {
-        if (javaType instanceof ParameterizedType && ((ParameterizedType) javaType).getRawType() instanceof Class) {
-            return (Class) ((ParameterizedType) javaType).getRawType();
-        } else if (javaType instanceof GenericArrayType) {
-            return Object[].class;
-        } else if (javaType instanceof Class) {
-            return (Class) javaType;
-        }
-        throw new RuntimeException(String.format("ERROR: cannot get class by type={%s}", javaType));
-    }
-
-    public static boolean isAnnotationPresentInHierarchy(final Class<?> clazz, final Class<? extends Annotation> annotationClazz) {
-        Class<?> current = clazz;
-        while (Objects.nonNull(current) && current != Object.class) {
-            if (current.isAnnotationPresent(annotationClazz)) {
-                return true;
-            }
-            current = current.getSuperclass();
-        }
-        return false;
-    }
-
-    public static List<Type> calculateHierarchyDistance(final Class<?> clazz) {
-        final List<Type> interfaces = new ArrayList<>();
-        final List<Type> parents = new ArrayList<>();
-        Class<?> current = clazz;
-        while (Objects.nonNull(current) && current != Object.class) {
-            if (clazz != current) {
-                parents.add(current);
-            }
-            for (final Class i : current.getInterfaces()) {
-                if (!interfaces.contains(i)) {
-                    interfaces.add(i);
-                }
-            }
-            current = current.getSuperclass();
-        }
-        parents.addAll(interfaces);
-        return parents;
-    }
-
-    public static <T> T getAnnotationValue(final Annotation annotation, final String propertyName) {
-        return (T) invokeGetter(annotation, propertyName);
-    }
-
-    public static Set<Annotation> getAnnotations(final Member member) {
-        return Collections.unmodifiableSet(Sets.newHashSet(((AccessibleObject) member).getAnnotations()));
     }
 
     /**
