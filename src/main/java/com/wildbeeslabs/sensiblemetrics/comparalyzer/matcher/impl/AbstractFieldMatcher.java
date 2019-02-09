@@ -34,8 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Abstract field matcher implementation by input object instance
  *
- * @param <T>
- * @param <E>
+ * @param <T> type of input element to be matched by operation
+ * @param <E> type of difference matcher instance
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

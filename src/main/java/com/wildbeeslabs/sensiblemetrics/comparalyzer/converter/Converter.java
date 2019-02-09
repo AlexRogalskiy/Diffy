@@ -26,8 +26,8 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter;
 /**
  * Custom converter interface declaration
  *
- * @param <T>
- * @param <R>
+ * @param <T> type of input element to be converted from
+ * @param <R> type of input element to be converted to
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -36,10 +36,10 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter;
 public interface Converter<T, R> {
 
     /**
-     * Returns converted value of input argument {@link String}
+     * Returns converted value by input argument value
      *
-     * @param value - initial argument value
-     * @return converted input value
+     * @param value - initial input argument value
+     * @return converted value
      */
     R convert(final T value);
 }

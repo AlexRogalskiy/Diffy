@@ -28,7 +28,7 @@ import java.io.Serializable;
 /**
  * Difference entry declaration
  *
- * @param <T>
+ * @param <T> type of input element to be stored by entry
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

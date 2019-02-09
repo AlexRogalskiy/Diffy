@@ -32,8 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Abstract converter implementation
  *
- * @param <T>
- * @param <R>
+ * @param <T> type of input element to be converted from
+ * @param <R> type of input element to be converted to
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

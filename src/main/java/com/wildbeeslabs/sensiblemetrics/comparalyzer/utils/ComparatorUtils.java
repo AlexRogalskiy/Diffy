@@ -50,7 +50,7 @@ public class ComparatorUtils {
     /**
      * Default comparable comparator implementation
      *
-     * @param <T>
+     * @param <T> type of input element to be compared by operation
      */
     @EqualsAndHashCode
     @ToString
@@ -148,6 +148,8 @@ public class ComparatorUtils {
 
     /**
      * Default iterable comparator implementation {@link Iterable}
+     *
+     * @param <T> type of input element to be compared by operation
      */
     @Data
     @EqualsAndHashCode
@@ -226,7 +228,7 @@ public class ComparatorUtils {
     /**
      * Returns comparable {@link Comparable} comparator instance {@link Comparator}
      *
-     * @param <T>
+     * @param <T> type of input element to be compared by operation
      * @return comparable {@link Comparable} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
@@ -247,6 +249,7 @@ public class ComparatorUtils {
     /**
      * Returns iterable {@link Iterable} comparator instance {@link Comparator}
      *
+     * @param <T> type of input element to be compared by operation
      * @return iterable {@link Iterable} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
@@ -257,7 +260,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result of initial arguments comparison by {@link Comparator}
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument
      * @param last  - initial last input argument
      * @return numeric value of comparison
@@ -269,7 +272,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by initial comparator instance {@link Comparator}
      *
-     * @param <T>
+     * @param <T>        type of input element to be compared by operation
      * @param first      - initial first input argument
      * @param last       - initial last input argument
      * @param comparator - initial comparator instance {@link Comparator}
@@ -282,7 +285,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe integer arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument
      * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
@@ -295,7 +298,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe long arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument
      * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
@@ -308,7 +311,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe float arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument
      * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
@@ -321,7 +324,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe double arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument
      * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
@@ -334,7 +337,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe BigDecimal-like arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument
      * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first
@@ -347,7 +350,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe {@link BigDecimal} arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument {@link BigDecimal}
      * @param last  - initial last input argument {@link BigDecimal}
      * @return a negative integer, zero, or a positive integer if the first
@@ -360,7 +363,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe string-like arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument {@link BigDecimal}
      * @param last  - initial last input argument {@link BigDecimal}
      * @return a negative integer, zero, or a positive integer if the first
@@ -386,7 +389,7 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe general arguments comparison
      *
-     * @param <T>
+     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument
      * @param last  - initial last input argument
      * @return a negative integer, zero, or a positive integer if the first

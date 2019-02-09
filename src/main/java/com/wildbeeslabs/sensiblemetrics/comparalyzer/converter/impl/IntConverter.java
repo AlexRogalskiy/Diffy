@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntConverter extends AbstractConverter<String, Integer> {
+public class IntConverter extends NumericConverter<Integer> {
 
     /**
      * Returns integer value {@link Integer} by input argument {@link String}
@@ -48,7 +48,7 @@ public class IntConverter extends AbstractConverter<String, Integer> {
      * @return converted integer value {@link Integer}
      */
     @Override
-    public Integer convert(final String value) {
+    protected Integer valueOf(final String value) {
         return Integer.valueOf(value);
     }
 }

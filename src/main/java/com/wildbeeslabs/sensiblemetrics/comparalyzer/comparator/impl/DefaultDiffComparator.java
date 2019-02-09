@@ -40,6 +40,7 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtil
 /**
  * Default difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
  *
+ * @param <T> type of input element to be compared by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

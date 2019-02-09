@@ -208,7 +208,7 @@ public class ReflectionUtils {
      * Returns initialized instance by input argument class instance {@link Class}
      *
      * @param clazz - input argument class instance {@link Class}
-     * @param <T>
+     * @param <T>   type of input class instance
      * @return initialized instance by class {@link Class}
      */
     public static <T> T instanceOf(final Class<T> clazz) {
@@ -270,7 +270,7 @@ public class ReflectionUtils {
     /**
      * Returns property value of an object argument by name {@link String}
      *
-     * @param <T>
+     * @param <T>          type of input element to get property value from
      * @param value        - initial argument to get property value from
      * @param propertyName - initial property name {@link String}
      * @param clazz        - initial class to be casted to {@link Class}

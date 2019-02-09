@@ -49,6 +49,9 @@ public class StringMatchDescription extends BaseMatchDescription {
      */
     private static final long serialVersionUID = 1115429688276595763L;
 
+    /**
+     * Default appendable output stream {@link Appendable}
+     */
     private final Appendable out;
 
     /**

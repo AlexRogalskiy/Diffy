@@ -45,7 +45,8 @@ public class DefaultDiffMatcherFactory {
     /**
      * Creates difference matcher instance {@link DiffMatcher}
      *
-     * @param <T>
+     * @param <T> type of input element to create matcher for
+     * @param <E> type of difference matcher instance
      * @return difference matcher {@link DiffMatcher}
      */
     public static <T, E extends DiffMatcher<T>> E create() {
@@ -55,7 +56,8 @@ public class DefaultDiffMatcherFactory {
     /**
      * Creates difference matcher instance {@link DiffMatcher} by input matcher {@link Iterable}
      *
-     * @param <T>
+     * @param <T>     type of input element to create matcher for
+     * @param <E>     type of difference matcher instance
      * @param matcher - initial input argument matcher {@link Matcher}
      * @return difference matcher {@link DiffMatcher}
      */
@@ -66,7 +68,8 @@ public class DefaultDiffMatcherFactory {
     /**
      * Creates difference matcher instance {@link DiffMatcher} by input collection of matchers
      *
-     * @param <T>
+     * @param <T>      type of input element to create matcher for
+     * @param <E>      type of difference matcher instance
      * @param matchers - initial input collection of matchers
      * @return difference matcher {@link DiffMatcher}
      */
@@ -77,7 +80,8 @@ public class DefaultDiffMatcherFactory {
     /**
      * Creates difference matcher instance {@link DiffMatcher} by input iterable collection of matchers {@link Iterable}
      *
-     * @param <T>
+     * @param <T>      type of input element to create matcher for
+     * @param <E>      type of difference matcher instance
      * @param matchers - initial input iterable collection of matchers {@link Iterable}
      * @return difference matcher {@link DiffMatcher}
      */

@@ -65,7 +65,7 @@ public interface MatchDescription extends Serializable {
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input collection of values to be appended
-     * @param <T>
+     * @param <T>       type of input element to be processed by matchable operation
      * @return current description instance {@link MatchDescription}
      */
     <T> MatchDescription append(final String start, final String delimiter, final String end, final T... values);
@@ -77,10 +77,10 @@ public interface MatchDescription extends Serializable {
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input iterable collection of values to be appended {@link Iterable}
-     * @param <T>
+     * @param <T>       type of input element to be processed by matchable operation
      * @return current description instance {@link MatchDescription}
      */
-    <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<T> values);
+    <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values);
 
 
     /**
@@ -119,7 +119,7 @@ public interface MatchDescription extends Serializable {
          * @param delimiter - initial input delimiter token {@link String}
          * @param end       - initial input end token {@link String}
          * @param values    - initial input collection of values to be appended
-         * @param <T>
+         * @param <T>       type of input element to be processed by matchable operation
          * @return current empty description instance {@link MatchDescription}
          */
         @Override
@@ -134,11 +134,11 @@ public interface MatchDescription extends Serializable {
          * @param delimiter - initial input delimiter token {@link String}
          * @param end       - initial input end token {@link String}
          * @param values    - initial input iterable collection of values to be appended {@link Iterable}
-         * @param <T>
+         * @param <T>       type of input element to be processed by matchable operation
          * @return current empty description instance {@link MatchDescription}
          */
         @Override
-        public <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<T> values) {
+        public <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values) {
             return this;
         }
     }

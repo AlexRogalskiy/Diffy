@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 /**
  * Default difference matcher implementation by input object instance
  *
- * @param <T>
+ * @param <T> type of input element to be matched by difference operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

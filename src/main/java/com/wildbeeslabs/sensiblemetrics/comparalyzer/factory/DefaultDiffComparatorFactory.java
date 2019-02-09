@@ -44,7 +44,8 @@ public class DefaultDiffComparatorFactory {
     /**
      * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}
      *
-     * @param <T>
+     * @param <T>   type of input element to create comparator for
+     * @param <E>   type of difference comparator instance
      * @param clazz - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @return difference comparator {@link DiffComparator}
      */
@@ -55,7 +56,8 @@ public class DefaultDiffComparatorFactory {
     /**
      * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterable collections of included/excluded properties {@link Iterable}
      *
-     * @param <T>
+     * @param <T>               type of input element to create comparator for
+     * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @param includeProperties - initial iterable collection of included properties {@link Iterable}
      * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
@@ -74,7 +76,8 @@ public class DefaultDiffComparatorFactory {
     /**
      * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterable collection of excluded properties {@link Iterable}
      *
-     * @param <T>
+     * @param <T>               type of input element to create comparator for
+     * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
@@ -90,7 +93,8 @@ public class DefaultDiffComparatorFactory {
     /**
      * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} with comparator instance {@link Comparator}
      *
-     * @param <T>
+     * @param <T>        type of input element to create comparator for
+     * @param <E>        type of difference comparator instance
      * @param clazz      - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @param comparator - initial comparator instance {@link Comparator}
      * @return difference comparator {@link DiffComparator}
@@ -102,7 +106,8 @@ public class DefaultDiffComparatorFactory {
     /**
      * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterable collections of included/excluded properties {@link Iterable}
      *
-     * @param <T>
+     * @param <T>               type of input element to create comparator for
+     * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @param comparator        - initial comparator instance {@link Comparator}
      * @param includeProperties - initial iterable collection of included properties {@link Iterable}
@@ -123,7 +128,8 @@ public class DefaultDiffComparatorFactory {
     /**
      * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterable collection of excluded properties {@link Iterable}
      *
-     * @param <T>
+     * @param <T>               type of input element to create comparator for
+     * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @param comparator        - initial comparator instance {@link Comparator}
      * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}

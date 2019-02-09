@@ -47,8 +47,8 @@ public class ConverterUtils {
      *
      * @param value     - initial argument value to be converted
      * @param converter - initial converter to process on {@link Converter}
-     * @param <T>
-     * @param <R>
+     * @param <T>       type of input element to be converted from by operation
+     * @param <R>       type of input element to be converted to by operation
      * @return converted value
      */
     public static <T, R> R convert(final T value, final Converter<T, R> converter) {

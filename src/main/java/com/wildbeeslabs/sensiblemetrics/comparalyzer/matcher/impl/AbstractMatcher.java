@@ -34,7 +34,7 @@ import java.util.*;
 /**
  * Abstract matcher implementation
  *
- * @param <T>
+ * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

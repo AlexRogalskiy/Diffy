@@ -35,7 +35,7 @@ import java.util.Objects;
 /**
  * Abstract type safe matcher implementation by input class instance {@link Class}
  *
- * @param <T>
+ * @param <T> type of input element to be matched by type safe operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

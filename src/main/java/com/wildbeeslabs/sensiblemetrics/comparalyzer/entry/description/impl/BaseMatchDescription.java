@@ -81,7 +81,7 @@ public class BaseMatchDescription implements MatchDescription {
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input collection of values to be appended
-     * @param <T>
+     * @param <T> type of input element to be processed by matchable operation
      * @return current description instance {@link MatchDescription}
      */
     @Override
@@ -96,14 +96,14 @@ public class BaseMatchDescription implements MatchDescription {
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input iterable collection of values to be appended {@link Iterable}
-     * @param <T>
+     * @param <T> type of input element to be processed by matchable operation
      * @return current description instance {@link MatchDescription}
      */
     @Override
-    public <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<T> values) {
+    public <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values) {
         boolean separate = false;
         append(start);
-        final Iterator<T> it = values.iterator();
+        final Iterator<? extends T> it = values.iterator();
         while (it.hasNext()) {
             if (separate) append(delimiter);
             append(it.next());

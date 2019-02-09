@@ -21,65 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.converter.impl;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Singular;
 import lombok.ToString;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * Custom delivery info model
+ * Default integer converter implementation {@link Integer}
  *
+ * @param <T> type of input numeric element {@link Number} to be converted from
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
+@Slf4j
 @Data
-@EqualsAndHashCode
-@ToString
-public class DeliveryInfo implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public abstract class NumericConverter<T extends Number> extends AbstractConverter<String, T> {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Returns converted value {@link Number} by converter operation applied to input value
+     *
+     * @param value - initial input argument value {@link String}
+     * @return converted value {@link Number}
      */
-    private static final long serialVersionUID = 8170421693292671905L;
+    @Override
+    public T convert(final String value) {
+        return valueOf(value);
+    }
 
     /**
-     * Default ID
+     * Returns converted value {@link Number} by initial input value {@link String}
+     *
+     * @param value - initial input argument value {@link String}
+     * @return converted value {@link Number}
      */
-    private Long id;
-    /**
-     * Default type
-     */
-    private Integer type;
-    /**
-     * Default description/comments
-     */
-    private String description;
-    /**
-     * Default global ID
-     */
-    private String gid;
-    /**
-     * Default created timestamp
-     */
-    private Date createdAt;
-    /**
-     * Default updated timestamp
-     */
-    private Date updatedAt;
-    /**
-     * Default balance
-     */
-    private double balance;
-    /**
-     * Default address info {@link AddressInfo} collection {@link List}
-     */
-    @Singular
-    private List<AddressInfo> addresses;
+    protected abstract T valueOf(final String value);
 }
