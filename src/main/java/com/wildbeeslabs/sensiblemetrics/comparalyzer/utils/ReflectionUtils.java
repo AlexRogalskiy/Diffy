@@ -488,6 +488,20 @@ public class ReflectionUtils {
     }
 
     /**
+     * Return binary flag whether method has is been overridden
+     *
+     * @param parent  - initial parent method type {@link Method}
+     * @param toCheck - initial method type to be checked {@link Method}
+     * @return true - if method is been overridden, false - otherwise
+     */
+    private static boolean isOverridden(final Method parent, final Method toCheck) {
+        return isSubClass(parent, toCheck) &&
+                sameMethodName(parent, toCheck) &&
+                returnTypeCovariant(parent, toCheck) &&
+                sameArguments(parent, toCheck);
+    }
+
+    /**
      * Return binary flag whether method has subclass implementation
      *
      * @param parent - initial parent method type {@link Method}
