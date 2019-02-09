@@ -403,12 +403,21 @@ public class ReflectionUtils {
     /**
      * Returns method type instance {@link ReflectionMethodType}
      *
-     * @return class instance by input type
+     * @param methodName         - initial method name {@link String}
+     * @param numberOfParameters - initial number of method parameters
+     * @param typedParameter     - initial index of type parameter position
+     * @return reflection method type instance
      */
     public static ReflectionMethodType getMethodType(final String methodName, int numberOfParameters, int typedParameter) {
         return new ReflectionMethodType(methodName, numberOfParameters, typedParameter);
     }
 
+    /**
+     * Returns binary flag based on getter method characteristics (prefix/abstract/static/native/return type)
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method is a getter, false - otherwise
+     */
     public static boolean isGetter(final Method rawMethod) {
         return hasGetOrIsPrefix(rawMethod) &&
                 hasNoParameters(rawMethod) &&
@@ -418,56 +427,139 @@ public class ReflectionUtils {
                 isNotNative(rawMethod);
     }
 
+    /**
+     * Return binary flag whether method has prefix "get/is"
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method has a prefix, false - otherwise
+     */
     private static boolean hasGetOrIsPrefix(final Method rawMethod) {
         return rawMethod.getName().startsWith("get") || rawMethod.getName().startsWith("is");
     }
 
+    /**
+     * Return binary flag whether method has input parameters
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method has input parameters, false - otherwise
+     */
     private static boolean hasNoParameters(final Method rawMethod) {
         return rawMethod.getParameterTypes().length == 0;
     }
 
+    /**
+     * Return binary flag whether method returns value
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method returns value, false - otherwise
+     */
     private static boolean returnsSomething(final Method rawMethod) {
         return rawMethod.getGenericReturnType() != void.class;
     }
 
+    /**
+     * Return binary flag whether method is not abstract
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method is not abstract, false - otherwise
+     */
     private static boolean isNotAbstract(final Method rawMethod) {
         return !Modifier.isAbstract(rawMethod.getModifiers());
     }
 
+    /**
+     * Return binary flag whether method is not static
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method is not static, false - otherwise
+     */
     private static boolean isNotStatic(final Method rawMethod) {
         return !Modifier.isStatic(rawMethod.getModifiers());
     }
 
+    /**
+     * Return binary flag whether method is not native
+     *
+     * @param rawMethod - initial method type {@link Method}
+     * @return true - if method is not native, false - otherwise
+     */
     private static boolean isNotNative(final Method rawMethod) {
         return !Modifier.isNative(rawMethod.getModifiers());
     }
 
+    /**
+     * Return binary flag whether method has subclass implementation
+     *
+     * @param parent - initial parent method type {@link Method}
+     * @param parent - initial method type to be checked {@link Method}
+     * @return true - if method has subclass implementation, false - otherwise
+     */
     public static boolean isSubClass(final Method parent, final Method toCheck) {
         return parent.getDeclaringClass().isAssignableFrom(toCheck.getDeclaringClass());
     }
 
+    /**
+     * Return binary flag whether method has same name in subclass
+     *
+     * @param parent - initial parent method type {@link Method}
+     * @param parent - initial method type to be checked {@link Method}
+     * @return true - if method has same name, false - otherwise
+     */
     public static boolean sameMethodName(final Method parent, final Method toCheck) {
         return parent.getName().equals(toCheck.getName());
     }
 
+    /**
+     * Return binary flag whether method has covariant return type
+     *
+     * @param parent - initial parent method type {@link Method}
+     * @param parent - initial method type to be checked {@link Method}
+     * @return true - if method has covariant return type, false - otherwise
+     */
     public static boolean returnTypeCovariant(final Method parent, final Method toCheck) {
         return parent.getReturnType().isAssignableFrom(toCheck.getReturnType());
     }
 
+    /**
+     * Return binary flag whether method has same arguments
+     *
+     * @param parent - initial parent method type {@link Method}
+     * @param parent - initial method type to be checked {@link Method}
+     * @return true - if method has same arguments, false - otherwise
+     */
     public static boolean sameArguments(final Method parent, final Method toCheck) {
         return Arrays.equals(parent.getParameterTypes(), toCheck.getParameterTypes());
     }
 
+    /**
+     * Changes accessibility type of input member instance {@link Member}
+     *
+     * @param rawMember - initial member instance {@link Member}
+     */
     public static void setAccessible(final Member rawMember) {
         if (!isPublic(rawMember)) {
             ((AccessibleObject) rawMember).setAccessible(true);
         }
     }
 
+    /**
+     * Return binary flag whether member has "public" modifier
+     *
+     * @param member - initial member instance {@link Member}
+     * @return true - if method has "public" modifier, false - otherwise
+     */
     public static boolean isPublic(final Member member) {
         return Modifier.isPublic(member.getModifiers()) && Modifier.isPublic(member.getDeclaringClass().getModifiers());
     }
 
+    /**
+     * Returns value by method invocation on a target instance {@link Object}
+     *
+     * @param target     - initial target the method to be invoked on {@link Object}
+     * @param getterName - initial getter name to be invoked {@link String}
+     * @return method value by return type {@link Object}
+     * @throws RuntimeException
+     */
     public static Object invokeGetter(final Object target, final String getterName) {
         Objects.requireNonNull(target);
         Objects.requireNonNull(getterName);
@@ -479,25 +571,55 @@ public class ReflectionUtils {
         }
     }
 
+    /**
+     * Returns iterable collection of all persistent fields {@link List} by input class instance {@link Class}
+     *
+     * @param clazz - input class instance {@link Class}
+     * @return collection of persistent fields {@link List}
+     */
     public static List<Field> getAllPersistentFields(final Class clazz) {
         return Arrays.stream(Optional.ofNullable(getAllFields(clazz)).orElseGet(() -> new Field[]{})).filter(ReflectionUtils::isPersistentField).collect(Collectors.toList());
     }
 
+    /**
+     * Return binary flag whether field is persistent
+     *
+     * @param field - initial field instance {@link Field}
+     * @return true - if method is persistent, false - otherwise
+     */
     private static boolean isPersistentField(final Field field) {
         return !Modifier.isTransient(field.getModifiers()) &&
                 !Modifier.isStatic(field.getModifiers()) &&
                 !field.getName().equals("this$0");
     }
 
+    /**
+     * Return binary flag whether member is private
+     *
+     * @param member - initial member instance {@link Member}
+     * @return true - if method is private, false - otherwise
+     */
     private static boolean isPrivate(final Member member) {
         return Modifier.isPrivate(member.getModifiers());
     }
 
+    /**
+     * Return binary flag whether member is protected
+     *
+     * @param member - initial member instance {@link Member}
+     * @return true - if method is protected, false - otherwise
+     */
     private static boolean isProtected(final Member member) {
         return Modifier.isProtected(member.getModifiers());
     }
 
-    public static List<Type[]> getypeArguments(final Type type) {
+    /**
+     * Returns iterable collection of type arguments {@link List} by input type instance {@link Type}
+     *
+     * @param type - input type instance {@link Type}
+     * @return collection of type arguments {@link List}
+     */
+    public static List<Type[]> getTypeArguments(final Type type) {
         if (!(type instanceof ParameterizedType)) {
             return Collections.emptyList();
         }
