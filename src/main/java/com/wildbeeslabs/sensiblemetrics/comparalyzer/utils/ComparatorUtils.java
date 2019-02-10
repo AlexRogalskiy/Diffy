@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.comparators.ComparableComparator;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -48,18 +48,52 @@ import java.util.Objects;
 public class ComparatorUtils {
 
     /**
+     * Default comparator
+     */
+    public static final Comparator<? super Object> DEFAULT_COMPARATOR = getDefaultComparator();
+
+    /**
+     * Default null safe comparator implementation
+     *
+     * @param <T> type of input element to be compared by operation
+     */
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultNullSafeComparator<T> implements Comparator<T> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         * Byte.MAX_VALUE - if arguments are different (and not null either)
+         *
+         * @param first - initial first argument
+         * @param last  - initial last argument
+         * @return numeric result of two objects comparison
+         */
+        @Override
+        public int compare(final T first, final T last) {
+            if (first == last) {
+                return 0;
+            }
+            if (Objects.isNull(first)) {
+                return -1;
+            } else if (Objects.isNull(last)) {
+                return 1;
+            }
+            return Byte.MAX_VALUE;
+        }
+    }
+
+    /**
      * Default comparable comparator implementation
      *
      * @param <T> type of input element to be compared by operation
      */
     @EqualsAndHashCode
     @ToString
-    public static class DefaultComparableComparator<T extends Comparable<? super T>> implements Comparator<T>, Serializable {
-
-        /**
-         * Default explicit serialVersionUID for interoperability
-         */
-        private static final long serialVersionUID = 1893076360167804802L;
+    public static class DefaultComparableComparator<T extends Comparable<? super T>> implements Comparator<T> {
 
         /**
          * Returns numeric result of arguments comparison:
@@ -82,12 +116,7 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode
     @ToString
-    public static class DefaultComparator implements Comparator<Object>, Serializable {
-
-        /**
-         * Default explicit serialVersionUID for interoperability
-         */
-        private static final long serialVersionUID = 483179982991933496L;
+    public static class DefaultComparator extends DefaultNullSafeComparator<Object> {
 
         /**
          * Returns numeric result of arguments comparison:
@@ -101,15 +130,11 @@ public class ComparatorUtils {
          */
         @Override
         public int compare(final Object first, final Object last) {
-            if (first == last) {
-                return 0;
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                return first.toString().compareTo(last.toString());
             }
-            if (Objects.isNull(first)) {
-                return -1;
-            } else if (Objects.isNull(last)) {
-                return 1;
-            }
-            return first.toString().compareTo(last.toString());
+            return comp;
         }
     }
 
@@ -118,12 +143,7 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode
     @ToString
-    public static class DefaultClassComparator implements Comparator<Class<?>>, Serializable {
-
-        /**
-         * Default explicit serialVersionUID for interoperability
-         */
-        private static final long serialVersionUID = -6134543546347035055L;
+    public static class DefaultClassComparator implements Comparator<Class<?>> {
 
         /**
          * Returns numeric result of arguments comparison:
@@ -154,12 +174,7 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode
     @ToString
-    public static class DefaultIterableComparator<T> implements Comparator<Iterable<T>>, Serializable {
-
-        /**
-         * Default explicit serialVersionUID for interoperability
-         */
-        private static final long serialVersionUID = 6254436821300471761L;
+    public static class DefaultIterableComparator<T> extends DefaultNullSafeComparator<Iterable<T>> {
 
         /**
          * Custom comparator instance {@link Comparator}
@@ -172,7 +187,7 @@ public class ComparatorUtils {
          * @param comparator - initial input comparator instance {@link Comparator}
          */
         public DefaultIterableComparator(final Comparator<? super T> comparator) {
-            this.comparator = comparator;
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
         }
 
         /**
@@ -187,31 +202,86 @@ public class ComparatorUtils {
          */
         @Override
         public int compare(final Iterable<T> first, final Iterable<T> last) {
-            if (first == last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int firstSize = Iterables.size(first);
+                int lastSize = Iterables.size(last);
+                if (firstSize < lastSize) {
+                    return -1;
+                } else if (firstSize > lastSize) {
+                    return 1;
+                }
+                final Iterator<T> iteratorFirst = first.iterator();
+                final Iterator<T> iteratorLast = last.iterator();
+                int temp;
+                while (iteratorFirst.hasNext()) {
+                    temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), getComparator());
+                    if (0 != temp) {
+                        return temp;
+                    }
+                }
                 return 0;
             }
-            if (Objects.isNull(first)) {
-                return -1;
-            } else if (Objects.isNull(last)) {
-                return 1;
+            return comp;
+        }
+    }
+
+    /**
+     * Default big decimal comparator implementation {@link BigDecimal}
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultBigDecimalComparator extends DefaultNullSafeComparator<BigDecimal> {
+
+        /**
+         * Default significant decimal places
+         */
+        private int significantDecimalPlaces;
+        /**
+         * Custom comparator instance {@link Comparator}
+         */
+        private final Comparator<? super BigDecimal> comparator;
+
+        /**
+         * Default big decimal comparator
+         *
+         * @param significantDecimalPlaces - initial significant decimal places
+         */
+        public DefaultBigDecimalComparator(int significantDecimalPlaces) {
+            this(0, null);
+        }
+
+        /**
+         * Default big decimal comparator
+         *
+         * @param significantDecimalPlaces - initial significant decimal places
+         * @param comparator               - initial input comparator instance {@link Comparator}
+         */
+        public DefaultBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
+            this.significantDecimalPlaces = significantDecimalPlaces;
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link BigDecimal}
+         * @param last  - initial last argument {@link BigDecimal}
+         * @return numeric result of two iterable objects comparison
+         */
+        @Override
+        public int compare(final BigDecimal first, final BigDecimal last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                final BigDecimal firstRounded = first.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+                final BigDecimal lastRounded = last.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+                return Objects.compare(firstRounded, lastRounded, getComparator());
             }
-            int firstSize = Iterables.size(first);
-            int lastSize = Iterables.size(last);
-            if (firstSize < lastSize) {
-                return -1;
-            } else if (firstSize > lastSize) {
-                return 1;
-            }
-            final Iterator<T> iteratorFirst = first.iterator();
-            final Iterator<T> iteratorLast = last.iterator();
-            int temp;
-            while (iteratorFirst.hasNext()) {
-                temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), getComparator());
-                if (0 != temp) {
-                    return temp;
-                }
-            }
-            return 0;
+            return comp;
         }
     }
 
@@ -255,6 +325,17 @@ public class ComparatorUtils {
     @SuppressWarnings("unchecked")
     public static <T> Comparator<? super Iterable<T>> getDefaultIterableComparator(final Comparator<? super T> comparator) {
         return new DefaultIterableComparator(comparator);
+    }
+
+    /**
+     * Returns big decimal {@link BigDecimal} comparator instance {@link Comparator}
+     *
+     * @param <T> type of input element to be compared by operation
+     * @return iterable {@link BigDecimal} comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Comparator<? super BigDecimal> getDefaultBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
+        return new DefaultBigDecimalComparator(significantDecimalPlaces, comparator);
     }
 
     /**
