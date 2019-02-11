@@ -34,6 +34,7 @@ import org.apache.commons.collections.comparators.ComparableComparator;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -435,7 +436,7 @@ public class ComparatorUtils {
          */
         private final Comparator<? super BigDecimal> comparator;
         /**
-         * Default significant decimal places
+         * Custom significant decimal places
          */
         private int significantDecimalPlaces;
 
@@ -478,6 +479,59 @@ public class ComparatorUtils {
                 return Objects.compare(firstRounded, lastRounded, getComparator());
             }
             return comp;
+        }
+    }
+
+    /**
+     * Default value map comparator implementation {@link Map}
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultValueMapComparator<K, V> implements Comparator<K> {
+
+        /**
+         * Custom value map instance {@link Map}
+         */
+        final Map<K, V> map;
+        /**
+         * Custom value comparator instance {@link Comparator}
+         */
+        private final Comparator<? super V> comparator;
+
+        /**
+         * Default value map comparator with initial map collection instance {@link Map}
+         *
+         * @param map - initial input map collection instance {@link Map}
+         */
+        public DefaultValueMapComparator(final Map<K, V> map) {
+            this(map, null);
+        }
+
+        /**
+         * Default value map comparator with initial map collection instance {@link Map} and value comparator {@link Comparator}
+         *
+         * @param map        - initial input map collection instance {@link Map}
+         * @param comparator - initial input value map comparator instance {@link Comparator}
+         */
+        public DefaultValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
+            this.map = map;
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link BigDecimal}
+         * @param last  - initial last argument {@link BigDecimal}
+         * @return numeric result of two iterable objects comparison
+         */
+        @Override
+        public int compare(final K first, final K last) {
+            return Objects.compare(getMap().get(first), getMap().get(last), getComparator());
         }
     }
 }
