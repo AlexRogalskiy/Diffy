@@ -53,239 +53,6 @@ public class ComparatorUtils {
     public static final Comparator<? super Object> DEFAULT_COMPARATOR = getDefaultComparator();
 
     /**
-     * Default null safe comparator implementation
-     *
-     * @param <T> type of input element to be compared by operation
-     */
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultNullSafeComparator<T> implements Comparator<T> {
-
-        /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         * Byte.MAX_VALUE - if arguments are different (and not null either)
-         *
-         * @param first - initial first argument
-         * @param last  - initial last argument
-         * @return numeric result of two objects comparison
-         */
-        @Override
-        public int compare(final T first, final T last) {
-            if (first == last) {
-                return 0;
-            }
-            if (Objects.isNull(first)) {
-                return -1;
-            } else if (Objects.isNull(last)) {
-                return 1;
-            }
-            return Byte.MAX_VALUE;
-        }
-    }
-
-    /**
-     * Default comparable comparator implementation
-     *
-     * @param <T> type of input element to be compared by operation
-     */
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultComparableComparator<T extends Comparable<? super T>> implements Comparator<T> {
-
-        /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial first argument
-         * @param last  - initial last argument
-         * @return numeric result of two objects comparison
-         */
-        @Override
-        public int compare(final T first, final T last) {
-            return ComparatorUtils.compareTo(first, last);
-        }
-    }
-
-    /**
-     * Default object comparator implementation {@link Object}
-     */
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultComparator extends DefaultNullSafeComparator<Object> {
-
-        /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial first argument {@link Object}
-         * @param last  - initial last argument {@link Object}
-         * @return numeric result of two objects comparison
-         */
-        @Override
-        public int compare(final Object first, final Object last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                return first.toString().compareTo(last.toString());
-            }
-            return comp;
-        }
-    }
-
-    /**
-     * Default class comparator implementation {@link Class}
-     */
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultClassComparator implements Comparator<Class<?>> {
-
-        /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial first argument {@link Class}
-         * @param last  - initial last argument {@link Class}
-         * @return numeric result of two objects comparison
-         */
-        @Override
-        public int compare(final Class<?> first, final Class<?> last) {
-            if (first.isAssignableFrom(last)) {
-                return 1;
-            } else if (last.isAssignableFrom(first)) {
-                return -1;
-            }
-            return 0;
-        }
-    }
-
-    /**
-     * Default iterable comparator implementation {@link Iterable}
-     *
-     * @param <T> type of input element to be compared by operation
-     */
-    @Data
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultIterableComparator<T> extends DefaultNullSafeComparator<Iterable<T>> {
-
-        /**
-         * Custom comparator instance {@link Comparator}
-         */
-        private final Comparator<? super T> comparator;
-
-        /**
-         * Default iterable comparator constructor with initial comparator instance {@link Comparator}
-         *
-         * @param comparator - initial input comparator instance {@link Comparator}
-         */
-        public DefaultIterableComparator(final Comparator<? super T> comparator) {
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
-        }
-
-        /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial first argument {@link Iterable}
-         * @param last  - initial last argument {@link Iterable}
-         * @return numeric result of two iterable objects comparison
-         */
-        @Override
-        public int compare(final Iterable<T> first, final Iterable<T> last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int firstSize = Iterables.size(first);
-                int lastSize = Iterables.size(last);
-                if (firstSize < lastSize) {
-                    return -1;
-                } else if (firstSize > lastSize) {
-                    return 1;
-                }
-                final Iterator<T> iteratorFirst = first.iterator();
-                final Iterator<T> iteratorLast = last.iterator();
-                int temp;
-                while (iteratorFirst.hasNext()) {
-                    temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), getComparator());
-                    if (0 != temp) {
-                        return temp;
-                    }
-                }
-                return 0;
-            }
-            return comp;
-        }
-    }
-
-    /**
-     * Default big decimal comparator implementation {@link BigDecimal}
-     */
-    @Data
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultBigDecimalComparator extends DefaultNullSafeComparator<BigDecimal> {
-
-        /**
-         * Default significant decimal places
-         */
-        private int significantDecimalPlaces;
-        /**
-         * Custom comparator instance {@link Comparator}
-         */
-        private final Comparator<? super BigDecimal> comparator;
-
-        /**
-         * Default big decimal comparator
-         *
-         * @param significantDecimalPlaces - initial significant decimal places
-         */
-        public DefaultBigDecimalComparator(int significantDecimalPlaces) {
-            this(0, null);
-        }
-
-        /**
-         * Default big decimal comparator
-         *
-         * @param significantDecimalPlaces - initial significant decimal places
-         * @param comparator               - initial input comparator instance {@link Comparator}
-         */
-        public DefaultBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
-            this.significantDecimalPlaces = significantDecimalPlaces;
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
-        }
-
-        /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial first argument {@link BigDecimal}
-         * @param last  - initial last argument {@link BigDecimal}
-         * @return numeric result of two iterable objects comparison
-         */
-        @Override
-        public int compare(final BigDecimal first, final BigDecimal last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                final BigDecimal firstRounded = first.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
-                final BigDecimal lastRounded = last.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
-                return Objects.compare(firstRounded, lastRounded, getComparator());
-            }
-            return comp;
-        }
-    }
-
-    /**
      * Returns object {@link Object} comparator instance {@link Comparator}
      *
      * @return object {@link Object} comparator instance {@link Comparator}
@@ -479,5 +246,238 @@ public class ComparatorUtils {
     public static <T extends Comparable<? super T>> int compareTo(final T first, final T last) {
         final boolean f1, f2;
         return (f1 = Objects.isNull(first)) ^ (f2 = Objects.isNull(last)) ? f1 ? -1 : 1 : f1 && f2 ? 0 : first.compareTo(last);
+    }
+
+    /**
+     * Default null safe comparator implementation
+     *
+     * @param <T> type of input element to be compared by operation
+     */
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultNullSafeComparator<T> implements Comparator<T> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         * Byte.MAX_VALUE - if arguments are different (and not null either)
+         *
+         * @param first - initial first argument
+         * @param last  - initial last argument
+         * @return numeric result of two objects comparison
+         */
+        @Override
+        public int compare(final T first, final T last) {
+            if (first == last) {
+                return 0;
+            }
+            if (Objects.isNull(first)) {
+                return -1;
+            } else if (Objects.isNull(last)) {
+                return 1;
+            }
+            return Byte.MAX_VALUE;
+        }
+    }
+
+    /**
+     * Default comparable comparator implementation
+     *
+     * @param <T> type of input element to be compared by operation
+     */
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultComparableComparator<T extends Comparable<? super T>> implements Comparator<T> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument
+         * @param last  - initial last argument
+         * @return numeric result of two objects comparison
+         */
+        @Override
+        public int compare(final T first, final T last) {
+            return ComparatorUtils.compareTo(first, last);
+        }
+    }
+
+    /**
+     * Default object comparator implementation {@link Object}
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultComparator extends DefaultNullSafeComparator<Object> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link Object}
+         * @param last  - initial last argument {@link Object}
+         * @return numeric result of two objects comparison
+         */
+        @Override
+        public int compare(final Object first, final Object last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                return first.toString().compareTo(last.toString());
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default class comparator implementation {@link Class}
+     */
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultClassComparator implements Comparator<Class<?>> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link Class}
+         * @param last  - initial last argument {@link Class}
+         * @return numeric result of two objects comparison
+         */
+        @Override
+        public int compare(final Class<?> first, final Class<?> last) {
+            if (first.isAssignableFrom(last)) {
+                return 1;
+            } else if (last.isAssignableFrom(first)) {
+                return -1;
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * Default iterable comparator implementation {@link Iterable}
+     *
+     * @param <T> type of input element to be compared by operation
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultIterableComparator<T> extends DefaultNullSafeComparator<Iterable<T>> {
+
+        /**
+         * Custom comparator instance {@link Comparator}
+         */
+        private final Comparator<? super T> comparator;
+
+        /**
+         * Default iterable comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultIterableComparator(final Comparator<? super T> comparator) {
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link Iterable}
+         * @param last  - initial last argument {@link Iterable}
+         * @return numeric result of two iterable objects comparison
+         */
+        @Override
+        public int compare(final Iterable<T> first, final Iterable<T> last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int firstSize = Iterables.size(first);
+                int lastSize = Iterables.size(last);
+                if (firstSize < lastSize) {
+                    return -1;
+                } else if (firstSize > lastSize) {
+                    return 1;
+                }
+                final Iterator<T> iteratorFirst = first.iterator();
+                final Iterator<T> iteratorLast = last.iterator();
+                int temp;
+                while (iteratorFirst.hasNext()) {
+                    temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), getComparator());
+                    if (0 != temp) {
+                        return temp;
+                    }
+                }
+                return 0;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default big decimal comparator implementation {@link BigDecimal}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultBigDecimalComparator extends DefaultNullSafeComparator<BigDecimal> {
+
+        /**
+         * Custom comparator instance {@link Comparator}
+         */
+        private final Comparator<? super BigDecimal> comparator;
+        /**
+         * Default significant decimal places
+         */
+        private int significantDecimalPlaces;
+
+        /**
+         * Default big decimal comparator
+         *
+         * @param significantDecimalPlaces - initial significant decimal places
+         */
+        public DefaultBigDecimalComparator(int significantDecimalPlaces) {
+            this(0, null);
+        }
+
+        /**
+         * Default big decimal comparator
+         *
+         * @param significantDecimalPlaces - initial significant decimal places
+         * @param comparator               - initial input comparator instance {@link Comparator}
+         */
+        public DefaultBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
+            this.significantDecimalPlaces = significantDecimalPlaces;
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first argument {@link BigDecimal}
+         * @param last  - initial last argument {@link BigDecimal}
+         * @return numeric result of two iterable objects comparison
+         */
+        @Override
+        public int compare(final BigDecimal first, final BigDecimal last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                final BigDecimal firstRounded = first.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+                final BigDecimal lastRounded = last.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+                return Objects.compare(firstRounded, lastRounded, getComparator());
+            }
+            return comp;
+        }
     }
 }

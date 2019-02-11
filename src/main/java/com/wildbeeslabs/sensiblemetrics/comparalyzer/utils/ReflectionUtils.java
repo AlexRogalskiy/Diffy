@@ -430,8 +430,8 @@ public class ReflectionUtils {
     /**
      * Return binary flag whether method has subclass implementation
      *
-     * @param parent - initial parent method type {@link Method}
-     * @param parent - initial method type to be checked {@link Method}
+     * @param parent  - initial parent method type {@link Method}
+     * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has subclass implementation, false - otherwise
      */
     public static boolean isSubClass(final Method parent, final Method toCheck) {
@@ -441,8 +441,8 @@ public class ReflectionUtils {
     /**
      * Return binary flag whether method has same name in subclass
      *
-     * @param parent - initial parent method type {@link Method}
-     * @param parent - initial method type to be checked {@link Method}
+     * @param parent  - initial parent method type {@link Method}
+     * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has same name, false - otherwise
      */
     public static boolean sameMethodName(final Method parent, final Method toCheck) {
@@ -452,8 +452,8 @@ public class ReflectionUtils {
     /**
      * Return binary flag whether method has covariant return type
      *
-     * @param parent - initial parent method type {@link Method}
-     * @param parent - initial method type to be checked {@link Method}
+     * @param parent  - initial parent method type {@link Method}
+     * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has covariant return type, false - otherwise
      */
     public static boolean returnTypeCovariant(final Method parent, final Method toCheck) {
@@ -463,8 +463,8 @@ public class ReflectionUtils {
     /**
      * Return binary flag whether method has same arguments
      *
-     * @param parent - initial parent method type {@link Method}
-     * @param parent - initial method type to be checked {@link Method}
+     * @param parent  - initial parent method type {@link Method}
+     * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has same arguments, false - otherwise
      */
     public static boolean sameArguments(final Method parent, final Method toCheck) {
