@@ -32,6 +32,8 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -744,6 +746,42 @@ public class ReflectionUtils {
      */
     private static boolean isProtected(final Member member) {
         return Modifier.isProtected(member.getModifiers());
+    }
+
+    /**
+     * Returns sorted iterable collection {@link List} by input collection {@link List}, object field name {@link String} and class instance {@link Class}
+     *
+     * @param list  - initial input collection to be sorted {@link List}
+     * @param field - initial input object field name {@link String}
+     * @param clazz - initial input class instance {@link Class}
+     * @param <T>
+     * @return sorted collection {@link List}
+     * @throws ReflectiveOperationException
+     * @throws IntrospectionException
+     */
+    public static <T> List<T> sortList(final List<T> list, final String field, final Class<? extends T> clazz) throws ReflectiveOperationException, IntrospectionException {
+        Objects.requireNonNull(clazz);
+        final Field f = clazz.getDeclaredField(field);
+        final PropertyDescriptor propertyDescriptor = new PropertyDescriptor(f.getName(), clazz);
+        final Method getter = propertyDescriptor.getReadMethod();
+        final Class<?> returnType = getter.getReturnType();
+
+        if (Comparable.class.isAssignableFrom(returnType) || returnType.isPrimitive()) {
+            Collections.sort(Optional.ofNullable(list).orElseGet(Collections::emptyList), (e1, e2) -> {
+                try {
+                    final Comparable val1 = (Comparable) getter.invoke(e1);
+                    final Comparable val2 = (Comparable) getter.invoke(e2);
+                    return val1.compareTo(val2);
+                } catch (Exception e) {
+                    String errorMessage = String.format("ERROR: cannot invoke getter method = {%s} on field = {%s}", getter.getName(), field);
+                    log.error(errorMessage);
+                    throw new RuntimeException(errorMessage, e);
+                }
+            });
+        } else {
+            throw new IllegalArgumentException(String.format("ERROR: cannot compare list = {%s} by field = {%s} of type = {%s}", org.apache.commons.lang3.StringUtils.join(list, "|"), field, returnType.getName()));
+        }
+        return list;
     }
 
     /**

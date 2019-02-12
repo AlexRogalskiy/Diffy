@@ -66,7 +66,7 @@ public class ComparatorUtils {
     /**
      * Returns comparable {@link Comparable} comparator instance {@link Comparator}
      *
-     * @param <T> type of input element to be compared by operation
+     * @param <T> type of input element to be compared by
      * @return comparable {@link Comparable} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
@@ -87,8 +87,8 @@ public class ComparatorUtils {
     /**
      * Returns iterable {@link Iterable} comparator instance {@link Comparator}
      *
-     * @param <T> type of input element to be compared by operation
-     * @return iterable {@link Iterable} comparator instance {@link Comparator}
+     * @param <T> type of input element to be compared by
+     * @return iterable comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
     public static <T> Comparator<? super Iterable<T>> getDefaultIterableComparator(final Comparator<? super T> comparator) {
@@ -98,12 +98,36 @@ public class ComparatorUtils {
     /**
      * Returns big decimal {@link BigDecimal} comparator instance {@link Comparator}
      *
-     * @param <T> type of input element to be compared by operation
-     * @return iterable {@link BigDecimal} comparator instance {@link Comparator}
+     * @param <T> type of input element to be compared by
+     * @return big decimal comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
     public static <T> Comparator<? super BigDecimal> getDefaultBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
         return new DefaultBigDecimalComparator(significantDecimalPlaces, comparator);
+    }
+
+    /**
+     * Returns value map comparator instance {@link Comparator}
+     *
+     * @param <K> type of key entry element
+     * @param <V> type of value entry element to be compared by
+     * @return value map comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static <K, V> Comparator<? super V> getDefaultValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
+        return new DefaultValueMapComparator(map, comparator);
+    }
+
+    /**
+     * Returns map entry comparator instance {@link Comparator}
+     *
+     * @param <K> type of key entry element
+     * @param <V> type of value entry element
+     * @return map entry comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static <K, V> Comparator<? super Map.Entry<K, V>> getDefaultMapEntryComparator(final Comparator<? super Map.Entry<K, V>> comparator) {
+        return new DefaultMapEntryComparator(comparator);
     }
 
     /**
@@ -267,7 +291,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument
          * @param last  - initial last argument
-         * @return numeric result of two objects comparison
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
         public int compare(final T first, final T last) {
@@ -300,7 +324,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument
          * @param last  - initial last argument
-         * @return numeric result of two objects comparison
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
         public int compare(final T first, final T last) {
@@ -323,7 +347,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument {@link Object}
          * @param last  - initial last argument {@link Object}
-         * @return numeric result of two objects comparison
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
         public int compare(final Object first, final Object last) {
@@ -350,7 +374,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument {@link Class}
          * @param last  - initial last argument {@link Class}
-         * @return numeric result of two objects comparison
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
         public int compare(final Class<?> first, final Class<?> last) {
@@ -395,7 +419,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument {@link Iterable}
          * @param last  - initial last argument {@link Iterable}
-         * @return numeric result of two iterable objects comparison
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
         public int compare(final Iterable<T> first, final Iterable<T> last) {
@@ -468,7 +492,7 @@ public class ComparatorUtils {
          *
          * @param first - initial first argument {@link BigDecimal}
          * @param last  - initial last argument {@link BigDecimal}
-         * @return numeric result of two iterable objects comparison
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
         public int compare(final BigDecimal first, final BigDecimal last) {
@@ -515,7 +539,7 @@ public class ComparatorUtils {
          * @param comparator - initial input value map comparator instance {@link Comparator}
          */
         public DefaultValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
-            this.map = map;
+            this.map = Objects.requireNonNull(map);
             this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
         }
 
@@ -525,13 +549,58 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument {@link BigDecimal}
-         * @param last  - initial last argument {@link BigDecimal}
-         * @return numeric result of two iterable objects comparison
+         * @param first - initial first argument
+         * @param last  - initial last argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
         public int compare(final K first, final K last) {
             return Objects.compare(getMap().get(first), getMap().get(last), getComparator());
+        }
+    }
+
+    /**
+     * Default map entry comparator implementation
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultMapEntryComparator<K, V> implements Comparator<Map.Entry<K, V>> {
+
+        /**
+         * Custom map entry comparator instance {@link Comparator}
+         */
+        private final Comparator<? super Map.Entry<K, V>> comparator;
+
+        /**
+         * Default map entry comparator
+         */
+        public DefaultMapEntryComparator() {
+            this(null);
+        }
+
+        /**
+         * Default map entry comparator with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultMapEntryComparator(final Comparator<? super Map.Entry<K, V>> comparator) {
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial input first argument
+         * @param last  - initial input last argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final Map.Entry<K, V> first, final Map.Entry<K, V> last) {
+            return Objects.compare(first, last, getComparator());
         }
     }
 }
