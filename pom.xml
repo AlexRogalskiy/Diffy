@@ -16,7 +16,7 @@
 
     <issueManagement>
         <url>https://github.com/AlexRogalskiy/Comparalyzer/issues</url>
-        <system>GitLab Issues</system>
+        <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
