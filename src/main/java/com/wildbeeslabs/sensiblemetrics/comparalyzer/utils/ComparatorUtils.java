@@ -36,6 +36,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * Custom comparator utilities implementation {@link Comparator}
@@ -49,7 +50,171 @@ import java.util.Objects;
 public class ComparatorUtils {
 
     /**
-     * Default comparator
+     * Default comparator with false first order {@link Comparator}
+     */
+    public static final Comparator<? super Boolean> DEFAULT_FALSE_FIRST = (a, b) -> a == b ? 0 : b ? -1 : 1;
+
+    /**
+     * Default comparator with true first order {@link Comparator}
+     */
+    public static final Comparator<? super Boolean> DEFAULT_TRUE_FIRST = (a, b) -> a == b ? 0 : a ? -1 : 1;
+
+    /**
+     * Returns boolean comparator with false first order {@link Comparator}
+     *
+     * @return boolean comparator with false first order {@link Comparator}
+     */
+    public static Comparator<? super Boolean> lastIf() {
+        return DEFAULT_FALSE_FIRST;
+    }
+
+    /**
+     * Returns boolean comparator with true first order {@link Comparator}
+     *
+     * @return boolean comparator with true first order {@link Comparator}
+     */
+    public static Comparator<? super Boolean> firstIf() {
+        return DEFAULT_TRUE_FIRST;
+    }
+
+    /**
+     * Returns comparator with false first order {@link Comparator} with initial predicate value {@link Predicate}
+     *
+     * @param <T>       type of value to be compared by
+     * @param predicate - initial input predicate value {@link Predicate}
+     * @return comparator with false first order {@link Comparator}
+     */
+    public static <T> Comparator<? super T> lastIf(final Predicate<T> predicate) {
+        Objects.requireNonNull(predicate);
+        return (a, b) -> {
+            final boolean pa = predicate.test(a), pb = predicate.test(b);
+            return pa == pb ? 0 : pb ? -1 : 1;
+        };
+    }
+
+    /**
+     * Returns comparator with true first order {@link Comparator} by initial predicate value {@link Predicate}
+     *
+     * @param <T>       type of value to be compared by
+     * @param predicate - initial input predicate value {@link Predicate}
+     * @return comparator with true first order {@link Comparator}
+     */
+    public static <T> Comparator<? super T> firstIf(final Predicate<T> predicate) {
+        Objects.requireNonNull(predicate);
+        return (a, b) -> {
+            final boolean pa = predicate.test(a), pb = predicate.test(b);
+            return pa == pb ? 0 : pa ? -1 : 1;
+        };
+    }
+
+    /**
+     * Returns comparator with true first order {@link Comparator} by initial predicate value {@link Predicate}, first order comparator {@link Comparator}, last order comparator {@link Comparator}
+     *
+     * @param <T>        type of value to be compared by
+     * @param predicate  - initial input predicate value {@link Predicate}
+     * @param firstOrder - initial input first order comparator {@link Comparator}
+     * @param lastOrder  - initial input last order comparator {@link Comparator}
+     * @return comparator with true first order {@link Comparator}
+     */
+    public static <T> Comparator<? super T> firstIf(final Predicate<T> predicate, final Comparator<T> firstOrder, final Comparator<T> lastOrder) {
+        Objects.requireNonNull(predicate);
+        Objects.requireNonNull(firstOrder);
+        Objects.requireNonNull(lastOrder);
+        return (a, b) -> {
+            final boolean pa = predicate.test(a), pb = predicate.test(b);
+            if (pa == pb) {
+                return (pa ? firstOrder : lastOrder).compare(a, b);
+            }
+            return pb ? -1 : 1;
+        };
+    }
+
+    /**
+     * Returns comparator with false first order {@link Comparator} by initial predicate value {@link Predicate}, first order comparator {@link Comparator}, last order comparator {@link Comparator}
+     *
+     * @param <T>        type of value to be compared by
+     * @param predicate  - initial input predicate value {@link Predicate}
+     * @param firstOrder - initial input first order comparator {@link Comparator}
+     * @param lastOrder  - initial input last order comparator {@link Comparator}
+     * @return comparator with false first order {@link Comparator}
+     */
+    public static <T> Comparator<? super T> lastIf(final Predicate<T> predicate, final Comparator<T> firstOrder, final Comparator<T> lastOrder) {
+        Objects.requireNonNull(predicate);
+        return firstIf(predicate.negate(), firstOrder, lastOrder);
+    }
+
+    /**
+     * Returns comparator with instances first order {@link Comparator} by initial class instance {@link Class}
+     *
+     * @param <T>   type of value to be compared by
+     * @param clazz - initial input class instance {@link Class}
+     * @return comparator with instances first order {@link Comparator}
+     */
+    public static <T> Comparator<? super T> instancesFirst(final Class<? extends T> clazz) {
+        Objects.requireNonNull(clazz);
+        return firstIf(clazz::isInstance);
+    }
+
+    /**
+     * Returns comparator with instances last order {@link Comparator} by initial class instance {@link Class}
+     *
+     * @param <T>   type of value to be compared by
+     * @param clazz - initial input class instance {@link Class}
+     * @return comparator with instances last order {@link Comparator}
+     */
+    public static <T> Comparator<? super T> instancesLast(final Class<? extends T> clazz) {
+        Objects.requireNonNull(clazz);
+        return lastIf(clazz::isInstance);
+    }
+
+    /**
+     * Returns comparator with instances first order {@link Comparator} by initial class {@link Class} and comparator instance {@link Comparator}
+     *
+     * @param <T>        type of value to be compared by
+     * @param <U>        type of value to be compared with
+     * @param clazz      - initial input class instance {@link Class}
+     * @param comparator - initial input comparator {@link Comparator} to compare clazz instances by
+     * @return comparator with instances first order {@link Comparator}
+     */
+    public static <T, U> Comparator<? super T> instancesFirst(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(comparator);
+        return (a, b) -> {
+            if (clazz.isInstance(a)) {
+                if (clazz.isInstance(b)) {
+                    return comparator.compare(clazz.cast(a), clazz.cast(b));
+                }
+                return -1;
+            }
+            return clazz.isInstance(b) ? 1 : 0;
+        };
+    }
+
+    /**
+     * Returns comparator with instances last order {@link Comparator} by initial class {@link Class} and comparator instance {@link Comparator}
+     *
+     * @param <T>        type of value to be compared by
+     * @param <U>        type of value to be compared with
+     * @param clazz      - initial input class instance {@link Class}
+     * @param comparator - initial input comparator {@link Comparator} to compare clazz instances by
+     * @return comparator with instances last order {@link Comparator}
+     */
+    public static <T, U> Comparator<? super T> instancesLast(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(comparator);
+        return (a, b) -> {
+            if (clazz.isInstance(a)) {
+                if (clazz.isInstance(b)) {
+                    return comparator.compare(clazz.cast(a), clazz.cast(b));
+                }
+                return 1;
+            }
+            return clazz.isInstance(b) ? -1 : 0;
+        };
+    }
+
+    /**
+     * Default comparator instance {@link Comparator}
      */
     public static final Comparator<? super Object> DEFAULT_COMPARATOR = getDefaultComparator();
 
