@@ -107,7 +107,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns value map comparator instance {@link Comparator}
+     * Returns map value comparator instance {@link Comparator}
      *
      * @param <K> type of key entry element
      * @param <V> type of value entry element to be compared by
@@ -115,7 +115,7 @@ public class ComparatorUtils {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> Comparator<? super V> getDefaultValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
-        return new DefaultValueMapComparator(map, comparator);
+        return new DefaultMapValueComparator(map, comparator);
     }
 
     /**
@@ -128,6 +128,27 @@ public class ComparatorUtils {
     @SuppressWarnings("unchecked")
     public static <K, V> Comparator<? super Map.Entry<K, V>> getDefaultMapEntryComparator(final Comparator<? super Map.Entry<K, V>> comparator) {
         return new DefaultMapEntryComparator(comparator);
+    }
+
+    /**
+     * Returns array comparator instance {@link Comparator}
+     *
+     * @param <T> type of array element
+     * @return array comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Comparator<? super T> getDefaultArrayComparator(final Comparator<? super T> comparator) {
+        return new DefaultArrayComparator(comparator);
+    }
+
+    /**
+     * Returns byte array comparator instance {@link Comparator}
+     *
+     * @return array comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<byte[]> getDefaultByteArrayComparator() {
+        return new DefaultByteArrayComparator();
     }
 
     /**
@@ -388,6 +409,130 @@ public class ComparatorUtils {
     }
 
     /**
+     * Default array comparator implementation
+     *
+     * @param <T> type of input element to be compared by operation
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
+
+        /**
+         * Custom comparator instance {@link Comparator}
+         */
+        private final Comparator<? super T> comparator;
+
+        /**
+         * Default value comparator
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultArrayComparator(final Comparator<? super T> comparator) {
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final T[] first, final T[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int firstSize = first.length;
+                int lastSize = last.length;
+                if (firstSize < lastSize) {
+                    return -1;
+                } else if (firstSize > lastSize) {
+                    return 1;
+                }
+                for (int temp, i = 0; i < firstSize; i++) {
+                    temp = Objects.compare(first[i], last[i], getComparator());
+                    if (0 != temp) {
+                        return temp;
+                    }
+                }
+                return 0;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default byte array comparator implementation
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultByteArrayComparator extends DefaultNullSafeComparator<byte[]> {
+
+        /**
+         * Default unsigned mask
+         */
+        private static final int DEFAULT_UNSIGNED_MASK = 0xFF;
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final byte[] first, final byte[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int firstSize = first.length;
+                int lastSize = last.length;
+                if (firstSize < lastSize) {
+                    return -1;
+                } else if (firstSize > lastSize) {
+                    return 1;
+                }
+                for (int i = 0; i < firstSize; i++) {
+                    int result = compareBy(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return 0;
+            }
+            return comp;
+        }
+
+        /**
+         * Compares input objects by value
+         *
+         * @param a - initial input first type argument
+         * @param b - initial input last type argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        private int compareBy(byte a, byte b) {
+            return toInt(a) - toInt(b);
+        }
+
+        /**
+         * Converts initial input value to integer formatted value {@link Integer}
+         *
+         * @param value - initial input value to be converted by {@byte}
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        private static int toInt(byte value) {
+            return value & DEFAULT_UNSIGNED_MASK;
+        }
+    }
+
+    /**
      * Default iterable comparator implementation {@link Iterable}
      *
      * @param <T> type of input element to be compared by operation
@@ -507,12 +652,12 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default value map comparator implementation {@link Map}
+     * Default map value comparator implementation {@link Map}
      */
     @Data
     @EqualsAndHashCode
     @ToString
-    public static class DefaultValueMapComparator<K, V> implements Comparator<K> {
+    public static class DefaultMapValueComparator<K, V> implements Comparator<K> {
 
         /**
          * Custom value map instance {@link Map}
@@ -524,11 +669,11 @@ public class ComparatorUtils {
         private final Comparator<? super V> comparator;
 
         /**
-         * Default value map comparator with initial map collection instance {@link Map}
+         * Default map value comparator with initial map collection instance {@link Map}
          *
          * @param map - initial input map collection instance {@link Map}
          */
-        public DefaultValueMapComparator(final Map<K, V> map) {
+        public DefaultMapValueComparator(final Map<K, V> map) {
             this(map, null);
         }
 
@@ -538,7 +683,7 @@ public class ComparatorUtils {
          * @param map        - initial input map collection instance {@link Map}
          * @param comparator - initial input value map comparator instance {@link Comparator}
          */
-        public DefaultValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
+        public DefaultMapValueComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
             this.map = Objects.requireNonNull(map);
             this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
         }
