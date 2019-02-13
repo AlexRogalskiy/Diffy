@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -58,96 +57,119 @@ import java.util.stream.StreamSupport;
 public class ReflectionUtils {
 
     /**
-     * Default primitive wrapper types {@link Set}
+     * Default collection of primitive wrapper types {@link ImmutableCollection}
      */
-    private static final Set<Class<?>> DEFAULT_PRIMITIVE_WRAPPER_TYPES = getDefaultPrimitiveWrapperTypes();
+    private static final ImmutableCollection<Class<?>> DEFAULT_PRIMITIVE_WRAPPER_TYPES = getDefaultPrimitiveWrapperTypes();
     /**
-     * Default primitive numeric types {@link Collection}
+     * Default collection of primitive numeric types {@link ImmutableCollection}
      */
-    private static final Collection<Class<?>> DEFAULT_PRIMITIVE_NUMERIC_TYPES = getDefaultPrimitiveNumericTypes();
+    private static final ImmutableCollection<Class<?>> DEFAULT_PRIMITIVE_NUMERIC_TYPES = getDefaultPrimitiveNumericTypes();
     /**
-     * Default collection of extendable simple types {@link Collection}
+     * Default collection map of primitive types {@link ImmutableBiMap}
      */
-    @SuppressWarnings("unchecked")
-    private static final Collection<Class<?>> EXTENDABLE_SIMPLE_TYPES = Arrays.asList(
-            BigDecimal.class,
-            BigInteger.class,
-            CharSequence.class,
-            ThreadLocal.class,
-            Calendar.class,
-            Date.class,
-            Enum.class,
-            Number.class,
-            Process.class
-    );
-    /**
-     * Default collection of final simple types {@link List}
-     */
-    @SuppressWarnings("unchecked")
-    private static final Collection<Class<? extends Serializable>> FINAL_SIMPLE_TYPES = Arrays.asList(
-            Class.class,
-            URI.class,
-            URL.class,
-            Currency.class,
-            Locale.class,
-            UUID.class,
-            String.class
-    );
+    private static final ImmutableBiMap<Class<?>, Class<?>> DEFAULT_PRIMITIVE_TYPES = getDefaultPrimitiveTypes();
 
     /**
-     * Returns collection of primitive wrapper types {@link Set}
-     *
-     * @return collection of primitive wrapper types {@link Set}
+     * Default collection of extendable simple types {@link ImmutableCollection}
      */
-    private static Set<Class<?>> getDefaultPrimitiveWrapperTypes() {
-        final Set<Class<?>> wrapperTypes = new HashSet<>();
-        wrapperTypes.add(Boolean.class);
-        wrapperTypes.add(Character.class);
-        wrapperTypes.add(Byte.class);
-        wrapperTypes.add(Short.class);
-        wrapperTypes.add(Integer.class);
-        wrapperTypes.add(Long.class);
-        wrapperTypes.add(Float.class);
-        wrapperTypes.add(Double.class);
-        wrapperTypes.add(Void.class);
-        return wrapperTypes;
+    @SuppressWarnings("unchecked")
+    private static final ImmutableCollection<Class<?>> EXTENDABLE_SIMPLE_TYPES =
+            ImmutableSet.<Class<?>>builder()
+                    .add(BigDecimal.class)
+                    .add(BigInteger.class)
+                    .add(CharSequence.class)
+                    .add(ThreadLocal.class)
+                    .add(Calendar.class)
+                    .add(Date.class)
+                    .add(Enum.class)
+                    .add(Number.class)
+                    .add(Process.class)
+                    .build();
+    /**
+     * Default collection of final simple types {@link ImmutableCollection}
+     */
+    @SuppressWarnings("unchecked")
+    private static final ImmutableCollection<Class<? extends Serializable>> FINAL_SIMPLE_TYPES =
+            ImmutableSet.<Class<? extends Serializable>>builder()
+                    .add(Class.class)
+                    .add(URI.class)
+                    .add(URL.class)
+                    .add(Currency.class)
+                    .add(Locale.class)
+                    .add(UUID.class)
+                    .add(String.class)
+                    .build();
+
+    /**
+     * Returns collection of primitive wrapper types {@link ImmutableCollection}
+     *
+     * @return collection of primitive wrapper types {@link ImmutableCollection}
+     */
+    private static ImmutableCollection<Class<?>> getDefaultPrimitiveWrapperTypes() {
+        return ImmutableSet.<Class<?>>builder()
+                .add(Boolean.class)
+                .add(Character.class)
+                .add(Byte.class)
+                .add(Short.class)
+                .add(Integer.class)
+                .add(Long.class)
+                .add(Float.class)
+                .add(Double.class)
+                .add(Void.class)
+                .build();
     }
 
     /**
-     * Returns collection of primitive numeric types {@link Collection}
+     * Returns collection of primitive numeric types {@link ImmutableCollection}
      *
-     * @return collection of primitive numeric types {@link Collection}
+     * @return collection of primitive numeric types {@link ImmutableCollection}
      */
-    private static Collection<Class<?>> getDefaultPrimitiveNumericTypes() {
-        final Collection<Class<?>> numericTypes = new HashSet<>();
-        numericTypes.add(char.class);
-        numericTypes.add(byte.class);
-        numericTypes.add(short.class);
-        numericTypes.add(int.class);
-        numericTypes.add(long.class);
-        numericTypes.add(float.class);
-        numericTypes.add(double.class);
-        numericTypes.add(boolean.class);
-        numericTypes.add(void.class);
-        return numericTypes;
+    private static ImmutableCollection<Class<?>> getDefaultPrimitiveNumericTypes() {
+        return ImmutableSet.<Class<?>>builder()
+                .add(char.class)
+                .add(byte.class)
+                .add(short.class)
+                .add(int.class)
+                .add(long.class)
+                .add(float.class)
+                .add(double.class)
+                .add(boolean.class)
+                .add(void.class)
+                .build();
     }
 
     /**
-     * Returns matchable class instance {@link Class} by input argument class type
+     * Returns collection map of primitive types {@link ImmutableBiMap}
+     *
+     * @return collection map of primitive types {@link ImmutableBiMap}
+     */
+    private static ImmutableBiMap<Class<?>, Class<?>> getDefaultPrimitiveTypes() {
+        return ImmutableBiMap.<Class<?>, Class<?>>builder()
+                .put(boolean.class, Boolean.class)
+                .put(char.class, Character.class)
+                .put(byte.class, Byte.class)
+                .put(short.class, Short.class)
+                .put(int.class, Integer.class)
+                .put(long.class, Long.class)
+                .put(float.class, Float.class)
+                .put(double.class, Double.class)
+                .build();
+    }
+
+    /**
+     * Returns matchable class instance {@link Class} by input class type {@link Class}
      *
      * @param expectedClass - initial argument class instance {@link Class}
      * @return matchable class instance {@link Class}
      */
     public static Class<?> getMatchableClass(final Class<?> expectedClass) {
-        if (boolean.class.equals(expectedClass)) return Boolean.class;
-        if (byte.class.equals(expectedClass)) return Byte.class;
-        if (char.class.equals(expectedClass)) return Character.class;
-        if (double.class.equals(expectedClass)) return Double.class;
-        if (float.class.equals(expectedClass)) return Float.class;
-        if (int.class.equals(expectedClass)) return Integer.class;
-        if (long.class.equals(expectedClass)) return Long.class;
-        if (short.class.equals(expectedClass)) return Short.class;
-        return expectedClass;
+        final Optional<? extends Class<?>> optionalClass = DEFAULT_PRIMITIVE_TYPES
+                .keySet()
+                .stream()
+                .filter(type -> type.equals(expectedClass))
+                .map(type -> DEFAULT_PRIMITIVE_TYPES.get(type))
+                .findFirst();
+        return (optionalClass.isPresent()) ? optionalClass.get() : expectedClass;
     }
 
     /**
