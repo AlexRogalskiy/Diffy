@@ -307,13 +307,83 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns byte array comparator instance {@link Comparator}
+     * Returns null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
      *
-     * @return array comparator instance {@link Comparator}
+     * @return null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
      */
     @SuppressWarnings("unchecked")
     public static Comparator<byte[]> getDefaultByteArrayComparator() {
-        return new DefaultByteArrayComparator();
+        return new LexicographicalByteArrayComparator();
+    }
+
+    /**
+     * Returns null-safe lexicographical short array comparator instance {@link LexicographicalShortArrayComparator}
+     *
+     * @return null-safe lexicographical short array comparator instance {@link LexicographicalShortArrayComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<short[]> getDefaultShortArrayComparator() {
+        return new LexicographicalShortArrayComparator();
+    }
+
+    /**
+     * Returns null-safe lexicographical int array comparator instance {@link Comparator}
+     *
+     * @return null-safe lexicographical int array comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<int[]> getDefaultIntArrayComparator() {
+        return new LexicographicalIntArrayComparator();
+    }
+
+    /**
+     * Returns null-safe lexicographical long array comparator instance {@link LexicographicalLongArrayComparator}
+     *
+     * @return null-safe lexicographical long array comparator instance {@link LexicographicalLongArrayComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<long[]> getDefaultLongArrayComparator() {
+        return new LexicographicalLongArrayComparator();
+    }
+
+    /**
+     * Returns null-safe lexicographical double array comparator instance {@link LexicographicalDoubleArrayComparator}
+     *
+     * @return null-safe lexicographical double array comparator instance {@link LexicographicalDoubleArrayComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<double[]> getDefaultDoubleArrayComparator() {
+        return new LexicographicalDoubleArrayComparator();
+    }
+
+    /**
+     * Returns null-safe lexicographical float array comparator instance {@link LexicographicalFloatArrayComparator}
+     *
+     * @return null-safe lexicographical float array comparator instance {@link LexicographicalFloatArrayComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<float[]> getDefaultFloatArrayComparator() {
+        return new LexicographicalFloatArrayComparator();
+    }
+
+    /**
+     * Returns null-safe lexicographical char array comparator instance {@link LexicographicalCharacterArrayComparator}
+     *
+     * @return null-safe lexicographicalchar array comparator instance {@link LexicographicalCharacterArrayComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<char[]> getDefaultCharacterArrayComparator() {
+        return new LexicographicalCharacterArrayComparator();
+    }
+
+    /**
+     * Returns null-safe lexicographical boolean array comparator instance {@link LexicographicalBooleanArrayComparator}
+     *
+     * @return null-safe lexicographical boolean array comparator instance {@link LexicographicalBooleanArrayComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<boolean[]> getDefaultBooleanArrayComparator() {
+        return new LexicographicalBooleanArrayComparator();
     }
 
     /**
@@ -460,13 +530,13 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null safe comparator implementation
+     * Default abstract null-safe comparator implementation {@link Comparator}
      *
      * @param <T> type of input element to be compared by operation
      */
     @EqualsAndHashCode
     @ToString
-    public static class DefaultNullSafeComparator<T> implements Comparator<T> {
+    public static abstract class DefaultNullSafeComparator<T> implements Comparator<T> {
 
         /**
          * Returns numeric result of arguments comparison:
@@ -494,7 +564,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default comparable comparator implementation
+     * Default comparable comparator implementation {@link Comparator}
      *
      * @param <T> type of input element to be compared by operation
      */
@@ -519,7 +589,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default object comparator implementation {@link Object}
+     * Default null-safe object {@link Object} comparator implementation {@link DefaultNullSafeComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
@@ -546,7 +616,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default class comparator implementation {@link Class}
+     * Default class {@link Class} comparator implementation {@link Comparator}
      */
     @EqualsAndHashCode
     @ToString
@@ -574,7 +644,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default array comparator implementation
+     * Default null-safe array comparator implementation {@link DefaultNullSafeComparator}
      *
      * @param <T> type of input element to be compared by operation
      */
@@ -631,12 +701,257 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default byte array comparator implementation
+     * Default null-safe lexicographical short array comparator implementation {@link DefaultNullSafeComparator}
      */
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultByteArrayComparator extends DefaultNullSafeComparator<byte[]> {
+    public static class LexicographicalShortArrayComparator extends DefaultNullSafeComparator<short[]> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final short[] first, final short[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Short.compare(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default null-safe lexicographical int array comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalIntArrayComparator extends DefaultNullSafeComparator<int[]> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final int[] first, final int[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Integer.compare(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default null-safe lexicographical long array comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalLongArrayComparator extends DefaultNullSafeComparator<long[]> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final long[] first, final long[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Long.compare(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default null-safe lexicographical float array comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalFloatArrayComparator extends DefaultNullSafeComparator<float[]> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final float[] first, final float[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Float.compare(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default null-safe lexicographical double array comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalDoubleArrayComparator extends DefaultNullSafeComparator<double[]> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final double[] first, final double[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Double.compare(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default null-safe lexicographical char array comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalCharacterArrayComparator extends DefaultNullSafeComparator<char[]> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final char[] first, final char[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Character.compare(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default null-safe lexicographical boolean array comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalBooleanArrayComparator extends DefaultNullSafeComparator<boolean[]> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial first array argument
+         * @param last  - initial last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final boolean[] first, final boolean[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Boolean.compare(first[i], last[i]);
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
+     * Default null-safe lexicographical byte array comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalByteArrayComparator extends DefaultNullSafeComparator<byte[]> {
 
         /**
          * Default unsigned mask
@@ -657,14 +972,8 @@ public class ComparatorUtils {
         public int compare(final byte[] first, final byte[] last) {
             int comp = super.compare(first, last);
             if (comp == Byte.MAX_VALUE) {
-                int firstSize = first.length;
-                int lastSize = last.length;
-                if (firstSize < lastSize) {
-                    return -1;
-                } else if (firstSize > lastSize) {
-                    return 1;
-                }
-                for (int i = 0; i < firstSize; i++) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
                     int result = compareBy(first[i], last[i]);
                     if (result != 0) {
                         return result;
@@ -698,7 +1007,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default iterable comparator implementation {@link Iterable}
+     * Default null-safe iterable comparator implementation {@link DefaultNullSafeComparator}
      *
      * @param <T> type of input element to be compared by operation
      */
@@ -758,7 +1067,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default big decimal comparator implementation {@link BigDecimal}
+     * Default null-safe big decimal {@link BigDecimal} comparator implementation {@link DefaultNullSafeComparator}
      */
     @Data
     @EqualsAndHashCode(callSuper = true)
@@ -817,7 +1126,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default map value comparator implementation {@link Map}
+     * Default map value comparator implementation {@link Comparator}
      */
     @Data
     @EqualsAndHashCode
@@ -870,7 +1179,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default map entry comparator implementation
+     * Default map entry comparator implementation {@link Comparator}
      */
     @Data
     @EqualsAndHashCode
