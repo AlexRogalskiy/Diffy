@@ -32,10 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -307,6 +304,17 @@ public class ComparatorUtils {
     }
 
     /**
+     * Returns null-safe lexicographical array comparator instance {@link LexicographicalArrayComparator}
+     *
+     * @param <T> type of array element
+     * @return null-safe lexicographical array comparator instance {@link LexicographicalArrayComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Comparator<? super T> getLexicographicalArrayComparator(final Comparator<? super T> comparator) {
+        return new LexicographicalArrayComparator(comparator);
+    }
+
+    /**
      * Returns null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
      *
      * @return null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
@@ -322,7 +330,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical short array comparator instance {@link LexicographicalShortArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<short[]> getDefaultShortArrayComparator() {
+    public static Comparator<short[]> getLexicographicalShortArrayComparator() {
         return new LexicographicalShortArrayComparator();
     }
 
@@ -332,7 +340,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical int array comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<int[]> getDefaultIntArrayComparator() {
+    public static Comparator<int[]> getLexicographicalIntArrayComparator() {
         return new LexicographicalIntArrayComparator();
     }
 
@@ -342,7 +350,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical long array comparator instance {@link LexicographicalLongArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<long[]> getDefaultLongArrayComparator() {
+    public static Comparator<long[]> getLexicographicalLongArrayComparator() {
         return new LexicographicalLongArrayComparator();
     }
 
@@ -352,7 +360,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical double array comparator instance {@link LexicographicalDoubleArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<double[]> getDefaultDoubleArrayComparator() {
+    public static Comparator<double[]> getLexicographicalDoubleArrayComparator() {
         return new LexicographicalDoubleArrayComparator();
     }
 
@@ -362,7 +370,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical float array comparator instance {@link LexicographicalFloatArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<float[]> getDefaultFloatArrayComparator() {
+    public static Comparator<float[]> getLexicographicalFloatArrayComparator() {
         return new LexicographicalFloatArrayComparator();
     }
 
@@ -372,7 +380,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographicalchar array comparator instance {@link LexicographicalCharacterArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<char[]> getDefaultCharacterArrayComparator() {
+    public static Comparator<char[]> getLexicographicalCharacterArrayComparator() {
         return new LexicographicalCharacterArrayComparator();
     }
 
@@ -382,7 +390,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical boolean array comparator instance {@link LexicographicalBooleanArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<boolean[]> getDefaultBooleanArrayComparator() {
+    public static Comparator<boolean[]> getLexicographicalBooleanArrayComparator() {
         return new LexicographicalBooleanArrayComparator();
     }
 
@@ -545,8 +553,8 @@ public class ComparatorUtils {
          * "0" - arguments are equal
          * Byte.MAX_VALUE - if arguments are different (and not null either)
          *
-         * @param first - initial first argument
-         * @param last  - initial last argument
+         * @param first - initial input first argument
+         * @param last  - initial input last argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -578,8 +586,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument
-         * @param last  - initial last argument
+         * @param first - initial input first argument
+         * @param last  - initial input last argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -601,8 +609,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument {@link Object}
-         * @param last  - initial last argument {@link Object}
+         * @param first - initial input first argument {@link Object}
+         * @param last  - initial input last argument {@link Object}
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -628,8 +636,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument {@link Class}
-         * @param last  - initial last argument {@link Class}
+         * @param first - initial input first argument {@link Class}
+         * @param last  - initial input last argument {@link Class}
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -644,9 +652,38 @@ public class ComparatorUtils {
     }
 
     /**
+     * Default localeo {@link Locale} comparator implementation {@link Comparator}
+     */
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultLocaleComparator implements Comparator<Locale> {
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial input first argument {@link Locale}
+         * @param last  - initial input last argument {@link Locale}
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final Locale first, final Locale last) {
+            if (first.getLanguage().equals(last.getLanguage())) {
+                if (first.getCountry().equals(last.getCountry())) {
+                    return 0;
+                }
+                return 1;
+            }
+            return -1;
+        }
+    }
+
+    /**
      * Default null-safe array comparator implementation {@link DefaultNullSafeComparator}
      *
-     * @param <T> type of input element to be compared by operation
+     * @param <T> type of array element to be compared by operation
      */
     @Data
     @EqualsAndHashCode(callSuper = true)
@@ -673,8 +710,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -701,6 +738,57 @@ public class ComparatorUtils {
     }
 
     /**
+     * Default null-safe lexicographical array comparator implementation {@link DefaultNullSafeComparator}
+     *
+     * @param <T> type of array element to be compared by operation
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class LexicographicalArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
+
+        /**
+         * Custom comparator instance {@link Comparator}
+         */
+        private final Comparator<? super T> comparator;
+
+        /**
+         * Default value comparator
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public LexicographicalArrayComparator(final Comparator<? super T> comparator) {
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final T[] first, final T[] last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                int minLength = Math.min(first.length, last.length);
+                for (int i = 0; i < minLength; i++) {
+                    int result = Objects.compare(first[i], last[i], getComparator());
+                    if (0 != result) {
+                        return result;
+                    }
+                }
+                return first.length - last.length;
+            }
+            return comp;
+        }
+    }
+
+    /**
      * Default null-safe lexicographical short array comparator implementation {@link DefaultNullSafeComparator}
      */
     @Data
@@ -714,8 +802,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -725,7 +813,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Short.compare(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -749,8 +837,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -760,7 +848,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Integer.compare(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -784,8 +872,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -795,7 +883,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Long.compare(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -819,8 +907,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -830,7 +918,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Float.compare(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -854,8 +942,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -865,7 +953,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Double.compare(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -889,8 +977,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -900,7 +988,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Character.compare(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -924,8 +1012,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -935,7 +1023,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Boolean.compare(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -964,8 +1052,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first array argument
-         * @param last  - initial last array argument
+         * @param first - initial input first array argument
+         * @param last  - initial input last array argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -975,7 +1063,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(first.length, last.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = compareBy(first[i], last[i]);
-                    if (result != 0) {
+                    if (0 != result) {
                         return result;
                     }
                 }
@@ -1036,8 +1124,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument {@link Iterable}
-         * @param last  - initial last argument {@link Iterable}
+         * @param first - initial input first argument {@link Iterable}
+         * @param last  - initial input last argument {@link Iterable}
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -1109,8 +1197,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument {@link BigDecimal}
-         * @param last  - initial last argument {@link BigDecimal}
+         * @param first - initial input first argument {@link BigDecimal}
+         * @param last  - initial input last argument {@link BigDecimal}
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -1168,8 +1256,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial first argument
-         * @param last  - initial last argument
+         * @param first - initial input first argument
+         * @param last  - initial input last argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -1213,8 +1301,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial input first argument
-         * @param last  - initial input last argument
+         * @param first - initial input input first argument
+         * @param last  - initial input input last argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
