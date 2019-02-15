@@ -45,7 +45,7 @@ public class DeliveryInfoDiffComparatorFactory {
     /**
      * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
      *
-     * @param <E>
+     * @param <E> type of entity to be compared by
      * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
      */
     public static <E extends DiffComparator<DeliveryInfo>> E create() {
@@ -55,7 +55,7 @@ public class DeliveryInfoDiffComparatorFactory {
     /**
      * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
      *
-     * @param <E>
+     * @param <E>        type of entity to be compared by
      * @param comparator - initial comparator instance {@link Comparator}
      * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
      */

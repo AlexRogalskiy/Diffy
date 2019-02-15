@@ -54,12 +54,12 @@ THE SOFTWARE.
 
     <appender name="FILE_AUDIT" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/${FILE_AUDIT_NAME}.log</file>
-        <append>false</append>
+        <append>true</append>
+        <immediateFlush>false</immediateFlush>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>UTF-8</charset>
             <pattern>${FILE_AUDIT_LOG_PATTERN}</pattern>
-            <immediateFlush>false</immediateFlush>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
 
@@ -73,12 +73,12 @@ THE SOFTWARE.
 
     <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/${FILE_ERROR_NAME}.log</file>
-        <append>false</append>
+        <append>true</append>
+        <immediateFlush>false</immediateFlush>
 
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>UTF-8</charset>
             <pattern>${FILE_ERROR_LOG_PATTERN}</pattern>
-            <immediateFlush>false</immediateFlush>
             <outputPatternAsHeader>true</outputPatternAsHeader>
         </encoder>
 
