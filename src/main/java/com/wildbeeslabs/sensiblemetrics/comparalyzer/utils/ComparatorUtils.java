@@ -315,6 +315,16 @@ public class ComparatorUtils {
     }
 
     /**
+     * Returns null-safe number {@link Number} comparator instance {@link DefaultNumberComparator}
+     *
+     * @return null-safe number {@link Number} comparator instance {@link DefaultNumberComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Number> Comparator<? super T> getDefaultNumberComparator(final Comparator<? super T> comparator) {
+        return new DefaultNumberComparator<T>(comparator);
+    }
+
+    /**
      * Returns null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
      *
      * @return null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
@@ -1308,6 +1318,55 @@ public class ComparatorUtils {
         @Override
         public int compare(final Map.Entry<K, V> first, final Map.Entry<K, V> last) {
             return Objects.compare(first, last, getComparator());
+        }
+    }
+
+    /**
+     * Default number comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultNumberComparator<T extends Number> extends DefaultNullSafeComparator<T> {
+
+        /**
+         * Custom map entry comparator instance {@link Comparator}
+         */
+        private final Comparator<? super T> comparator;
+
+        /**
+         * Default number comparator
+         */
+        public DefaultNumberComparator() {
+            this(null);
+        }
+
+        /**
+         * Default number comparator with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNumberComparator(final Comparator<? super T> comparator) {
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial input first array argument {@code T}
+         * @param last  - initial input last array argument {@code T}
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final T first, final T last) {
+            int comp = super.compare(first, last);
+            if (comp == Byte.MAX_VALUE) {
+                return Objects.compare(first, last, getComparator());
+            }
+            return comp;
         }
     }
 }
