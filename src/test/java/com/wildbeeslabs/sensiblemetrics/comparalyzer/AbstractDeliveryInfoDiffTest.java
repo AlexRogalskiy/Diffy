@@ -59,30 +59,30 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      * Default address info comparator instance {@link Comparator}
      */
     protected static final Comparator<? super AddressInfo> DEFAULT_ADDRESS_INFO_COMPARATOR =
-            Comparator.comparing(AddressInfo::getId)
-                    .thenComparing(AddressInfo::getCity)
-                    .thenComparing(AddressInfo::getCountry)
-                    .thenComparing(AddressInfo::getPostalCode)
-                    .thenComparing(AddressInfo::getStateOrProvince)
-                    .thenComparing(AddressInfo::getStreet);
+        Comparator.comparing(AddressInfo::getId)
+            .thenComparing(AddressInfo::getCity)
+            .thenComparing(AddressInfo::getCountry)
+            .thenComparing(AddressInfo::getPostalCode)
+            .thenComparing(AddressInfo::getStateOrProvince)
+            .thenComparing(AddressInfo::getStreet);
 
     /**
      * Default address info list comparator instance {@link Comparator}
      */
-    protected static final Comparator<? super List<AddressInfo>> DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR = ComparatorUtils.getDefaultIterableComparator(DEFAULT_ADDRESS_INFO_COMPARATOR);
+    protected static final Comparator<? super List<AddressInfo>> DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR = ComparatorUtils.getIterableComparator(DEFAULT_ADDRESS_INFO_COMPARATOR, false);
 
     /**
      * Default delivery info comparator instance {@link Comparator}
      */
     protected static final Comparator<? super DeliveryInfo> DEFAULT_DELIVERY_INFO_COMPARATOR =
-            Comparator.comparing(DeliveryInfo::getId)
-                    .thenComparing(DeliveryInfo::getType)
-                    .thenComparing(DeliveryInfo::getGid)
-                    .thenComparing(DeliveryInfo::getDescription)
-                    .thenComparing(DeliveryInfo::getCreatedAt)
-                    .thenComparing(DeliveryInfo::getUpdatedAt)
-                    .thenComparing(DeliveryInfo::getBalance)
-                    .thenComparing(DeliveryInfo::getAddresses, DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR);
+        Comparator.comparing(DeliveryInfo::getId)
+            .thenComparing(DeliveryInfo::getType)
+            .thenComparing(DeliveryInfo::getGid)
+            .thenComparing(DeliveryInfo::getDescription)
+            .thenComparing(DeliveryInfo::getCreatedAt)
+            .thenComparing(DeliveryInfo::getUpdatedAt)
+            .thenComparing(DeliveryInfo::getBalance)
+            .thenComparing(DeliveryInfo::getAddresses, DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR);
 
     /**
      * Default delivery info mock unit instance {@link MockUnit}
@@ -100,14 +100,14 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      */
     protected MockUnit<DeliveryInfo> getDeliveryInfoMock(int addressListSize) {
         return filler(() -> new DeliveryInfo())
-                .setter(DeliveryInfo::setId, getLongMock())
-                .setter(DeliveryInfo::setType, getIntMock())
-                .setter(DeliveryInfo::setGid, getAlphaNumericStringMock())
-                .setter(DeliveryInfo::setDescription, getLettersStringMock())
-                .setter(DeliveryInfo::setCreatedAt, getLocalDateMock().toUtilDate())
-                .setter(DeliveryInfo::setUpdatedAt, getLocalDateMock().toUtilDate())
-                .setter(DeliveryInfo::setBalance, getDoubleMock())
-                .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
+            .setter(DeliveryInfo::setId, getLongMock())
+            .setter(DeliveryInfo::setType, getIntMock())
+            .setter(DeliveryInfo::setGid, getAlphaNumericStringMock())
+            .setter(DeliveryInfo::setDescription, getLettersStringMock())
+            .setter(DeliveryInfo::setCreatedAt, getLocalDateMock().toUtilDate())
+            .setter(DeliveryInfo::setUpdatedAt, getLocalDateMock().toUtilDate())
+            .setter(DeliveryInfo::setBalance, getDoubleMock())
+            .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
     }
 
     /**
@@ -117,11 +117,11 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      */
     protected MockUnit<AddressInfo> getAddressInfoMock() {
         return filler(() -> new AddressInfo())
-                .setter(AddressInfo::setId, getLongMock())
-                .setter(AddressInfo::setCity, getLettersStringMock())
-                .setter(AddressInfo::setCountry, getLettersStringMock())
-                .setter(AddressInfo::setPostalCode, getAlphaNumericStringMock())
-                .setter(AddressInfo::setStateOrProvince, getLettersStringMock())
-                .setter(AddressInfo::setStreet, getLettersStringMock());
+            .setter(AddressInfo::setId, getLongMock())
+            .setter(AddressInfo::setCity, getLettersStringMock())
+            .setter(AddressInfo::setCountry, getLettersStringMock())
+            .setter(AddressInfo::setPostalCode, getAlphaNumericStringMock())
+            .setter(AddressInfo::setStateOrProvince, getLettersStringMock())
+            .setter(AddressInfo::setStreet, getLettersStringMock());
     }
 }

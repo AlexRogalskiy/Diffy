@@ -89,6 +89,7 @@ public abstract class AbstractDiffTest {
     /**
      * Default ip mock instances
      */
-    protected final MockUnitString ipv4ClassA = mock.ipv4s().types(CLASS_A, CLASS_C);
+    protected final MockUnitString ipv4ClassA = this.mock.ipv4s().types(CLASS_A, CLASS_C);
+    protected final MockUnitString ipv6ClassA = this.mock.iPv6s().mapToString();
 }
 

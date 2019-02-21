@@ -221,7 +221,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     @SuppressWarnings("unchecked")
     protected <T> Comparator<? super T> getPropertyComparator(final String property) {
-        return (Comparator<? super T>) getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), ComparatorUtils.getDefaultComparator());
+        return (Comparator<? super T>) getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), ComparatorUtils.getObjectComparator(false));
     }
 
     /**

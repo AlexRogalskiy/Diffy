@@ -35,7 +35,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.hamcrest.core.IsEqual;
 import org.joda.time.LocalDateTime;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -108,7 +110,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
-        assertEquals(0, valueChangeList.size());
+        assertThat(valueChangeList.size(), IsEqual.equalTo(0));
     }
 
     @Test
@@ -372,7 +374,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
         assertThat(valueChangeList, not(empty()));
-        assertEquals(3, valueChangeList.size());
+        Assert.assertThat(valueChangeList.size(), IsEqual.equalTo(3));
 
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
@@ -465,7 +467,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
         assertThat(valueChangeList, not(empty()));
-        assertEquals(3, valueChangeList.size());
+        assertThat(valueChangeList.size(), IsEqual.equalTo(3));
 
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
@@ -519,7 +521,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
         assertThat(valueChangeList, not(empty()));
-        assertEquals(3, valueChangeList.size());
+        assertThat(valueChangeList.size(), IsEqual.equalTo(3));
 
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
@@ -565,7 +567,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
         assertThat(valueChangeList, not(empty()));
-        assertEquals(1, valueChangeList.size());
+        assertThat(valueChangeList.size(), IsEqual.equalTo(1));
 
         DefaultDiffEntry entry = DefaultDiffEntry
                 .builder()
@@ -608,7 +610,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         valueChangeList = Lists.newArrayList(iterable);
-        assertEquals(1, valueChangeList.size());
+        assertThat(valueChangeList.size(), IsEqual.equalTo(1));
     }
 
     @Test
@@ -631,8 +633,8 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         getDeliveryInfoLast().setBalance(1.0001567);
 
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        valueChangeList = Lists.newArrayList(iterable);
-        assertEquals(1, valueChangeList.size());
+        valueChangeList = Lists.newArrayList(iterable);;
+        assertThat(valueChangeList.size(), IsEqual.equalTo(1));
     }
 
     @Test

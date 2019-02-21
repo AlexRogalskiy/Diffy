@@ -31,6 +31,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.core.IsEqual;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -163,7 +164,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
                 getDeliveryInfoMock().val(),
                 getDeliveryInfoMock().val()
         );
-        assertEquals(4, deliveryInfoList.size());
+        assertThat(deliveryInfoList.size(), IsEqual.equalTo(4));
         assertTrue(deliveryInfoList.stream().noneMatch(entity -> deliveryInfoMatcher.matches(entity)));
 
         getDeliveryInfo().setGid(DEFAULT_GID_PREFIX + UUID.randomUUID());

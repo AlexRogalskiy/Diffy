@@ -47,14 +47,23 @@ import java.util.function.Predicate;
 public class ComparatorUtils {
 
     /**
+     * Default object comparator instance {@link Comparator}
+     */
+    public static final Comparator<? super Object> DEFAULT_OBJECT_COMPARATOR = getObjectComparator(false);
+    /**
+     * Default string comparator instance {@link Comparator}
+     */
+    public static final Comparator<? super String> DEFAULT_STRING_COMPARATOR = getStringComparator(Comparator.naturalOrder(), false);
+
+    /**
      * Default comparator with false first order {@link Comparator}
      */
-    public static final Comparator<? super Boolean> DEFAULT_FALSE_FIRST = (a, b) -> a == b ? 0 : b ? -1 : 1;
+    public static final Comparator<? super Boolean> DEFAULT_FALSE_FIRST_COMPARATOR = (a, b) -> a == b ? 0 : b ? -1 : 1;
 
     /**
      * Default comparator with true first order {@link Comparator}
      */
-    public static final Comparator<? super Boolean> DEFAULT_TRUE_FIRST = (a, b) -> a == b ? 0 : a ? -1 : 1;
+    public static final Comparator<? super Boolean> DEFAULT_TRUE_FIRST_COMPARATOR = (a, b) -> a == b ? 0 : a ? -1 : 1;
 
     /**
      * Returns boolean comparator with false first order {@link Comparator}
@@ -62,7 +71,7 @@ public class ComparatorUtils {
      * @return boolean comparator with false first order {@link Comparator}
      */
     public static Comparator<? super Boolean> lastIf() {
-        return DEFAULT_FALSE_FIRST;
+        return DEFAULT_FALSE_FIRST_COMPARATOR;
     }
 
     /**
@@ -71,7 +80,7 @@ public class ComparatorUtils {
      * @return boolean comparator with true first order {@link Comparator}
      */
     public static Comparator<? super Boolean> firstIf() {
-        return DEFAULT_TRUE_FIRST;
+        return DEFAULT_TRUE_FIRST_COMPARATOR;
     }
 
     /**
@@ -117,6 +126,7 @@ public class ComparatorUtils {
         Objects.requireNonNull(predicate);
         Objects.requireNonNull(firstOrder);
         Objects.requireNonNull(lastOrder);
+
         return (a, b) -> {
             final boolean pa = predicate.test(a), pb = predicate.test(b);
             if (pa == pb) {
@@ -176,6 +186,7 @@ public class ComparatorUtils {
     public static <T, U> Comparator<? super T> instancesFirst(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
         Objects.requireNonNull(clazz);
         Objects.requireNonNull(comparator);
+
         return (a, b) -> {
             if (clazz.isInstance(a)) {
                 if (clazz.isInstance(b)) {
@@ -199,6 +210,7 @@ public class ComparatorUtils {
     public static <T, U> Comparator<? super T> instancesLast(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
         Objects.requireNonNull(clazz);
         Objects.requireNonNull(comparator);
+
         return (a, b) -> {
             if (clazz.isInstance(a)) {
                 if (clazz.isInstance(b)) {
@@ -211,18 +223,23 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default comparator instance {@link Comparator}
-     */
-    public static final Comparator<? super Object> DEFAULT_COMPARATOR = getDefaultComparator();
-
-    /**
      * Returns object {@link Object} comparator instance {@link Comparator}
      *
      * @return object {@link Object} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<? super Object> getDefaultComparator() {
-        return new DefaultComparator();
+    public static Comparator<? super Object> getObjectComparator(boolean nullsInPriority) {
+        return new DefaultNullSafeObjectComparator(nullsInPriority);
+    }
+
+    /**
+     * Returns string {@link String} comparator instance {@link Comparator}
+     *
+     * @return string {@link String} comparator instance {@link Comparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<? super String> getStringComparator(final Comparator<? super String> comparator, boolean nullsInPriority) {
+        return new DefaultNullSafeStringComparator(comparator, nullsInPriority);
     }
 
     /**
@@ -232,7 +249,7 @@ public class ComparatorUtils {
      * @return comparable {@link Comparable} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super T> getDefaultComparableComparator() {
+    public static <T> Comparator<? super T> getComparableComparator() {
         return new DefaultComparableComparator();
     }
 
@@ -242,8 +259,8 @@ public class ComparatorUtils {
      * @return class {@link Class} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<? super Class<?>> getDefaultClassComparator() {
-        return new DefaultClassComparator();
+    public static Comparator<? super Class<?>> getClassComparator(boolean nullsInPriority) {
+        return new DefaultNullSafeClassComparator(nullsInPriority);
     }
 
     /**
@@ -253,8 +270,8 @@ public class ComparatorUtils {
      * @return iterable comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super Iterable<T>> getDefaultIterableComparator(final Comparator<? super T> comparator) {
-        return new DefaultIterableComparator(comparator);
+    public static <T> Comparator<? super Iterable<T>> getIterableComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        return new DefaultNullSafeIterableComparator(comparator, nullsInPriority);
     }
 
     /**
@@ -264,8 +281,8 @@ public class ComparatorUtils {
      * @return big decimal comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super BigDecimal> getDefaultBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
-        return new DefaultBigDecimalComparator(significantDecimalPlaces, comparator);
+    public static <T> Comparator<? super BigDecimal> getBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
+        return new DefaultNullSafeBigDecimalComparator(significantDecimalPlaces, comparator, nullsInPriority);
     }
 
     /**
@@ -276,7 +293,7 @@ public class ComparatorUtils {
      * @return value map comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> Comparator<? super V> getDefaultValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
+    public static <K, V> Comparator<? super V> getValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
         return new DefaultMapValueComparator(map, comparator);
     }
 
@@ -288,7 +305,7 @@ public class ComparatorUtils {
      * @return map entry comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> Comparator<? super Map.Entry<K, V>> getDefaultMapEntryComparator(final Comparator<? super Map.Entry<K, V>> comparator) {
+    public static <K, V> Comparator<? super Map.Entry<K, V>> getMapEntryComparator(final Comparator<? super Map.Entry<K, V>> comparator) {
         return new DefaultMapEntryComparator(comparator);
     }
 
@@ -299,49 +316,49 @@ public class ComparatorUtils {
      * @return array comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super T> getDefaultArrayComparator(final Comparator<? super T> comparator) {
-        return new DefaultArrayComparator(comparator);
+    public static <T> Comparator<? super T[]> getArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        return new DefaultNullSafeArrayComparator(comparator, nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical array comparator instance {@link LexicographicalArrayComparator}
+     * Returns null-safe lexicographical array comparator instance {@link LexicographicalNullSafeArrayComparator}
      *
      * @param <T> type of array element
-     * @return null-safe lexicographical array comparator instance {@link LexicographicalArrayComparator}
+     * @return null-safe lexicographical array comparator instance {@link LexicographicalNullSafeArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super T> getLexicographicalArrayComparator(final Comparator<? super T> comparator) {
-        return new LexicographicalArrayComparator(comparator);
+    public static <T> Comparator<? super T> getLexicographicalArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        return new LexicographicalNullSafeArrayComparator(comparator, nullsInPriority);
     }
 
     /**
-     * Returns null-safe number {@link Number} comparator instance {@link DefaultNumberComparator}
+     * Returns null-safe number {@link Number} comparator instance {@link DefaultNullSafeNumberComparator}
      *
-     * @return null-safe number {@link Number} comparator instance {@link DefaultNumberComparator}
+     * @return null-safe number {@link Number} comparator instance {@link DefaultNullSafeNumberComparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Number> Comparator<? super T> getDefaultNumberComparator(final Comparator<? super T> comparator) {
-        return new DefaultNumberComparator<T>(comparator);
+    public static <T extends Number> Comparator<? super T> getNumberComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        return new DefaultNullSafeNumberComparator<T>(comparator, nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
+     * Returns null-safe lexicographical byte array comparator instance {@link LexicographicalNullSafeByteArrayComparator}
      *
-     * @return null-safe lexicographical byte array comparator instance {@link LexicographicalByteArrayComparator}
+     * @return null-safe lexicographical byte array comparator instance {@link LexicographicalNullSafeByteArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<byte[]> getDefaultByteArrayComparator() {
-        return new LexicographicalByteArrayComparator();
+    public static Comparator<byte[]> getByteArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeByteArrayComparator(nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical short array comparator instance {@link LexicographicalShortArrayComparator}
+     * Returns null-safe lexicographical short array comparator instance {@link LexicographicalNullSafeShortArrayComparator}
      *
-     * @return null-safe lexicographical short array comparator instance {@link LexicographicalShortArrayComparator}
+     * @return null-safe lexicographical short array comparator instance {@link LexicographicalNullSafeShortArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<short[]> getLexicographicalShortArrayComparator() {
-        return new LexicographicalShortArrayComparator();
+    public static Comparator<short[]> getShortArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeShortArrayComparator(nullsInPriority);
     }
 
     /**
@@ -350,58 +367,58 @@ public class ComparatorUtils {
      * @return null-safe lexicographical int array comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<int[]> getLexicographicalIntArrayComparator() {
-        return new LexicographicalIntArrayComparator();
+    public static Comparator<int[]> getIntArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeIntArrayComparator(nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical long array comparator instance {@link LexicographicalLongArrayComparator}
+     * Returns null-safe lexicographical long array comparator instance {@link LexicographicalNullSafeLongArrayComparator}
      *
-     * @return null-safe lexicographical long array comparator instance {@link LexicographicalLongArrayComparator}
+     * @return null-safe lexicographical long array comparator instance {@link LexicographicalNullSafeLongArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<long[]> getLexicographicalLongArrayComparator() {
-        return new LexicographicalLongArrayComparator();
+    public static Comparator<long[]> getLongArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeLongArrayComparator(nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical double array comparator instance {@link LexicographicalDoubleArrayComparator}
+     * Returns null-safe lexicographical double array comparator instance {@link LexicographicalNullSafeDoubleArrayComparator}
      *
-     * @return null-safe lexicographical double array comparator instance {@link LexicographicalDoubleArrayComparator}
+     * @return null-safe lexicographical double array comparator instance {@link LexicographicalNullSafeDoubleArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<double[]> getLexicographicalDoubleArrayComparator() {
-        return new LexicographicalDoubleArrayComparator();
+    public static Comparator<double[]> getDoubleArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeDoubleArrayComparator(nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical float array comparator instance {@link LexicographicalFloatArrayComparator}
+     * Returns null-safe lexicographical float array comparator instance {@link LexicographicalNullSafeFloatArrayComparator}
      *
-     * @return null-safe lexicographical float array comparator instance {@link LexicographicalFloatArrayComparator}
+     * @return null-safe lexicographical float array comparator instance {@link LexicographicalNullSafeFloatArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<float[]> getLexicographicalFloatArrayComparator() {
-        return new LexicographicalFloatArrayComparator();
+    public static Comparator<float[]> getFloatArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeFloatArrayComparator(nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical char array comparator instance {@link LexicographicalCharacterArrayComparator}
+     * Returns null-safe lexicographical char array comparator instance {@link LexicographicalNullSafeCharacterArrayComparator}
      *
-     * @return null-safe lexicographicalchar array comparator instance {@link LexicographicalCharacterArrayComparator}
+     * @return null-safe lexicographicalchar array comparator instance {@link LexicographicalNullSafeCharacterArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<char[]> getLexicographicalCharacterArrayComparator() {
-        return new LexicographicalCharacterArrayComparator();
+    public static Comparator<char[]> getCharacterArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeCharacterArrayComparator(nullsInPriority);
     }
 
     /**
-     * Returns null-safe lexicographical boolean array comparator instance {@link LexicographicalBooleanArrayComparator}
+     * Returns null-safe lexicographical boolean array comparator instance {@link LexicographicalNullSafeBooleanArrayComparator}
      *
-     * @return null-safe lexicographical boolean array comparator instance {@link LexicographicalBooleanArrayComparator}
+     * @return null-safe lexicographical boolean array comparator instance {@link LexicographicalNullSafeBooleanArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<boolean[]> getLexicographicalBooleanArrayComparator() {
-        return new LexicographicalBooleanArrayComparator();
+    public static Comparator<boolean[]> getBooleanArrayComparator(boolean nullsInPriority) {
+        return new LexicographicalNullSafeBooleanArrayComparator(nullsInPriority);
     }
 
     /**
@@ -413,7 +430,7 @@ public class ComparatorUtils {
      * @return numeric value of comparison
      */
     public static <T> int compare(final T first, final T last) {
-        return compare(first, last, getDefaultComparableComparator());
+        return compare(first, last, getComparableComparator());
     }
 
     /**
@@ -552,9 +569,46 @@ public class ComparatorUtils {
      *
      * @param <T> type of input element to be compared by operation
      */
+    @Data
     @EqualsAndHashCode
     @ToString
     public static abstract class DefaultNullSafeComparator<T> implements Comparator<T> {
+
+        /**
+         * Default comparator instance {@link Comparator}
+         */
+        private final Comparator<? super T> comparator;
+        /**
+         * Default "null" priority (true - if nulls are first, false - otherwise)
+         */
+        boolean nullsInPriority;
+
+        /**
+         * Default null-safe comparator constructor
+         */
+        public DefaultNullSafeComparator() {
+            this(null);
+        }
+
+        /**
+         * Default null-safe comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeComparator(final Comparator<? super T> comparator) {
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        }
+
+        /**
+         * Default null-safe comparator constructor with initial comparator instance {@link Comparator} and "null" priority {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority {@link Boolean}
+         */
+        public DefaultNullSafeComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+            this.nullsInPriority = nullsInPriority;
+        }
 
         /**
          * Returns numeric result of arguments comparison:
@@ -573,11 +627,12 @@ public class ComparatorUtils {
                 return 0;
             }
             if (Objects.isNull(first)) {
-                return -1;
-            } else if (Objects.isNull(last)) {
-                return 1;
+                return (isNullsInPriority() ? 1 : -1);
             }
-            return Byte.MAX_VALUE;
+            if (Objects.isNull(last)) {
+                return (isNullsInPriority() ? -1 : 1);
+            }
+            return Objects.compare(first, last, getComparator());
         }
     }
 
@@ -611,82 +666,110 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultComparator extends DefaultNullSafeComparator<Object> {
+    public static class DefaultNullSafeObjectComparator extends DefaultNullSafeComparator<Object> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first argument {@link Object}
-         * @param last  - initial input last argument {@link Object}
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe object comparator constructor
          */
-        @Override
-        public int compare(final Object first, final Object last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                return first.toString().compareTo(last.toString());
-            }
-            return comp;
+        public DefaultNullSafeObjectComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe object comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeObjectComparator(boolean nullsInPriority) {
+            super(Comparator.comparing(Object::toString), nullsInPriority);
         }
     }
 
     /**
-     * Default class {@link Class} comparator implementation {@link Comparator}
+     * Default null-safe string {@link String} comparator implementation {@link DefaultNullSafeComparator}
      */
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultClassComparator implements Comparator<Class<?>> {
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultNullSafeStringComparator extends DefaultNullSafeComparator<String> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first argument {@link Class}
-         * @param last  - initial input last argument {@link Class}
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe string comparator constructor
          */
-        @Override
-        public int compare(final Class<?> first, final Class<?> last) {
-            if (first.isAssignableFrom(last)) {
-                return 1;
-            } else if (last.isAssignableFrom(first)) {
-                return -1;
-            }
-            return 0;
+        public DefaultNullSafeStringComparator() {
+            this(null, false);
+        }
+
+        /**
+         * Default null-safe string comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeStringComparator(final Comparator<? super String> comparator, boolean nullsInPriority) {
+            super(comparator, nullsInPriority);
         }
     }
 
     /**
-     * Default localeo {@link Locale} comparator implementation {@link Comparator}
+     * Default null-safe class {@link Class} comparator implementation {@link DefaultNullSafeComparator}
      */
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultLocaleComparator implements Comparator<Locale> {
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultNullSafeClassComparator extends DefaultNullSafeComparator<Class<?>> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first argument {@link Locale}
-         * @param last  - initial input last argument {@link Locale}
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe class comparator constructor
          */
-        @Override
-        public int compare(final Locale first, final Locale last) {
-            if (first.getLanguage().equals(last.getLanguage())) {
-                if (first.getCountry().equals(last.getCountry())) {
-                    return 0;
+        public DefaultNullSafeClassComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe class comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeClassComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                if (o1.isAssignableFrom(o2)) {
+                    return 1;
+                } else if (o2.isAssignableFrom(o1)) {
+                    return -1;
                 }
-                return 1;
-            }
-            return -1;
+                return 0;
+            }, nullsInPriority);
+        }
+    }
+
+    /**
+     * Default null-safe locale {@link Locale} comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultNullSafeLocaleComparator extends DefaultNullSafeComparator<Locale> {
+
+        /**
+         * Default null safe locale comparator constructor
+         */
+        public DefaultNullSafeLocaleComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe locale comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeLocaleComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                if (o1.getLanguage().equals(o2.getLanguage())) {
+                    if (o1.getCountry().equals(o2.getCountry())) {
+                        return 0;
+                    }
+                    return 1;
+                }
+                return -1;
+            }, nullsInPriority);
         }
     }
 
@@ -698,52 +781,48 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
+    public static class DefaultNullSafeArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
 
         /**
-         * Custom comparator instance {@link Comparator}
+         * Default null-safe array comparator constructor
          */
-        private final Comparator<? super T> comparator;
-
-        /**
-         * Default value comparator
-         *
-         * @param comparator - initial input comparator instance {@link Comparator}
-         */
-        public DefaultArrayComparator(final Comparator<? super T> comparator) {
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        public DefaultNullSafeArrayComparator() {
+            this(null, false);
         }
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
+         * Default null-safe array comparator constructor with input comparator instance {@link Comparator}
          *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * @param comparator - initial input comparator instance {@link Comparator}
          */
-        @Override
-        public int compare(final T[] first, final T[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int firstSize = first.length;
-                int lastSize = last.length;
+        public DefaultNullSafeArrayComparator(final Comparator<? super T> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe array comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int firstSize = o1.length;
+                int lastSize = o2.length;
                 if (firstSize < lastSize) {
                     return -1;
                 } else if (firstSize > lastSize) {
                     return 1;
                 }
+                final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
                 for (int temp, i = 0; i < firstSize; i++) {
-                    temp = Objects.compare(first[i], last[i], getComparator());
+                    temp = Objects.compare(o1[i], o2[i], comp);
                     if (0 != temp) {
                         return temp;
                     }
                 }
                 return 0;
-            }
-            return comp;
+            }, nullsInPriority);
         }
     }
 
@@ -755,46 +834,42 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
+    public static class LexicographicalNullSafeArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
 
         /**
-         * Custom comparator instance {@link Comparator}
+         * Default null-safe lexicographical array comparator constructor
          */
-        private final Comparator<? super T> comparator;
-
-        /**
-         * Default value comparator
-         *
-         * @param comparator - initial input comparator instance {@link Comparator}
-         */
-        public LexicographicalArrayComparator(final Comparator<? super T> comparator) {
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        public LexicographicalNullSafeArrayComparator() {
+            this(null, false);
         }
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
+         * Default null-safe lexicographical array comparator constructor with input comparator instance {@link Comparator}
          *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * @param comparator - initial input comparator instance {@link Comparator}
          */
-        @Override
-        public int compare(final T[] first, final T[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeArrayComparator(final Comparator<? super T> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe lexicographical array comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
+                final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
                 for (int i = 0; i < minLength; i++) {
-                    int result = Objects.compare(first[i], last[i], getComparator());
+                    int result = Objects.compare(o1[i], o2[i], comp);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -804,32 +879,31 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalShortArrayComparator extends DefaultNullSafeComparator<short[]> {
+    public static class LexicographicalNullSafeShortArrayComparator extends DefaultNullSafeComparator<short[]> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical short array comparator constructor
          */
-        @Override
-        public int compare(final short[] first, final short[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeShortArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical short array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeShortArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = Short.compare(first[i], last[i]);
+                    int result = Short.compare(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -839,32 +913,31 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalIntArrayComparator extends DefaultNullSafeComparator<int[]> {
+    public static class LexicographicalNullSafeIntArrayComparator extends DefaultNullSafeComparator<int[]> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical int array comparator constructor
          */
-        @Override
-        public int compare(final int[] first, final int[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeIntArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical int array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeIntArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = Integer.compare(first[i], last[i]);
+                    int result = Integer.compare(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -874,32 +947,31 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalLongArrayComparator extends DefaultNullSafeComparator<long[]> {
+    public static class LexicographicalNullSafeLongArrayComparator extends DefaultNullSafeComparator<long[]> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical long array comparator constructor
          */
-        @Override
-        public int compare(final long[] first, final long[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeLongArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical long array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeLongArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = Long.compare(first[i], last[i]);
+                    int result = Long.compare(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -909,32 +981,31 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalFloatArrayComparator extends DefaultNullSafeComparator<float[]> {
+    public static class LexicographicalNullSafeFloatArrayComparator extends DefaultNullSafeComparator<float[]> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical float array comparator constructor
          */
-        @Override
-        public int compare(final float[] first, final float[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeFloatArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical float array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeFloatArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = Float.compare(first[i], last[i]);
+                    int result = Float.compare(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -944,32 +1015,31 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalDoubleArrayComparator extends DefaultNullSafeComparator<double[]> {
+    public static class LexicographicalNullSafeDoubleArrayComparator extends DefaultNullSafeComparator<double[]> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical double array comparator constructor
          */
-        @Override
-        public int compare(final double[] first, final double[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeDoubleArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical double array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeDoubleArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = Double.compare(first[i], last[i]);
+                    int result = Double.compare(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -979,32 +1049,31 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalCharacterArrayComparator extends DefaultNullSafeComparator<char[]> {
+    public static class LexicographicalNullSafeCharacterArrayComparator extends DefaultNullSafeComparator<char[]> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical char array comparator constructor
          */
-        @Override
-        public int compare(final char[] first, final char[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeCharacterArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical char array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeCharacterArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = Character.compare(first[i], last[i]);
+                    int result = Character.compare(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -1014,32 +1083,31 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalBooleanArrayComparator extends DefaultNullSafeComparator<boolean[]> {
+    public static class LexicographicalNullSafeBooleanArrayComparator extends DefaultNullSafeComparator<boolean[]> {
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical boolean array comparator constructor
          */
-        @Override
-        public int compare(final boolean[] first, final boolean[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeBooleanArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical boolean array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeBooleanArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = Boolean.compare(first[i], last[i]);
+                    int result = Boolean.compare(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
-                return first.length - last.length;
-            }
-            return comp;
+                return (o1.length - o2.length);
+            }, nullsInPriority);
         }
     }
 
@@ -1049,7 +1117,7 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LexicographicalByteArrayComparator extends DefaultNullSafeComparator<byte[]> {
+    public static class LexicographicalNullSafeByteArrayComparator extends DefaultNullSafeComparator<byte[]> {
 
         /**
          * Default unsigned mask
@@ -1057,29 +1125,28 @@ public class ComparatorUtils {
         private static final int DEFAULT_UNSIGNED_MASK = 0xFF;
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first array argument
-         * @param last  - initial input last array argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * Default null-safe lexicographical boolean array comparator constructor
          */
-        @Override
-        public int compare(final byte[] first, final byte[] last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int minLength = Math.min(first.length, last.length);
+        public LexicographicalNullSafeByteArrayComparator() {
+            this(false);
+        }
+
+        /**
+         * Default null-safe lexicographical boolean array comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public LexicographicalNullSafeByteArrayComparator(boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
-                    int result = compareBy(first[i], last[i]);
+                    int result = compareBy(o1[i], o2[i]);
                     if (0 != result) {
                         return result;
                     }
                 }
                 return 0;
-            }
-            return comp;
+            }, nullsInPriority);
         }
 
         /**
@@ -1089,7 +1156,7 @@ public class ComparatorUtils {
          * @param b - initial input last type argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
-        private int compareBy(byte a, byte b) {
+        private static int compareBy(byte a, byte b) {
             return toInt(a) - toInt(b);
         }
 
@@ -1112,55 +1179,51 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultIterableComparator<T> extends DefaultNullSafeComparator<Iterable<T>> {
+    public static class DefaultNullSafeIterableComparator<T> extends DefaultNullSafeComparator<Iterable<T>> {
 
         /**
-         * Custom comparator instance {@link Comparator}
+         * Default null-safe iterable comparator constructor
          */
-        private final Comparator<? super T> comparator;
-
-        /**
-         * Default iterable comparator constructor with initial comparator instance {@link Comparator}
-         *
-         * @param comparator - initial input comparator instance {@link Comparator}
-         */
-        public DefaultIterableComparator(final Comparator<? super T> comparator) {
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        public DefaultNullSafeIterableComparator() {
+            this(null, false);
         }
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
+         * Default null-safe iterable comparator constructor with input comparator instance {@link Comparator}
          *
-         * @param first - initial input first argument {@link Iterable}
-         * @param last  - initial input last argument {@link Iterable}
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * @param comparator - initial input comparator instance {@link Comparator}
          */
-        @Override
-        public int compare(final Iterable<T> first, final Iterable<T> last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                int firstSize = Iterables.size(first);
-                int lastSize = Iterables.size(last);
+        public DefaultNullSafeIterableComparator(final Comparator<? super T> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe iterable comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeIterableComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super((o1, o2) -> {
+                int firstSize = Iterables.size(o1);
+                int lastSize = Iterables.size(o2);
                 if (firstSize < lastSize) {
                     return -1;
                 } else if (firstSize > lastSize) {
                     return 1;
                 }
-                final Iterator<T> iteratorFirst = first.iterator();
-                final Iterator<T> iteratorLast = last.iterator();
+                final Iterator<T> iteratorFirst = o1.iterator();
+                final Iterator<T> iteratorLast = o2.iterator();
+                final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
                 int temp;
                 while (iteratorFirst.hasNext()) {
-                    temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), getComparator());
+                    temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), comp);
                     if (0 != temp) {
                         return temp;
                     }
                 }
                 return 0;
-            }
-            return comp;
+            }, nullsInPriority);
         }
     }
 
@@ -1170,56 +1233,39 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultBigDecimalComparator extends DefaultNullSafeComparator<BigDecimal> {
+    public static class DefaultNullSafeBigDecimalComparator extends DefaultNullSafeComparator<BigDecimal> {
 
         /**
-         * Custom comparator instance {@link Comparator}
+         * Default null-safe big decimal comparator constructor
          */
-        private final Comparator<? super BigDecimal> comparator;
-        /**
-         * Custom significant decimal places
-         */
-        private int significantDecimalPlaces;
-
-        /**
-         * Default big decimal comparator
-         *
-         * @param significantDecimalPlaces - initial significant decimal places
-         */
-        public DefaultBigDecimalComparator(int significantDecimalPlaces) {
+        public DefaultNullSafeBigDecimalComparator() {
             this(0, null);
         }
 
         /**
-         * Default big decimal comparator
+         * Default null-safe big decimal comparator constructor with input significant decimal places number, comparator instance {@link Comparator}
          *
-         * @param significantDecimalPlaces - initial significant decimal places
+         * @param significantDecimalPlaces - initial significant decimal places number
          * @param comparator               - initial input comparator instance {@link Comparator}
          */
-        public DefaultBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
-            this.significantDecimalPlaces = significantDecimalPlaces;
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
+            this(significantDecimalPlaces, comparator, false);
         }
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
+         * Default null-safe big decimal comparator constructor with input significant decimal places number, comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
-         * @param first - initial input first argument {@link BigDecimal}
-         * @param last  - initial input last argument {@link BigDecimal}
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * @param significantDecimalPlaces - initial significant decimal places number
+         * @param comparator               - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority          - initial input "null" priority argument {@link Boolean}
          */
-        @Override
-        public int compare(final BigDecimal first, final BigDecimal last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                final BigDecimal firstRounded = first.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
-                final BigDecimal lastRounded = last.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
-                return Objects.compare(firstRounded, lastRounded, getComparator());
-            }
-            return comp;
+        public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
+            super((o1, o2) -> {
+                final Comparator<? super BigDecimal> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+                final BigDecimal firstRounded = o1.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+                final BigDecimal lastRounded = o2.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+                return Objects.compare(firstRounded, lastRounded, comp);
+            }, nullsInPriority);
         }
     }
 
@@ -1322,51 +1368,37 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default number comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe number comparator implementation {@link DefaultNullSafeComparator}
      */
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNumberComparator<T extends Number> extends DefaultNullSafeComparator<T> {
+    public static class DefaultNullSafeNumberComparator<T extends Number> extends DefaultNullSafeComparator<T> {
 
         /**
-         * Custom map entry comparator instance {@link Comparator}
+         * Default null-safe number comparator constructor
          */
-        private final Comparator<? super T> comparator;
-
-        /**
-         * Default number comparator
-         */
-        public DefaultNumberComparator() {
-            this(null);
+        public DefaultNullSafeNumberComparator() {
+            this(null, false);
         }
 
         /**
-         * Default number comparator with initial comparator instance {@link Comparator}
+         * Default null-safe number comparator constructor with input comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultNumberComparator(final Comparator<? super T> comparator) {
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        public DefaultNullSafeNumberComparator(final Comparator<? super T> comparator) {
+            this(comparator, false);
         }
 
         /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
+         * Default null-safe number comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
-         * @param first - initial input first array argument {@code T}
-         * @param last  - initial input last array argument {@code T}
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        @Override
-        public int compare(final T first, final T last) {
-            int comp = super.compare(first, last);
-            if (comp == Byte.MAX_VALUE) {
-                return Objects.compare(first, last, getComparator());
-            }
-            return comp;
+        public DefaultNullSafeNumberComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super(comparator, nullsInPriority);
         }
     }
 }
