@@ -42,6 +42,8 @@ import java.util.*;
 import static junit.framework.TestCase.assertTrue;
 import static net.andreinc.mockneat.types.enums.StringFormatType.LOWER_CASE;
 import static net.andreinc.mockneat.types.enums.StringFormatType.UPPER_CASE;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -82,6 +84,58 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }, false);
 
     @Test
+    public void testObjectWithEmptyDefaultNumberComparator() {
+        // given
+        final Object d1 = new Object();
+        final Object d2 = new Object();
+
+        // when
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), greaterThan(0));
+    }
+
+    @Test
+    public void testObjectWithBothNullsAndEmptyDefaultNumberComparator() {
+        // given
+        final Object d1 = null;
+        final Object d2 = null;
+
+        // when
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
+    }
+
+    @Test
+    public void testObjectWithFirstNullsAndEmptyDefaultNumberComparator() {
+        // given
+        final Object d1 = null;
+        final Object d2 = new Object();
+
+        // when
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    public void testObjectWithLastNullsAndEmptyDefaultNumberComparator() {
+        // given
+        final Object d1 = new Object();
+        final Object d2 = null;
+
+        // when
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(true);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
     public void testDoublesWithEmptyDefaultNumberComparator() {
         // given
         final Double d1 = Double.valueOf(0.1233334);
@@ -92,7 +146,6 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
-        //assertThat(orderedList, isInDescendingOrdering());
     }
 
     @Test
@@ -268,6 +321,188 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         //then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    public void testFloatArraysWithDefaultNumberComparator() {
+        // given
+        final float[] d1 = {4.3f, 6.4f, 2.1f, 6.2f};
+        final float[] d2 = {3.4f, 6.4f, 2.1f, 6.2f};
+
+        // when
+        final Comparator<? super float[]> comparator = ComparatorUtils.getFloatArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testFloatArraysWithDifferentSizesAndDefaultNumberComparator() {
+        // given
+        final float[] d1 = {4.3f, 6.4f, 2.1f, 6.2f};
+        final float[] d2 = {3.4f, 6.4f, 2.1f, 6.2f, 7.9f};
+
+        // when
+        final Comparator<? super float[]> comparator = ComparatorUtils.getFloatArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testIntArraysWithDefaultNumberComparator() {
+        // given
+        final int[] d1 = {4, 6, 2, 6};
+        final int[] d2 = {3, 6, 2, 6};
+
+        // when
+        final Comparator<? super int[]> comparator = ComparatorUtils.getIntArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testIntArraysWithDifferentSizesAndDefaultNumberComparator() {
+        // given
+        final int[] d1 = {4, 6, 2, 6};
+        final int[] d2 = {3, 6, 2, 6, 7};
+
+        // when
+        final Comparator<? super int[]> comparator = ComparatorUtils.getIntArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testLongArraysWithDefaultNumberComparator() {
+        // given
+        final long[] d1 = {4, 6, 2, 6, 7_000_444};
+        final long[] d2 = {3, 6, 2, 6, 3_344_444};
+
+        // when
+        final Comparator<? super long[]> comparator = ComparatorUtils.getLongArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testLongArraysWithDifferentSizesAndDefaultNumberComparator() {
+        // given
+        final long[] d1 = {4, 6, 2, 6, 7_000_444};
+        final long[] d2 = {3, 6, 2, 6, 3_344_444, 6_444};
+
+        // when
+        final Comparator<? super long[]> comparator = ComparatorUtils.getLongArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testBoolArraysWithDefaultNumberComparator() {
+        // given
+        final boolean[] d1 = {true, false, true, true, false, false};
+        final boolean[] d2 = {true, false, false, true, false, true};
+
+        // when
+        final Comparator<? super boolean[]> comparator = ComparatorUtils.getBooleanArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testBoolArraysWithDifferentSizesAndDefaultNumberComparator() {
+        // given
+        final boolean[] d1 = {true, false, true, true, false, false};
+        final boolean[] d2 = {true, false, false, true, false, true, false};
+
+        // when
+        final Comparator<? super boolean[]> comparator = ComparatorUtils.getBooleanArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testByteArraysWithDefaultNumberComparator() {
+        // given
+        final byte[] d1 = {4, 6, 2, 6, 35, 127};
+        final byte[] d2 = {3, 6, 2, 6, 127, -1};
+
+        // when
+        final Comparator<? super byte[]> comparator = ComparatorUtils.getByteArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testByteArraysWithDifferentSizesAndDefaultNumberComparator() {
+        // given
+        final byte[] d1 = {4, 6, 2, 6, 35, 127};
+        final byte[] d2 = {3, 6, 2, 6, 127, -1, 67};
+
+        // when
+        final Comparator<? super byte[]> comparator = ComparatorUtils.getByteArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testShortArraysWithDefaultNumberComparator() {
+        // given
+        final short[] d1 = {4, 6, 2, 6, 35, 127, 255, 3, 2570};
+        final short[] d2 = {3, 6, 2, 6, 127, -1, -267, 3, 799};
+
+        // when
+        final Comparator<? super short[]> comparator = ComparatorUtils.getShortArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testShortArraysWithDifferentSizesAndDefaultNumberComparator() {
+        // given
+        final short[] d1 = {4, 6, 2, 6, 35, 127, 255, 3, 2570};
+        final short[] d2 = {3, 6, 2, 6, 127, -1, -267, 3, 799, 58};
+
+        // when
+        final Comparator<? super short[]> comparator = ComparatorUtils.getShortArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testCharArraysWithDefaultNumberComparator() {
+        // given
+        final char[] d1 = {4, 6, 2, 6, 35, 127, 'b', 3, 'c'};
+        final char[] d2 = {3, 6, 2, 6, 127, 'a', 'a', 3, '8'};
+
+        // when
+        final Comparator<? super char[]> comparator = ComparatorUtils.getCharacterArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testCharArraysWithDifferentSizesAndDefaultNumberComparator() {
+        // given
+        final char[] d1 = {4, 6, 2, 6, 35, 127, 'b', 3, 'c'};
+        final char[] d2 = {3, 6, 2, 6, 127, 'a', 'a', 3, '8', 'n'};
+
+        // when
+        final Comparator<? super char[]> comparator = ComparatorUtils.getCharacterArrayComparator(false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
     }
 
     @Test
