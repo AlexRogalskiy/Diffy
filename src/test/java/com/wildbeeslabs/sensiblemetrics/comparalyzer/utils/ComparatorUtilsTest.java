@@ -23,14 +23,18 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDiffTest;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.AddressInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.andreinc.mockneat.abstraction.MockUnitInt;
+import org.apache.commons.collections.comparators.ComparableComparator;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -43,8 +47,8 @@ import java.util.*;
 import static junit.framework.TestCase.assertTrue;
 import static net.andreinc.mockneat.types.enums.StringFormatType.LOWER_CASE;
 import static net.andreinc.mockneat.types.enums.StringFormatType.UPPER_CASE;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -555,6 +559,19 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
+    public void testСlassesWithDefaultNumberComparator() {
+        // given
+        final Class<DeliveryInfo> d1 = DeliveryInfo.class;
+        final Class<AddressInfo> d2 = AddressInfo.class;
+
+        // when
+        final Comparator<? super Class<?>> comparator = ComparatorUtils.getClassComparator(null, false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
+    }
+
+    @Test
     public void testStringsWithDefaultNumberComparator() {
         // given
         final List<String> strings = generateStrings(1000);
@@ -573,7 +590,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Locale d2 = Locale.CHINESE;
 
         // when
-        final Comparator<? super Locale> comparator = ComparatorUtils.getLocaleComparator(false);
+        final Comparator<? super Locale> comparator = ComparatorUtils.getLocaleComparator(null, false);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
@@ -590,6 +607,117 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    public void testValueMapWithCustomComparator() {
+        // given
+        final String d1 = "ww";
+        final String d2 = "aa";
+
+        final Map<String, Integer> map = new ImmutableMap.Builder<String, Integer>()
+            .put("aa", 1)
+            .put("bb", 2)
+            .put("cc", 33)
+            .put("dd", 7)
+            .put("ee", 78)
+            .put("yy", 9)
+            .put("ii", 90)
+            .put("ww", 56)
+            .build();
+
+        // when
+        final Comparator<? super String> comparator = ComparatorUtils.getValueMapComparator(map, Comparator.naturalOrder());
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    public void testValueMapWithDefaultNumberComparator() {
+        // given
+        final String d1 = "ww";
+        final String d2 = "aa";
+
+        final Map<String, Integer> map = new ImmutableMap.Builder<String, Integer>()
+            .put("aa", 1)
+            .put("bb", 2)
+            .put("cc", 33)
+            .put("dd", 7)
+            .put("ee", 78)
+            .put("yy", 9)
+            .put("ii", 90)
+            .put("ww", 56)
+            .build();
+
+        // when
+        final Comparator<? super String> comparator = ComparatorUtils.getValueMapComparator(map, null);
+
+        // then
+        assertThat(comparator.compare(d1, d2), greaterThan(0));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testNullValueMapWithDefaultNumberComparator() {
+        // given
+        final String d1 = "w";
+        final String d2 = "aa";
+
+        final Map<String, Integer> map = new ImmutableMap.Builder<String, Integer>()
+            .put("aa", 1)
+            .put("bb", 2)
+            .put("cc", 33)
+            .put("dd", 7)
+            .put("ee", 78)
+            .put("yy", 9)
+            .put("ii", 90)
+            .put("ww", 56)
+            .build();
+
+        // when
+        final Comparator<? super String> comparator = ComparatorUtils.getValueMapComparator(map, null);
+
+        // then
+        assertThat(comparator.compare(d1, d2), greaterThan(0));
+    }
+
+    @Test(expected = ClassCastException.class)
+    public void testMapEntryClassCastExceptionWithDefaultNumberComparator() {
+        // given
+        final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
+        final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
+
+        // when
+        final Comparator<? super Map.Entry<String, Integer>> comparator = ComparatorUtils.getMapEntryComparator(ComparableComparator.getInstance());
+
+        // then
+        assertThat(comparator.compare(d1, d2), lessThan(0));
+    }
+
+    @Test
+    public void testMapEntryWithCustomComparator() {
+        // given
+        final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
+        final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
+
+        // when
+        final Comparator<? super Map.Entry<String, Integer>> comparator = ComparatorUtils.getMapEntryComparator(DEFAULT_OBJECT_COMPARATOR);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
+    }
+
+    @Test
+    public void testMapEntryWithDefaultNumberComparator() {
+        // given
+        final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
+        final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
+
+        // when
+        final Comparator<? super Map.Entry<String, Integer>> comparator = ComparatorUtils.getMapEntryComparator(null);
+
+        // then
+        assertThat(comparator.compare(d1, d2), lessThan(0));
     }
 
     @Test
