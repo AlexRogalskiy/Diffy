@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDiffTest;
@@ -912,8 +913,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test iterable collections of strings by default comparator and not priority nulls")
-    public void testIterablesWithDefaultNumberComparator() {
+    @DisplayName("Test list collections of strings by default comparator and not priority nulls")
+    public void testIterableListsWithDefaultNumberComparator() {
         // given
         final List<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
         final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
@@ -923,6 +924,45 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    @DisplayName("Test null list collections of strings by default comparator and not priority nulls")
+    public void testNullIterableListsWithDefaultNumberComparator() {
+        // given
+        final List<String> d1 = null;
+        final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+
+        // when
+        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    @DisplayName("Test set collections of strings by default comparator and not priority nulls")
+    public void testIterableSetsWithDefaultNumberComparator() {
+        // given
+        final Set<String> d1 = new ImmutableSet.Builder<String>()
+            .add("saf")
+            .add("fas")
+            .add("sfa")
+            .add("sadf")
+            .add("fsa")
+            .build();
+        final Set<String> d2 = new ImmutableSet.Builder<String>()
+            .add("saf")
+            .add("fas")
+            .add("sfaa")
+            .add("sadf")
+            .build();
+
+        // when
+        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
     }
 
     protected List<String> generateStrings(int size) {
