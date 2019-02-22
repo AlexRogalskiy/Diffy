@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.utils;
 
 import com.google.common.collect.Iterables;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -31,6 +32,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
 
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Predicate;
@@ -45,15 +47,6 @@ import java.util.function.Predicate;
 @Slf4j
 @UtilityClass
 public class ComparatorUtils {
-
-    /**
-     * Default object comparator instance {@link Comparator}
-     */
-    public static final Comparator<? super Object> DEFAULT_OBJECT_COMPARATOR = getObjectComparator(false);
-    /**
-     * Default string comparator instance {@link Comparator}
-     */
-    public static final Comparator<? super String> DEFAULT_STRING_COMPARATOR = getStringComparator(Comparator.naturalOrder(), false);
 
     /**
      * Default comparator with false first order {@link Comparator}
@@ -228,8 +221,8 @@ public class ComparatorUtils {
      * @return object {@link Object} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<? super Object> getObjectComparator(boolean nullsInPriority) {
-        return new DefaultNullSafeObjectComparator(nullsInPriority);
+    public static Comparator<? super Object> getObjectComparator(@Nullable final Comparator<? super Object> comparator, boolean nullsInPriority) {
+        return new DefaultNullSafeObjectComparator(comparator, nullsInPriority);
     }
 
     /**
@@ -238,8 +231,12 @@ public class ComparatorUtils {
      * @return string {@link String} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<? super String> getStringComparator(final Comparator<? super String> comparator, boolean nullsInPriority) {
-        return new DefaultNullSafeStringComparator(comparator, nullsInPriority);
+    public static Comparator<? super String> getStringComparator(@Nullable final Comparator<? super String> comparator, boolean nullsInPriority) {
+        return DefaultNullSafeStringComparator
+            .<String>builder()
+            .comparator(comparator)
+            .nullsInPriority(nullsInPriority)
+            .build();
     }
 
     /**
@@ -260,7 +257,10 @@ public class ComparatorUtils {
      */
     @SuppressWarnings("unchecked")
     public static Comparator<? super Class<?>> getClassComparator(boolean nullsInPriority) {
-        return new DefaultNullSafeClassComparator(nullsInPriority);
+        return DefaultNullSafeClassComparator
+            .builder()
+            .nullsInPriority(nullsInPriority)
+            .build();
     }
 
     /**
@@ -270,18 +270,20 @@ public class ComparatorUtils {
      * @return iterable comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super Iterable<T>> getIterableComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+    public static <T> Comparator<? super Iterable<T>> getIterableComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeIterableComparator(comparator, nullsInPriority);
     }
 
     /**
      * Returns big decimal {@link BigDecimal} comparator instance {@link Comparator}
      *
-     * @param <T> type of input element to be compared by
+     * @param significantDecimalPlaces type of input element to be compared by
+     * @param comparator               type of input element to be compared by
+     * @param nullsInPriority          type of input element to be compared by
      * @return big decimal comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super BigDecimal> getBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
+    public static Comparator<? super BigDecimal> getBigDecimalComparator(int significantDecimalPlaces, @Nullable final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeBigDecimalComparator(significantDecimalPlaces, comparator, nullsInPriority);
     }
 
@@ -293,7 +295,7 @@ public class ComparatorUtils {
      * @return value map comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> Comparator<? super V> getValueMapComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
+    public static <K, V> Comparator<? super V> getValueMapComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator) {
         return new DefaultMapValueComparator(map, comparator);
     }
 
@@ -305,8 +307,11 @@ public class ComparatorUtils {
      * @return map entry comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> Comparator<? super Map.Entry<K, V>> getMapEntryComparator(final Comparator<? super Map.Entry<K, V>> comparator) {
-        return new DefaultMapEntryComparator(comparator);
+    public static <K, V> Comparator<? super Map.Entry<K, V>> getMapEntryComparator(@Nullable final Comparator<? super Map.Entry<K, V>> comparator) {
+        return DefaultMapEntryComparator
+            .<K, V>builder()
+            .comparator(comparator)
+            .build();
     }
 
     /**
@@ -316,7 +321,7 @@ public class ComparatorUtils {
      * @return array comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super T[]> getArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+    public static <T> Comparator<? super T[]> getArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeArrayComparator(comparator, nullsInPriority);
     }
 
@@ -327,8 +332,12 @@ public class ComparatorUtils {
      * @return null-safe lexicographical array comparator instance {@link LexicographicalNullSafeArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Comparator<? super T> getLexicographicalArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
-        return new LexicographicalNullSafeArrayComparator(comparator, nullsInPriority);
+    public static <T> Comparator<? super T> getLexicographicalArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+        return LexicographicalNullSafeArrayComparator
+            .<T>builder()
+            .comparator(comparator)
+            .nullsInPriority(nullsInPriority)
+            .build();
     }
 
     /**
@@ -337,8 +346,12 @@ public class ComparatorUtils {
      * @return null-safe number {@link Number} comparator instance {@link DefaultNullSafeNumberComparator}
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Number> Comparator<? super T> getNumberComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
-        return new DefaultNullSafeNumberComparator<T>(comparator, nullsInPriority);
+    public static <T extends Number> Comparator<? super T> getNumberComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+        return DefaultNullSafeNumberComparator
+            .<T>builder()
+            .comparator(comparator)
+            .nullsInPriority(nullsInPriority)
+            .build();
     }
 
     /**
@@ -347,7 +360,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical byte array comparator instance {@link LexicographicalNullSafeByteArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<byte[]> getByteArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super byte[]> getByteArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeByteArrayComparator(nullsInPriority);
     }
 
@@ -357,7 +370,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical short array comparator instance {@link LexicographicalNullSafeShortArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<short[]> getShortArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super short[]> getShortArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeShortArrayComparator(nullsInPriority);
     }
 
@@ -367,7 +380,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical int array comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<int[]> getIntArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super int[]> getIntArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeIntArrayComparator(nullsInPriority);
     }
 
@@ -377,7 +390,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical long array comparator instance {@link LexicographicalNullSafeLongArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<long[]> getLongArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super long[]> getLongArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeLongArrayComparator(nullsInPriority);
     }
 
@@ -387,7 +400,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical double array comparator instance {@link LexicographicalNullSafeDoubleArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<double[]> getDoubleArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super double[]> getDoubleArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeDoubleArrayComparator(nullsInPriority);
     }
 
@@ -397,7 +410,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical float array comparator instance {@link LexicographicalNullSafeFloatArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<float[]> getFloatArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super float[]> getFloatArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeFloatArrayComparator(nullsInPriority);
     }
 
@@ -407,7 +420,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographicalchar array comparator instance {@link LexicographicalNullSafeCharacterArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<char[]> getCharacterArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super char[]> getCharacterArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeCharacterArrayComparator(nullsInPriority);
     }
 
@@ -417,8 +430,18 @@ public class ComparatorUtils {
      * @return null-safe lexicographical boolean array comparator instance {@link LexicographicalNullSafeBooleanArrayComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<boolean[]> getBooleanArrayComparator(boolean nullsInPriority) {
+    public static Comparator<? super boolean[]> getBooleanArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeBooleanArrayComparator(nullsInPriority);
+    }
+
+    /**
+     * Returns null-safe locale {@link Locale} comparator instance {@link DefaultNullSafeLocaleComparator}
+     *
+     * @return null-safe locale {@link Locale} comparator instance {@link DefaultNullSafeLocaleComparator}
+     */
+    @SuppressWarnings("unchecked")
+    public static Comparator<? super Locale> getLocaleComparator(boolean nullsInPriority) {
+        return new DefaultNullSafeLocaleComparator(nullsInPriority);
     }
 
     /**
@@ -569,10 +592,11 @@ public class ComparatorUtils {
      *
      * @param <T> type of input element to be compared by operation
      */
+    @Builder
     @Data
     @EqualsAndHashCode
     @ToString
-    public static abstract class DefaultNullSafeComparator<T> implements Comparator<T> {
+    public static class DefaultNullSafeComparator<T> implements Comparator<T> {
 
         /**
          * Default comparator instance {@link Comparator}
@@ -581,7 +605,7 @@ public class ComparatorUtils {
         /**
          * Default "null" priority (true - if nulls are first, false - otherwise)
          */
-        boolean nullsInPriority;
+        private final boolean nullsInPriority;
 
         /**
          * Default null-safe comparator constructor
@@ -595,8 +619,8 @@ public class ComparatorUtils {
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultNullSafeComparator(final Comparator<? super T> comparator) {
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+        public DefaultNullSafeComparator(@Nullable final Comparator<? super T> comparator) {
+            this(comparator, false);
         }
 
         /**
@@ -605,7 +629,7 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority {@link Boolean}
          */
-        public DefaultNullSafeComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        public DefaultNullSafeComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
             this.nullsInPriority = nullsInPriority;
         }
@@ -672,7 +696,7 @@ public class ComparatorUtils {
          * Default null-safe object comparator constructor
          */
         public DefaultNullSafeObjectComparator() {
-            this(false);
+            this(null, false);
         }
 
         /**
@@ -680,8 +704,8 @@ public class ComparatorUtils {
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeObjectComparator(boolean nullsInPriority) {
-            super(Comparator.comparing(Object::toString), nullsInPriority);
+        public DefaultNullSafeObjectComparator(@Nullable final Comparator<? super Object> comparator, boolean nullsInPriority) {
+            super(Objects.isNull(comparator) ? Comparator.comparing(Object::toString) : comparator, nullsInPriority);
         }
     }
 
@@ -705,7 +729,7 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeStringComparator(final Comparator<? super String> comparator, boolean nullsInPriority) {
+        public DefaultNullSafeStringComparator(@Nullable final Comparator<? super String> comparator, boolean nullsInPriority) {
             super(comparator, nullsInPriority);
         }
     }
@@ -778,7 +802,6 @@ public class ComparatorUtils {
      *
      * @param <T> type of array element to be compared by operation
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class DefaultNullSafeArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
@@ -795,7 +818,7 @@ public class ComparatorUtils {
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultNullSafeArrayComparator(final Comparator<? super T> comparator) {
+        public DefaultNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator) {
             this(comparator, false);
         }
 
@@ -805,7 +828,7 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        public DefaultNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
                 int firstSize = o1.length;
                 int lastSize = o2.length;
@@ -831,7 +854,6 @@ public class ComparatorUtils {
      *
      * @param <T> type of array element to be compared by operation
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeArrayComparator<T> extends DefaultNullSafeComparator<T[]> {
@@ -848,7 +870,7 @@ public class ComparatorUtils {
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public LexicographicalNullSafeArrayComparator(final Comparator<? super T> comparator) {
+        public LexicographicalNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator) {
             this(comparator, false);
         }
 
@@ -858,7 +880,7 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public LexicographicalNullSafeArrayComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        public LexicographicalNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
                 int minLength = Math.min(o1.length, o2.length);
                 final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
@@ -876,7 +898,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical short array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeShortArrayComparator extends DefaultNullSafeComparator<short[]> {
@@ -910,7 +931,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical int array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeIntArrayComparator extends DefaultNullSafeComparator<int[]> {
@@ -944,7 +964,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical long array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeLongArrayComparator extends DefaultNullSafeComparator<long[]> {
@@ -978,7 +997,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical float array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeFloatArrayComparator extends DefaultNullSafeComparator<float[]> {
@@ -1012,7 +1030,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical double array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeDoubleArrayComparator extends DefaultNullSafeComparator<double[]> {
@@ -1046,7 +1063,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical char array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeCharacterArrayComparator extends DefaultNullSafeComparator<char[]> {
@@ -1080,7 +1096,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical boolean array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeBooleanArrayComparator extends DefaultNullSafeComparator<boolean[]> {
@@ -1114,7 +1129,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe lexicographical byte array comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class LexicographicalNullSafeByteArrayComparator extends DefaultNullSafeComparator<byte[]> {
@@ -1176,7 +1190,6 @@ public class ComparatorUtils {
      *
      * @param <T> type of input element to be compared by operation
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class DefaultNullSafeIterableComparator<T> extends DefaultNullSafeComparator<Iterable<T>> {
@@ -1193,7 +1206,7 @@ public class ComparatorUtils {
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultNullSafeIterableComparator(final Comparator<? super T> comparator) {
+        public DefaultNullSafeIterableComparator(@Nullable final Comparator<? super T> comparator) {
             this(comparator, false);
         }
 
@@ -1203,7 +1216,7 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeIterableComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        public DefaultNullSafeIterableComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
                 int firstSize = Iterables.size(o1);
                 int lastSize = Iterables.size(o2);
@@ -1230,7 +1243,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe big decimal {@link BigDecimal} comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class DefaultNullSafeBigDecimalComparator extends DefaultNullSafeComparator<BigDecimal> {
@@ -1248,7 +1260,7 @@ public class ComparatorUtils {
          * @param significantDecimalPlaces - initial significant decimal places number
          * @param comparator               - initial input comparator instance {@link Comparator}
          */
-        public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator) {
+        public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, @Nullable final Comparator<? super BigDecimal> comparator) {
             this(significantDecimalPlaces, comparator, false);
         }
 
@@ -1259,7 +1271,7 @@ public class ComparatorUtils {
          * @param comparator               - initial input comparator instance {@link Comparator}
          * @param nullsInPriority          - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
+        public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, @Nullable final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
                 final Comparator<? super BigDecimal> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
                 final BigDecimal firstRounded = o1.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
@@ -1301,7 +1313,7 @@ public class ComparatorUtils {
          * @param map        - initial input map collection instance {@link Map}
          * @param comparator - initial input value map comparator instance {@link Comparator}
          */
-        public DefaultMapValueComparator(final Map<K, V> map, final Comparator<? super V> comparator) {
+        public DefaultMapValueComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator) {
             this.map = Objects.requireNonNull(map);
             this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
         }
@@ -1325,6 +1337,7 @@ public class ComparatorUtils {
     /**
      * Default map entry comparator implementation {@link Comparator}
      */
+    @Builder
     @Data
     @EqualsAndHashCode
     @ToString
@@ -1347,7 +1360,7 @@ public class ComparatorUtils {
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultMapEntryComparator(final Comparator<? super Map.Entry<K, V>> comparator) {
+        public DefaultMapEntryComparator(@Nullable final Comparator<? super Map.Entry<K, V>> comparator) {
             this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
         }
 
@@ -1370,7 +1383,6 @@ public class ComparatorUtils {
     /**
      * Default null-safe number comparator implementation {@link DefaultNullSafeComparator}
      */
-    @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class DefaultNullSafeNumberComparator<T extends Number> extends DefaultNullSafeComparator<T> {
@@ -1387,7 +1399,7 @@ public class ComparatorUtils {
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultNullSafeNumberComparator(final Comparator<? super T> comparator) {
+        public DefaultNullSafeNumberComparator(@Nullable final Comparator<? super T> comparator) {
             this(comparator, false);
         }
 
@@ -1397,7 +1409,7 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeNumberComparator(final Comparator<? super T> comparator, boolean nullsInPriority) {
+        public DefaultNullSafeNumberComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super(comparator, nullsInPriority);
         }
     }

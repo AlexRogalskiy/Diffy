@@ -37,6 +37,7 @@ import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static junit.framework.TestCase.assertTrue;
@@ -60,9 +61,9 @@ import static org.junit.Assert.assertThat;
 public class ComparatorUtilsTest extends AbstractDiffTest {
 
     /**
-     * Default double comparator instance {@link Comparator}
+     * Default String comparator instance {@link Comparator}
      */
-    public static final Comparator<? super String> DEFAULT_STRING_COMPARATOR = ComparatorUtils.getStringComparator((o1, o2) -> {
+    public static final Comparator<String> DEFAULT_STRING_COMPARATOR = (o1, o2) -> {
         int minLength = Math.min(o1.length(), o2.length());
         for (int i = 0; i < minLength; i += 2) {
             int result = Character.compare(o1.charAt(i), o2.charAt(i));
@@ -71,29 +72,34 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
             }
         }
         return 0;
-    }, false);
+    };
 
     /**
-     * Default double comparator instance {@link Comparator}
+     * Default Object comparator instance {@link Comparator}
      */
-    public static final Comparator<? super Double> DEFAULT_DOUBLE_COMPARATOR = ComparatorUtils.getNumberComparator((o1, o2) -> {
+    public static final Comparator<Object> DEFAULT_OBJECT_COMPARATOR = (o1, o2) -> Objects.compare(o1.getClass().toString(), o2.getClass().toString(), Comparator.naturalOrder());
+
+    /**
+     * Default Double comparator instance {@link Comparator}
+     */
+    public static final Comparator<Double> DEFAULT_DOUBLE_COMPARATOR = (o1, o2) -> {
         if (Math.abs(o1 - o2) < 1e-4) {
             return 0;
         }
         return (o1 < o2) ? -1 : 1;
-    }, false);
+    };
 
     @Test
     public void testObjectWithEmptyDefaultNumberComparator() {
         // given
         final Object d1 = new Object();
-        final Object d2 = new Object();
+        final Object d2 = new String();
 
         // when
-        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(false);
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(DEFAULT_OBJECT_COMPARATOR, false);
 
         // then
-        assertThat(comparator.compare(d1, d2), greaterThan(0));
+        assertThat(comparator.compare(d1, d2), lessThan(0));
     }
 
     @Test
@@ -103,7 +109,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Object d2 = null;
 
         // when
-        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(false);
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(null, false);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
@@ -116,7 +122,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Object d2 = new Object();
 
         // when
-        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(false);
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(null, false);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
@@ -129,7 +135,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Object d2 = null;
 
         // when
-        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(true);
+        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(null, true);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
@@ -154,8 +160,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double d1 = Double.valueOf(0.1233334);
         final Double d2 = Double.valueOf(0.1233335);
 
+        // when
+        final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(DEFAULT_DOUBLE_COMPARATOR, false);
+
         // then
-        assertThat(DEFAULT_DOUBLE_COMPARATOR.compare(d1, d2), IsEqual.equalTo(0));
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
     }
 
     @Test
@@ -241,7 +250,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double[] doubles = generateDoubles(100, 1000.0, 2000.0);
 
         // when
-        Arrays.sort(doubles, DEFAULT_DOUBLE_COMPARATOR);
+        final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(DEFAULT_DOUBLE_COMPARATOR, false);
+        Arrays.sort(doubles, comparator);
 
         //then
         assertTrue(isSorted(doubles));
@@ -519,13 +529,26 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
+    public void testStringsWithCustomDefaultNumberComparator() {
+        // given
+        final String d1 = "acde";
+        final String d2 = "abcd";
+
+        // when
+        final Comparator<? super String> comparator = ComparatorUtils.getStringComparator(DEFAULT_STRING_COMPARATOR, false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
     public void testEmptyStringsWithDefaultNumberComparator() {
         // given
         final String d1 = "";
         final String d2 = "";
 
         // when
-        final Comparator<? super String> comparator = ComparatorUtils.getStringComparator(Comparator.naturalOrder(), false);
+        final Comparator<? super String> comparator = ComparatorUtils.getStringComparator(null, false);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
@@ -541,6 +564,45 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         //then
         assertTrue(Ordering.natural().isOrdered(strings));
+    }
+
+    @Test
+    public void testLocalesWithDefaultNumberComparator() {
+        // given
+        final Locale d1 = Locale.FRENCH;
+        final Locale d2 = Locale.CHINESE;
+
+        // when
+        final Comparator<? super Locale> comparator = ComparatorUtils.getLocaleComparator(false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    public void testBidDecimalsWithDefaultNumberComparator() {
+        // given
+        final BigDecimal d1 = BigDecimal.valueOf(1_999.0005);
+        final BigDecimal d2 = BigDecimal.valueOf(2_000.0004);
+
+        // when
+        final Comparator<? super BigDecimal> comparator = ComparatorUtils.getBigDecimalComparator(0, null, false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    public void testIterablesWithDefaultNumberComparator() {
+        // given
+        final List<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
+        final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+
+        // when
+        final Comparator<? super Iterable<String>> comparator = ComparatorUtils.getIterableComparator(null, false);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
     }
 
     protected List<String> generateStrings(int size) {
