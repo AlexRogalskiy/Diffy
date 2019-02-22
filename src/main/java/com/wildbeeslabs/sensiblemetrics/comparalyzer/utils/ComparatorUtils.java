@@ -173,7 +173,7 @@ public class ComparatorUtils {
      * @param <T>        type of value to be compared by
      * @param <U>        type of value to be compared with
      * @param clazz      - initial input class instance {@link Class}
-     * @param comparator - initial input comparator {@link Comparator} to compare clazz instances by
+     * @param comparator - initial input comparator instance {@link Comparator} to compare clazz instances by
      * @return comparator with instances first order {@link Comparator}
      */
     public static <T, U> Comparator<? super T> instancesFirst(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
@@ -197,7 +197,7 @@ public class ComparatorUtils {
      * @param <T>        type of value to be compared by
      * @param <U>        type of value to be compared with
      * @param clazz      - initial input class instance {@link Class}
-     * @param comparator - initial input comparator {@link Comparator} to compare clazz instances by
+     * @param comparator - initial input comparator instance {@link Comparator} to compare clazz instances by
      * @return comparator with instances last order {@link Comparator}
      */
     public static <T, U> Comparator<? super T> instancesLast(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
@@ -269,7 +269,7 @@ public class ComparatorUtils {
     /**
      * Returns iterable {@link Iterable} comparator instance {@link Comparator}
      *
-     * @param <T>             type of input element to be compared by
+     * @param <T>             type of input element to be compared by {@link Iterable}
      * @param comparator      - initial input comparator instance {@link Comparator}
      * @param nullsInPriority - initial input "null" priority {@link Boolean}
      * @return iterable comparator instance {@link Comparator}
@@ -297,6 +297,7 @@ public class ComparatorUtils {
      *
      * @param <K>        type of key entry element
      * @param <V>        type of value entry element to be compared by
+     * @param map        - initial input map collection instance {@link Map}
      * @param comparator - initial input comparator instance {@link Comparator}
      * @return value map comparator instance {@link Comparator}
      */
@@ -354,6 +355,7 @@ public class ComparatorUtils {
     /**
      * Returns null-safe number {@link Number} comparator instance {@link DefaultNullSafeNumberComparator}
      *
+     * @param <T>             type of number element {@link Number}
      * @param comparator      - initial input comparator instance {@link Comparator}
      * @param nullsInPriority - initial input "null" priority {@link Boolean}
      * @return null-safe number {@link Number} comparator instance {@link DefaultNullSafeNumberComparator}
@@ -463,7 +465,7 @@ public class ComparatorUtils {
      * @return null-safe locale {@link Locale} comparator instance {@link DefaultNullSafeLocaleComparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<? super Locale> getLocaleComparator(final Comparator<? super Locale> comparator, boolean nullsInPriority) {
+    public static Comparator<? super Locale> getLocaleComparator(@Nullable final Comparator<? super Locale> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeLocaleComparator(comparator, nullsInPriority);
     }
 
@@ -713,12 +715,22 @@ public class ComparatorUtils {
          * Default null-safe object comparator constructor
          */
         public DefaultNullSafeObjectComparator() {
-            this(null, false);
+            this(null);
+        }
+
+        /**
+         * Default null-safe object comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeObjectComparator(@Nullable final Comparator<? super Object> comparator) {
+            this(comparator, false);
         }
 
         /**
          * Default null-safe object comparator constructor with input "null" priority argument {@link Boolean}
          *
+         * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
         public DefaultNullSafeObjectComparator(@Nullable final Comparator<? super Object> comparator, boolean nullsInPriority) {
@@ -737,7 +749,16 @@ public class ComparatorUtils {
          * Default null-safe string comparator constructor
          */
         public DefaultNullSafeStringComparator() {
-            this(null, false);
+            this(null);
+        }
+
+        /**
+         * Default null-safe string comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeStringComparator(@Nullable final Comparator<? super String> comparator) {
+            this(comparator, false);
         }
 
         /**
@@ -762,12 +783,22 @@ public class ComparatorUtils {
          * Default null-safe class comparator constructor
          */
         public DefaultNullSafeClassComparator() {
-            this(null, false);
+            this(null);
         }
 
         /**
-         * Default null-safe class comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe class comparator constructor with initial comparator instance {@link Comparator}
          *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeClassComparator(@Nullable final Comparator<? super Class<?>> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe class comparator constructor with initil comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
         public DefaultNullSafeClassComparator(@Nullable final Comparator<? super Class<?>> comparator, boolean nullsInPriority) {
@@ -793,12 +824,22 @@ public class ComparatorUtils {
          * Default null safe locale comparator constructor
          */
         public DefaultNullSafeLocaleComparator() {
-            this(null, false);
+            this(null);
         }
 
         /**
-         * Default null-safe locale comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null safe locale comparator constructor with initial comparator instance {@link Comparator}
          *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeLocaleComparator(@Nullable final Comparator<? super Locale> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe locale comparator constructor with comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
         public DefaultNullSafeLocaleComparator(@Nullable final Comparator<? super Locale> comparator, boolean nullsInPriority) {
@@ -837,7 +878,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe array comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         * Default null-safe array comparator constructor with initial comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
@@ -880,7 +921,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical array comparator constructor with input comparator instance {@link Comparator}
+         * Default null-safe lexicographical array comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
@@ -889,7 +930,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical array comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical array comparator constructor with initial comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
@@ -924,7 +965,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical short array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical short array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -957,7 +998,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical int array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical int array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -990,7 +1031,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical long array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical long array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -1023,7 +1064,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical float array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical float array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -1056,7 +1097,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical double array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical double array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -1089,7 +1130,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical char array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical char array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -1122,7 +1163,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical boolean array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical boolean array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -1160,7 +1201,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe lexicographical boolean array comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe lexicographical boolean array comparator constructor with initial "null" priority argument {@link Boolean}
          *
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
@@ -1216,7 +1257,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe iterable comparator constructor with input comparator instance {@link Comparator}
+         * Default null-safe iterable comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
@@ -1225,7 +1266,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe iterable comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         * Default null-safe iterable comparator constructor with initial comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
@@ -1269,7 +1310,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe big decimal comparator constructor with input significant decimal places number, comparator instance {@link Comparator}
+         * Default null-safe big decimal comparator constructor with initial significant decimal places number, comparator instance {@link Comparator}
          *
          * @param significantDecimalPlaces - initial significant decimal places number
          * @param comparator               - initial input comparator instance {@link Comparator}
@@ -1279,7 +1320,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe big decimal comparator constructor with input significant decimal places number, comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         * Default null-safe big decimal comparator constructor with initial significant decimal places number, comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
          * @param significantDecimalPlaces - initial significant decimal places number
          * @param comparator               - initial input comparator instance {@link Comparator}
@@ -1297,6 +1338,9 @@ public class ComparatorUtils {
 
     /**
      * Default map value comparator implementation {@link Comparator}
+     *
+     * @param <K> type of key element
+     * @param <V> type of value element
      */
     @Data
     @EqualsAndHashCode
@@ -1409,7 +1453,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe number comparator constructor with input comparator instance {@link Comparator}
+         * Default null-safe number comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
@@ -1418,7 +1462,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe number comparator constructor with input comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         * Default null-safe number comparator constructor with initial comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}

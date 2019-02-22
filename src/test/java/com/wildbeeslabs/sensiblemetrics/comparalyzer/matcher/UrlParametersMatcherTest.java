@@ -31,6 +31,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -59,6 +60,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     }
 
     @Test
+    @DisplayName("Test match url strings by default url parameters matcher")
     public void assertMatches() {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = urlString;
@@ -68,6 +70,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     }
 
     @Test
+    @DisplayName("Test mismatch url strings length by default url parameters matcher")
     public void assertLengthMismatch() {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3&arg4=val4";
@@ -77,6 +80,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     }
 
     @Test
+    @DisplayName("Test mismatch url string names by default url parameter matcher")
     public void assertNamesMismatch() {
         final String urlString = "arg1=val1&arg22=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
@@ -86,6 +90,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
     }
 
     @Test
+    @DisplayName("Test mismatch url string values by default url parameter matcher")
     public void assertValuesMismatch() {
         final String urlString = "arg1=val1&arg2=val22&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";

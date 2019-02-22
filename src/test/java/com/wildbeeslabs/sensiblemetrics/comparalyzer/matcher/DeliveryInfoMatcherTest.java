@@ -35,6 +35,7 @@ import org.hamcrest.core.IsEqual;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -77,12 +78,13 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
+    @DisplayName("Test delivery info entity by custom delivery info matcher")
     public void testDeliveryInfoByMatcher() {
         DeliveryInfoMatcher deliveryInfoMatcher = getDeliveryInfoMatcher(
-                getIntMock().val(),
-                getAlphaNumericStringMock().val(),
-                getLocalDateMock().toUtilDate().val(),
-                getLocalDateMock().toUtilDate().val()
+            getIntMock().val(),
+            getAlphaNumericStringMock().val(),
+            getLocalDateMock().toUtilDate().val(),
+            getLocalDateMock().toUtilDate().val()
         );
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
@@ -92,21 +94,22 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         deliveryInfoMatcher = getDeliveryInfoMatcher(
-                5,
-                DEFAULT_GID_PREFIX,
-                toDate("17/06/2013", DEFAULT_DATE_FORMAT),
-                toDate("27/09/2018", DEFAULT_DATE_FORMAT)
+            5,
+            DEFAULT_GID_PREFIX,
+            toDate("17/06/2013", DEFAULT_DATE_FORMAT),
+            toDate("27/09/2018", DEFAULT_DATE_FORMAT)
         );
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
     @Test
+    @DisplayName("Test delivery info entity by custom created/update date fields matcher")
     public void testDeliveryInfoByCustomDateMatcher() {
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
                 return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
-                        && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
+                    && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
             }
         };
         final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
@@ -121,6 +124,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
+    @DisplayName("Test delivery info entity by custom type field matcher")
     public void testDeliveryInfoByCustomTypeMatcher() {
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
             @Override
@@ -138,6 +142,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
+    @DisplayName("Test delivery info entity by custom gid/type fields matchers")
     public void testDeliveryInfoListByCustomGidAndTypeMatcher() {
         final Integer DELIVERY_INFO_LOWER_TYPE_BOUND = 100;
         final Integer DELIVERY_INFO_UPPER_TYPE_BOUND = 1000;
@@ -155,14 +160,14 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
             }
         };
         final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
-                .withGidMatcher(gidMatcher)
-                .withTypeMatcher(typeMatcher);
+            .withGidMatcher(gidMatcher)
+            .withTypeMatcher(typeMatcher);
 
         final List<DeliveryInfo> deliveryInfoList = Arrays.asList(
-                getDeliveryInfoMock().val(),
-                getDeliveryInfoMock().val(),
-                getDeliveryInfoMock().val(),
-                getDeliveryInfoMock().val()
+            getDeliveryInfoMock().val(),
+            getDeliveryInfoMock().val(),
+            getDeliveryInfoMock().val(),
+            getDeliveryInfoMock().val()
         );
         assertThat(deliveryInfoList.size(), IsEqual.equalTo(4));
         assertTrue(deliveryInfoList.stream().noneMatch(entity -> deliveryInfoMatcher.matches(entity)));
@@ -174,9 +179,9 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     protected DeliveryInfoMatcher getDeliveryInfoMatcher(final Integer type, final String gid, final Date createdDate, final Date updatedDate) {
         return DeliveryInfoMatcher.getInstance()
-                .withType(type)
-                .withGid(gid)
-                .withCreatedDate(createdDate)
-                .withUpdatedDate(updatedDate);
+            .withType(type)
+            .withGid(gid)
+            .withCreatedDate(createdDate)
+            .withUpdatedDate(updatedDate);
     }
 }
