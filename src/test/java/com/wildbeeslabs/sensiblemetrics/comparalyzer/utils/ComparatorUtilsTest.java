@@ -48,9 +48,11 @@ import java.util.*;
 import static junit.framework.TestCase.assertTrue;
 import static net.andreinc.mockneat.types.enums.StringFormatType.LOWER_CASE;
 import static net.andreinc.mockneat.types.enums.StringFormatType.UPPER_CASE;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Сomparator utils unit test
@@ -66,15 +68,75 @@ import static org.junit.Assert.assertThat;
 public class ComparatorUtilsTest extends AbstractDiffTest {
 
     /**
+     * Default sort order enumeration
+     */
+    public enum SortOrder {
+        ASC(1),
+        DESC(-1),
+        EQ(0);
+
+        /**
+         * Default sort order
+         */
+        private int order;
+
+        SortOrder(int order) {
+            this.order = order;
+        }
+
+        /**
+         * Returns whether the direction is ascending {@code ASC}
+         */
+        public boolean isAscending() {
+            return this.equals(ASC);
+        }
+
+        /**
+         * Returns whether the direction is descending {@code DESC}
+         */
+        public boolean isDescending() {
+            return this.equals(DESC);
+        }
+
+        /**
+         * Returns the {@link SortOrder} enum for the given {@link String} value
+         *
+         * @param value - initial input string value to be converted
+         * @return enum for the given {@link SortOrder} string value
+         * @throws IllegalArgumentException in case the given value cannot be parsed into an enum value
+         */
+        public static SortOrder fromString(final String value) {
+            try {
+                return SortOrder.valueOf(value.toUpperCase(Locale.US));
+            } catch (Exception e) {
+                throw new IllegalArgumentException(String.format("Invalid value '%s' for orders given! Has to be either 'desc' or 'asc' (case insensitive).", value), e);
+            }
+        }
+
+        /**
+         * Returns the {@link SortOrder} enum for the given {@link String} or null if it cannot be parsed into an enum
+         * value.
+         *
+         * @param value - initial input string value to be converted
+         * @return wrapped enum {@link SortOrder} for the given string value
+         */
+        public static Optional<SortOrder> fromOptionalString(final String value) {
+            try {
+                return Optional.of(fromString(value));
+            } catch (IllegalArgumentException e) {
+                return Optional.empty();
+            }
+        }
+    }
+
+    /**
      * Default {@link String} comparator instance {@link Comparator}
      */
     public static final Comparator<String> DEFAULT_STRING_COMPARATOR = (o1, o2) -> {
         int minLength = Math.min(o1.length(), o2.length());
         for (int i = 0; i < minLength; i += 2) {
             int result = Character.compare(o1.charAt(i), o2.charAt(i));
-            if (0 != result) {
-                return result;
-            }
+            if (0 != result) return result;
         }
         return 0;
     };
@@ -238,26 +300,29 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test sort array of doubles by default comparator and not priority nulls")
     public void testDoubleArrayWithEmptyDefaultNumberComparator() {
         // given
-        final Double[] doubles = generateDoubles(100, 1000.0, 2000.0);
+        int size = 100;
+        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0);
 
         // when
         Arrays.sort(doubles, ComparatorUtils.getNumberComparator(null, false));
 
         // then
-        assertTrue(isSorted(doubles));
-        //assertThat(Lists.newArrayList(doubles), isInDescendingOrdering());
+        assertEquals(doubles.length, size);
+        assertTrue(isSorted(doubles, SortOrder.ASC));
     }
 
     @Test
     @DisplayName("Test sort array of integers by default comparator and not priority nulls")
     public void testIntegerArrayWithEmptyDefaultNumberComparator() {
         // given
-        final Integer[] ints = generateInts(100, 100, 200);
+        int size = 100;
+        final Integer[] ints = generateInts(size, 100, 200);
 
         // when
         Arrays.sort(ints, ComparatorUtils.getNumberComparator(null, false));
 
         // then
+        assertEquals(ints.length, size);
         assertThat(Lists.newArrayList(ints), isInAscendingOrdering());
     }
 
@@ -265,14 +330,16 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test sort array of doubles by custom comparator and not priority nulls")
     public void testDoubleArrayWithDefaultNumberComparator() {
         // given
-        final Double[] doubles = generateDoubles(100, 1000.0, 2000.0);
+        int size = 100;
+        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0);
 
         // when
         final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(DEFAULT_DOUBLE_COMPARATOR, false);
         Arrays.sort(doubles, comparator);
 
         //then
-        assertTrue(isSorted(doubles));
+        assertEquals(doubles.length, size);
+        assertTrue(isSorted(doubles, SortOrder.ASC));
     }
 
     @Test
@@ -620,13 +687,41 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test sort collection of strings by default comparator and not priority nulls")
     public void testStringsWithDefaultNumberComparator() {
         // given
-        final List<String> strings = generateStrings(1000);
+        int size = 1000;
+        final List<String> strings = generateStrings(size);
 
         // when
         Collections.sort(strings, new ComparatorUtils.DefaultNullSafeStringComparator());
 
         //then
+        assertThat(strings, hasSize(size));
         assertTrue(Ordering.natural().isOrdered(strings));
+    }
+
+    @Test
+    @DisplayName("Test sort collection of integers by custom comparator")
+    public void testIntegersWithDefaultNumberComparator() {
+        // given
+        int size = 1000;
+        List<Integer> ints = generateInts(size, 1000);
+
+        // when
+        Collections.sort(ints, ComparableComparator.getInstance());
+
+        //then
+        assertThat(ints, hasSize(size));
+        assertTrue(Ordering.natural().isOrdered(ints));
+
+        // given
+        size = 100;
+        ints = generateInts(size, 2000);
+
+        // when
+        Collections.sort(ints, Comparator.naturalOrder());
+
+        //then
+        assertThat(ints, hasSize(size));
+        assertTrue(Ordering.natural().isOrdered(ints));
     }
 
     @Test
@@ -831,14 +926,14 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     protected List<String> generateStrings(int size) {
-        final MockUnitInt num = mock.probabilites(Integer.class)
-            .add(0.3, mock.ints().range(0, 10))
-            .add(0.7, mock.ints().range(10, 20))
+        final MockUnitInt num = this.mock.probabilites(Integer.class)
+            .add(0.3, this.mock.ints().range(0, 10))
+            .add(0.7, this.mock.ints().range(10, 20))
             .mapToInt(Integer::intValue);
 
-        final List<String> strings = mock.fmt("#{first} #{last} #{num}")
-            .param("first", mock.names().first().format(LOWER_CASE))
-            .param("last", mock.names().last().format(UPPER_CASE))
+        final List<String> strings = this.mock.fmt("#{first} #{last} #{num}")
+            .param("first", this.mock.names().first().format(LOWER_CASE))
+            .param("last", this.mock.names().last().format(UPPER_CASE))
             .param("num", num)
             .list(size)
             .val();
@@ -856,6 +951,13 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         return this.mock.ints()
             .range(lowerBound, upperBound)
             .array(size)
+            .val();
+    }
+
+    protected List<Integer> generateInts(int size, int bound) {
+        return this.mock.ints()
+            .bound(size)
+            .list(LinkedList.class, size)
             .val();
     }
 
@@ -878,9 +980,28 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         };
     }
 
-    protected static boolean isSorted(final Double[] a) {
-        for (int i = 0; i < a.length - 1; i++) {
-            if (a[i] > a[i + 1]) {
+    protected Matcher<? super List<Integer>> isInDescendingOrdering() {
+        return new TypeSafeMatcher<List<Integer>>() {
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("collection should be sorted in descending order");
+            }
+
+            @Override
+            protected boolean matchesSafely(final List<Integer> item) {
+                for (int i = 0; i < item.size() - 1; i++) {
+                    if (item.get(i) < item.get(i + 1)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
+    }
+
+    protected static boolean isSorted(final Double[] array, final SortOrder order) {
+        for (int i = 0; i < array.length - 1; i++) {
+            if (Objects.equals(Double.compare(array[i], array[i + 1]), order)) {
                 return false;
             }
         }

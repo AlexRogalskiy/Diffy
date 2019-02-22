@@ -887,17 +887,12 @@ public class ComparatorUtils {
             super((o1, o2) -> {
                 int firstSize = o1.length;
                 int lastSize = o2.length;
-                if (firstSize < lastSize) {
-                    return -1;
-                } else if (firstSize > lastSize) {
-                    return 1;
-                }
+                if (firstSize < lastSize) return -1;
+                if (firstSize > lastSize) return 1;
                 final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
                 for (int temp, i = 0; i < firstSize; i++) {
                     temp = Objects.compare(o1[i], o2[i], comp);
-                    if (0 != temp) {
-                        return temp;
-                    }
+                    if (0 != temp) return temp;
                 }
                 return 0;
             }, nullsInPriority);
@@ -941,9 +936,7 @@ public class ComparatorUtils {
                 final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
                 for (int i = 0; i < minLength; i++) {
                     int result = Objects.compare(o1[i], o2[i], comp);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -974,9 +967,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Short.compare(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -1007,9 +998,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Integer.compare(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -1040,9 +1029,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Long.compare(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -1073,9 +1060,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Float.compare(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -1106,9 +1091,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Double.compare(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -1139,9 +1122,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Character.compare(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -1172,9 +1153,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = Boolean.compare(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return (o1.length - o2.length);
             }, nullsInPriority);
@@ -1210,9 +1189,7 @@ public class ComparatorUtils {
                 int minLength = Math.min(o1.length, o2.length);
                 for (int i = 0; i < minLength; i++) {
                     int result = compareBy(o1[i], o2[i]);
-                    if (0 != result) {
-                        return result;
-                    }
+                    if (0 != result) return result;
                 }
                 return 0;
             }, nullsInPriority);
@@ -1275,20 +1252,15 @@ public class ComparatorUtils {
             super((o1, o2) -> {
                 int firstSize = Iterables.size(o1);
                 int lastSize = Iterables.size(o2);
-                if (firstSize < lastSize) {
-                    return -1;
-                } else if (firstSize > lastSize) {
-                    return 1;
-                }
+                if (firstSize < lastSize) return -1;
+                if (firstSize > lastSize) return 1;
                 final Iterator<T> iteratorFirst = o1.iterator();
                 final Iterator<T> iteratorLast = o2.iterator();
                 final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
                 int temp;
                 while (iteratorFirst.hasNext()) {
                     temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), comp);
-                    if (0 != temp) {
-                        return temp;
-                    }
+                    if (0 != temp) return temp;
                 }
                 return 0;
             }, nullsInPriority);
