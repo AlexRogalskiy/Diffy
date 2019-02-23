@@ -94,25 +94,73 @@ public abstract class AbstractDiffTest {
     protected final MockUnitString ipv4ClassA = this.mock.ipv4s().types(CLASS_A, CLASS_C);
     protected final MockUnitString ipv6ClassA = this.mock.iPv6s().mapToString();
 
-    protected Double[] generateDoubles(int size, double lowerBound, double upperBound) {
+    /**
+     * Returns mock unit {@link MockUnit} of {@link Float} array by initial size, lower and upper bounds
+     *
+     * @param size       - initial input array size
+     * @param lowerBound - initial input lower bound
+     * @param upperBound - initial input upper bound
+     * @return mock unit {@link MockUnit} of {@link Float} array
+     */
+    protected MockUnit<Float[]> generateFloats(int size, float lowerBound, float upperBound) {
+        return this.mock.floats()
+            .range(lowerBound, upperBound)
+            .array(size);
+    }
+
+    /**
+     * Returns mock unit {@link MockUnit} of {@link Double} array by initial size, lower and upper bounds
+     *
+     * @param size       - initial input array size
+     * @param lowerBound - initial input lower bound
+     * @param upperBound - initial input upper bound
+     * @return mock unit {@link MockUnit} of {@link Double} array
+     */
+    protected MockUnit<Double[]> generateDoubles(int size, double lowerBound, double upperBound) {
         return this.mock.doubles()
             .range(lowerBound, upperBound)
-            .array(size)
-            .val();
+            .array(size);
     }
 
-    protected Integer[] generateInts(int size, int lowerBound, int upperBound) {
+    /**
+     * Returns mock unit {@link MockUnit} of {@link Integer} array by initial size, lower and upper bounds
+     *
+     * @param size       - initial input array size
+     * @param lowerBound - initial input lower bound
+     * @param upperBound - initial input upper bound
+     * @return mock unit {@link MockUnit} of {@link Integer} array
+     */
+    protected MockUnit<Integer[]> generateInts(int size, int lowerBound, int upperBound) {
         return this.mock.ints()
             .range(lowerBound, upperBound)
-            .array(size)
-            .val();
+            .array(size);
     }
 
-    protected List<Integer> generateInts(int size, int bound) {
+    /**
+     * Returns mock unit {@link MockUnit} of {@link Long} array by initial size, lower and upper bounds
+     *
+     * @param size       - initial input array size
+     * @param lowerBound - initial input lower bound
+     * @param upperBound - initial input upper bound
+     * @return mock unit {@link MockUnit} of {@link Long} array
+     */
+    protected MockUnit<Long[]> generateInts(int size, long lowerBound, long upperBound) {
+        return this.mock.longs()
+            .range(lowerBound, upperBound)
+            .array(size);
+    }
+
+    /**
+     * Returns mock unit {@link MockUnit} of {@link List} integers by initial size and bound
+     *
+     * @param size  - initial input array size
+     * @param bound - initial input bound
+     * @return mock unit {@link MockUnit} of {@link List} integers
+     */
+    protected MockUnit<List<Integer>> generateInts(int size, int bound) {
         return this.mock.ints()
-            .bound(size)
-            .list(LinkedList.class, size)
-            .val();
+            .bound(bound)
+            .list(LinkedList.class, size);
     }
 }
 

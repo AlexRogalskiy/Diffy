@@ -87,6 +87,7 @@ public class DateUtils {
         Objects.requireNonNull(dateFormat);
         try {
             final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+            formatter.setLenient(true);
             return formatter.parse(date);
         } catch (ParseException e) {
             log.error(String.format("ERROR: cannot parse date by format={%s}", dateFormat));

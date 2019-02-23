@@ -82,4 +82,8 @@ public class DeliveryInfo implements Serializable {
      */
     @Singular
     private List<AddressInfo> addresses;
+    /**
+     * Default types
+     */
+    private Integer[] codes;
 }

@@ -107,6 +107,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .setter(DeliveryInfo::setCreatedAt, getLocalDateMock().toUtilDate())
             .setter(DeliveryInfo::setUpdatedAt, getLocalDateMock().toUtilDate())
             .setter(DeliveryInfo::setBalance, getDoubleMock())
+            .setter(DeliveryInfo::setCodes, generateInts(10, 100, 200))
             .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
     }
 

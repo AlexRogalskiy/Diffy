@@ -72,7 +72,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     /**
      * Default {@link String} comparator instance {@link Comparator}
      */
-    public static final Comparator<String> DEFAULT_STRING_COMPARATOR = (o1, o2) -> {
+    public static final Comparator<CharSequence> DEFAULT_STRING_COMPARATOR = (o1, o2) -> {
         int minLength = Math.min(o1.length(), o2.length());
         for (int i = 0; i < minLength; i += 2) {
             int result = Character.compare(o1.charAt(i), o2.charAt(i));
@@ -98,7 +98,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test different objects by custom comparator and not priority nulls")
-    public void testObjectWithEmptyDefaultNumberComparator() {
+    public void testObjectsByDefaultComparator() {
         // given
         final Object d1 = new Object();
         final Object d2 = new String();
@@ -112,7 +112,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test null objects by default comparator and not priority nulls")
-    public void testObjectWithBothNullsAndEmptyDefaultNumberComparator() {
+    public void testNullObjectsByDefaultComparator() {
         // given
         final Object d1 = null;
         final Object d2 = null;
@@ -125,8 +125,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different objects with first null object by default comparator and not priority nulls")
-    public void testObjectWithFirstNullsAndEmptyDefaultNumberComparator() {
+    @DisplayName("Test different objects with first null by default comparator and not priority nulls")
+    public void testObjectsWithFirstNullByDefaultComparator() {
         // given
         final Object d1 = null;
         final Object d2 = new Object();
@@ -139,8 +139,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different objects with last null object by default comparator and priority nulls")
-    public void testObjectWithLastNullsAndEmptyDefaultNumberComparator() {
+    @DisplayName("Test different objects with last null by default comparator and priority nulls")
+    public void testObjectsWithLastNullByDefaultComparator() {
         // given
         final Object d1 = new Object();
         final Object d2 = null;
@@ -153,8 +153,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different doubles by default comparator and not priority nulls")
-    public void testDoublesWithEmptyDefaultNumberComparator() {
+    @DisplayName("Test different double objects by default comparator and not priority nulls")
+    public void testDoubleObjectsByDefaultComparator() {
         // given
         final Double d1 = Double.valueOf(0.1233334);
         final Double d2 = Double.valueOf(0.1233335);
@@ -167,8 +167,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different doubles by custom comparator and not priority nulls")
-    public void testDoublesWithNonEmptyDefaultNumberComparator() {
+    @DisplayName("Test different double objects by custom comparator and not priority nulls")
+    public void testDoubleObjectsByCustomComparator() {
         // given
         final Double d1 = Double.valueOf(0.1233334);
         final Double d2 = Double.valueOf(0.1233335);
@@ -181,8 +181,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different doubles by default comparator and not priority nulls")
-    public void testDoubleWithPriorityNullsAndEmptyDefaultNumberComparator() {
+    @DisplayName("Test different double objects by default comparator and not priority nulls")
+    public void testDoubleObjectsWithPriorityNullsByDefaultComparator() {
         // given
         final Double d1 = null;
         final Double d2 = Double.valueOf(0.1233335);
@@ -195,8 +195,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different doubles with first null by default comparator and priority nulls")
-    public void testDoubleWithNonPriorityNullsAndEmptyDefaultNumberComparator() {
+    @DisplayName("Test different double objects by default comparator and priority nulls")
+    public void testDoubleObjectsWithNonPriorityNullsByDefaultComparator() {
         // given
         final Double d1 = null;
         final Double d2 = Double.valueOf(0.1233335);
@@ -209,8 +209,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test null doubles by default comparator and priority nulls")
-    public void testDoublesWithNullsAndEmptyDefaultNumberComparator() {
+    @DisplayName("Test null double objects by default comparator and priority nulls")
+    public void testNullDoubleObjectsByDefaultComparator() {
         // given
         final Double d1 = null;
         final Double d2 = null;
@@ -223,8 +223,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test(expected = NullPointerException.class)
-    @DisplayName("Test null doubles by custom not null-safe comparator")
-    public void testDoublesWithNullsAndNonEmptyDefaultNumberComparator() {
+    @DisplayName("Test null double objects by non-safe custom comparator")
+    public void testNullDoubleObjectsByCustomComparator() {
         // given
         final Double d1 = null;
         final Double d2 = null;
@@ -237,11 +237,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test sort array of doubles by default comparator and not priority nulls")
-    public void testDoubleArrayWithEmptyDefaultNumberComparator() {
+    @DisplayName("Test sort double array by default comparator and not priority nulls")
+    public void testDoubleArrayByDefaultComparator() {
         // given
         int size = 100;
-        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0);
+        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0).val();
 
         // when
         Arrays.sort(doubles, ComparatorUtils.getNumberComparator(null, false));
@@ -252,11 +252,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test sort array of integers by default comparator and not priority nulls")
-    public void testIntegerArrayWithEmptyDefaultNumberComparator() {
+    @DisplayName("Test sort integer array objects by default comparator and not priority nulls")
+    public void testSortIntegerArrayByDefaultComparator() {
         // given
         int size = 100;
-        final Integer[] ints = generateInts(size, 100, 200);
+        final Integer[] ints = generateInts(size, 100, 200).val();
 
         // when
         Arrays.sort(ints, ComparatorUtils.getNumberComparator(null, false));
@@ -267,11 +267,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test sort array of doubles by custom comparator and not priority nulls")
-    public void testDoubleArrayWithDefaultNumberComparator() {
+    @DisplayName("Test sort double array by custom comparator and not priority nulls")
+    public void testSortDoubleArrayByCustomComparator() {
         // given
         int size = 100;
-        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0);
+        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0).val();
 
         // when
         final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(DEFAULT_DOUBLE_COMPARATOR, false);
@@ -283,8 +283,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test equal arrays of doubles by custom comparator and not priority nulls")
-    public void testEqualDoubleArraysWithDefaultNumberComparator() {
+    @DisplayName("Test equal double array objects by default comparator and not priority nulls")
+    public void testEqualDoubleArrayObjectsByDefaultComparator() {
         // given
         final Double[] d1 = {3.4, 6.4, 2.1, 6.2, null};
         final Double[] d2 = {3.4, 6.4, 2.1, 6.2, null};
@@ -297,8 +297,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test(expected = NullPointerException.class)
-    @DisplayName("Test different arrays of doubles by custom comparator and not priority nulls")
-    public void testEqualDoubleArraysWithNullsAndDefaultNumberComparator() {
+    @DisplayName("Test different double array objects by default comparator and not priority nulls")
+    public void testDoubleArrayObjectsWithNullsByDefaultComparator() {
         // given
         final Double[] d1 = {3.4, null, 2.1, 6.2};
         final Double[] d2 = {3.4, 6.4, null, 6.2};
@@ -311,8 +311,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of doubles by custom null-safe comparator and not priority nulls")
-    public void testEqualDoubleArraysWithNullsAndNonDefaultNumberComparator() {
+    @DisplayName("Test different double array objects by custom null-safe comparator and not priority nulls")
+    public void testDoubleArrayObjectsWithNullsByCustomComparator() {
         // given
         final Double[] d1 = {3.4, null, 2.1, 6.2};
         final Double[] d2 = {3.4, 6.4, null, 6.2};
@@ -330,8 +330,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of doubles by default comparator and not priority nulls")
-    public void testDoubleArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different double array objects by default comparator and not priority nulls")
+    public void testDoubleArrayObjectsByDefaultComparator() {
         // given
         final double[] d1 = {4.3, 6.4, 2.1, 6.2};
         final double[] d2 = {3.4, 6.4, 2.1, 6.2};
@@ -344,8 +344,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of doubles with different length by default comparator and not priority nulls")
-    public void testDoubleArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different double array objects with different length by default comparator and not priority nulls")
+    public void testDoubleArrayObjectsWithDifferentSizeAndDefaultComparator() {
         // given
         final double[] d1 = {3.4, 6.4, 2.1, 6.2};
         final double[] d2 = {3.4, 6.4, 2.1, 6.2, 7.9};
@@ -358,8 +358,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of floats by default comparator and not priority nulls")
-    public void testFloatArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different float array objects by default comparator and not priority nulls")
+    public void testFloatArrayObjectsByDefaultComparator() {
         // given
         final float[] d1 = {4.3f, 6.4f, 2.1f, 6.2f};
         final float[] d2 = {3.4f, 6.4f, 2.1f, 6.2f};
@@ -372,8 +372,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of floats with different length by default comparator and not priority nulls")
-    public void testFloatArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different float array objects with different length by default comparator and not priority nulls")
+    public void testFloatArrayObjectsWithDifferentSizeByDefaultComparator() {
         // given
         final float[] d1 = {4.3f, 6.4f, 2.1f, 6.2f};
         final float[] d2 = {3.4f, 6.4f, 2.1f, 6.2f, 7.9f};
@@ -386,8 +386,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of ints by default comparator and not priority nulls")
-    public void testIntArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different integer array objects by default comparator and not priority nulls")
+    public void testIntegerArrayObjectsByDefaultComparator() {
         // given
         final int[] d1 = {4, 6, 2, 6};
         final int[] d2 = {3, 6, 2, 6};
@@ -400,8 +400,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of int with different length by default comparator and not priority nulls")
-    public void testIntArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different integers array objects with different length by default comparator and not priority nulls")
+    public void testIntArrayObjectsWithDifferentSizeByDefaultComparator() {
         // given
         final int[] d1 = {4, 6, 2, 6};
         final int[] d2 = {3, 6, 2, 6, 7};
@@ -414,8 +414,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of longs by default comparator and not priority nulls")
-    public void testLongArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different long array objects by default comparator and not priority nulls")
+    public void testLongArrayObjectsByDefaultComparator() {
         // given
         final long[] d1 = {4, 6, 2, 6, 7_000_444};
         final long[] d2 = {3, 6, 2, 6, 3_344_444};
@@ -428,8 +428,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of longs with different length by default comparator and not priority nulls")
-    public void testLongArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different long array objects with different length by default comparator and not priority nulls")
+    public void testLongArrayObjectsWithDifferentSizeByDefaultComparator() {
         // given
         final long[] d1 = {4, 6, 2, 6, 7_000_444};
         final long[] d2 = {3, 6, 2, 6, 3_344_444, 6_444};
@@ -442,8 +442,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of booleans by default comparator and not priority nulls")
-    public void testBoolArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different boolean array objects by default comparator and not priority nulls")
+    public void testBoolArrayObjectsByDefaultComparator() {
         // given
         final boolean[] d1 = {true, false, true, true, false, false};
         final boolean[] d2 = {true, false, false, true, false, true};
@@ -456,8 +456,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of booleans with different length by default comparator and not priority nulls")
-    public void testBoolArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different boolean array objects with different length by default comparator and not priority nulls")
+    public void testBoolArrayObjectsWithDifferentSizeByDefaultComparator() {
         // given
         final boolean[] d1 = {true, false, true, true, false, false};
         final boolean[] d2 = {true, false, false, true, false, true, false};
@@ -470,8 +470,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of bytes by default comparator and not priority nulls")
-    public void testByteArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different byte array objects by default comparator and not priority nulls")
+    public void testByteArrayObjectsByDefaultComparator() {
         // given
         final byte[] d1 = {4, 6, 2, 6, 35, 127};
         final byte[] d2 = {3, 6, 2, 6, 127, -1};
@@ -484,8 +484,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of bytes with different lengths by default comparator and not priority nulls")
-    public void testByteArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different byte array objects with different lengths by default comparator and not priority nulls")
+    public void testByteArrayObjectsWithDifferentSizeByDefaultComparator() {
         // given
         final byte[] d1 = {4, 6, 2, 6, 35, 127};
         final byte[] d2 = {3, 6, 2, 6, 127, -1, 67};
@@ -498,8 +498,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of shorts by default comparator and not priority nulls")
-    public void testShortArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different short array objects by default comparator and not priority nulls")
+    public void testShortArrayObjectsByDefaultComparator() {
         // given
         final short[] d1 = {4, 6, 2, 6, 35, 127, 255, 3, 2570};
         final short[] d2 = {3, 6, 2, 6, 127, -1, -267, 3, 799};
@@ -512,8 +512,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of shorts with different length by default comparator and not priority nulls")
-    public void testShortArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different short array objects with different length by default comparator and not priority nulls")
+    public void testShortArrayObjectsWithDifferentSizeByDefaultComparator() {
         // given
         final short[] d1 = {4, 6, 2, 6, 35, 127, 255, 3, 2570};
         final short[] d2 = {3, 6, 2, 6, 127, -1, -267, 3, 799, 58};
@@ -526,8 +526,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of chars by default comparator and not priority nulls")
-    public void testCharArraysWithDefaultNumberComparator() {
+    @DisplayName("Test different char array objects by default comparator and not priority nulls")
+    public void testCharArrayObjectsByDefaultComparator() {
         // given
         final char[] d1 = {4, 6, 2, 6, 35, 127, 'b', 3, 'c'};
         final char[] d2 = {3, 6, 2, 6, 127, 'a', 'a', 3, '8'};
@@ -540,8 +540,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays of chars with different length by default comparator and not priority nulls")
-    public void testCharArraysWithDifferentSizesAndDefaultNumberComparator() {
+    @DisplayName("Test different char array objects with different length by default comparator and not priority nulls")
+    public void testCharArrayObjectsWithDifferentSizeByDefaultComparator() {
         // given
         final char[] d1 = {4, 6, 2, 6, 35, 127, 'b', 3, 'c'};
         final char[] d2 = {3, 6, 2, 6, 127, 'a', 'a', 3, '8', 'n'};
@@ -554,8 +554,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different strings by custom natural order comparator and not priority nulls")
-    public void testStringsWithNonEmptyDefaultNumberComparator() {
+    @DisplayName("Test different string objects by custom natural order comparator and not priority nulls")
+    public void testStringObjectsByCustomNaturalOrderComparator() {
         // given
         final String d1 = "acde";
         final String d2 = "abcd";
@@ -568,8 +568,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different strings by custom comparator and not priority nulls")
-    public void testStringsWithCustomDefaultNumberComparator() {
+    @DisplayName("Test different string objects by custom comparator and not priority nulls")
+    public void testStringObjectsByCustomComparator() {
         // given
         final String d1 = "acde";
         final String d2 = "abcd";
@@ -582,8 +582,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test empty strings by default comparator and not priority nulls")
-    public void testEmptyStringsWithDefaultNumberComparator() {
+    @DisplayName("Test empty string objects by default comparator and not priority nulls")
+    public void testEmptyStringObjectsByDefaultComparator() {
         // given
         final String d1 = "";
         final String d2 = "";
@@ -596,8 +596,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different classes by default comparator and not priority nulls")
-    public void testСlassesWithDefaultNumberComparator() {
+    @DisplayName("Test different class objects by default comparator and not priority nulls")
+    public void testСlassObjectsByDefaultComparator() {
         // given
         final Class<DeliveryInfo> d1 = DeliveryInfo.class;
         final Class<AddressInfo> d2 = AddressInfo.class;
@@ -610,8 +610,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test null classes by default comparator and not priority nulls")
-    public void testNullsСlassesWithDefaultNumberComparator() {
+    @DisplayName("Test null class objects by default comparator and not priority nulls")
+    public void testNullСlassObjectsByDefaultComparator() {
         // given
         final Class<DeliveryInfo> d1 = null;
         final Class<AddressInfo> d2 = AddressInfo.class;
@@ -624,8 +624,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test sort collection of strings by default comparator and not priority nulls")
-    public void testStringsWithDefaultNumberComparator() {
+    @DisplayName("Test string list objects by default comparator and not priority nulls")
+    public void testStringListObjectsByDefaultComparator() {
         // given
         int size = 1000;
         final List<String> strings = generateStrings(size);
@@ -639,11 +639,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test sort collection of integers by custom comparator")
-    public void testIntegersWithDefaultNumberComparator() {
+    @DisplayName("Test integer list objects by custom comparator")
+    public void testIntegerListObjectsByCustomComparator() {
         // given
         int size = 1000;
-        List<Integer> ints = generateInts(size, 1000);
+        List<Integer> ints = generateInts(size, 1000).val();
 
         // when
         Collections.sort(ints, ComparableComparator.getInstance());
@@ -654,7 +654,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // given
         size = 100;
-        ints = generateInts(size, 2000);
+        ints = generateInts(size, 2000).val();
 
         // when
         Collections.sort(ints, Comparator.naturalOrder());
@@ -665,8 +665,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different locales by default comparator and not priority nulls")
-    public void testLocalesWithDefaultNumberComparator() {
+    @DisplayName("Test different locale objects by default comparator and not priority nulls")
+    public void testLocaleObjectsByDefaultComparator() {
         // given
         final Locale d1 = Locale.FRENCH;
         final Locale d2 = Locale.CHINESE;
@@ -679,8 +679,22 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different locales by default comparator and not priority nulls")
-    public void testNullLocalesWithDefaultNumberComparator() {
+    @DisplayName("Test different currency objects by default comparator and not priority nulls")
+    public void testCurrencyObjectsByDefaultComparator() {
+        // given
+        final Currency d1 = Currency.getInstance(Locale.FRANCE);
+        final Currency d2 = Currency.getInstance(Locale.CHINA);
+
+        // when
+        final Comparator<? super Currency> comparator = new ComparatorUtils.DefaultNullSafeCurrencyComparator();
+
+        // then
+        assertThat(comparator.compare(d1, d2), greaterThan(0));
+    }
+
+    @Test
+    @DisplayName("Test different locale objects by default comparator and not priority nulls")
+    public void testNullLocaleObjectsByDefaultComparator() {
         // given
         final Locale d1 = null;
         final Locale d2 = Locale.CHINESE;
@@ -693,8 +707,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different big decimals with zero significant places by default comparator and not priority nulls")
-    public void testBigDecimalsWithDefaultNumberComparator() {
+    @DisplayName("Test different big decimal objects with zero significant places by default comparator and not priority nulls")
+    public void testBigDecimalObjectsByDefaultComparator() {
         // given
         final BigDecimal d1 = BigDecimal.valueOf(1_999.0005);
         final BigDecimal d2 = BigDecimal.valueOf(2_000.0004);
@@ -707,8 +721,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different big decimals with zero significant places by default comparator and not priority nulls")
-    public void testNullBigDecimalsWithDefaultNumberComparator() {
+    @DisplayName("Test different big decimal objects with zero significant places by default comparator and not priority nulls")
+    public void testNullBigDecimalObjectsByDefaultComparator() {
         // given
         final BigDecimal d1 = null;
         final BigDecimal d2 = BigDecimal.valueOf(2_000.0004);
@@ -721,8 +735,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different map values by custom natural order comparator")
-    public void testValueMapWithCustomComparator() {
+    @DisplayName("Test different map value objects by custom natural order comparator")
+    public void testValueMapObjectsByCustomComparator() {
         // given
         final String d1 = "ww";
         final String d2 = "aa";
@@ -746,8 +760,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different map values by default comparator")
-    public void testValueMapWithDefaultNumberComparator() {
+    @DisplayName("Test different map value objects by default comparator")
+    public void testValueMapObjectsByDefaultComparator() {
         // given
         final String d1 = "ww";
         final String d2 = "aa";
@@ -772,7 +786,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test null map values by default comparator")
-    public void testNullValueMapWithDefaultNumberComparator() {
+    public void testNullValueMapObjectsByDefaultComparator() {
         // given
         final String d1 = "w";
         final String d2 = "aa";
@@ -796,8 +810,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test(expected = ClassCastException.class)
-    @DisplayName("Test map entries by comparable comparator")
-    public void testMapEntryClassCastExceptionWithDefaultNumberComparator() {
+    @DisplayName("Test map entry objects with class cast exception by default comparator")
+    public void testMapEntryObjectsWithClassCastExceptionByDefaultComparator() {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
@@ -810,8 +824,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test map entries by custom comparator")
-    public void testMapEntryWithCustomComparator() {
+    @DisplayName("Test map entry objects by custom comparator")
+    public void testMapEntryObjectsByCustomComparator() {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
@@ -824,8 +838,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test map entries by default comparator")
-    public void testMapEntryWithDefaultNumberComparator() {
+    @DisplayName("Test map entry objects by default comparator")
+    public void testMapEntryObjectsByDefaultComparator() {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
@@ -838,8 +852,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test(expected = NullPointerException.class)
-    @DisplayName("Test null map entries by default comparator")
-    public void testNullsMapEntryWithDefaultNumberComparator() {
+    @DisplayName("Test null map entry objects by default comparator")
+    public void testNullMapEntryObjectsByDefaultComparator() {
         // given
         final Map.Entry<String, Integer> d1 = null;
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
@@ -852,8 +866,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test list collections of strings by default comparator and not priority nulls")
-    public void testIterableListsWithDefaultNumberComparator() {
+    @DisplayName("Test list objects by default comparator and not priority nulls")
+    public void testIterableListObjectsByDefaultComparator() {
         // given
         final List<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
         final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
@@ -866,8 +880,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test null list collections of strings by default comparator and not priority nulls")
-    public void testNullIterableListsWithDefaultNumberComparator() {
+    @DisplayName("Test null list objects by default comparator and not priority nulls")
+    public void testNullListObjectsByDefaultComparator() {
         // given
         final List<String> d1 = null;
         final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
@@ -880,8 +894,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test set collections of strings by default comparator and not priority nulls")
-    public void testIterableSetsWithDefaultNumberComparator() {
+    @DisplayName("Test set objects by default comparator and not priority nulls")
+    public void testSetObjectsByDefaultComparator() {
         // given
         final Set<String> d1 = new ImmutableSet.Builder<String>()
             .add("saf")
@@ -905,8 +919,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test list and set collections of strings by default comparator and not priority nulls")
-    public void testIterableListAndSetWithDefaultNumberComparator() {
+    @DisplayName("Test list / set objects by default comparator and not priority nulls")
+    public void testListAndSetObjectsByDefaultComparator() {
         // given
         final Set<String> d1 = new ImmutableSet.Builder<String>()
             .add("saf")

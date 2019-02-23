@@ -32,10 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.setAccessible;
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
@@ -87,6 +84,19 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     @Override
     @SuppressWarnings("unchecked")
     protected Comparator<?> getPropertyComparator(final String property) {
+        final Class<?> fieldClazz = getPropertyMap().get(property).getType();
+        if (Locale.class.isAssignableFrom(fieldClazz)) {
+            return new ComparatorUtils.DefaultNullSafeLocaleComparator();
+        } else if (Currency.class.isAssignableFrom(fieldClazz)) {
+            return new ComparatorUtils.DefaultNullSafeCurrencyComparator();
+        } else if (Class.class.isAssignableFrom(fieldClazz)) {
+            return new ComparatorUtils.DefaultNullSafeClassComparator();
+        }
+        if (fieldClazz.isArray()) {
+            if (Object.class.isAssignableFrom(fieldClazz.getComponentType())) {
+                return new ComparatorUtils.DefaultNullSafeArrayComparator<>();
+            }
+        }
         return getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
     }
 
@@ -110,7 +120,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     /**
      * Returns iterable collection of difference entries {@link DiffEntry}
      *
-     * @param <S>
+     * @param <S>   type of difference entry collection
      * @param first - initial first argument to be compared {@code T}
      * @param last  - initial last argument to be compared with {@code T}
      * @return collection of difference entries {@link DiffEntry}

@@ -746,19 +746,51 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe char sequence {@link String} comparator implementation {@link DefaultNullSafeComparator}
-     *
-     * @param <T> type of input element to be compared by operation
+     * Default null-safe Currency sequence {@link String} comparator implementation {@link DefaultNullSafeComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeCharSequenceComparator<T extends CharSequence> extends DefaultNullSafeObjectComparator<T> {
+    public static class DefaultNullSafeCurrencyComparator extends DefaultNullSafeObjectComparator<Currency> {
+
+        /**
+         * Default null-safe currency comparator constructor
+         */
+        public DefaultNullSafeCurrencyComparator() {
+            super();
+        }
+
+        /**
+         * Default null-safe currency comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeCurrencyComparator(@Nullable final Comparator<? super Currency> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe currency comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeCurrencyComparator(@Nullable final Comparator<? super Currency> comparator, boolean nullsInPriority) {
+            super(comparator, nullsInPriority);
+        }
+    }
+
+    /**
+     * Default null-safe char sequence {@link String} comparator implementation {@link DefaultNullSafeComparator}
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultNullSafeCharSequenceComparator extends DefaultNullSafeObjectComparator<CharSequence> {
 
         /**
          * Default null-safe char sequence comparator constructor
          */
         public DefaultNullSafeCharSequenceComparator() {
-            this(null);
+            super();
         }
 
         /**
@@ -766,7 +798,7 @@ public class ComparatorUtils {
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultNullSafeCharSequenceComparator(@Nullable final Comparator<? super T> comparator) {
+        public DefaultNullSafeCharSequenceComparator(@Nullable final Comparator<? super CharSequence> comparator) {
             this(comparator, false);
         }
 
@@ -776,7 +808,7 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeCharSequenceComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+        public DefaultNullSafeCharSequenceComparator(@Nullable final Comparator<? super CharSequence> comparator, boolean nullsInPriority) {
             super(Objects.isNull(comparator) ? Comparator.comparing(Object::toString) : comparator, nullsInPriority);
         }
     }
@@ -894,11 +926,10 @@ public class ComparatorUtils {
          */
         public DefaultNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
-                int firstSize = o1.length;
-                int lastSize = o2.length;
+                int firstSize = o1.length, lastSize = o2.length;
                 if (firstSize < lastSize) return -1;
                 if (firstSize > lastSize) return 1;
-                final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+                final Comparator<? super T> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
                 for (int temp, i = 0; i < firstSize; i++) {
                     temp = Objects.compare(o1[i], o2[i], comp);
                     if (0 != temp) return temp;
@@ -942,7 +973,7 @@ public class ComparatorUtils {
         public LexicographicalNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
                 int minLength = Math.min(o1.length, o2.length);
-                final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+                final Comparator<? super T> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
                 for (int i = 0; i < minLength; i++) {
                     int result = Objects.compare(o1[i], o2[i], comp);
                     if (0 != result) return result;
@@ -1239,7 +1270,7 @@ public class ComparatorUtils {
          * Default null-safe iterable comparator constructor
          */
         public DefaultNullSafeIterableComparator() {
-            this(null, false);
+            this(null);
         }
 
         /**
@@ -1265,7 +1296,7 @@ public class ComparatorUtils {
                 if (firstSize > lastSize) return 1;
                 final Iterator<T> iteratorFirst = o1.iterator();
                 final Iterator<T> iteratorLast = o2.iterator();
-                final Comparator<? super T> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+                final Comparator<? super T> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
                 int temp;
                 while (iteratorFirst.hasNext()) {
                     temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), comp);
@@ -1309,7 +1340,7 @@ public class ComparatorUtils {
          */
         public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, @Nullable final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
-                final Comparator<? super BigDecimal> comp = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+                final Comparator<? super BigDecimal> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
                 final BigDecimal firstRounded = o1.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
                 final BigDecimal lastRounded = o2.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
                 return Objects.compare(firstRounded, lastRounded, comp);
@@ -1431,7 +1462,7 @@ public class ComparatorUtils {
          * Default null-safe number comparator constructor
          */
         public DefaultNullSafeNumberComparator() {
-            this(null, false);
+            super();
         }
 
         /**
