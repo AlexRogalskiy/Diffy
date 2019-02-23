@@ -1409,8 +1409,8 @@ public class ComparatorUtils {
     /**
      * Default map value comparator implementation {@link Comparator}
      *
-     * @param <K> type of key element
-     * @param <V> type of value element
+     * @param <K> type of map key element
+     * @param <V> type of map value element
      */
     @Data
     @EqualsAndHashCode
@@ -1460,6 +1460,62 @@ public class ComparatorUtils {
         @Override
         public int compare(final K first, final K last) {
             return Objects.compare(getMap().get(first), getMap().get(last), getComparator());
+        }
+    }
+
+    /**
+     * Default list positional comparator implementation {@link Comparator}
+     *
+     * @param <T> type of list element
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultListPositionComparator<T> implements Comparator<T> {
+
+        /**
+         * Custom list instance {@link List}
+         */
+        private final List<? extends T> list;
+        /**
+         * Custom list comparator instance {@link Comparator}
+         */
+        private final Comparator<? super Integer> comparator;
+
+        /**
+         * Default map value comparator with initial map collection instance {@link Map}
+         *
+         * @param list - initial input list collection instance {@link List}
+         */
+        public DefaultListPositionComparator(final List<? extends T> list) {
+            this(list, null, false);
+        }
+
+        /**
+         * Default value map comparator with initial map collection instance {@link Map}, map value comparator {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param list            - initial input list collection instance {@link List}
+         * @param comparator      - initial input value map comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultListPositionComparator(final List<? extends T> list, @Nullable final Comparator<? super Integer> comparator, boolean nullsInPriority) {
+            this.list = Objects.requireNonNull(list);
+            this.comparator = new NullComparator(Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator, nullsInPriority);
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial input first argument
+         * @param last  - initial input last argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final T first, final T last) {
+            return Objects.compare(getList().indexOf(first), getList().indexOf(last), getComparator());
         }
     }
 

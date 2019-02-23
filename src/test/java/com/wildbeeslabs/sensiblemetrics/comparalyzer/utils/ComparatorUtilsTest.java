@@ -850,6 +850,36 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
     }
 
+    @Test
+    @DisplayName("Test different string objects by default positional comparator and not priority nulls")
+    public void testStringObjectsByDefaultComparator() {
+        // given
+        final List<String> list = Arrays.asList("saf", "fas", "sfa", "sadf");
+        final String d1 = "fas";
+        final String d2 = "saf";
+
+        // when
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultListPositionComparator<>(list);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Test different null string objects by default positional comparator and not priority nulls")
+    public void testNullStringObjectsByDefaultComparator() {
+        // given
+        final List<String> list = Arrays.asList("saf", "fas", "sfa", "sadf");
+        final String d1 = null;
+        final String d2 = "saf";
+
+        // when
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultListPositionComparator<>(list);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
     @Test(expected = ClassCastException.class)
     @DisplayName("Test map entry objects with class cast exception by default comparator")
     public void testMapEntryObjectsWithClassCastExceptionByDefaultComparator() {
