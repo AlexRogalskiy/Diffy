@@ -74,31 +74,31 @@ public class ReflectionUtils {
      */
     @SuppressWarnings("unchecked")
     private static final ImmutableCollection<Class<?>> EXTENDABLE_SIMPLE_TYPES =
-            ImmutableSet.<Class<?>>builder()
-                    .add(BigDecimal.class)
-                    .add(BigInteger.class)
-                    .add(CharSequence.class)
-                    .add(ThreadLocal.class)
-                    .add(Calendar.class)
-                    .add(Date.class)
-                    .add(Enum.class)
-                    .add(Number.class)
-                    .add(Process.class)
-                    .build();
+        ImmutableSet.<Class<?>>builder()
+            .add(BigDecimal.class)
+            .add(BigInteger.class)
+            .add(CharSequence.class)
+            .add(ThreadLocal.class)
+            .add(Calendar.class)
+            .add(Date.class)
+            .add(Enum.class)
+            .add(Number.class)
+            .add(Process.class)
+            .build();
     /**
      * Default collection of final simple types {@link ImmutableCollection}
      */
     @SuppressWarnings("unchecked")
     private static final ImmutableCollection<Class<? extends Serializable>> FINAL_SIMPLE_TYPES =
-            ImmutableSet.<Class<? extends Serializable>>builder()
-                    .add(Class.class)
-                    .add(URI.class)
-                    .add(URL.class)
-                    .add(Currency.class)
-                    .add(Locale.class)
-                    .add(UUID.class)
-                    .add(String.class)
-                    .build();
+        ImmutableSet.<Class<? extends Serializable>>builder()
+            .add(Class.class)
+            .add(URI.class)
+            .add(URL.class)
+            .add(Currency.class)
+            .add(Locale.class)
+            .add(UUID.class)
+            .add(String.class)
+            .build();
 
     /**
      * Returns collection of primitive wrapper types {@link ImmutableCollection}
@@ -107,16 +107,16 @@ public class ReflectionUtils {
      */
     private static ImmutableCollection<Class<?>> getDefaultPrimitiveWrapperTypes() {
         return ImmutableSet.<Class<?>>builder()
-                .add(Boolean.class)
-                .add(Character.class)
-                .add(Byte.class)
-                .add(Short.class)
-                .add(Integer.class)
-                .add(Long.class)
-                .add(Float.class)
-                .add(Double.class)
-                .add(Void.class)
-                .build();
+            .add(Boolean.class)
+            .add(Character.class)
+            .add(Byte.class)
+            .add(Short.class)
+            .add(Integer.class)
+            .add(Long.class)
+            .add(Float.class)
+            .add(Double.class)
+            .add(Void.class)
+            .build();
     }
 
     /**
@@ -126,16 +126,16 @@ public class ReflectionUtils {
      */
     private static ImmutableCollection<Class<?>> getDefaultPrimitiveNumericTypes() {
         return ImmutableSet.<Class<?>>builder()
-                .add(char.class)
-                .add(byte.class)
-                .add(short.class)
-                .add(int.class)
-                .add(long.class)
-                .add(float.class)
-                .add(double.class)
-                .add(boolean.class)
-                .add(void.class)
-                .build();
+            .add(char.class)
+            .add(byte.class)
+            .add(short.class)
+            .add(int.class)
+            .add(long.class)
+            .add(float.class)
+            .add(double.class)
+            .add(boolean.class)
+            .add(void.class)
+            .build();
     }
 
     /**
@@ -145,15 +145,15 @@ public class ReflectionUtils {
      */
     private static ImmutableBiMap<Class<?>, Class<?>> getDefaultPrimitiveTypes() {
         return ImmutableBiMap.<Class<?>, Class<?>>builder()
-                .put(boolean.class, Boolean.class)
-                .put(char.class, Character.class)
-                .put(byte.class, Byte.class)
-                .put(short.class, Short.class)
-                .put(int.class, Integer.class)
-                .put(long.class, Long.class)
-                .put(float.class, Float.class)
-                .put(double.class, Double.class)
-                .build();
+            .put(boolean.class, Boolean.class)
+            .put(char.class, Character.class)
+            .put(byte.class, Byte.class)
+            .put(short.class, Short.class)
+            .put(int.class, Integer.class)
+            .put(long.class, Long.class)
+            .put(float.class, Float.class)
+            .put(double.class, Double.class)
+            .build();
     }
 
     /**
@@ -164,11 +164,11 @@ public class ReflectionUtils {
      */
     public static Class<?> getMatchableClass(final Class<?> expectedClass) {
         final Optional<? extends Class<?>> optionalClass = DEFAULT_PRIMITIVE_TYPES
-                .keySet()
-                .stream()
-                .filter(type -> type.equals(expectedClass))
-                .map(type -> DEFAULT_PRIMITIVE_TYPES.get(type))
-                .findFirst();
+            .keySet()
+            .stream()
+            .filter(type -> type.equals(expectedClass))
+            .map(type -> DEFAULT_PRIMITIVE_TYPES.get(type))
+            .findFirst();
         return (optionalClass.isPresent()) ? optionalClass.get() : expectedClass;
     }
 
@@ -205,7 +205,7 @@ public class ReflectionUtils {
             return true;
         }
         return FINAL_SIMPLE_TYPES.stream().anyMatch(type -> type.equals(clazz))
-                || EXTENDABLE_SIMPLE_TYPES.stream().anyMatch(type -> type.isAssignableFrom(clazz));
+            || EXTENDABLE_SIMPLE_TYPES.stream().anyMatch(type -> type.isAssignableFrom(clazz));
     }
 
     /**
@@ -397,8 +397,8 @@ public class ReflectionUtils {
      */
     public static List<Field> getValidFields(final Field[] fields, boolean includeFinalFields, boolean includeAccessibleFields) {
         return Arrays.stream(fields)
-                .filter(field -> isNotStaticOrFinalOrAccessible(field, includeFinalFields, includeAccessibleFields))
-                .collect(Collectors.toList());
+            .filter(field -> isNotStaticOrFinalOrAccessible(field, includeFinalFields, includeAccessibleFields))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -444,11 +444,11 @@ public class ReflectionUtils {
      */
     public static boolean isGetter(final Method rawMethod) {
         return hasGetOrIsPrefix(rawMethod) &&
-                hasNoParameters(rawMethod) &&
-                returnsSomething(rawMethod) &&
-                isNotStatic(rawMethod) &&
-                //isNotAbstract(rawMethod) &&
-                isNotNative(rawMethod);
+            hasNoParameters(rawMethod) &&
+            returnsSomething(rawMethod) &&
+            isNotStatic(rawMethod) &&
+            //isNotAbstract(rawMethod) &&
+            isNotNative(rawMethod);
     }
 
     /**
@@ -733,9 +733,9 @@ public class ReflectionUtils {
      */
     private static boolean isOverridden(final Method parent, final Method toCheck) {
         return isSubClass(parent, toCheck) &&
-                sameMethodName(parent, toCheck) &&
-                returnTypeCovariant(parent, toCheck) &&
-                sameArguments(parent, toCheck);
+            sameMethodName(parent, toCheck) &&
+            returnTypeCovariant(parent, toCheck) &&
+            sameArguments(parent, toCheck);
     }
 
     /**
@@ -746,8 +746,8 @@ public class ReflectionUtils {
      */
     private static boolean isPersistentField(final Field field) {
         return !Modifier.isTransient(field.getModifiers()) &&
-                !Modifier.isStatic(field.getModifiers()) &&
-                !field.getName().equals("this$0");
+            !Modifier.isStatic(field.getModifiers()) &&
+            !field.getName().equals("this$0");
     }
 
     /**
@@ -855,8 +855,8 @@ public class ReflectionUtils {
          */
         private boolean hasSignature(final Method method) {
             return method.getName().equals(getMethodName())
-                    && (method.getParameterTypes().length == getNumberOfParameters())
-                    && !method.isSynthetic();
+                && (method.getParameterTypes().length == getNumberOfParameters())
+                && !method.isSynthetic();
         }
 
         /**

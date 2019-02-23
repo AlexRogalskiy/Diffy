@@ -35,6 +35,7 @@ import org.apache.commons.collections.comparators.NullComparator;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -620,10 +621,32 @@ public class ComparatorUtils {
      */
     private interface NullSafeComparator<T> extends Comparator<T> {
 
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         * Byte.MAX_VALUE - if arguments are different (and not null either)
+         *
+         * @param first - initial input first argument
+         * @param last  - initial input last argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
         default int compare(final T first, final T last) {
             return safeCompare(first, last);
         }
 
+        /**
+         * Returns numeric result of safe type arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         * Byte.MAX_VALUE - if arguments are different (and not null either)
+         *
+         * @param first - initial input first argument
+         * @param last  - initial input last argument
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
         int safeCompare(final T first, final T last);
     }
 
@@ -729,7 +752,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default comparable comparator implementation {@link Comparator}
+     * Default comparable comparator implementation {@link DefaultNullSafeObjectComparator}
      *
      * @param <T> type of input element to be compared by operation
      */
@@ -746,21 +769,21 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe Currency sequence {@link String} comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe currency {@link Currency} comparator implementation {@link DefaultNullSafeObjectComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
     public static class DefaultNullSafeCurrencyComparator extends DefaultNullSafeObjectComparator<Currency> {
 
         /**
-         * Default null-safe currency comparator constructor
+         * Default null-safe currency {@link Currency} comparator constructor
          */
         public DefaultNullSafeCurrencyComparator() {
             super();
         }
 
         /**
-         * Default null-safe currency comparator constructor with initial comparator instance {@link Comparator}
+         * Default null-safe currency {@link Currency} comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
@@ -769,7 +792,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe currency comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe currency {@link Currency} comparator constructor with input "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
@@ -780,10 +803,45 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe char sequence {@link String} comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe url {@link URL} comparator implementation {@link DefaultNullSafeObjectComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
+    public static class DefaultNullSafeUrlComparator extends DefaultNullSafeObjectComparator<URL> {
+
+        /**
+         * Default null-safe url {@link URL} comparator constructor
+         */
+        public DefaultNullSafeUrlComparator() {
+            super();
+        }
+
+        /**
+         * Default null-safe url {@link URL} comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeUrlComparator(@Nullable final Comparator<? super URL> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe url {@link URL} comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeUrlComparator(@Nullable final Comparator<? super URL> comparator, boolean nullsInPriority) {
+            super(comparator, nullsInPriority);
+        }
+    }
+
+    /**
+     * Default null-safe char sequence {@link String} comparator implementation {@link DefaultNullSafeObjectComparator}
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+
     public static class DefaultNullSafeCharSequenceComparator extends DefaultNullSafeObjectComparator<CharSequence> {
 
         /**
@@ -814,7 +872,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe class {@link Class} comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe class {@link Class} comparator implementation {@link DefaultNullSafeObjectComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
@@ -855,7 +913,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe locale {@link Locale} comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe locale {@link Locale} comparator implementation {@link DefaultNullSafeObjectComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
@@ -1258,7 +1316,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe iterable {@link Iterable} comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe iterable {@link Iterable} comparator implementation {@link DefaultNullSafeObjectComparator}
      *
      * @param <T> type of input element to be compared by operation
      */
@@ -1308,7 +1366,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe big decimal {@link BigDecimal} comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe big decimal {@link BigDecimal} comparator implementation {@link DefaultNullSafeObjectComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
@@ -1452,7 +1510,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe number {@link Number} comparator implementation {@link DefaultNullSafeComparator}
+     * Default null-safe number {@link Number} comparator implementation {@link DefaultNullSafeObjectComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)

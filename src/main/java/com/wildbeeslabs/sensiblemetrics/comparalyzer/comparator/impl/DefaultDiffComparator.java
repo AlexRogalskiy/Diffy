@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.URL;
 import java.util.*;
 
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.setAccessible;
@@ -91,6 +92,8 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
             return new ComparatorUtils.DefaultNullSafeCurrencyComparator();
         } else if (Class.class.isAssignableFrom(fieldClazz)) {
             return new ComparatorUtils.DefaultNullSafeClassComparator();
+        } else if (URL.class.isAssignableFrom(fieldClazz)) {
+            return new ComparatorUtils.DefaultNullSafeUrlComparator();
         }
         if (fieldClazz.isArray()) {
             if (Object.class.isAssignableFrom(fieldClazz.getComponentType())) {

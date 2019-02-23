@@ -35,7 +35,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import net.andreinc.mockneat.abstraction.MockUnitInt;
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -45,11 +44,11 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 import static junit.framework.TestCase.assertTrue;
-import static net.andreinc.mockneat.types.enums.StringFormatType.LOWER_CASE;
-import static net.andreinc.mockneat.types.enums.StringFormatType.UPPER_CASE;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
@@ -628,7 +627,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     public void testStringListObjectsByDefaultComparator() {
         // given
         int size = 1000;
-        final List<String> strings = generateStrings(size);
+        final List<String> strings = generateStrings(size).val();
 
         // when
         Collections.sort(strings, new ComparatorUtils.DefaultNullSafeCharSequenceComparator());
@@ -679,6 +678,20 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
+    @DisplayName("Test different null locale objects by default comparator and not priority nulls")
+    public void testNullLocaleObjectsByDefaultComparator() {
+        // given
+        final Locale d1 = null;
+        final Locale d2 = Locale.CHINESE;
+
+        // when
+        final Comparator<? super Locale> comparator = new ComparatorUtils.DefaultNullSafeLocaleComparator();
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
     @DisplayName("Test different currency objects by default comparator and not priority nulls")
     public void testCurrencyObjectsByDefaultComparator() {
         // given
@@ -693,14 +706,42 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different locale objects by default comparator and not priority nulls")
-    public void testNullLocaleObjectsByDefaultComparator() {
+    @DisplayName("Test different null currency objects by default comparator and not priority nulls")
+    public void testNullCurrencyObjectsByDefaultComparator() {
         // given
-        final Locale d1 = null;
-        final Locale d2 = Locale.CHINESE;
+        final Currency d1 = null;
+        final Currency d2 = Currency.getInstance(Locale.CHINA);
 
         // when
-        final Comparator<? super Locale> comparator = new ComparatorUtils.DefaultNullSafeLocaleComparator();
+        final Comparator<? super Currency> comparator = new ComparatorUtils.DefaultNullSafeCurrencyComparator();
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    @DisplayName("Test different url objects by default comparator and not priority nulls")
+    public void testUrlObjectsByDefaultComparator() throws MalformedURLException {
+        // given
+        final URL d1 = new URL("https://mafiadoc.com/search/wifi");
+        final URL d2 = new URL("https://mafiadoc.com/search/network");
+
+        // when
+        final Comparator<? super URL> comparator = new ComparatorUtils.DefaultNullSafeUrlComparator();
+
+        // then
+        assertThat(comparator.compare(d1, d2), greaterThan(1));
+    }
+
+    @Test
+    @DisplayName("Test different null url objects by default comparator and not priority nulls")
+    public void testNullUrlObjectsByDefaultComparator() throws MalformedURLException {
+        // given
+        final URL d1 = null;
+        final URL d2 = new URL("https://mafiadoc.com/search/network");
+
+        // when
+        final Comparator<? super URL> comparator = new ComparatorUtils.DefaultNullSafeUrlComparator();
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
@@ -721,7 +762,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different big decimal objects with zero significant places by default comparator and not priority nulls")
+    @DisplayName("Test different null big decimal objects with zero significant places by default comparator and not priority nulls")
     public void testNullBigDecimalObjectsByDefaultComparator() {
         // given
         final BigDecimal d1 = null;
@@ -866,7 +907,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test list objects by default comparator and not priority nulls")
+    @DisplayName("Test different list objects by default comparator and not priority nulls")
     public void testIterableListObjectsByDefaultComparator() {
         // given
         final List<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
@@ -880,7 +921,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test null list objects by default comparator and not priority nulls")
+    @DisplayName("Test different null list objects by default comparator and not priority nulls")
     public void testNullListObjectsByDefaultComparator() {
         // given
         final List<String> d1 = null;
@@ -894,7 +935,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test set objects by default comparator and not priority nulls")
+    @DisplayName("Test different set objects by default comparator and not priority nulls")
     public void testSetObjectsByDefaultComparator() {
         // given
         final Set<String> d1 = new ImmutableSet.Builder<String>()
@@ -919,7 +960,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test list / set objects by default comparator and not priority nulls")
+    @DisplayName("Test different list / set objects by default comparator and not priority nulls")
     public void testListAndSetObjectsByDefaultComparator() {
         // given
         final Set<String> d1 = new ImmutableSet.Builder<String>()
@@ -938,21 +979,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
     }
 
-    protected List<String> generateStrings(int size) {
-        final MockUnitInt num = this.mock.probabilites(Integer.class)
-            .add(0.3, this.mock.ints().range(0, 10))
-            .add(0.7, this.mock.ints().range(10, 20))
-            .mapToInt(Integer::intValue);
-
-        final List<String> strings = this.mock.fmt("#{first} #{last} #{num}")
-            .param("first", this.mock.names().first().format(LOWER_CASE))
-            .param("last", this.mock.names().last().format(UPPER_CASE))
-            .param("num", num)
-            .list(size)
-            .val();
-        return strings;
-    }
-
+    /**
+     * Return matcher {@link Matcher} by collection of integers {@link List} in descending order
+     *
+     * @return matcher {@link Matcher}
+     */
     protected Matcher<? super List<Integer>> isInAscendingOrdering() {
         return new TypeSafeMatcher<List<Integer>>() {
             @Override
@@ -972,6 +1003,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         };
     }
 
+    /**
+     * Return matcher {@link Matcher} by collection of integers {@link List} in descending order
+     *
+     * @return matcher {@link Matcher}
+     */
     protected Matcher<? super List<Integer>> isInDescendingOrdering() {
         return new TypeSafeMatcher<List<Integer>>() {
             @Override
@@ -991,6 +1027,13 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         };
     }
 
+    /**
+     * Returns binary flag to assert input array of doubles {@link Double} to be sorted by order {@link SortOrder}
+     *
+     * @param array - initial input array of doubles {@link Double}
+     * @param order - initial input sort order {@link SortOrder}
+     * @return binary flag to assert input array of doubles to be sorted by order {@link SortOrder}
+     */
     protected static boolean isSorted(final Double[] array, final SortOrder order) {
         for (int i = 0; i < array.length - 1; i++) {
             if (Objects.equals(Double.compare(array[i], array[i + 1]), order)) {
