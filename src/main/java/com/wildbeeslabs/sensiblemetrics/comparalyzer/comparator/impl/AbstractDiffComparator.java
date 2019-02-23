@@ -25,8 +25,8 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.sort.SortOrder;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
 /**
  * Abstract difference comparator implementation by input object instance
@@ -98,8 +99,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public AbstractDiffComparator(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
         this.clazz = Objects.requireNonNull(clazz);
         this.comparator = Objects.nonNull(comparator)
-                ? comparator
-                : ComparableComparator.getInstance();
+            ? comparator
+            : ComparableComparator.getInstance();
         this.propertyMap.putAll(this.getFieldsMap(this.clazz));
         this.propertySet.addAll(this.propertyMap.keySet());
     }
@@ -111,8 +112,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void excludeProperties(final Iterable<String> properties) {
         Optional.ofNullable(properties)
-                .orElseGet(Collections::emptyList)
-                .forEach(property -> excludeProperty(property));
+            .orElseGet(Collections::emptyList)
+            .forEach(property -> excludeProperty(property));
     }
 
     /**
@@ -134,8 +135,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public void includeProperties(final Iterable<String> properties) {
         getPropertySet().clear();
         Optional.ofNullable(properties)
-                .orElseGet(Collections::emptyList)
-                .forEach(property -> includeProperty(property));
+            .orElseGet(Collections::emptyList)
+            .forEach(property -> includeProperty(property));
     }
 
     /**
@@ -158,7 +159,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public void setComparator(final String property, final Comparator<?> comparator) {
         Objects.requireNonNull(property);
         log.debug(String.format("{%s}: storing property by name={%s}, comparator={%s}", getClass().getName(), property, comparator));
-        this.getPropertyComparatorMap().put(StringUtils.sanitize(property), comparator);
+        this.getPropertyComparatorMap().put(sanitize(property), comparator);
     }
 
     /**
@@ -168,9 +169,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void setComparators(final Map<String, Comparator<?>> propertyMap) {
         Optional.ofNullable(propertyMap)
-                .orElseGet(Collections::emptyMap)
-                .entrySet()
-                .forEach(entry -> setComparator(entry.getKey(), entry.getValue()));
+            .orElseGet(Collections::emptyMap)
+            .entrySet()
+            .forEach(entry -> setComparator(entry.getKey(), entry.getValue()));
     }
 
     /**
@@ -180,7 +181,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void removeComparator(final String property) {
         log.debug(String.format("{%s}: removing comparator for property={%s}", getClass().getName(), property));
-        this.getPropertyComparatorMap().remove(StringUtils.sanitize(property));
+        this.getPropertyComparatorMap().remove(sanitize(property));
     }
 
     /**
@@ -190,8 +191,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     protected void removeComparators(final Iterable<String> properties) {
         Optional.ofNullable(properties)
-                .orElseGet(Collections::emptyList)
-                .forEach(property -> removeComparator(property));
+            .orElseGet(Collections::emptyList)
+            .forEach(property -> removeComparator(property));
     }
 
     /**
@@ -220,8 +221,20 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @return property comparator {@link Comparator}}
      */
     @SuppressWarnings("unchecked")
-    protected <T> Comparator<? super T> getPropertyComparator(final String property) {
-        return (Comparator<? super T>) getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), ComparatorUtils.getObjectComparator(null,false));
+    protected Comparator<?> getPropertyComparator(final String property) {
+        return getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+    }
+
+    /**
+     * Returns result of comparison {@link SortOrder} by property name {@link String}
+     *
+     * @param first    - initial input first value {@code T}
+     * @param last     - initial input last value {@code T}
+     * @param property - initial property name {@link String}
+     * @return result of comparison {@link SortOrder}
+     */
+    protected <T> SortOrder compare(final T first, final T last, final String property) {
+        return SortOrder.getSortOrderByCode(Objects.compare(first, last, (Comparator<? super T>) getPropertyComparator(property)));
     }
 
     /**
@@ -232,9 +245,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     protected List<String> getFieldsList(final Class<? extends T> clazz) {
         return getValidFields(getAllFields(clazz), false, false)
-                .stream()
-                .map(field -> field.getName())
-                .collect(Collectors.toList());
+            .stream()
+            .map(field -> field.getName())
+            .collect(Collectors.toList());
     }
 
     /**
@@ -245,8 +258,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     protected Map<String, Class<?>> getFieldsClassMap(final Class<? extends T> clazz) {
         return getValidFields(getAllFields(clazz), false, false)
-                .stream()
-                .collect(Collectors.toMap(Field::getName, Field::getType));
+            .stream()
+            .collect(Collectors.toMap(Field::getName, Field::getType));
     }
 
     /**
@@ -257,8 +270,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     protected Map<String, Field> getFieldsMap(final Class<? extends T> clazz) {
         return getValidFields(getAllFields(clazz), false, false)
-                .stream()
-                .collect(Collectors.toMap(field -> field.getName(), field -> field));
+            .stream()
+            .collect(Collectors.toMap(field -> field.getName(), field -> field));
     }
 
     /**

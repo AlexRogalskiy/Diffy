@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDiffTest;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.sort.SortOrder;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import lombok.Data;
@@ -67,68 +68,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ComparatorUtilsTest extends AbstractDiffTest {
-
-    /**
-     * Default sort order enumeration
-     */
-    public enum SortOrder {
-        ASC(1),
-        DESC(-1),
-        EQ(0);
-
-        /**
-         * Default sort order
-         */
-        private int order;
-
-        SortOrder(int order) {
-            this.order = order;
-        }
-
-        /**
-         * Returns whether the direction is ascending {@code ASC}
-         */
-        public boolean isAscending() {
-            return this.equals(ASC);
-        }
-
-        /**
-         * Returns whether the direction is descending {@code DESC}
-         */
-        public boolean isDescending() {
-            return this.equals(DESC);
-        }
-
-        /**
-         * Returns the {@link SortOrder} enum for the given {@link String} value
-         *
-         * @param value - initial input string value to be converted
-         * @return enum for the given {@link SortOrder} string value
-         * @throws IllegalArgumentException in case the given value cannot be parsed into an enum value
-         */
-        public static SortOrder fromString(final String value) {
-            try {
-                return SortOrder.valueOf(value.toUpperCase(Locale.US));
-            } catch (Exception e) {
-                throw new IllegalArgumentException(String.format("Invalid value '%s' for orders given! Has to be either 'desc' or 'asc' (case insensitive).", value), e);
-            }
-        }
-
-        /**
-         * Returns the {@link SortOrder} enum for the given {@link String} or null if it cannot be parsed into an enum
-         * value.
-         *
-         * @param value - initial input string value to be converted
-         * @return wrapped enum {@link SortOrder} for the given string value
-         */
-        public static Optional<SortOrder> fromOptionalString(final String value) {
-            try {
-                return Optional.of(fromString(value));
-            } catch (IllegalArgumentException e) {
-                return Optional.empty();
-            }
-        }
-    }
 
     /**
      * Default {@link String} comparator instance {@link Comparator}
@@ -636,7 +575,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final String d2 = "abcd";
 
         // when
-        final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeStringComparator(DEFAULT_STRING_COMPARATOR);
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeCharSequenceComparator(DEFAULT_STRING_COMPARATOR);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
@@ -650,7 +589,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final String d2 = "";
 
         // when
-        final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeStringComparator();
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeCharSequenceComparator();
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
@@ -692,7 +631,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final List<String> strings = generateStrings(size);
 
         // when
-        Collections.sort(strings, new ComparatorUtils.DefaultNullSafeStringComparator());
+        Collections.sort(strings, new ComparatorUtils.DefaultNullSafeCharSequenceComparator());
 
         //then
         assertThat(strings, hasSize(size));
@@ -800,7 +739,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
             .build();
 
         // when
-        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator(map, Comparator.naturalOrder());
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator(map, Comparator.naturalOrder(), false);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
@@ -831,7 +770,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         assertThat(comparator.compare(d1, d2), greaterThan(0));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     @DisplayName("Test null map values by default comparator")
     public void testNullValueMapWithDefaultNumberComparator() {
         // given
@@ -853,7 +792,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator(map);
 
         // then
-        assertThat(comparator.compare(d1, d2), greaterThan(0));
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
     }
 
     @Test(expected = ClassCastException.class)
@@ -965,6 +904,26 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
     }
 
+    @Test
+    @DisplayName("Test list and set collections of strings by default comparator and not priority nulls")
+    public void testIterableListAndSetWithDefaultNumberComparator() {
+        // given
+        final Set<String> d1 = new ImmutableSet.Builder<String>()
+            .add("saf")
+            .add("fas")
+            .add("sfa")
+            .add("sadf")
+            .add("fsa")
+            .build();
+        final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+
+        // when
+        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
+    }
+
     protected List<String> generateStrings(int size) {
         final MockUnitInt num = this.mock.probabilites(Integer.class)
             .add(0.3, this.mock.ints().range(0, 10))
@@ -978,27 +937,6 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
             .list(size)
             .val();
         return strings;
-    }
-
-    protected Double[] generateDoubles(int size, double lowerBound, double upperBound) {
-        return this.mock.doubles()
-            .range(lowerBound, upperBound)
-            .array(size)
-            .val();
-    }
-
-    protected Integer[] generateInts(int size, int lowerBound, int upperBound) {
-        return this.mock.ints()
-            .range(lowerBound, upperBound)
-            .array(size)
-            .val();
-    }
-
-    protected List<Integer> generateInts(int size, int bound) {
-        return this.mock.ints()
-            .bound(size)
-            .list(LinkedList.class, size)
-            .val();
     }
 
     protected Matcher<? super List<Integer>> isInAscendingOrdering() {

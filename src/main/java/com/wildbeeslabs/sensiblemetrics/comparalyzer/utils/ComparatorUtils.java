@@ -31,6 +31,7 @@ import lombok.ToString;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
+import org.apache.commons.collections.comparators.NullComparator;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
@@ -236,7 +237,7 @@ public class ComparatorUtils {
      */
     @SuppressWarnings("unchecked")
     public static Comparator<? super String> getStringComparator(@Nullable final Comparator<? super String> comparator, boolean nullsInPriority) {
-        return DefaultNullSafeStringComparator
+        return DefaultNullSafeCharSequenceComparator
             .<String>builder()
             .comparator(comparator)
             .nullsInPriority(nullsInPriority)
@@ -295,15 +296,16 @@ public class ComparatorUtils {
     /**
      * Returns map value comparator instance {@link Comparator}
      *
-     * @param <K>        type of key entry element
-     * @param <V>        type of value entry element to be compared by
-     * @param map        - initial input map collection instance {@link Map}
-     * @param comparator - initial input comparator instance {@link Comparator}
+     * @param <K>             type of key entry element
+     * @param <V>             type of value entry element to be compared by
+     * @param map             - initial input map collection instance {@link Map}
+     * @param comparator      - initial input comparator instance {@link Comparator}
+     * @param nullsInPriority - initial input "null" priority {@link Boolean}
      * @return value map comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> Comparator<? super K> getValueMapComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator) {
-        return new DefaultMapValueComparator(map, comparator);
+    public static <K, V> Comparator<? super K> getValueMapComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator, boolean nullsInPriority) {
+        return new DefaultMapValueComparator(map, comparator, nullsInPriority);
     }
 
     /**
@@ -477,7 +479,7 @@ public class ComparatorUtils {
      * @param last  - initial last input argument
      * @return numeric value of comparison
      */
-    public static <T> int compare(final T first, final T last) {
+    public static <T extends Comparable<? super T>> int compare(final T first, final T last) {
         return compare(first, last, getComparableComparator());
     }
 
@@ -562,13 +564,12 @@ public class ComparatorUtils {
     /**
      * Returns numeric result by null-safe {@link BigDecimal} arguments comparison
      *
-     * @param <T>   type of input element to be compared by operation
      * @param first - initial first input argument {@link BigDecimal}
      * @param last  - initial last input argument {@link BigDecimal}
      * @return a negative integer, zero, or a positive integer if the first
      * argument is less than, equal to, or greater than the second
      */
-    public static <T extends Number> int bigDecimalCompareTo(final BigDecimal first, final BigDecimal last) {
+    public static int bigDecimalCompareTo(final BigDecimal first, final BigDecimal last) {
         return compareTo(first, last);
     }
 
@@ -613,6 +614,20 @@ public class ComparatorUtils {
     }
 
     /**
+     * Default null-safe {@code T} comparator declaration {@link Comparator}
+     *
+     * @param <T> type of input element to be compared by operation
+     */
+    private interface NullSafeComparator<T> extends Comparator<T> {
+
+        default int compare(final T first, final T last) {
+            return safeCompare(first, last);
+        }
+
+        int safeCompare(final T first, final T last);
+    }
+
+    /**
      * Default abstract null-safe {@code T} comparator implementation {@link Comparator}
      *
      * @param <T> type of input element to be compared by operation
@@ -621,7 +636,7 @@ public class ComparatorUtils {
     @Data
     @EqualsAndHashCode
     @ToString
-    public static class DefaultNullSafeComparator<T> implements Comparator<T> {
+    public static class DefaultNullSafeComparator<T> implements NullSafeComparator<T> {
 
         /**
          * Default comparator instance {@link Comparator}
@@ -655,7 +670,7 @@ public class ComparatorUtils {
          * @param nullsInPriority - initial input "null" priority {@link Boolean}
          */
         public DefaultNullSafeComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
-            this.comparator = Objects.nonNull(comparator) ? comparator : ComparableComparator.getInstance();
+            this.comparator = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
             this.nullsInPriority = nullsInPriority;
         }
 
@@ -671,7 +686,7 @@ public class ComparatorUtils {
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
-        public int compare(final T first, final T last) {
+        public int safeCompare(final T first, final T last) {
             if (first == last) return 0;
             if (Objects.isNull(first)) return (isNullsInPriority() ? 1 : -1);
             if (Objects.isNull(last)) return (isNullsInPriority() ? -1 : 1);
@@ -680,42 +695,17 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default comparable comparator implementation {@link Comparator}
-     *
-     * @param <T> type of input element to be compared by operation
-     */
-    @EqualsAndHashCode
-    @ToString
-    public static class DefaultComparableComparator<T extends Comparable<? super T>> implements Comparator<T> {
-
-        /**
-         * Returns numeric result of arguments comparison:
-         * "-1" - first argument is greater than the last one
-         * "1" - last argument is greater than the first one
-         * "0" - arguments are equal
-         *
-         * @param first - initial input first argument
-         * @param last  - initial input last argument
-         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
-         */
-        @Override
-        public int compare(final T first, final T last) {
-            return ComparatorUtils.compareTo(first, last);
-        }
-    }
-
-    /**
      * Default null-safe object {@link Object} comparator implementation {@link DefaultNullSafeComparator}
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeObjectComparator extends DefaultNullSafeComparator<Object> {
+    public static class DefaultNullSafeObjectComparator<T> extends DefaultNullSafeComparator<T> {
 
         /**
          * Default null-safe object comparator constructor
          */
         public DefaultNullSafeObjectComparator() {
-            this(null);
+            this(Comparator.comparing(Object::toString));
         }
 
         /**
@@ -733,42 +723,61 @@ public class ComparatorUtils {
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeObjectComparator(@Nullable final Comparator<? super Object> comparator, boolean nullsInPriority) {
-            super(Objects.isNull(comparator) ? Comparator.comparing(Object::toString) : comparator, nullsInPriority);
+        public DefaultNullSafeObjectComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super(comparator, nullsInPriority);
         }
     }
 
     /**
-     * Default null-safe string {@link String} comparator implementation {@link DefaultNullSafeComparator}
+     * Default comparable comparator implementation {@link Comparator}
+     *
+     * @param <T> type of input element to be compared by operation
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeStringComparator extends DefaultNullSafeComparator<String> {
+    public static class DefaultComparableComparator<T extends Comparable<? super T>> extends DefaultNullSafeObjectComparator<T> {
 
         /**
-         * Default null-safe string comparator constructor
+         * Default null-safe comparable comparator constructor
          */
-        public DefaultNullSafeStringComparator() {
+        public DefaultComparableComparator() {
+            super(ComparableComparator.getInstance(), false);
+        }
+    }
+
+    /**
+     * Default null-safe char sequence {@link String} comparator implementation {@link DefaultNullSafeComparator}
+     *
+     * @param <T> type of input element to be compared by operation
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultNullSafeCharSequenceComparator<T extends CharSequence> extends DefaultNullSafeObjectComparator<T> {
+
+        /**
+         * Default null-safe char sequence comparator constructor
+         */
+        public DefaultNullSafeCharSequenceComparator() {
             this(null);
         }
 
         /**
-         * Default null-safe string comparator constructor with initial comparator instance {@link Comparator}
+         * Default null-safe char sequence comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
-        public DefaultNullSafeStringComparator(@Nullable final Comparator<? super String> comparator) {
+        public DefaultNullSafeCharSequenceComparator(@Nullable final Comparator<? super T> comparator) {
             this(comparator, false);
         }
 
         /**
-         * Default null-safe string comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe char sequence comparator constructor with input "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultNullSafeStringComparator(@Nullable final Comparator<? super String> comparator, boolean nullsInPriority) {
-            super(comparator, nullsInPriority);
+        public DefaultNullSafeCharSequenceComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super(Objects.isNull(comparator) ? Comparator.comparing(Object::toString) : comparator, nullsInPriority);
         }
     }
 
@@ -777,7 +786,7 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeClassComparator extends DefaultNullSafeComparator<Class<?>> {
+    public static class DefaultNullSafeClassComparator extends DefaultNullSafeObjectComparator<Class<?>> {
 
         /**
          * Default null-safe class comparator constructor
@@ -818,7 +827,7 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeLocaleComparator extends DefaultNullSafeComparator<Locale> {
+    public static class DefaultNullSafeLocaleComparator extends DefaultNullSafeObjectComparator<Locale> {
 
         /**
          * Default null safe locale comparator constructor
@@ -1224,7 +1233,7 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeIterableComparator<T> extends DefaultNullSafeComparator<Iterable<T>> {
+    public static class DefaultNullSafeIterableComparator<T> extends DefaultNullSafeObjectComparator<Iterable<T>> {
 
         /**
          * Default null-safe iterable comparator constructor
@@ -1272,7 +1281,7 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeBigDecimalComparator extends DefaultNullSafeComparator<BigDecimal> {
+    public static class DefaultNullSafeBigDecimalComparator extends DefaultNullSafeObjectComparator<BigDecimal> {
 
         /**
          * Default null-safe big decimal comparator constructor
@@ -1334,18 +1343,19 @@ public class ComparatorUtils {
          * @param map - initial input map collection instance {@link Map}
          */
         public DefaultMapValueComparator(final Map<K, V> map) {
-            this(map, null);
+            this(map, null, false);
         }
 
         /**
-         * Default value map comparator with initial map collection instance {@link Map} and value comparator {@link Comparator}
+         * Default value map comparator with initial map collection instance {@link Map}, map value comparator {@link Comparator} and "null" priority argument {@link Boolean}
          *
-         * @param map        - initial input map collection instance {@link Map}
-         * @param comparator - initial input value map comparator instance {@link Comparator}
+         * @param map             - initial input map collection instance {@link Map}
+         * @param comparator      - initial input value map comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultMapValueComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator) {
+        public DefaultMapValueComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator, boolean nullsInPriority) {
             this.map = Objects.requireNonNull(map);
-            this.comparator = Objects.isNull(comparator) ? Comparator.comparing(Object::toString) : comparator;
+            this.comparator = new NullComparator(Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator, nullsInPriority);
         }
 
         /**
@@ -1415,7 +1425,7 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultNullSafeNumberComparator<T extends Number> extends DefaultNullSafeComparator<T> {
+    public static class DefaultNullSafeNumberComparator<T extends Number> extends DefaultNullSafeObjectComparator<T> {
 
         /**
          * Default null-safe number comparator constructor

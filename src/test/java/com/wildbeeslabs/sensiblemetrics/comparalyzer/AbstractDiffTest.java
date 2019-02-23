@@ -31,6 +31,8 @@ import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.*;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 import static net.andreinc.mockneat.types.enums.IPv4Type.CLASS_A;
 import static net.andreinc.mockneat.types.enums.IPv4Type.CLASS_C;
@@ -91,5 +93,26 @@ public abstract class AbstractDiffTest {
      */
     protected final MockUnitString ipv4ClassA = this.mock.ipv4s().types(CLASS_A, CLASS_C);
     protected final MockUnitString ipv6ClassA = this.mock.iPv6s().mapToString();
+
+    protected Double[] generateDoubles(int size, double lowerBound, double upperBound) {
+        return this.mock.doubles()
+            .range(lowerBound, upperBound)
+            .array(size)
+            .val();
+    }
+
+    protected Integer[] generateInts(int size, int lowerBound, int upperBound) {
+        return this.mock.ints()
+            .range(lowerBound, upperBound)
+            .array(size)
+            .val();
+    }
+
+    protected List<Integer> generateInts(int size, int bound) {
+        return this.mock.ints()
+            .bound(size)
+            .list(LinkedList.class, size)
+            .val();
+    }
 }
 

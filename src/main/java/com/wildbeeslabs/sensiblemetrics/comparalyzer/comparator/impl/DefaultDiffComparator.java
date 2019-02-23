@@ -23,8 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.sort.SortOrder;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -36,6 +38,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtils.setAccessible;
+import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
 /**
  * Default difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
@@ -76,6 +79,18 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     }
 
     /**
+     * Returns comparator instance {@link Comparator} by property name {@link String}
+     *
+     * @param property - initial property name {@link String}
+     * @return property comparator {@link Comparator}}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    protected Comparator<?> getPropertyComparator(final String property) {
+        return getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+    }
+
+    /**
      * Creates new default difference entry {@link DefaultDiffEntry}
      *
      * @param first        - initial first argument to be compared {@link Object}
@@ -85,39 +100,39 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
      */
     protected DefaultDiffEntry createDiffEntry(final Object first, final Object last, final String propertyName) {
         return DefaultDiffEntry
-                .builder()
-                .first(first)
-                .last(last)
-                .propertyName(propertyName)
-                .build();
+            .builder()
+            .first(first)
+            .last(last)
+            .propertyName(propertyName)
+            .build();
     }
 
     /**
      * Returns iterable collection of difference entries {@link DiffEntry}
      *
      * @param <S>
-     * @param first - initial first argument to be compared
-     * @param last  - initial last argument to be compared with
+     * @param first - initial first argument to be compared {@code T}
+     * @param last  - initial last argument to be compared with {@code T}
      * @return collection of difference entries {@link DiffEntry}
      */
     @Override
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {
         final List<DiffEntry<?>> result = new ArrayList<>();
         getPropertySet()
-                .stream()
-                .filter(property -> getPropertyMap().containsKey(property))
-                .forEach(property -> {
-                    try {
-                        setAccessible(getPropertyMap().get(property));
-                        final Object firstValue = getPropertyMap().get(property).get(first);
-                        final Object lastValue = getPropertyMap().get(property).get(last);
-                        if (0 != Objects.compare(firstValue, lastValue, getPropertyComparator(property))) {
-                            result.add(createDiffEntry(firstValue, lastValue, property));
-                        }
-                    } catch (IllegalAccessException e) {
-                        log.error(String.format("ERROR: cannot get value of field={%s}, message={%s}", property, e.getMessage()));
+            .stream()
+            .filter(property -> getPropertyMap().containsKey(property))
+            .forEach(property -> {
+                try {
+                    setAccessible(getPropertyMap().get(property));
+                    final Object firstValue = getPropertyMap().get(property).get(first);
+                    final Object lastValue = getPropertyMap().get(property).get(last);
+                    if (!Objects.equals(compare(firstValue, lastValue, property), SortOrder.EQ)) {
+                        result.add(createDiffEntry(firstValue, lastValue, property));
                     }
-                });
+                } catch (IllegalAccessException e) {
+                    log.error(String.format("ERROR: cannot get value of property={%s}, message={%s}", property, e.getMessage()));
+                }
+            });
         return (S) result;
     }
 }
