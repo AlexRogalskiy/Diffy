@@ -229,16 +229,16 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns string {@link String} comparator instance {@link Comparator}
+     * Returns char sequence {@link CharSequence} comparator instance {@link Comparator}
      *
      * @param comparator      - initial input comparator instance {@link Comparator}
      * @param nullsInPriority - initial input "null" priority {@link Boolean}
-     * @return string {@link String} comparator instance {@link Comparator}
+     * @return char sequence {@link CharSequence} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
-    public static Comparator<? super String> getStringComparator(@Nullable final Comparator<? super String> comparator, boolean nullsInPriority) {
+    public static Comparator<? super CharSequence> getCharSequenceComparator(@Nullable final Comparator<? super CharSequence> comparator, boolean nullsInPriority) {
         return DefaultNullSafeCharSequenceComparator
-            .<String>builder()
+            .<CharSequence>builder()
             .comparator(comparator)
             .nullsInPriority(nullsInPriority)
             .build();
@@ -790,7 +790,7 @@ public class ComparatorUtils {
          * Default null-safe char sequence comparator constructor
          */
         public DefaultNullSafeCharSequenceComparator() {
-            super();
+            this(ComparableComparator.getInstance());
         }
 
         /**

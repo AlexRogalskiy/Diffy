@@ -561,7 +561,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final String d2 = "abcd";
 
         // when
-        final Comparator<? super String> comparator = ComparatorUtils.getStringComparator(Comparator.naturalOrder(), false);
+        final Comparator<? super CharSequence> comparator = ComparatorUtils.getCharSequenceComparator((o1, o2) -> Objects.compare(String.valueOf(o1), String.valueOf(o2), Comparator.naturalOrder()), false);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
