@@ -295,6 +295,20 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
     }
 
+    @Test
+    @DisplayName("Test equal double array objects by lexicographical default comparator and not priority nulls")
+    public void testEqualDoubleArrayObjectsByLexicographicalDefaultComparator() {
+        // given
+        final Double[] d1 = {3.4, 6.4, 2.1, 6.2, null};
+        final Double[] d2 = {3.4, 6.4, 2.1, 6.2, null};
+
+        // when
+        final Comparator<? super Double[]> comparator = ComparatorUtils.<Double>getLexicographicalArrayComparator(null, false);
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
+    }
+
     @Test(expected = NullPointerException.class)
     @DisplayName("Test different double array objects by default comparator and not priority nulls")
     public void testDoubleArrayObjectsWithNullsByDefaultComparator() {

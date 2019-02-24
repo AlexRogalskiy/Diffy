@@ -100,10 +100,22 @@ public abstract class AbstractDiffTest {
     protected final MockUnitString lettersStringMock = strings().types(LETTERS);
     protected final MockUnitString numbersStringMock = strings().types(NUMBERS);
     /**
-     * Default IP string mock unit instances {@link MockUnitString}
+     * Default string mock unit instances {@link MockUnitString}
      */
-    protected final MockUnitString ipv4ClassA = this.mock.ipv4s().types(CLASS_A, CLASS_C);
-    protected final MockUnitString ipv6ClassA = this.mock.iPv6s().mapToString();
+    protected final MockUnitString ipv4ClassACMock = this.mock.ipv4s().types(CLASS_A, CLASS_C);
+    protected final MockUnitString ipv6Mock = this.mock.iPv6s().mapToString();
+    protected final MockUnitString uuidMock = this.mock.uuids().mapToString();
+    protected final MockUnitString countryNameMock = this.mock.countries().names();
+    protected final MockUnitString cityNameMock = this.mock.cities().capitals();
+    protected final MockUnitString currencyNameMock = this.mock.currencies().name();
+    protected final MockUnitString creditCardNameMock = this.mock.creditCards().names();
+    protected final MockUnitString emailMock = this.mock.emails().mapToString();
+    protected final MockUnitString domainMock = this.mock.domains().all();
+    protected final MockUnitString departmentMock = this.mock.departments().mapToString();
+    protected final MockUnitString genderMock = this.mock.genders().letter();
+    protected final MockUnitString firstNameMock = this.mock.names().first();
+    protected final MockUnitString lastNameMock = this.mock.names().last();
+    protected final MockUnitString quotationMock = this.mock.naughtyStrings().quotations();
 
     /**
      * Returns mock unit instance {@link MockUnit} to produce array of {@link Float} by initial array size, lower / upper value bounds

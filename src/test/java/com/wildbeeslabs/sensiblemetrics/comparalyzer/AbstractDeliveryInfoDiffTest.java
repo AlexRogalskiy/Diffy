@@ -118,9 +118,18 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .setter(DeliveryInfo::setCreatedAt, getLocalDateMock().toUtilDate())
             .setter(DeliveryInfo::setUpdatedAt, getLocalDateMock().toUtilDate())
             .setter(DeliveryInfo::setBalance, getDoubleMock())
-            .setter(DeliveryInfo::setStatus, ints().bound(DELIVERY_STATUS_LIST.size()).map(value -> DELIVERY_STATUS_LIST.get(value)))
+            .setter(DeliveryInfo::setStatus, generateStatus())
             .setter(DeliveryInfo::setCodes, generateInts(10, 100, 200))
             .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
+    }
+
+    /**
+     * Returns delivery info status mock unit instance {@link MockUnit}
+     *
+     * @return delivery info status mock unit instance {@link MockUnit}
+     */
+    protected MockUnit<DeliveryInfo.DeliveryStatus> generateStatus() {
+        return ints().bound(DELIVERY_STATUS_LIST.size()).map(value -> DELIVERY_STATUS_LIST.get(value));
     }
 
     /**
