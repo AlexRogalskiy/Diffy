@@ -47,6 +47,7 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.Matchers.hasSize;
@@ -78,6 +79,20 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
             if (0 != result) return result;
         }
         return 0;
+    };
+
+    /**
+     * Default functional {@link Class} comparator instance {@link Comparator}
+     */
+    public static final Function<String, Comparator<Class<?>>> DEFAULT_CLASS_COMPARATOR = (className) -> (o1, o2) -> {
+        final String n1 = o1.getName();
+        final String n2 = o2.getName();
+        boolean tika1 = n1.startsWith(className);
+        boolean tika2 = n2.startsWith(className);
+        if (tika1 == tika2) {
+            return n1.compareTo(n2);
+        }
+        return tika1 ? -1 : 1;
     };
 
     /**
@@ -634,6 +649,34 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    @DisplayName("Test different class objects by custom comparator and not priority nulls")
+    public void testDifferentСlassObjectsByCustomComparator() {
+        // given
+        final Class<Date> d1 = Date.class;
+        final Class<AddressInfo> d2 = AddressInfo.class;
+
+        // when
+        final Comparator<? super Class<?>> comparator = new ComparatorUtils.DefaultNullSafeClassComparator(DEFAULT_CLASS_COMPARATOR.apply("java.util."));
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    @DisplayName("Test equal class objects by custom comparator and not priority nulls")
+    public void testEqualСlassObjectsByCustomComparator() {
+        // given
+        final Class<AddressInfo> d1 = AddressInfo.class;
+        final Class<AddressInfo> d2 = AddressInfo.class;
+
+        // when
+        final Comparator<? super Class<?>> comparator = new ComparatorUtils.DefaultNullSafeClassComparator(DEFAULT_CLASS_COMPARATOR.apply("com.wildbeeslabs.sensiblemetrics.comparalyzer."));
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
     }
 
     @Test
