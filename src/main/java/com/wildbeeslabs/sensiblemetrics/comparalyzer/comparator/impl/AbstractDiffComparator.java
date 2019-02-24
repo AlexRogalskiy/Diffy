@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.sort.SortOrder;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -226,15 +226,15 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Returns result of comparison {@link SortOrder} by property name {@link String}
+     * Returns result of comparison {@code SortManager.SortDirection} by property name {@link String}
      *
      * @param first    - initial input first value {@code T}
      * @param last     - initial input last value {@code T}
      * @param property - initial property name {@link String}
-     * @return result of comparison {@link SortOrder}
+     * @return result of comparison {@code SortManager.SortDirection}
      */
-    protected <T> SortOrder compare(final T first, final T last, final String property) {
-        return SortOrder.getSortOrderByCode(Objects.compare(first, last, (Comparator<? super T>) getPropertyComparator(property)));
+    protected <T> SortManager.SortDirection compare(final T first, final T last, final String property) {
+        return SortManager.SortDirection.getDirectionByCode(Objects.compare(first, last, (Comparator<? super T>) getPropertyComparator(property)));
     }
 
     /**

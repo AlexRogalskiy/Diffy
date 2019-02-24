@@ -1598,4 +1598,39 @@ public class ComparatorUtils {
             super(comparator, nullsInPriority);
         }
     }
+
+    /**
+     * Default multi comparator implementation {@link DefaultNullSafeObjectComparator}
+     *
+     * @param <T> type of list element
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultMultiComparator<T> implements Comparator<T> {
+        /**
+         * Default collection of comparators {@link List}
+         */
+        private final List<Comparator<? super T>> comparators;
+
+        public DefaultMultiComparator(final List<Comparator<? super T>> comparators) {
+            this.comparators = comparators;
+        }
+
+        public DefaultMultiComparator(final Comparator<? super T>... comparators) {
+            this(Arrays.asList(comparators));
+        }
+
+        public int compare(final T o1, final T o2) {
+            for (final Comparator<? super T> c : getComparators()) {
+                int result = c.compare(o1, o2);
+                if (0 != result) return result;
+            }
+            return 0;
+        }
+
+        public static <T> void sort(final List<T> list, final Comparator<? super T>... comparators) {
+            Collections.sort(list, new DefaultMultiComparator<>(comparators));
+        }
+    }
 }

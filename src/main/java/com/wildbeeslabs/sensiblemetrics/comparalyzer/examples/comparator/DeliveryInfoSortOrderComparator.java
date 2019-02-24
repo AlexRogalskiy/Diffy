@@ -21,45 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.factory;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator.DeliveryInfoDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl.DefaultSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
-import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Comparator;
+import java.util.Map;
 
 /**
- * Default difference comparator factory implementation
+ * Custom delivery info {@link DeliveryInfo} sort order functional comparator implementation {@link DefaultSortOrderComparator}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
-@UtilityClass
-public class DeliveryInfoDiffComparatorFactory {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class DeliveryInfoSortOrderComparator extends DefaultSortOrderComparator<DeliveryInfo> {
 
     /**
-     * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
+     * Default delivery info sort order comparator constructor with input comparator map {@link Map} and default comparator instance {@link Comparator}
      *
-     * @param <E> type of entity to be compared by
-     * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
+     * @param comparatorMap - initial input comparator map {@link Map}
+     * @param comparator    - initial input default comparator instance {@link Comparator}
      */
-    public static <E extends DiffComparator<DeliveryInfo>> E create() {
-        return (E) new DeliveryInfoDiffComparator();
-    }
-
-    /**
-     * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
-     *
-     * @param <E>        type of entity to be compared by
-     * @param comparator - initial comparator instance {@link Comparator}
-     * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
-     */
-    public static <E extends DiffComparator<DeliveryInfo>> E create(final Comparator<? super DeliveryInfo> comparator) {
-        return (E) new DeliveryInfoDiffComparator(comparator);
+    public DeliveryInfoSortOrderComparator(final Map<String, Comparator<? super DeliveryInfo>> comparatorMap, final Comparator<? super DeliveryInfo> defaultComparator) {
+        super(comparatorMap, defaultComparator);
     }
 }

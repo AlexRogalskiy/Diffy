@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.sort.SortOrder;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
@@ -39,7 +39,7 @@ import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ReflectionUtil
 import static com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.StringUtils.sanitize;
 
 /**
- * Default difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
+ * Difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
  *
  * @param <T> type of input element to be compared by operation
  * @author Alexander Rogalskiy
@@ -139,7 +139,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                     setAccessible(getPropertyMap().get(property));
                     final Object firstValue = getPropertyMap().get(property).get(first);
                     final Object lastValue = getPropertyMap().get(property).get(last);
-                    if (!Objects.equals(compare(firstValue, lastValue, property), SortOrder.EQ)) {
+                    if (!Objects.equals(compare(firstValue, lastValue, property), SortManager.SortDirection.EQ)) {
                         result.add(createDiffEntry(firstValue, lastValue, property));
                     }
                 } catch (IllegalAccessException e) {

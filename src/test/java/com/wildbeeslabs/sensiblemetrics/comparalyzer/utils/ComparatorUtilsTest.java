@@ -28,9 +28,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDiffTest;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.sort.SortOrder;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -247,7 +247,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // then
         assertEquals(doubles.length, size);
-        assertTrue(isSorted(doubles, SortOrder.ASC));
+        assertTrue(isSorted(doubles, SortManager.SortDirection.ASC));
     }
 
     @Test
@@ -278,7 +278,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         //then
         assertEquals(doubles.length, size);
-        assertTrue(isSorted(doubles, SortOrder.ASC));
+        assertTrue(isSorted(doubles, SortManager.SortDirection.ASC));
     }
 
     @Test
@@ -1058,13 +1058,13 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     /**
-     * Returns binary flag to assert input array of doubles {@link Double} to be sorted by order {@link SortOrder}
+     * Returns binary flag to assert input array of doubles {@link Double} to be sorted by order {@link SortDirection}
      *
      * @param array - initial input array of doubles {@link Double}
-     * @param order - initial input sort order {@link SortOrder}
-     * @return binary flag to assert input array of doubles to be sorted by order {@link SortOrder}
+     * @param order - initial input sort order {@link SortDirection}
+     * @return binary flag to assert input array of doubles to be sorted by order {@link SortDirection}
      */
-    protected static boolean isSorted(final Double[] array, final SortOrder order) {
+    protected static boolean isSorted(final Double[] array, final SortManager.SortDirection order) {
         for (int i = 0; i < array.length - 1; i++) {
             if (Objects.equals(Double.compare(array[i], array[i + 1]), order)) {
                 return false;

@@ -21,53 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.interfaces.impl;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.interfaces.Streamable;
+import lombok.Value;
 
-import java.io.Serializable;
+import java.util.Iterator;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
- * Custom address info model
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Default lazy {@link Streamable} implementation from a given {@link Supplier}
  */
-@Data
-@EqualsAndHashCode
-@ToString
-public class AddressInfo implements Serializable {
+@Value(staticConstructor = "from")
+public class LazyStream<T> implements Streamable<T> {
+
+    private final Supplier<? extends Stream<T>> stream;
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Returns default iterator instance {@link Iterator}
+     *
+     * @return default iterator instance {@link Iterator}
      */
-    private static final long serialVersionUID = -6518611464972728811L;
+    @Override
+    public Iterator<T> iterator() {
+        return stream().iterator();
+    }
 
     /**
-     * Default address info ID
+     * Returns default stream instance {@link Stream}
+     *
+     * @return default stream instance {@link Stream}
      */
-    private Long id;
-    /**
-     * Default city name
-     */
-    private String city;
-    /**
-     * Default country name
-     */
-    private String country;
-    /**
-     * Default state/province name
-     */
-    private String stateOrProvince;
-    /**
-     * Default postal code
-     */
-    private String postalCode;
-    /**
-     * Default street name
-     */
-    private String street;
+    @Override
+    public Stream<T> stream() {
+        return stream.get();
+    }
 }

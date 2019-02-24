@@ -21,53 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
- * Custom address info model
+ * Sort comparator declaration
  *
+ * @param <T> type of input element to be compared by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode
-@ToString
-public class AddressInfo implements Serializable {
+@FunctionalInterface
+public interface SortComparator<T> extends Serializable {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Returns comparator instance {@link Comparator} by input sort stream instance {@link SortManager}
+     *
+     * @param config - initial input sort configuration {@link SortManager}
+     * @return comparator instance {@link Comparator}
      */
-    private static final long serialVersionUID = -6518611464972728811L;
-
-    /**
-     * Default address info ID
-     */
-    private Long id;
-    /**
-     * Default city name
-     */
-    private String city;
-    /**
-     * Default country name
-     */
-    private String country;
-    /**
-     * Default state/province name
-     */
-    private String stateOrProvince;
-    /**
-     * Default postal code
-     */
-    private String postalCode;
-    /**
-     * Default street name
-     */
-    private String street;
+    Comparator<? super T> getComparator(final SortManager sortManager);
 }

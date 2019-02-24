@@ -21,80 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator;
 
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.SortComparator;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.utils.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Singular;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
- * Custom delivery info model
+ * Custom delivery info sort implementation {@link Function}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
 @Data
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class DeliveryInfo implements Serializable {
+public class DeliveryInfoSortComparator implements SortComparator {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 8170421693292671905L;
+    private static final long serialVersionUID = -96283263770009545L;
 
     /**
-     * Default delivery status
+     * Default delivery info sort order functional comparator {@link Function}
      */
-    public enum DeliveryStatus {
-        DELIVERED, REJECTED, PENDING
+    private final DeliveryInfoSortOrderComparator sortOrderComparator;
+
+    public Comparator<? super DeliveryInfo> getComparator(final SortManager sortManager) {
+        Objects.requireNonNull(sortManager);
+        final List<Comparator<? super DeliveryInfo>> comparatorList = StreamSupport.stream(sortManager.spliterator(), false)
+            .map(getSortOrderComparator())
+            .collect(Collectors.toList());
+        return new ComparatorUtils.DefaultMultiComparator<>(comparatorList);
     }
-
-    /**
-     * Default delivery info ID
-     */
-    private Long id;
-    /**
-     * Default type
-     */
-    private Integer type;
-    /**
-     * Default description/comments
-     */
-    private String description;
-    /**
-     * Default global ID
-     */
-    private String gid;
-    /**
-     * Default created timestamp
-     */
-    private Date createdAt;
-    /**
-     * Default updated timestamp
-     */
-    private Date updatedAt;
-    /**
-     * Default balance
-     */
-    private double balance;
-    /**
-     * Default delivery status
-     */
-    private DeliveryStatus status;
-    /**
-     * Default address info {@link AddressInfo} collection {@link List}
-     */
-    @Singular("address")
-    private List<AddressInfo> addresses;
-    /**
-     * Default types
-     */
-    private Integer[] codes;
 }

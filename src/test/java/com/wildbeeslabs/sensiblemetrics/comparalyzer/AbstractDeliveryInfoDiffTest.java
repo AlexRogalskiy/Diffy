@@ -32,10 +32,13 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.andreinc.mockneat.abstraction.MockUnit;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import static net.andreinc.mockneat.unit.objects.Filler.filler;
+import static net.andreinc.mockneat.unit.types.Ints.ints;
 
 /**
  * Abstract delivery info difference unit test
@@ -53,35 +56,43 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
     /**
      * Default address info list size
      */
-    private static final int DEFAULT_ADDRESS_INFO_LIST_SIZE = 5;
+    public static final int DEFAULT_ADDRESS_INFO_LIST_SIZE = 5;
+    /**
+     * Default delivery status {@link DeliveryInfo.DeliveryStatus} collection {@link List}
+     */
+    public static final List<DeliveryInfo.DeliveryStatus> DELIVERY_STATUS_LIST = Collections.unmodifiableList(Arrays.asList(DeliveryInfo.DeliveryStatus.values()));
 
     /**
      * Default address info comparator instance {@link Comparator}
      */
-    protected static final Comparator<? super AddressInfo> DEFAULT_ADDRESS_INFO_COMPARATOR =
+    public static final Comparator<? super AddressInfo> DEFAULT_ADDRESS_INFO_COMPARATOR =
         Comparator.comparing(AddressInfo::getId)
             .thenComparing(AddressInfo::getCity)
             .thenComparing(AddressInfo::getCountry)
             .thenComparing(AddressInfo::getPostalCode)
             .thenComparing(AddressInfo::getStateOrProvince)
             .thenComparing(AddressInfo::getStreet);
-
     /**
      * Default address info list comparator instance {@link Comparator}
      */
-    protected static final Comparator<? super List<AddressInfo>> DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR = ComparatorUtils.getIterableComparator(DEFAULT_ADDRESS_INFO_COMPARATOR, false);
-
+    public static final Comparator<? super List<AddressInfo>> DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR = ComparatorUtils.getIterableComparator(DEFAULT_ADDRESS_INFO_COMPARATOR, false);
+    /**
+     * Default code array comparator instance {@link Comparator}
+     */
+    public static final Comparator<? super Integer[]> DEFAULT_CODE_COMPARATOR = new ComparatorUtils.DefaultNullSafeArrayComparator<>();
     /**
      * Default delivery info comparator instance {@link Comparator}
      */
-    protected static final Comparator<? super DeliveryInfo> DEFAULT_DELIVERY_INFO_COMPARATOR =
+    public static final Comparator<? super DeliveryInfo> DEFAULT_DELIVERY_INFO_COMPARATOR =
         Comparator.comparing(DeliveryInfo::getId)
-            .thenComparing(DeliveryInfo::getType)
+            .thenComparingInt(DeliveryInfo::getType)
             .thenComparing(DeliveryInfo::getGid)
             .thenComparing(DeliveryInfo::getDescription)
             .thenComparing(DeliveryInfo::getCreatedAt)
             .thenComparing(DeliveryInfo::getUpdatedAt)
-            .thenComparing(DeliveryInfo::getBalance)
+            .thenComparingDouble(DeliveryInfo::getBalance)
+            .thenComparing(DeliveryInfo::getCodes, DEFAULT_CODE_COMPARATOR)
+            .thenComparing(DeliveryInfo::getStatus)
             .thenComparing(DeliveryInfo::getAddresses, DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR);
 
     /**
@@ -107,6 +118,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .setter(DeliveryInfo::setCreatedAt, getLocalDateMock().toUtilDate())
             .setter(DeliveryInfo::setUpdatedAt, getLocalDateMock().toUtilDate())
             .setter(DeliveryInfo::setBalance, getDoubleMock())
+            .setter(DeliveryInfo::setStatus, ints().bound(DELIVERY_STATUS_LIST.size()).map(value -> DELIVERY_STATUS_LIST.get(value)))
             .setter(DeliveryInfo::setCodes, generateInts(10, 100, 200))
             .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
     }

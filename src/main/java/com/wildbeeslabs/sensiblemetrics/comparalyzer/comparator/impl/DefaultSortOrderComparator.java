@@ -21,80 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model;
+package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Singular;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
- * Custom delivery info model
+ * Default sort order functional comparator implementation {@link Function}
  *
+ * @param <T> type of input element to be compared by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
 @Data
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class DeliveryInfo implements Serializable {
+public abstract class DefaultSortOrderComparator<T> implements Function<SortManager.SortOrder, Comparator<? super T>> {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Default property by comparator map instance {@link Map}
      */
-    private static final long serialVersionUID = 8170421693292671905L;
+    private final Map<String, Comparator<? super T>> comparatorMap;
+    /**
+     * Default property comparator {@link Comparator}
+     */
+    private final Comparator<? super T> defaultComparator;
 
     /**
-     * Default delivery status
+     * Returns comparator instance {@link Comparator} by input sort order value {@code SortManager.SortOrder}
+     *
+     * @param order - initial input sort order value {@code SortManager.SortOrder}
+     * @return comparator instance {@link Comparator}
      */
-    public enum DeliveryStatus {
-        DELIVERED, REJECTED, PENDING
+    @Override
+    public Comparator<? super T> apply(final SortManager.SortOrder order) {
+        final Comparator<? super T> comparator = getComparatorMap().getOrDefault(order.getProperty(), getDefaultComparator());
+        return order.getDirection().isDescending() ? comparator.reversed() : comparator;
     }
-
-    /**
-     * Default delivery info ID
-     */
-    private Long id;
-    /**
-     * Default type
-     */
-    private Integer type;
-    /**
-     * Default description/comments
-     */
-    private String description;
-    /**
-     * Default global ID
-     */
-    private String gid;
-    /**
-     * Default created timestamp
-     */
-    private Date createdAt;
-    /**
-     * Default updated timestamp
-     */
-    private Date updatedAt;
-    /**
-     * Default balance
-     */
-    private double balance;
-    /**
-     * Default delivery status
-     */
-    private DeliveryStatus status;
-    /**
-     * Default address info {@link AddressInfo} collection {@link List}
-     */
-    @Singular("address")
-    private List<AddressInfo> addresses;
-    /**
-     * Default types
-     */
-    private Integer[] codes;
 }
