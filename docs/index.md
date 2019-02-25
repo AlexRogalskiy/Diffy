@@ -1,6 +1,6 @@
 ## General Description
 
-`Comparalyzer` is a simple library to provide the differences between two Java objects.
+`Diffy` is a simpleasy library to provide the differences between two Java objects.
 
 ## Introduction
 

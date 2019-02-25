@@ -1,6 +1,6 @@
 # User Guide
 
-This guide will provide you with a brief overview over the most essential parts of the Comparalyzer API.
+This guide will provide you with a brief overview over the most essential parts of the Diffy API.
 
 ## Comparator
 

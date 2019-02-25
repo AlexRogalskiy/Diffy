@@ -1,6 +1,6 @@
-# Comparalyzer
+# Diffy
 
-The Comparalyzer project
+The Diffy project
 
 ## Features
 
@@ -17,8 +17,8 @@ The Comparalyzer project
 
 ```xml
 <dependency>
-    <groupId>com.wildbeeslabs.sensiblemetrics.Comparalyzer</groupId>
-    <artifactId>comparalyzer-core</artifactId>
+    <groupId>com.wildbeeslabs.sensiblemetrics.Diffy</groupId>
+    <artifactId>diffy-core</artifactId>
     <version>1.0.0-RELEASE</version>
 </dependency>
 ```
@@ -26,7 +26,7 @@ The Comparalyzer project
 ***Using with Gradle:***
 
 ```groovy
-compile 'com.wildbeeslabs.sensiblemetrics.Comparalyzer:1.0.0-RELEASE'
+compile 'com.wildbeeslabs.sensiblemetrics.Diffy:1.0.0-RELEASE'
 ```
 
 ***Packaging:***

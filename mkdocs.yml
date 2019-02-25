@@ -1,5 +1,5 @@
-site_name: Comparalyzer Documentation
-repo_url: https://gitlab.com/AlexRogalskiy/Comparalyzer
+site_name: Diffy Documentation
+repo_url: https://gitlab.com/AlexRogalskiy/Diffy
 pages:
 - Home: index.md
 - Dependency Management: dependency.md

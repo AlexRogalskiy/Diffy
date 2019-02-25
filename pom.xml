@@ -4,25 +4,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wildbeeslabs.sensiblemetrics.comparalyzer</groupId>
-    <artifactId>comparalyzer-core</artifactId>
+    <groupId>com.wildbeeslabs.sensiblemetrics.diffy</groupId>
+    <artifactId>diffy-core</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>Comparator Analyzer</name>
-    <url>https://github.com/AlexRogalskiy/Comparalyzer</url>
-    <description>Comparalyzer core API</description>
+    <url>https://github.com/AlexRogalskiy/Diffy</url>
+    <description>Diffy core API</description>
     <inceptionYear>2019</inceptionYear>
 
     <issueManagement>
-        <url>https://github.com/AlexRogalskiy/Comparalyzer/issues</url>
+        <url>https://github.com/AlexRogalskiy/Diffy/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
-        <connection>scm:git:git://gitlab.com/AlexRogalskiy/Comparalyzer.git</connection>
-        <url>scm:git:git://gitlab.com/AlexRogalskiy/Comparalyzer.git</url>
-        <developerConnection>scm:git:git://gitlab.com/AlexRogalskiy/Comparalyzer.git</developerConnection>
+        <connection>scm:git:git://gitlab.com/AlexRogalskiy/Diffy.git</connection>
+        <url>scm:git:git://gitlab.com/AlexRogalskiy/Diffy.git</url>
+        <developerConnection>scm:git:git://gitlab.com/AlexRogalskiy/Diffy.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -382,8 +382,8 @@
                             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                             <Bundle-Version>${project.version}</Bundle-Version>
                             <Import-Package>*</Import-Package>
-                            <Private-Package>com.wildbeeslabs.sensiblemetrics.comparalyzer.*</Private-Package>
-                            <Export-Package>com.wildbeeslabs.sensiblemetrics.comparalyzer.*;-noimport:=true
+                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.*</Private-Package>
+                            <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.*;-noimport:=true
                             </Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
                         </instructions>
