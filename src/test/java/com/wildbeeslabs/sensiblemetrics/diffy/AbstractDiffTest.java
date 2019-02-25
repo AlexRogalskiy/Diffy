@@ -31,6 +31,8 @@ import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -116,9 +118,11 @@ public abstract class AbstractDiffTest {
     protected final MockUnitString firstNameMock = this.mock.names().first();
     protected final MockUnitString lastNameMock = this.mock.names().last();
     protected final MockUnitString quotationMock = this.mock.naughtyStrings().quotations();
+    protected final MockUnitString dayNameMock = this.mock.days().mapToString();
+    protected final MockUnitString monthNameMock = this.mock.months().mapToString();
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Float} by initial array size, lower / upper value bounds
+     * Returns mock unit instance {@link MockUnit} to produce array of {@link Float} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower bound
@@ -132,7 +136,7 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Double} by initial array size, lower / upper value bounds
+     * Returns mock unit instance {@link MockUnit} to produce array of {@link Double} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower bound
@@ -146,7 +150,7 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Integer} by initial array size, lower / upper value bounds
+     * Returns mock unit instance {@link MockUnit} to produce array of {@link Integer} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower value bound
@@ -160,7 +164,7 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Long} by initial array size, lower and upper value bounds
+     * Returns mock unit instance {@link MockUnit} to produce array of {@link Long} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower value bound
@@ -174,9 +178,9 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link Integer} by initial list size and value bound
+     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link Integer} by initial input list size and bound
      *
-     * @param size  - initial input list {@link List} size
+     * @param size  - initial input {@link List} size
      * @param bound - initial input value bound
      * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Integer}
      */
@@ -187,9 +191,9 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce list {@link List} of {@link String} by initial list size
+     * Returns mock unit instance {@link MockUnit} to produce list {@link List} of {@link String} by initial input list size
      *
-     * @param size - initial input list {@link List} size
+     * @param size - initial input {@link List} size
      * @return mock unit instance {@link MockUnit} to produce list {@link List} of {@link String}
      */
     protected MockUnit<List<String>> generateStrings(int size) {
@@ -203,6 +207,45 @@ public abstract class AbstractDiffTest {
             .param("last", this.mock.names().last().format(UPPER_CASE))
             .param("num", num)
             .list(size);
+    }
+
+    /**
+     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link Boolean} by initial input probability and size values
+     *
+     * @param probability - initial input probability value
+     * @param size        - initial input {@link List} size
+     * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Boolean}
+     */
+    protected MockUnit<List<Boolean>> generateProbabilities(double probability, int size) {
+        return this.mock.bools()
+            .probability(probability)
+            .list(size);
+    }
+
+    /**
+     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link String} by range (lower / upper bounds)
+     *
+     * @param lowerBound - initial input lower value bound
+     * @param upperBound - initial input value value bound
+     * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Boolean}
+     */
+    protected MockUnit<List<String>> genearateStrings(int lowerBound, int upperBound) {
+        final MockUnitInt sizeGenerator = this.mock.ints().range(lowerBound, upperBound);
+        return this.mock.strings()
+            .list(() -> new ArrayList<>(), sizeGenerator);
+    }
+
+    /**
+     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link String} by range (lower / upper bounds)
+     *
+     * @param dateStart - initial input date start value {@link LocalDate}
+     * @param dateEnd   - initial input date end value {@link LocalDate}
+     * @return mock unit instance {@link MockUnit} to produce {@link Date}
+     */
+    protected MockUnit<Date> genearateDates(final LocalDate dateStart, final LocalDate dateEnd) {
+        return this.mock.localDates()
+            .between(dateStart, dateEnd)
+            .toUtilDate();
     }
 }
 
