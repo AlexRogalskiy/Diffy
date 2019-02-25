@@ -25,12 +25,12 @@ package com.wildbeeslabs.sensiblemetrics.comparalyzer.comparator;
 
 import com.google.common.collect.ImmutableList;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.AbstractDeliveryInfoDiffTest;
-import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator.DeliveryInfoSortComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.comparator.DeliveryInfoSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.factory.DeliveryInfoFactory;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.comparalyzer.examples.model.DeliveryInfo.DeliveryStatus;
+import com.wildbeeslabs.sensiblemetrics.comparalyzer.sort.SortManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -79,7 +79,7 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
         );
 
         // when
-        final Comparator<? super DeliveryInfo> comparator = this.sortComparator.getComparator(sort);
+        final Comparator<? super DeliveryInfo> comparator = getSortComparator().getComparator(sort);
         final List<DeliveryInfo> sorted = ImmutableList.sortedCopyOf(comparator, givenDeliveryInfoList());
 
         // then
