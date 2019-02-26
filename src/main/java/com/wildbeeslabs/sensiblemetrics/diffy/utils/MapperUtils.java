@@ -25,11 +25,14 @@ package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,15 +58,23 @@ public class MapperUtils {
      * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
      */
     static {
-        //final JsonFactory jsonFactory = new JsonFactory();
-        //jsonFactory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
-        //modelMapper = new ObjectMapper(jsonFactory);
         modelMapper = new ObjectMapper();
         modelMapper.setDefaultMergeable(true);
         modelMapper.setLocale(Locale.getDefault());
         //modelMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         modelMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+        modelMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        modelMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        modelMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+        modelMapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+
+        modelMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        modelMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        modelMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         modelMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        modelMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
     }
 
     /**
@@ -123,7 +134,7 @@ public class MapperUtils {
      * @return mapped object with <code><D></code> type
      * @throws IOException
      */
-    public static <D, V> D mapFromJson(final String source, final Class<? extends D> outClass, final Class<? extends V> viewClazz) throws IOException {
+    public static <D, V> D asList(final String source, final Class<? extends D> outClass, final Class<? extends V> viewClazz) throws IOException {
         return modelMapper.readerWithView(viewClazz).forType(outClass).readValue(source);
     }
 
@@ -136,25 +147,39 @@ public class MapperUtils {
      * @return mapped object with <code><D></code> type
      * @throws IOException
      */
-    public static <D> D mapFromJson(final String source, final Class<? extends D> outClass) throws IOException {
+    public static <D> D asList(final String source, final Class<? extends D> outClass) throws IOException {
         return modelMapper.reader().forType(outClass).readValue(source);
     }
 
     /**
-     * Returns converted input object {@code source} to destination object {@code destination}
+     * Returns converted input object {@code source} to destination object {@link List}
      *
-     * @param <D>    type of object to be converted to
-     * @param source - initial input source to be mapped from {@code T}
-     * @return mapped object with <code><D></code> type
+     * @param <D>    type of element to be converted to
+     * @param source - initial input source to be mapped from
+     * @return mapped object {@link List} with <code><D></code> type
      * @throws IOException
      */
-    public static <D> List<D> mapFromJson(final String source) throws IOException {
+    public static <D> List<D> asList(final String source) throws IOException {
         return modelMapper.reader().forType(new TypeReference<List<D>>() {
         }).readValue(source);
     }
 
     /**
-     * Returns converted input object {@code source} to destination object {@code destination}
+     * Returns converted input object {@code source} to destination object {@link Map}
+     *
+     * @param <K>    type of key element
+     * @param <V>    type of value element
+     * @param source - initial input source to be mapped from
+     * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
+     * @throws IOException
+     */
+    public static <K, V> Map<K, V> asMap(final String source) throws IOException {
+        return modelMapper.reader().forType(new TypeReference<Map<K, V>>() {
+        }).readValue(source);
+    }
+
+    /**
+     * Returns converted input object {@code T} as string value
      *
      * @param <T>       type of object to be converted from
      * @param <V>       type of object to be mapped by
@@ -168,7 +193,21 @@ public class MapperUtils {
     }
 
     /**
-     * Returns converted input object {@code source} to destination object {@code destination}
+     * Returns formatted input object {@code T} as string value
+     *
+     * @param <T>       type of object to be converted from
+     * @param <V>       type of object to be mapped by
+     * @param source    - initial input source to be mapped from {@code T}
+     * @param viewClazz - initial input view class to converted by {@link Class}
+     * @return string representation of input object
+     * @throws JsonProcessingException
+     */
+    public static <T, V> String prettyPrint(final T source, final Class<? extends V> viewClazz) throws JsonProcessingException {
+        return modelMapper.writerWithView(viewClazz).withDefaultPrettyPrinter().writeValueAsString(source);
+    }
+
+    /**
+     * Returns converted input object {@code T} as string value
      *
      * @param <T>    type of object to be converted from
      * @param source - initial input source to be mapped from {@code T}
@@ -177,5 +216,17 @@ public class MapperUtils {
      */
     public static <T> String mapToJson(final T source) throws JsonProcessingException {
         return modelMapper.writeValueAsString(source);
+    }
+
+    /**
+     * Returns formatted input object {@code T} as string value
+     *
+     * @param <T>    type of object to be converted from
+     * @param source - initial input source to be mapped from {@code T}
+     * @return string representation of input object
+     * @throws JsonProcessingException
+     */
+    public static <T> String prettyPrint(final T source) throws JsonProcessingException {
+        return modelMapper.writerWithDefaultPrettyPrinter().writeValueAsString(source);
     }
 }
