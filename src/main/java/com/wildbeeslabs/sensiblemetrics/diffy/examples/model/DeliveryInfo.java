@@ -29,6 +29,7 @@ import lombok.Singular;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -84,6 +85,10 @@ public class DeliveryInfo implements Serializable {
      * Default balance
      */
     private double balance;
+    /**
+     * Default discount
+     */
+    private BigDecimal discount;
     /**
      * Default delivery status
      */

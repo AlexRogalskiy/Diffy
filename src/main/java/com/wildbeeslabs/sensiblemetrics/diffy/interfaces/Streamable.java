@@ -41,28 +41,28 @@ import java.util.stream.StreamSupport;
 public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
 
     /**
-     * Returns an empty {@link Streamable}.
+     * Returns an empty {@link Streamable} instance
      *
-     * @return empty streamable instance {@link Streamable}
+     * @return empty streamable instance {@link Streamable} of values {@code T}
      */
     default <T> Streamable<T> empty() {
         return Collections::emptyIterator;
     }
 
     /**
-     * Returns a {@link Streamable} with the given elements.
+     * Returns a {@link Streamable} with the given elements {@code T}
      *
-     * @param t the elements to return.
-     * @return streamable instance {@link Streamable}
+     * @param values the elements to be returned {@code T}
+     * @return streamable instance {@link Streamable} of values {@code T}
      */
-    default <T> Streamable<T> of(final T... t) {
-        return () -> Arrays.asList(t).iterator();
+    default <T> Streamable<T> of(final T... values) {
+        return () -> Arrays.asList(values).iterator();
     }
 
     /**
-     * Returns a {@link Streamable} for the given {@link Iterable}.
+     * Returns a {@link Streamable} for the given {@link Iterable} instance
      *
-     * @param iterable must not be {@literal null}.
+     * @param iterable - initial input iterable collection {@link Iterable}
      * @return streamable instance {@link Streamable}
      */
     default <T> Streamable<T> of(final Iterable<T> iterable) {
@@ -74,17 +74,17 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * Returns streamable instance {@link Streamable} from input supplier {@link Supplier}
      *
      * @param <T>
-     * @param supplier - initial input supplier {@link Supplier}
-     * @return streamable instance {@link Streamable}
+     * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
+     * @return streamable instance {@link Streamable} of values {@code T}
      */
     default <T> Streamable<T> of(final Supplier<? extends Stream<T>> supplier) {
         return LazyStream.from(supplier);
     }
 
     /**
-     * Creates a non-parallel {@link Stream} of the underlying {@link Iterable}.
+     * Creates a non-parallel {@link Stream} of the underlying {@link Iterable} collection
      *
-     * @return will never be {@literal null}.
+     * @return streamable instance {@link Streamable} of values {@code T}
      */
     default Stream<T> stream() {
         return StreamSupport.stream(spliterator(), false);
@@ -93,8 +93,8 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     /**
      * Returns a new {@link Streamable} that will apply the given {@link Function} to the current one.
      *
-     * @param mapper must not be {@literal null}.
-     * @return streamable instance {@link Streamable}
+     * @param mapper - initial input mapper instance {@link Function}
+     * @return streamable instance {@link Streamable} of values {@code T}
      * @see Stream#map(Function)
      */
     default <R> Streamable<R> map(final Function<? super T, ? extends R> mapper) {
@@ -103,10 +103,10 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     }
 
     /**
-     * Returns a new {@link Streamable} that will apply the given {@link Function} to the current one.
+     * Returns a new {@link Streamable} that will apply the given {@link Function} to the current one
      *
-     * @param mapper must not be {@literal null}.
-     * @return streamable instance {@link Streamable}
+     * @param mapper - initial input mapper instance {@link Function}
+     * @return streamable instance {@link Streamable} of values {@code T}
      * @see Stream#flatMap(Function)
      */
     default <R> Streamable<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
@@ -115,11 +115,11 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     }
 
     /**
-     * Returns a new {@link Streamable} that will apply the given filter {@link Predicate} to the current one.
+     * Returns a new {@link Streamable} instance that will apply the given filter {@link Predicate} to the current one.
      *
-     * @param predicate must not be {@literal null}.
-     * @return streamable instance {@link Streamable}
-     * @see Stream#filter(Predicate)
+     * @param predicate - initial input predicate instance {@link Predicate}
+     * @return streamable instance {@link Streamable} of values {@code T}
+     * @see Stream#filter(Predicate) of values {@code T}
      */
     default Streamable<T> filter(final Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate, "Filter predicate must not be null!");
@@ -127,7 +127,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     }
 
     /**
-     * Returns whether the current {@link Streamable} is empty.
+     * Returns whether the current {@link Streamable} is empty
      *
      * @return true - if iterator is exhausted, false - otherwise
      */
@@ -136,20 +136,20 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     }
 
     /**
-     * Creates a new {@link Streamable} from the current one and the given {@link Stream} concatenated.
+     * Creates a new {@link Streamable} instance from the current supplier {@link Supplier} and the given {@link Stream} concatenated.
      *
-     * @param stream must not be {@literal null}.
-     * @return streamable instance {@link Streamable}
+     * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
+     * @return streamable instance {@link Streamable} of values {@code T}
      */
-    default Streamable<T> and(final Supplier<? extends Stream<? extends T>> stream) {
-        Objects.requireNonNull(stream, "Stream must not be null!");
-        return of(() -> Stream.concat(this.stream(), stream.get()));
+    default Streamable<T> and(final Supplier<? extends Stream<? extends T>> supplier) {
+        Objects.requireNonNull(supplier, "Supplier must not be null!");
+        return of(() -> Stream.concat(this.stream(), supplier.get()));
     }
 
     /**
-     * Returns default stream instance {@link Stream}
+     * Returns stream instance {@link Stream} of values {@code T}
      *
-     * @return default stream instance {@link Stream}
+     * @return stream instance {@link Stream} of values {@code T}
      */
     default Stream<T> get() {
         return stream();

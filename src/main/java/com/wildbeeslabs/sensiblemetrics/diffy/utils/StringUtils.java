@@ -47,10 +47,10 @@ public class StringUtils {
     /**
      * Returns string value {@link String} with replaced values by pattern
      *
-     * @param initialValue - initial argument value {@link String}
-     * @param pattern      - initial pattern to be replaced by {@link String}
-     * @param replaceValue - initial value replacement by pattern occurrences {@link String}
-     * @return string with replaced by pattern values {@link String}
+     * @param initialValue - initial input argument value {@link String} to be processed
+     * @param pattern      - initial input pattern value {@link String} to be replaced by
+     * @param replaceValue - initial input value {@link String} to replace by pattern
+     * @return formatted string value stripped default regex pattern {@link String}
      */
     public static String replaceAll(final String initialValue, final String pattern, final String replaceValue) {
         Objects.requireNonNull(initialValue);
@@ -60,10 +60,21 @@ public class StringUtils {
     /**
      * Returns string value sanitized by default regex pattern {@link String}
      *
-     * @param initialValue - initial argument value {@link String}
-     * @return string value stripped by default regex pattern {@link String}
+     * @param initialValue - initial input argument value {@link String} to be processed
+     * @param pattern      - initial input pattern value {@link String} to be replaced by
+     * @return formatted string stripped by default regex pattern {@link String}
+     */
+    public static String sanitize(final String initialValue, final String pattern) {
+        return replaceAll(initialValue, pattern, org.apache.commons.lang3.StringUtils.EMPTY).trim();
+    }
+
+    /**
+     * Returns string value sanitized by default regex pattern {@link String}
+     *
+     * @param initialValue - initial argument value {@link String} to be processed
+     * @return formatted string value stripped by default regex pattern {@link String}
      */
     public static String sanitize(final String initialValue) {
-        return replaceAll(initialValue, DEFAULT_ALPHANUMERIC_PATTERN, org.apache.commons.lang3.StringUtils.EMPTY).trim();
+        return sanitize(initialValue, DEFAULT_ALPHANUMERIC_PATTERN);
     }
 }

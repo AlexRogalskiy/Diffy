@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.NullPriority.NATIVE;
 
 /**
- * Default sort {@link Streamable} configuration
+ * Default sort {@link Streamable} manager
  */
 @Data
 @EqualsAndHashCode
@@ -341,6 +341,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * @param code - initial input code direction
          * @return direction {@link SortDirection}
          */
+        @Nullable
         public static SortDirection getDirectionByCode(int code) {
             for (final SortDirection direction : SortDirection.values()) {
                 if (code == direction.getValue()) {
@@ -367,7 +368,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     }
 
     /**
-     * Enumeration for null priority hints that can be used in {@link SortOrder} expressions.
+     * Enumeration for null priority hints that can be used in {@link SortOrder} expressions
      */
     public enum NullPriority {
 

@@ -41,8 +41,8 @@ public interface DiffComparator<T> extends Serializable {
     /**
      * Returns iterable collection of difference entries {@link Iterable} with properties marked by initial arguments comparison
      *
-     * @param first - initial first argument to be compared by
-     * @param last  - initial last argument to be compared with
+     * @param first - initial first argument to be compared by {@code T}
+     * @param last  - initial last argument to be compared with {@code T}
      * @return iterable collection of difference entries {@link Iterable}
      */
     <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last);

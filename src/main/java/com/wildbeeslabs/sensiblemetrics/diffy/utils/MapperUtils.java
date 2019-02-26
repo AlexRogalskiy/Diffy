@@ -1,0 +1,158 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Custom mapper utilities implementation
+ */
+@Slf4j
+@UtilityClass
+public class MapperUtils {
+
+    /**
+     * Default model mapper instance {@link ObjectMapper}
+     */
+    private static ObjectMapper modelMapper;
+
+    /**
+     * Model mapper property settings
+     * Default property matching strategy is set to Strict see {@link MatchingStrategies}
+     * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
+     */
+    static {
+        modelMapper = new ObjectMapper();
+        modelMapper.setDefaultMergeable(true);
+        modelMapper.setLocale(Locale.getDefault());
+    }
+
+    /**
+     * Converts input entity by initial output class instance {@link Class}
+     *
+     * <p>Note: outClass object must have default constructor with no arguments</p>
+     *
+     * @param <T>      type of object to be converted from
+     * @param <D>      type of objects in result list
+     * @param source   - initial input object to be mapped {@code T}
+     * @param outClass - initial input class to map by {@link Class}
+     * @return mapped object of <code>outClass</code> type
+     */
+    public static <T, D> D map(final T source, final Class<? extends D> outClass) {
+        return modelMapper.convertValue(source, outClass);
+    }
+
+    /**
+     * Converts input object {@code source} to destination object {@code destination}
+     *
+     * @param <T>      type of object to be converted from
+     * @param <D>      type of object to be converted to
+     * @param source   - initial input source to be mapped from {@code T}
+     * @param javaType - initial java type to be mapped to {@link JavaType}
+     * @return mapped object with <code><D></code> type
+     */
+    public static <T, D> D map(final T source, final JavaType javaType) {
+        return modelMapper.convertValue(source, javaType);
+    }
+
+    /**
+     * Converts input collection of objects {@link Collection} by initial output class instance {@link Class}
+     * <p>Note: outClass object must have default constructor with no arguments</p>
+     *
+     * @param <T>      type of object to be converted from
+     * @param <D>      type of objects in result list
+     * @param source   - initial input collection of objects {@code T} to be mapped {@link Collection}
+     * @param outClass - initial input class to map by {@link Class}
+     * @return list of mapped objects of <code>outClass</code> type
+     */
+    public static <T, D> List<? extends D> mapAll(final Collection<T> source, final Class<? extends D> outClass) {
+        return Optional.ofNullable(source)
+            .orElseGet(Collections::emptyList)
+            .stream()
+            .map(entity -> map(entity, outClass))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@code destination}
+     *
+     * @param <D>       type of object to be converted to
+     * @param <V>       type of object to be mapped by
+     * @param source    - initial input source to be mapped from {@code T}
+     * @param outClass  - initial input class to convert to {@link Class}
+     * @param viewClazz - initial input view class to converted by {@link Class}
+     * @return mapped object with <code><D></code> type
+     * @throws IOException
+     */
+    public static <D, V> D mapFromJson(final String source, final Class<? extends D> outClass, final Class<? extends V> viewClazz) throws IOException {
+        return modelMapper.readerWithView(viewClazz).forType(outClass).readValue(source);
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@code destination}
+     *
+     * @param <D>      type of object to be converted to
+     * @param source   - initial input source to be mapped from {@code T}
+     * @param outClass - initial input class to convert to {@link Class}
+     * @return mapped object with <code><D></code> type
+     * @throws IOException
+     */
+    public static <D> D mapFromJson(final String source, final Class<? extends D> outClass) throws IOException {
+        return modelMapper.reader().forType(outClass).readValue(source);
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@code destination}
+     *
+     * @param <T>       type of object to be converted from
+     * @param <V>       type of object to be mapped by
+     * @param source    - initial input source to be mapped from {@code T}
+     * @param viewClazz - initial input view class to converted by {@link Class}
+     * @return string representation of input object
+     * @throws JsonProcessingException
+     */
+    public static <T, V> String mapToJson(final T source, final Class<? extends V> viewClazz) throws JsonProcessingException {
+        return modelMapper.writerWithView(viewClazz).writeValueAsString(source);
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@code destination}
+     *
+     * @param <T>    type of object to be converted from
+     * @param source - initial input source to be mapped from {@code T}
+     * @return string representation of input object
+     * @throws JsonProcessingException
+     */
+    public static <T> String mapToJson(final T source) throws JsonProcessingException {
+        return modelMapper.writeValueAsString(source);
+    }
+}

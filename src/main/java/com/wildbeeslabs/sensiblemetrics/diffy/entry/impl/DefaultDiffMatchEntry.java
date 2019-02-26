@@ -23,8 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.EntryView;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -49,12 +51,20 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
     private static final long serialVersionUID = 5902509374305990063L;
 
     /**
+     * Default entry id
+     */
+    @JsonView(EntryView.Internal.class)
+    private String id;
+
+    /**
      * Default match description {@link MatchDescription}
      */
+    @JsonView(EntryView.External.class)
     private MatchDescription description;
 
     /**
      * Default property value to be matched {@link Object}
      */
+    @JsonView(EntryView.External.class)
     private Object value;
 }

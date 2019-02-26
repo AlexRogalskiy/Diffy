@@ -24,6 +24,8 @@ THE SOFTWARE.
 -->
 <configuration debug="false" scan="true">
 
+    <!--<statusListener class="ch.qos.logback.core.status.NopStatusListener" />-->
+
     <property name="LOG_PATH" value="${LOG_TEMP:-${java.io.tmpdir:-/tmp}}"/>
     <property name="LOG_HOME" value="${LOG_PATH}/logs"/>
 

@@ -31,6 +31,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 
+import javax.annotation.Nullable;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
@@ -235,6 +236,7 @@ public class ReflectionUtils {
      * @param <T>   type of input class instance
      * @return initialized instance by class {@link Class}
      */
+    @Nullable
     public static <T> T instanceOf(final Class<T> clazz) {
         if (Objects.isNull(clazz)) {
             return null;

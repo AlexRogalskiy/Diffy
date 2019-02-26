@@ -43,7 +43,7 @@ public interface Matcher<T> extends Serializable {
     /**
      * Returns binary flag by initial argument match comparison
      *
-     * @param value - initial input argument value to be matched
+     * @param value - initial input argument value to be matched {@code T}
      * @return true - if initial value matches input argument, false - otherwise
      */
     boolean matches(final T value);

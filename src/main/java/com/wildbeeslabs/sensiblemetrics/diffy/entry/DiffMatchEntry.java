@@ -45,9 +45,9 @@ public interface DiffMatchEntry<T> extends Serializable {
     MatchDescription getDescription();
 
     /**
-     * Returns property value to be matched
+     * Returns property value {@code T} to be matched
      *
-     * @return property value
+     * @return property value {@code T}
      */
     T getValue();
 }

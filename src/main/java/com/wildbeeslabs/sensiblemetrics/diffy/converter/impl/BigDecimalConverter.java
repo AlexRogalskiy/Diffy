@@ -23,70 +23,56 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
-
-import javax.annotation.Nullable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
- * Default date converter implementation {@link Date}
+ * Default date converter implementation {@link java.util.Date}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
+import java.math.BigDecimal;
+
 @Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DateConverter extends AbstractConverter<String, Date> {
+public class BigDecimalConverter extends NumericConverter<BigDecimal> {
 
     /**
-     * Default date format pattern
+     * Default significant decimal places
      */
-    private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+    private final int significantDecimalPlaces;
 
     /**
-     * Initial date format pattern
+     * Default big decimal constructor
      */
-    private final String format;
-
-    /**
-     * Default date converter constructor
-     */
-    public DateConverter() {
-        this(DEFAULT_DATE_FORMAT);
+    public BigDecimalConverter() {
+        this(0);
     }
 
     /**
-     * Default date converter constructor with initial input date format
+     * Default big decimal constructor with initial significant decimal places
      *
-     * @param format - initial input date format
+     * @param significantDecimalPlaces - initial input significant decimal places argument
      */
-    public DateConverter(@NonNull final String format) {
-        this.format = format;
+    public BigDecimalConverter(int significantDecimalPlaces) {
+        this.significantDecimalPlaces = significantDecimalPlaces;
     }
 
     /**
-     * Returns date value {@link Date} by input argument {@link String}
+     * Returns big decimal value {@link BigDecimal} by input argument {@link String}
      *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Date}
+     * @param value - initial input argument value {@link String}
+     * @return converted big decimal value {@link BigDecimal}
      */
     @Override
-    @Nullable
-    public Date convert(final String value) {
-        try {
-            new SimpleDateFormat(getFormat()).parse(value);
-        } catch (ParseException e) {
-            log.error(String.format("ERROR: cannot format input string={%s} by format={%s}", value, getFormat()));
-        }
-        return null;
+    protected BigDecimal valueOf(final String value) {
+        return BigDecimal.valueOf(Long.valueOf(value), getSignificantDecimalPlaces());
     }
 }

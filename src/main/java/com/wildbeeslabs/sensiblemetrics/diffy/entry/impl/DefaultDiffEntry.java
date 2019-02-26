@@ -23,7 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.EntryView;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,17 +50,26 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     private static final long serialVersionUID = -8477472621769483552L;
 
     /**
+     * Default entry id
+     */
+    @JsonView(EntryView.Internal.class)
+    private String id;
+
+    /**
      * Default property name {@link String}
      */
+    @JsonView(EntryView.External.class)
     private String propertyName;
 
     /**
      * Default property value of first argument {@link Object}
      */
+    @JsonView(EntryView.External.class)
     private Object first;
 
     /**
      * Default property value of last argument {@link Object}
      */
+    @JsonView(EntryView.External.class)
     private Object last;
 }

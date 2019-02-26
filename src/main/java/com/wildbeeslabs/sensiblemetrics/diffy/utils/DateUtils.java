@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Nullable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -83,6 +84,7 @@ public class DateUtils {
         return calendar.getTime();
     }
 
+    @Nullable
     public static Date toDate(final String date, final String dateFormat) {
         Objects.requireNonNull(dateFormat);
         try {

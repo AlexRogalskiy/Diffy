@@ -21,34 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
+package com.wildbeeslabs.sensiblemetrics.diffy.entry.view;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Type safe matcher interface declaration by input object instance
+ * Default difference entry view implementation
  *
- * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@FunctionalInterface
-public interface TypeSafeMatcher<T> extends Matcher<T> {
+@Builder
+@Data
+@EqualsAndHashCode
+@ToString
+public class EntryView {
 
     /**
-     * Returns binary flag depending on initial argument value by comparison
-     *
-     * @param value - initial input argument value {@code T}
-     * @return true - if initial value matches input argument, false - otherwise
+     * Default external entry view
      */
-    default boolean matches(final T value) {
-        return matchesSafe(value);
+    public static class External {
     }
 
     /**
-     * Returns binary flag depending on initial argument value by type safe comparison
-     *
-     * @param value - initial input argument value {@code T}
-     * @return true - if initial value matches input argument, false - otherwise
+     * Default internal entry view
      */
-    boolean matchesSafe(final T value);
+    public static class Internal extends External {
+    }
 }

@@ -68,7 +68,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     private final String DEFAULT_GID_PREFIX = "TEST";
 
     /**
-     * Default delivery information model
+     * Default delivery info model {@link DeliveryInfo}
      */
     private DeliveryInfo deliveryInfo;
 
@@ -80,31 +80,38 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     @Test
     @DisplayName("Test delivery info entity by custom delivery info matcher")
     public void testDeliveryInfoByMatcher() {
+        // when
         DeliveryInfoMatcher deliveryInfoMatcher = getDeliveryInfoMatcher(
             getIntMock().val(),
             getAlphaNumericStringMock().val(),
             getLocalDateMock().toUtilDate().val(),
             getLocalDateMock().toUtilDate().val()
         );
+        // then
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
+        // given
         getDeliveryInfo().setType(5);
         getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
         getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
+        // when
         deliveryInfoMatcher = getDeliveryInfoMatcher(
             5,
             DEFAULT_GID_PREFIX,
             toDate("17/06/2013", DEFAULT_DATE_FORMAT),
             toDate("27/09/2018", DEFAULT_DATE_FORMAT)
         );
+
+        // then
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom created/update date fields matcher")
     public void testDeliveryInfoByCustomDateMatcher() {
+        // given
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
@@ -114,36 +121,50 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         };
         final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
 
+        // when
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
+
+        // then
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
+        // when
         getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DEFAULT_DATE_FORMAT));
+
+        // then
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom type field matcher")
     public void testDeliveryInfoByCustomTypeMatcher() {
+        // given
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
-                return 1 == value.getType();
+                return (1 == value.getType());
             }
         };
-        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
 
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
         getDeliveryInfo().setType(1);
+
+        // then
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
+        // when
         getDeliveryInfo().setType(10);
+
+        // then
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom gid/type fields matchers")
     public void testDeliveryInfoListByCustomGidAndTypeMatcher() {
+        // given
         final Integer DELIVERY_INFO_LOWER_TYPE_BOUND = 100;
         final Integer DELIVERY_INFO_UPPER_TYPE_BOUND = 1000;
 
@@ -159,6 +180,8 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
                 return DELIVERY_INFO_LOWER_TYPE_BOUND < value && value < DELIVERY_INFO_UPPER_TYPE_BOUND;
             }
         };
+
+        // when
         final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
             .withGidMatcher(gidMatcher)
             .withTypeMatcher(typeMatcher);
@@ -169,14 +192,28 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
             getDeliveryInfoMock().val(),
             getDeliveryInfoMock().val()
         );
+
+        // then
         assertThat(deliveryInfoList.size(), IsEqual.equalTo(4));
         assertTrue(deliveryInfoList.stream().noneMatch(entity -> deliveryInfoMatcher.matches(entity)));
 
+        // when
         getDeliveryInfo().setGid(DEFAULT_GID_PREFIX + UUID.randomUUID());
         getDeliveryInfo().setType(150);
+
+        // then
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
+    /**
+     * Returns new delivery info matcher {@link DeliveryInfoMatcher} instance by initial input arguments
+     *
+     * @param type        - initial input type value
+     * @param gid         - initial input global id value
+     * @param createdDate - initial input created date value {@link Date}
+     * @param updatedDate - initial input udpated date value {@link Date}
+     * @return new delivery info matcher {@link DeliveryInfoMatcher} instance
+     */
     protected DeliveryInfoMatcher getDeliveryInfoMatcher(final Integer type, final String gid, final Date createdDate, final Date updatedDate) {
         return DeliveryInfoMatcher.getInstance()
             .withType(type)

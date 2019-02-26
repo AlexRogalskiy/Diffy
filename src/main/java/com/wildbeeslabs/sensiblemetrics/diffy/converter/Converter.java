@@ -36,10 +36,10 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter;
 public interface Converter<T, R> {
 
     /**
-     * Returns converted value by input argument value
+     * Returns converted value {@code R} by input argument value {@code T}
      *
-     * @param value - initial input argument value
-     * @return converted value
+     * @param value - initial input argument value {@code T}
+     * @return converted value {@code R}
      */
     R convert(final T value);
 }

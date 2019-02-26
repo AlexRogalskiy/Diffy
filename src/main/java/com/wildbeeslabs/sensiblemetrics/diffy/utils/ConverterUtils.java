@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -64,6 +65,7 @@ public class ConverterUtils {
      * @param parserMethod - initial method name to process the conversion {@link String}
      * @return converted value {@link Object}
      */
+    @Nullable
     public static Object convertFromString(final String value, final Class<?> toType, final String parserMethod) {
         Objects.requireNonNull(toType);
         final Method method;

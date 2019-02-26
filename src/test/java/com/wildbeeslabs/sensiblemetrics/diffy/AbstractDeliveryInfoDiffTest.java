@@ -32,6 +32,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.andreinc.mockneat.abstraction.MockUnit;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -93,6 +94,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .thenComparingDouble(DeliveryInfo::getBalance)
             .thenComparing(DeliveryInfo::getCodes, DEFAULT_CODE_COMPARATOR)
             .thenComparing(DeliveryInfo::getStatus)
+            .thenComparing(DeliveryInfo::getDiscount)
             .thenComparing(DeliveryInfo::getAddresses, DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR);
 
     /**
@@ -119,6 +121,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .setter(DeliveryInfo::setUpdatedAt, getLocalDateMock().toUtilDate())
             .setter(DeliveryInfo::setBalance, getDoubleMock())
             .setter(DeliveryInfo::setStatus, generateStatus())
+            .setter(DeliveryInfo::setDiscount, generateDiscount(1.5, 20.5))
             .setter(DeliveryInfo::setCodes, generateInts(10, 100, 200))
             .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
     }
@@ -130,6 +133,15 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      */
     protected MockUnit<DeliveryInfo.DeliveryStatus> generateStatus() {
         return ints().bound(DELIVERY_STATUS_LIST.size()).map(value -> DELIVERY_STATUS_LIST.get(value));
+    }
+
+    /**
+     * Returns delivery info discount mock unit instance {@link MockUnit} by initial input range (lower / upper bounds)
+     *
+     * @return delivery info discount mock unit instance {@link MockUnit}
+     */
+    protected MockUnit<BigDecimal> generateDiscount(double lowerBound, double upperBound) {
+        return this.mock.doubles().range(lowerBound, upperBound).map(BigDecimal::valueOf);
     }
 
     /**

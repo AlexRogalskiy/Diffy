@@ -48,7 +48,7 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Delivery info difference matcher unit test
+ * Delivery info difference matcher unit test {@link AbstractDeliveryInfoDiffTest}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -66,7 +66,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     private final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 
     /**
-     * Default delivery information model
+     * Default delivery info model {@link DeliveryInfo}
      */
     private DeliveryInfo deliveryInfo;
 
@@ -78,42 +78,50 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     @Test
     @DisplayName("Test delivery info entity by default diff matcher")
     public void testDeliveryInfoByDefaultTypeDiffMatcher() {
+        // given
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create();
+
+        // when
         final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
         assertThat(diffMatchEntryList, is(empty()));
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom created/update date fields diff matcher")
     public void testDeliveryInfoByDateDiffMatcher() {
-        final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
-            @Override
-            public boolean matchesSafe(final DeliveryInfo value) {
-                return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
-                    && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
-            }
-        };
-
-        // Update delivery info created / updated dates
+        // given
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
-        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(
+            new AbstractTypeSafeMatcher<DeliveryInfo>() {
+                @Override
+                public boolean matchesSafe(final DeliveryInfo value) {
+                    return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
+                        && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
+                }
+            });
+
+        // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
         assertThat(diffMatchEntryList, is(empty()));
 
-        // Update delivery info created / updated dates
+        // given
         getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DEFAULT_DATE_FORMAT));
 
-        // Check matchable delivery info
+        // when
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
         diffMatchEntryList = Lists.newArrayList(iterable);
-        assertThat(diffMatchEntryList, is(not(empty())));
 
-        // Check diff match entry exists
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
         final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
             .builder()
             .value(getDeliveryInfo())
@@ -124,46 +132,50 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     @Test
     @DisplayName("Test delivery info entity by custom type field diff matcher")
     public void testDeliveryInfoByCustomTypeDiffMatcher() {
-        Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
-            @Override
-            public boolean matchesSafe(final DeliveryInfo value) {
-                return value.getType() > 1000 && value.getType() < 5000;
-            }
-        };
-
-        // Update delivery info type
+        // given
         getDeliveryInfo().setType(getCodeMock().val());
 
-        DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+        DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(
+            new AbstractTypeSafeMatcher<DeliveryInfo>() {
+                @Override
+                public boolean matchesSafe(final DeliveryInfo value) {
+                    return value.getType() > 1000 && value.getType() < 5000;
+                }
+            });
+
+        // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-        assertThat(diffMatchEntryList, is(not(empty())));
 
-        // Check diff match entry exists
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
         final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
             .builder()
             .value(getDeliveryInfo())
             .build();
         assertFalse(diffMatchEntryList.contains(entry));
 
-        // Update delivery info type matcher
-        matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
-            @Override
-            public boolean matchesSafe(final DeliveryInfo value) {
-                return value.getType() >= 0 && value.getType() <= 10;
-            }
-        };
+        // given
+        diffMatcher = DefaultDiffMatcherFactory.create(
+            new AbstractTypeSafeMatcher<DeliveryInfo>() {
+                @Override
+                public boolean matchesSafe(final DeliveryInfo value) {
+                    return (value.getType() >= 0 && value.getType() <= 10);
+                }
+            });
 
-        // Check matchable delivery info
-        diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+        // when
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
         diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
         assertThat(diffMatchEntryList, is(empty()));
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom type/date fields diff matchers")
     public void testDeliveryInfoByCustomTypeAndDateDiffMatcher() {
+        // given
         final Matcher<DeliveryInfo> dateMatcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
@@ -178,31 +190,32 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             }
         };
 
-        // Update delivery info type
         getDeliveryInfo().setType(getCodeMock().val());
-        // Update delivery info created / updated dates
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(dateMatcher, typeMatcher);
+
+        // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-        assertThat(diffMatchEntryList, is(not(empty())));
 
-        // Check diff match entry exists
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
         final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
             .builder()
             .value(getDeliveryInfo())
             .build();
         assertFalse(diffMatchEntryList.contains(entry));
 
-
-        // Update delivery info type
+        // given
         getDeliveryInfo().setType(1001);
 
-        // Check matchable delivery info
+        // when
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
         diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
         assertThat(diffMatchEntryList, is(empty()));
     }
 }

@@ -43,16 +43,16 @@ public interface DiffEntry<T> extends Serializable {
     String getPropertyName();
 
     /**
-     * Returns property value of first argument
+     * Returns property value {@code T} of first argument
      *
-     * @return property value
+     * @return property value {@code T}
      */
     T getFirst();
 
     /**
-     * Returns property value of last argument
+     * Returns property value {@code T} of last argument
      *
-     * @return property value
+     * @return property value {@code T}
      */
     T getLast();
 }

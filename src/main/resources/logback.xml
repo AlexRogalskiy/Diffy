@@ -24,6 +24,8 @@ THE SOFTWARE.
 -->
 <configuration debug="true" scan="true" scanPeriod="3000 seconds">
 
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
     <!-- logger configurations -->
     <property name="LOG_PATH" value="${LOG_TEMP:-${java.io.tmpdir:-/tmp}}"/>
     <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/>
@@ -48,12 +50,6 @@ THE SOFTWARE.
     <property name="WEB_LOG_PATTERN" value="web - %date [%thread] %-5level %logger{36} - %messaging%n"/>
     <property name="FILE_AUDIT_LOG_PATTERN" value="%d{[yyyy-MM-dd HH:mm:ss]} [%thread] %-5level %logger{36} - %msg%n"/>
     <property name="FILE_ERROR_LOG_PATTERN" value="%d{[yyyy-MM-dd HH:mm:ss]} [%thread] %-5level %logger{36} - %msg%n"/>
-
-    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-        <discardingThreshold>0</discardingThreshold>
-        <queueSize>1024</queueSize>
-        <appender-ref ref="FILE"/>
-    </appender>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <!--<withjansi>true</withjansi>-->
@@ -95,6 +91,12 @@ THE SOFTWARE.
             <maxHistory>${FILE_ERROR_MAX_HISTORY}</maxHistory>
             <totalSizeCap>${FILE_ERROR_TOTAL_SIZE_CAP}</totalSizeCap>
         </rollingPolicy>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>1024</queueSize>
+        <appender-ref ref="FILE_AUDIT"/>
     </appender>
 
     <logger name="ROOT" level="WARN"/>

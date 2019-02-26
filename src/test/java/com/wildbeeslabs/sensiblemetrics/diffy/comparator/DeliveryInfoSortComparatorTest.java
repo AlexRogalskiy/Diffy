@@ -39,6 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -59,6 +60,9 @@ import static org.assertj.core.api.BDDAssertions.then;
 @ToString(callSuper = true)
 public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest {
 
+    /**
+     * Default delivery info sort comparator {@link DeliveryInfoSortComparator}
+     */
     private DeliveryInfoSortComparator sortComparator;
 
     @Before
@@ -86,7 +90,12 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
         then(sorted).extracting(DeliveryInfo::getId).containsExactly(1l, 2l, 3l, 4l, 5l);
     }
 
-    private List<DeliveryInfo> givenDeliveryInfoList() {
+    /**
+     * Returns immutable collection {@link Collection} of {@link DeliveryInfo} objects
+     *
+     * @return collection {@link Collection} of {@link DeliveryInfo} objects
+     */
+    private Collection<DeliveryInfo> givenDeliveryInfoList() {
         return ImmutableList.of(
             createDeliveryInfo(3l, "test3", DeliveryStatus.DELIVERED, 230.00),
             createDeliveryInfo(2l, "test2", DeliveryStatus.PENDING, 23.12),
@@ -96,6 +105,15 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
         );
     }
 
+    /**
+     * Returns new instance of {@link DeliveryInfo} by initial input parameters
+     *
+     * @param id      - initial input id value
+     * @param gid     - initial input global id value
+     * @param status  - initial input delivery info status {@link DeliveryStatus}
+     * @param balance - initial input balance value
+     * @return new instance of {@link DeliveryInfo}
+     */
     private DeliveryInfo createDeliveryInfo(final Long id, final String gid, final DeliveryStatus status, double balance) {
         final DeliveryInfo deliveryInfo = new DeliveryInfo();
         deliveryInfo.setId(id);
