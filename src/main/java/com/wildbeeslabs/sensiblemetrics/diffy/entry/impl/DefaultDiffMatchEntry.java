@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
@@ -43,6 +44,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode
 @ToString
+@JsonRootName(value = "diffMatchEntry")
 public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
 
     /**

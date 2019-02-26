@@ -23,7 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.experimental.UtilityClass;
@@ -51,9 +57,15 @@ public class MapperUtils {
      * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
      */
     static {
+        final JsonFactory jsonFactory = new JsonFactory();
+        jsonFactory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
+        //modelMapper = new ObjectMapper(jsonFactory);
         modelMapper = new ObjectMapper();
         modelMapper.setDefaultMergeable(true);
         modelMapper.setLocale(Locale.getDefault());
+        modelMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+        modelMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        modelMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
     /**
@@ -128,6 +140,19 @@ public class MapperUtils {
      */
     public static <D> D mapFromJson(final String source, final Class<? extends D> outClass) throws IOException {
         return modelMapper.reader().forType(outClass).readValue(source);
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@code destination}
+     *
+     * @param <D>    type of object to be converted to
+     * @param source - initial input source to be mapped from {@code T}
+     * @return mapped object with <code><D></code> type
+     * @throws IOException
+     */
+    public static <D> List<D> mapFromJson(final String source) throws IOException {
+        return modelMapper.reader().forType(new TypeReference<List<D>>() {
+        }).readValue(source);
     }
 
     /**
