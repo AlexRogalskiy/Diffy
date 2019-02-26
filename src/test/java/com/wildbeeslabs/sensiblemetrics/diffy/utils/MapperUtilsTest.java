@@ -23,11 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.google.common.collect.Lists;
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.EntryView;
@@ -46,10 +45,11 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -78,8 +78,8 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test serializing objects by custom mapper")
-    public void testDeliveryInfoByDiffComparator() throws IOException {
+    @DisplayName("Test serialize difference entries by default mapper")
+    public void testSerializeDiffEntriesByDefaultMapper() throws IOException {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "description");
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -95,36 +95,161 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
         // when
-        final String jsonString = MapperUtils.mapToJson(valueChangeList.get(0), EntryView.External.class);
+        String jsonString = MapperUtils.mapToJson(valueChangeList.get(0), EntryView.External.class);
         final DefaultDiffEntry entry = MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class, EntryView.External.class);
 
         // then
-        assertEquals(entry.getFirst(), valueChangeList.get(0).getFirst());
-        assertEquals(entry.getLast(), valueChangeList.get(0).getLast());
+        assertThat(entry.getFirst(), IsEqual.equalTo(valueChangeList.get(0).getFirst()));
+        assertThat(entry.getLast(), IsEqual.equalTo(valueChangeList.get(0).getLast()));
+
+        // when
+        jsonString = MapperUtils.mapToJson(valueChangeList, EntryView.External.class);
+        final List<DefaultDiffEntry> entries = MapperUtils.mapFromJson(jsonString);
+
+        // then
+        assertThat(entries, is(not(empty())));
+        assertThat(entries.size(), IsEqual.equalTo(valueChangeList.size()));
     }
 
     @Test
-    @DisplayName("Test serializing objects by custom mapper")
-    public void testObjectsByDefaultComparator() throws JsonProcessingException {
+    @DisplayName("Test serialize difference entry by default mapper")
+    public void testSerializeDiffEntryByDefaultMapper() throws IOException {
         // given
-        final String expectedJsonResult = "[{\"id\":null,\"propertyName\":\"codes\",\"first\":[107,111,189,110,150,134,157,139,119,143],\"last\":[143,152,177,136,188,149,176,158,195,147]},{\"id\":null,\"propertyName\":\"createdAt\",\"first\":200782800000,\"last\":521582400000},{\"id\":null,\"propertyName\":\"addresses\",\"first\":[{\"id\":9183259,\"city\":\"MezczcTcrDVhRDuATvOFHzSJFUgDLnZTDpMPvaTABAjYRWQjrshfcUwoTQDRmUia\",\"country\":\"fEoYMHKZaBLltuXTuPjGBnmNBVnAwqIYwxwuiuovmgAOjrsiqKWbNeENVgdtWQFp\",\"stateOrProvince\":\"iRqPAMYvHZozHDJJgyhlBqYdZMVYVvLMrTqvLEkmcybodAZuxQAWzZitrnKEBzrV\",\"postalCode\":\"nvbQ7ypk19PZ01lK1NhDw1nr2vs0ecMaE25qHlVHA6ETgpnlGJnpYdOe6OsHebTF\",\"street\":\"WbfREgYMaKojtILnJOaqobTdCONMpxjIQGUpTTggnuBJUmBwuJORQvAfkMVjMrrK\"},{\"id\":1274888,\"city\":\"TkCFDjwjuMwZqjqmaDnLOVLrilXAUjpkoruIIQiiQbvuxzNbOHBFpLFxBcPUXWWG\",\"country\":\"sNABMPcxStDZbVgJIIonJXLEOQClbVpMxmNwRLaxjhUkrKVmMHVNyTOwXipjKGcG\",\"stateOrProvince\":\"PJAmdpfOmwWCuojnsadcIHgoxVPTabRFuFuekdNRDsoHenQqLEHAFLCkQPEOPvlc\",\"postalCode\":\"sgceyD3BzGXLXu2W9vqeC0FihjoBGQ6ZDcVsRiSuivX0Sgr5Li0ycsR8o5C78bV2\",\"street\":\"sPAtGENYElSYTWlbiyoboepKNusqerRPeBLXTRSxjWPDWWzLpibrXoepWXjtQAQS\"},{\"id\":6035643,\"city\":\"YMNIDJRyDTUjDKYvjPTtuQGnYUBYkTxQhVTtLVpQoobORYiycpYfYExgDNUcqUOk\",\"country\":\"PhxmcCTjOabeYnTarObduNKaQBTgWofHWIfCwrlvBtdXgIhCSThxszoPKmDciCwK\",\"stateOrProvince\":\"iZysRWDBmmlwqcLTVnDqVoWktuhfRsiYClDLsMscirECMclTumpquecaFrcfPwak\",\"postalCode\":\"I3nWWPu1WddHKM8dXzrGVrCJetWQ4MAKmzy13pUhs8xQe5Giffo49Yf4tQm6TZp7\",\"street\":\"JnNFbWULDNsTlbexMQIUpASzXNrhnJyZQYKVMpYwdISVCjKypXmtFtEAvOlaOLfb\"},{\"id\":5739158,\"city\":\"zEqrZYFbBHMbRROfQpxnBiMYTdUNWJkwvYxODEHxaFxFMiwbabSQfAJklpCqGWAa\",\"country\":\"bVdTlexsRwEcsLqDbpPDiFYSdrtJcJekLSofBFpNGLqPgOjRTnOFNoNbhhhbZJLb\",\"stateOrProvince\":\"PEmkDRIddQTlEDRyhpgUCnMggOEJOpqsGjeQVJKpkfmLDbjFLMRlYgbrJzOWSKrP\",\"postalCode\":\"8xrsrjXRZj1Rtg1T062qqJsks9Lc9uMJTrllV4QALtxJKJjCD8cOE9LO6usBFYrx\",\"street\":\"sNXvpBRmlJAQYJaeaSQZVlhgfTeyaqqyAZZhSCpFaMUyfyBMTOYrUUPeoNsxOIeF\"},{\"id\":874071,\"city\":\"YyvUiDauIeWwzDWBSotUvPrcgTWvhkzYULAQsrOKUJhocHMNIKIzFsEhjAXYKKKG\",\"country\":\"xKiSzBTskIQRJOQngBrlfNnmWzVTckdqWXYcaDSbWaXJtRpKkzkPnNxETXNqmTLc\",\"stateOrProvince\":\"NUqGxzHSnBDwiqNFCHOdilIaEyrNzxvgxbBoERjsOeDuTZJtgetXFmsPgkiikYdJ\",\"postalCode\":\"PUqY8tLubBo6A6etMURuuxPCZs2j86qBLpu7BnpRHqszahL2BRcgumS8DapLdgfQ\",\"street\":\"hjnPphsepyVAHVeVBIVCOvQOwdWDIChONtbQWRPRmiBEWRRGGGDXUiDrIrBYFnwS\"}],\"last\":[{\"id\":7341564,\"city\":\"HqRSLRsEwoGEHLfaHoSIzLCpPYqIvGvEMbDVTKkblQuXIhJuFSKuNrJfBWtfoUIb\",\"country\":\"nmSwrgBrvzNNUONhRxdmYvHAeUKgHRnAdlzPMMrsmJJAlLwhcrLFTvdzdgbPzLFk\",\"stateOrProvince\":\"meJriFKKkMKKqBOHjFYjGuzycbCdYOvAmEmVDPzAAZxRJELphCQdXVbFnPEuWpnO\",\"postalCode\":\"n35rwdQtXrqLyHA34KLMluzfhozF7mew7T8Yrxo8jX9J3ouyjEbvDibCS8O1PlB7\",\"street\":\"bPKoCuZClbeEfkwaDrDBQLaoPfLJkcDoEjZXsoVhEAuslMKVAavVCplYBQcxuGiv\"},{\"id\":7723550,\"city\":\"ShwHnNHJywMUIdRaRsLdLDYchgbcQDCIRvbrCoWRjkMrwSnQJDaCgTgkeiHgrzIV\",\"country\":\"BQNybFAHeKkiXnedmThqmqAuKjEplNsMGfEzYdTObaErhMZyfvKOnrBdhuLHWgnN\",\"stateOrProvince\":\"fLTjOkEAAAgsQcTXXLRXNrliykqRcDuVwlYdutmlTfgUTaTpjCNSHMfIPcIKeQMO\",\"postalCode\":\"ZEu5DGwhcZ1uu0OXwGoQ63cmcv3Nz1AbY4XtUGFeuESIXLUjTsvGky3m09L96aHA\",\"street\":\"wfBKLkYaZxscCBNUoRDpoaWCfNXeNvHyychJFDBfXnpxdliMJybPxGPVtUeJOzBp\"},{\"id\":7458037,\"city\":\"HeIuZItWafxqnHmLfKpZMEoLvAWRETnlzuZbVCDsoXMxulhOZYQaDmdoTTGxyAbd\",\"country\":\"DLebNjiEgfaohmtWNrTrZndnSpbSqkLNFmMmhUbbosOYRBXOYFdVmLnnOHbNGqyN\",\"stateOrProvince\":\"gkGBaAyszZBpioMcEaWOIpYctiubwlWqBGRPIKIdHYZSpjFJGOgMoTbhEfOZyFhc\",\"postalCode\":\"sWk9iz4ZO1q6WQuh99vO24QT9Vj9lUl2wLJhpJCcRqYy7Dld9qbcqPUcztcx3uCa\",\"street\":\"DxuSBGlHKyxbmqrXqCmetekCvsxRdwJVzdzUPJIuueYurhyAIwCmddFLITHgvdAF\"},{\"id\":5529635,\"city\":\"JFZJyWTbykaPPbUiOijqKfZBVbSwHKjBXcVhKfaXbJiLnUplZFIqyZlHMBQcWOPm\",\"country\":\"vHvGmvQmfkUfYkbQZvJcnTokQDtmFjkLIyqGrlPppECVrGdMwjVVcaFTsUBQgfrp\",\"stateOrProvince\":\"VPopAxVmPhmvZweKTwYkjbFGOxbhCPXihDndEyquRKPocagsiOEOpRHOUciuvtIB\",\"postalCode\":\"kiq4ozAwmLC3GP8HFzjrYByAI2FhupV397LONpEtpXEuOjfYRO5BDjNVxb2JFyXn\",\"street\":\"XJTJXEnBDfgBoWbRbBGQPdaytWlIPCsglibupRIyOaerVFEdUUrMXEDMFxBPWYsw\"},{\"id\":8325831,\"city\":\"SUMROSJzmwDYquUcvAYUsrgyBOgBPJdAklvDhkaVTpXORovZhwypaqUpvcbBNEIG\",\"country\":\"xknNvROhqofgvKhuvrdhOQcKSWzMKxedXZpJzQzNalKkqUaTIbEvtwxvfOYqvVgF\",\"stateOrProvince\":\"MwuzGthomuOfeVjaqHXnLpWMaEUBxMkZxynxbLnqtLtechlropAeuzSBRUwFPeVX\",\"postalCode\":\"ZlQytTX2k8tGWDOx8fUCeppzsbWEO8F7mg2HOhIY2G8DN3ZpmUWm7FCALRIgr9Vi\",\"street\":\"jJmWMqsPoYrrCouPcfnwUqhGaPIxaFNhOkPvOvfPoQSmNQqMNMBMWHzHZvbVQxKZ\"}]},{\"id\":null,\"propertyName\":\"gid\",\"first\":\"tEZbDhUuT01ylAd9MccpK977X8OKM5s4Phry3wgtBxVa7BEGIsMlWsG63InZzv6X\",\"last\":\"Fz3EnTNtUaNExgAKSddREARnWHbkJpsYphs9BaBz83l5w8yr7LMHtDvfG9Enx4kW\"},{\"id\":null,\"propertyName\":\"balance\",\"first\":48353.200317735136,\"last\":1146.4539067625235},{\"id\":null,\"propertyName\":\"discount\",\"first\":7.86074363446051,\"last\":11.605950547072029},{\"id\":null,\"propertyName\":\"description\",\"first\":\"hrnbWJqDISXWPddxMFJvWgHfPNzdoyRhkFSsKLbntRrrhEzlBxDofyqltZJzIAky\",\"last\":\"bPbyJvfdKTqwcEDoUpzTXpitQxIDTHisHAMcxQRBbAVDLmsjqNvdixvrDbXMkAlp\"},{\"id\":null,\"propertyName\":\"id\",\"first\":8042080,\"last\":5108549},{\"id\":null,\"propertyName\":\"type\",\"first\":46109,\"last\":16002},{\"id\":null,\"propertyName\":\"status\",\"first\":\"PENDING\",\"last\":\"REJECTED\"},{\"id\":null,\"propertyName\":\"updatedAt\",\"first\":1319918400000,\"last\":1267563600000}]";
-        final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
+        final List<String> includedProperties = Arrays.asList("id", "type", "description");
+        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
+        diffComparator.includeProperties(includedProperties);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
+        // then
+        assertThat(valueChangeList, is(not(empty())));
+        assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
+        assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
+
         // when
-        final String jsonResult = MapperUtils.mapToJson(valueChangeList);
+        String jsonString = MapperUtils.mapToJson(valueChangeList.get(0), EntryView.External.class);
+        final DefaultDiffEntry entry = MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class, EntryView.External.class);
 
         // then
-        assertThat(jsonResult, IsEqual.equalTo(""));
+        assertThat(entry.getFirst(), IsEqual.equalTo(valueChangeList.get(0).getFirst()));
+        assertThat(entry.getLast(), IsEqual.equalTo(valueChangeList.get(0).getLast()));
+
+        // when
+        jsonString = MapperUtils.mapToJson(valueChangeList, EntryView.External.class);
+        final List<Map<String, DefaultDiffEntry>> entries = MapperUtils.mapFromJson(jsonString);
+
+        // then
+        assertThat(entries, is(not(empty())));
+        assertThat(entries.size(), IsEqual.equalTo(valueChangeList.size()));
     }
 
-    @Test(expected = JsonMappingException.class)
-    public void givenAbstractClass_whenDeserializing_thenException() throws IOException {
-        final String jsonString = "{\"propertyName\":\"description\",\"first\":\"cGSWCwEawsEvMrAPghayOBoGhUYURCHTqxhHWboiopHSgiQJlphvkHNvpWigpkaJ\",\"last\":\"eYqOeXZUihWmoLlhjTxWkEpuObQJMuMGHqOwLlGkLBfEbdWvtlIDdoYKbTUaNgmL\"}";
+    @Test
+    @DisplayName("Test deserialize collection of difference entries by default mapper")
+    public void testDeserializeDiffEntriesByDefaultMapper() throws IOException {
+        // given
+        final String jsonString = "[{\"propertyName\":\"description\",\"first\":\"oeffPyZQcxoaOMFrKOdbrMURgasTaQUbRlAwPztMeUptxWehkROMStfwgbFAPVhl\",\"last\":\"boHdMLIhLCnAPjXZOclxTWMflYdGmZDVewXYfqjIDFSIPAqsElGjOEOgNInznuhb\"},{\"propertyName\":\"id\",\"first\":5814988,\"last\":8258751},{\"propertyName\":\"type\",\"first\":425402,\"last\":620131}]";
+
+        // when
+        final List<Map<String, DefaultDiffEntry>> entries = MapperUtils.mapFromJson(jsonString);
+
+        // then
+        assertThat(entries, is(not(empty())));
+        assertThat(entries.size(), IsEqual.equalTo(3));
+
+        // then
+        assertThat(entries.get(0).get("propertyName"), IsEqual.equalTo("description"));
+        assertThat(entries.get(0).get("first"), IsEqual.equalTo("oeffPyZQcxoaOMFrKOdbrMURgasTaQUbRlAwPztMeUptxWehkROMStfwgbFAPVhl"));
+        assertThat(entries.get(0).get("last"), IsEqual.equalTo("boHdMLIhLCnAPjXZOclxTWMflYdGmZDVewXYfqjIDFSIPAqsElGjOEOgNInznuhb"));
+
+        assertThat(entries.get(1).get("propertyName"), IsEqual.equalTo("id"));
+        assertThat(entries.get(1).get("first"), IsEqual.equalTo(5814988));
+        assertThat(entries.get(1).get("last"), IsEqual.equalTo(8258751));
+
+        assertThat(entries.get(2).get("propertyName"), IsEqual.equalTo("type"));
+        assertThat(entries.get(2).get("first"), IsEqual.equalTo(425402));
+        assertThat(entries.get(2).get("last"), IsEqual.equalTo(620131));
+    }
+
+    @Test
+    @DisplayName("Test deserialize single difference entry by default mapper and empty view class")
+    public void testDeserializeDiffEntryByDefaultMapperAndEmptyView() throws IOException {
+        // given
+        final String jsonString = "{\"propertyName\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
+
+        // when
+        final DefaultDiffEntry entry = MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class);
+
+        // then
+        assertThat(entry.getPropertyName(), IsEqual.equalTo("description"));
+        assertThat(entry.getFirst(), IsEqual.equalTo("qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp"));
+        assertThat(entry.getLast(), IsEqual.equalTo("SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG"));
+    }
+
+    @Test
+    @DisplayName("Test deserialize single difference entry by default mapper and custom view class")
+    public void testDeserializeDiffEntryByDefaultMapperAndCustomView() throws IOException {
+        // given
+        final String jsonString = "{\"propertyName\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
+
+        // when
         final DefaultDiffEntry entry = MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+
+        // then
+        assertThat(entry.getPropertyName(), IsEqual.equalTo("description"));
+        assertThat(entry.getFirst(), IsEqual.equalTo("qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp"));
+        assertThat(entry.getLast(), IsEqual.equalTo("SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG"));
+    }
+
+    @Test
+    @DisplayName("Test deserialize single difference entry with mismatch properties by default mapper and custom view class")
+    public void testDeserializeDiffEntryWithMismatchPropertiesByDefaultMapperAndCustomView() throws IOException {
+        // given
+        final String jsonString = "{\"propertyName\":\"description\",\"entityFirst\":\"cGSWCwEawsEvMrAPghayOBoGhUYURCHTqxhHWboiopHSgiQJlphvkHNvpWigpkaJ\",\"entityLast\":\"eYqOeXZUihWmoLlhjTxWkEpuObQJMuMGHqOwLlGkLBfEbdWvtlIDdoYKbTUaNgmL\"}";
+
+        // when
+        final DefaultDiffEntry entry = MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+
+        // then
+        assertThat(entry.getPropertyName(), IsEqual.equalTo("description"));
+        assertNull(entry.getFirst());
+        assertNull(entry.getLast());
+    }
+
+    @Test
+    @DisplayName("Test deserialize single empty difference entry by default mapper and custom view class")
+    public void testDeserializeEmptyDiffEntryByDefaultMapperAndCustomView() throws IOException {
+        // given
+        final String jsonString = "{}";
+
+        // when
+        final DefaultDiffEntry entry = MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+
+        // then
+        assertNull(entry.getPropertyName());
+        assertNull(entry.getFirst());
+        assertNull(entry.getLast());
+    }
+
+    @Test(expected = MismatchedInputException.class)
+    @DisplayName("Test deserialize invalid difference entry by default mapper and custom view class")
+    public void testDeserializeInvalidDiffEntryByDefaultMapperAndCustomView() throws IOException {
+        // given
+        final String jsonString = "[]";
+
+        // when
+        MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+    }
+
+    @Test(expected = JsonParseException.class)
+    @DisplayName("Test deserialize unquoted difference entry by default mapper and custom view class")
+    public void testDeserializeUnquotedDiffEntryByDefaultMapperAndCustomView() throws IOException {
+        // given
+        final String jsonString = "{[]}";
+
+        // when
+        MapperUtils.mapFromJson(jsonString, DefaultDiffEntry.class, EntryView.External.class);
     }
 
     /**

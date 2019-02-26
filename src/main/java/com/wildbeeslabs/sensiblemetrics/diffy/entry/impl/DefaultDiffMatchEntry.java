@@ -23,15 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.EntryView;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * Default difference match entry implementation
@@ -41,10 +37,12 @@ import lombok.ToString;
  * @since 1.0
  */
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @EqualsAndHashCode
 @ToString
-@JsonRootName(value = "diffMatchEntry")
+//@JsonRootName(value = "diffMatchEntry")
 public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
 
     /**

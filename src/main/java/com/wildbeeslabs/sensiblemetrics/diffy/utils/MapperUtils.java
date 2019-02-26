@@ -25,8 +25,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -57,13 +55,13 @@ public class MapperUtils {
      * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
      */
     static {
-        final JsonFactory jsonFactory = new JsonFactory();
-        jsonFactory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
+        //final JsonFactory jsonFactory = new JsonFactory();
+        //jsonFactory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
         //modelMapper = new ObjectMapper(jsonFactory);
         modelMapper = new ObjectMapper();
         modelMapper.setDefaultMergeable(true);
         modelMapper.setLocale(Locale.getDefault());
-        modelMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+        //modelMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         modelMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         modelMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
