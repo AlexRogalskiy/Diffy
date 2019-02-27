@@ -15,22 +15,21 @@ jdk:
   - openjdk8
 addons:
   sonarcloud:
-    organization: c15023496337bd4a33f094371b8036e211eae6f0
+    organization: alexrogalskiy-github
     token:
-      secure: "Vx2yWyIdJuqZgBbbnnccxRCx9X5XY01evzsTdzw8aOOreULsekD54oWA7c7H7av9zgZdu2qrfO/qPCUwmmJFOBDl6sIDyjLiErxrbq3iEZdANkjHv4htyteF8mX8PhCk62rP0RNvIr3CSZd/IXQZ6De3FhFtK7SUqMh9d/az3fxQMaTrP3bHFLhr+1CD3bSmJFrf+LMVk00iKwJQgv5A8zHbqjfnO2zScTa+DzHHiHZFzlpC4llvfgqLUr6FP31Pgojgd6F0q9HBo4Whe+seHAIxWLjVmAwxajdMXBdSmAjCVGLblE5KfZpkk75NrcDMg5XYdbHNe6gr2FIdQoOoUmPvUsiqGQJk8CALAlC3e3r8RZ6KykDAX3JEXcwwySe4eEHma8GHX3RnidoPor6RQcb3c2jEj9d92Smp9Z7iYHzA78Oo1W48liNdBO8SpOx1VluHIx+HI20PRONolAIyL0ufP29ChRiKxO6AvVYgNekV0RDrvwGr4TMLCusoueLLQyxeBfb1jGfMwkLjLlOcgv6PFWK4NtXgpjTJISwp2zY/u0EgI3RBSEzkS5Naq+C74H0KAXIjXloEtIi0EjXpf6KffGnRK3dS1A74tuoHI/s2ZJQFizjlznLrlfQm5l7JVIr3nlEwyn/BBlaR3O6dHbpf+kfbxd6q8I2iq//ESZE="
+      secure: Vx2yWyIdJuqZgBbbnnccxRCx9X5XY01evzsTdzw8aOOreULsekD54oWA7c7H7av9zgZdu2qrfO/qPCUwmmJFOBDl6sIDyjLiErxrbq3iEZdANkjHv4htyteF8mX8PhCk62rP0RNvIr3CSZd/IXQZ6De3FhFtK7SUqMh9d/az3fxQMaTrP3bHFLhr+1CD3bSmJFrf+LMVk00iKwJQgv5A8zHbqjfnO2zScTa+DzHHiHZFzlpC4llvfgqLUr6FP31Pgojgd6F0q9HBo4Whe+seHAIxWLjVmAwxajdMXBdSmAjCVGLblE5KfZpkk75NrcDMg5XYdbHNe6gr2FIdQoOoUmPvUsiqGQJk8CALAlC3e3r8RZ6KykDAX3JEXcwwySe4eEHma8GHX3RnidoPor6RQcb3c2jEj9d92Smp9Z7iYHzA78Oo1W48liNdBO8SpOx1VluHIx+HI20PRONolAIyL0ufP29ChRiKxO6AvVYgNekV0RDrvwGr4TMLCusoueLLQyxeBfb1jGfMwkLjLlOcgv6PFWK4NtXgpjTJISwp2zY/u0EgI3RBSEzkS5Naq+C74H0KAXIjXloEtIi0EjXpf6KffGnRK3dS1A74tuoHI/s2ZJQFizjlznLrlfQm5l7JVIr3nlEwyn/BBlaR3O6dHbpf+kfbxd6q8I2iq//ESZE=
   apt:
     packages:
       - oracle-java8-installer
 install: true
 before_script:
-  - CODECOV_TOKEN="4d0b50b4-57c8-4c41-afe9-b61b1dfd752e"
   - pip install --user codecov
   - curl http://www.jpm4j.org/install/script | sh
 script:
   - mvn -U -B -V test --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
   - mvn cobertura:cobertura
-  - sonar-scanner
+  - mvn sonar:sonar -Dsonar.projectKey=AlexRogalskiy_Diffy -Dsonar.organization=alexrogalskiy-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}
 after_success:
   - mvn clean test jacoco:report
   - codecov --build "$TRAVIS_JOB_NUMBER-jdk8"
@@ -42,3 +41,7 @@ notifications:
 env:
   global:
     - secure: YNE9GjEV52M9LawKTHLTgNcc8n7LG6884Xq2VGNstdz4xtqphunCZKWpVAPIDKrMdJDjZvji7PT1uZz7aleypSI3sXLjYjvXaGQ3bZ2G9zqCfMfHFTbAb1oW0zhy27gFsQ0+8/EvEd5xNrEuniBbo5ZRMz1WuHLSQvNiiR6QntCziTn0lgvrbnpsX1tFlWIONxvnaMcDFYyV7gDEODDn45ese05wAcqEl2tQBUfMu5BJZ1cw40qvuhfEK+M4Kui6/bcZZbCIRe0We0m4RlFx04G6xZ1GstQJCVDFIi7lZXY55EqAm+7d/XMQoCmmElEWV81GajyH1LOWZL9gq4ZED1TKSZUQcuWVIfANHpNxCzTNZ9fqD4g/MTa0rG2xfBJYcPd58eXuo2xWzZ/Wbkx5kFWr0xegG+6ctiySV7f4uy85n5V1loLTVOFLegJu00uGl4j6o0hHfE8Qc9+DupDB3WgPkKOW9ZMJGgT6v47uYr1qGnze9FhBMboFUPlbDEbbYdCrch4op9v/w1fzegX6QMWcDVa1nqTJ8uG7pbATkIk2AvAbDbofBtDcWq3neXr8zp2hdb/RIa6jeReGhIHiQ8eckhRoOW+eC3omOlqkX2+6rxoH3JtU4eSBovzXkOiq50xsm/vmzhCcLFlLEhyTV1GUQN8SzLzizanTtcAw6y0=
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
