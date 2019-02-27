@@ -268,6 +268,31 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
     }
 
+    @Test
+    @DisplayName("Test serialize custom difference entries by default mapper and external view class")
+    public void testSerializeCustomDiffEntriesByDefaultMapperAndExternalView() throws IOException {
+        // given
+        final String expectedJsonString = "[{\"propertyName\":\"codes\",\"first\":[1,2,3],\"last\":[1,2]},{\"propertyName\":\"gid\",\"first\":\"Test 01\",\"last\":\"Test 02\"},{\"propertyName\":\"discount\",\"first\":10,\"last\":1},{\"propertyName\":\"description\",\"first\":\"Description 01\",\"last\":\"Description 02\"},{\"propertyName\":\"id\",\"first\":1,\"last\":2},{\"propertyName\":\"status\",\"first\":\"DELIVERED\",\"last\":\"PENDING\"}]";
+        final DeliveryInfo deliveryInfoFirst = createDeliveryInfo(1L, 10, "Test 01", 0.68, "Description 01", DeliveryInfo.DeliveryStatus.DELIVERED, BigDecimal.TEN, 1, 2, 3);
+        final DeliveryInfo deliveryInfoLast = createDeliveryInfo(2L, 10, "Test 02", 0.68, "Description 02", DeliveryInfo.DeliveryStatus.PENDING, BigDecimal.ONE, 1, 2);
+
+        final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
+
+        // when
+        final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(deliveryInfoFirst, deliveryInfoLast);
+        final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(valueChangeList, is(not(empty())));
+        assertThat(valueChangeList.size(), IsEqual.equalTo(6));
+
+        // when
+        String jsonString = MapperUtils.mapToJson(valueChangeList, EntryView.External.class);
+
+        // then
+        assertThat(jsonString, IsEqual.equalTo(expectedJsonString));
+    }
+
     /**
      * Returns new {@link DeliveryInfo} instance by initial input parameters
      *

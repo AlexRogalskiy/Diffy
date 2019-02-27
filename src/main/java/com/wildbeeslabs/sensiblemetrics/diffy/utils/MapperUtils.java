@@ -53,7 +53,7 @@ public class MapperUtils {
     private static ObjectMapper modelMapper;
 
     /**
-     * Model mapper property settings
+     * Model mapper property settings {@link ObjectMapper}
      * Default property matching strategy is set to Strict see {@link MatchingStrategies}
      * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
      */
@@ -69,7 +69,7 @@ public class MapperUtils {
         modelMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         modelMapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
 
-        modelMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        modelMapper.disable(SerializationFeature.INDENT_OUTPUT);
         modelMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         modelMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 

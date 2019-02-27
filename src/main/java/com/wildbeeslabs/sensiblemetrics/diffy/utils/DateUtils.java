@@ -47,6 +47,27 @@ import java.util.Objects;
 @UtilityClass
 public class DateUtils {
 
+    /**
+     * Default date format locale
+     */
+    public static final String DEFAULT_DATE_FORMAT_LOCALE = "de_DE";
+    /**
+     * Default date format pattern
+     */
+    public static final String DEFAULT_DATE_FORMAT_PATTERN_EXT = "yyyy-MM-dd HH:mm:ssZ";
+    /**
+     * Default date format pattern
+     */
+    public static final String DEFAULT_DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * Default date pattern
+     */
+    public static final String DEFAULT_DATE_PATTERN = "EEEEE, dd/MM/yyyy";
+    /**
+     * Default time pattern
+     */
+    public static final String DEFAULT_TIME_PATTERN = "h:mm a";
+
     public static LocalDate toLocalDateBySql(final Date dateToConvert) {
         return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }

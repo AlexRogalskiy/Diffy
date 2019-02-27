@@ -28,7 +28,7 @@ import java.io.Serializable;
 /**
  * Difference entry declaration
  *
- * @param <T> type of input element to be stored by entry
+ * @param <T> type of element to be stored by entry
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -38,7 +38,7 @@ public interface DiffEntry<T> extends Serializable {
     /**
      * Returns property name {@link String} to compare by
      *
-     * @return property name
+     * @return property name {@link String}
      */
     String getPropertyName();
 

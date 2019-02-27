@@ -23,10 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Singular;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -41,6 +38,7 @@ import java.util.List;
  * @since 1.0
  */
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class DeliveryInfo implements Serializable {

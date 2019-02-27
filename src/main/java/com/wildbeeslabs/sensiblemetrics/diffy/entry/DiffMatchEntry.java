@@ -30,7 +30,7 @@ import java.io.Serializable;
 /**
  * Difference match entry declaration
  *
- * @param <T> type of input element to be stored by match entry
+ * @param <T> type of element to be stored by match entry
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

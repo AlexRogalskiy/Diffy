@@ -141,7 +141,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      * @return delivery info discount mock unit instance {@link MockUnit}
      */
     protected MockUnit<BigDecimal> generateDiscount(double lowerBound, double upperBound) {
-        return this.mock.doubles().range(lowerBound, upperBound).map(BigDecimal::valueOf);
+        return getMock().doubles().range(lowerBound, upperBound).map(BigDecimal::valueOf);
     }
 
     /**

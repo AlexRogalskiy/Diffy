@@ -754,7 +754,7 @@ public class ComparatorUtils {
          * Default null-safe object comparator constructor
          */
         public DefaultNullSafeObjectComparator() {
-            this(Comparator.comparing(Object::toString));
+            this(null);
         }
 
         /**
@@ -805,7 +805,7 @@ public class ComparatorUtils {
          * Default null-safe currency {@link Currency} comparator constructor
          */
         public DefaultNullSafeCurrencyComparator() {
-            super();
+            this(null);
         }
 
         /**
@@ -824,7 +824,7 @@ public class ComparatorUtils {
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
         public DefaultNullSafeCurrencyComparator(@Nullable final Comparator<? super Currency> comparator, boolean nullsInPriority) {
-            super(comparator, nullsInPriority);
+            super(Objects.isNull(comparator) ? Comparator.comparing(Object::toString) : comparator, nullsInPriority);
         }
     }
 
@@ -839,7 +839,7 @@ public class ComparatorUtils {
          * Default null-safe url {@link URL} comparator constructor
          */
         public DefaultNullSafeUrlComparator() {
-            super();
+            this(null);
         }
 
         /**
@@ -858,7 +858,7 @@ public class ComparatorUtils {
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
         public DefaultNullSafeUrlComparator(@Nullable final Comparator<? super URL> comparator, boolean nullsInPriority) {
-            super(comparator, nullsInPriority);
+            super(Objects.isNull(comparator) ? Comparator.comparing(Object::toString) : comparator, nullsInPriority);
         }
     }
 
@@ -867,7 +867,6 @@ public class ComparatorUtils {
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-
     public static class DefaultNullSafeCharSequenceComparator extends DefaultNullSafeObjectComparator<CharSequence> {
 
         /**
@@ -1599,7 +1598,7 @@ public class ComparatorUtils {
          * Default null-safe number comparator constructor
          */
         public DefaultNullSafeNumberComparator() {
-            super();
+            this(null);
         }
 
         /**

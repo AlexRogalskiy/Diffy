@@ -96,30 +96,30 @@ public abstract class AbstractDiffTest {
     protected final MockUnitLocalDate pastLocalDateMock = localDates().past(LocalDate.now().minusYears(3));
     protected final MockUnitLocalDate futureLocalDateMock = localDates().future(LocalDate.now().plusYears(3));
     /**
-     * Default string mock unit instances {@link MockUnitString}
+     * Default string mock unit character instances {@link MockUnitString}
      */
     protected final MockUnitString alphaNumericStringMock = strings().types(ALPHA_NUMERIC);
     protected final MockUnitString lettersStringMock = strings().types(LETTERS);
     protected final MockUnitString numbersStringMock = strings().types(NUMBERS);
     /**
-     * Default string mock unit instances {@link MockUnitString}
+     * Default string mock unit misc instances {@link MockUnitString}
      */
-    protected final MockUnitString ipv4ClassACMock = this.mock.ipv4s().types(CLASS_A, CLASS_C);
-    protected final MockUnitString ipv6Mock = this.mock.iPv6s().mapToString();
-    protected final MockUnitString uuidMock = this.mock.uuids().mapToString();
-    protected final MockUnitString countryNameMock = this.mock.countries().names();
-    protected final MockUnitString cityNameMock = this.mock.cities().capitals();
-    protected final MockUnitString currencyNameMock = this.mock.currencies().name();
-    protected final MockUnitString creditCardNameMock = this.mock.creditCards().names();
-    protected final MockUnitString emailMock = this.mock.emails().mapToString();
-    protected final MockUnitString domainMock = this.mock.domains().all();
-    protected final MockUnitString departmentMock = this.mock.departments().mapToString();
-    protected final MockUnitString genderMock = this.mock.genders().letter();
-    protected final MockUnitString firstNameMock = this.mock.names().first();
-    protected final MockUnitString lastNameMock = this.mock.names().last();
-    protected final MockUnitString quotationMock = this.mock.naughtyStrings().quotations();
-    protected final MockUnitString dayNameMock = this.mock.days().mapToString();
-    protected final MockUnitString monthNameMock = this.mock.months().mapToString();
+    protected final MockUnitString ipv4ClassACMock = getMock().ipv4s().types(CLASS_A, CLASS_C);
+    protected final MockUnitString ipv6Mock = getMock().iPv6s().mapToString();
+    protected final MockUnitString uuidMock = getMock().uuids().mapToString();
+    protected final MockUnitString countryNameMock = getMock().countries().names();
+    protected final MockUnitString cityNameMock = getMock().cities().capitals();
+    protected final MockUnitString currencyNameMock = getMock().currencies().name();
+    protected final MockUnitString creditCardNameMock = getMock().creditCards().names();
+    protected final MockUnitString emailMock = getMock().emails().mapToString();
+    protected final MockUnitString domainMock = getMock().domains().all();
+    protected final MockUnitString departmentMock = getMock().departments().mapToString();
+    protected final MockUnitString genderMock = getMock().genders().letter();
+    protected final MockUnitString firstNameMock = getMock().names().first();
+    protected final MockUnitString lastNameMock = getMock().names().last();
+    protected final MockUnitString quotationMock = getMock().naughtyStrings().quotations();
+    protected final MockUnitString dayNameMock = getMock().days().mapToString();
+    protected final MockUnitString monthNameMock = getMock().months().mapToString();
 
     /**
      * Returns mock unit instance {@link MockUnit} to produce array of {@link Float} by initial input array size and range (lower / upper bounds)
@@ -130,7 +130,7 @@ public abstract class AbstractDiffTest {
      * @return mock unit {@link MockUnit} to produce array of {@link Float}
      */
     protected MockUnit<Float[]> generateFloats(int size, float lowerBound, float upperBound) {
-        return this.mock.floats()
+        return getMock().floats()
             .range(lowerBound, upperBound)
             .array(size);
     }
@@ -144,7 +144,7 @@ public abstract class AbstractDiffTest {
      * @return mock unit instance {@link MockUnit} to produce array of {@link Double}
      */
     protected MockUnit<Double[]> generateDoubles(int size, double lowerBound, double upperBound) {
-        return this.mock.doubles()
+        return getMock().doubles()
             .range(lowerBound, upperBound)
             .array(size);
     }
@@ -158,7 +158,7 @@ public abstract class AbstractDiffTest {
      * @return mock unit {@link MockUnit} to produce array of {@link Integer}
      */
     protected MockUnit<Integer[]> generateInts(int size, int lowerBound, int upperBound) {
-        return this.mock.ints()
+        return getMock().ints()
             .range(lowerBound, upperBound)
             .array(size);
     }
@@ -172,7 +172,7 @@ public abstract class AbstractDiffTest {
      * @return mock unit instance {@link MockUnit} to produce array of {@link Long}
      */
     protected MockUnit<Long[]> generateLongs(int size, long lowerBound, long upperBound) {
-        return this.mock.longs()
+        return getMock().longs()
             .range(lowerBound, upperBound)
             .array(size);
     }
@@ -185,7 +185,7 @@ public abstract class AbstractDiffTest {
      * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Integer}
      */
     protected MockUnit<List<Integer>> generateInts(int size, int bound) {
-        return this.mock.ints()
+        return getMock().ints()
             .bound(bound)
             .list(LinkedList.class, size);
     }
@@ -197,14 +197,14 @@ public abstract class AbstractDiffTest {
      * @return mock unit instance {@link MockUnit} to produce list {@link List} of {@link String}
      */
     protected MockUnit<List<String>> generateStrings(int size) {
-        final MockUnitInt num = this.mock.probabilites(Integer.class)
-            .add(0.3, this.mock.ints().range(0, 10))
-            .add(0.7, this.mock.ints().range(10, 20))
+        final MockUnitInt num = getMock().probabilites(Integer.class)
+            .add(0.3, getMock().ints().range(0, 10))
+            .add(0.7, getMock().ints().range(10, 20))
             .mapToInt(Integer::intValue);
 
-        return this.mock.fmt("#{first} #{last} #{num}")
-            .param("first", this.mock.names().first().format(LOWER_CASE))
-            .param("last", this.mock.names().last().format(UPPER_CASE))
+        return getMock().fmt("#{first} #{last} #{num}")
+            .param("first", getMock().names().first().format(LOWER_CASE))
+            .param("last", getMock().names().last().format(UPPER_CASE))
             .param("num", num)
             .list(size);
     }
@@ -217,7 +217,7 @@ public abstract class AbstractDiffTest {
      * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Boolean}
      */
     protected MockUnit<List<Boolean>> generateProbabilities(double probability, int size) {
-        return this.mock.bools()
+        return getMock().bools()
             .probability(probability)
             .list(size);
     }
@@ -230,8 +230,8 @@ public abstract class AbstractDiffTest {
      * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Boolean}
      */
     protected MockUnit<List<String>> genearateStrings(int lowerBound, int upperBound) {
-        final MockUnitInt sizeGenerator = this.mock.ints().range(lowerBound, upperBound);
-        return this.mock.strings()
+        final MockUnitInt sizeGenerator = getMock().ints().range(lowerBound, upperBound);
+        return getMock().strings()
             .list(() -> new ArrayList<>(), sizeGenerator);
     }
 
@@ -243,7 +243,7 @@ public abstract class AbstractDiffTest {
      * @return mock unit instance {@link MockUnit} to produce {@link Date}
      */
     protected MockUnit<Date> genearateDates(final LocalDate dateStart, final LocalDate dateEnd) {
-        return this.mock.localDates()
+        return getMock().localDates()
             .between(dateStart, dateEnd)
             .toUtilDate();
     }

@@ -46,6 +46,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 
@@ -87,12 +88,12 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     public static final Function<String, Comparator<Class<?>>> DEFAULT_CLASS_COMPARATOR = (className) -> (o1, o2) -> {
         final String n1 = o1.getName();
         final String n2 = o2.getName();
-        boolean tika1 = n1.startsWith(className);
-        boolean tika2 = n2.startsWith(className);
-        if (tika1 == tika2) {
+        boolean class1 = n1.startsWith(className);
+        boolean class2 = n2.startsWith(className);
+        if (class1 == class2) {
             return n1.compareTo(n2);
         }
-        return tika1 ? -1 : 1;
+        return class1 ? -1 : 1;
     };
 
     /**
@@ -132,7 +133,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Object d2 = null;
 
         // when
-        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(null, false);
+        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
@@ -146,7 +147,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Object d2 = new Object();
 
         // when
-        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(null, false);
+        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
@@ -160,10 +161,10 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Object d2 = null;
 
         // when
-        final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(null, true);
+        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
 
         // then
-        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
     }
 
     @Test
@@ -174,7 +175,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double d2 = Double.valueOf(0.1233335);
 
         // when
-        final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(null, false);
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
@@ -202,7 +203,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double d2 = Double.valueOf(0.1233335);
 
         // when
-        final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(null, false);
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
@@ -216,10 +217,10 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double d2 = Double.valueOf(0.1233335);
 
         // when
-        final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(null, true);
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
 
         // then
-        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
     }
 
     @Test
@@ -230,7 +231,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double d2 = null;
 
         // when
-        final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(null, true);
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
@@ -258,7 +259,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double[] doubles = generateDoubles(size, 1000.0, 2000.0).val();
 
         // when
-        Arrays.sort(doubles, ComparatorUtils.getNumberComparator(null, false));
+        Arrays.sort(doubles, new ComparatorUtils.DefaultNullSafeNumberComparator());
 
         // then
         assertEquals(doubles.length, size);
@@ -273,7 +274,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Integer[] ints = generateInts(size, 100, 200).val();
 
         // when
-        Arrays.sort(ints, ComparatorUtils.getNumberComparator(null, false));
+        Arrays.sort(ints, new ComparatorUtils.DefaultNullSafeNumberComparator());
 
         // then
         assertEquals(ints.length, size);
@@ -304,7 +305,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double[] d2 = {3.4, 6.4, 2.1, 6.2, null};
 
         // when
-        final Comparator<? super Double[]> comparator = ComparatorUtils.<Double>getArrayComparator(null, false);
+        final Comparator<? super Double[]> comparator = new ComparatorUtils.LexicographicalNullSafeArrayComparator<>();
 
         //then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
@@ -318,7 +319,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double[] d2 = {3.4, 6.4, 2.1, 6.2, null};
 
         // when
-        final Comparator<? super Double[]> comparator = ComparatorUtils.<Double>getLexicographicalArrayComparator(null, false);
+        final Comparator<? super Double[]> comparator = new ComparatorUtils.LexicographicalNullSafeArrayComparator<>();
 
         //then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
@@ -332,7 +333,22 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Double[] d2 = {3.4, 6.4, null, 6.2};
 
         // when
-        final Comparator<? super Double[]> comparator = ComparatorUtils.<Double>getArrayComparator(null, false);
+        final Comparator<? super Double[]> comparator = new ComparatorUtils.DefaultNullSafeArrayComparator<>();
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
+    }
+
+    @Test
+    @DisplayName("Test different array objects by default comparator and not priority nulls")
+    public void testEqualArrayObjectsByDefaultComparator() {
+        // given
+        final Date dateNow = Date.from(Instant.now());
+        final Object[] d1 = {3.4, "object1", 2.1, 7, dateNow};
+        final Object[] d2 = {3.4, "object1", 2.1, 7, dateNow};
+
+        // when
+        final Comparator<? super Object[]> comparator = new ComparatorUtils.DefaultNullSafeArrayComparator<>();
 
         //then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
