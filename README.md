@@ -1,3 +1,13 @@
+![GitHub](https://img.shields.io/github/license/AlexRogalskiy/Diffy.svg)
+[![Build Status](https://travis-ci.com/AlexRogalskiy/Diffy.svg?branch=master)](https://travis-ci.com/AlexRogalskiy/Diffy)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/AlexRogalskiy/Diffy.svg)
+![GitHub All Releases](https://img.shields.io/github/downloads/AlexRogalskiy/Diffy/total.svg?style=flat&logo=travis)
+![GitHub issues](https://img.shields.io/github/issues-raw/AlexRogalskiy/Diffy.svg)
+![Codecov](https://img.shields.io/codecov/c/github/AlexRogalskiy/Diffy.svg)
+![GitHub top language](https://img.shields.io/github/languages/top/AlexRogalskiy/Diffy.svg)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AlexRogalskiy/Diffy.svg)
+![GitHub contributors](https://img.shields.io/github/contributors/AlexRogalskiy/Diffy.svg)
+
 # Diffy
 
 The Diffy project
@@ -17,16 +27,16 @@ The Diffy project
 
 ```xml
 <dependency>
-    <groupId>com.wildbeeslabs.sensiblemetrics.Diffy</groupId>
+    <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
     <artifactId>diffy-core</artifactId>
-    <version>1.0.0-RELEASE</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 ***Using with Gradle:***
 
 ```groovy
-compile 'com.wildbeeslabs.sensiblemetrics.Diffy:1.0.0-RELEASE'
+compile 'com.wildbeeslabs.sensiblemetrics:diffy-core:1.1.0'
 ```
 
 ***Packaging:***

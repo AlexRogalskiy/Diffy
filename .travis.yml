@@ -27,15 +27,18 @@ addons:
 install: true
 
 before_script:
+- CODECOV_TOKEN="4d0b50b4-57c8-4c41-afe9-b61b1dfd752e"
 - pip install --user codecov
 - curl http://www.jpm4j.org/install/script | sh
 
 script:
 - mvn -U -B -V test --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
+- mvn cobertura:cobertura
 
 after_success:
 - mvn clean test jacoco:report
 - codecov --build "$TRAVIS_JOB_NUMBER-jdk8"
+- bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:
