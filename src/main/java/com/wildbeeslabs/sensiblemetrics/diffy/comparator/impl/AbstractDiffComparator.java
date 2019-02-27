@@ -60,7 +60,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     /**
      * Default comparator instance {@link Comparator}
      */
-    private final Comparator<? super T> comparator;
+    private final transient Comparator<? super T> comparator;
     /**
      * Default class instance {@link Class}
      */
@@ -69,12 +69,12 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * Default property map {@link Map} by names {@link String} and values {@link Comparator}
      */
     @Getter(AccessLevel.PROTECTED)
-    private final Map<String, Comparator<?>> propertyComparatorMap = new HashMap<>();
+    private final transient Map<String, Comparator<?>> propertyComparatorMap = new HashMap<>();
     /**
      * Default collection of properties {@link Map} to compare by with related property types {@link Class}
      */
     @Getter(AccessLevel.PROTECTED)
-    private final Map<String, Field> propertyMap = new HashMap<>();
+    private final transient Map<String, Field> propertyMap = new HashMap<>();
     /**
      * Default collection of properties {@link Set} to compare by
      */
@@ -113,7 +113,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public void excludeProperties(final Iterable<String> properties) {
         Optional.ofNullable(properties)
             .orElseGet(Collections::emptyList)
-            .forEach(property -> excludeProperty(property));
+            .forEach(this::excludeProperty);
     }
 
     /**
@@ -136,7 +136,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
         getPropertySet().clear();
         Optional.ofNullable(properties)
             .orElseGet(Collections::emptyList)
-            .forEach(property -> includeProperty(property));
+            .forEach(this::includeProperty);
     }
 
     /**
@@ -158,7 +158,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void setComparator(final String property, final Comparator<?> comparator) {
         Objects.requireNonNull(property);
-        log.debug(String.format("{%s}: storing property by name={%s}, comparator={%s}", getClass().getName(), property, comparator));
+        log.debug("DEBUG <{}>: storing property by name={}, comparator={}", getClass().getName(), property, comparator);
         this.getPropertyComparatorMap().put(sanitize(property), comparator);
     }
 
@@ -180,7 +180,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param property - initial property name {@link String}
      */
     public void removeComparator(final String property) {
-        log.debug(String.format("{%s}: removing comparator for property={%s}", getClass().getName(), property));
+        log.debug("DEBUG: <{}>: removing comparator for property={}", getClass().getName(), property);
         this.getPropertyComparatorMap().remove(sanitize(property));
     }
 
@@ -192,7 +192,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     protected void removeComparators(final Iterable<String> properties) {
         Optional.ofNullable(properties)
             .orElseGet(Collections::emptyList)
-            .forEach(property -> removeComparator(property));
+            .forEach(this::removeComparator);
     }
 
     /**
@@ -246,7 +246,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     protected List<String> getFieldsList(final Class<? extends T> clazz) {
         return getValidFields(getAllFields(clazz), false, false)
             .stream()
-            .map(field -> field.getName())
+            .map(Field::getName)
             .collect(Collectors.toList());
     }
 
@@ -271,7 +271,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     protected Map<String, Field> getFieldsMap(final Class<? extends T> clazz) {
         return getValidFields(getAllFields(clazz), false, false)
             .stream()
-            .collect(Collectors.toMap(field -> field.getName(), field -> field));
+            .collect(Collectors.toMap(Field::getName, field -> field));
     }
 
     /**

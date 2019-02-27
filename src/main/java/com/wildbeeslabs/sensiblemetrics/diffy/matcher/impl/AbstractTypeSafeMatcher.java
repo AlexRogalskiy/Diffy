@@ -86,8 +86,8 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     @SuppressWarnings("unchecked")
     public AbstractTypeSafeMatcher(final Class<? extends T> clazz) {
         this.clazz = Objects.isNull(clazz)
-                ? (Class<? extends T>) DEFAULT_TYPE.getType(this.getClass())
-                : clazz;
+            ? (Class<? extends T>) DEFAULT_TYPE.getType(this.getClass())
+            : clazz;
     }
 
     /**
@@ -96,6 +96,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      * @param value - initial input argument value
      * @return true - if initial value matches input argument, false - otherwise
      */
+    @Override
     public final boolean matches(final T value) {
         return Objects.nonNull(value) && getClazz().isInstance(value) && this.matchesSafe(value);
     }

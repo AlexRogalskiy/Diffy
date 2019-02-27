@@ -21,26 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 /**
- * Abstract converter implementation
- *
- * @param <T> type of input element to be converted from
- * @param <R> type of input element to be converted to
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Bad operation runtime exception implementation {@link RuntimeException}
  */
-@Slf4j
-@Data
-@EqualsAndHashCode
-@ToString
-public abstract class AbstractConverter<T, R> implements Converter<T, R> {
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class BadOperationException extends RuntimeException {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -8529822101880469339L;
+
+    public BadOperationException(final String message) {
+        super(message);
+    }
+
+    public BadOperationException(final Throwable cause) {
+        super(cause);
+    }
+
+    public BadOperationException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
 }

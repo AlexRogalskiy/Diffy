@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -38,9 +39,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public abstract class NumericConverter<T extends Number> extends AbstractConverter<String, T> {
+@EqualsAndHashCode
+@ToString
+public abstract class NumericConverter<T extends Number> implements Converter<String, T> {
 
     /**
      * Returns converted value {@link Number} by converter operation applied to input value

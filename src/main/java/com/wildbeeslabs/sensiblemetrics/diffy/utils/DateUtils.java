@@ -102,6 +102,6 @@ public class DateUtils {
     }
 
     public static LocalDate now(final ZoneId zone) {
-        return LocalDate.now(ZoneId.systemDefault());
+        return LocalDate.now(zone);
     }
 }

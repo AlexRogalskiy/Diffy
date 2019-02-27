@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.description.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -52,7 +53,7 @@ public class StringMatchDescription extends BaseMatchDescription {
     /**
      * Default appendable output stream {@link Appendable}
      */
-    private final Appendable out;
+    private final transient Appendable out;
 
     /**
      * Default empty string match description constructor
@@ -83,7 +84,7 @@ public class StringMatchDescription extends BaseMatchDescription {
         } catch (IOException e) {
             String errorMessage = String.format("ERROR: cannot append value={%s}, message={%s}", value, e.getMessage());
             log.error(errorMessage);
-            throw new RuntimeException(errorMessage, e);
+            throw new BadOperationException(errorMessage, e);
         }
         return this;
     }

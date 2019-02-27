@@ -54,6 +54,7 @@ public class StringUtils {
      */
     public static String replaceAll(final String initialValue, final String pattern, final String replaceValue) {
         Objects.requireNonNull(initialValue);
+        Objects.requireNonNull(pattern);
         return initialValue.replaceAll(pattern, replaceValue);
     }
 

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -43,9 +44,9 @@ import java.util.Date;
  */
 @Slf4j
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class DateConverter extends AbstractConverter<String, Date> {
+@EqualsAndHashCode
+@ToString
+public class DateConverter implements Converter<String, Date> {
 
     /**
      * Default date format pattern

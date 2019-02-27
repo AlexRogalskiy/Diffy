@@ -37,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Date;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 
 /**
  * Custom delivery info matcher implementation {@link DeliveryInfo}
@@ -59,7 +60,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Type" field matcher {@link Matcher}
      */
-    public static Function<Integer, Matcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final IntFunction<Matcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(type, value.getType());
@@ -69,7 +70,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Gid" field matcher {@link Matcher}
      */
-    public static Function<String, Matcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final Function<String, Matcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(gid, value.getGid());
@@ -79,7 +80,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Created date" matcher {@link Matcher}
      */
-    public static Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(date, value.getCreatedAt());
@@ -89,7 +90,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Updated date" matcher {@link Matcher}
      */
-    public static Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(date, value.getUpdatedAt());
@@ -99,7 +100,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "ID" matcher {@link Matcher}
      */
-    public static Function<Matcher<? super Long>, Matcher<? super DeliveryInfo>> FIELD_ID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Long>(matcher) {
+    public static final Function<Matcher<? super Long>, Matcher<? super DeliveryInfo>> FIELD_ID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Long>(matcher) {
         @Override
         protected Long valueOf(final DeliveryInfo value) {
             return value.getId();
@@ -109,7 +110,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Created date" matcher {@link Matcher}
      */
-    public static Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_CREATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
+    public static final Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_CREATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
         @Override
         protected Date valueOf(final DeliveryInfo value) {
             return value.getCreatedAt();
@@ -119,7 +120,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Updated date" matcher {@link Matcher}
      */
-    public static Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_UPDATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
+    public static final Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_UPDATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
         @Override
         protected Date valueOf(final DeliveryInfo value) {
             return value.getUpdatedAt();
@@ -129,7 +130,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Type" field matcher {@link Matcher}
      */
-    public static Function<Matcher<? super Integer>, Matcher<? super DeliveryInfo>> FIELD_TYPE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Integer>(matcher) {
+    public static final Function<Matcher<? super Integer>, Matcher<? super DeliveryInfo>> FIELD_TYPE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Integer>(matcher) {
         @Override
         protected Integer valueOf(final DeliveryInfo value) {
             return value.getType();
@@ -139,7 +140,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Gid" field matcher {@link Matcher}
      */
-    public static Function<Matcher<? super String>, Matcher<? super DeliveryInfo>> FIELD_GID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, String>(matcher) {
+    public static final Function<Matcher<? super String>, Matcher<? super DeliveryInfo>> FIELD_GID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, String>(matcher) {
         @Override
         protected String valueOf(final DeliveryInfo value) {
             return value.getGid();

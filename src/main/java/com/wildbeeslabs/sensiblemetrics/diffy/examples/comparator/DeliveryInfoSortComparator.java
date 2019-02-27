@@ -60,7 +60,7 @@ public class DeliveryInfoSortComparator implements SortComparator {
     /**
      * Default delivery info sort order functional comparator {@link Function}
      */
-    private final DeliveryInfoSortOrderComparator sortOrderComparator;
+    private final transient DeliveryInfoSortOrderComparator sortOrderComparator;
 
     public Comparator<? super DeliveryInfo> getComparator(final SortManager sortManager) {
         Objects.requireNonNull(sortManager);

@@ -42,7 +42,6 @@ import lombok.*;
 @Data
 @EqualsAndHashCode
 @ToString
-//@JsonRootName(value = "diffMatchEntry")
 public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
 
     /**
@@ -66,5 +65,5 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
      * Default property value to be matched {@link Object}
      */
     @JsonView(EntryView.External.class)
-    private Object value;
+    private transient Object value;
 }

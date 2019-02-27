@@ -77,7 +77,7 @@ public class ConverterUtils {
         } catch (IllegalAccessException e) {
             log.error(String.format("ERROR: cannot access method={%s} in type={%s},", parserMethod, toType));
         } catch (InvocationTargetException e) {
-            log.error(String.format("ERROR: cannot convert value=${%s} to type={%s},", value, toType));
+            log.error(String.format("ERROR: cannot convert value={%s} to type={%s},", value, toType));
         }
         return null;
     }

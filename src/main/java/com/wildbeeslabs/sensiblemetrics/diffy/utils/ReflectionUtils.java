@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.google.common.collect.*;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -168,7 +169,7 @@ public class ReflectionUtils {
             .keySet()
             .stream()
             .filter(type -> type.equals(expectedClass))
-            .map(type -> DEFAULT_PRIMITIVE_TYPES.get(type))
+            .map(DEFAULT_PRIMITIVE_TYPES::get)
             .findFirst();
         return (optionalClass.isPresent()) ? optionalClass.get() : expectedClass;
     }
@@ -253,7 +254,7 @@ public class ReflectionUtils {
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (final Exception e) {
-            throw new RuntimeException(e);
+            throw new BadOperationException(e);
         } finally {
             constructor.setAccessible(accessibility);
         }
@@ -267,7 +268,7 @@ public class ReflectionUtils {
      */
     public static Set<Class<?>> typesOf(final Object... values) {
         final Object[] traversableType = Optional.ofNullable(values).orElseGet(() -> new Object[]{});
-        return Stream.of(traversableType).filter(Objects::nonNull).map(type -> type.getClass()).collect(Collectors.toSet());
+        return Stream.of(traversableType).filter(Objects::nonNull).map(Object::getClass).collect(Collectors.toSet());
     }
 
     /**
@@ -279,7 +280,7 @@ public class ReflectionUtils {
      */
     public static boolean allAssignableFrom(final Class<?> sharedType, final Iterable<? extends Class<?>> types) {
         final Iterable<? extends Class<?>> traversableType = Optional.ofNullable(types).orElseGet(Collections::emptyList);
-        return !StreamSupport.stream(traversableType.spliterator(), false).anyMatch(type -> !sharedType.isAssignableFrom(type));
+        return !StreamSupport.stream(traversableType.spliterator(), false).allMatch(type -> sharedType.isAssignableFrom(type));
     }
 
     /**
@@ -306,11 +307,9 @@ public class ReflectionUtils {
         try {
             return castSafe(BeanUtils.getProperty(value, propertyName), clazz);
         } catch (IllegalAccessException ex) {
-            throw new RuntimeException(String.format("ERROR: cannot access property = {%s}, {%s}, argument: {%s}, message = ${%s}", propertyName, value, ex.getMessage()));
-        } catch (InvocationTargetException ex) {
-            throw new RuntimeException(String.format("ERROR: cannot get value of property = {%s}, argument: {%s}, message = ${%s}", propertyName, value, ex.getMessage()));
-        } catch (NoSuchMethodException ex) {
-            throw new RuntimeException(String.format("ERROR: cannot get value of property = {%s}, argument: {%s}, message = ${%s}", propertyName, value, ex.getMessage()));
+            throw new BadOperationException(String.format("ERROR: cannot access property = {%s}, argument: {%s}, message = {%s}", propertyName, value, ex.getMessage()));
+        } catch (InvocationTargetException | NoSuchMethodException ex) {
+            throw new BadOperationException(String.format("ERROR: cannot get value of property = {%s}, argument: {%s}, message = {%s}", propertyName, value, ex.getMessage()));
         }
     }
 
@@ -515,6 +514,7 @@ public class ReflectionUtils {
      * @return true - if method has "public" modifier, false - otherwise
      */
     public static boolean isPublic(final Member member) {
+        Objects.requireNonNull(member);
         return Modifier.isPublic(member.getModifiers()) && Modifier.isPublic(member.getDeclaringClass().getModifiers());
     }
 
@@ -533,7 +533,7 @@ public class ReflectionUtils {
             final Method m = target.getClass().getMethod(getterName);
             return m.invoke(target);
         } catch (Exception e) {
-            throw new RuntimeException(String.format("ERROR: cannot invoke getter={%s} for target={%s}, message={%s}", getterName, target, e.getMessage()));
+            throw new BadOperationException(String.format("ERROR: cannot invoke getter={%s} for target={%s}, message={%s}", getterName, target, e.getMessage()));
         }
     }
 
@@ -598,7 +598,7 @@ public class ReflectionUtils {
         } else if (javaType instanceof Class) {
             return (Class) javaType;
         }
-        throw new RuntimeException(String.format("ERROR: cannot get class by type={%s}", javaType));
+        throw new BadOperationException(String.format("ERROR: cannot get class by type={%s}", javaType));
     }
 
     /**
@@ -799,7 +799,7 @@ public class ReflectionUtils {
                 } catch (Exception e) {
                     String errorMessage = String.format("ERROR: cannot invoke getter method = {%s} on field = {%s}", getter.getName(), field);
                     log.error(errorMessage);
-                    throw new RuntimeException(errorMessage, e);
+                    throw new BadOperationException(errorMessage, e);
                 }
             });
         } else {
@@ -841,12 +841,12 @@ public class ReflectionUtils {
          */
         public Class<?> getType(final Class<?> clazz) {
             for (Class c = clazz; c != Object.class; c = c.getSuperclass()) {
-                final Optional<Method> methodOptional = Stream.of(c.getDeclaredMethods()).filter(method -> hasSignature(method)).findFirst();
+                final Optional<Method> methodOptional = Stream.of(c.getDeclaredMethods()).filter(this::hasSignature).findFirst();
                 if (methodOptional.isPresent()) {
                     return getParameterType(methodOptional.get());
                 }
             }
-            throw new RuntimeException(String.format("ERROR: cannot determine correct type for method={%s}", getMethodName()));
+            throw new BadOperationException(String.format("ERROR: cannot determine correct type for method={%s}", getMethodName()));
         }
 
         /**

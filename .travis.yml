@@ -1,49 +1,44 @@
 language: java
-
 dist: trusty
-
 git:
   depth: false
   quiet: true
   submodules: false
   lfs_skip_smudge: true
-
 sudo: false
-
 branches:
   only:
-  - master
-  - stable
-
+    - master
+    - stable
 jdk:
   - oraclejdk8
   - openjdk8
-
 addons:
+  sonarcloud:
+    organization: c15023496337bd4a33f094371b8036e211eae6f0
+    token:
+      secure: NrrrGoMgvsx5EQ87VWJYwsXSD8VZn0K8cP1//Ddl/tS4TMqDeVXvzJMVxpKGPWVQS/6MXjtW8JvjrtcpXj2rPM+ioBkBjPCu6ltl43+jd4x25eWM2kaZ6LKnr/ZVuo64bnf6VbN3oD8wEZaAOOR1t/XSo3YkIxJj6DKwcYedaqhyQ2EkjSeP4hRKPCmY4xFQZf1wnxRTPrABDtAN7vAhoUkPhNtYB5dzCs8yLtHs1LyoKRmNGePHbr7ZE/nEcXm+h8TzL1GBAsKpHfk/60bw9UaWz9wIcLf0kiJbYHKrmqJrx9f8nPG5V5ahme/f+yx7m0toPAxzfvt26nAIjt1DNAfbaLuxo5Qw2+4SnXwaHCebQHWU7JuBLdNdSpW9Ez30aQ4ARnr7R7fxeR0NSBSjdEJLQSEMiojy4yV+LnP2V0WoCC7PWvqLgGBS55Ze/qBlM2LQQCk6zyVW+mbIamgcvAjS3clm5okoO1cj1fHIYajsqMavOVNMdIQaTAMjKSeH6kHRhZlLtF2Z3yE198AhnILC/OtiQ7aYUNybPnRoaNoI42/FYtcR7rjFxJLFTYdjWsDKGZ5kXaaikZf6B6jZsARptNHmZ8+QaZWFfva2R3e1OYkSNHSq0jYU9zHWvuJ2YQ15i2W2UNdsVJGt49ftS5zYDpZORe5ockJHrDc243g=
   apt:
     packages:
       - oracle-java8-installer
-
 install: true
-
 before_script:
-- pip install --user codecov
-- curl http://www.jpm4j.org/install/script | sh
-
+  - CODECOV_TOKEN="4d0b50b4-57c8-4c41-afe9-b61b1dfd752e"
+  - pip install --user codecov
+  - curl http://www.jpm4j.org/install/script | sh
 script:
-- mvn -U -B -V test --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
-- mvn cobertura:cobertura
-
+  - mvn -U -B -V test --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  - mvn cobertura:cobertura
+  - sonar-scanner
 after_success:
-- mvn clean test jacoco:report
-- codecov --build "$TRAVIS_JOB_NUMBER-jdk8"
-- bash <(curl -s https://codecov.io/bash)
-
+  - mvn clean test jacoco:report
+  - codecov --build "$TRAVIS_JOB_NUMBER-jdk8"
+  - bash <(curl -s https://codecov.io/bash) -t "$CODECOV_TOKEN"
 notifications:
   email:
     on_success: change
     on_failure: always
-
 env:
   global:
-    secure: YNE9GjEV52M9LawKTHLTgNcc8n7LG6884Xq2VGNstdz4xtqphunCZKWpVAPIDKrMdJDjZvji7PT1uZz7aleypSI3sXLjYjvXaGQ3bZ2G9zqCfMfHFTbAb1oW0zhy27gFsQ0+8/EvEd5xNrEuniBbo5ZRMz1WuHLSQvNiiR6QntCziTn0lgvrbnpsX1tFlWIONxvnaMcDFYyV7gDEODDn45ese05wAcqEl2tQBUfMu5BJZ1cw40qvuhfEK+M4Kui6/bcZZbCIRe0We0m4RlFx04G6xZ1GstQJCVDFIi7lZXY55EqAm+7d/XMQoCmmElEWV81GajyH1LOWZL9gq4ZED1TKSZUQcuWVIfANHpNxCzTNZ9fqD4g/MTa0rG2xfBJYcPd58eXuo2xWzZ/Wbkx5kFWr0xegG+6ctiySV7f4uy85n5V1loLTVOFLegJu00uGl4j6o0hHfE8Qc9+DupDB3WgPkKOW9ZMJGgT6v47uYr1qGnze9FhBMboFUPlbDEbbYdCrch4op9v/w1fzegX6QMWcDVa1nqTJ8uG7pbATkIk2AvAbDbofBtDcWq3neXr8zp2hdb/RIa6jeReGhIHiQ8eckhRoOW+eC3omOlqkX2+6rxoH3JtU4eSBovzXkOiq50xsm/vmzhCcLFlLEhyTV1GUQN8SzLzizanTtcAw6y0=
+    - secure: YNE9GjEV52M9LawKTHLTgNcc8n7LG6884Xq2VGNstdz4xtqphunCZKWpVAPIDKrMdJDjZvji7PT1uZz7aleypSI3sXLjYjvXaGQ3bZ2G9zqCfMfHFTbAb1oW0zhy27gFsQ0+8/EvEd5xNrEuniBbo5ZRMz1WuHLSQvNiiR6QntCziTn0lgvrbnpsX1tFlWIONxvnaMcDFYyV7gDEODDn45ese05wAcqEl2tQBUfMu5BJZ1cw40qvuhfEK+M4Kui6/bcZZbCIRe0We0m4RlFx04G6xZ1GstQJCVDFIi7lZXY55EqAm+7d/XMQoCmmElEWV81GajyH1LOWZL9gq4ZED1TKSZUQcuWVIfANHpNxCzTNZ9fqD4g/MTa0rG2xfBJYcPd58eXuo2xWzZ/Wbkx5kFWr0xegG+6ctiySV7f4uy85n5V1loLTVOFLegJu00uGl4j6o0hHfE8Qc9+DupDB3WgPkKOW9ZMJGgT6v47uYr1qGnze9FhBMboFUPlbDEbbYdCrch4op9v/w1fzegX6QMWcDVa1nqTJ8uG7pbATkIk2AvAbDbofBtDcWq3neXr8zp2hdb/RIa6jeReGhIHiQ8eckhRoOW+eC3omOlqkX2+6rxoH3JtU4eSBovzXkOiq50xsm/vmzhCcLFlLEhyTV1GUQN8SzLzizanTtcAw6y0=

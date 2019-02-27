@@ -55,12 +55,12 @@ public class ComparatorUtils {
     /**
      * Default comparator with false first order {@link Comparator}
      */
-    public static final Comparator<? super Boolean> DEFAULT_FALSE_FIRST_COMPARATOR = (a, b) -> a == b ? 0 : b ? -1 : 1;
+    public static final Comparator<? super Boolean> DEFAULT_FALSE_FIRST_COMPARATOR = (a, b) -> Objects.equals(a, b) ? 0 : b ? -1 : 1;
 
     /**
      * Default comparator with true first order {@link Comparator}
      */
-    public static final Comparator<? super Boolean> DEFAULT_TRUE_FIRST_COMPARATOR = (a, b) -> a == b ? 0 : a ? -1 : 1;
+    public static final Comparator<? super Boolean> DEFAULT_TRUE_FIRST_COMPARATOR = (a, b) -> Objects.equals(a, b) ? 0 : a ? -1 : 1;
 
     /**
      * Returns boolean comparator with false first order {@link Comparator}
@@ -90,7 +90,8 @@ public class ComparatorUtils {
     public static <T> Comparator<? super T> lastIf(final Predicate<T> predicate) {
         Objects.requireNonNull(predicate);
         return (a, b) -> {
-            final boolean pa = predicate.test(a), pb = predicate.test(b);
+            final boolean pa = predicate.test(a);
+            final boolean pb = predicate.test(b);
             return pa == pb ? 0 : pb ? -1 : 1;
         };
     }
@@ -105,7 +106,8 @@ public class ComparatorUtils {
     public static <T> Comparator<? super T> firstIf(final Predicate<T> predicate) {
         Objects.requireNonNull(predicate);
         return (a, b) -> {
-            final boolean pa = predicate.test(a), pb = predicate.test(b);
+            final boolean pa = predicate.test(a);
+            final boolean pb = predicate.test(b);
             return pa == pb ? 0 : pa ? -1 : 1;
         };
     }
@@ -125,7 +127,8 @@ public class ComparatorUtils {
         Objects.requireNonNull(lastOrder);
 
         return (a, b) -> {
-            final boolean pa = predicate.test(a), pb = predicate.test(b);
+            final boolean pa = predicate.test(a);
+            final boolean pb = predicate.test(b);
             if (pa == pb) {
                 return (pa ? firstOrder : lastOrder).compare(a, b);
             }
@@ -659,7 +662,7 @@ public class ComparatorUtils {
         /**
          * Default comparator instance {@link Comparator}
          */
-        private final Comparator<? super T> comparator;
+        private final transient Comparator<? super T> comparator;
         /**
          * Default "null" priority (true - if nulls are first, false - otherwise)
          */
@@ -964,7 +967,7 @@ public class ComparatorUtils {
         public DefaultNullSafeLocaleComparator(@Nullable final Comparator<? super Locale> comparator, boolean nullsInPriority) {
             super(Objects.isNull(comparator) ? (o1, o2) -> {
                 if (o1.getLanguage().equals(o2.getLanguage())) {
-                    return (o1.getCountry().equals(o2.getCountry())) ? 0 : 1;
+                    return (Objects.equals(o1.getCountry(), o2.getCountry())) ? 0 : 1;
                 }
                 return -1;
             } : comparator, nullsInPriority);
@@ -1004,12 +1007,13 @@ public class ComparatorUtils {
          */
         public DefaultNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
-                int firstSize = o1.length, lastSize = o2.length;
+                int firstSize = o1.length;
+                int lastSize = o2.length;
                 if (firstSize < lastSize) return -1;
                 if (firstSize > lastSize) return 1;
                 final Comparator<? super T> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
-                for (int temp, i = 0; i < firstSize; i++) {
-                    temp = Objects.compare(o1[i], o2[i], comp);
+                for (int i = 0; i < firstSize; i++) {
+                    int temp = Objects.compare(o1[i], o2[i], comp);
                     if (0 != temp) return temp;
                 }
                 return 0;
@@ -1375,9 +1379,8 @@ public class ComparatorUtils {
                 final Iterator<T> iteratorFirst = o1.iterator();
                 final Iterator<T> iteratorLast = o2.iterator();
                 final Comparator<? super T> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
-                int temp;
                 while (iteratorFirst.hasNext()) {
-                    temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), comp);
+                    int temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), comp);
                     if (0 != temp) return temp;
                 }
                 return 0;

@@ -41,7 +41,6 @@ import lombok.*;
 @Data
 @EqualsAndHashCode
 @ToString
-//@JsonRootName(value = "diffEntry")
 public class DefaultDiffEntry implements DiffEntry<Object> {
 
     /**
@@ -65,11 +64,11 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
      * Default property value of first argument {@link Object}
      */
     @JsonView(EntryView.External.class)
-    private Object first;
+    private transient Object first;
 
     /**
      * Default property value of last argument {@link Object}
      */
     @JsonView(EntryView.External.class)
-    private Object last;
+    private transient Object last;
 }

@@ -23,10 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.view;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * Default difference entry view implementation
@@ -36,6 +33,7 @@ import lombok.ToString;
  * @since 1.0
  */
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @EqualsAndHashCode
 @ToString
@@ -44,12 +42,14 @@ public class EntryView {
     /**
      * Default external entry view
      */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class External {
     }
 
     /**
      * Default internal entry view
      */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Internal extends External {
     }
 }

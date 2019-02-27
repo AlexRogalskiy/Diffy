@@ -445,7 +445,6 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          *
          * @param property must not be {@literal null} or empty.
          */
-        @Deprecated
         public SortOrder(final String property) {
             this(DEFAULT_DIRECTION, property);
         }
