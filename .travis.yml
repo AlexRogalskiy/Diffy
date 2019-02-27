@@ -15,7 +15,7 @@ jdk:
   - openjdk8
 addons:
   sonarcloud:
-    organization: alexrogalskiy-github
+    organization: "alexrogalskiy-github"
     token:
       secure: "EFloHmTj8WE5g+NJ0OPbXFYF5+YZ+az4K5seJgCjY+dxw8CbwyNCZPc0rxRbzxevf00hg/OywEfWQM1x9g6JuPvVeoR51kkqF1Ved7gTl4Xi5s7hLYltq2U/4e+iDPyRBJehelw1sclSSgQPQ66YDWlRq9zAT/9NJcz4Nbp89mTwZ9jrOPepy8U0iXwVg167OJhUWowGdv+g3Ffn0ZsuEXJ92XMgd3c7ypb39/c3W72rmL2iNNa/FdtIVRAmOS89371CFdh8vUx8qTGgUyofXfkJTnh1Ha8gf1taZTZsdnfgy9cL3S6wq/rpbbyxMnC6A8JpKRxPgXPCjVGPFgZWzQol8UpiNftnoR/7y4+q6cQJ1Nlo/NEdx+liXK6+WC96tzApf/8Wrsx7pYxSLEExSzeAb8gnSVY/qh9K5Ix8jcyPQPYWNrv8Lo59sbg5f0Lzg5qMAvk6FBJwvB/QCSD+ZUSCEvjhLBhugv9xi+UVVEzcMJMm7yFVeskBoInngD1rjIeZvA8asppJALHw7a9sluJvLQlntd0QYZlYipSwj9ayJYYXdn1sxxeUA2Ldlq9JhUHYo1oAIfD+varTYEksf7XJsCkc3HnlBW1rPdnUG5NHvFcwn2Y0lPcH7AZsL8duIiriq3OGEa9m/4OybkLlxvbKo/RVfp11vUSpJJZpdqk="
   apt:
@@ -27,6 +27,7 @@ before_script:
   - pip install --user codecov
   - curl http://www.jpm4j.org/install/script | sh
 script:
+  - set
   - mvn -U -B -V test --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
   - mvn cobertura:cobertura
   - mvn sonar:sonar -Dsonar.projectKey=AlexRogalskiy_Diffy -Dsonar.organization=alexrogalskiy-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
