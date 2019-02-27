@@ -3,6 +3,7 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/AlexRogalskiy/Diffy.svg)
 ![GitHub All Releases](https://img.shields.io/github/downloads/AlexRogalskiy/Diffy/total.svg?style=flat&logo=travis)
 ![GitHub issues](https://img.shields.io/github/issues-raw/AlexRogalskiy/Diffy.svg)
+<br/>
 ![Codecov](https://img.shields.io/codecov/c/github/AlexRogalskiy/Diffy.svg)
 ![GitHub top language](https://img.shields.io/github/languages/top/AlexRogalskiy/Diffy.svg)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AlexRogalskiy/Diffy.svg)

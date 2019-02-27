@@ -27,7 +27,6 @@ addons:
 install: true
 
 before_script:
-- CODECOV_TOKEN="4d0b50b4-57c8-4c41-afe9-b61b1dfd752e"
 - pip install --user codecov
 - curl http://www.jpm4j.org/install/script | sh
 
