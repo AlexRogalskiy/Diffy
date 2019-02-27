@@ -48,12 +48,12 @@ public class StringUtils {
     /**
      * Default brackets wrapper {@link Function}
      */
-    public static final Function<Object, String> wrapInBrackets = (s) -> "[ " + s + " ]";
+    public static final Function<Object, String> wrapInBrackets = s -> "[ " + s + " ]";
 
     /**
      * Default quotes wrapper {@link Function}
      */
-    public static final Function<Object, String> wrapInQuotes = (s) -> "\" " + s + " \"";
+    public static final Function<Object, String> wrapInQuotes = s -> "\" " + s + " \"";
 
     /**
      * Returns string value {@link String} with replaced values by pattern

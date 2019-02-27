@@ -966,7 +966,10 @@ public class ComparatorUtils {
         public DefaultNullSafeLocaleComparator(@Nullable final Comparator<? super Locale> comparator, boolean nullsInPriority) {
             super(Objects.isNull(comparator) ? (o1, o2) -> {
                 if (o1.getLanguage().equals(o2.getLanguage())) {
-                    return (Objects.equals(o1.getCountry(), o2.getCountry())) ? 0 : 1;
+                    if (Objects.equals(o1.getCountry(), o2.getCountry())) {
+                        return 0;
+                    }
+                    return 1;
                 }
                 return -1;
             } : comparator, nullsInPriority);

@@ -280,7 +280,7 @@ public class ReflectionUtils {
      */
     public static boolean allAssignableFrom(final Class<?> sharedType, final Iterable<? extends Class<?>> types) {
         final Iterable<? extends Class<?>> traversableType = Optional.ofNullable(types).orElseGet(Collections::emptyList);
-        return !StreamSupport.stream(traversableType.spliterator(), false).allMatch(type -> sharedType.isAssignableFrom(type));
+        return !StreamSupport.stream(traversableType.spliterator(), false).allMatch(sharedType::isAssignableFrom);
     }
 
     /**

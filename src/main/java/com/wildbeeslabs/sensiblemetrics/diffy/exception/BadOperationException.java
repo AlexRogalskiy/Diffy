@@ -51,9 +51,4 @@ public class BadOperationException extends RuntimeException {
     public BadOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
-
-    @Override
-    public String getMessage() {
-        return super.getMessage();
-    }
 }
