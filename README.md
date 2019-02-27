@@ -69,7 +69,7 @@ If you discovered a bug or have just an idea for a new feature development, plea
 [Pull Request](https://help.github.com/articles/using-pull-requests)
 
 More information regarding a contribution involvement process can be found at:
-[here](https://github.com/SQiShER/java-object-diff/blob/master/CONTRIBUTING.md)
+[here](https://github.com/AlexRogalskiy/Diffy/CONTRIBUTING.md)
 
 ---
 Powered by *IntelliJ IDEA* IDE
