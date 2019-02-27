@@ -40,14 +40,14 @@ import lombok.*;
 public class EntryView {
 
     /**
-     * Default external entry view
+     * Default entry view {@link External}
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class External {
     }
 
     /**
-     * Default internal entry view
+     * Default entry view {@link Internal}
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Internal extends External {

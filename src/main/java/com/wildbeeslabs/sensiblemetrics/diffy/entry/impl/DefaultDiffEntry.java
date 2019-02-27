@@ -49,7 +49,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     private static final long serialVersionUID = -8477472621769483552L;
 
     /**
-     * Default entry id
+     * Default entry id {@link String}
      */
     @JsonView(EntryView.Internal.class)
     private String id;

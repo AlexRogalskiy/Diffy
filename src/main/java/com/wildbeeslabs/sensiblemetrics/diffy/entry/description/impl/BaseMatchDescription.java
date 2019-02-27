@@ -32,8 +32,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.wrapInBrackets;
+
 /**
- * Base match description declaration
+ * Base match description declaration {@link MatchDescription}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -81,7 +83,7 @@ public class BaseMatchDescription implements MatchDescription {
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input collection of values to be appended
-     * @param <T> type of input element to be processed by matchable operation
+     * @param <T>       type of input element to be processed by matchable operation
      * @return current description instance {@link MatchDescription}
      */
     @Override
@@ -96,7 +98,7 @@ public class BaseMatchDescription implements MatchDescription {
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input iterable collection of values to be appended {@link Iterable}
-     * @param <T> type of input element to be processed by matchable operation
+     * @param <T>       type of input element to be processed by matchable operation
      * @return current description instance {@link MatchDescription}
      */
     @Override
@@ -106,7 +108,7 @@ public class BaseMatchDescription implements MatchDescription {
         final Iterator<? extends T> it = values.iterator();
         while (it.hasNext()) {
             if (separate) append(delimiter);
-            append(it.next());
+            append(wrapInBrackets.apply(it.next()));
             separate = true;
         }
         append(end);

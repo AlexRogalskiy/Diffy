@@ -61,7 +61,6 @@ public class MapperUtils {
         modelMapper = new ObjectMapper();
         modelMapper.setDefaultMergeable(true);
         modelMapper.setLocale(Locale.getDefault());
-        //modelMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         modelMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         modelMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
@@ -73,6 +72,7 @@ public class MapperUtils {
         modelMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         modelMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
+        modelMapper.disable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         modelMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         modelMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
     }

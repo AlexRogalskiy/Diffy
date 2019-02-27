@@ -30,9 +30,9 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Default integer converter implementation {@link Integer}
+ * Default {@link Number} converter implementation {@link Converter}
  *
- * @param <T> type of input numeric element {@link Number} to be converted from
+ * @param <T> type of input value {@link Number} to be converted from
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

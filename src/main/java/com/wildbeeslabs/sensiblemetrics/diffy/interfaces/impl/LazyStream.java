@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.interfaces.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.interfaces.Streamable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Value;
 
 import java.util.Iterator;
@@ -31,11 +34,17 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Default lazy {@link Streamable} implementation from a given {@link Supplier}
+ * Default lazy {@link Streamable} implementation for a given {@link Supplier}
  */
+@Data
+@EqualsAndHashCode
+@ToString
 @Value(staticConstructor = "from")
 public class LazyStream<T> implements Streamable<T> {
 
+    /**
+     * Default supplier stream instance {@link Supplier}
+     */
     private final Supplier<? extends Stream<T>> stream;
 
     /**

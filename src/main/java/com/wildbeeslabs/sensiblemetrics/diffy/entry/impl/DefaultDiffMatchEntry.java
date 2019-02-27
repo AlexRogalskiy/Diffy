@@ -50,7 +50,7 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
     private static final long serialVersionUID = 5902509374305990063L;
 
     /**
-     * Default entry id
+     * Default entry id {@link String}
      */
     @JsonView(EntryView.Internal.class)
     private String id;

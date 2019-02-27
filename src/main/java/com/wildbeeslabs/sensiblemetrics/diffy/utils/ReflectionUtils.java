@@ -61,15 +61,15 @@ public class ReflectionUtils {
     /**
      * Default collection of primitive wrapper types {@link ImmutableCollection}
      */
-    private static final ImmutableCollection<Class<?>> DEFAULT_PRIMITIVE_WRAPPER_TYPES = getDefaultPrimitiveWrapperTypes();
+    private static final ImmutableCollection<Class<?>> DEFAULT_PRIMITIVE_WRAPPER_TYPES = getPrimitiveWrapperTypes();
     /**
      * Default collection of primitive numeric types {@link ImmutableCollection}
      */
-    private static final ImmutableCollection<Class<?>> DEFAULT_PRIMITIVE_NUMERIC_TYPES = getDefaultPrimitiveNumericTypes();
+    private static final ImmutableCollection<Class<?>> DEFAULT_PRIMITIVE_NUMERIC_TYPES = getPrimitiveNumericTypes();
     /**
      * Default collection map of primitive types {@link ImmutableBiMap}
      */
-    private static final ImmutableBiMap<Class<?>, Class<?>> DEFAULT_PRIMITIVE_TYPES = getDefaultPrimitiveTypes();
+    private static final ImmutableBiMap<Class<?>, Class<?>> DEFAULT_PRIMITIVE_TYPES = getPrimitiveTypes();
 
     /**
      * Default collection of extendable simple types {@link ImmutableCollection}
@@ -107,7 +107,7 @@ public class ReflectionUtils {
      *
      * @return collection of primitive wrapper types {@link ImmutableCollection}
      */
-    private static ImmutableCollection<Class<?>> getDefaultPrimitiveWrapperTypes() {
+    private static ImmutableCollection<Class<?>> getPrimitiveWrapperTypes() {
         return ImmutableSet.<Class<?>>builder()
             .add(Boolean.class)
             .add(Character.class)
@@ -126,7 +126,7 @@ public class ReflectionUtils {
      *
      * @return collection of primitive numeric types {@link ImmutableCollection}
      */
-    private static ImmutableCollection<Class<?>> getDefaultPrimitiveNumericTypes() {
+    private static ImmutableCollection<Class<?>> getPrimitiveNumericTypes() {
         return ImmutableSet.<Class<?>>builder()
             .add(char.class)
             .add(byte.class)
@@ -145,7 +145,7 @@ public class ReflectionUtils {
      *
      * @return collection map of primitive types {@link ImmutableBiMap}
      */
-    private static ImmutableBiMap<Class<?>, Class<?>> getDefaultPrimitiveTypes() {
+    private static ImmutableBiMap<Class<?>, Class<?>> getPrimitiveTypes() {
         return ImmutableBiMap.<Class<?>, Class<?>>builder()
             .put(boolean.class, Boolean.class)
             .put(char.class, Character.class)

@@ -23,14 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
-/**
- * Default date converter implementation {@link java.util.Date}
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
- */
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -38,6 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 
+/**
+ * Default {@link BigDecimal} converter implementation {@link NumericConverter}
+ *
+ * @author Alexander Rogalskiy
+ * @version 1.1
+ * @since 1.0
+ */
 @Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)

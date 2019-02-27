@@ -754,7 +754,7 @@ public class ComparatorUtils {
          * Default null-safe object comparator constructor
          */
         public DefaultNullSafeObjectComparator() {
-            this(null);
+            this(Comparator.comparing(Object::toString));
         }
 
         /**
@@ -805,7 +805,7 @@ public class ComparatorUtils {
          * Default null-safe currency {@link Currency} comparator constructor
          */
         public DefaultNullSafeCurrencyComparator() {
-            this(null);
+            super();
         }
 
         /**
@@ -839,7 +839,7 @@ public class ComparatorUtils {
          * Default null-safe url {@link URL} comparator constructor
          */
         public DefaultNullSafeUrlComparator() {
-            this(null);
+            super();
         }
 
         /**
@@ -873,7 +873,7 @@ public class ComparatorUtils {
          * Default null-safe char sequence comparator constructor
          */
         public DefaultNullSafeCharSequenceComparator() {
-            this(ComparableComparator.getInstance());
+            super();
         }
 
         /**

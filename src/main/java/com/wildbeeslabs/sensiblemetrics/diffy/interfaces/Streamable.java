@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Custom streamable interface declaration based on {@link Iterable}
+ * Custom {@link Streamable} interface declaration by {@link Iterable}, {@link Supplier}
  */
 @FunctionalInterface
 public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {

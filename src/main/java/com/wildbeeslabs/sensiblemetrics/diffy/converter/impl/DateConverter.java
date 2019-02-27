@@ -31,12 +31,13 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.DEFAULT_DATE_FORMAT_PATTERN;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
+
 /**
- * Default date converter implementation {@link Date}
+ * Default {@link Date} converter implementation {@link Converter}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -49,11 +50,6 @@ import java.util.Date;
 public class DateConverter implements Converter<String, Date> {
 
     /**
-     * Default date format pattern
-     */
-    private static final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
-
-    /**
      * Initial date format pattern
      */
     private final String format;
@@ -62,7 +58,7 @@ public class DateConverter implements Converter<String, Date> {
      * Default date converter constructor
      */
     public DateConverter() {
-        this(DEFAULT_DATE_FORMAT);
+        this(DEFAULT_DATE_FORMAT_PATTERN);
     }
 
     /**
@@ -83,11 +79,6 @@ public class DateConverter implements Converter<String, Date> {
     @Override
     @Nullable
     public Date convert(final String value) {
-        try {
-            new SimpleDateFormat(getFormat()).parse(value);
-        } catch (ParseException e) {
-            log.error(String.format("ERROR: cannot format input string={%s} by format={%s}", value, getFormat()));
-        }
-        return null;
+        return toDate(value, getFormat());
     }
 }

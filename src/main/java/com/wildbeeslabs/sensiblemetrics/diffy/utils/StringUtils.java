@@ -27,6 +27,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Custom string utilities implementation
@@ -43,6 +44,16 @@ public class StringUtils {
      * Default regular expression (only alpha-numeric characters)
      */
     public static final String DEFAULT_ALPHANUMERIC_PATTERN = "[^a-zA-Z0-9]";
+
+    /**
+     * Default brackets wrapper {@link Function}
+     */
+    public static final Function<Object, String> wrapInBrackets = (s) -> "[ " + s + " ]";
+
+    /**
+     * Default quotes wrapper {@link Function}
+     */
+    public static final Function<Object, String> wrapInQuotes = (s) -> "\" " + s + " \"";
 
     /**
      * Returns string value {@link String} with replaced values by pattern
