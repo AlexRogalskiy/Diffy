@@ -8,6 +8,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/AlexRogalskiy/Diffy.svg)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AlexRogalskiy/Diffy.svg)
 ![GitHub contributors](https://img.shields.io/github/contributors/AlexRogalskiy/Diffy.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AlexRogalskiy_Diffy&metric=alert_status)](https://sonarcloud.io/dashboard?id=AlexRogalskiy_Diffy)
 
 # Diffy
 

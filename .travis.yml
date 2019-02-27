@@ -28,7 +28,7 @@ before_script:
 script:
   - mvn -U -B -V test --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
   - mvn cobertura:cobertura
-  - mvn sonar:sonar -Dsonar.projectKey=AlexRogalskiy_Diffy -Dsonar.organization=alexrogalskiy-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}
+  - mvn sonar:sonar -Dsonar.projectKey=AlexRogalskiy_Diffy -Dsonar.organization=alexrogalskiy-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login="$SONAR_TOKEN"
 after_success:
   - mvn clean test jacoco:report
   - codecov --build "$TRAVIS_JOB_NUMBER-jdk8"
