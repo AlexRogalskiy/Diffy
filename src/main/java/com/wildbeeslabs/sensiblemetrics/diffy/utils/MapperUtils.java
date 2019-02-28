@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -59,8 +60,9 @@ public class MapperUtils {
      */
     static {
         modelMapper = new ObjectMapper();
-        modelMapper.setDefaultMergeable(true);
+        modelMapper.setDefaultMergeable(Boolean.TRUE);
         modelMapper.setLocale(Locale.getDefault());
+        modelMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         modelMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         modelMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
