@@ -74,4 +74,4 @@ More information regarding a contribution involvement process can be found at:
 
 ---
 Powered by *IntelliJ IDEA* IDE
-[![IntelliJ IDEA](https://www.jetbrains.com/idea/docs/logo_intellij_idea.png)](https://www.jetbrains.com/idea/)
+<a href="https://www.jetbrains.com/idea/"><img src="http://resources.jetbrains.com/storage/products/intellij-idea/img/meta/intellij-idea_logo_300x300.png" width="15"></a>
