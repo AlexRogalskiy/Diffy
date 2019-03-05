@@ -74,7 +74,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     private final String DEFAULT_DATETIME_FORMAT = "dd/MM/yyyy hh:mm:ss";
 
     /**
-     * Default delivery info models {@link DeliveryInfo}
+     * Default {@link DeliveryInfo} models
      */
     private DeliveryInfo deliveryInfoFirst;
     private DeliveryInfo deliveryInfoLast;

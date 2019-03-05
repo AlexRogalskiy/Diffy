@@ -58,7 +58,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Сomparator utils unit test
+ * Comparator utils unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -83,7 +83,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     };
 
     /**
-     * Default functional {@link Class} comparator instance {@link Comparator}
+     * Default {@link Class} comparator instance {@link Comparator}
      */
     public static final Function<String, Comparator<Class<?>>> DEFAULT_CLASS_COMPARATOR = (className) -> (o1, o2) -> {
         final String n1 = o1.getName();
@@ -1131,11 +1131,11 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     /**
-     * Returns binary flag to assert input array of doubles {@link Double} to be sorted by order {@link SortDirection}
+     * Returns binary flag to assert input array of doubles {@link Double} to be sorted by order
      *
      * @param array - initial input array of doubles {@link Double}
-     * @param order - initial input sort order {@link SortDirection}
-     * @return binary flag to assert input array of doubles to be sorted by order {@link SortDirection}
+     * @param order - initial input sort order
+     * @return binary flag to assert input array of doubles to be sorted by order
      */
     protected static boolean isSorted(final Double[] array, final SortManager.SortDirection order) {
         for (int i = 0; i < array.length - 1; i++) {

@@ -61,7 +61,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest {
 
     /**
-     * Default delivery info sort comparator {@link DeliveryInfoSortComparator}
+     * Default {@link DeliveryInfoSortComparator} instance
      */
     private DeliveryInfoSortComparator sortComparator;
 

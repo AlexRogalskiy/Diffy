@@ -66,7 +66,7 @@ import static org.junit.Assert.assertThat;
 public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     /**
-     * Default delivery info models {@link DeliveryInfo}
+     * Default {@link DeliveryInfo} models
      */
     private DeliveryInfo deliveryInfoFirst;
     private DeliveryInfo deliveryInfoLast;

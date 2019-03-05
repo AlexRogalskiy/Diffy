@@ -66,7 +66,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     private final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 
     /**
-     * Default delivery info model {@link DeliveryInfo}
+     * Default {@link DeliveryInfo} model
      */
     private DeliveryInfo deliveryInfo;
 

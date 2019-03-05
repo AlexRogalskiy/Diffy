@@ -50,7 +50,7 @@ import static org.junit.Assert.assertTrue;
 public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     /**
-     * Default url parameters string
+     * Default url string
      */
     private String urlString;
 

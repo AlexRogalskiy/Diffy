@@ -68,7 +68,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     private final String DEFAULT_GID_PREFIX = "TEST";
 
     /**
-     * Default delivery info model {@link DeliveryInfo}
+     * Default {@link DeliveryInfo} model
      */
     private DeliveryInfo deliveryInfo;
 
