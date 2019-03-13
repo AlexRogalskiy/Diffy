@@ -30,7 +30,7 @@ The Diffy project
 ```xml
 <dependency>
     <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
-    <artifactId>diffy-core</artifactId>
+    <artifactId>diffy</artifactId>
     <version>1.1.0</version>
 </dependency>
 ```
@@ -38,7 +38,7 @@ The Diffy project
 ***Using with Gradle:***
 
 ```groovy
-compile 'com.wildbeeslabs.sensiblemetrics:diffy-core:1.1.0'
+compile 'com.wildbeeslabs.sensiblemetrics:diffy:1.1.0'
 ```
 
 ***Packaging:***

@@ -6,12 +6,12 @@ The Сomparalyzer dependency can be simply acquired by adding the following code
 
 ```xml
     <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
-    <artifactId>diffy-core</artifactId>
+    <artifactId>diffy</artifactId>
     <version>1.1.0</version>
 ```
 
 ## Gradle
 
 ```groovy
-compile 'com.wildbeeslabs.sensiblemetrics:diffy-core:1.1.0'
+compile 'com.wildbeeslabs.sensiblemetrics:diffy:1.1.0'
 ```
