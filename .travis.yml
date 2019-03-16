@@ -23,6 +23,7 @@ addons:
     update: true
     packages:
       - oracle-java8-installer
+before_install: echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
 install: true
 before_script:
   - pip install --user codecov
@@ -37,6 +38,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
 notifications:
   email:
+    - alexander.rogalsky@yandex.ru
     on_success: change
     on_failure: always
 env:
