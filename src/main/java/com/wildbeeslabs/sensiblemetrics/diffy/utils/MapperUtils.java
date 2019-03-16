@@ -65,10 +65,10 @@ public class MapperUtils {
         modelMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         modelMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-        modelMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-        modelMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        modelMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        modelMapper.configure(JsonGenerator.Feature.ESCAPE_NON_ASCII, true);
+        modelMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+        modelMapper.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES);
+        modelMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
+        modelMapper.enable(JsonGenerator.Feature.ESCAPE_NON_ASCII);
 
         modelMapper.disable(SerializationFeature.INDENT_OUTPUT);
         modelMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -76,7 +76,9 @@ public class MapperUtils {
         modelMapper.disable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         modelMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
+        modelMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         modelMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        //objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
     }
 
     /**
