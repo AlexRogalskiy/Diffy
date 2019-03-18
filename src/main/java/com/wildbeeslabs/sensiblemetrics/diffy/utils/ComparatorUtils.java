@@ -24,10 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.google.common.collect.Iterables;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
@@ -42,7 +39,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * Custom comparator utilities implementation {@link Comparator}
+ * Comparator utilities implementation {@link Comparator}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -87,8 +84,7 @@ public class ComparatorUtils {
      * @param predicate - initial input predicate value {@link Predicate}
      * @return comparator with false first order {@link Comparator}
      */
-    public static <T> Comparator<? super T> lastIf(final Predicate<T> predicate) {
-        Objects.requireNonNull(predicate);
+    public static <T> Comparator<? super T> lastIf(@NonNull final Predicate<T> predicate) {
         return (a, b) -> {
             final boolean pa = predicate.test(a);
             final boolean pb = predicate.test(b);
@@ -103,8 +99,7 @@ public class ComparatorUtils {
      * @param predicate - initial input predicate value {@link Predicate}
      * @return comparator with true first order {@link Comparator}
      */
-    public static <T> Comparator<? super T> firstIf(final Predicate<T> predicate) {
-        Objects.requireNonNull(predicate);
+    public static <T> Comparator<? super T> firstIf(@NonNull final Predicate<T> predicate) {
         return (a, b) -> {
             final boolean pa = predicate.test(a);
             final boolean pb = predicate.test(b);
@@ -121,11 +116,7 @@ public class ComparatorUtils {
      * @param lastOrder  - initial input last order comparator {@link Comparator}
      * @return comparator with true first order {@link Comparator}
      */
-    public static <T> Comparator<? super T> firstIf(final Predicate<T> predicate, final Comparator<T> firstOrder, final Comparator<T> lastOrder) {
-        Objects.requireNonNull(predicate);
-        Objects.requireNonNull(firstOrder);
-        Objects.requireNonNull(lastOrder);
-
+    public static <T> Comparator<? super T> firstIf(@NonNull final Predicate<T> predicate, @NonNull final Comparator<T> firstOrder, @NonNull final Comparator<T> lastOrder) {
         return (a, b) -> {
             final boolean pa = predicate.test(a);
             final boolean pb = predicate.test(b);
@@ -145,8 +136,7 @@ public class ComparatorUtils {
      * @param lastOrder  - initial input last order comparator {@link Comparator}
      * @return comparator with false first order {@link Comparator}
      */
-    public static <T> Comparator<? super T> lastIf(final Predicate<T> predicate, final Comparator<T> firstOrder, final Comparator<T> lastOrder) {
-        Objects.requireNonNull(predicate);
+    public static <T> Comparator<? super T> lastIf(@NonNull final Predicate<T> predicate, final Comparator<T> firstOrder, final Comparator<T> lastOrder) {
         return firstIf(predicate.negate(), firstOrder, lastOrder);
     }
 
@@ -157,8 +147,7 @@ public class ComparatorUtils {
      * @param clazz - initial input class instance {@link Class}
      * @return comparator with instances first order {@link Comparator}
      */
-    public static <T> Comparator<? super T> instancesFirst(final Class<? extends T> clazz) {
-        Objects.requireNonNull(clazz);
+    public static <T> Comparator<? super T> instancesFirst(@NonNull final Class<? extends T> clazz) {
         return firstIf(clazz::isInstance);
     }
 
@@ -169,8 +158,7 @@ public class ComparatorUtils {
      * @param clazz - initial input class instance {@link Class}
      * @return comparator with instances last order {@link Comparator}
      */
-    public static <T> Comparator<? super T> instancesLast(final Class<? extends T> clazz) {
-        Objects.requireNonNull(clazz);
+    public static <T> Comparator<? super T> instancesLast(@NonNull final Class<? extends T> clazz) {
         return lastIf(clazz::isInstance);
     }
 
@@ -183,10 +171,7 @@ public class ComparatorUtils {
      * @param comparator - initial input comparator instance {@link Comparator} to compare clazz instances by
      * @return comparator with instances first order {@link Comparator}
      */
-    public static <T, U> Comparator<? super T> instancesFirst(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
-        Objects.requireNonNull(clazz);
-        Objects.requireNonNull(comparator);
-
+    public static <T, U> Comparator<? super T> instancesFirst(@NonNull final Class<? extends U> clazz, @NonNull final Comparator<? super U> comparator) {
         return (a, b) -> {
             if (clazz.isInstance(a)) {
                 if (clazz.isInstance(b)) {
@@ -207,10 +192,7 @@ public class ComparatorUtils {
      * @param comparator - initial input comparator instance {@link Comparator} to compare clazz instances by
      * @return comparator with instances last order {@link Comparator}
      */
-    public static <T, U> Comparator<? super T> instancesLast(final Class<? extends U> clazz, final Comparator<? super U> comparator) {
-        Objects.requireNonNull(clazz);
-        Objects.requireNonNull(comparator);
-
+    public static <T, U> Comparator<? super T> instancesLast(@NonNull final Class<? extends U> clazz, @NonNull final Comparator<? super U> comparator) {
         return (a, b) -> {
             if (clazz.isInstance(a)) {
                 if (clazz.isInstance(b)) {
@@ -722,7 +704,6 @@ public class ComparatorUtils {
          */
         @Override
         public Comparator<T> thenComparing(@Nonnull final Comparator<? super T> otherComparator) {
-            Objects.requireNonNull(otherComparator);
             return new DefaultNullSafeComparator<>(
                 Objects.isNull(getComparator()) ? otherComparator : ((Comparator<T>) getComparator()).thenComparing(otherComparator),
                 isNullsInPriority()
@@ -1467,8 +1448,8 @@ public class ComparatorUtils {
          * @param comparator      - initial input value map comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultMapValueComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator, boolean nullsInPriority) {
-            this.map = Objects.requireNonNull(map);
+        public DefaultMapValueComparator(@NonNull final Map<K, V> map, @Nullable final Comparator<? super V> comparator, boolean nullsInPriority) {
+            this.map = map;
             this.comparator = new NullComparator(Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator, nullsInPriority);
         }
 
@@ -1523,8 +1504,8 @@ public class ComparatorUtils {
          * @param comparator      - initial input value map comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
-        public DefaultListPositionComparator(final List<? extends T> list, @Nullable final Comparator<? super Integer> comparator, boolean nullsInPriority) {
-            this.list = Objects.requireNonNull(list);
+        public DefaultListPositionComparator(@NonNull final List<? extends T> list, @Nullable final Comparator<? super Integer> comparator, boolean nullsInPriority) {
+            this.list = list;
             this.comparator = new NullComparator(Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator, nullsInPriority);
         }
 

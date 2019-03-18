@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,10 +35,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 /**
- * Custom date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
+ * Date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -106,8 +106,7 @@ public class DateUtils {
     }
 
     @Nullable
-    public static Date toDate(final String date, final String dateFormat) {
-        Objects.requireNonNull(dateFormat);
+    public static Date toDate(final String date, @NonNull final String dateFormat) {
         try {
             final SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
             formatter.setLenient(true);

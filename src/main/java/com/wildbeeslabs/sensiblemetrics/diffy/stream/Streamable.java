@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.interfaces;
+package com.wildbeeslabs.sensiblemetrics.diffy.stream;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.interfaces.impl.LazyStream;
+import com.wildbeeslabs.sensiblemetrics.diffy.stream.impl.LazyStream;
 
 import java.util.Arrays;
 import java.util.Collections;

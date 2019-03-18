@@ -42,7 +42,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Custom mapper utilities implementation
+ * Mapper utilities implementation
  */
 @Slf4j
 @UtilityClass

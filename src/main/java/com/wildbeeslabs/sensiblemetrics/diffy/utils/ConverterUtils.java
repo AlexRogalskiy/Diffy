@@ -24,16 +24,16 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
- * Custom converter utilities implementation {@link Converter}
+ * Converter utilities implementation {@link Converter}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -52,8 +52,7 @@ public class ConverterUtils {
      * @param <R>       type of input element to be converted to by operation
      * @return converted value
      */
-    public static <T, R> R convert(final T value, final Converter<T, R> converter) {
-        Objects.requireNonNull(converter);
+    public static <T, R> R convert(final T value, @NonNull final Converter<T, R> converter) {
         return converter.convert(value);
     }
 
@@ -66,8 +65,7 @@ public class ConverterUtils {
      * @return converted value {@link Object}
      */
     @Nullable
-    public static Object convertFromString(final String value, final Class<?> toType, final String parserMethod) {
-        Objects.requireNonNull(toType);
+    public static Object convertFromString(final String value, @NonNull final Class<?> toType, final String parserMethod) {
         final Method method;
         try {
             method = toType.getMethod(parserMethod, String.class);

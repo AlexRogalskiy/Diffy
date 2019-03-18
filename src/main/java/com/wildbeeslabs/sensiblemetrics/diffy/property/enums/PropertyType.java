@@ -21,49 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.interfaces.impl;
-
-import com.wildbeeslabs.sensiblemetrics.diffy.interfaces.Streamable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.Value;
-
-import java.util.Iterator;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
 /**
- * Default lazy {@link Streamable} implementation for a given {@link Supplier}
+ * Property type implementation
  */
-@Data
-@EqualsAndHashCode
-@ToString
-@Value(staticConstructor = "from")
-public class LazyStream<T> implements Streamable<T> {
-
+public enum PropertyType {
     /**
-     * Default supplier stream instance {@link Supplier}
+     * Default field property name
      */
-    private final Supplier<? extends Stream<T>> stream;
-
+    FIELD,
     /**
-     * Returns default iterator instance {@link Iterator}
-     *
-     * @return default iterator instance {@link Iterator}
+     * Default method property name
      */
-    @Override
-    public Iterator<T> iterator() {
-        return stream().iterator();
-    }
-
+    METHOD,
     /**
-     * Returns default stream instance {@link Stream}
-     *
-     * @return default stream instance {@link Stream}
+     * Default property name
      */
-    @Override
-    public Stream<T> stream() {
-        return stream.get();
-    }
+    GENERIC
 }

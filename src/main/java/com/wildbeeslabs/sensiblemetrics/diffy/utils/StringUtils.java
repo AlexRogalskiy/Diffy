@@ -23,14 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Custom string utilities implementation
+ * String utilities implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -63,9 +63,7 @@ public class StringUtils {
      * @param replaceValue - initial input value {@link String} to replace by pattern
      * @return formatted string value stripped default regex pattern {@link String}
      */
-    public static String replaceAll(final String initialValue, final String pattern, final String replaceValue) {
-        Objects.requireNonNull(initialValue);
-        Objects.requireNonNull(pattern);
+    public static String replaceAll(@NonNull final String initialValue, @NonNull final String pattern, final String replaceValue) {
         return initialValue.replaceAll(pattern, replaceValue);
     }
 
@@ -88,5 +86,23 @@ public class StringUtils {
      */
     public static String sanitize(final String initialValue) {
         return sanitize(initialValue, DEFAULT_ALPHANUMERIC_PATTERN);
+    }
+
+    /**
+     * Returns decapitalized string by input string value {@link String}
+     *
+     * @param value - initial input string value {@link String}
+     * @return decapitalized string {@link String}
+     */
+    public static String decapitalize(final String value) {
+        if (org.apache.commons.lang3.StringUtils.isEmpty(value)) {
+            return value;
+        }
+        if (value.length() > 1 && Character.isUpperCase(value.charAt(1)) && Character.isUpperCase(value.charAt(0))) {
+            return value;
+        }
+        char chars[] = value.toCharArray();
+        chars[0] = Character.toLowerCase(chars[0]);
+        return String.valueOf(chars);
     }
 }

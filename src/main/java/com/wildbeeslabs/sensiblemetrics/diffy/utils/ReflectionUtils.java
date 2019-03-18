@@ -27,6 +27,7 @@ import com.google.common.collect.*;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Custom reflection utilities implementation
+ * Reflection utilities implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -321,8 +322,7 @@ public class ReflectionUtils {
      * @param clazz - initial class to be casted to {@link Class}
      * @return casted object
      */
-    public static <T> T castSafe(final Object value, final Class<? extends T> clazz) {
-        Objects.requireNonNull(clazz);
+    public static <T> T castSafe(final Object value, @NonNull final Class<? extends T> clazz) {
         return clazz.isInstance(value) ? clazz.cast(value) : null;
     }
 
@@ -333,8 +333,7 @@ public class ReflectionUtils {
      * @param member - initial argument to reflect on {@link Member}
      * @return type of the supplied argument {@link Member}
      */
-    public static Type typeOf(final Member member) {
-        Objects.requireNonNull(member);
+    public static Type typeOf(@NonNull final Member member) {
         if (member instanceof Field) {
             return ((Field) member).getGenericType();
         }
@@ -350,8 +349,7 @@ public class ReflectionUtils {
      * @param clazz - class to reflect on {@link Class}
      * @return list of super-classes of the supplied class {@link Class}
      */
-    public static List<Class<?>> getAllSuperclasses(final Class<?> clazz) {
-        Objects.requireNonNull(clazz);
+    public static List<Class<?>> getAllSuperclasses(@NonNull final Class<?> clazz) {
         final List<Class<?>> classes = new ArrayList<>();
         Class<?> superclass = clazz.getSuperclass();
         while (Objects.nonNull(superclass)) {
@@ -513,8 +511,7 @@ public class ReflectionUtils {
      * @param member - initial member instance {@link Member}
      * @return true - if method has "public" modifier, false - otherwise
      */
-    public static boolean isPublic(final Member member) {
-        Objects.requireNonNull(member);
+    public static boolean isPublic(@NonNull final Member member) {
         return Modifier.isPublic(member.getModifiers()) && Modifier.isPublic(member.getDeclaringClass().getModifiers());
     }
 
@@ -526,9 +523,7 @@ public class ReflectionUtils {
      * @return method value by return type {@link Object}
      * @throws RuntimeException
      */
-    public static Object invokeGetter(final Object target, final String getterName) {
-        Objects.requireNonNull(target);
-        Objects.requireNonNull(getterName);
+    public static Object invokeGetter(@NonNull final Object target, @NonNull final String getterName) {
         try {
             final Method m = target.getClass().getMethod(getterName);
             return m.invoke(target);
@@ -783,25 +778,25 @@ public class ReflectionUtils {
      * @throws ReflectiveOperationException
      * @throws IntrospectionException
      */
-    public static <T> List<T> sortList(final List<T> list, final String field, final Class<? extends T> clazz) throws ReflectiveOperationException, IntrospectionException {
-        Objects.requireNonNull(clazz);
+    public static <T> List<T> sortList(final List<T> list, final String field, @NonNull final Class<? extends T> clazz) throws ReflectiveOperationException, IntrospectionException {
         final Field f = clazz.getDeclaredField(field);
         final PropertyDescriptor propertyDescriptor = new PropertyDescriptor(f.getName(), clazz);
         final Method getter = propertyDescriptor.getReadMethod();
         final Class<?> returnType = getter.getReturnType();
 
         if (Comparable.class.isAssignableFrom(returnType) || returnType.isPrimitive()) {
-            Collections.sort(Optional.ofNullable(list).orElseGet(Collections::emptyList), (e1, e2) -> {
-                try {
-                    final Comparable val1 = (Comparable) getter.invoke(e1);
-                    final Comparable val2 = (Comparable) getter.invoke(e2);
-                    return val1.compareTo(val2);
-                } catch (Exception e) {
-                    String errorMessage = String.format("ERROR: cannot invoke getter method = {%s} on field = {%s}", getter.getName(), field);
-                    log.error(errorMessage);
-                    throw new BadOperationException(errorMessage, e);
-                }
-            });
+            Collections.sort(Optional.ofNullable(list).orElseGet(Collections::emptyList),
+                (e1, e2) -> {
+                    try {
+                        final Comparable val1 = (Comparable) getter.invoke(e1);
+                        final Comparable val2 = (Comparable) getter.invoke(e2);
+                        return val1.compareTo(val2);
+                    } catch (Exception e) {
+                        String errorMessage = String.format("ERROR: cannot invoke getter method = {%s} on field = {%s}", getter.getName(), field);
+                        log.error(errorMessage);
+                        throw new BadOperationException(errorMessage, e);
+                    }
+                });
         } else {
             throw new IllegalArgumentException(String.format("ERROR: cannot compare list = {%s} by field = {%s} of type = {%s}", org.apache.commons.lang3.StringUtils.join(list, "|"), field, returnType.getName()));
         }

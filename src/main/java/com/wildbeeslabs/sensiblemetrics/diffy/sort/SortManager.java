@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.sort;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.interfaces.Streamable;
+import com.wildbeeslabs.sensiblemetrics.diffy.stream.Streamable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
