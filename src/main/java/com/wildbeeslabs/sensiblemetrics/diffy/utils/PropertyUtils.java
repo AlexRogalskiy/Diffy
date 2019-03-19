@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.NamePredicate;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.NameTokenizer;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.NameTransformer;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.NamingPredicate;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.NamingTokenizer;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.NamingTransformer;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
 import lombok.experimental.UtilityClass;
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.decapitalize;
 
 /**
- * Property utilities implementation {@link NamePredicate}, {@link NameTransformer}, {@link NameTokenizer}
+ * Property utilities implementation {@link NamingPredicate}, {@link NamingTransformer}, {@link NamingTokenizer}
  */
 @Slf4j
 @UtilityClass
@@ -59,27 +59,27 @@ public class PropertyUtils {
     private static final Pattern DEFAULT_UNDERSCORE_PATTERN = Pattern.compile("_");
 
     /**
-     * Default property getter {@link NamePredicate}
+     * Default property getter {@link NamingPredicate}
      */
-    public static final NamePredicate DEFAULT_PROPERTY_GETTER_PREDICATE = (propertyName, propertyType) ->
+    public static final NamingPredicate DEFAULT_PROPERTY_GETTER_PREDICATE = (propertyName, propertyType) ->
         PropertyType.FIELD.equals(propertyType)
             || propertyName.startsWith(GETTER_ACCESSOR_PREFIX) && propertyName.length() > 3
             || propertyName.startsWith(BOOLEAN_ACCESSOR_PREFIX) && propertyName.length() > 2;
     /**
-     * Default property setter {@link NamePredicate}
+     * Default property setter {@link NamingPredicate}
      */
-    public static final NamePredicate DEFAULT_PROPERTY_SETTER_PREDICATE = (propertyName, propertyType) ->
+    public static final NamingPredicate DEFAULT_PROPERTY_SETTER_PREDICATE = (propertyName, propertyType) ->
         PropertyType.FIELD.equals(propertyType)
             || propertyName.startsWith(SETTER_ACCESSOR_PREFIX) && propertyName.length() > 3;
     /**
-     * Default property valid {@link NamePredicate}
+     * Default property valid {@link NamingPredicate}
      */
-    public static final NamePredicate DEFAULT_PROPERTY_VALID_PREDICATE = (propertyName, propertyType) -> true;
+    public static final NamingPredicate DEFAULT_PROPERTY_VALID_PREDICATE = (propertyName, propertyType) -> true;
 
     /**
-     * Default property getter {@link NameTransformer}
+     * Default property getter {@link NamingTransformer}
      */
-    public static final NameTransformer DEFAULT_PROPERTY_GETTER_TRANSFORMER = (name, nameableType) -> {
+    public static final NamingTransformer DEFAULT_PROPERTY_GETTER_TRANSFORMER = (name, nameableType) -> {
         if (NameableType.METHOD.equals(nameableType)) {
             if (name.startsWith(GETTER_ACCESSOR_PREFIX) && name.length() > 3) {
                 return decapitalize(name.substring(3));
@@ -90,9 +90,9 @@ public class PropertyUtils {
         return name;
     };
     /**
-     * Default property setter {@link NameTransformer}
+     * Default property setter {@link NamingTransformer}
      */
-    public static final NameTransformer DEFAULT_PROPERTY_SETTER_TRANSFORMER = (name, nameableType) -> {
+    public static final NamingTransformer DEFAULT_PROPERTY_SETTER_TRANSFORMER = (name, nameableType) -> {
         if (NameableType.METHOD.equals(nameableType) && name.startsWith(SETTER_ACCESSOR_PREFIX) && name.length() > 3) {
             return decapitalize(name.substring(3));
         }
@@ -100,12 +100,12 @@ public class PropertyUtils {
     };
 
     /**
-     * Default camelcase property {@link NameTokenizer}
+     * Default camelcase property {@link NamingTokenizer}
      */
-    public static final NameTokenizer DEFAULT_CAMELCASE_TOKENIZER = (name, nameableType) -> DEFAULT_CAMEL_CASE_PATTERN.split(name);
+    public static final NamingTokenizer DEFAULT_CAMELCASE_TOKENIZER = (name, nameableType) -> DEFAULT_CAMEL_CASE_PATTERN.split(name);
 
     /**
-     * Default underscore property {@link NameTokenizer}
+     * Default underscore property {@link NamingTokenizer}
      */
-    public static NameTokenizer DEFAULT_UNDERSCORE_TOKENIZER = (name, nameableType) -> DEFAULT_UNDERSCORE_PATTERN.split(name);
+    public static NamingTokenizer DEFAULT_UNDERSCORE_TOKENIZER = (name, nameableType) -> DEFAULT_UNDERSCORE_PATTERN.split(name);
 }

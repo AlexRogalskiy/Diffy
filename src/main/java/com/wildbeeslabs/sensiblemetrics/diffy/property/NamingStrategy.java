@@ -23,20 +23,17 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
-
 /**
- * Transforms property accessor names to their simple property name according to the JavaBeans convention
+ * Tokenizes property accessor names to an array of simple property names according to the JavaBeans convention
  */
 @FunctionalInterface
-public interface NameTransformer {
+public interface NamingStrategy {
 
     /**
-     * Transforms property name by input name {@link String} and type {@code NameableType}
+     * Translates property name by input property name {@link String}
      *
-     * @param name         - initial input name {@link String}
-     * @param nameableType - initial input property nameable type {@code NameableType}
-     * @return transformed property name {@link String}
+     * @param name - initial input name to be translated {@link String}
+     * @return translated property name of {@link String}
      */
-    String transform(final String name, final NameableType nameableType);
+    String translate(final String input);
 }

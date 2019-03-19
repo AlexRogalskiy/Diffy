@@ -29,7 +29,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
  * Determines properties to be eligible for matching based on their name
  */
 @FunctionalInterface
-public interface NamePredicate {
+public interface NamingPredicate {
 
     /**
      * Returns true if the naming convention applies to the property name {@link String} and

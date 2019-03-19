@@ -44,7 +44,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class PropertyInfoImpl<M extends Member> implements PropertyInfo {
+public abstract class AbstractPropertyInfo<M extends Member> implements PropertyInfo {
 
     protected final Class<?> initialType;
     protected final M member;
@@ -55,7 +55,7 @@ public abstract class PropertyInfoImpl<M extends Member> implements PropertyInfo
     /**
      * Default abstract {@link Method} property info implementation
      */
-    public static abstract class AbstractMethodInfo extends PropertyInfoImpl<Method> {
+    public static abstract class AbstractMethodInfo extends AbstractPropertyInfo<Method> {
 
         private AbstractMethodInfo(final Class<?> initialType, final Method method, final String name) {
             super(initialType, method, PropertyType.METHOD, name);
@@ -71,7 +71,7 @@ public abstract class PropertyInfoImpl<M extends Member> implements PropertyInfo
     /**
      * Default {@link Field} property info implementation
      */
-    public static class FieldPropertyInfo extends PropertyInfoImpl<Field> {
+    public static class FieldPropertyInfo extends AbstractPropertyInfo<Field> {
 
         /**
          * Default field property info constructor
@@ -129,6 +129,7 @@ public abstract class PropertyInfoImpl<M extends Member> implements PropertyInfo
             super(initialType, method, name);
         }
 
+        @Override
         public Type getGenericType() {
             return member.getGenericReturnType();
         }
@@ -159,6 +160,7 @@ public abstract class PropertyInfoImpl<M extends Member> implements PropertyInfo
             super(initialType, method, name);
         }
 
+        @Override
         public Type getGenericType() {
             return member.getGenericParameterTypes()[0];
         }
@@ -172,7 +174,7 @@ public abstract class PropertyInfoImpl<M extends Member> implements PropertyInfo
         }
     }
 
-    private PropertyInfoImpl(final Class<?> initialType, final M member, final PropertyType propertyType, final String name) {
+    private AbstractPropertyInfo(final Class<?> initialType, final M member, final PropertyType propertyType, final String name) {
         this.initialType = initialType;
         this.member = member;
         this.propertyType = propertyType;
