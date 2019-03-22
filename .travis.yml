@@ -38,7 +38,6 @@ after_success:
   - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
 notifications:
   email:
-    - alexander.rogalsky@yandex.ru
     on_success: change
     on_failure: always
 env:
