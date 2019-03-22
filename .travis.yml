@@ -11,8 +11,8 @@ branches:
     - master
     - stable
 jdk:
-  - oraclejdk8
-  - openjdk8
+  - oraclejdk11
+  - openjdk11
 addons:
   sonarcloud:
     organization: "alexrogalskiy-github"

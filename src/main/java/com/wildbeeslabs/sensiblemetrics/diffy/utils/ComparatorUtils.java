@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Predicate;
@@ -1405,8 +1406,8 @@ public class ComparatorUtils {
         public DefaultNullSafeBigDecimalComparator(int significantDecimalPlaces, @Nullable final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
                 final Comparator<? super BigDecimal> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
-                final BigDecimal firstRounded = o1.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
-                final BigDecimal lastRounded = o2.setScale(significantDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+                final BigDecimal firstRounded = o1.setScale(significantDecimalPlaces, RoundingMode.HALF_UP);
+                final BigDecimal lastRounded = o2.setScale(significantDecimalPlaces, RoundingMode.HALF_UP);
                 return Objects.compare(firstRounded, lastRounded, comp);
             }, nullsInPriority);
         }

@@ -74,7 +74,7 @@ public class DefaultDiffMatcherFactory {
      * @return difference matcher {@link DiffMatcher}
      */
     public static <T, E extends DiffMatcher<T>> E create(final Matcher<? super T>... matchers) {
-        return (E) new DefaultDiffMatcher<>(Arrays.asList(matchers));
+        return (E) new DefaultDiffMatcher<T>(Arrays.asList(matchers));
     }
 
     /**
@@ -86,6 +86,6 @@ public class DefaultDiffMatcherFactory {
      * @return difference matcher {@link DiffMatcher}
      */
     public static <T, E extends DiffMatcher<T>> E create(final Iterable<Matcher<? super T>> matchers) {
-        return (E) new DefaultDiffMatcher<>(matchers);
+        return (E) new DefaultDiffMatcher<T>(matchers);
     }
 }

@@ -93,17 +93,7 @@ THE SOFTWARE.
     </appender>
 
     <logger name="ROOT" level="DEBUG"/>
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="org.springframework.transaction" level="WARN"/>
-    <logger name="org.springframework.web.servlet.mvc" level="WARN"/>
-    <logger name="org.hibernate" level="DEBUG"/>
 
-    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
-        <appender-ref ref="FILE_AUDIT"/>
-    </logger>
-    <logger name="org.hibernate.type" level="TRACE" additivity="false">
-        <appender-ref ref="FILE_AUDIT"/>
-    </logger>
     <logger name="com.wildbeeslabs.sensiblemetrics.diffy" level="DEBUG" additivity="false">
         <appender-ref ref="FILE_AUDIT"/>
     </logger>

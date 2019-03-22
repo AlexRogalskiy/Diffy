@@ -31,10 +31,6 @@
         <tag>HEAD</tag>
     </scm>
 
-    <prerequisites>
-        <maven>3.0.0</maven>
-    </prerequisites>
-
     <licenses>
         <license>
             <name>MIT License</name>
@@ -126,13 +122,13 @@
         <main.basedir>${project.basedir}/../..</main.basedir>
         <profileProperties>src/test/resource/test.properties</profileProperties>
 
+        <java.version>11</java.version>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
 
         <unit-tests.skip>true</unit-tests.skip>
         <integration-tests.skip>true</integration-tests.skip>
@@ -164,6 +160,7 @@
         <apache.commons.version>3.8.1</apache.commons.version>
         <joda-time.version>2.10.1</joda-time.version>
         <guava.version>27.0.1-jre</guava.version>
+        <jetbrains.version>17.0.0</jetbrains.version>
 
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -211,6 +208,13 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.1.0</version>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>overlays</directory>
+                            </fileset>
+                        </filesets>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -225,6 +229,9 @@
                             </goals>
                             <configuration>
                                 <rules>
+                                    <requireMavenVersion>
+                                        <version>3.0</version>
+                                    </requireMavenVersion>
                                     <requireJavaVersion>
                                         <version>[1.8,1.9)</version>
                                     </requireJavaVersion>
@@ -238,6 +245,27 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>3.0.0-M1</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <configLocation>src/main/resources/checkstyle.xml</configLocation>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>checkstyle</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <failOnViolation>true</failOnViolation>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>
@@ -303,6 +331,13 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
                     <configuration>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
                         <executable>true</executable>
                         <showDeprecation>true</showDeprecation>
                         <debug>true</debug>
@@ -312,7 +347,6 @@
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>${project.reporting.outputEncoding}</encoding>
-                        <compilerArgument>-parameters</compilerArgument>
                     </configuration>
                     <executions>
                         <execution>
@@ -326,6 +360,13 @@
                             </configuration>
                         </execution>
                     </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.ow2.asm</groupId>
+                            <artifactId>asm</artifactId>
+                            <version>7.0</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
@@ -531,7 +572,19 @@
 
     <repositories>
         <repository>
-            <id>central</id>
+            <id>projectlombok.org</id>
+            <name>Lombok repository</name>
+            <url>https://projectlombok.org/edge-releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>maven</id>
             <name>Maven Repository Switchboard</name>
             <layout>default</layout>
             <url>http://repo1.maven.org/maven2</url>
@@ -555,7 +608,7 @@
             </releases>
         </repository>
         <repository>
-            <id>JBoss repository</id>
+            <id>jboss-maven</id>
             <url>http://repository.jboss.com/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
@@ -566,7 +619,7 @@
             </releases>
         </repository>
         <repository>
-            <id>JBOSS</id>
+            <id>jboss-release</id>
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
             <snapshots>
                 <enabled>false</enabled>
@@ -577,7 +630,7 @@
             </releases>
         </repository>
         <repository>
-            <id>repo-maven</id>
+            <id>apache-maven</id>
             <url>https://repo.maven.apache.org/maven2/</url>
             <snapshots>
                 <enabled>false</enabled>
@@ -638,7 +691,18 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.0.1</version>
                         <configuration>
+                            <doctitle>${project.name} API Reference (${project.version})</doctitle>
+                            <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
+                            <locale>en_US</locale>
+                            <linksource>true</linksource>
+                            <notimestamp>true</notimestamp>
+                            <quiet>true</quiet>
+                            <docencoding>UTF-8</docencoding>
+                            <version>false</version>
+                            <author>true</author>
+                            <keywords>true</keywords>
                             <additionalJOption>-Xdoclint:none</additionalJOption>
+                            <useStandardDocletOptions>true</useStandardDocletOptions>
                         </configuration>
                         <executions>
                             <execution>
@@ -656,6 +720,41 @@
             <id>reporting</id>
             <reporting>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <version>2.9</version>
+                        <configuration>
+                            <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                            <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                        </configuration>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>index</report>
+                                    <report>dependencies</report>
+                                    <report>issue-tracking</report>
+                                    <report>license</report>
+                                    <report>mailing-list</report>
+                                    <report>modules</report>
+                                    <report>project-team</report>
+                                    <report>plugin-management</report>
+                                    <report>plugins</report>
+                                    <report>scm</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jxr-plugin</artifactId>
+                        <version>2.5</version>
+                        <configuration>
+                            <linkJavadoc>true</linkJavadoc>
+                            <docTitle>${project.name} Source Xref (${project.version})</docTitle>
+                            <windowTitle>${project.name} Source Xref (${project.version})</windowTitle>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
@@ -730,7 +829,6 @@
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>sonar-coverage</id>
             <activation>
@@ -770,12 +868,53 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>update-sourcepath-for-lombok</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.8.0</version>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>-sourcepath</arg>
+                                <arg>
+                                    ${project.basedir}/src/main/java${path.separator}${project.basedir}/target/generated-sources/annotations${path.separator}/
+                                </arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <pluginRepositories>
         <pluginRepository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
+            <id>sonatype-public-repository</id>
+            <name>Sonatype Public Repository</name>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Plugin Repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
         </pluginRepository>
     </pluginRepositories>
 
@@ -934,6 +1073,12 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- JetBrains library dependencies -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
-
 </project>

@@ -42,7 +42,7 @@ import java.util.Objects;
 @UtilityClass
 public class DocumentConverter {
 
-    static Document toDocument(final JsonObject jsonObject) {
+    public static Document toDocument(final JsonObject jsonObject) {
         final Document document = new Document();
         for (final Map.Entry<String, JsonElement> e : jsonObject.entrySet()) {
             document.append(e.getKey(), fromJsonElement(e.getValue()));
@@ -50,7 +50,7 @@ public class DocumentConverter {
         return document;
     }
 
-    static JsonElement fromDocument(final Document document) {
+    public static JsonElement fromDocument(final Document document) {
         final JsonObject jsonObject = new JsonObject();
         for (final Map.Entry<String, Object> e : document.entrySet()) {
             jsonObject.add(e.getKey(), createJsonElement(e.getValue()));
@@ -59,19 +59,19 @@ public class DocumentConverter {
     }
 
     private static Object fromJsonElement(final JsonElement jsonElement) {
-        if (jsonElement == JsonNull.INSTANCE) {
+        if (Objects.equals(jsonElement, JsonNull.INSTANCE)) {
             return null;
         }
         if (jsonElement instanceof JsonObject) {
             return toDocument((JsonObject) jsonElement);
         }
         if (jsonElement instanceof JsonPrimitive) {
-            JsonPrimitive jsonPrimitive = (JsonPrimitive) jsonElement;
+            final JsonPrimitive jsonPrimitive = (JsonPrimitive) jsonElement;
             if (jsonPrimitive.isString()) {
                 return jsonElement.getAsString();
             }
             if (jsonPrimitive.isNumber() && jsonElement.getAsNumber() instanceof BigDecimal) {
-                BigDecimal value = ((BigDecimal) jsonElement.getAsNumber());
+                final BigDecimal value = ((BigDecimal) jsonElement.getAsNumber());
                 try {
                     return value.longValueExact();
                 } catch (ArithmeticException e) {
@@ -87,8 +87,8 @@ public class DocumentConverter {
         }
 
         if (jsonElement instanceof JsonArray) {
-            List list = new ArrayList();
-            for (JsonElement e : ((JsonArray) jsonElement)) {
+            final List<Object> list = new ArrayList<>();
+            for (final JsonElement e : ((JsonArray) jsonElement)) {
                 list.add(fromJsonElement(e));
             }
             return list;
@@ -128,6 +128,6 @@ public class DocumentConverter {
             return id;
         }
 
-        throw new IllegalArgumentException("unsupported dbObject type - " + dbObject.getClass().getSimpleName());
+        throw new IllegalArgumentException(String.format("ERROR: unsupported object type: {%s}", dbObject.getClass().getSimpleName()));
     }
 }

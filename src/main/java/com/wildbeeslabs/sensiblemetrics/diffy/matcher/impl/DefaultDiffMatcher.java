@@ -77,7 +77,7 @@ public class DefaultDiffMatcher<T> extends AbstractMatcher<T> implements DiffMat
      * @return iterable collection of difference match entries {@link Iterable}
      */
     @Override
-    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatches(T value) {
+    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatches(final T value) {
         super.matches(value);
         return (S) getFailedMatchers().stream().map(matcher -> createDiffMatchEntry(value, matcher.getDescription())).collect(Collectors.toList());
     }

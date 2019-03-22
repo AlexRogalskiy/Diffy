@@ -250,7 +250,7 @@ public class ReflectionUtils {
             log.error("ERROR: missing default constructor for type {}. Assuming standard default values for primitive properties.", clazz.getName());
             return null;
         }
-        final boolean accessibility = constructor.isAccessible();
+        final boolean accessibility = constructor.trySetAccessible();
         try {
             constructor.setAccessible(true);
             return constructor.newInstance();
@@ -420,7 +420,7 @@ public class ReflectionUtils {
      * @return true - if field is non-static/final/accessible, false - otherwise
      */
     public static boolean isNotStaticOrFinalOrAccessible(final Field field, boolean includeFinalFields, boolean includeAccessibleFields) {
-        return isNotStaticOrFinal(field, includeFinalFields) && (!includeAccessibleFields || field.isAccessible());
+        return isNotStaticOrFinal(field, includeFinalFields) && (!includeAccessibleFields || field.trySetAccessible());
     }
 
     /**

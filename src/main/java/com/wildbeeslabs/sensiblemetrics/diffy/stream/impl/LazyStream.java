@@ -24,10 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.stream.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.stream.Streamable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.Value;
+import lombok.*;
 
 import java.util.Iterator;
 import java.util.function.Supplier;
