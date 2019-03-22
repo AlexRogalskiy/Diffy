@@ -303,6 +303,9 @@
                                 <classpathPrefix>dependency-jars/</classpathPrefix>
                             </manifest>
                         </archive>
+                        <outputDirectory>
+                            ${project.build.directory}/modules
+                        </outputDirectory>
                     </configuration>
                 </plugin>
 
@@ -318,7 +321,7 @@
                                 <goal>copy-dependencies</goal>
                             </goals>
                             <configuration>
-                                <outputDirectory>${project.build.directory}/dependency-jars/</outputDirectory>
+                                <outputDirectory>${project.build.directory}/modules/</outputDirectory>
                                 <includeScope>compile</includeScope>
                                 <excludeScope>test</excludeScope>
                                 <overWriteReleases>false</overWriteReleases>
@@ -398,6 +401,9 @@
                     <version>3.0.0-M2</version>
                     <configuration>
                         <skipTests>${integration-tests.skip}</skipTests>
+                        <argLine>
+                            --illegal-access=permit
+                        </argLine>
                         <includes>
                             <include>**/*IT.java</include>
                         </includes>
@@ -418,10 +424,50 @@
                     <version>3.0.0-M2</version>
                     <configuration>
                         <skipTests>${unit-tests.skip}</skipTests>
+                        <forkCount>0</forkCount>
+                        <argLine>
+                            --illegal-access=permit
+                        </argLine>
                         <excludes>
                             <exclude>**/*IT.java</exclude>
                         </excludes>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.ow2.asm</groupId>
+                            <artifactId>asm</artifactId>
+                            <version>7.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <executions>
+                        <execution>
+                            <id>module-main-class</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                            <configuration>
+                                <executable>jar</executable>
+                                <arguments>
+                                    <argument>
+                                        --update
+                                    </argument>
+                                    <argument>
+                                        --file=${project.build.directory}/modules/${project.build.finalName}.jar
+                                    </argument>
+                                    <argument>
+                                        --module-version=${project.version}
+                                    </argument>
+                                </arguments>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>
@@ -509,20 +555,6 @@
                             </configuration>
                         </execution>
                     </executions>
-                </plugin>
-
-                <!-- Cobertura plugins -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>cobertura-maven-plugin</artifactId>
-                    <version>2.7</version>
-                    <configuration>
-                        <formats>
-                            <format>html</format>
-                            <format>xml</format>
-                        </formats>
-                        <check/>
-                    </configuration>
                 </plugin>
 
                 <!-- Code coverage plugins -->

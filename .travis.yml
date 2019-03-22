@@ -29,8 +29,7 @@ before_script:
   - pip install --user codecov
   - curl http://www.jpm4j.org/install/script | sh
 script:
-  - mvn -U -B -V test --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
-  - mvn cobertura:cobertura
+  - mvn -U -B -V test --fail-at-end -Dfile.encoding=UTF-8 -DskipTests=true -Dmaven.javadoc.skip=false clean install -P update-sourcepath-for-lombok
   - mvn sonar:sonar -Dsonar.projectKey=AlexRogalskiy_Diffy -Dsonar.organization=alexrogalskiy-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
 after_success:
   - mvn clean test jacoco:report

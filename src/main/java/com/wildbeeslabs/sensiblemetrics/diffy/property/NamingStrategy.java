@@ -32,7 +32,7 @@ public interface NamingStrategy {
     /**
      * Translates property name by input property name {@link String}
      *
-     * @param name - initial input name to be translated {@link String}
+     * @param input - initial input name to be translated {@link String}
      * @return translated property name of {@link String}
      */
     String translate(final String input);
