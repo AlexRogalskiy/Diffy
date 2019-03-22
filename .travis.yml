@@ -23,7 +23,9 @@ addons:
     update: true
     packages:
       - oracle-java11-installer
-before_install: echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
+before_install:
+  - echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
+  - sudo add-apt-repository ppa:linuxuprising/java
 install: true
 before_script:
   - pip install --user codecov
