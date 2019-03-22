@@ -300,12 +300,10 @@
                             </manifestEntries>
                             <manifest>
                                 <addClasspath>true</addClasspath>
-                                <classpathPrefix>dependency-jars/</classpathPrefix>
+                                <classpathPrefix>modules/</classpathPrefix>
                             </manifest>
                         </archive>
-                        <outputDirectory>
-                            ${project.build.directory}/modules
-                        </outputDirectory>
+                        <outputDirectory>${project.build.directory}/modules</outputDirectory>
                     </configuration>
                 </plugin>
 
