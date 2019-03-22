@@ -23,11 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.DiffMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.DiffMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

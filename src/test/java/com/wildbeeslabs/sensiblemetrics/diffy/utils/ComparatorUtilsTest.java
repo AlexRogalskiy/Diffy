@@ -27,10 +27,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDiffTest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -73,11 +73,33 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     /**
      * Default {@link String} comparator instance {@link Comparator}
      */
-    public static final Comparator<CharSequence> DEFAULT_STRING_COMPARATOR = (o1, o2) -> {
+    public static final Comparator<CharSequence> DEFAULT_CHAR_SEQUENCE_COMPARATOR = (o1, o2) -> {
         int minLength = Math.min(o1.length(), o2.length());
         for (int i = 0; i < minLength; i += 2) {
             int result = Character.compare(o1.charAt(i), o2.charAt(i));
             if (0 != result) return result;
+        }
+        return 0;
+    };
+
+    /**
+     * Default {@link String} comparator instance {@link Comparator}
+     */
+    public static final Comparator<Set<?>> DEFAULT_SET_COMPARATOR = (o1, o2) -> {
+        if (Objects.equals(o1, o2)) {
+            return 0;
+        }
+        if (o1.size() < o2.size()) return -1;
+        if (o1.size() > o2.size()) return 1;
+        final Set first = new HashSet<>(o1);
+        final Set last = new HashSet<>(o2);
+        first.removeAll(o2);
+        last.removeAll(o1);
+        final Iterator<?> iteratorFirst = o1.iterator();
+        final Iterator<?> iteratorLast = o2.iterator();
+        while (iteratorFirst.hasNext()) {
+            int temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), ComparableComparator.getInstance());
+            if (0 != temp) return temp;
         }
         return 0;
     };
@@ -619,7 +641,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final String d2 = "abcd";
 
         // when
-        final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeCharSequenceComparator(DEFAULT_STRING_COMPARATOR);
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeCharSequenceComparator(DEFAULT_CHAR_SEQUENCE_COMPARATOR);
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
@@ -1060,6 +1082,29 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Test different set objects by custom comparator")
+    public void testSetObjectsByCustomComparator() {
+        // given
+        final Set<String> d1 = new ImmutableSet.Builder<String>()
+            .add("saf")
+            .add("fas")
+            .add("sfa")
+            .add("sadf")
+            .add("fsa")
+            .build();
+        final Set<String> d2 = new ImmutableSet.Builder<String>()
+            .add("saf")
+            .add("fas")
+            .add("sfaa")
+            .add("sadf")
+            .add("saddf")
+            .build();
+
+        // then
+        assertThat(DEFAULT_SET_COMPARATOR.compare(d1, d2), IsEqual.equalTo(-1));
     }
 
     @Test

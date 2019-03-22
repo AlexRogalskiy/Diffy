@@ -1,7 +1,7 @@
 /**
  * Diffy API module configuration file
  */
-module com.wildbeeslabs.sensiblemtrics.diffy {
+open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires static lombok;
     requires slf4j.api;
     requires jsr305;
@@ -16,4 +16,8 @@ module com.wildbeeslabs.sensiblemtrics.diffy {
     requires com.fasterxml.jackson.core;
     requires commons.beanutils;
     requires java.desktop;
+
+    exports com.wildbeeslabs.sensiblemetrics.diffy.comparator;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.converter;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.entry;
 }

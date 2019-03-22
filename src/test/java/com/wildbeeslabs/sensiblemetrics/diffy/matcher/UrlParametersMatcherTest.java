@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.UrlParametersMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDiffTest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

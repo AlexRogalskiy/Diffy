@@ -25,18 +25,21 @@ package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffComparatorFactory;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
@@ -98,17 +101,17 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         // then
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
-        assertThat(valueChangeList.size(), is(lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length)));
+        assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length)));
 
-        assertEquals("createdAt", valueChangeList.get(1).getPropertyName());
-        assertEquals(getDeliveryInfoFirst().getCreatedAt(), valueChangeList.get(1).getFirst());
-        assertEquals(getDeliveryInfoLast().getCreatedAt(), valueChangeList.get(1).getLast());
+        assertEquals("createdAt", valueChangeList.get(0).getPropertyName());
+        assertEquals(getDeliveryInfoFirst().getCreatedAt(), valueChangeList.get(0).getFirst());
+        assertEquals(getDeliveryInfoLast().getCreatedAt(), valueChangeList.get(0).getLast());
         assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
 
-        assertEquals("updatedAt", valueChangeList.get(valueChangeList.size() - 1).getPropertyName());
-        assertEquals(getDeliveryInfoFirst().getUpdatedAt(), valueChangeList.get(valueChangeList.size() - 1).getFirst());
-        assertEquals(getDeliveryInfoLast().getUpdatedAt(), valueChangeList.get(valueChangeList.size() - 1).getLast());
-        assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
+        assertEquals("status", valueChangeList.get(valueChangeList.size() - 1).getPropertyName());
+        assertEquals(getDeliveryInfoFirst().getStatus(), valueChangeList.get(valueChangeList.size() - 1).getFirst());
+        assertEquals(getDeliveryInfoLast().getStatus(), valueChangeList.get(valueChangeList.size() - 1).getLast());
+        assertNotEquals(getDeliveryInfoFirst().getStatus(), getDeliveryInfoLast().getStatus());
     }
 
     @Test
@@ -139,7 +142,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         // then
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
-        assertThat(valueChangeList.size(), lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size()));
+        assertThat(valueChangeList.size(), lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size()));
 
         DefaultDiffEntry entry = DefaultDiffEntry
             .builder()
@@ -222,7 +225,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         // then
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
-        assertThat(valueChangeList.size(), is(lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
+        assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
 
         DefaultDiffEntry entry = DefaultDiffEntry
             .builder()
@@ -289,7 +292,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // then
         assertThat(valueChangeList, is(not(empty())));
-        assertThat(valueChangeList.size(), is(lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
+        assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
 
         DefaultDiffEntry entry = DefaultDiffEntry
             .builder()
@@ -460,7 +463,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // then
         assertThat(valueChangeList, is(not(empty())));
-        assertThat(valueChangeList.size(), is(lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
+        assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
 
         DefaultDiffEntry entry = DefaultDiffEntry
             .builder()
@@ -501,7 +504,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         // then
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
-        assertThat(valueChangeList.size(), is(lessThanOrEqualTo(getAllFields(DeliveryInfo.class).length)));
+        assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length)));
 
         assertTrue(valueChangeList.stream().noneMatch(value -> Objects.equals(value.getFirst(), value.getLast())));
     }
@@ -616,10 +619,10 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByDateFieldsAndComparators() {
         // given
         final List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
-        getDeliveryInfoFirst().setCreatedAt(toDate("07/06/2013 12:13:14", DEFAULT_DATETIME_FORMAT));
-        getDeliveryInfoFirst().setUpdatedAt(toDate("17/06/2018 14:13:12", DEFAULT_DATETIME_FORMAT));
-        getDeliveryInfoLast().setCreatedAt(toDate("01/05/2013 15:01:01", DEFAULT_DATETIME_FORMAT));
-        getDeliveryInfoLast().setUpdatedAt(toDate("17/07/2018 16:17:17", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoFirst().setCreatedAt(DateUtils.toDate("07/06/2013 12:13:14", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoFirst().setUpdatedAt(DateUtils.toDate("17/06/2018 14:13:12", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoLast().setCreatedAt(DateUtils.toDate("01/05/2013 15:01:01", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoLast().setUpdatedAt(DateUtils.toDate("17/07/2018 16:17:17", DEFAULT_DATETIME_FORMAT));
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
@@ -664,9 +667,9 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         diffComparator.includeProperties(includedProperties);
         diffComparator.setComparator("createdAt", (Comparator<Date>) (d1, d2) -> Math.abs(d1.getTime() - d2.getTime()) <= DEFAULT_DIFFERENCE_DELTA ? 0 : d1.compareTo(d2));
 
-        final LocalDate initialDate = now();
-        getDeliveryInfoFirst().setCreatedAt(toDate(initialDate));
-        getDeliveryInfoLast().setCreatedAt(toDate(initialDate.plus(1, ChronoUnit.DAYS)));
+        final LocalDate initialDate = DateUtils.now();
+        getDeliveryInfoFirst().setCreatedAt(DateUtils.toDate(initialDate));
+        getDeliveryInfoLast().setCreatedAt(DateUtils.toDate(initialDate.plus(1, ChronoUnit.DAYS)));
 
         // when
         Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
@@ -675,8 +678,8 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         // then
         assertThat(valueChangeList, is(empty()));
 
-        getDeliveryInfoFirst().setCreatedAt(toDate(initialDate));
-        getDeliveryInfoLast().setCreatedAt(toDate(initialDate.minus(2, ChronoUnit.DAYS)));
+        getDeliveryInfoFirst().setCreatedAt(DateUtils.toDate(initialDate));
+        getDeliveryInfoLast().setCreatedAt(DateUtils.toDate(initialDate.minus(2, ChronoUnit.DAYS)));
 
         // when
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());

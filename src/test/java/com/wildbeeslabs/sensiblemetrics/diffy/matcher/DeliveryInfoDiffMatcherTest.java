@@ -24,11 +24,12 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
 import com.google.common.collect.Lists;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffMatcherFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
+import com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -93,8 +94,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test delivery info entity by custom created/update date fields diff matcher")
     public void testDeliveryInfoByDateDiffMatcher() {
         // given
-        getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(DateUtils.toDate("07/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(
             new AbstractTypeSafeMatcher<DeliveryInfo>() {
@@ -113,8 +114,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertThat(diffMatchEntryList, is(empty()));
 
         // given
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(DateUtils.toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("27/06/2018", DEFAULT_DATE_FORMAT));
 
         // when
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
@@ -191,8 +192,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         };
 
         getDeliveryInfo().setType(getCodeMock().val());
-        getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(DateUtils.toDate("07/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(dateMatcher, typeMatcher);
 

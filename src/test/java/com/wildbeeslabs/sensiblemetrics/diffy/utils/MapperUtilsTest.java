@@ -26,12 +26,12 @@ package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.google.common.collect.Lists;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.EntryView;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffComparatorFactory;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -152,7 +152,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "[{\"propertyName\":\"description\",\"first\":\"oeffPyZQcxoaOMFrKOdbrMURgasTaQUbRlAwPztMeUptxWehkROMStfwgbFAPVhl\",\"last\":\"boHdMLIhLCnAPjXZOclxTWMflYdGmZDVewXYfqjIDFSIPAqsElGjOEOgNInznuhb\"},{\"propertyName\":\"id\",\"first\":5814988,\"last\":8258751},{\"propertyName\":\"type\",\"first\":425402,\"last\":620131}]";
 
         // when
-        final List<Map<String, DefaultDiffEntry>> entries = MapperUtils.asList(jsonString);
+        final List<Map<String, ?>> entries = MapperUtils.asList(jsonString);
 
         // then
         assertThat(entries, is(not(empty())));
@@ -272,7 +272,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test serialize custom difference entries by default mapper and external view class")
     public void testSerializeCustomDiffEntriesByDefaultMapperAndExternalView() throws IOException {
         // given
-        final String expectedJsonString = "[{\"propertyName\":\"codes\",\"first\":[1,2,3],\"last\":[1,2]},{\"propertyName\":\"gid\",\"first\":\"Test 01\",\"last\":\"Test 02\"},{\"propertyName\":\"discount\",\"first\":10,\"last\":1},{\"propertyName\":\"description\",\"first\":\"Description 01\",\"last\":\"Description 02\"},{\"propertyName\":\"id\",\"first\":1,\"last\":2},{\"propertyName\":\"status\",\"first\":\"DELIVERED\",\"last\":\"PENDING\"}]";
+        final String expectedJsonString = "[{\"propertyName\":\"codes\",\"first\":[1,2,3],\"last\":[1,2]},{\"propertyName\":\"gid\",\"first\":\"Test 01\",\"last\":\"Test 02\"},{\"propertyName\":\"description\",\"first\":\"Description 01\",\"last\":\"Description 02\"},{\"propertyName\":\"discount\",\"first\":10,\"last\":1},{\"propertyName\":\"id\",\"first\":1,\"last\":2},{\"propertyName\":\"status\",\"first\":\"DELIVERED\",\"last\":\"PENDING\"}]";
         final DeliveryInfo deliveryInfoFirst = createDeliveryInfo(1L, 10, "Test 01", 0.68, "Description 01", DeliveryInfo.DeliveryStatus.DELIVERED, BigDecimal.TEN, 1, 2, 3);
         final DeliveryInfo deliveryInfoLast = createDeliveryInfo(2L, 10, "Test 02", 0.68, "Description 02", DeliveryInfo.DeliveryStatus.PENDING, BigDecimal.ONE, 1, 2);
 

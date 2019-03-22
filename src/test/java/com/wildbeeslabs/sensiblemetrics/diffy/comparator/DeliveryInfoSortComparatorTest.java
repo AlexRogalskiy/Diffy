@@ -24,13 +24,12 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
 
 import com.google.common.collect.ImmutableList;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.factory.DeliveryInfoFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo.DeliveryStatus;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -43,8 +42,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.SortDirection.ASC;
-import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.SortDirection.DESC;
 import static org.assertj.core.api.BDDAssertions.then;
 
 /**
@@ -76,10 +73,10 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testDeliveryInfoBySortComparator() {
         // given
         final SortManager sort = new SortManager(
-            new SortManager.SortOrder(ASC, "id"),
-            new SortManager.SortOrder(DESC, "gid"),
-            new SortManager.SortOrder(ASC, "status"),
-            new SortManager.SortOrder(ASC, "balance")
+            new SortManager.SortOrder(SortManager.SortDirection.ASC, "id"),
+            new SortManager.SortOrder(SortManager.SortDirection.DESC, "gid"),
+            new SortManager.SortOrder(SortManager.SortDirection.ASC, "status"),
+            new SortManager.SortOrder(SortManager.SortDirection.ASC, "balance")
         );
 
         // when
@@ -97,11 +94,11 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
      */
     private Collection<DeliveryInfo> givenDeliveryInfoList() {
         return ImmutableList.of(
-            createDeliveryInfo(3l, "test3", DeliveryStatus.DELIVERED, 230.00),
-            createDeliveryInfo(2l, "test2", DeliveryStatus.PENDING, 23.12),
-            createDeliveryInfo(1l, "test1", DeliveryStatus.REJECTED, 243.3),
-            createDeliveryInfo(5l, "test5", DeliveryStatus.PENDING, 315.4),
-            createDeliveryInfo(4l, "test4", DeliveryStatus.DELIVERED, 31.4)
+            createDeliveryInfo(3l, "test3", DeliveryInfo.DeliveryStatus.DELIVERED, 230.00),
+            createDeliveryInfo(2l, "test2", DeliveryInfo.DeliveryStatus.PENDING, 23.12),
+            createDeliveryInfo(1l, "test1", DeliveryInfo.DeliveryStatus.REJECTED, 243.3),
+            createDeliveryInfo(5l, "test5", DeliveryInfo.DeliveryStatus.PENDING, 315.4),
+            createDeliveryInfo(4l, "test4", DeliveryInfo.DeliveryStatus.DELIVERED, 31.4)
         );
     }
 
@@ -110,11 +107,11 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
      *
      * @param id      - initial input id value
      * @param gid     - initial input global id value
-     * @param status  - initial input delivery info status {@link DeliveryStatus}
+     * @param status  - initial input delivery info status {@link DeliveryInfo.DeliveryStatus}
      * @param balance - initial input balance value
      * @return new instance of {@link DeliveryInfo}
      */
-    private DeliveryInfo createDeliveryInfo(final Long id, final String gid, final DeliveryStatus status, double balance) {
+    private DeliveryInfo createDeliveryInfo(final Long id, final String gid, final DeliveryInfo.DeliveryStatus status, double balance) {
         final DeliveryInfo deliveryInfo = new DeliveryInfo();
         deliveryInfo.setId(id);
         deliveryInfo.setGid(gid);
