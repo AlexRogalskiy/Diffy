@@ -295,6 +295,9 @@
                     <version>3.1.1</version>
                     <configuration>
                         <archive>
+                            <manifestEntries>
+                                <Automatic-Module-Name>${project.groupId}.${project.artifactId}</Automatic-Module-Name>
+                            </manifestEntries>
                             <manifest>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>dependency-jars/</classpathPrefix>
@@ -877,6 +880,7 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>3.8.0</version>
                         <configuration>
+                            <release>11</release>
                             <compilerArgs>
                                 <arg>-sourcepath</arg>
                                 <arg>

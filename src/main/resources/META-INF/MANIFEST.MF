@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Implementation-Title: diffy
 Implementation-Version: 1.0.0-RELEASE
+Application-Version: 1.0.0-RElEASE
 Implementation-Vendor-Id: com.wildbeeslabs.sensiblemetrics.diffy
 Build-Jdk: 11
 Implementation-Vendor: SensibleMetrics, Inc.

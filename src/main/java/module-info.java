@@ -19,5 +19,6 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
 
     exports com.wildbeeslabs.sensiblemetrics.diffy.comparator;
     exports com.wildbeeslabs.sensiblemetrics.diffy.converter;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher;
     exports com.wildbeeslabs.sensiblemetrics.diffy.entry;
 }

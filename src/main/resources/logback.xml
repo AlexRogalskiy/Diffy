@@ -24,8 +24,6 @@ THE SOFTWARE.
 -->
 <configuration debug="true" scan="true" scanPeriod="3000 seconds">
 
-    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
-
     <!-- logger configurations -->
     <property name="LOG_PATH" value="${LOG_TEMP:-${java.io.tmpdir:-/tmp}}"/>
     <property name="LOG_ARCHIVE" value="${LOG_PATH}/archive"/>
@@ -108,10 +106,6 @@ THE SOFTWARE.
         <appender-ref ref="FILE_AUDIT"/>
     </logger>
 
-    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
-        <resetJUL>true</resetJUL>
-    </contextListener>
-
     <root level="ERROR">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE_AUDIT"/>
@@ -127,6 +121,9 @@ THE SOFTWARE.
         <appender-ref ref="FILE_ERROR"/>
     </root>
 
-    <jmxConfigurator/>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
 
 </configuration>

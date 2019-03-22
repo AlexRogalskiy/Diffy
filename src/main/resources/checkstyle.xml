@@ -146,5 +146,4 @@
         <property name="format" value="\.printStackTrace\(\s*\)"/>
         <property name="message" value="printStacktrace() is deprecated "/>
     </module>
-
 </module>
