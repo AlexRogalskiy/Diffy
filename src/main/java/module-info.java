@@ -16,9 +16,14 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires com.fasterxml.jackson.core;
     requires commons.beanutils;
     requires java.desktop;
+    requires com.fasterxml.classmate;
 
+    // Comparator exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.comparator;
+    // Converter exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.converter;
+    // Matcher exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.matcher;
+    // Entry exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.entry;
 }

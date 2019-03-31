@@ -161,6 +161,7 @@
         <joda-time.version>2.10.1</joda-time.version>
         <guava.version>27.0.1-jre</guava.version>
         <jetbrains.version>17.0.0</jetbrains.version>
+        <classmate.version>1.5.0</classmate.version>
 
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -376,7 +377,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.1.1</version>
                     <configuration>
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -396,7 +397,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M2</version>
+                    <version>3.0.0-M3</version>
                     <configuration>
                         <skipTests>${integration-tests.skip}</skipTests>
                         <argLine>
@@ -419,7 +420,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M2</version>
+                    <version>3.0.0-M3</version>
                     <configuration>
                         <skipTests>${unit-tests.skip}</skipTests>
                         <forkCount>0</forkCount>
@@ -471,7 +472,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>RELEASE</version>
+                    <version>3.4.0</version>
                     <extensions>true</extensions>
                     <configuration>
                         <instructions>
@@ -527,7 +528,7 @@
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.7</version>
+                    <version>1.6.8</version>
                     <extensions>true</extensions>
                     <configuration>
                         <serverId>ossrh</serverId>
@@ -559,7 +560,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.2</version>
+                    <version>0.8.3</version>
                     <executions>
                         <execution>
                             <id>default-prepare-agent</id>
@@ -593,7 +594,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-plugin</artifactId>
-                    <version>1.11.1</version>
+                    <version>1.11.2</version>
                     <configuration>
                         <pushChanges>false</pushChanges>
                         <tag>${project.version}</tag>
@@ -722,7 +723,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.1.0</version>
                         <configuration>
                             <doctitle>${project.name} API Reference (${project.version})</doctitle>
                             <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
@@ -756,10 +757,9 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-project-info-reports-plugin</artifactId>
-                        <version>2.9</version>
+                        <version>3.0.0</version>
                         <configuration>
                             <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                            <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                         </configuration>
                         <reportSets>
                             <reportSet>
@@ -781,7 +781,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jxr-plugin</artifactId>
-                        <version>2.5</version>
+                        <version>3.0.0</version>
                         <configuration>
                             <linkJavadoc>true</linkJavadoc>
                             <docTitle>${project.name} Source Xref (${project.version})</docTitle>
@@ -791,7 +791,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.1.0</version>
                         <reportSets>
                             <reportSet>
                                 <id>non-aggregate</id>
@@ -832,7 +832,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -872,7 +872,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.2</version>
+                        <version>0.8.3</version>
                         <configuration>
                             <append>true</append>
                         </configuration>
@@ -903,6 +903,9 @@
         </profile>
         <profile>
             <id>update-sourcepath-for-lombok</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -910,7 +913,7 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>3.8.0</version>
                         <configuration>
-                            <release>11</release>
+                            <release>${java.version}</release>
                             <compilerArgs>
                                 <arg>-sourcepath</arg>
                                 <arg>
@@ -1024,6 +1027,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml</groupId>
+            <artifactId>classmate</artifactId>
+            <version>${classmate.version}</version>
         </dependency>
 
         <!-- Json library dependencies -->
