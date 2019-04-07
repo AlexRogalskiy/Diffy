@@ -864,9 +864,6 @@
         </profile>
         <profile>
             <id>sonar-coverage</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
