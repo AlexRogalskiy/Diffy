@@ -249,11 +249,29 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>3.1.9</version>
+                    <configuration>
+                        <excludeFilterFile>${project.basedir}/findbugs/exclude.xml</excludeFilterFile>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>check</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>3.0.0</version>
                     <configuration>
-                        <configLocation>src/main/resources/checkstyle.xml</configLocation>
+                        <configLocation>${project.basedir}/checkstyle/checkstyle.xml</configLocation>
                     </configuration>
                     <executions>
                         <execution>
