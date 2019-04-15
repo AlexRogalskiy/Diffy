@@ -34,6 +34,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -139,7 +141,7 @@ public class MapperUtils {
      * @return mapped object with <code><D></code> type
      * @throws IOException
      */
-    public static <D, V> D toList(final String source, final Class<? extends D> outClass, final Class<? extends V> viewClazz) throws IOException {
+    public static <D, V> D map(final String source, final Class<? extends D> outClass, final Class<? extends V> viewClazz) throws IOException {
         return objectMapper.readerWithView(viewClazz).forType(outClass).readValue(source);
     }
 
@@ -152,7 +154,7 @@ public class MapperUtils {
      * @return mapped object with <code><D></code> type
      * @throws IOException
      */
-    public static <D> D toList(final String source, final Class<? extends D> outClass) throws IOException {
+    public static <D> D map(final String source, final Class<? extends D> outClass) throws IOException {
         return objectMapper.reader().forType(outClass).readValue(source);
     }
 
@@ -181,6 +183,47 @@ public class MapperUtils {
     public static <K, V> Map<K, V> toMap(final String source) throws IOException {
         return objectMapper.reader().forType(new TypeReference<Map<K, V>>() {
         }).readValue(source);
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@link List}
+     *
+     * @param <T>    type of key element
+     * @param source - initial input source to be mapped from
+     * @param clazz  - initial input element {@link Class}
+     * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
+     * @throws IOException
+     */
+    public static <T> List<T> toList(final String source, final Class<? extends T> clazz) throws IOException {
+        return toCollection(source, List.class, clazz);
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@link Set}
+     *
+     * @param <T>    type of key element
+     * @param source - initial input source to be mapped from
+     * @param clazz  - initial input element {@link Class}
+     * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
+     * @throws IOException
+     */
+    public static <T> Set<T> toSet(final String source, final Class<? extends T> clazz) throws IOException {
+        return toCollection(source, Set.class, clazz);
+    }
+
+    /**
+     * Returns converted input object {@code source} to destination object {@link Set}
+     *
+     * @param <T>             type of key element
+     * @param source          - initial input source to be mapped from
+     * @param collectionClazz - initial input collection {@link Class}
+     * @param elementClazz    - initial input element {@link Class}
+     * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
+     * @throws IOException
+     */
+    public static <T, S extends Collection<T>> S toCollection(final String source, final Class<? extends S> collectionClazz, final Class<? extends T> elementClazz) throws IOException {
+        final CollectionType collectionType = TypeFactory.defaultInstance().constructCollectionType(collectionClazz, elementClazz);
+        return objectMapper.readerFor(collectionType).readValue(source);
     }
 
     /**
