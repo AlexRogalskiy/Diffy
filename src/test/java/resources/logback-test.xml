@@ -27,19 +27,19 @@ THE SOFTWARE.
     <property name="LOG_PATH" value="${LOG_TEMP:-${java.io.tmpdir:-/tmp}}"/>
     <property name="LOG_HOME" value="${LOG_PATH}/logs"/>
 
-    <!-- file audit appender configurations -->
+    <!-- file audit appender configuration -->
     <property name="FILE_AUDIT_NAME" value="application"/>
     <property name="FILE_AUDIT_MAX_FILE_SIZE" value="100MB"/>
     <property name="FILE_AUDIT_MAX_HISTORY" value="30"/>
     <property name="FILE_AUDIT_TOTAL_SIZE_CAP" value="3GB"/>
 
-    <!-- file error appender configurations -->
+    <!-- file error appender configuration -->
     <property name="FILE_ERROR_NAME" value="error"/>
     <property name="FILE_ERROR_MAX_FILE_SIZE" value="100MB"/>
     <property name="FILE_ERROR_MAX_HISTORY" value="30"/>
     <property name="FILE_ERROR_TOTAL_SIZE_CAP" value="3GB"/>
 
-    <!-- log pattern configurations -->
+    <!-- log pattern configuration -->
     <property name="CONSOLE_LOG_PATTERN" value="%d %-4relative [%thread] %-5level %logger{35} - %msg%n"/>
     <property name="FILE_AUDIT_LOG_PATTERN" value="%d{[yyyy-MM-dd HH:mm:ss]} [%thread] %-5level %logger{36} - %msg%n"/>
     <property name="FILE_ERROR_LOG_PATTERN" value="%d{[yyyy-MM-dd HH:mm:ss]} [%thread] %-5level %logger{36} - %msg%n"/>
@@ -90,11 +90,13 @@ THE SOFTWARE.
         </rollingPolicy>
     </appender>
 
+    <!-- logger root reporter -->
     <logger name="ROOT" level="DEBUG"/>
-
+    <!-- logger diffy reporter -->
     <logger name="com.wildbeeslabs.sensiblemetrics.diffy" level="DEBUG" additivity="false">
         <appender-ref ref="FILE_AUDIT"/>
     </logger>
+    <!-- logger audit reporter -->
     <logger name="audit" level="DEBUG" additivity="false">
         <appender-ref ref="FILE_AUDIT"/>
     </logger>

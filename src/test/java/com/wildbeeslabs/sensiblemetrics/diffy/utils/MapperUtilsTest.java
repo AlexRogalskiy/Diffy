@@ -95,16 +95,16 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
         // when
-        String jsonString = MapperUtils.mapToJson(valueChangeList.get(0), EntryView.External.class);
-        final DefaultDiffEntry entry = MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+        String jsonString = MapperUtils.toJson(valueChangeList.get(0), EntryView.External.class);
+        final DefaultDiffEntry entry = MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
 
         // then
         assertThat(entry.getFirst(), IsEqual.equalTo(valueChangeList.get(0).getFirst()));
         assertThat(entry.getLast(), IsEqual.equalTo(valueChangeList.get(0).getLast()));
 
         // when
-        jsonString = MapperUtils.mapToJson(valueChangeList, EntryView.External.class);
-        final List<DefaultDiffEntry> entries = MapperUtils.asList(jsonString);
+        jsonString = MapperUtils.toJson(valueChangeList, EntryView.External.class);
+        final List<DefaultDiffEntry> entries = MapperUtils.toList(jsonString);
 
         // then
         assertThat(entries, is(not(empty())));
@@ -129,16 +129,16 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
         // when
-        String jsonString = MapperUtils.mapToJson(valueChangeList.get(0), EntryView.External.class);
-        final DefaultDiffEntry entry = MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+        String jsonString = MapperUtils.toJson(valueChangeList.get(0), EntryView.External.class);
+        final DefaultDiffEntry entry = MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
 
         // then
         assertThat(entry.getFirst(), IsEqual.equalTo(valueChangeList.get(0).getFirst()));
         assertThat(entry.getLast(), IsEqual.equalTo(valueChangeList.get(0).getLast()));
 
         // when
-        jsonString = MapperUtils.mapToJson(valueChangeList, EntryView.External.class);
-        final List<Map<String, DefaultDiffEntry>> entries = MapperUtils.asList(jsonString);
+        jsonString = MapperUtils.toJson(valueChangeList, EntryView.External.class);
+        final List<Map<String, DefaultDiffEntry>> entries = MapperUtils.toList(jsonString);
 
         // then
         assertThat(entries, is(not(empty())));
@@ -152,7 +152,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "[{\"propertyName\":\"description\",\"first\":\"oeffPyZQcxoaOMFrKOdbrMURgasTaQUbRlAwPztMeUptxWehkROMStfwgbFAPVhl\",\"last\":\"boHdMLIhLCnAPjXZOclxTWMflYdGmZDVewXYfqjIDFSIPAqsElGjOEOgNInznuhb\"},{\"propertyName\":\"id\",\"first\":5814988,\"last\":8258751},{\"propertyName\":\"type\",\"first\":425402,\"last\":620131}]";
 
         // when
-        final List<Map<String, ?>> entries = MapperUtils.asList(jsonString);
+        final List<Map<String, ?>> entries = MapperUtils.toList(jsonString);
 
         // then
         assertThat(entries, is(not(empty())));
@@ -179,7 +179,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "{\"propertyName\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
 
         // when
-        final DefaultDiffEntry entry = MapperUtils.asList(jsonString, DefaultDiffEntry.class);
+        final DefaultDiffEntry entry = MapperUtils.toList(jsonString, DefaultDiffEntry.class);
 
         // then
         assertThat(entry.getPropertyName(), IsEqual.equalTo("description"));
@@ -194,7 +194,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "{\"propertyName\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
 
         // when
-        final DefaultDiffEntry entry = MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+        final DefaultDiffEntry entry = MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
 
         // then
         assertThat(entry.getPropertyName(), IsEqual.equalTo("description"));
@@ -209,7 +209,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "{\"id\":\"1\",\"propertyName\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
 
         // when
-        final DefaultDiffEntry entry = MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.Internal.class);
+        final DefaultDiffEntry entry = MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.Internal.class);
 
         // then
         assertThat(entry.getId(), IsEqual.equalTo("1"));
@@ -225,7 +225,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "{\"propertyName\":\"description\",\"entityFirst\":\"cGSWCwEawsEvMrAPghayOBoGhUYURCHTqxhHWboiopHSgiQJlphvkHNvpWigpkaJ\",\"entityLast\":\"eYqOeXZUihWmoLlhjTxWkEpuObQJMuMGHqOwLlGkLBfEbdWvtlIDdoYKbTUaNgmL\"}";
 
         // when
-        final DefaultDiffEntry entry = MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+        final DefaultDiffEntry entry = MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
 
         // then
         assertThat(entry.getPropertyName(), IsEqual.equalTo("description"));
@@ -240,7 +240,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "{}";
 
         // when
-        final DefaultDiffEntry entry = MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+        final DefaultDiffEntry entry = MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
 
         // then
         assertNull(entry.getPropertyName());
@@ -255,7 +255,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "[]";
 
         // when
-        MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+        MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
     }
 
     @Test(expected = JsonParseException.class)
@@ -265,7 +265,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final String jsonString = "{[]}";
 
         // when
-        MapperUtils.asList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
+        MapperUtils.toList(jsonString, DefaultDiffEntry.class, EntryView.External.class);
     }
 
     @Test
@@ -287,7 +287,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         assertThat(valueChangeList.size(), IsEqual.equalTo(6));
 
         // when
-        String jsonString = MapperUtils.mapToJson(valueChangeList, EntryView.External.class);
+        String jsonString = MapperUtils.toJson(valueChangeList, EntryView.External.class);
 
         // then
         assertThat(jsonString, IsEqual.equalTo(expectedJsonString));

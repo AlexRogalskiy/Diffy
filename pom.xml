@@ -81,7 +81,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.3</version>
+                <version>${maven.versions.plugin.version}</version>
                 <configuration>
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
@@ -133,6 +133,8 @@
         <unit-tests.skip>true</unit-tests.skip>
         <integration-tests.skip>true</integration-tests.skip>
 
+        <docker.image.prefix>diffy</docker.image.prefix>
+
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.25</slf4j.version>
 
@@ -169,6 +171,48 @@
         <sonar.language>java</sonar.language>
 
         <surefire.forkNumber>0</surefire.forkNumber>
+
+        <!-- Maven plugins -->
+        <maven.versions.plugin.version>2.7</maven.versions.plugin.version>
+        <maven.swagger.plugin.version>3.1.7</maven.swagger.plugin.version>
+        <maven.build.helper.plugin.version>3.0.0</maven.build.helper.plugin.version>
+        <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+        <maven.reports.plugin.version>3.0.0</maven.reports.plugin.version>
+        <maven.jar.plugin.version>3.1.1</maven.jar.plugin.version>
+        <maven.flatten.plugin.version>1.0.1</maven.flatten.plugin.version>
+        <maven.antrun.plugin.version>1.8</maven.antrun.plugin.version>
+        <maven.git-commit-id.plugin.version>2.2.5</maven.git-commit-id.plugin.version>
+        <maven.build.helper.plugin.version>3.0.0</maven.build.helper.plugin.version>
+        <maven.surefire.plugin.version>3.0.0-M2</maven.surefire.plugin.version>
+        <maven.license.plugin.version>1.4.0</maven.license.plugin.version>
+        <maven.jacoco.plugin.version>0.8.3</maven.jacoco.plugin.version>
+        <maven.enforcer.plugin.version>3.0.0-M2</maven.enforcer.plugin.version>
+        <maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
+        <maven.shade.plugin.version>3.2.1</maven.shade.plugin.version>
+        <maven.release.plugin.version>2.5.3</maven.release.plugin.version>
+        <maven.dockerfile.plugin.version>1.4.10</maven.dockerfile.plugin.version>
+        <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
+        <maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
+        <maven.sonar.plugin.version>3.6.0.1398</maven.sonar.plugin.version>
+        <maven.scm.plugin.version>1.11.2</maven.scm.plugin.version>
+        <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
+        <maven.spotbugs.plugin.version>3.1.11</maven.spotbugs.plugin.version>
+        <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
+        <maven.checkstyle.plugin.lib.version>8.15</maven.checkstyle.plugin.lib.version>
+        <maven.properties.plugin.version>1.0.0</maven.properties.plugin.version>
+        <maven.javadoc.plugin.version>3.1.0</maven.javadoc.plugin.version>
+        <maven.jxr.plugin.version>3.0.0</maven.jxr.plugin.version>
+        <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
+        <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
+        <maven.nexus.staging.plugin.version>1.6.8</maven.nexus.staging.plugin.version>
+        <maven.pmd.plugin.version>3.11.0</maven.pmd.plugin.version>
+        <maven.flyway.plugin.version>5.2.4</maven.flyway.plugin.version>
+        <maven.exec.plugin.version>1.6.0</maven.exec.plugin.version>
+        <maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
+        <maven.failsafe.plugin.version>3.0.0-M2</maven.failsafe.plugin.version>
+        <maven.bundle.plugin.vesion>4.1.0</maven.bundle.plugin.vesion>
+        <maven.project.reports.plugin.version>3.0.0</maven.project.reports.plugin.version>
+        <maven.install.plugin.version>3.0.0-M1</maven.install.plugin.version>
     </properties>
 
     <build>
@@ -196,7 +240,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.5.3</version>
+                    <version>${maven.release.plugin.version}</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <useReleaseProfile>false</useReleaseProfile>
@@ -208,7 +252,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>${maven.clean.plugin.version}</version>
                     <configuration>
                         <filesets>
                             <fileset>
@@ -221,7 +265,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.0.0-M2</version>
+                    <version>${maven.enforcer.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>require-jdk8</id>
@@ -245,13 +289,25 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>${maven.install.plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>${maven.dockerfile.plugin.version}</version>
+                    <configuration>
+                        <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                        <buildArgs>
+                            <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+                    </configuration>
                 </plugin>
 
                 <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>3.1.9</version>
+                    <version>${maven.spotbugs.plugin.version}</version>
                     <configuration>
                         <excludeFilterFile>${project.basedir}/findbugs/exclude.xml</excludeFilterFile>
                     </configuration>
@@ -269,7 +325,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>${maven.checkstyle.plugin.version}</version>
                     <configuration>
                         <configLocation>${project.basedir}/checkstyle/checkstyle.xml</configLocation>
                     </configuration>
@@ -290,7 +346,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>${maven.resources.plugin.version}</version>
                     <configuration>
                         <encoding>${project.reporting.outputEncoding}</encoding>
                     </configuration>
@@ -299,19 +355,19 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.2.1</version>
+                    <version>${maven.shade.plugin.version}</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>${maven.deploy.plugin.version}</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>${maven.jar.plugin.version}</version>
                     <configuration>
                         <archive>
                             <manifestEntries>
@@ -329,7 +385,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>${maven.dependency.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>copy-dependencies</id>
@@ -352,7 +408,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>${maven.compiler.plugin.version}</version>
                     <configuration>
                         <annotationProcessorPaths>
                             <path>
@@ -395,7 +451,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>${maven.assembly.plugin.version}</version>
                     <configuration>
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -415,7 +471,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.0.0-M3</version>
+                    <version>${maven.failsafe.plugin.version}</version>
                     <configuration>
                         <skipTests>${integration-tests.skip}</skipTests>
                         <argLine>
@@ -438,7 +494,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M3</version>
+                    <version>${maven.surefire.plugin.version}</version>
                     <configuration>
                         <skipTests>${unit-tests.skip}</skipTests>
                         <forkCount>0</forkCount>
@@ -461,7 +517,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
-                    <version>1.6.0</version>
+                    <version>${maven.exec.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>module-main-class</id>
@@ -490,7 +546,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>${maven.bundle.plugin.vesion}</version>
                     <extensions>true</extensions>
                     <configuration>
                         <instructions>
@@ -508,7 +564,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>${maven.build.helper.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>attach-artifacts</id>
@@ -546,7 +602,7 @@
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.8</version>
+                    <version>${maven.nexus.staging.plugin.version}</version>
                     <extensions>true</extensions>
                     <configuration>
                         <serverId>ossrh</serverId>
@@ -558,7 +614,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
-                    <version>1.0.0</version>
+                    <version>${maven.properties.plugin.version}</version>
                     <executions>
                         <execution>
                             <phase>initialize</phase>
@@ -578,7 +634,7 @@
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.3</version>
+                    <version>${maven.jacoco.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>default-prepare-agent</id>
@@ -605,14 +661,14 @@
                 <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
-                    <version>3.6.0.1398</version>
+                    <version>${maven.sonar.plugin.version}</version>
                 </plugin>
 
                 <!-- Deploy plugins -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-scm-plugin</artifactId>
-                    <version>1.11.2</version>
+                    <version>${maven.scm.plugin.version}</version>
                     <configuration>
                         <pushChanges>false</pushChanges>
                         <tag>${project.version}</tag>
@@ -741,7 +797,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>${maven.javadoc.plugin.version}</version>
                         <configuration>
                             <doctitle>${project.name} API Reference (${project.version})</doctitle>
                             <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
@@ -775,7 +831,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-project-info-reports-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>${maven.project.reports.plugin.version}</version>
                         <configuration>
                             <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                         </configuration>
@@ -799,7 +855,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jxr-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>${maven.jxr.plugin.version}</version>
                         <configuration>
                             <linkJavadoc>true</linkJavadoc>
                             <docTitle>${project.name} Source Xref (${project.version})</docTitle>
@@ -809,7 +865,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>${maven.javadoc.plugin.version}</version>
                         <reportSets>
                             <reportSet>
                                 <id>non-aggregate</id>
@@ -837,7 +893,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>${maven.source.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -850,7 +906,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>${maven.javadoc.plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -863,7 +919,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${maven.gpg.plugin.version}</version>
                         <configuration>
                             <useAgent>false</useAgent>
                         </configuration>
@@ -887,7 +943,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.3</version>
+                        <version>${maven.jacoco.plugin.version}</version>
                         <configuration>
                             <append>true</append>
                         </configuration>
@@ -926,7 +982,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.8.0</version>
+                        <version>${maven.compiler.plugin.version}</version>
                         <configuration>
                             <release>${java.version}</release>
                             <compilerArgs>

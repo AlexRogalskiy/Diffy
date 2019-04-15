@@ -51,7 +51,7 @@ public class MapperUtils {
     /**
      * Default model mapper instance {@link ObjectMapper}
      */
-    private static ObjectMapper modelMapper;
+    private static ObjectMapper objectMapper;
 
     /**
      * Model mapper property settings {@link ObjectMapper}
@@ -59,25 +59,26 @@ public class MapperUtils {
      * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
      */
     static {
-        modelMapper = new ObjectMapper();
-        modelMapper.setDefaultMergeable(Boolean.TRUE);
-        modelMapper.setLocale(Locale.getDefault());
-        modelMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        modelMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        objectMapper = new ObjectMapper();
+        objectMapper.setDefaultMergeable(Boolean.TRUE);
+        objectMapper.setLocale(Locale.getDefault());
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
-        modelMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        modelMapper.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES);
-        modelMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
-        modelMapper.enable(JsonGenerator.Feature.ESCAPE_NON_ASCII);
+        objectMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+        objectMapper.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES);
+        objectMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
+        objectMapper.enable(JsonGenerator.Feature.ESCAPE_NON_ASCII);
 
-        modelMapper.disable(SerializationFeature.INDENT_OUTPUT);
-        modelMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        modelMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        modelMapper.disable(DeserializationFeature.UNWRAP_ROOT_VALUE);
-        modelMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.disable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
-        modelMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-        modelMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        objectMapper.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
         //objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
     }
 
@@ -93,7 +94,7 @@ public class MapperUtils {
      * @return mapped object of <code>outClass</code> type
      */
     public static <T, D> D map(final T source, final Class<? extends D> outClass) {
-        return modelMapper.convertValue(source, outClass);
+        return objectMapper.convertValue(source, outClass);
     }
 
     /**
@@ -106,7 +107,7 @@ public class MapperUtils {
      * @return mapped object with <code><D></code> type
      */
     public static <T, D> D map(final T source, final JavaType javaType) {
-        return modelMapper.convertValue(source, javaType);
+        return objectMapper.convertValue(source, javaType);
     }
 
     /**
@@ -119,7 +120,7 @@ public class MapperUtils {
      * @param outClass - initial input class to map by {@link Class}
      * @return list of mapped objects of <code>outClass</code> type
      */
-    public static <T, D> List<? extends D> mapAll(final Collection<T> source, final Class<? extends D> outClass) {
+    public static <T, D> List<? extends D> toList(final Collection<T> source, final Class<? extends D> outClass) {
         return Optional.ofNullable(source)
             .orElseGet(Collections::emptyList)
             .stream()
@@ -138,8 +139,8 @@ public class MapperUtils {
      * @return mapped object with <code><D></code> type
      * @throws IOException
      */
-    public static <D, V> D asList(final String source, final Class<? extends D> outClass, final Class<? extends V> viewClazz) throws IOException {
-        return modelMapper.readerWithView(viewClazz).forType(outClass).readValue(source);
+    public static <D, V> D toList(final String source, final Class<? extends D> outClass, final Class<? extends V> viewClazz) throws IOException {
+        return objectMapper.readerWithView(viewClazz).forType(outClass).readValue(source);
     }
 
     /**
@@ -151,8 +152,8 @@ public class MapperUtils {
      * @return mapped object with <code><D></code> type
      * @throws IOException
      */
-    public static <D> D asList(final String source, final Class<? extends D> outClass) throws IOException {
-        return modelMapper.reader().forType(outClass).readValue(source);
+    public static <D> D toList(final String source, final Class<? extends D> outClass) throws IOException {
+        return objectMapper.reader().forType(outClass).readValue(source);
     }
 
     /**
@@ -163,8 +164,8 @@ public class MapperUtils {
      * @return mapped object {@link List} with <code><D></code> type
      * @throws IOException
      */
-    public static <D> List<D> asList(final String source) throws IOException {
-        return modelMapper.reader().forType(new TypeReference<List<D>>() {
+    public static <D> List<D> toList(final String source) throws IOException {
+        return objectMapper.reader().forType(new TypeReference<List<D>>() {
         }).readValue(source);
     }
 
@@ -177,8 +178,8 @@ public class MapperUtils {
      * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
      * @throws IOException
      */
-    public static <K, V> Map<K, V> asMap(final String source) throws IOException {
-        return modelMapper.reader().forType(new TypeReference<Map<K, V>>() {
+    public static <K, V> Map<K, V> toMap(final String source) throws IOException {
+        return objectMapper.reader().forType(new TypeReference<Map<K, V>>() {
         }).readValue(source);
     }
 
@@ -192,8 +193,8 @@ public class MapperUtils {
      * @return string representation of input object
      * @throws JsonProcessingException
      */
-    public static <T, V> String mapToJson(final T source, final Class<? extends V> viewClazz) throws JsonProcessingException {
-        return modelMapper.writerWithView(viewClazz).writeValueAsString(source);
+    public static <T, V> String toJson(final T source, final Class<? extends V> viewClazz) throws JsonProcessingException {
+        return objectMapper.writerWithView(viewClazz).writeValueAsString(source);
     }
 
     /**
@@ -206,8 +207,8 @@ public class MapperUtils {
      * @return string representation of input object
      * @throws JsonProcessingException
      */
-    public static <T, V> String prettyPrint(final T source, final Class<? extends V> viewClazz) throws JsonProcessingException {
-        return modelMapper.writerWithView(viewClazz).withDefaultPrettyPrinter().writeValueAsString(source);
+    public static <T, V> String toFormatString(final T source, final Class<? extends V> viewClazz) throws JsonProcessingException {
+        return objectMapper.writerWithView(viewClazz).withDefaultPrettyPrinter().writeValueAsString(source);
     }
 
     /**
@@ -218,8 +219,8 @@ public class MapperUtils {
      * @return string representation of input object
      * @throws JsonProcessingException
      */
-    public static <T> String mapToJson(final T source) throws JsonProcessingException {
-        return modelMapper.writeValueAsString(source);
+    public static <T> String toJson(final T source) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(source);
     }
 
     /**
@@ -230,7 +231,7 @@ public class MapperUtils {
      * @return string representation of input object
      * @throws JsonProcessingException
      */
-    public static <T> String prettyPrint(final T source) throws JsonProcessingException {
-        return modelMapper.writerWithDefaultPrettyPrinter().writeValueAsString(source);
+    public static <T> String toFormatString(final T source) throws JsonProcessingException {
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(source);
     }
 }

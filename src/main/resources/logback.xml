@@ -97,11 +97,13 @@ THE SOFTWARE.
         <appender-ref ref="FILE_AUDIT"/>
     </appender>
 
+    <!-- logger root reporter -->
     <logger name="ROOT" level="WARN"/>
-
+    <!-- logger diffy reporter -->
     <logger name="com.wildbeeslabs.sensiblemetrics.diffy" level="DEBUG" additivity="false">
         <appender-ref ref="FILE_AUDIT"/>
     </logger>
+    <!-- logger audit reporter -->
     <logger name="audit" level="DEBUG" additivity="false">
         <appender-ref ref="FILE_AUDIT"/>
     </logger>
