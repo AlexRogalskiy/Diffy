@@ -65,13 +65,23 @@ public class BigDecimalConverter extends NumericConverter<BigDecimal> {
     }
 
     /**
+     * Returns big decimal value {@link BigDecimal} by input argument {@link Long}
+     *
+     * @param value - initial input argument value {@link Long}
+     * @return {@link BigDecimal} converted value
+     */
+    protected BigDecimal valueOf(final long value) {
+        return BigDecimal.valueOf(value, this.getSignificantDecimalPlaces());
+    }
+
+    /**
      * Returns big decimal value {@link BigDecimal} by input argument {@link String}
      *
      * @param value - initial input argument value {@link String}
-     * @return converted big decimal value {@link BigDecimal}
+     * @return {@link BigDecimal} converted value
      */
     @Override
     protected BigDecimal valueOf(final String value) {
-        return BigDecimal.valueOf(Long.valueOf(value), getSignificantDecimalPlaces());
+        return new BigDecimal(value);
     }
 }

@@ -21,34 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
+
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
 
 /**
- * Type safe matcher interface declaration by input object instance
- *
- * @param <T> type of input element to be matched by operation
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Tokenizes property accessor names to an array of simple property names according to the JavaBeans convention
  */
 @FunctionalInterface
-public interface TypeSafeMatcher<T> extends Matcher<T> {
+public interface NamingTokenizer {
 
     /**
-     * Returns binary flag depending on initial argument value by comparison
+     * Tokenized property name by input property name {@link String} and type {@code NameableType}
      *
-     * @param value - initial input argument value {@code T}
-     * @return true - if initial value matches input argument, false - otherwise
+     * @param name         - initial input name to be tokenized {@link String}
+     * @param nameableType - initial input property nameable type {@code NameableType}
+     * @return tokenized property name array of {@link String}
      */
-    default boolean matches(final T value) {
-        return matchesSafe(value);
-    }
-
-    /**
-     * Returns binary flag depending on initial argument value by type safe comparison
-     *
-     * @param value - initial input argument value {@code T}
-     * @return true - if initial value matches input argument, false - otherwise
-     */
-    boolean matchesSafe(final T value);
+    String[] tokenize(final String name, final NameableType nameableType);
 }

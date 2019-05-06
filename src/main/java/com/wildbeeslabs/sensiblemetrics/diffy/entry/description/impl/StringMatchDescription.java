@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.description.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 
 /**
- * String match description declaration
+ * String {@link BaseMatchDescription} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -65,14 +65,14 @@ public class StringMatchDescription extends BaseMatchDescription {
     /**
      * Default string match description constructor with input appendable output source {@link Appendable}
      *
-     * @param out
+     * @param out - initial input {@link Appendable} output source instance
      */
     public StringMatchDescription(final Appendable out) {
         this.out = out;
     }
 
     /**
-     * Appends input string value to current description {@link MatchDescription}
+     * Appends input string value to curernt description {@link MatchDescription}
      *
      * @param value - initial input string value to be appended {@link String}
      * @return current description instance {@link MatchDescription}
@@ -82,9 +82,7 @@ public class StringMatchDescription extends BaseMatchDescription {
         try {
             out.append(value);
         } catch (IOException e) {
-            String errorMessage = String.format("ERROR: cannot append value={%s}, message={%s}", value, e.getMessage());
-            log.error(errorMessage);
-            throw new BadOperationException(errorMessage, e);
+            BadOperationException.throwBadOperation(String.format("ERROR: cannot append value: {%s}", value), e);
         }
         return this;
     }

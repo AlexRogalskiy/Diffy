@@ -21,22 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.property;
+package com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
+
+import java.io.Serializable;
 
 /**
- * Transforms property accessor names to their simple property name according to the JavaBeans convention
+ * Difference comparator declaration
+ *
+ * @param <T> type of input element to be compared by operation
+ * @author Alexander Rogalskiy
+ * @version 1.1
+ * @since 1.0
  */
 @FunctionalInterface
-public interface NamingTransformer {
+public interface DiffComparator<T> extends Serializable {
 
     /**
-     * Transforms property name by input name {@link String} and type {@code NameableType}
+     * Returns iterable collection of difference entries {@link Iterable} with properties marked by initial arguments comparison
      *
-     * @param name         - initial input name {@link String}
-     * @param nameableType - initial input property nameable type {@code NameableType}
-     * @return transformed property name {@link String}
+     * @param first - initial first argument to be compared by {@code T}
+     * @param last  - initial last argument to be compared with {@code T}
+     * @return iterable collection of difference entries {@link Iterable}
      */
-    String transform(final String name, final NameableType nameableType);
+    <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last);
 }

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.SortComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.SortComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter;
+package com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
 
 /**
  * Custom converter interface declaration

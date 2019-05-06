@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

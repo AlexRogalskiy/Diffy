@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.DiffMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
 import lombok.Data;

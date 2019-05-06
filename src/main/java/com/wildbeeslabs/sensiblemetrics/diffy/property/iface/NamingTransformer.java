@@ -21,29 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-
-import java.io.Serializable;
-import java.util.Comparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
 
 /**
- * Sort comparator declaration
- *
- * @param <T> type of input element to be compared by operation
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Transforms property accessor names to their simple property name according to the JavaBeans convention
  */
 @FunctionalInterface
-public interface SortComparator<T> extends Serializable {
+public interface NamingTransformer {
 
     /**
-     * Returns comparator instance {@link Comparator} by input sort manager instance {@link SortManager}
+     * Transforms property name by input name {@link String} and type {@code NameableType}
      *
-     * @param sortManager - initial input sort manager {@link SortManager}
-     * @return comparator instance {@link Comparator}
+     * @param name         - initial input name {@link String}
+     * @param nameableType - initial input property nameable type {@code NameableType}
+     * @return transformed property name {@link String}
      */
-    Comparator<? super T> getComparator(final SortManager sortManager);
+    String transform(final String name, final NameableType nameableType);
 }

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -51,7 +51,7 @@ public abstract class NumericConverter<T extends Number> implements Converter<St
      */
     @Override
     public T convert(final String value) {
-        return valueOf(value);
+        return this.valueOf(value);
     }
 
     /**

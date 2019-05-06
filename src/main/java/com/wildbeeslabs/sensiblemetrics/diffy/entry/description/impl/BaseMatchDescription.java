@@ -35,7 +35,7 @@ import java.util.Iterator;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.wrapInBrackets;
 
 /**
- * Base match description declaration {@link MatchDescription}
+ * Base {@link MatchDescription} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1

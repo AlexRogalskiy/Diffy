@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;

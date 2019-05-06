@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.factory;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

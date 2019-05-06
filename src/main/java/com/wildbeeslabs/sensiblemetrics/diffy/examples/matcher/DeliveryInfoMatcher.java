@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractFieldMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;

@@ -27,49 +27,40 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
- * Bad operation {@link RuntimeException} implementation
+ * Unsupported conversion {@link RuntimeException} implementation
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BadOperationException extends RuntimeException {
+public class UnsupportedConversionException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -8529822101880469339L;
+    private static final long serialVersionUID = -4325886623981761909L;
 
-    public BadOperationException(final String message) {
+    public UnsupportedConversionException(final String message) {
         super(message);
     }
 
-    public BadOperationException(final Throwable cause) {
+    public UnsupportedConversionException(final Throwable cause) {
         super(cause);
     }
 
-    public BadOperationException(final String message, final Throwable cause) {
+    public UnsupportedConversionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link BadOperationException} instance by input parameters
+     * Returns {@link UnsupportedConversionException} instance by input parameters
      *
-     * @param message   - initial input raw message {@link String}
-     * @param throwable - initial input cause instance {@link Throwable}
-     * @return {@link BadOperationException} instance
+     * @param target - initial input source target {@link Object}
+     * @return {@link UnsupportedConversionException} instance
      */
-    public static final BadOperationException throwBadOperation(final String message, final Throwable throwable) {
-        throw new BadOperationException(message, throwable);
-    }
-
-    /**
-     * Returns {@link BadOperationException} instance by input parameters
-     *
-     * @param message - initial input raw message {@link String}
-     * @return {@link BadOperationException} instance
-     */
-    public static final BadOperationException throwBadOperation(final String message) {
-        throw new BadOperationException(message);
+    public static final UnsupportedConversionException throwUnsupportedConversion(final Object target) {
+        throw new UnsupportedConversionException(formatMessage("ERROR: unsupported conversion on target {%s}", target));
     }
 }

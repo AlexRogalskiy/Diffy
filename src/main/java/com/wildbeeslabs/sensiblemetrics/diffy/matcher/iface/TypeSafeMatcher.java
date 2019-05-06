@@ -21,29 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
-
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffEntry;
-
-import java.io.Serializable;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 /**
- * Difference comparator declaration
+ * Type safe matcher interface declaration by input object instance
  *
- * @param <T> type of input element to be compared by operation
+ * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
 @FunctionalInterface
-public interface DiffComparator<T> extends Serializable {
+public interface TypeSafeMatcher<T> extends Matcher<T> {
 
     /**
-     * Returns iterable collection of difference entries {@link Iterable} with properties marked by initial arguments comparison
+     * Returns binary flag depending on initial argument value by comparison
      *
-     * @param first - initial first argument to be compared by {@code T}
-     * @param last  - initial last argument to be compared with {@code T}
-     * @return iterable collection of difference entries {@link Iterable}
+     * @param value - initial input argument value {@code T}
+     * @return true - if initial value matches input argument, false - otherwise
      */
-    <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last);
+    default boolean matches(final T value) {
+        return matchesSafe(value);
+    }
+
+    /**
+     * Returns binary flag depending on initial argument value by type safe comparison
+     *
+     * @param value - initial input argument value {@code T}
+     * @return true - if initial value matches input argument, false - otherwise
+     */
+    boolean matchesSafe(final T value);
 }

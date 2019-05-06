@@ -27,6 +27,9 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.function.Function;
 
 /**
@@ -54,6 +57,42 @@ public class StringUtils {
      * Default quotes wrapper {@link Function}
      */
     public static final Function<Object, String> wrapInQuotes = s -> "\" " + s + " \"";
+    /**
+     * Default numeric pattern format
+     */
+    public static final String DEFAULT_FORMAT_PATTERN = "#.##";
+
+    /**
+     * Default decimal format instance {@link DecimalFormat}
+     */
+    public static final ThreadLocal<DecimalFormat> DECIMAL_FORMATTER = ThreadLocal.withInitial(() -> {
+        final DecimalFormatSymbols decimalSymbols = DecimalFormatSymbols.getInstance();
+        decimalSymbols.setDecimalSeparator('.');
+        return new DecimalFormat(DEFAULT_FORMAT_PATTERN, decimalSymbols);
+    });
+
+    /**
+     * Returns {@link String} message by default {@link Locale} instance, initial string message {@link String} and array of arguments
+     *
+     * @param message - initial input raw string message {@link String}
+     * @param args    - initial input array of arguments
+     * @return localized string message {@link String}
+     */
+    public static String formatMessage(final String message, final Object... args) {
+        return formatMessage(Locale.getDefault(), message, args);
+    }
+
+    /**
+     * Returns formatted string message {@link String} by initial input {@link Locale} instance, string message {@link String} and array of arguments
+     *
+     * @param locale  - initial input {@link Locale} instance
+     * @param message - initial input raw string message {@link String}
+     * @param args    - initial input array of arguments
+     * @return formatted string message {@link String}
+     */
+    public static String formatMessage(@NonNull final Locale locale, final String message, final Object... args) {
+        return String.format(locale, message, args);
+    }
 
     /**
      * Returns string value {@link String} with replaced values by pattern

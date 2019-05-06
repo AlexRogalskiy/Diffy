@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.PropertyInfo;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.PropertyInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

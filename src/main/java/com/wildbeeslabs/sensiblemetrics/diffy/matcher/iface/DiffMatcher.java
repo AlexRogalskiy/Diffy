@@ -21,22 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.property;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
+
+import java.io.Serializable;
 
 /**
- * Tokenizes property accessor names to an array of simple property names according to the JavaBeans convention
+ * Difference matcher interface declaration
+ *
+ * @param <T> type of input element to be matched by operation
+ * @author Alexander Rogalskiy
+ * @version 1.1
+ * @since 1.0
  */
 @FunctionalInterface
-public interface NamingTokenizer {
+public interface DiffMatcher<T> extends Serializable {
 
     /**
-     * Tokenized property name by input property name {@link String} and type {@code NameableType}
+     * Returns iterable collection of difference match entries {@link Iterable} by initial arguments {@code T} match comparison
      *
-     * @param name         - initial input name to be tokenized {@link String}
-     * @param nameableType - initial input property nameable type {@code NameableType}
-     * @return tokenized property name array of {@link String}
+     * @param value - initial input argument to be matched by {@code T}
+     * @return iterable collection of difference match entries {@link Iterable}
      */
-    String[] tokenize(final String name, final NameableType nameableType);
+    <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatches(final T value);
 }

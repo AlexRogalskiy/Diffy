@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
 import lombok.Data;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.property;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
 

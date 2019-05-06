@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.factory;
 
 import com.google.common.collect.ImmutableMap;
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortOrderComparator;

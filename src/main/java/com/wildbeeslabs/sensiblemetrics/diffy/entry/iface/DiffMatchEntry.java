@@ -21,38 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry;
+package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
+
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
 
 import java.io.Serializable;
 
 /**
- * Difference entry declaration
+ * Difference match entry declaration
  *
- * @param <T> type of element to be stored by entry
+ * @param <T> type of element to be stored by match entry
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public interface DiffEntry<T> extends Serializable {
+public interface DiffMatchEntry<T> extends Serializable {
 
     /**
-     * Returns property name {@link String} to compare by
+     * Returns match description {@link MatchDescription}
      *
-     * @return property name {@link String}
+     * @return match description {@link MatchDescription}
      */
-    String getPropertyName();
+    MatchDescription getDescription();
 
     /**
-     * Returns property value {@code T} of first argument
-     *
-     * @return property value {@code T}
-     */
-    T getFirst();
-
-    /**
-     * Returns property value {@code T} of last argument
+     * Returns property value {@code T} to be matched
      *
      * @return property value {@code T}
      */
-    T getLast();
+    T getValue();
 }

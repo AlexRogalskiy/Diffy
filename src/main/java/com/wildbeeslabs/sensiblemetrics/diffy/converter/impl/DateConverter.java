@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

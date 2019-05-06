@@ -19,11 +19,11 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires com.fasterxml.classmate;
 
     // Comparator exports
-    exports com.wildbeeslabs.sensiblemetrics.diffy.comparator;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
     // Converter exports
-    exports com.wildbeeslabs.sensiblemetrics.diffy.converter;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
     // Matcher exports
-    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
     // Entry exports
-    exports com.wildbeeslabs.sensiblemetrics.diffy.entry;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 }

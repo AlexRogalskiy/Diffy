@@ -27,6 +27,8 @@ import com.google.common.collect.Lists;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffMatcherFactory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils;

@@ -26,6 +26,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.IllegalAccessException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.MethodInvocationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.PropertyAccessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -133,8 +136,8 @@ public class ReflectionUtils {
     /**
      * Returns initialized instance by input argument class instance {@link Class}
      *
-     * @param clazz - input argument class instance {@link Class}
      * @param <T>   type of input class instance
+     * @param clazz - input argument class instance {@link Class}
      * @return initialized instance by class {@link Class}
      */
     @Nullable
@@ -146,17 +149,15 @@ public class ReflectionUtils {
         try {
             constructor = clazz.getDeclaredConstructor();
         } catch (final NoSuchMethodException e) {
-            log.error("ERROR: missing default constructor for type {}. Assuming standard default values for primitive properties.", clazz.getName());
+            BadOperationException.throwBadOperation(String.format("ERROR: missing default constructor for class: {%s}", clazz.getName()), e);
             return null;
         }
-        final boolean accessibility = constructor.trySetAccessible();
         try {
             constructor.setAccessible(true);
             return constructor.newInstance();
-        } catch (final Exception e) {
-            throw new BadOperationException(e);
-        } finally {
-            constructor.setAccessible(accessibility);
+        } catch (Exception e) {
+            BadOperationException.throwBadOperation(String.format("ERROR: cannot create instance by class: {%s}", clazz), e);
+            return null;
         }
     }
 
@@ -195,7 +196,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns property value of an object argument by name {@link String}
+     * Returns property value of an object {@code T} by name {@link String}
      *
      * @param <T>          type of input element to get property value from
      * @param value        - initial argument to get property value from
@@ -206,11 +207,12 @@ public class ReflectionUtils {
     public static <T> T getProperty(final T value, final String propertyName, final Class<? extends T> clazz) {
         try {
             return castSafe(BeanUtils.getProperty(value, propertyName), clazz);
-        } catch (IllegalAccessException ex) {
-            throw new BadOperationException(String.format("ERROR: cannot access property = {%s}, argument: {%s}, message = {%s}", propertyName, value, ex.getMessage()));
-        } catch (InvocationTargetException | NoSuchMethodException ex) {
-            throw new BadOperationException(String.format("ERROR: cannot get value of property = {%s}, argument: {%s}, message = {%s}", propertyName, value, ex.getMessage()));
+        } catch (java.lang.IllegalAccessException e) {
+            PropertyAccessException.throwIllegalAccess(propertyName, value, e);
+        } catch (InvocationTargetException | NoSuchMethodException e) {
+            PropertyAccessException.throwIllegalAccess(propertyName, value, e);
         }
+        return null;
     }
 
     /**
@@ -239,7 +241,8 @@ public class ReflectionUtils {
         if (member instanceof Method) {
             return ((Method) member).getGenericReturnType();
         }
-        throw new IllegalArgumentException(String.format("ERROR: no such class member = {%s}, neither a field nor a method", member));
+        IllegalAccessException.throwIllegalAccess(String.format("ERROR: no such class member = {%s}, neither a field nor a method", member));
+        return null;
     }
 
     /**
@@ -427,8 +430,9 @@ public class ReflectionUtils {
             final Method m = target.getClass().getMethod(getterName);
             return m.invoke(target);
         } catch (Exception e) {
-            throw new BadOperationException(String.format("ERROR: cannot invoke getter={%s} for target={%s}, message={%s}", getterName, target, e.getMessage()));
+            MethodInvocationException.throwMethodInvocation(getterName, target, e);
         }
+        return null;
     }
 
     /**
@@ -492,7 +496,8 @@ public class ReflectionUtils {
         } else if (javaType instanceof Class) {
             return (Class) javaType;
         }
-        throw new BadOperationException(String.format("ERROR: cannot get class by type={%s}", javaType));
+        IllegalAccessException.throwIllegalAccess(String.format("ERROR: cannot get class by type: {%s}", javaType));
+        return null;
     }
 
     /**
@@ -687,17 +692,16 @@ public class ReflectionUtils {
             Collections.sort(Optional.ofNullable(list).orElseGet(Collections::emptyList),
                 (e1, e2) -> {
                     try {
-                        final Comparable val1 = (Comparable) getter.invoke(e1);
-                        final Comparable val2 = (Comparable) getter.invoke(e2);
+                        final Comparable<Object> val1 = (Comparable<Object>) getter.invoke(e1);
+                        final Comparable<Object> val2 = (Comparable<Object>) getter.invoke(e2);
                         return val1.compareTo(val2);
                     } catch (Exception e) {
-                        String errorMessage = String.format("ERROR: cannot invoke getter method = {%s} on field = {%s}", getter.getName(), field);
-                        log.error(errorMessage);
-                        throw new BadOperationException(errorMessage, e);
+                        BadOperationException.throwBadOperation(String.format("ERROR: cannot invoke getter method = {%s} on field = {%s}", getter.getName(), field), e);
                     }
+                    return 0;
                 });
         } else {
-            throw new IllegalArgumentException(String.format("ERROR: cannot compare list = {%s} by field = {%s} of type = {%s}", org.apache.commons.lang3.StringUtils.join(list, "|"), field, returnType.getName()));
+            BadOperationException.throwBadOperation(String.format("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", org.apache.commons.lang3.StringUtils.join(list, "|"), field, returnType.getName()));
         }
         return list;
     }
@@ -740,7 +744,8 @@ public class ReflectionUtils {
                     return getParameterType(methodOptional.get());
                 }
             }
-            throw new BadOperationException(String.format("ERROR: cannot determine correct type for method={%s}", getMethodName()));
+            BadOperationException.throwBadOperation(String.format("ERROR: cannot determine correct type for method={%s}", getMethodName()));
+            return null;
         }
 
         /**

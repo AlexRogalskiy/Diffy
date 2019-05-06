@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.EntryView;
 import lombok.*;
 

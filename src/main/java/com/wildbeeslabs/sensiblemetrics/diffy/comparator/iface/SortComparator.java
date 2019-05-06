@@ -21,23 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.property;
+package com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
+
+import java.io.Serializable;
+import java.util.Comparator;
 
 /**
- * Determines properties to be eligible for matching based on their name
+ * Sort comparator declaration
+ *
+ * @param <T> type of input element to be compared by operation
+ * @author Alexander Rogalskiy
+ * @version 1.1
+ * @since 1.0
  */
 @FunctionalInterface
-public interface NamingPredicate {
+public interface SortComparator<T> extends Serializable {
 
     /**
-     * Returns true if the naming convention applies to the property name {@link String} and
-     * type {@code PropertyType}, otherwise returns false.
+     * Returns comparator instance {@link Comparator} by input sort manager instance {@link SortManager}
      *
-     * @param propertyName - initial input property name {@link String}
-     * @param propertyType - initial input property type {@code PropertyType}
-     * @return true - if the naming convention applies to the property name and type, false - otherwise
+     * @param sortManager - initial input sort manager {@link SortManager}
+     * @return comparator instance {@link Comparator}
      */
-    boolean apply(final String propertyName, final PropertyType propertyType);
+    Comparator<? super T> getComparator(final SortManager sortManager);
 }

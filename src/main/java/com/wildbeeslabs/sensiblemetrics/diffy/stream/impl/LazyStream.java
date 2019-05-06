@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.stream.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.stream.Streamable;
+import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
 import lombok.*;
 
 import java.util.Iterator;

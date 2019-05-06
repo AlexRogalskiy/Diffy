@@ -21,39 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
-
-import java.io.Serializable;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
 
 /**
- * Matcher interface declaration by input object instance
- *
- * @param <T> type of input element to be matched by operation
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Determines properties to be eligible for matching based on their name
  */
 @FunctionalInterface
-public interface Matcher<T> extends Serializable {
+public interface NamingPredicate {
 
     /**
-     * Returns binary flag by initial argument match comparison
+     * Returns true if the naming convention applies to the property name {@link String} and
+     * type {@code PropertyType}, otherwise returns false.
      *
-     * @param value - initial input argument value to be matched {@code T}
-     * @return true - if initial value matches input argument, false - otherwise
+     * @param propertyName - initial input property name {@link String}
+     * @param propertyType - initial input property type {@code PropertyType}
+     * @return true - if the naming convention applies to the property name and type, false - otherwise
      */
-    boolean matches(final T value);
-
-    /**
-     * Returns default matcher description {@link MatchDescription}
-     *
-     * @return matcher description {@link MatchDescription}
-     */
-    default MatchDescription getDescription() {
-        return DEFAULT_EMPTY_MATCH_DESCRIPTION;
-    }
+    boolean apply(final String propertyName, final PropertyType propertyType);
 }

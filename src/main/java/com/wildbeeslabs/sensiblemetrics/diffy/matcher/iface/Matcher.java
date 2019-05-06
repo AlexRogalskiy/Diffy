@@ -21,14 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.DiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
 
 import java.io.Serializable;
+import java.util.Objects;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
 
 /**
- * Difference matcher interface declaration
+ * Matcher interface declaration by input object instance
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -36,13 +39,34 @@ import java.io.Serializable;
  * @since 1.0
  */
 @FunctionalInterface
-public interface DiffMatcher<T> extends Serializable {
+public interface Matcher<T> extends Serializable {
 
     /**
-     * Returns iterable collection of difference match entries {@link Iterable} by initial arguments {@code T} match comparison
+     * Returns binary flag by initial argument match comparison
      *
-     * @param value - initial input argument to be matched by {@code T}
-     * @return iterable collection of difference match entries {@link Iterable}
+     * @param value - initial input argument value to be matched {@code T}
+     * @return true - if initial value matches input argument, false - otherwise
      */
-    <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatches(final T value);
+    boolean matches(final T value);
+
+    /**
+     * Returns default matcher description {@link MatchDescription}
+     *
+     * @return matcher description {@link MatchDescription}
+     */
+    default MatchDescription getDescription() {
+        return DEFAULT_EMPTY_MATCH_DESCRIPTION;
+    }
+
+    /**
+     * Returns composed {@code Matcher} instance
+     *
+     * @param after - initial input {@link Matcher} instance to perform operation by
+     * @return composed {@code Matcher} instance
+     * @throws NullPointerException if {@code after} is null
+     */
+    default Matcher<T> andThen(final Matcher<? super T> after) {
+        Objects.requireNonNull(after);
+        return (final T t) -> matches(t) && after.matches(t);
+    }
 }

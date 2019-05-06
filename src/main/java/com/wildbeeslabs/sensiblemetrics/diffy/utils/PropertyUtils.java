@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.NamingPredicate;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.NamingTokenizer;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.NamingTransformer;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingPredicate;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTokenizer;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTransformer;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
 import lombok.experimental.UtilityClass;
