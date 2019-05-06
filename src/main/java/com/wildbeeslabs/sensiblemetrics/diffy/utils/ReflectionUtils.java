@@ -241,7 +241,7 @@ public class ReflectionUtils {
         if (member instanceof Method) {
             return ((Method) member).getGenericReturnType();
         }
-        IllegalAccessException.throwIllegalAccess(String.format("ERROR: no such class member = {%s}, neither a field nor a method", member));
+        IllegalAccessException.throwInvalidAccess(String.format("ERROR: no such class member = {%s}, neither a field nor a method", member));
         return null;
     }
 
@@ -496,7 +496,7 @@ public class ReflectionUtils {
         } else if (javaType instanceof Class) {
             return (Class) javaType;
         }
-        IllegalAccessException.throwIllegalAccess(String.format("ERROR: cannot get class by type: {%s}", javaType));
+        IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot get class by type: {%s}", javaType));
         return null;
     }
 

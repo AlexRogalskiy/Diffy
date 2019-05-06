@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
 
+import javax.annotation.Nullable;
+
 /**
  * Custom converter interface declaration
  *
@@ -41,5 +43,6 @@ public interface Converter<T, R> {
      * @param value - initial input argument value {@code T}
      * @return converted value {@code R}
      */
+    @Nullable
     R convert(final T value);
 }

@@ -27,7 +27,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultDiffMatcher;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
@@ -38,7 +37,6 @@ import java.util.Arrays;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @UtilityClass
 public class DefaultDiffMatcherFactory {
 

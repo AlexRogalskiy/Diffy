@@ -39,11 +39,11 @@ import java.io.Serializable;
 public interface DiffComparator<T> extends Serializable {
 
     /**
-     * Returns iterable collection of difference entries {@link Iterable} with properties marked by initial arguments comparison
+     * Returns {@link Iterable} collection of {@link DiffEntry} by initial arguments comparison {@code T}
      *
      * @param first - initial first argument to be compared by {@code T}
      * @param last  - initial last argument to be compared with {@code T}
-     * @return iterable collection of difference entries {@link Iterable}
+     * @return {@link Iterable} collection of {@link DiffEntry}
      */
     <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last);
 }

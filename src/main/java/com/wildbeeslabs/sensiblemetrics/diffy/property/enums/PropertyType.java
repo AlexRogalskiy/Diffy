@@ -38,5 +38,20 @@ public enum PropertyType {
     /**
      * Default property name
      */
-    GENERIC
+    GENERIC;
+
+    /**
+     * Returns {@link PropertyType} instance by input property type value {@link String}
+     *
+     * @param propertyType - initial input property type value {@link String}
+     * @return {@link PropertyType} instance
+     */
+    public static PropertyType forType(final String propertyType) {
+        for (final PropertyType type : values()) {
+            if (type.equals(propertyType)) {
+                return type;
+            }
+        }
+        return null;
+    }
 }

@@ -1,4 +1,4 @@
 /**
- * Diffy API package file
+ * Diffy API package info
  */
 package com.wildbeeslabs.sensiblemetrics.diffy;

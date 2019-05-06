@@ -37,17 +37,17 @@ import lombok.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public class EntryView {
+public class DefaultDiffEntryView {
 
     /**
-     * Default entry view {@link External}
+     * Default {@link External} entry view
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class External {
     }
 
     /**
-     * Default entry view {@link Internal}
+     * Default {@link Internal} entry view
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Internal extends External {

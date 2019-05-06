@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
 
 /**
@@ -47,6 +48,7 @@ public interface DiffEntry<T> extends Serializable {
      *
      * @return property value {@code T}
      */
+    @Nullable
     T getFirst();
 
     /**
@@ -54,5 +56,6 @@ public interface DiffEntry<T> extends Serializable {
      *
      * @return property value {@code T}
      */
+    @Nullable
     T getLast();
 }

@@ -35,7 +35,7 @@ public interface NamingTransformer {
      * Transforms property name by input name {@link String} and type {@code NameableType}
      *
      * @param name         - initial input name {@link String}
-     * @param nameableType - initial input property nameable type {@code NameableType}
+     * @param nameableType - initial input {@link NameableType} instance
      * @return transformed property name {@link String}
      */
     String transform(final String name, final NameableType nameableType);

@@ -35,7 +35,7 @@ public class IllegalAccessException extends RuntimeException {
      * @param message - initial input raw message {@link String}
      * @return {@link IllegalAccessException} instance
      */
-    public static final IllegalAccessException throwIllegalAccess(final String message) {
+    public static final IllegalAccessException throwInvalidAccess(final String message) {
         throw new IllegalAccessException(message);
     }
 
@@ -46,7 +46,7 @@ public class IllegalAccessException extends RuntimeException {
      * @param throwable - initial input cause instance {@link Throwable}
      * @return {@link IllegalAccessException} instance
      */
-    public static final IllegalAccessException throwIllegalAccess(final String message, final Throwable throwable) {
+    public static final IllegalAccessException throwInvalidAccess(final String message, final Throwable throwable) {
         throw new IllegalAccessException(message, throwable);
     }
 }

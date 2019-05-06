@@ -23,10 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.EntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DefaultDiffEntryView;
 import lombok.*;
 
 /**
@@ -52,18 +53,21 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
     /**
      * Default entry id {@link String}
      */
-    @JsonView(EntryView.Internal.class)
+    @JsonView(DefaultDiffEntryView.Internal.class)
+    @JsonProperty("id")
     private String id;
 
     /**
      * Default match description {@link MatchDescription}
      */
-    @JsonView(EntryView.External.class)
+    @JsonView(DefaultDiffEntryView.External.class)
+    @JsonProperty("description")
     private MatchDescription description;
 
     /**
      * Default property value to be matched {@link Object}
      */
-    @JsonView(EntryView.External.class)
+    @JsonView(DefaultDiffEntryView.External.class)
+    @JsonProperty("value")
     private transient Object value;
 }

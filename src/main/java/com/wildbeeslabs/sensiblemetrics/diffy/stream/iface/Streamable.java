@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Custom {@link Streamable} interface declaration by {@link Iterable}, {@link Supplier}
+ * {@link Streamable} interface declaration {@link Iterable}, {@link Supplier}
  */
 @FunctionalInterface
 public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
@@ -43,7 +43,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     /**
      * Returns an empty {@link Streamable} instance
      *
-     * @return empty streamable instance {@link Streamable} of values {@code T}
+     * @return empty {@link Streamable} of values {@code T}
      */
     default <T> Streamable<T> empty() {
         return Collections::emptyIterator;
@@ -53,7 +53,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * Returns a {@link Streamable} with the given elements {@code T}
      *
      * @param values the elements to be returned {@code T}
-     * @return streamable instance {@link Streamable} of values {@code T}
+     * @return {@link Streamable} of values {@code T}
      */
     default <T> Streamable<T> of(final T... values) {
         return () -> Arrays.asList(values).iterator();
@@ -63,7 +63,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * Returns a {@link Streamable} for the given {@link Iterable} instance
      *
      * @param iterable - initial input iterable collection {@link Iterable}
-     * @return streamable instance {@link Streamable}
+     * @return {@link Streamable} of values {@code T}
      */
     default <T> Streamable<T> of(final Iterable<T> iterable) {
         Objects.requireNonNull(iterable, "Iterable must not be null!");
@@ -75,7 +75,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      *
      * @param <T>
      * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
-     * @return streamable instance {@link Streamable} of values {@code T}
+     * @return {@link Streamable} of values {@code T}
      */
     default <T> Streamable<T> of(final Supplier<? extends Stream<T>> supplier) {
         return LazyStream.from(supplier);
@@ -94,7 +94,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * Returns a new {@link Streamable} that will apply the given {@link Function} to the current one.
      *
      * @param mapper - initial input mapper instance {@link Function}
-     * @return streamable instance {@link Streamable} of values {@code T}
+     * @return {@link Streamable} of values {@code T}
      * @see Stream#map(Function)
      */
     default <R> Streamable<R> map(final Function<? super T, ? extends R> mapper) {
@@ -118,7 +118,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * Returns a new {@link Streamable} instance that will apply the given filter {@link Predicate} to the current one.
      *
      * @param predicate - initial input predicate instance {@link Predicate}
-     * @return streamable instance {@link Streamable} of values {@code T}
+     * @return {@link Streamable} of values {@code T}
      * @see Stream#filter(Predicate) of values {@code T}
      */
     default Streamable<T> filter(final Predicate<? super T> predicate) {
@@ -139,7 +139,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * Creates a new {@link Streamable} instance from the current supplier {@link Supplier} and the given {@link Stream} concatenated.
      *
      * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
-     * @return streamable instance {@link Streamable} of values {@code T}
+     * @return {@link Streamable} of values {@code T}
      */
     default Streamable<T> and(final Supplier<? extends Stream<? extends T>> supplier) {
         Objects.requireNonNull(supplier, "Supplier must not be null!");

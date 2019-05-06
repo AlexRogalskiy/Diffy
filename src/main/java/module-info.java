@@ -1,5 +1,5 @@
 /**
- * Diffy API module configuration file
+ * Diffy API module info
  */
 open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires static lombok;
@@ -18,12 +18,12 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires java.desktop;
     requires com.fasterxml.classmate;
 
-    // Comparator exports
+    // comparator interface exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
-    // Converter exports
+    // converter interface exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
-    // Matcher exports
+    // matcher interface exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
-    // Entry exports
+    // entry interface exports
     exports com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 }

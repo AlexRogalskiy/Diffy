@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.description.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

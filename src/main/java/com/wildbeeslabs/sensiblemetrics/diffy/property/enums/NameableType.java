@@ -45,7 +45,10 @@ public enum NameableType {
     GENERIC;
 
     /**
-     * Returns a NameableType for the corresponding {@code propertyType}, else {@link #CLASS}.
+     * Returns {@link NameableType} for corresponding {@link PropertyType} instance, else {@link #CLASS}
+     *
+     * @param propertyType - initial input {@link PropertyType} instance
+     * @return {@link NameableType} instance
      */
     public static NameableType forPropertyType(final PropertyType propertyType) {
         if (PropertyType.FIELD.equals(propertyType)) {

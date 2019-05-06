@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.NullPriority.NATIVE;
 
 /**
- * Default sort {@link Streamable} manager
+ * Default {@link Streamable} sort manager implementation
  */
 @Data
 @EqualsAndHashCode
@@ -74,7 +74,6 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      */
     public SortManager(final List<SortOrder> orders) {
         Objects.requireNonNull(orders, "Orders must not be null!");
-
         this.orders = Collections.unmodifiableList(orders);
     }
 
@@ -94,7 +93,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @param properties must not be {@literal null}, empty or contain {@literal null} or empty strings.
      */
     public SortManager(final SortDirection direction, final String... properties) {
-        this(direction, properties == null ? new ArrayList<>() : Arrays.asList(properties));
+        this(direction, Objects.isNull(properties) ? new ArrayList<>() : Arrays.asList(properties));
     }
 
     /**
@@ -157,7 +156,6 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
         Objects.requireNonNull(direction, "SortDirection must not be null!");
         Objects.requireNonNull(properties, "Properties must not be null!");
         Objects.requireNonNull(properties.length > 0, "At least one property must be given!");
-
         return SortManager.by(Arrays.stream(properties)
             .map(it -> new SortOrder(direction, it))
             .collect(Collectors.toList()));
@@ -411,9 +409,21 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          */
         private static final NullPriority DEFAULT_NULL_HANDLING = NATIVE;
 
+        /**
+         * {@link SortDirection} instance
+         */
         private final SortDirection direction;
+        /**
+         * Property name
+         */
         private final String property;
+        /**
+         * Ignore case binary flag
+         */
         private final boolean ignoreCase;
+        /**
+         * {@link NullPriority} instance
+         */
         private final NullPriority nullPriority;
 
         /**
@@ -586,7 +596,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * @return sort order instance {@link SortOrder}
          */
         public SortOrder nullsNative() {
-            return with(NATIVE);
+            return with(NullPriority.NATIVE);
         }
     }
 }

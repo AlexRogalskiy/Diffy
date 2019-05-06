@@ -23,12 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
+import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
 
 /**
  * Matcher interface declaration by input object instance

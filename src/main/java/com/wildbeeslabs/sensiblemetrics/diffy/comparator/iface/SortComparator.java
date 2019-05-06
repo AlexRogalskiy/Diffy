@@ -40,10 +40,10 @@ import java.util.Comparator;
 public interface SortComparator<T> extends Serializable {
 
     /**
-     * Returns comparator instance {@link Comparator} by input sort manager instance {@link SortManager}
+     * Returns {@link Comparator} by input {@link SortManager} instance
      *
-     * @param sortManager - initial input sort manager {@link SortManager}
-     * @return comparator instance {@link Comparator}
+     * @param sortManager - initial input {@link SortManager} instance
+     * @return {@link Comparator} instance
      */
     Comparator<? super T> getComparator(final SortManager sortManager);
 }

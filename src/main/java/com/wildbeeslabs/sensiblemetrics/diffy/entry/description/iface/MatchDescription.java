@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.description;
+package com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

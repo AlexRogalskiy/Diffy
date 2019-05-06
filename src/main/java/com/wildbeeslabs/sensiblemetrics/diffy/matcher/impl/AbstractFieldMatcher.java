@@ -52,7 +52,7 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
     private static final long serialVersionUID = 1150403660115920086L;
 
     /**
-     * Default method type instance
+     * Default reflection method type instance
      */
     private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("valueOf", 1, 0);
     /**

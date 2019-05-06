@@ -23,8 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
 
 /**
@@ -49,5 +50,6 @@ public interface DiffMatchEntry<T> extends Serializable {
      *
      * @return property value {@code T}
      */
+    @Nullable
     T getValue();
 }

@@ -23,12 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.PropertyInfo;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.IllegalAccessException;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.PropertyInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -40,28 +40,56 @@ import java.util.Objects;
 /**
  * Abstract {@link PropertyInfo} implementation
  */
-@Slf4j
 @Data
 @EqualsAndHashCode
 @ToString
 public abstract class AbstractPropertyInfo<M extends Member> implements PropertyInfo {
 
+    /**
+     * Default initial {@link Class} type
+     */
     protected final Class<?> initialType;
+    /**
+     * Default {@link Member} member type
+     */
     protected final M member;
+    /**
+     * Default {@link Class} type
+     */
     protected final Class<?> type;
+    /**
+     * Default property name
+     */
     protected final String name;
+    /**
+     * Default {@link PropertyType} instance
+     */
     protected final PropertyType propertyType;
 
     /**
-     * Default abstract {@link Method} property info implementation
+     * Default {@link AbstractPropertyInfo} implementation
      */
     public static abstract class AbstractMethodInfo extends AbstractPropertyInfo<Method> {
 
+        /**
+         * Private abstract method info constructor by input arguments
+         *
+         * @param initialType - initial input {@link Class} instance
+         * @param method      - - initial input {@link Method} instance
+         * @param name        - initial input method name value
+         */
         private AbstractMethodInfo(final Class<?> initialType, final Method method, final String name) {
             super(initialType, method, PropertyType.METHOD, name);
             method.setAccessible(true);
         }
 
+        /**
+         * Returns {@code T} annotation by input annotation {@link Class}
+         *
+         * @param <T>
+         * @param annotationClass - initial input annotation {@link Class}
+         * @return {@code T} annotation
+         */
         @Override
         public <T extends Annotation> T getAnnotation(final Class<T> annotationClass) {
             return member.getAnnotation(annotationClass);
@@ -69,7 +97,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
     }
 
     /**
-     * Default {@link Field} property info implementation
+     * Default {@link AbstractPropertyInfo} implementation
      */
     public static class FieldPropertyInfo extends AbstractPropertyInfo<Field> {
 
@@ -85,36 +113,60 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
             field.setAccessible(true);
         }
 
+        /**
+         * Returns {@code T} annotation by input annotation {@link Class}
+         *
+         * @param <T>
+         * @param annotationClass - initial input annotation {@link Class}
+         * @return {@code T} annotation
+         */
         @Override
         public <T extends Annotation> T getAnnotation(final Class<T> annotationClass) {
-            return member.getAnnotation(annotationClass);
+            return this.member.getAnnotation(annotationClass);
         }
 
+        /**
+         * Returns {@link Field} generic parameter {@link Type}
+         *
+         * @return {@link Field} generic parameter {@link Type}
+         */
         @Override
         public Type getGenericType() {
-            return member.getGenericType();
+            return this.member.getGenericType();
         }
 
+        /**
+         * Returns {@link Field} value on target {@link Object}
+         *
+         * @param subject - initial input target to get field from {@link Object}
+         * @return updated {@link Object}
+         */
         public Object getValue(final Object subject) {
             try {
-                return member.get(subject);
+                return this.member.get(subject);
             } catch (Exception e) {
-                log.error("ERROR: cannot get member={%s} of type={%s}, message={%s}", subject, member, e.getMessage());
+                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot get member: {%s} of type: {%s}", subject, this.member), e);
             }
             return null;
         }
 
+        /**
+         * Updates {@link Field} instance on target {@link Object} by new value {@link Object}
+         *
+         * @param subject - initial input target {@link Object} to update
+         * @param value   - initial input value {@link Object} to set
+         */
         public void setValue(final Object subject, final Object value) {
             try {
-                member.set(subject, value);
+                this.member.set(subject, value);
             } catch (Exception e) {
-                log.error("ERROR: cannot set value={%s} for member={%s} of type={%s}, message={%s}", value, subject, member, e.getMessage());
+                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot set value: {%s} for member: {%s} of type: {%s}", value, subject, this.member), e);
             }
         }
     }
 
     /**
-     * Default method accessor implementation
+     * Default {@link AbstractMethodInfo} implementation
      */
     public static class MethodGetterAccessor extends AbstractMethodInfo {
 
@@ -129,23 +181,34 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
             super(initialType, method, name);
         }
 
+        /**
+         * Returns {@link Method} generic parameter {@link Type}
+         *
+         * @return {@link Method} generic parameter {@link Type}
+         */
         @Override
         public Type getGenericType() {
-            return member.getGenericReturnType();
+            return this.member.getGenericReturnType();
         }
 
+        /**
+         * Returns result set by {@link Method} on target {@link Object}
+         *
+         * @param subject - initial input target {@link Object} to get result set from
+         * @return method result set {@link Object}
+         */
         public Object getValue(final Object subject) {
             try {
-                return member.invoke(subject);
+                return this.member.invoke(subject);
             } catch (Exception e) {
-                log.error("ERROR: cannot get member={%s} of type={%s}, message={%s}", subject, member, e.getMessage());
+                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot get member: {%s} of type: {%s}", subject, this.member), e);
             }
             return null;
         }
     }
 
     /**
-     * Default method setter implementation
+     * Default {@link AbstractMethodInfo} implementation
      */
     public static class MethodSetterAccessor extends AbstractMethodInfo {
 
@@ -160,26 +223,45 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
             super(initialType, method, name);
         }
 
+        /**
+         * Returns {@link Method} generic parameter {@link Type}
+         *
+         * @return {@link Method} generic parameter {@link Type}
+         */
         @Override
         public Type getGenericType() {
-            return member.getGenericParameterTypes()[0];
+            return this.member.getGenericParameterTypes()[0];
         }
 
+        /**
+         * Updates target {@link Object} by new value {@link Object}
+         *
+         * @param subject - initial input target {@link Object} to update
+         * @param value   - initial input value {@link Object} to set
+         */
         public void setValue(final Object subject, final Object value) {
             try {
-                member.invoke(subject, value);
+                this.member.invoke(subject, value);
             } catch (Exception e) {
-                log.error("ERROR: cannot set value={%s} for member={%s} of type={%s}, message={%s}", value, subject, member, e.getMessage());
+                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot set value={%s} for member={%s} of type={%s}, message={%s}", value, subject, this.member), e);
             }
         }
     }
 
+    /**
+     * Default private abstract property info constructor by input parameters
+     *
+     * @param initialType  - initial input {@link Class} type
+     * @param member       - initial input member {@code M} type
+     * @param propertyType - initial input {@link PropertyType} instance
+     * @param name         - initial input property name {@link String}
+     */
     private AbstractPropertyInfo(final Class<?> initialType, final M member, final PropertyType propertyType, final String name) {
         this.initialType = initialType;
         this.member = member;
         this.propertyType = propertyType;
 
-        final Type genericType = getGenericType();
+        final Type genericType = this.getGenericType();
         this.type = Objects.isNull(genericType) ? initialType : genericType.getClass();
         this.name = name;
     }

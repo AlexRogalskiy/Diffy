@@ -35,7 +35,7 @@ public interface NamingTokenizer {
      * Tokenized property name by input property name {@link String} and type {@code NameableType}
      *
      * @param name         - initial input name to be tokenized {@link String}
-     * @param nameableType - initial input property nameable type {@code NameableType}
+     * @param nameableType - initial input {@link NameableType} instance
      * @return tokenized property name array of {@link String}
      */
     String[] tokenize(final String name, final NameableType nameableType);

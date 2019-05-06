@@ -24,7 +24,10 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.stream.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
 import java.util.Iterator;
 import java.util.function.Supplier;
@@ -40,14 +43,14 @@ import java.util.stream.Stream;
 public class LazyStream<T> implements Streamable<T> {
 
     /**
-     * Default supplier stream instance {@link Supplier}
+     * Default {@link Supplier} instance
      */
     private final Supplier<? extends Stream<T>> stream;
 
     /**
-     * Returns default iterator instance {@link Iterator}
+     * Returns default {@link Iterator} instance
      *
-     * @return default iterator instance {@link Iterator}
+     * @return default {@link Iterator} instance
      */
     @Override
     public Iterator<T> iterator() {
@@ -55,12 +58,12 @@ public class LazyStream<T> implements Streamable<T> {
     }
 
     /**
-     * Returns default stream instance {@link Stream}
+     * Returns default {@link Stream} instance
      *
-     * @return default stream instance {@link Stream}
+     * @return default {@link Stream} instance
      */
     @Override
     public Stream<T> stream() {
-        return stream.get();
+        return this.stream.get();
     }
 }

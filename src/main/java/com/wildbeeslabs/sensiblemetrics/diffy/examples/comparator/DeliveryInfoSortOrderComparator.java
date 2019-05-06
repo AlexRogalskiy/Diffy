@@ -47,8 +47,8 @@ public class DeliveryInfoSortOrderComparator extends DefaultSortOrderComparator<
     /**
      * Default delivery info sort order comparator constructor with input comparator map {@link Map} and default comparator instance {@link Comparator}
      *
-     * @param comparatorMap     - initial input comparator map {@link Map}
-     * @param defaultComparator - initial input default comparator instance {@link Comparator}
+     * @param comparatorMap     - initial input comparator {@link Map}
+     * @param defaultComparator - initial input default {@link Comparator}
      */
     public DeliveryInfoSortOrderComparator(final Map<String, Comparator<? super DeliveryInfo>> comparatorMap, final Comparator<? super DeliveryInfo> defaultComparator) {
         super(comparatorMap, defaultComparator);

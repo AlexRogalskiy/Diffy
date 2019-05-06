@@ -71,7 +71,7 @@ public class DeliveryInfoFactory {
     /**
      * Default delivery info {@link DeliveryInfo} comparator map {@link Map}
      */
-    public static final Map<String, Comparator<? super DeliveryInfo>> comparatorMap = ImmutableMap.of(
+    public static final Map<String, Comparator<? super DeliveryInfo>> DEFAULT_COMPARATOR_MAP = ImmutableMap.of(
         "id", SORT_BY_ID,
         "gid", SORT_BY_GID,
         "status", SORT_BY_STATUS,
@@ -105,7 +105,7 @@ public class DeliveryInfoFactory {
      * @return delivery info sort order comparator {@link DeliveryInfoSortOrderComparator}
      */
     public static DeliveryInfoSortOrderComparator createDefaultSortOrderComparator() {
-        return createSortOrderComparator(comparatorMap, SORT_BY_ID);
+        return createSortOrderComparator(DEFAULT_COMPARATOR_MAP, SORT_BY_ID);
     }
 
     /**

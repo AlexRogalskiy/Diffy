@@ -40,7 +40,7 @@ public interface PropertyInfo {
      * @param <T>             annotation type
      * @param annotationClass to get annotation for
      */
-    <T extends Annotation> T getAnnotation(Class<T> annotationClass);
+    <T extends Annotation> T getAnnotation(final Class<T> annotationClass);
 
     /**
      * Returns the generic type represented by the property. For fields this will be the field's
