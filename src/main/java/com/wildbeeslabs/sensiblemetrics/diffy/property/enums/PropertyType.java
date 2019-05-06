@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
 /**
- * Property type implementation
+ * Property type enumeration
  */
 public enum PropertyType {
     /**

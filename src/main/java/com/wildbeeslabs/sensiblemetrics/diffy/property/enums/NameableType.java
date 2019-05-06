@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
 /**
- * Property nameable type implementation
+ * Nameable property type enumeration
  */
 public enum NameableType {
     /**

@@ -23,12 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.DeliveryInfoMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -95,15 +94,15 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         getDeliveryInfo().setType(5);
         getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
-        getDeliveryInfo().setCreatedAt(DateUtils.toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
         deliveryInfoMatcher = getDeliveryInfoMatcher(
             5,
             DEFAULT_GID_PREFIX,
-            DateUtils.toDate("17/06/2013", DEFAULT_DATE_FORMAT),
-            DateUtils.toDate("27/09/2018", DEFAULT_DATE_FORMAT)
+            toDate("17/06/2013", DEFAULT_DATE_FORMAT),
+            toDate("27/09/2018", DEFAULT_DATE_FORMAT)
         );
 
         // then
@@ -111,10 +110,31 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
+    @DisplayName("Test delivery info entity by custom delivery info chained matchers")
+    public void testDeliveryInfoByMatchers() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(deliveryInfoMatcher.andThen(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
     @DisplayName("Test delivery info entity by custom created/update date fields matcher")
     public void testDeliveryInfoByCustomDateMatcher() {
         // given
-        final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
+        final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
                 return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
@@ -124,15 +144,15 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
 
         // when
-        getDeliveryInfo().setCreatedAt(DateUtils.toDate("07/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("17/06/2018", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
         // then
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
 
         // when
-        getDeliveryInfo().setCreatedAt(DateUtils.toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(DateUtils.toDate("27/06/2018", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DEFAULT_DATE_FORMAT));
 
         // then
         assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
@@ -142,7 +162,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test delivery info entity by custom type field matcher")
     public void testDeliveryInfoByCustomTypeMatcher() {
         // given
-        final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
+        final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
                 return (1 == value.getType());
@@ -170,13 +190,13 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Integer DELIVERY_INFO_LOWER_TYPE_BOUND = 100;
         final Integer DELIVERY_INFO_UPPER_TYPE_BOUND = 1000;
 
-        final Matcher<? super String> gidMatcher = new AbstractTypeSafeMatcher<String>() {
+        final Matcher<? super String> gidMatcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final String value) {
                 return String.valueOf(value).substring(0, 4).equalsIgnoreCase(DEFAULT_GID_PREFIX);
             }
         };
-        final Matcher<? super Integer> typeMatcher = new AbstractTypeSafeMatcher<Integer>() {
+        final Matcher<? super Integer> typeMatcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final Integer value) {
                 return DELIVERY_INFO_LOWER_TYPE_BOUND < value && value < DELIVERY_INFO_UPPER_TYPE_BOUND;

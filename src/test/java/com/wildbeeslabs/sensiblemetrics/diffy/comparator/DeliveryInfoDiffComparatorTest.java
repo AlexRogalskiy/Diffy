@@ -25,13 +25,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffComparatorFactory;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
@@ -51,9 +51,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.now;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.getAllFields;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -620,10 +618,10 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void testCompareByDateFieldsAndComparators() {
         // given
         final List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
-        getDeliveryInfoFirst().setCreatedAt(DateUtils.toDate("07/06/2013 12:13:14", DEFAULT_DATETIME_FORMAT));
-        getDeliveryInfoFirst().setUpdatedAt(DateUtils.toDate("17/06/2018 14:13:12", DEFAULT_DATETIME_FORMAT));
-        getDeliveryInfoLast().setCreatedAt(DateUtils.toDate("01/05/2013 15:01:01", DEFAULT_DATETIME_FORMAT));
-        getDeliveryInfoLast().setUpdatedAt(DateUtils.toDate("17/07/2018 16:17:17", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoFirst().setCreatedAt(toDate("07/06/2013 12:13:14", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoFirst().setUpdatedAt(toDate("17/06/2018 14:13:12", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoLast().setCreatedAt(toDate("01/05/2013 15:01:01", DEFAULT_DATETIME_FORMAT));
+        getDeliveryInfoLast().setUpdatedAt(toDate("17/07/2018 16:17:17", DEFAULT_DATETIME_FORMAT));
 
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
         diffComparator.includeProperties(includedProperties);
@@ -669,8 +667,8 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         diffComparator.setComparator("createdAt", (Comparator<Date>) (d1, d2) -> Math.abs(d1.getTime() - d2.getTime()) <= DEFAULT_DIFFERENCE_DELTA ? 0 : d1.compareTo(d2));
 
         final LocalDate initialDate = DateUtils.now();
-        getDeliveryInfoFirst().setCreatedAt(DateUtils.toDate(initialDate));
-        getDeliveryInfoLast().setCreatedAt(DateUtils.toDate(initialDate.plus(1, ChronoUnit.DAYS)));
+        getDeliveryInfoFirst().setCreatedAt(toDate(initialDate));
+        getDeliveryInfoLast().setCreatedAt(toDate(initialDate.plus(1, ChronoUnit.DAYS)));
 
         // when
         Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
@@ -679,8 +677,8 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         // then
         assertThat(valueChangeList, is(empty()));
 
-        getDeliveryInfoFirst().setCreatedAt(DateUtils.toDate(initialDate));
-        getDeliveryInfoLast().setCreatedAt(DateUtils.toDate(initialDate.minus(2, ChronoUnit.DAYS)));
+        getDeliveryInfoFirst().setCreatedAt(toDate(initialDate));
+        getDeliveryInfoLast().setCreatedAt(toDate(initialDate.minus(2, ChronoUnit.DAYS)));
 
         // when
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
