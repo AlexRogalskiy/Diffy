@@ -80,7 +80,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by custom delivery info matcher")
-    public void testDeliveryInfoByMatcher() {
+    public void test_deliveryInfo_by_Matcher() {
         // when
         DeliveryInfoMatcher deliveryInfoMatcher = getDeliveryInfoMatcher(
             getIntMock().val(),
@@ -171,7 +171,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by custom created/update date fields matcher")
-    public void testDeliveryInfoByCustomDateMatcher() {
+    public void test_deliveryInfo_by_customDateMatcher() {
         // given
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<>() {
             @Override
@@ -199,7 +199,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by custom type field matcher")
-    public void testDeliveryInfoByCustomTypeMatcher() {
+    public void test_deliveryInfo_by_customTypeMatcher() {
         // given
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<>() {
             @Override
@@ -224,7 +224,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by custom gid/type fields matchers")
-    public void testDeliveryInfoListByCustomGidAndTypeMatcher() {
+    public void test_deliveryInfoList_by_customGidAndTypeMatcher() {
         // given
         final Integer DELIVERY_INFO_LOWER_TYPE_BOUND = 100;
         final Integer DELIVERY_INFO_UPPER_TYPE_BOUND = 1000;

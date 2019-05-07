@@ -55,16 +55,16 @@ import static net.andreinc.mockneat.unit.types.Ints.ints;
 public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
 
     /**
-     * Default address info list size
+     * Default number of {@link AddressInfo} items
      */
-    public static final int DEFAULT_ADDRESS_INFO_LIST_SIZE = 5;
+    public static final int DEFAULT_ADDRESS_INFO_COUNT = 5;
     /**
-     * Default delivery status {@link DeliveryInfo.DeliveryStatus} collection {@link List}
+     * Default {@link DeliveryInfo.DeliveryStatus} collection {@link List}
      */
     public static final List<DeliveryInfo.DeliveryStatus> DELIVERY_STATUS_LIST = Collections.unmodifiableList(Arrays.asList(DeliveryInfo.DeliveryStatus.values()));
 
     /**
-     * Default address info comparator instance {@link Comparator}
+     * Default address info {@link Comparator}
      */
     public static final Comparator<? super AddressInfo> DEFAULT_ADDRESS_INFO_COMPARATOR =
         Comparator.comparing(AddressInfo::getId)
@@ -74,15 +74,15 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .thenComparing(AddressInfo::getStateOrProvince)
             .thenComparing(AddressInfo::getStreet);
     /**
-     * Default address info list comparator instance {@link Comparator}
+     * Default address info list {@link Comparator}
      */
     public static final Comparator<? super List<AddressInfo>> DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR = ComparatorUtils.getIterableComparator(DEFAULT_ADDRESS_INFO_COMPARATOR, false);
     /**
-     * Default code array comparator instance {@link Comparator}
+     * Default code array {@link Comparator}
      */
     public static final Comparator<? super Integer[]> DEFAULT_CODE_COMPARATOR = new ComparatorUtils.DefaultNullSafeArrayComparator<>();
     /**
-     * Default delivery info comparator instance {@link Comparator}
+     * Default delivery info {@link Comparator}
      */
     public static final Comparator<? super DeliveryInfo> DEFAULT_DELIVERY_INFO_COMPARATOR =
         Comparator.comparing(DeliveryInfo::getId)
@@ -98,12 +98,12 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .thenComparing(DeliveryInfo::getAddresses, DEFAULT_ADDRESS_INFO_COLLECTION_COMPARATOR);
 
     /**
-     * Default delivery info mock unit instance {@link MockUnit}
+     * Default {@link DeliveryInfo} {@link MockUnit}
      *
-     * @return delivery info mock unit instance {@link MockUnit}
+     * @return {@link DeliveryInfo} {@link MockUnit}
      */
     protected MockUnit<DeliveryInfo> getDeliveryInfoMock() {
-        return getDeliveryInfoMock(DEFAULT_ADDRESS_INFO_LIST_SIZE);
+        return getDeliveryInfoMock(DEFAULT_ADDRESS_INFO_COUNT);
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      *
      * @return delivery info mock unit instance {@link MockUnit}
      */
-    protected MockUnit<DeliveryInfo> getDeliveryInfoMock(int addressListSize) {
+    protected MockUnit<DeliveryInfo> getDeliveryInfoMock(int addressInfoCount) {
         return filler(() -> new DeliveryInfo())
             .setter(DeliveryInfo::setId, getLongMock())
             .setter(DeliveryInfo::setType, getIntMock())
@@ -123,31 +123,31 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
             .setter(DeliveryInfo::setStatus, generateStatus())
             .setter(DeliveryInfo::setDiscount, generateDiscount(1.5, 20.5))
             .setter(DeliveryInfo::setCodes, generateInts(10, 100, 200))
-            .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressListSize));
+            .setter(DeliveryInfo::setAddresses, getAddressInfoMock().list(addressInfoCount));
     }
 
     /**
-     * Returns delivery info status mock unit instance {@link MockUnit}
+     * Returns {@link DeliveryInfo.DeliveryStatus} {@link MockUnit}
      *
-     * @return delivery info status mock unit instance {@link MockUnit}
+     * @return {@link DeliveryInfo.DeliveryStatus} {@link MockUnit}
      */
     protected MockUnit<DeliveryInfo.DeliveryStatus> generateStatus() {
         return ints().bound(DELIVERY_STATUS_LIST.size()).map(value -> DELIVERY_STATUS_LIST.get(value));
     }
 
     /**
-     * Returns delivery info discount mock unit instance {@link MockUnit} by initial input range (lower / upper bounds)
+     * Returns delivery info discount {@link MockUnit} by initial input range (lower / upper bounds)
      *
-     * @return delivery info discount mock unit instance {@link MockUnit}
+     * @return delivery info discount {@link MockUnit}
      */
     protected MockUnit<BigDecimal> generateDiscount(double lowerBound, double upperBound) {
         return getMock().doubles().range(lowerBound, upperBound).map(BigDecimal::valueOf);
     }
 
     /**
-     * Default address info unit {@link MockUnit}
+     * Default {@link AddressInfo} {@link MockUnit}
      *
-     * @return address info unit {@link MockUnit}
+     * @return {@link AddressInfo} {@link MockUnit}
      */
     protected MockUnit<AddressInfo> getAddressInfoMock() {
         return filler(() -> new AddressInfo())

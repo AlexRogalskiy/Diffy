@@ -79,7 +79,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by default diff matcher")
-    public void testDeliveryInfoByDefaultTypeDiffMatcher() {
+    public void test_deliveryInfo_by_defaultTypeDiffMatcher() {
         // given
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create();
 
@@ -93,13 +93,13 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by custom created/update date fields diff matcher")
-    public void testDeliveryInfoByDateDiffMatcher() {
+    public void test_deliveryInfo_by_dateDiffMatcher() {
         // given
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(
-            new AbstractTypeSafeMatcher<DeliveryInfo>() {
+            new AbstractTypeSafeMatcher<>() {
                 @Override
                 public boolean matchesSafe(final DeliveryInfo value) {
                     return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
@@ -133,12 +133,12 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by custom type field diff matcher")
-    public void testDeliveryInfoByCustomTypeDiffMatcher() {
+    public void test_deliveryInfo_by_customTypeDiffMatcher() {
         // given
         getDeliveryInfo().setType(getCodeMock().val());
 
         DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(
-            new AbstractTypeSafeMatcher<DeliveryInfo>() {
+            new AbstractTypeSafeMatcher<>() {
                 @Override
                 public boolean matchesSafe(final DeliveryInfo value) {
                     return value.getType() > 1000 && value.getType() < 5000;
@@ -159,7 +159,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // given
         diffMatcher = DefaultDiffMatcherFactory.create(
-            new AbstractTypeSafeMatcher<DeliveryInfo>() {
+            new AbstractTypeSafeMatcher<>() {
                 @Override
                 public boolean matchesSafe(final DeliveryInfo value) {
                     return (value.getType() >= 0 && value.getType() <= 10);
@@ -176,16 +176,16 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test delivery info entity by custom type/date fields diff matchers")
-    public void testDeliveryInfoByCustomTypeAndDateDiffMatcher() {
+    public void test_deliveryInfo_by_customTypeAndDateDiffMatcher() {
         // given
-        final Matcher<DeliveryInfo> dateMatcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
+        final Matcher<DeliveryInfo> dateMatcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
                 return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
                     && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
             }
         };
-        final Matcher<DeliveryInfo> typeMatcher = new AbstractTypeSafeMatcher<DeliveryInfo>() {
+        final Matcher<DeliveryInfo> typeMatcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
                 return value.getType() > 1000 && value.getType() < 5000;

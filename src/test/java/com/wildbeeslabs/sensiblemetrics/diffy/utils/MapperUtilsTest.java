@@ -79,7 +79,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test serialize difference entries by default mapper and external view class")
-    public void testSerializeDiffEntriesByDefaultMapperAndExternalView() throws IOException {
+    public void test_serializeDiffEntries_by_defaultMapperAndExternalView() throws IOException {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "description");
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -113,7 +113,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test serialize difference entry by default mapper and external view class")
-    public void testSerializeDiffEntryByDefaultMapperAndExternalView() throws IOException {
+    public void test_serializeDiffEntry_by_defaultMapperAndExternalView() throws IOException {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "description");
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -147,7 +147,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test deserialize collection of difference entries by default mapper")
-    public void testDeserializeDiffEntriesByDefaultMapperAndExternalView() throws IOException {
+    public void test_deserializeDiffEntries_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "[{\"property\":\"description\",\"first\":\"oeffPyZQcxoaOMFrKOdbrMURgasTaQUbRlAwPztMeUptxWehkROMStfwgbFAPVhl\",\"last\":\"boHdMLIhLCnAPjXZOclxTWMflYdGmZDVewXYfqjIDFSIPAqsElGjOEOgNInznuhb\"},{\"property\":\"id\",\"first\":5814988,\"last\":8258751},{\"property\":\"type\",\"first\":425402,\"last\":620131}]";
 
@@ -174,7 +174,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test deserialize single difference entry by default mapper")
-    public void testDeserializeDiffEntryByDefaultMapperAndEmptyView() throws IOException {
+    public void test_deserializeDiffEntry_by_defaultMapperAndEmptyView() throws IOException {
         // given
         final String jsonString = "{\"property\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
 
@@ -189,7 +189,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test deserialize single difference entry by default mapper and external view class")
-    public void testDeserializeDiffEntryByDefaultMapperAndExternalView() throws IOException {
+    public void test_deserializeDiffEntry_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "{\"property\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
 
@@ -204,7 +204,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test deserialize single difference entry by default mapper and internal view class")
-    public void testDeserializeDiffEntryByDefaultMapperAndInternalView() throws IOException {
+    public void test_deserializeDiffEntry_by_defaultMapperAndInternalView() throws IOException {
         // given
         final String jsonString = "{\"id\":\"1\",\"property\":\"description\",\"first\":\"qJuhKeFPtekjZMfsHNntujjnmNbFBKhQPFIVdsEWsWfcJHkbTYnTNdchFGsdPjTp\",\"last\":\"SklOvcvqlEoXlAJspQyIVCjvzBQFsjrwYifJIAhJuZpLstBKYgYjZawqNTvXZkkG\"}";
 
@@ -220,7 +220,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test deserialize single difference entry with mismatch properties by default mapper and external view class")
-    public void testDeserializeDiffEntryWithMismatchPropertiesByDefaultMapperAndExternalView() throws IOException {
+    public void test_deserializeDiffEntryWithMismatchProperties_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "{\"property\":\"description\",\"entityFirst\":\"cGSWCwEawsEvMrAPghayOBoGhUYURCHTqxhHWboiopHSgiQJlphvkHNvpWigpkaJ\",\"entityLast\":\"eYqOeXZUihWmoLlhjTxWkEpuObQJMuMGHqOwLlGkLBfEbdWvtlIDdoYKbTUaNgmL\"}";
 
@@ -235,7 +235,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test deserialize single empty difference entry by default mapper and external view class")
-    public void testDeserializeEmptyDiffEntryByDefaultMapperAndExternalView() throws IOException {
+    public void test_deserializeEmptyDiffEntry_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "{}";
 
@@ -250,7 +250,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test(expected = MismatchedInputException.class)
     @DisplayName("Test deserialize invalid difference entry by default mapper and external view class")
-    public void testDeserializeInvalidDiffEntryByDefaultMapperAndExternalView() throws IOException {
+    public void test_deserializeInvalidDiffEntry_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "[]";
 
@@ -260,7 +260,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test(expected = JsonParseException.class)
     @DisplayName("Test deserialize unquoted difference entry by default mapper and external view class")
-    public void testDeserializeUnquotedDiffEntryByDefaultMapperAndExternalView() throws IOException {
+    public void test_deserializeUnquotedDiffEntry_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "{[]}";
 
@@ -270,7 +270,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Test
     @DisplayName("Test serialize custom difference entries by default mapper and external view class")
-    public void testSerializeCustomDiffEntriesByDefaultMapperAndExternalView() throws IOException {
+    public void test_serializeCustomDiffEntries_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String expectedJsonString = "[{\"property\":\"codes\",\"first\":[1,2,3],\"last\":[1,2]},{\"property\":\"gid\",\"first\":\"Test 01\",\"last\":\"Test 02\"},{\"property\":\"description\",\"first\":\"Description 01\",\"last\":\"Description 02\"},{\"property\":\"discount\",\"first\":10,\"last\":1},{\"property\":\"id\",\"first\":1,\"last\":2},{\"property\":\"status\",\"first\":\"DELIVERED\",\"last\":\"PENDING\"}]";
         final DeliveryInfo deliveryInfoFirst = createDeliveryInfo(1L, 10, "Test 01", 0.68, "Description 01", DeliveryInfo.DeliveryStatus.DELIVERED, BigDecimal.TEN, 1, 2, 3);

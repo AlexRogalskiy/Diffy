@@ -23,12 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.impl.IntConverter;
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+
+import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
@@ -54,12 +57,12 @@ public class IntConverterTest {
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting invalid integer value")
-    public void test_invalidIntValue_Converter() {
+    public void test_invalidInt_Converter() {
         // given
-        final String intStr = "a56";
+        final String value = "a56";
 
         // when
-        final Integer intValue = this.getIntConverter().convert(intStr);
+        final Integer intValue = this.getIntConverter().convert(value);
 
         // then
         assertNull(intValue);
@@ -67,35 +70,77 @@ public class IntConverterTest {
 
     @Test
     @DisplayName("Test converting valid integer value")
-    public void test_validIntValue_Converter() {
+    public void test_validInt_Converter() {
         // given
-        final String intStr = "2019";
+        final String value = "2019";
 
         // when
-        final Integer intValue = this.getIntConverter().convert(intStr);
+        final Integer intValue = this.getIntConverter().convert(value);
 
         // then
         assertNotNull(intValue);
-        assertThat(intValue.toString(), IsEqual.equalTo(intStr));
+        assertThat(intValue.toString(), IsEqual.equalTo(value));
+    }
+
+    @Test
+    @DisplayName("Test converting valid integer value by post converter")
+    public void test_validInt_by_postConverter() {
+        // given
+        final String value = "2019";
+
+        // when
+        final String result = this.getIntConverter().andThen(String::valueOf).convert(value);
+
+        // then
+        assertNotNull(result);
+        assertThat(result, IsEqual.equalTo(value));
+    }
+
+    @Test
+    @DisplayName("Test converting valid integer value by pre converter")
+    public void test_validInt_by_preConverter() {
+        // given
+        final BigDecimal value = BigDecimal.ONE;
+
+        // when
+        final Integer result = this.getIntConverter().compose(BigDecimal::toString).convert(value);
+
+        // then
+        assertNotNull(result);
+        assertThat(result, IsEqual.equalTo(result));
+    }
+
+    @Test
+    @DisplayName("Test converting valid integer value by identity converter")
+    public void test_validInt_by_identityConverter() {
+        // given
+        final Integer value = 5;
+
+        // then
+        final Integer result = Converter.<Integer>identity().convert(value);
+
+        // then
+        assertNotNull(result);
+        assertThat(result, IsEqual.equalTo(value));
     }
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting empty integer value")
-    public void test_emptyIntValue_Converter() {
+    public void test_emptyInt_Converter() {
         // given
-        final String intStr = "";
+        final String value = "";
 
         // when
-        this.getIntConverter().convert(intStr);
+        this.getIntConverter().convert(value);
     }
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting nullable integer value")
-    public void test_nullableIntValue_Converter() {
+    public void test_nullableInt_Converter() {
         // given
-        final String intStr = null;
+        final String value = null;
 
         // when
-        this.getIntConverter().convert(intStr);
+        this.getIntConverter().convert(value);
     }
 }

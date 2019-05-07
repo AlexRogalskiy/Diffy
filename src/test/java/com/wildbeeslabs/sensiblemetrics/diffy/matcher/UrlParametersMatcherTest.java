@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.UrlParametersMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDiffTest;
+import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.UrlParametersMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -61,7 +61,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test match url strings by default url parameters matcher")
-    public void assertMatches() {
+    public void test_validUrlParameters_Matcher() {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = urlString;
 
@@ -71,7 +71,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test mismatch url strings length by default url parameters matcher")
-    public void assertLengthMismatch() {
+    public void test_mismatchUrlParametersLength_Matcher() {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3&arg4=val4";
 
@@ -81,7 +81,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test mismatch url string names by default url parameter matcher")
-    public void assertNamesMismatch() {
+    public void test_mismatchUrlParametersNames_Matcher() {
         final String urlString = "arg1=val1&arg22=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
 
@@ -91,7 +91,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test mismatch url string values by default url parameter matcher")
-    public void assertValuesMismatch() {
+    public void test_mismatchUrlParametersValues_Matcher() {
         final String urlString = "arg1=val1&arg2=val22&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
 

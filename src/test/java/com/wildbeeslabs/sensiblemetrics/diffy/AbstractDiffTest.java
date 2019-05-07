@@ -76,33 +76,33 @@ public abstract class AbstractDiffTest {
     protected final MockUnitInt shortMock = ints().bound(15000);
     protected final MockUnitInt intRangeMock = ints().range(1000, 5000);
     /**
-     * Default long mock unit instances {@link MockUnitLong}
+     * Default {@link MockUnitLong}
      */
     protected final MockUnitLong longMock = longs().bound(10000000);
     protected final MockUnitLong longRangeMock = longs().range(100000, 500000);
     /**
-     * Default double mock unit instances {@link MockUnitDouble}
+     * Default {@link MockUnitDouble}
      */
     protected final MockUnitDouble doubleMock = doubles().bound(50000);
     /**
-     * Default float mock unit instances {@link MockUnitFloat}
+     * Default {@link MockUnitFloat}
      */
     protected final MockUnitFloat floatMock = floats().bound(5000);
     /**
-     * Default local date mock unit instances {@link MockUnitLocalDate}
+     * Default {@link MockUnitLocalDate}
      */
     protected final MockUnitLocalDate localDateMock = localDates();
     protected final MockUnitLocalDate yearLocalDateMock = localDates().thisYear();
     protected final MockUnitLocalDate pastLocalDateMock = localDates().past(LocalDate.now().minusYears(3));
     protected final MockUnitLocalDate futureLocalDateMock = localDates().future(LocalDate.now().plusYears(3));
     /**
-     * Default string mock unit character instances {@link MockUnitString}
+     * Default {@link MockUnitString}
      */
     protected final MockUnitString alphaNumericStringMock = strings().types(ALPHA_NUMERIC);
     protected final MockUnitString lettersStringMock = strings().types(LETTERS);
     protected final MockUnitString numbersStringMock = strings().types(NUMBERS);
     /**
-     * Default string mock unit misc instances {@link MockUnitString}
+     * Default {@link MockUnitString}
      */
     protected final MockUnitString ipv4ClassACMock = getMock().ipv4s().types(CLASS_A, CLASS_C);
     protected final MockUnitString ipv6Mock = getMock().iPv6s().mapToString();
@@ -122,12 +122,12 @@ public abstract class AbstractDiffTest {
     protected final MockUnitString monthNameMock = getMock().months().mapToString();
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Float} by initial input array size and range (lower / upper bounds)
+     * Returns {@link MockUnit} to produce array of {@link Float} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower bound
      * @param upperBound - initial input upper bound
-     * @return mock unit {@link MockUnit} to produce array of {@link Float}
+     * @return {@link MockUnit} to produce array of {@link Float}
      */
     protected MockUnit<Float[]> generateFloats(int size, float lowerBound, float upperBound) {
         return getMock().floats()
@@ -136,12 +136,12 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Double} by initial input array size and range (lower / upper bounds)
+     * Returns {@link MockUnit} to produce array of {@link Double} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower bound
      * @param upperBound - initial input upper bound
-     * @return mock unit instance {@link MockUnit} to produce array of {@link Double}
+     * @return {@link MockUnit} to produce array of {@link Double}
      */
     protected MockUnit<Double[]> generateDoubles(int size, double lowerBound, double upperBound) {
         return getMock().doubles()
@@ -150,12 +150,12 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Integer} by initial input array size and range (lower / upper bounds)
+     * Returns {@link MockUnit} to produce array of {@link Integer} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower value bound
      * @param upperBound - initial input upper value bound
-     * @return mock unit {@link MockUnit} to produce array of {@link Integer}
+     * @return {@link MockUnit} to produce array of {@link Integer}
      */
     protected MockUnit<Integer[]> generateInts(int size, int lowerBound, int upperBound) {
         return getMock().ints()
@@ -164,12 +164,12 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce array of {@link Long} by initial input array size and range (lower / upper bounds)
+     * Returns {@link MockUnit} to produce array of {@link Long} by initial input array size and range (lower / upper bounds)
      *
      * @param size       - initial input array size
      * @param lowerBound - initial input lower value bound
      * @param upperBound - initial input value value bound
-     * @return mock unit instance {@link MockUnit} to produce array of {@link Long}
+     * @return {@link MockUnit} to produce array of {@link Long}
      */
     protected MockUnit<Long[]> generateLongs(int size, long lowerBound, long upperBound) {
         return getMock().longs()
@@ -182,7 +182,7 @@ public abstract class AbstractDiffTest {
      *
      * @param size  - initial input {@link List} size
      * @param bound - initial input value bound
-     * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Integer}
+     * @return {@link MockUnit} to produce {@link List} of {@link Integer}
      */
     protected MockUnit<List<Integer>> generateInts(int size, int bound) {
         return getMock().ints()
@@ -191,10 +191,10 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit instance {@link MockUnit} to produce list {@link List} of {@link String} by initial input list size
+     * Returns {@link MockUnit} to produce list {@link List} of {@link String} by initial input list size
      *
      * @param size - initial input {@link List} size
-     * @return mock unit instance {@link MockUnit} to produce list {@link List} of {@link String}
+     * @return {@link MockUnit} to produce list {@link List} of {@link String}
      */
     protected MockUnit<List<String>> generateStrings(int size) {
         final MockUnitInt num = getMock().probabilites(Integer.class)
@@ -210,39 +210,39 @@ public abstract class AbstractDiffTest {
     }
 
     /**
-     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link Boolean} by initial input probability and size values
+     * Returns {@link MockUnit} to produce {@link List} of {@link Boolean} by initial input probability and size values
      *
      * @param probability - initial input probability value
      * @param size        - initial input {@link List} size
-     * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Boolean}
+     * @return {@link MockUnit} to produce {@link List} of {@link Boolean}
      */
-    protected MockUnit<List<Boolean>> generateProbabilities(double probability, int size) {
+    protected MockUnit<List<Boolean>> generateBools(double probability, int size) {
         return getMock().bools()
             .probability(probability)
             .list(size);
     }
 
     /**
-     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link String} by range (lower / upper bounds)
+     * Returns {@link MockUnit} to produce {@link List} of {@link String} by range (lower / upper bounds)
      *
      * @param lowerBound - initial input lower value bound
      * @param upperBound - initial input value value bound
-     * @return mock unit instance {@link MockUnit} to produce {@link List} of {@link Boolean}
+     * @return {@link MockUnit} to produce {@link List} of {@link Boolean}
      */
-    protected MockUnit<List<String>> genearateStrings(int lowerBound, int upperBound) {
+    protected MockUnit<List<String>> generateStrings(int lowerBound, int upperBound) {
         final MockUnitInt sizeGenerator = getMock().ints().range(lowerBound, upperBound);
         return getMock().strings()
             .list(() -> new ArrayList<>(), sizeGenerator);
     }
 
     /**
-     * Returns mock unit {@link MockUnit} to produce {@link List} of {@link String} by range (lower / upper bounds)
+     * Returns {@link MockUnit} to produce {@link List} of {@link String} by range (lower / upper bounds)
      *
      * @param dateStart - initial input date start value {@link LocalDate}
      * @param dateEnd   - initial input date end value {@link LocalDate}
-     * @return mock unit instance {@link MockUnit} to produce {@link Date}
+     * @return {@link MockUnit} to produce {@link Date}
      */
-    protected MockUnit<Date> genearateDates(final LocalDate dateStart, final LocalDate dateEnd) {
+    protected MockUnit<Date> generateDates(final LocalDate dateStart, final LocalDate dateEnd) {
         return getMock().localDates()
             .between(dateStart, dateEnd)
             .toUtilDate();

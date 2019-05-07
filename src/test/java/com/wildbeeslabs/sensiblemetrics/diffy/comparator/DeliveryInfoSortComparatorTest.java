@@ -70,7 +70,7 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test sort delivery info collection by sort order comparator")
-    public void testDeliveryInfoBySortComparator() {
+    public void test_deliveryInfo_by_sortComparator() {
         // given
         final SortManager sort = new SortManager(
             new SortManager.SortOrder(SortManager.SortDirection.ASC, "id"),
@@ -111,7 +111,7 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
      * @param balance - initial input balance value
      * @return new instance of {@link DeliveryInfo}
      */
-    private DeliveryInfo createDeliveryInfo(final Long id, final String gid, final DeliveryInfo.DeliveryStatus status, double balance) {
+    private DeliveryInfo createDeliveryInfo(final Long id, final String gid, final DeliveryInfo.DeliveryStatus status, final double balance) {
         final DeliveryInfo deliveryInfo = new DeliveryInfo();
         deliveryInfo.setId(id);
         deliveryInfo.setGid(gid);

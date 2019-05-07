@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.impl.DateConverter;
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
@@ -62,51 +63,100 @@ public class DateConverterTest {
 
     @Test
     @DisplayName("Test converting invalid date value")
-    public void test_invalidDateValue_Converter() {
+    public void test_invalidDate_Converter() {
         // given
-        final String dateStr = "a3563/56/56";
+        final String value = "a3563/56/56";
 
         // when
-        final Date date = this.getDateConverter().convert(dateStr);
+        final Date result = this.getDateConverter().convert(value);
 
         // then
-        assertNull(date);
+        assertNull(result);
     }
 
     @Test
     @DisplayName("Test converting valid date value")
-    public void test_validDateValue_Converter() {
+    public void test_validDate_Converter() {
         // given
-        final String dateStr = "2019/12/12";
+        final String value = "2019/12/12";
 
         // when
-        final Date date = this.getDateConverter().convert(dateStr);
+        final Date result = this.getDateConverter().convert(value);
 
         // then
-        assertNotNull(date);
-        assertThat(format(date, DEFAULT_DATE_FORMAT), IsEqual.equalTo(dateStr));
+        assertNotNull(result);
+        assertThat(format(result, DEFAULT_DATE_FORMAT), IsEqual.equalTo(value));
+    }
+
+    @Test
+    @DisplayName("Test converting valid date value by post converter")
+    public void test_validDate_by_postConverter() {
+        // given
+        final String value = "2019/12/12";
+
+        // when
+        final String result = this.getDateConverter().andThen((Date d) -> format(d, DEFAULT_DATE_FORMAT)).convert(value);
+
+        // then
+        assertNotNull(result);
+        assertThat(result, IsEqual.equalTo(value));
+    }
+
+    @Test
+    @DisplayName("Test converting valid date value by pre converter")
+    public void test_validDate_by_preConverter() {
+        // given
+        final Long value = 34234234234234L;
+
+        // when
+        final Date result = this.getDateConverter().compose((Long i) -> format(new Date(i), DEFAULT_DATE_FORMAT)).convert(value);
+
+        // then
+        assertNotNull(result);
+        assertThat(result.toString(), IsEqual.equalTo(result.toString()));
+    }
+
+    @Test
+    @DisplayName("Test converting valid date value by identity converter")
+    public void test_validDate_by_identityConverter() {
+        // given
+        final Date value = new Date();
+
+        // then
+        final Date result = Converter.<Date>identity().convert(value);
+
+        // then
+        assertNotNull(result);
+        assertThat(result, IsEqual.equalTo(value));
     }
 
     @Test
     @DisplayName("Test converting empty date value")
-    public void test_emptyDateValue_Converter() {
+    public void test_emptyDate_Converter() {
         // given
-        final String dateStr = "";
+        final String value = "";
 
         // when
-        this.getDateConverter().convert(dateStr);
+        this.getDateConverter().convert(value);
     }
 
     @Test(expected = NullPointerException.class)
     @DisplayName("Test converting nullable date value")
-    public void test_nullableDateValue_Converter() {
+    public void test_nullableDate_Converter() {
         // given
-        final String dateStr = null;
+        final String value = null;
 
         // when
-        this.getDateConverter().convert(dateStr);
+        this.getDateConverter().convert(value);
     }
 
+    /**
+     * Converts to {@link String} by input {@link Date} value and {@link String} pattern
+     *
+     * @param date    - initial input {@link Date} value
+     * @param pattern - initial input {@link String} value
+     * @return converted {@link String} value
+     */
     private String format(final Date date, final String pattern) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);

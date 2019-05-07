@@ -89,12 +89,13 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing different delivery info entities by default comparator")
-    public void testCompareDifferentEntities() {
+    public void test_differentEntities_by_defaultComparator() {
         // given
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -115,12 +116,13 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing equal delivery info entities by default comparator")
-    public void testCompareEqualEntities() {
+    public void test_equalEntities_by_defaultComparator() {
         // given
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -129,13 +131,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by excluded properties and custom comparator")
-    public void testCompareByExcludedPropertiesAndDefaultComparator() {
+    public void test_entitiesWithExcludedProperties_by_defaultComparator() {
         // given
         final List<String> excludedProperties = Arrays.asList("id", "createdAt", "updatedAt");
 
         // when
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -171,13 +174,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties, empty excluded properties and custom comparator")
-    public void testCompareByIncludedPropertiesAndDefaultComparator() {
+    public void test_entitiesWithIncludedProperties_by_defaultComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "description");
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -212,13 +216,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by excluded properties and custom comparator")
-    public void testCompareByExcludedProperties() {
+    public void test_entitiesWithExcludedProperties_by_customComparator() {
         // given
         final List<String> excludedProperties = Arrays.asList("id", "type");
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, excludedProperties);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -246,13 +251,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties, empty excluded properties and custom comparator")
-    public void testCompareByIncludedProperties() {
+    public void test_entitiesWithIncludedProperties_by_customComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "createdAt");
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -280,13 +286,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by excluded non-existing properties and default comparator")
-    public void testCompareByNonExistingProperty() {
+    public void test_entitiesWithNonExistingProperty_by_defaultComparator() {
         // given
         final List<String> excludedProperties = Arrays.asList("id", "country", "createdAt", "updatedAt");
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, excludedProperties);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -315,7 +322,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included / excluded intersected properties and default comparator")
-    public void testCompareByIntersectedProperties() {
+    public void test_entitiesWithIntersectedProperties_by_defaultComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "createdAt", "updatedAt", "description");
         final List<String> excludedProperties = Arrays.asList("createdAt", "updatedAt", "type");
@@ -323,6 +330,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -366,7 +374,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included / excluded non-intersected properties and default comparator")
-    public void testCompareByNonIntersectedProperties() {
+    public void test_entitiesWithNonIntersectedProperties_by_defaultComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "balance");
         final List<String> excludedProperties = Arrays.asList("description", "createdAt", "updatedAt");
@@ -374,6 +382,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -408,7 +417,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included duplicate properties and default comparator")
-    public void testCompareByIncludedDuplicateProperties() {
+    public void test_entitiesWithIncludedDuplicateProperty_by_defaultComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "createdAt", "id", "type");
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -416,6 +425,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -451,13 +461,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by excluded duplicate properties and default comparator")
-    public void testCompareByExcludedDuplicateProperties() {
+    public void test_entitiesWithExcludedDuplicateProperty_by_defaultComparator() {
         // given
         final List<String> excludedProperties = Arrays.asList("id", "type", "description", "type", "type", "id");
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, excludedProperties);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -492,12 +503,13 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by default comparator")
-    public void testCompareByDefaultComparator() {
+    public void test_entities_by_defaultComparator() {
         // given
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -510,7 +522,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties and custom gid field comparator (with non equal gid)")
-    public void testCompareByNonEqualGidFieldAndComparator() {
+    public void test_entitiesWithNonEqualGidFields_by_customComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "createdAt", "description");
         getDeliveryInfoFirst().setDescription(null);
@@ -522,6 +534,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -567,7 +580,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties and custom gid field comparator (with equals gid)")
-    public void testCompareByEqualsGidFieldAndComparator() {
+    public void test_entitiesWithEqualsGidFields_by_defaultComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "type", "gid", "createdAt");
         final String DEFAULT_GID_PREFIX = "TEST_";
@@ -580,6 +593,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -615,7 +629,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties and custom created/updated fields comparator")
-    public void testCompareByDateFieldsAndComparators() {
+    public void test_entityDateFields_by_customComparators() {
         // given
         final List<String> includedProperties = Arrays.asList("createdAt", "updatedAt");
         getDeliveryInfoFirst().setCreatedAt(toDate("07/06/2013 12:13:14", DEFAULT_DATETIME_FORMAT));
@@ -630,6 +644,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -657,7 +672,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included createdAt property and custom field comparator")
-    public void testCompareByDateFieldAndComparator() {
+    public void test_entityCreatedAtField_by_customComparator() {
         // given
         final int DEFAULT_DIFFERENCE_DELTA = 24 * 60 * 60 * 1000;
         final List<String> includedProperties = Arrays.asList("createdAt");
@@ -672,6 +687,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -682,6 +698,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -690,7 +707,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included balance property and custom field comparator")
-    public void testCompareByBalanceFieldComparator() {
+    public void test_entityBalanceField_by_customComparator() {
         // given
         final double DEFAULT_DIFFERENCE_DELTA = 0.0001;
         final List<String> includedProperties = Arrays.asList("balance");
@@ -704,6 +721,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -714,6 +732,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -722,13 +741,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included non-equal addresses property and custom comparator")
-    public void testCompareByNonEqualAddressFields() {
+    public void test_entitiesWithNonEqualAddressFields_by_defaultComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("addresses");
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -755,13 +775,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included equal addresses property and custom comparator")
-    public void testCompareByEqualAddressFields() {
+    public void test_entitiesWithEqualAddressFields_by_defaultComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("addresses");
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, includedProperties, Collections.emptyList());
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -770,7 +791,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties and default array comparator")
-    public void testCompareByIncludedPropertiesAndDefaultArrayComparator() {
+    public void test_entitiesWithIncludedProperties_by_defaultArrayComparator() {
         // given
         final List<String> includedProperties = Arrays.asList("id", "codes", "description");
         final DefaultDiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
@@ -778,6 +799,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -822,7 +844,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties and default array comparator")
-    public void testCompareByIncludedPropertiesAndCustomArrayComparator() {
+    public void test_enttitiesWithIncludedProperties_by_customArrayComparator() {
         // given
         final Integer[] testCodes = {10, 20, 30, 50, 70};
         final List<String> includedProperties = Arrays.asList("id", "codes", "description");
@@ -835,6 +857,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -871,7 +894,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
     @Test
     @DisplayName("Test comparing delivery info entities by included properties and default iterable comparator")
-    public void testCompareByIncludedPropertiesAndCustomIterableComparator() {
+    public void test_entitiesWithIncludedProperties_by_customIterableComparator() {
         // given
         final List<AddressInfo> addressInfoList = Arrays.asList(getAddressInfoMock().val(), getAddressInfoMock().val());
         final List<String> includedProperties = Arrays.asList("id", "addresses", "description");
@@ -887,6 +910,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
+        assertNotNull("Collection of difference entries should not be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then

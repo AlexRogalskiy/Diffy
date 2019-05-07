@@ -58,91 +58,91 @@ public class BigDecimalConverterTest {
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting invalid big decimal value")
-    public void test_invalidBigDecimalValue_Converter() {
+    public void test_invalidBigDecimal_Converter() {
         // given
-        final String bigDecimalStr = "4,5";
+        final String value = "4,5";
 
         // when
-        final BigDecimal bigDecimal = this.getBigDecimalConverter().convert(bigDecimalStr);
+        final BigDecimal result = this.getBigDecimalConverter().convert(value);
 
         // then
-        assertNotNull(bigDecimal);
-        assertThat(bigDecimal.toString(), IsEqual.equalTo(bigDecimalStr));
+        assertNotNull(result);
+        assertThat(result.toString(), IsEqual.equalTo(value));
     }
 
     @Test
     @DisplayName("Test converting valid big decimal value")
-    public void test_validBigDecimalValue_Converter() {
+    public void test_validBigDecimal_Converter() {
         // given
-        final String bigDecimalStr = "4.5";
+        final String value = "4.5";
 
         // when
-        final BigDecimal bigDecimal = this.getBigDecimalConverter().convert(bigDecimalStr);
+        final BigDecimal result = this.getBigDecimalConverter().convert(value);
 
         // then
-        assertNotNull(bigDecimal);
-        assertThat(bigDecimal.toString(), IsEqual.equalTo(bigDecimalStr));
+        assertNotNull(result);
+        assertThat(result.toString(), IsEqual.equalTo(value));
     }
 
     @Test
     @DisplayName("Test converting valid big decimal value by post converter")
-    public void test_validBigDecimalValue_byPostConverter() {
+    public void test_validBigDecimal_by_postConverter() {
         // given
-        final String bigDecimalStr = "443.345";
+        final String value = "443.345";
 
         // when
-        final String bigDecimal = this.getBigDecimalConverter().andThen(String::valueOf).convert(bigDecimalStr);
+        final String result = this.getBigDecimalConverter().andThen(String::valueOf).convert(value);
 
         // then
-        assertNotNull(bigDecimal);
-        assertThat(bigDecimal, IsEqual.equalTo(bigDecimalStr));
+        assertNotNull(result);
+        assertThat(result, IsEqual.equalTo(value));
     }
 
     @Test
     @DisplayName("Test converting valid big decimal value by pre converter")
-    public void test_validBigDecimalValue_byPreConverter() {
+    public void test_validBigDecimal_by_preConverter() {
         // given
-        final Long bigDecimalLong = 443_345L;
+        final Long value = 443_345L;
 
         // when
-        final BigDecimal bigDecimal = this.getBigDecimalConverter().compose(String::valueOf).convert(bigDecimalLong);
+        final BigDecimal result = this.getBigDecimalConverter().compose(String::valueOf).convert(value);
 
         // then
-        assertNotNull(bigDecimal);
-        assertThat(bigDecimal.toString(), IsEqual.equalTo(bigDecimalLong.toString()));
+        assertNotNull(result);
+        assertThat(result.toString(), IsEqual.equalTo(value.toString()));
     }
 
     @Test
     @DisplayName("Test converting valid big decimal value by identity converter")
-    public void test_validBigDecimalValue_byIdentityConverter() {
+    public void test_validBigDecimal_by_identityConverter() {
         // given
-        final String bigDecimalStr = "443.345";
+        final BigDecimal value = BigDecimal.TEN;
 
         // then
-        final String result = Converter.<String>identity().convert(bigDecimalStr);
+        final BigDecimal result = Converter.<BigDecimal>identity().convert(value);
 
         // then
         assertNotNull(result);
-        assertThat(result, IsEqual.equalTo(bigDecimalStr));
+        assertThat(result, IsEqual.equalTo(value));
     }
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting empty big decimal value")
-    public void test_emptyBigDecimalValue_Converter() {
+    public void test_emptyBigDecimal_Converter() {
         // given
-        final String bigDecimalStr = "";
+        final String value = "";
 
         // when
-        this.getBigDecimalConverter().convert(bigDecimalStr);
+        this.getBigDecimalConverter().convert(value);
     }
 
     @Test(expected = NullPointerException.class)
     @DisplayName("Test converting nullable big decimal value")
-    public void test_nullableBigDecimalValue_Converter() {
+    public void test_nullableBigDecimal_Converter() {
         // given
-        final String bigDecimalStr = null;
+        final String value = null;
 
         // when
-        this.getBigDecimalConverter().convert(bigDecimalStr);
+        this.getBigDecimalConverter().convert(value);
     }
 }
