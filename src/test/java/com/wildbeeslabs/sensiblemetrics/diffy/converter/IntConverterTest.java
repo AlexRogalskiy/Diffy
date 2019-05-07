@@ -54,7 +54,7 @@ public class IntConverterTest {
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting invalid integer value")
-    public void test_invalidIntValue() {
+    public void test_invalidIntValue_Converter() {
         // given
         final String intStr = "a56";
 
@@ -67,7 +67,7 @@ public class IntConverterTest {
 
     @Test
     @DisplayName("Test converting valid integer value")
-    public void test_validIntValue() {
+    public void test_validIntValue_Converter() {
         // given
         final String intStr = "2019";
 
@@ -81,7 +81,7 @@ public class IntConverterTest {
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting empty integer value")
-    public void test_emptyIntValue() {
+    public void test_emptyIntValue_Converter() {
         // given
         final String intStr = "";
 
@@ -91,7 +91,7 @@ public class IntConverterTest {
 
     @Test(expected = NumberFormatException.class)
     @DisplayName("Test converting nullable integer value")
-    public void test_nullableIntValue() {
+    public void test_nullableIntValue_Converter() {
         // given
         final String intStr = null;
 

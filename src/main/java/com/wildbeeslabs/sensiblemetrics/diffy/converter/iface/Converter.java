@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 /**
  * Custom converter interface declaration
@@ -45,4 +46,42 @@ public interface Converter<T, R> {
      */
     @Nullable
     R convert(final T value);
+
+    /**
+     * Returns composed {@link Converter} function that applies input {@link Converter}
+     * function to its input, and then applies current {@link Converter} function to the result
+     *
+     * @param <V>    the type of input to be converted from
+     * @param before - initial input {@link Converter} function to apply before current function is applied
+     * @return composed {@link Converter} function
+     * @throws NullPointerException if before is null
+     */
+    default <V> Converter<V, R> compose(final Converter<? super V, ? extends T> before) {
+        Objects.requireNonNull(before);
+        return (final V v) -> convert(before.convert(v));
+    }
+
+    /**
+     * Returns composed {@link Converter} function that first applies current {@link Converter} function to
+     * its input, and then applies input {@link Converter} function to the result
+     *
+     * @param <V>   type of input element to be converted from
+     * @param after - initial input {@link Converter} function to apply after current function is applied
+     * @return composed {@link Converter} function
+     * @throws NullPointerException if after is null
+     */
+    default <V> Converter<T, V> andThen(final Converter<? super R, ? extends V> after) {
+        Objects.requireNonNull(after);
+        return (final T t) -> after.convert(convert(t));
+    }
+
+    /**
+     * Returns {@link Converter} function that always returns its input argument
+     *
+     * @param <T> type of input element to be converted from
+     * @return {@link Converter} function
+     */
+    static <T> Converter<T, T> identity() {
+        return t -> t;
+    }
 }

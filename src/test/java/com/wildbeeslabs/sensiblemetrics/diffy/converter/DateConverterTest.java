@@ -62,7 +62,7 @@ public class DateConverterTest {
 
     @Test
     @DisplayName("Test converting invalid date value")
-    public void test_invalidDateValue() {
+    public void test_invalidDateValue_Converter() {
         // given
         final String dateStr = "a3563/56/56";
 
@@ -75,7 +75,7 @@ public class DateConverterTest {
 
     @Test
     @DisplayName("Test converting valid date value")
-    public void test_validDateValue() {
+    public void test_validDateValue_Converter() {
         // given
         final String dateStr = "2019/12/12";
 
@@ -89,7 +89,7 @@ public class DateConverterTest {
 
     @Test
     @DisplayName("Test converting empty date value")
-    public void test_emptyDateValue() {
+    public void test_emptyDateValue_Converter() {
         // given
         final String dateStr = "";
 
@@ -99,7 +99,7 @@ public class DateConverterTest {
 
     @Test(expected = NullPointerException.class)
     @DisplayName("Test converting nullable date value")
-    public void test_nullableDateValue() {
+    public void test_nullableDateValue_Converter() {
         // given
         final String dateStr = null;
 

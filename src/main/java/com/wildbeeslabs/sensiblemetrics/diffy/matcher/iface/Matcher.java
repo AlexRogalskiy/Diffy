@@ -59,14 +59,35 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@code Matcher} instance
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of current predicate and another
      *
-     * @param after - initial input {@link Matcher} instance to perform operation by
-     * @return composed {@code Matcher} instance
+     * @param after - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
      * @throws NullPointerException if {@code after} is null
      */
-    default Matcher<T> andThen(final Matcher<? super T> after) {
+    default Matcher<T> and(final Matcher<? super T> after) {
         Objects.requireNonNull(after);
         return (final T t) -> matches(t) && after.matches(t);
+    }
+
+    /**
+     * Returns negated {@link Matcher} operator
+     *
+     * @return negated {@link Matcher} operator
+     */
+    default Matcher<T> negate() {
+        return (final T t) -> !matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of this predicate and another
+     *
+     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is null
+     */
+    default Matcher<T> or(final Matcher<? super T> other) {
+        Objects.requireNonNull(other);
+        return (final T t) -> matches(t) || other.matches(t);
     }
 }
