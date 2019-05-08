@@ -75,7 +75,7 @@ public interface Matcher<T> extends Serializable {
      *
      * @return negated {@link Matcher} operator
      */
-    default Matcher<T> negate() {
+    default Matcher<T> not() {
         return (final T t) -> !matches(t);
     }
 
@@ -89,5 +89,17 @@ public interface Matcher<T> extends Serializable {
     default Matcher<T> or(final Matcher<? super T> other) {
         Objects.requireNonNull(other);
         return (final T t) -> matches(t) || other.matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of this predicate and another
+     *
+     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is null
+     */
+    default Matcher<T> xor(final Matcher<? super T> other) {
+        Objects.requireNonNull(other);
+        return (final T t) -> matches(t) ^ other.matches(t);
     }
 }
