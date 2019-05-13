@@ -95,7 +95,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -122,7 +122,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -138,7 +138,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         // when
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class, DEFAULT_DELIVERY_INFO_COMPARATOR, excludedProperties);
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -181,7 +181,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -223,7 +223,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -258,7 +258,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -293,7 +293,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -330,7 +330,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -382,7 +382,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -425,7 +425,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -468,7 +468,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -509,7 +509,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -534,7 +534,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -593,7 +593,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -644,7 +644,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -687,7 +687,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -698,7 +698,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -721,7 +721,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -732,7 +732,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -748,7 +748,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -782,7 +782,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoFirst());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -799,7 +799,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -857,7 +857,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then
@@ -910,7 +910,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
-        assertNotNull("Collection of difference entries should not be null", iterable);
+        assertNotNull("Collection of difference entries should negate be null", iterable);
         final List<DefaultDiffEntry> valueChangeList = Lists.newArrayList(iterable);
 
         // then

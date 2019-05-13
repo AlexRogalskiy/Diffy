@@ -152,8 +152,50 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom delivery info or-chained matchers")
-    public void test_deliveryInfo_by_OrMatcher() {
+    @DisplayName("Test delivery info entity by custom delivery info not-chained matchers")
+    public void test_deliveryInfo_by_validNotMatcher() {
+        // given
+        getDeliveryInfo().setType(4);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+            .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("26/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(deliveryInfoMatcher.not(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info equal-chained matchers")
+    public void test_deliveryInfo_by_validEqualMatcher() {
+        // given
+        final DeliveryInfo deliveryInfo = getDeliveryInfo();
+        deliveryInfo.setType(4);
+
+        // then
+        assertTrue(Matcher.isEqual(deliveryInfo).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info equal-chained matchers")
+    public void test_deliveryInfo_by_invalidEqualMatcher() {
+        // given
+        final DeliveryInfo deliveryInfo = getDeliveryInfoMock().val();
+
+        // then
+        assertFalse(Matcher.isEqual(deliveryInfo).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info or-chained matchers")
+    public void test_deliveryInfo_by_validOrMatcher() {
         // given
         getDeliveryInfo().setType(5);
         getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
@@ -173,7 +215,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom delivery info or-chained matchers")
+    @DisplayName("Test delivery info entity by invalid custom delivery info or-chained matchers")
     public void test_deliveryInfo_by_invalidOrMatcher() {
         // given
         getDeliveryInfo().setType(6);
@@ -194,8 +236,8 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom delivery info or-chained matchers")
-    public void test_deliveryInfo_by_XorMatcher() {
+    @DisplayName("Test delivery info entity by valid custom delivery info or-chained matchers")
+    public void test_deliveryInfo_by_validXorMatcher() {
         // given
         getDeliveryInfo().setType(5);
         getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
@@ -215,7 +257,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom delivery info or-chained matchers")
+    @DisplayName("Test delivery info entity by invalid custom delivery info or-chained matchers")
     public void test_deliveryInfo_by_invalidXorMatcher() {
         // given
         getDeliveryInfo().setType(5);
@@ -236,8 +278,8 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom delivery info not matcher")
-    public void test_deliveryInfo_by_NegateMatcher() {
+    @DisplayName("Test delivery info entity by valid custom delivery info negate matcher")
+    public void test_deliveryInfo_by_validNegateMatcher() {
         // given
         getDeliveryInfo().setType(5);
         getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
@@ -250,11 +292,11 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withGid(DEFAULT_GID_PREFIX);
 
         // then
-        assertTrue(deliveryInfoMatcher.not().matches(getDeliveryInfo()));
+        assertTrue(deliveryInfoMatcher.negate().matches(getDeliveryInfo()));
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom created/update date fields matcher")
+    @DisplayName("Test delivery info entity by valid custom created/update date fields matcher")
     public void test_deliveryInfo_by_customDateMatcher() {
         // given
         final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<>() {

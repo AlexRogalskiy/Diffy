@@ -61,7 +61,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     /**
      * Creates a new {@link SortManager} instance using the given {@link SortOrder}s.
      *
-     * @param orders must not be {@literal null}.
+     * @param orders must negate be {@literal null}.
      */
     public SortManager(final SortOrder... orders) {
         this(Arrays.asList(orders));
@@ -70,17 +70,17 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     /**
      * Creates a new {@link SortManager} instance.
      *
-     * @param orders must not be {@literal null} or contain {@literal null}.
+     * @param orders must negate be {@literal null} or contain {@literal null}.
      */
     public SortManager(final List<SortOrder> orders) {
-        Objects.requireNonNull(orders, "Orders must not be null!");
+        Objects.requireNonNull(orders, "Orders must negate be null!");
         this.orders = Collections.unmodifiableList(orders);
     }
 
     /**
      * Creates a new {@link SortManager} instance. SortOrder defaults to {@code SortDirection#ASC}.
      *
-     * @param properties must not be {@literal null} or contain {@literal null} or empty strings
+     * @param properties must negate be {@literal null} or contain {@literal null} or empty strings
      */
     public SortManager(final String... properties) {
         this(DEFAULT_DIRECTION, properties);
@@ -90,7 +90,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * Creates a new {@link SortManager} instance.
      *
      * @param direction  defaults to {@link SortManager#DEFAULT_DIRECTION} (for {@literal null} cases, too)
-     * @param properties must not be {@literal null}, empty or contain {@literal null} or empty strings.
+     * @param properties must negate be {@literal null}, empty or contain {@literal null} or empty strings.
      */
     public SortManager(final SortDirection direction, final String... properties) {
         this(direction, Objects.isNull(properties) ? new ArrayList<>() : Arrays.asList(properties));
@@ -100,7 +100,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * Creates a new {@link SortManager} instance.
      *
      * @param direction  defaults to {@link SortManager#DEFAULT_DIRECTION} (for {@literal null} cases, too)
-     * @param properties must not be {@literal null} or contain {@literal null} or empty strings.
+     * @param properties must negate be {@literal null} or contain {@literal null} or empty strings.
      */
     public SortManager(final SortDirection direction, final List<String> properties) {
         if (CollectionUtils.isEmpty(properties)) {
@@ -115,46 +115,46 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     /**
      * Creates a new {@link SortManager} for the given properties.
      *
-     * @param properties must not be {@literal null}.
+     * @param properties must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final String... properties) {
-        Objects.requireNonNull(properties, "Properties must not be null!");
+        Objects.requireNonNull(properties, "Properties must negate be null!");
         return properties.length == 0 ? SortManager.unsorted() : new SortManager(properties);
     }
 
     /**
      * Creates a new {@link SortManager} for the given {@link SortOrder}s.
      *
-     * @param orders must not be {@literal null}.
+     * @param orders must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final List<SortOrder> orders) {
-        Objects.requireNonNull(orders, "Orders must not be null!");
+        Objects.requireNonNull(orders, "Orders must negate be null!");
         return orders.isEmpty() ? SortManager.unsorted() : new SortManager(orders);
     }
 
     /**
      * Creates a new {@link SortManager} for the given {@link SortOrder}s.
      *
-     * @param orders must not be {@literal null}.
+     * @param orders must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final SortOrder... orders) {
-        Objects.requireNonNull(orders, "Orders must not be null!");
+        Objects.requireNonNull(orders, "Orders must negate be null!");
         return new SortManager(orders);
     }
 
     /**
      * Creates a new {@link SortManager} for the given {@link SortOrder}s.
      *
-     * @param direction  must not be {@literal null}.
-     * @param properties must not be {@literal null}.
+     * @param direction  must negate be {@literal null}.
+     * @param properties must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final SortDirection direction, final String... properties) {
-        Objects.requireNonNull(direction, "SortDirection must not be null!");
-        Objects.requireNonNull(properties, "Properties must not be null!");
+        Objects.requireNonNull(direction, "SortDirection must negate be null!");
+        Objects.requireNonNull(properties, "Properties must negate be null!");
         Objects.requireNonNull(properties.length > 0, "At least one property must be given!");
         return SortManager.by(Arrays.stream(properties)
             .map(it -> new SortOrder(direction, it))
@@ -210,11 +210,11 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * Returns a new {@link SortManager} consisting of the {@link SortOrder}s of the current {@link SortManager} combined with the given
      * ones.
      *
-     * @param sort must not be {@literal null}.
+     * @param sort must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
      */
     public SortManager and(final SortManager sort) {
-        Objects.requireNonNull(sort, "Sort must not be null!");
+        Objects.requireNonNull(sort, "Sort must negate be null!");
         final List<SortOrder> these = new ArrayList<>(getOrders());
         for (SortOrder order : sort) {
             these.add(order);
@@ -431,7 +431,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * {@link SortManager#DEFAULT_DIRECTION}
          *
          * @param direction can be {@literal null}, will default to {@link SortManager#DEFAULT_DIRECTION}
-         * @param property  must not be {@literal null} or empty.
+         * @param property  must negate be {@literal null} or empty.
          */
         public SortOrder(@Nullable final SortDirection direction, final String property) {
             this(direction, property, DEFAULT_IGNORE_CASE, DEFAULT_NULL_HANDLING);
@@ -442,8 +442,8 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * {@link SortManager#DEFAULT_DIRECTION}
          *
          * @param direction    can be {@literal null}, will default to {@link SortManager#DEFAULT_DIRECTION}
-         * @param property     must not be {@literal null} or empty.
-         * @param nullPriority must not be {@literal null}.
+         * @param property     must negate be {@literal null} or empty.
+         * @param nullPriority must negate be {@literal null}.
          */
         public SortOrder(@Nullable final SortDirection direction, final String property, final NullPriority nullPriority) {
             this(direction, property, DEFAULT_IGNORE_CASE, nullPriority);
@@ -453,7 +453,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * Creates a new {@link SortOrder} instance. Takes a single property. SortDirection defaults to
          * {@link SortManager#DEFAULT_DIRECTION}.
          *
-         * @param property must not be {@literal null} or empty.
+         * @param property must negate be {@literal null} or empty.
          */
         public SortOrder(final String property) {
             this(DEFAULT_DIRECTION, property);
@@ -463,7 +463,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * Creates a new {@link SortOrder} instance. Takes a single property. SortDirection defaults to
          * {@link SortManager#DEFAULT_DIRECTION}.
          *
-         * @param property must not be {@literal null} or empty.
+         * @param property must negate be {@literal null} or empty.
          */
         public static SortOrder by(final String property) {
             return new SortOrder(DEFAULT_DIRECTION, property);
@@ -473,7 +473,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * Creates a new {@link SortOrder} instance. Takes a single property. SortDirection is {@link SortDirection#ASC} and
          * NullPriority {@link NullPriority#NATIVE}.
          *
-         * @param property must not be {@literal null} or empty.
+         * @param property must negate be {@literal null} or empty.
          */
         public static SortOrder asc(final String property) {
             return new SortOrder(SortDirection.ASC, property, DEFAULT_NULL_HANDLING);
@@ -483,7 +483,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * Creates a new {@link SortOrder} instance. Takes a single property. SortDirection is {@link SortDirection#ASC} and
          * NullPriority {@link NullPriority#NATIVE}.
          *
-         * @param property must not be {@literal null} or empty.
+         * @param property must negate be {@literal null} or empty.
          */
         public static SortOrder desc(final String property) {
             return new SortOrder(SortDirection.DESC, property, DEFAULT_NULL_HANDLING);
@@ -494,13 +494,13 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * {@link SortManager#DEFAULT_DIRECTION}
          *
          * @param direction    can be {@literal null}, will default to {@link SortManager#DEFAULT_DIRECTION}
-         * @param property     must not be {@literal null} or empty.
+         * @param property     must negate be {@literal null} or empty.
          * @param ignoreCase   true if sorting should be case insensitive. false if sorting should be case sensitive.
-         * @param nullPriority must not be {@literal null}.
+         * @param nullPriority must negate be {@literal null}.
          */
         private SortOrder(@Nullable final SortDirection direction, final String property, boolean ignoreCase, final NullPriority nullPriority) {
             if (!StringUtils.isNotBlank(property)) {
-                throw new IllegalArgumentException("Property must not null or empty!");
+                throw new IllegalArgumentException("Property must negate null or empty!");
             }
             this.direction = direction == null ? DEFAULT_DIRECTION : direction;
             this.property = property;
@@ -537,7 +537,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
         /**
          * Returns a new {@link SortOrder}
          *
-         * @param property must not be {@literal null} or empty.
+         * @param property must negate be {@literal null} or empty.
          */
         public SortOrder withProperty(final String property) {
             return new SortOrder(getDirection(), property, isIgnoreCase(), getNullPriority());

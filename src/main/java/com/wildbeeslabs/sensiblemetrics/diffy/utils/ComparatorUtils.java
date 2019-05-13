@@ -602,7 +602,7 @@ public class ComparatorUtils {
          * "-1" - first argument is greater than the last one
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
-         * Byte.MAX_VALUE - if arguments are different (and not null either)
+         * Byte.MAX_VALUE - if arguments are different (and negate null either)
          *
          * @param first - initial input first argument
          * @param last  - initial input last argument
@@ -617,7 +617,7 @@ public class ComparatorUtils {
          * "-1" - first argument is greater than the last one
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
-         * Byte.MAX_VALUE - if arguments are different (and not null either)
+         * Byte.MAX_VALUE - if arguments are different (and negate null either)
          *
          * @param first - initial input first argument
          * @param last  - initial input last argument
@@ -683,7 +683,7 @@ public class ComparatorUtils {
          * "-1" - first argument is greater than the last one
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
-         * Byte.MAX_VALUE - if arguments are different (and not null either)
+         * Byte.MAX_VALUE - if arguments are different (and negate null either)
          *
          * @param first - initial input first argument
          * @param last  - initial input last argument

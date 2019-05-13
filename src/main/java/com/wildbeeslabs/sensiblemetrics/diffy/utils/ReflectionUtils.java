@@ -596,30 +596,30 @@ public class ReflectionUtils {
     }
 
     /**
-     * Return binary flag whether method is not abstract
+     * Return binary flag whether method is negate abstract
      *
      * @param rawMethod - initial method type {@link Method}
-     * @return true - if method is not abstract, false - otherwise
+     * @return true - if method is negate abstract, false - otherwise
      */
     private static boolean isNotAbstract(final Method rawMethod) {
         return !Modifier.isAbstract(rawMethod.getModifiers());
     }
 
     /**
-     * Return binary flag whether method is not static
+     * Return binary flag whether method is negate static
      *
      * @param rawMethod - initial method type {@link Method}
-     * @return true - if method is not static, false - otherwise
+     * @return true - if method is negate static, false - otherwise
      */
     private static boolean isNotStatic(final Method rawMethod) {
         return !Modifier.isStatic(rawMethod.getModifiers());
     }
 
     /**
-     * Return binary flag whether method is not native
+     * Return binary flag whether method is negate native
      *
      * @param rawMethod - initial method type {@link Method}
-     * @return true - if method is not native, false - otherwise
+     * @return true - if method is negate native, false - otherwise
      */
     private static boolean isNotNative(final Method rawMethod) {
         return !Modifier.isNative(rawMethod.getModifiers());

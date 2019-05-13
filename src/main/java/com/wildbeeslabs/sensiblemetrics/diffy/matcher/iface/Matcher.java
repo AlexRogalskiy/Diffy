@@ -75,8 +75,20 @@ public interface Matcher<T> extends Serializable {
      *
      * @return negated {@link Matcher} operator
      */
-    default Matcher<T> not() {
+    default Matcher<T> negate() {
         return (final T t) -> !matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOT" of this predicate and another
+     *
+     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is null
+     */
+    default Matcher<T> not(final Matcher<? super T> other) {
+        Objects.requireNonNull(other);
+        return (Matcher<T>) other.negate();
     }
 
     /**
@@ -101,5 +113,19 @@ public interface Matcher<T> extends Serializable {
     default Matcher<T> xor(final Matcher<? super T> other) {
         Objects.requireNonNull(other);
         return (final T t) -> matches(t) ^ other.matches(t);
+    }
+
+    /**
+     * Returns {@link Matcher} operator that tests if two arguments are equal according
+     * to {@link Objects#equals(Object, Object)}.
+     *
+     * @param value - initial input argument value to be matched {@code T}
+     * @return {@link Matcher} operator that tests if two arguments are equal according
+     * to {@link Objects#equals(Object, Object)}
+     */
+    static <T> Matcher<T> isEqual(final T value) {
+        return (Objects.isNull(value))
+            ? Objects::isNull
+            : (final T t) -> value.equals(t);
     }
 }
