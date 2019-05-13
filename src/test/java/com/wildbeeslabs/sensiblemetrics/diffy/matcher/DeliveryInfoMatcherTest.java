@@ -152,6 +152,28 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
+    @DisplayName("Test delivery info entity by multiple valid custom delivery info and-chained matchers")
+    public void test_deliveryInfo_by_multipleValidAndMatcher() {
+        // given
+        getDeliveryInfo().setType(4);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.getInstance()
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(deliveryInfoMatcher.and(deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+    }
+
+    @Test
     @DisplayName("Test delivery info entity by custom delivery info not-chained matchers")
     public void test_deliveryInfo_by_validNotMatcher() {
         // given
@@ -233,6 +255,28 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertFalse(deliveryInfoMatcher.or(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by multiple valid custom delivery info or-chained matchers")
+    public void test_deliveryInfo_by_multipleValidOrMatcher() {
+        // given
+        getDeliveryInfo().setType(6);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+            .withCreatedDate(toDate("10/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.getInstance()
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(deliveryInfoMatcher.or(deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
     }
 
     @Test

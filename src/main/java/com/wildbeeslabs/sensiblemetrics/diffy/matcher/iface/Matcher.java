@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
@@ -59,18 +60,6 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of current predicate and another
-     *
-     * @param after - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if {@code after} is null
-     */
-    default Matcher<T> and(final Matcher<? super T> after) {
-        Objects.requireNonNull(after);
-        return (final T t) -> matches(t) && after.matches(t);
-    }
-
-    /**
      * Returns negated {@link Matcher} operator
      *
      * @return negated {@link Matcher} operator
@@ -80,14 +69,26 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of current predicate and another
+     *
+     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if {@code after} is null
+     */
+    default Matcher<T> and(final Matcher<? super T> other) {
+        Objects.requireNonNull(other, "matcher must not be null");
+        return (final T t) -> matches(t) && other.matches(t);
+    }
+
+    /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOT" of this predicate and another
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is null
+     * @throws NullPointerException if matchers is {@code null}
      */
     default Matcher<T> not(final Matcher<? super T> other) {
-        Objects.requireNonNull(other);
+        Objects.requireNonNull(other, "matcher must not be null");
         return (Matcher<T>) other.negate();
     }
 
@@ -96,10 +97,10 @@ public interface Matcher<T> extends Serializable {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is null
+     * @throws NullPointerException if matchers is {@code null}
      */
     default Matcher<T> or(final Matcher<? super T> other) {
-        Objects.requireNonNull(other);
+        Objects.requireNonNull(other, "matcher must not be null");
         return (final T t) -> matches(t) || other.matches(t);
     }
 
@@ -108,11 +109,37 @@ public interface Matcher<T> extends Serializable {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is null
+     * @throws NullPointerException if matchers is {@code null}
      */
     default Matcher<T> xor(final Matcher<? super T> other) {
-        Objects.requireNonNull(other);
+        Objects.requireNonNull(other, "matcher must not be null");
         return (final T t) -> matches(t) ^ other.matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of this predicate and another
+     *
+     * @param matchers - initial input {@link Matcher} operators to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    @SuppressWarnings("varargs")
+    default Matcher<T> and(final Matcher<T>... matchers) {
+        Objects.requireNonNull(matchers, "matchers must not be null");
+        return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> new IllegalStateException("Unable to combine matchers together via logical AND"));
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of this predicate and another
+     *
+     * @param matchers - initial input {@link Matcher} operators to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    @SuppressWarnings("varargs")
+    default Matcher<T> or(final Matcher<T>... matchers) {
+        Objects.requireNonNull(matchers, "matchers must not be null");
+        return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> new IllegalStateException("Unable to combine matchers together via logical OR"));
     }
 
     /**
