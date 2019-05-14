@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DefaultDiffEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntryView;
 import lombok.*;
 
 /**
@@ -52,28 +52,28 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     /**
      * Default entry id {@link String}
      */
-    @JsonView(DefaultDiffEntryView.Internal.class)
+    @JsonView(DiffEntryView.Internal.class)
     @JsonProperty("id")
     private String id;
 
     /**
      * Default property name {@link String}
      */
-    @JsonView(DefaultDiffEntryView.External.class)
+    @JsonView(DiffEntryView.External.class)
     @JsonProperty("property")
     private String propertyName;
 
     /**
      * Default property value of first argument {@link Object}
      */
-    @JsonView(DefaultDiffEntryView.External.class)
+    @JsonView(DiffEntryView.External.class)
     @JsonProperty("first")
     private transient Object first;
 
     /**
      * Default property value of last argument {@link Object}
      */
-    @JsonView(DefaultDiffEntryView.External.class)
+    @JsonView(DiffEntryView.External.class)
     @JsonProperty("last")
     private transient Object last;
 }

@@ -21,49 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.stream.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.Value;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import java.util.Iterator;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-/**
- * Default lazy {@link Streamable} implementation for a given {@link Supplier}
- */
-@Data
-@EqualsAndHashCode
-@ToString
-@Value(staticConstructor = "from")
-public class LazyStream<T> implements Streamable<T> {
+public interface DiffEntryView {
 
     /**
-     * Default {@link Supplier} instance
+     * {@link DiffEntryView.External} declaration
      */
-    private final Supplier<? extends Stream<T>> stream;
-
-    /**
-     * Returns default {@link Iterator} instance
-     *
-     * @return default {@link Iterator} instance
-     */
-    @Override
-    public Iterator<T> iterator() {
-        return stream().iterator();
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class External {
     }
 
     /**
-     * Returns default {@link Stream} instance
-     *
-     * @return default {@link Stream} instance
+     * {@link DiffEntryView.Internal} declaration
      */
-    @Override
-    public Stream<T> stream() {
-        return this.stream.get();
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class Internal extends DiffEntryView.External {
     }
 }

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.stream.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.stream.impl.LazyStream;
+import com.wildbeeslabs.sensiblemetrics.diffy.stream.impl.LazyStreamable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,7 +45,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      *
      * @return empty {@link Streamable} of values {@code T}
      */
-    default <T> Streamable<T> empty() {
+    static <T> Streamable<T> empty() {
         return Collections::emptyIterator;
     }
 
@@ -55,7 +55,8 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @param values the elements to be returned {@code T}
      * @return {@link Streamable} of values {@code T}
      */
-    default <T> Streamable<T> of(final T... values) {
+    @SafeVarargs
+    static <T> Streamable<T> of(final T... values) {
         return () -> Arrays.asList(values).iterator();
     }
 
@@ -66,8 +67,8 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @return {@link Streamable} of values {@code T}
      * @throws NullPointerException if iterable is null
      */
-    default <T> Streamable<T> of(final Iterable<T> iterable) {
-        Objects.requireNonNull(iterable, "Iterable must negate be null!");
+    static <T> Streamable<T> of(final Iterable<T> iterable) {
+        Objects.requireNonNull(iterable, "Iterable must not be null!");
         return iterable::iterator;
     }
 
@@ -78,8 +79,8 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
      * @return {@link Streamable} of values {@code T}
      */
-    default <T> Streamable<T> of(final Supplier<? extends Stream<T>> supplier) {
-        return LazyStream.from(supplier);
+    static <T> Streamable<T> of(final Supplier<? extends Stream<T>> supplier) {
+        return LazyStreamable.from(supplier);
     }
 
     /**
@@ -101,7 +102,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      */
     default <R> Streamable<R> map(final Function<? super T, ? extends R> mapper) {
         Objects.requireNonNull(mapper, "Mapping interfaces must negate be null!");
-        return of(() -> stream().map(mapper));
+        return Streamable.of(() -> stream().map(mapper));
     }
 
     /**
@@ -114,7 +115,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      */
     default <R> Streamable<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
         Objects.requireNonNull(mapper, "Mapping interfaces must negate be null!");
-        return of(() -> stream().flatMap(mapper));
+        return Streamable.of(() -> stream().flatMap(mapper));
     }
 
     /**
@@ -127,7 +128,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      */
     default Streamable<T> filter(final Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate, "Filter predicate must negate be null!");
-        return of(() -> stream().filter(predicate));
+        return Streamable.of(() -> stream().filter(predicate));
     }
 
     /**
@@ -147,8 +148,8 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @throws NullPointerException if supplier is null
      */
     default Streamable<T> and(final Supplier<? extends Stream<? extends T>> supplier) {
-        Objects.requireNonNull(supplier, "Supplier must negate be null!");
-        return of(() -> Stream.concat(this.stream(), supplier.get()));
+        Objects.requireNonNull(supplier, "Supplier must not be null!");
+        return Streamable.of(() -> Stream.concat(this.stream(), supplier.get()));
     }
 
     /**

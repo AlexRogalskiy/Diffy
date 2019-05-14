@@ -21,35 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.view;
+package com.wildbeeslabs.sensiblemetrics.diffy.stream.impl;
 
-import lombok.*;
+import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
+
+import java.util.Iterator;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
- * Default difference entry view implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Default lazy {@link Streamable} implementation for a given {@link Supplier}
  */
-@Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @EqualsAndHashCode
 @ToString
-public class DefaultDiffEntryView {
+@Value(staticConstructor = "from")
+public class LazyStreamable<T> implements Streamable<T> {
 
     /**
-     * Default {@link External} entry view declaration
+     * Default {@link Supplier} instance
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class External {
+    private final Supplier<? extends Stream<T>> stream;
+
+    /**
+     * Returns default {@link Iterator} instance
+     *
+     * @return default {@link Iterator} instance
+     */
+    @Override
+    public Iterator<T> iterator() {
+        return this.stream().iterator();
     }
 
     /**
-     * Default {@link Internal} entry view declaration
+     * Returns default {@link Stream} instance
+     *
+     * @return default {@link Stream} instance
      */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Internal extends External {
+    @Override
+    public Stream<T> stream() {
+        return this.stream.get();
     }
 }
