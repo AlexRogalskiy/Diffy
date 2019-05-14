@@ -32,10 +32,21 @@ public class InvalidParameterException extends RuntimeException {
     /**
      * Returns {@link InvalidParameterException} instance by input parameters
      *
+     * @param message   - initial input raw message {@link String}
+     * @param throwable - initial input cause instance {@link Throwable}
+     * @return {@link InvalidParameterException} instance
+     */
+    public static final InvalidParameterException throwInvalidParameter(final String message, final Throwable throwable) {
+        throw new InvalidParameterException(message, throwable);
+    }
+
+    /**
+     * Returns {@link InvalidParameterException} instance by input parameters
+     *
      * @param message - initial input raw message {@link String}
      * @return {@link InvalidParameterException} instance
      */
-    public static final InvalidParameterException throwIncorrectParameter(final String message) {
+    public static final InvalidParameterException throwInvalidParameter(final String message) {
         throw new InvalidParameterException(message);
     }
 }

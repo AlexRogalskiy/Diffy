@@ -24,6 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -126,7 +128,7 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     default Matcher<T> and(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "matchers must not be null");
-        return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> new IllegalStateException("Unable to combine matchers together via logical AND"));
+        return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -139,7 +141,20 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     default Matcher<T> or(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "matchers must not be null");
-        return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> new IllegalStateException("Unable to combine matchers together via logical OR"));
+        return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of this predicate and another
+     *
+     * @param matchers - initial input {@link Matcher} operators to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    @SuppressWarnings("varargs")
+    default Matcher<T> xor(final Matcher<T>... matchers) {
+        Objects.requireNonNull(matchers, "matchers must not be null");
+        return Arrays.stream(matchers).reduce(Matcher::xor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
     }
 
     /**
