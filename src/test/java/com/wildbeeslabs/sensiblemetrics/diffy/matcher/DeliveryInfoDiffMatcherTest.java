@@ -85,7 +85,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create();
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
@@ -110,7 +110,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             });
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
@@ -122,7 +122,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
         diffMatchEntryList = Lists.newArrayList(iterable);
 
@@ -150,7 +150,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             });
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
@@ -172,7 +172,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             });
 
         // when
-        iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
         diffMatchEntryList = Lists.newArrayList(iterable);
 
@@ -205,7 +205,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(dateMatcher, typeMatcher);
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
@@ -221,7 +221,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setType(1001);
 
         // when
-        iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
         diffMatchEntryList = Lists.newArrayList(iterable);
 

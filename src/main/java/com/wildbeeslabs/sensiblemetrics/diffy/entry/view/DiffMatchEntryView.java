@@ -21,29 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.entry.view;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
-import lombok.NonNull;
-
-import java.io.Serializable;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
- * Difference matcher interface declaration
+ * {@link DiffMatchEntry} view declaration
  *
- * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@FunctionalInterface
-public interface DiffMatcher<T> extends Serializable {
+public interface DiffMatchEntryView {
 
     /**
-     * Returns iterable collection of difference match entries {@link Iterable} by initial arguments {@code T} match comparison
-     *
-     * @param value - initial input argument to be matched by {@code T}
-     * @return {@link Iterable} collection of difference match entries
+     * {@link DiffEntryView.External} declaration
      */
-    @NonNull <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value);
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class External {
+    }
+
+    /**
+     * {@link DiffEntryView.Internal} declaration
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class Internal extends DiffMatchEntryView.External {
+    }
 }

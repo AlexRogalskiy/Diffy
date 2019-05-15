@@ -23,11 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -77,23 +76,8 @@ public class DefaultDiffMatcher<T> extends AbstractMatcher<T> implements DiffMat
      * @return iterable collection of difference match entries {@link Iterable}
      */
     @Override
-    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatches(final T value) {
+    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
         super.matches(value);
-        return (S) getFailedMatchers().stream().map(matcher -> createDiffMatchEntry(value, matcher.getDescription())).collect(Collectors.toList());
-    }
-
-    /**
-     * Creates new default difference match entry {@link DefaultDiffMatchEntry}
-     *
-     * @param value       - initial input argument value {@link Object}
-     * @param description - initial input match description {@link MatchDescription}
-     * @return default difference match entry {@link DefaultDiffMatchEntry}
-     */
-    protected DefaultDiffMatchEntry createDiffMatchEntry(final Object value, final MatchDescription description) {
-        return DefaultDiffMatchEntry
-                .builder()
-                .value(value)
-                .description(description)
-                .build();
+        return (S) getFailedMatchers().stream().map(matcher -> DefaultDiffMatchEntry.of(value, matcher.getDescription())).collect(Collectors.toList());
     }
 }

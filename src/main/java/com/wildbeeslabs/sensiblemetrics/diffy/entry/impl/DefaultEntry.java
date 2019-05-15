@@ -26,7 +26,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
 import lombok.*;
 
 import java.util.Optional;
@@ -52,11 +54,13 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     /**
      * Default entry key {@code K}
      */
+    @JsonView(DiffEntryView.External.class)
     @JsonProperty(value = "key", required = true)
     private K key;
     /**
      * Default entry value {@code V}
      */
+    @JsonView(DiffEntryView.External.class)
     @JsonProperty(value = "value")
     private V value;
 

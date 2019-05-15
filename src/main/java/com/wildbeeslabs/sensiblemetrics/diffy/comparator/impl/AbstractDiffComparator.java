@@ -27,7 +27,9 @@ import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
 
@@ -68,17 +70,14 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     /**
      * Default property map {@link Map} by names {@link String} and values {@link Comparator}
      */
-    @Getter(AccessLevel.PROTECTED)
     private final transient Map<String, Comparator<?>> propertyComparatorMap = new HashMap<>();
     /**
      * Default collection of properties {@link Map} to compare by with related property types {@link Class}
      */
-    @Getter(AccessLevel.PROTECTED)
     private final transient Map<String, Field> propertyMap = new HashMap<>();
     /**
      * Default collection of properties {@link Set} to compare by
      */
-    @Getter(AccessLevel.PROTECTED)
     private final Set<String> propertySet = new HashSet<>();
 
     /**
@@ -102,7 +101,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
             ? comparator
             : ComparableComparator.getInstance();
         this.propertyMap.putAll(this.getFieldsMap(this.clazz));
-        this.propertySet.addAll(this.propertyMap.keySet());
+        this.propertySet.addAll(this.getPropertyMap().keySet());
     }
 
     /**
@@ -234,7 +233,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @return result of comparison {@code SortManager.SortDirection}
      */
     protected <T> SortManager.SortDirection compare(final T first, final T last, final String property) {
-        return SortManager.SortDirection.getDirectionByCode(Objects.compare(first, last, (Comparator<? super T>) getPropertyComparator(property)));
+        return SortManager.SortDirection.getDirectionByCode(Objects.compare(first, last, (Comparator<? super T>) this.getPropertyComparator(property)));
     }
 
     /**

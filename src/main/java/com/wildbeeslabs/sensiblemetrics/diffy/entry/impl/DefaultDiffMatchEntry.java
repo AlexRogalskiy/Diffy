@@ -28,9 +28,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntryView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffMatchEntryView;
 import lombok.*;
+
+import java.util.UUID;
 
 /**
  * Default difference match entry implementation
@@ -57,21 +59,37 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
     /**
      * Default entry id {@link String}
      */
-    @JsonView(DiffEntryView.Internal.class)
+    @JsonView(DiffMatchEntryView.Internal.class)
     @JsonProperty(value = "id", required = true)
-    private String id;
+    private transient String id;
 
     /**
      * Default match description {@link MatchDescription}
      */
-    @JsonView(DiffEntryView.External.class)
+    @JsonView(DiffMatchEntryView.External.class)
     @JsonProperty("description")
     private MatchDescription description;
 
     /**
      * Default property value to be matched {@link Object}
      */
-    @JsonView(DiffEntryView.External.class)
+    @JsonView(DiffMatchEntryView.External.class)
     @JsonProperty("value")
     private transient Object value;
+
+    /**
+     * Creates new {@link DefaultDiffMatchEntry}
+     *
+     * @param value       - initial input argument value {@link Object}
+     * @param description - initial input {@link MatchDescription}
+     * @return {@link DefaultDiffMatchEntry}
+     */
+    public static DefaultDiffMatchEntry of(final Object value, final MatchDescription description) {
+        return DefaultDiffMatchEntry
+            .builder()
+            .id(UUID.randomUUID().toString())
+            .value(value)
+            .description(description)
+            .build();
+    }
 }

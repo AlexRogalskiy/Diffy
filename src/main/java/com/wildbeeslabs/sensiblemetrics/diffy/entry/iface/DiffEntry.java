@@ -23,8 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
+import lombok.NonNull;
+
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Difference entry declaration
@@ -41,6 +47,7 @@ public interface DiffEntry<T> extends Serializable {
      *
      * @return property name {@link String}
      */
+    @NonNull
     String getPropertyName();
 
     /**
@@ -58,4 +65,22 @@ public interface DiffEntry<T> extends Serializable {
      */
     @Nullable
     T getLast();
+
+    /**
+     * A collector to create {@link Map} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     *
+     * @return {@link Map} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     */
+    static <T> Collector<DiffEntry<T>, ?, Map<String, T>> firstToMap() {
+        return Collectors.toMap(DiffEntry::getPropertyName, DiffEntry::getFirst);
+    }
+
+    /**
+     * A collector to create {@link Map} from {@link Stream} of {@link DiffEntry}s last {@code T} elements
+     *
+     * @return {@link Map} from {@link Stream} of {@link DiffEntry}s last {@code T} elements
+     */
+    static <T> Collector<DiffEntry<T>, ?, Map<String, T>> lastToMap() {
+        return Collectors.toMap(DiffEntry::getPropertyName, DiffEntry::getLast);
+    }
 }

@@ -85,7 +85,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     @Override
     @SuppressWarnings("unchecked")
     protected Comparator<?> getPropertyComparator(final String property) {
-        final Class<?> fieldClazz = getPropertyMap().get(property).getType();
+        final Class<?> fieldClazz = this.getPropertyMap().get(property).getType();
         if (Locale.class.isAssignableFrom(fieldClazz)) {
             return new ComparatorUtils.DefaultNullSafeLocaleComparator();
         } else if (Currency.class.isAssignableFrom(fieldClazz)) {
@@ -100,7 +100,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                 return new ComparatorUtils.DefaultNullSafeArrayComparator<>();
             }
         }
-        return getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+        return this.getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
     }
 
     /**
@@ -114,7 +114,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     @Override
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {
         final List<DiffEntry<?>> result = new ArrayList<>();
-        getPropertySet()
+        this.getPropertySet()
             .stream()
             .filter(property -> this.getPropertyMap().containsKey(property))
             .forEach(property -> {
@@ -123,29 +123,12 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                     final Object firstValue = this.getPropertyMap().get(property).get(first);
                     final Object lastValue = this.getPropertyMap().get(property).get(last);
                     if (!Objects.equals(compare(firstValue, lastValue, property), SortManager.SortDirection.EQ)) {
-                        result.add(this.createDiffEntry(firstValue, lastValue, property));
+                        result.add(DefaultDiffEntry.of(property, firstValue, lastValue));
                     }
                 } catch (IllegalAccessException e) {
                     log.error(String.format("ERROR: cannot get value of property: {%s}, message: {%s}", property, e.getMessage()));
                 }
             });
         return (S) result;
-    }
-
-    /**
-     * Creates new default difference entry {@link DefaultDiffEntry}
-     *
-     * @param first        - initial first argument to be compared {@link Object}
-     * @param last         - initial last argument to be compared with {@link Object}
-     * @param propertyName - initial property name {@link String}
-     * @return {@link DefaultDiffEntry} instance
-     */
-    protected DefaultDiffEntry createDiffEntry(final Object first, final Object last, final String propertyName) {
-        return DefaultDiffEntry
-            .builder()
-            .first(first)
-            .last(last)
-            .propertyName(propertyName)
-            .build();
     }
 }

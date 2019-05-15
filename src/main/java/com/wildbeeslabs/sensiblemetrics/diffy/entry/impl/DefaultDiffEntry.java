@@ -28,8 +28,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
 import lombok.*;
+
+import java.util.UUID;
 
 /**
  * Default difference entry implementation
@@ -58,7 +61,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
      */
     @JsonView(DiffEntryView.Internal.class)
     @JsonProperty(value = "id", required = true)
-    private String id;
+    private transient String id;
 
     /**
      * Default property name {@link String}
@@ -80,4 +83,40 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     @JsonView(DiffEntryView.External.class)
     @JsonProperty("last")
     private transient Object last;
+
+    /**
+     * Returns {@link Entry} of first {@code T} elements
+     *
+     * @return first {@link Entry}
+     */
+    public Entry<String, Object> firstEntry() {
+        return DefaultEntry.of(this.getPropertyName(), this.getFirst());
+    }
+
+    /**
+     * Returns {@link Entry} of last {@code T} elements
+     *
+     * @return last {@link Entry}
+     */
+    public Entry<String, Object> lastEntry() {
+        return DefaultEntry.of(this.getPropertyName(), this.getLast());
+    }
+
+    /**
+     * Creates new {@link DefaultDiffEntry}
+     *
+     * @param propertyName - initial input property name {@link String}
+     * @param first        - initial input first element value {@link Object}
+     * @param last         - initial input last element value {@link Object}
+     * @return {@link DefaultDiffEntry}
+     */
+    public static DefaultDiffEntry of(final String propertyName, final Object first, final Object last) {
+        return DefaultDiffEntry
+            .builder()
+            .id(UUID.randomUUID().toString())
+            .propertyName(propertyName)
+            .first(first)
+            .last(last)
+            .build();
+    }
 }

@@ -92,6 +92,8 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     public void test_differentEntities_by_defaultComparator() {
         // given
         final DiffComparator<DeliveryInfo> diffComparator = DefaultDiffComparatorFactory.create(DeliveryInfo.class);
+        getDeliveryInfoFirst().setStatus(DeliveryInfo.DeliveryStatus.DELIVERED);
+        getDeliveryInfoLast().setStatus(DeliveryInfo.DeliveryStatus.PENDING);
 
         // when
         final Iterable<DefaultDiffEntry> iterable = diffComparator.diffCompare(getDeliveryInfoFirst(), getDeliveryInfoLast());
@@ -146,28 +148,13 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size()));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("type")
-            .first(getDeliveryInfoFirst().getType())
-            .last(getDeliveryInfoLast().getType())
-            .build();
+        entry = DefaultDiffEntry.of("type", getDeliveryInfoFirst().getType(), getDeliveryInfoLast().getType());
         assertTrue(valueChangeList.contains(entry));
 
     }
@@ -189,28 +176,13 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("updatedAt")
-            .first(getDeliveryInfoFirst().getUpdatedAt())
-            .last(getDeliveryInfoLast().getUpdatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("updatedAt", getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
     }
 
@@ -231,20 +203,10 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("description")
-            .first(getDeliveryInfoFirst().getDescription())
-            .last(getDeliveryInfoLast().getDescription())
-            .build();
+        entry = DefaultDiffEntry.of("description", getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
     }
@@ -266,20 +228,10 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("updatedAt")
-            .first(getDeliveryInfoFirst().getUpdatedAt())
-            .last(getDeliveryInfoLast().getUpdatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("updatedAt", getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
     }
@@ -300,22 +252,12 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("type")
-            .first(getDeliveryInfoFirst().getType())
-            .last(getDeliveryInfoLast().getType())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("type", getDeliveryInfoFirst().getType(), getDeliveryInfoLast().getType());
         assertTrue(valueChangeList.contains(entry));
 
         assertTrue(valueChangeList.stream().noneMatch(value -> "_sums".equalsIgnoreCase(value.getPropertyName())));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
     }
@@ -337,37 +279,17 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertEquals(CollectionUtils.subtract(includedProperties, excludedProperties).size(), valueChangeList.size());
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("type")
-            .first(getDeliveryInfoFirst().getType())
-            .last(getDeliveryInfoLast().getType())
-            .build();
+        entry = DefaultDiffEntry.of("type", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("description")
-            .first(getDeliveryInfoFirst().getDescription())
-            .last(getDeliveryInfoLast().getDescription())
-            .build();
+        entry = DefaultDiffEntry.of("description", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
     }
@@ -389,29 +311,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertEquals(includedProperties.size(), valueChangeList.size());
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("description")
-            .first(getDeliveryInfoFirst().getDescription())
-            .last(getDeliveryInfoLast().getDescription())
-            .build();
+        entry = DefaultDiffEntry.of("description", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
     }
 
@@ -432,30 +339,15 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), IsEqual.equalTo(3));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("description")
-            .first(getDeliveryInfoFirst().getDescription())
-            .last(getDeliveryInfoLast().getDescription())
-            .build();
+        entry = DefaultDiffEntry.of("description", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertNotEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("updatedAt")
-            .first(getDeliveryInfoFirst().getUpdatedAt())
-            .last(getDeliveryInfoLast().getUpdatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("updatedAt", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
     }
 
@@ -475,29 +367,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), Matchers.is(lessThanOrEqualTo(ReflectionUtils.getAllFields(DeliveryInfo.class).length - Sets.newHashSet(excludedProperties).size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("description")
-            .first(getDeliveryInfoFirst().getDescription())
-            .last(getDeliveryInfoLast().getDescription())
-            .build();
+        entry = DefaultDiffEntry.of("description", getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
         assertFalse(valueChangeList.contains(entry));
     }
 
@@ -541,39 +418,19 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), IsEqual.equalTo(3));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("gid")
-            .first(getDeliveryInfoFirst().getGid())
-            .last(getDeliveryInfoLast().getGid())
-            .build();
+        entry = DefaultDiffEntry.of("gid", getDeliveryInfoFirst().getGid(), getDeliveryInfoLast().getGid());
         assertFalse(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getGid(), getDeliveryInfoLast().getGid());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("updatedAt")
-            .first(getDeliveryInfoFirst().getUpdatedAt())
-            .last(getDeliveryInfoLast().getUpdatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("updatedAt", getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
         assertFalse(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("description")
-            .first(getDeliveryInfoFirst().getDescription())
-            .last(getDeliveryInfoLast().getDescription())
-            .build();
+        entry = DefaultDiffEntry.of("description", getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
         assertFalse(valueChangeList.contains(entry));
         assertEquals(getDeliveryInfoFirst().getDescription(), getDeliveryInfoLast().getDescription());
     }
@@ -600,30 +457,15 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), IsEqual.equalTo(3));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("updatedAt")
-            .first(getDeliveryInfoFirst().getUpdatedAt())
-            .last(getDeliveryInfoLast().getUpdatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("updatedAt", getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
         assertFalse(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("gid")
-            .first(getDeliveryInfoFirst().getDescription())
-            .last(getDeliveryInfoLast().getDescription())
-            .build();
+        entry = DefaultDiffEntry.of("gid", getDeliveryInfoFirst().getGid(), getDeliveryInfoLast().getGid());
         assertFalse(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getGid(), getDeliveryInfoLast().getGid());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
     }
 
@@ -651,21 +493,11 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList, is(not(empty())));
         assertThat(valueChangeList.size(), IsEqual.equalTo(1));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("updatedAt")
-            .first(getDeliveryInfoFirst().getUpdatedAt())
-            .last(getDeliveryInfoLast().getUpdatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("updatedAt", getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
         assertFalse(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
     }
@@ -756,20 +588,10 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(getDeliveryInfoFirst().getAddresses().size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("addresses")
-            .first(getDeliveryInfoFirst().getAddresses())
-            .last(getDeliveryInfoLast().getAddresses())
-            .build();
+        entry = DefaultDiffEntry.of("addresses", getDeliveryInfoFirst().getAddresses(), getDeliveryInfoLast().getAddresses());
         assertTrue(valueChangeList.contains(entry));
     }
 
@@ -807,37 +629,17 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("updatedAt")
-            .first(getDeliveryInfoFirst().getUpdatedAt())
-            .last(getDeliveryInfoLast().getUpdatedAt())
-            .build();
+        entry = DefaultDiffEntry.of("updatedAt", getDeliveryInfoFirst().getUpdatedAt(), getDeliveryInfoLast().getUpdatedAt());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("codes")
-            .first(getDeliveryInfoFirst().getCodes())
-            .last(getDeliveryInfoLast().getCodes())
-            .build();
+        entry = DefaultDiffEntry.of("codes", getDeliveryInfoFirst().getCodes(), getDeliveryInfoLast().getCodes());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getCodes(), getDeliveryInfoLast().getCodes());
     }
@@ -865,29 +667,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("codes")
-            .first(getDeliveryInfoFirst().getCodes())
-            .last(getDeliveryInfoLast().getCodes())
-            .build();
+        entry = DefaultDiffEntry.of("codes", getDeliveryInfoFirst().getCodes(), getDeliveryInfoLast().getCodes());
         assertFalse(valueChangeList.contains(entry));
         assertArrayEquals(getDeliveryInfoFirst().getCodes(), getDeliveryInfoLast().getCodes());
     }
@@ -918,29 +705,14 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
         assertThat(valueChangeList.size(), is(greaterThanOrEqualTo(0)));
         assertThat(valueChangeList.size(), is(lessThanOrEqualTo(includedProperties.size())));
 
-        DefaultDiffEntry entry = DefaultDiffEntry
-            .builder()
-            .propertyName("createdAt")
-            .first(getDeliveryInfoFirst().getCreatedAt())
-            .last(getDeliveryInfoLast().getCreatedAt())
-            .build();
+        DefaultDiffEntry entry = DefaultDiffEntry.of("createdAt", getDeliveryInfoFirst().getCreatedAt(), getDeliveryInfoLast().getCreatedAt());
         assertFalse(valueChangeList.contains(entry));
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("id")
-            .first(getDeliveryInfoFirst().getId())
-            .last(getDeliveryInfoLast().getId())
-            .build();
+        entry = DefaultDiffEntry.of("id", getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
         assertTrue(valueChangeList.contains(entry));
         assertNotEquals(getDeliveryInfoFirst().getId(), getDeliveryInfoLast().getId());
 
-        entry = DefaultDiffEntry
-            .builder()
-            .propertyName("addresses")
-            .first(getDeliveryInfoFirst().getAddresses())
-            .last(getDeliveryInfoLast().getCodes())
-            .build();
+        entry = DefaultDiffEntry.of("addresses", getDeliveryInfoFirst().getAddresses(), getDeliveryInfoLast().getAddresses());
         assertFalse(valueChangeList.contains(entry));
         assertEquals(getDeliveryInfoFirst().getAddresses(), getDeliveryInfoLast().getAddresses());
     }

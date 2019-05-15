@@ -40,7 +40,7 @@ public interface Entry<K, V> {
     /**
      * A collector to create a {@link Map} from a {@link Stream} of {@link Entry}s.
      *
-     * @return
+     * @return {@link Map} from a {@link Stream} of {@link Entry}s
      */
     static <K, V> Collector<Entry<K, V>, ?, Map<K, V>> toMap() {
         return Collectors.toMap(Entry::getKey, Entry::getValue);
@@ -56,9 +56,10 @@ public interface Entry<K, V> {
      * @param consumer - initial input {@link BiConsumer} operator
      */
     static <K, V> void ifAllPresent(final Optional<K> key, final Optional<V> value, final BiConsumer<K, V> consumer) {
-        Objects.requireNonNull(key, "Optional must not be null!");
-        Objects.requireNonNull(value, "Optional must not be null!");
+        Objects.requireNonNull(key, "Optional key must not be null!");
+        Objects.requireNonNull(value, "Optional value must not be null!");
         Objects.requireNonNull(consumer, "Consumer must not be null!");
+
         mapIfAllPresent(key, value, (k, v) -> {
             consumer.accept(k, v);
             return null;
@@ -77,9 +78,10 @@ public interface Entry<K, V> {
      * @return {@link Optional} of {@link BiFunction} operator result {@code R}
      */
     static <K, V, R> Optional<R> mapIfAllPresent(final Optional<K> key, final Optional<V> value, final BiFunction<K, V, R> function) {
-        Objects.requireNonNull(key, "Optional must not be null!");
-        Objects.requireNonNull(value, "Optional must not be null!");
+        Objects.requireNonNull(key, "Optional key must not be null!");
+        Objects.requireNonNull(value, "Optional value must not be null!");
         Objects.requireNonNull(function, "BiFunction must not be null!");
+
         return key.flatMap(k -> value.map(v -> function.apply(k, v)));
     }
 }
