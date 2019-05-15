@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
+import java.util.Arrays;
+
 /**
  * Property type enumeration
  */
@@ -47,11 +49,9 @@ public enum PropertyType {
      * @return {@link PropertyType} instance
      */
     public static PropertyType forType(final String propertyType) {
-        for (final PropertyType type : values()) {
-            if (type.equals(propertyType)) {
-                return type;
-            }
-        }
-        return null;
+        return Arrays.stream(values())
+            .filter(type -> type.name().equalsIgnoreCase(propertyType))
+            .findFirst()
+            .orElse(null);
     }
 }

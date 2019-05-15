@@ -4,13 +4,13 @@
  * Copyright 2019 WildBees Labs, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software andAll associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * to use, copy, modify, merge, publish, distribute, sublicense, andAll/or sell
+ * copies of the Software, andAll to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
+ * The above copyright notice andAll this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
@@ -43,6 +45,8 @@ import lombok.*;
 @Data
 @EqualsAndHashCode
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
 
     /**
@@ -54,7 +58,7 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
      * Default entry id {@link String}
      */
     @JsonView(DiffEntryView.Internal.class)
-    @JsonProperty("id")
+    @JsonProperty(value = "id", required = true)
     private String id;
 
     /**

@@ -4,13 +4,13 @@
  * Copyright 2019 WildBees Labs, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software andAll associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * to use, copy, modify, merge, publish, distribute, sublicense, andAll/or sell
+ * copies of the Software, andAll to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
+ * The above copyright notice andAll this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -126,7 +126,7 @@ public interface Matcher<T> extends Serializable {
      * @throws NullPointerException if matchers is {@code null}
      */
     @SuppressWarnings("varargs")
-    default Matcher<T> and(final Matcher<T>... matchers) {
+    static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "matchers must not be null");
         return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
     }
@@ -139,7 +139,7 @@ public interface Matcher<T> extends Serializable {
      * @throws NullPointerException if matchers is {@code null}
      */
     @SuppressWarnings("varargs")
-    default Matcher<T> or(final Matcher<T>... matchers) {
+    static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "matchers must not be null");
         return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
     }
@@ -152,7 +152,7 @@ public interface Matcher<T> extends Serializable {
      * @throws NullPointerException if matchers is {@code null}
      */
     @SuppressWarnings("varargs")
-    default Matcher<T> xor(final Matcher<T>... matchers) {
+    static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "matchers must not be null");
         return Arrays.stream(matchers).reduce(Matcher::xor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
     }

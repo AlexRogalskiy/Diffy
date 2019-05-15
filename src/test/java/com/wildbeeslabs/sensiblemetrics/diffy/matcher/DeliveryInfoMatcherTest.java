@@ -4,13 +4,13 @@
  * Copyright 2019 WildBees Labs, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * of this software andAll associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * to use, copy, modify, merge, publish, distribute, sublicense, andAll/or sell
+ * copies of the Software, andAll to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
+ * The above copyright notice andAll this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -110,7 +110,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test(expected = NullPointerException.class)
-    @DisplayName("Test delivery info entity by nullable custom delivery info and-chained matchers")
+    @DisplayName("Test delivery info entity by nullable custom delivery info andAll-chained matchers")
     public void test_deliveryInfo_by_nullableAndMatcher() {
         // given
         getDeliveryInfo().setType(5);
@@ -129,7 +129,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom delivery info and-chained matchers")
+    @DisplayName("Test delivery info entity by custom delivery info andAll-chained matchers")
     public void test_deliveryInfo_by_AndMatcher() {
         // given
         getDeliveryInfo().setType(5);
@@ -150,7 +150,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by custom delivery info and-chained matchers")
+    @DisplayName("Test delivery info entity by custom delivery info andAll-chained matchers")
     public void test_deliveryInfo_by_invalidAndMatcher() {
         // given
         getDeliveryInfo().setType(4);
@@ -171,7 +171,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
-    @DisplayName("Test delivery info entity by multiple valid custom delivery info and-chained matchers")
+    @DisplayName("Test delivery info entity by multiple valid custom delivery info andAll-chained matchers")
     public void test_deliveryInfo_by_multipleValidAndMatcher() {
         // given
         getDeliveryInfo().setType(4);
@@ -181,7 +181,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
-            .withType(5)
+            .withType(4)
             .withGid(DEFAULT_GID_PREFIX);
         final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
             .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
@@ -189,7 +189,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // then
-        assertTrue(deliveryInfoMatcher.and(deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+        assertTrue(Matcher.andAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -312,7 +312,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // then
-        assertTrue(deliveryInfoMatcher.or(deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+        assertTrue(Matcher.orAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
     }
 
     @Test(expected = NullPointerException.class)
@@ -390,12 +390,12 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
         final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
-            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+            .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT));
         final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.getInstance()
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // then
-        assertFalse(deliveryInfoMatcher.xor(deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+        assertFalse(Matcher.xorAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
     }
 
     @Test
