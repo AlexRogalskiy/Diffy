@@ -119,7 +119,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of this predicate and another
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of {@link Matcher} collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
@@ -132,7 +132,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of this predicate and another
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of {@link Matcher} collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
@@ -145,7 +145,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of this predicate and another
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of {@link Matcher} collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator

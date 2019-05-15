@@ -48,6 +48,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Delivery info difference matcher unit test {@link AbstractDeliveryInfoDiffTest}
@@ -85,6 +86,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
@@ -109,6 +111,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
@@ -120,6 +123,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
         diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
@@ -147,6 +151,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
@@ -168,6 +173,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
         diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
@@ -200,6 +206,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
@@ -215,6 +222,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         iterable = diffMatcher.diffMatches(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
         diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
