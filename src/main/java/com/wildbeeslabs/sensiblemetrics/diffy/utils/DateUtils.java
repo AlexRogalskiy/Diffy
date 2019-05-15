@@ -36,6 +36,8 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
  * Date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
  *
@@ -112,7 +114,7 @@ public class DateUtils {
             formatter.setLenient(true);
             return formatter.parse(date);
         } catch (ParseException e) {
-            log.error(String.format("ERROR: cannot parse date by format={%s}", dateFormat));
+            log.error(formatMessage("ERROR: cannot parse date by format={%s}", dateFormat));
         }
         return null;
     }

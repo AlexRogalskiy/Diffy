@@ -23,7 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,10 +32,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Custom delivery info matcher implementation {@link DeliveryInfo}
+ * Custom {@link String} {@link AbstractTypeSafeMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -51,7 +51,7 @@ public class UrlParametersMatcher extends AbstractTypeSafeMatcher<String> {
     /**
      * Default collection {@link Map} of url parameters
      */
-    private final Map<String, String> expected;
+    private final Map<String, String> urlParamMap;
 
     /**
      * Default url parameter matcher with expected input url argument {@link String}
@@ -59,19 +59,19 @@ public class UrlParametersMatcher extends AbstractTypeSafeMatcher<String> {
      * @param urlString - initial argument url string to match
      */
     public UrlParametersMatcher(final String urlString) {
-        this.expected = paramStringToMap(urlString);
+        this.urlParamMap = this.paramStringToMap(urlString);
     }
 
     protected final Map<String, String> paramStringToMap(final String string) {
-        return Arrays.stream(string.split("&"))
-                .collect(Collectors.toMap(
-                        (String s) -> s.split("=")[0],
-                        (String s) -> s.split("=").length == 2 ? s.split("=")[1] : StringUtils.EMPTY));
+        return Arrays.stream(Optional.ofNullable(string).orElse(StringUtils.EMPTY).split("&"))
+            .collect(Collectors.toMap(
+                (String s) -> s.split("=")[0],
+                (String s) -> s.split("=").length == 2 ? s.split("=")[1] : StringUtils.EMPTY));
     }
 
     @Override
     public boolean matchesSafe(final String value) {
-        return getExpected().equals(paramStringToMap(value));
+        return this.getUrlParamMap().equals(this.paramStringToMap(value));
     }
 
     /**
@@ -80,7 +80,7 @@ public class UrlParametersMatcher extends AbstractTypeSafeMatcher<String> {
      * @param urlString - initial argument url string to match
      * @return url parameters matcher instance {@link UrlParametersMatcher}
      */
-    public static UrlParametersMatcher getInstance(final String urlString) {
+    public static UrlParametersMatcher of(final String urlString) {
         return new UrlParametersMatcher(urlString);
     }
 }

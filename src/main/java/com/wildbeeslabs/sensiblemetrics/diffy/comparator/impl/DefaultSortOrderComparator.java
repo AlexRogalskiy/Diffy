@@ -48,19 +48,19 @@ import java.util.function.Function;
 public abstract class DefaultSortOrderComparator<T> implements Function<SortManager.SortOrder, Comparator<? super T>> {
 
     /**
-     * Default property by comparator map instance {@link Map}
+     * Default comparator {@link Map}
      */
     private final Map<String, Comparator<? super T>> comparatorMap;
     /**
-     * Default property comparator {@link Comparator}
+     * Default property {@link Comparator}
      */
     private final Comparator<? super T> defaultComparator;
 
     /**
-     * Returns comparator instance {@link Comparator} by input sort order value {@code SortManager.SortOrder}
+     * Returns {@link Comparator} by input {@code SortManager.SortOrder}
      *
-     * @param order - initial input sort order value {@code SortManager.SortOrder}
-     * @return comparator instance {@link Comparator}
+     * @param order - initial input {@code SortManager.SortOrder}
+     * @return {@link Comparator}
      */
     @Override
     public Comparator<? super T> apply(final SortManager.SortOrder order) {

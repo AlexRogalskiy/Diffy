@@ -30,7 +30,9 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.wrapInBrackets;
 
@@ -53,10 +55,10 @@ public class BaseMatchDescription implements MatchDescription {
     private static final long serialVersionUID = -8697254240651372713L;
 
     /**
-     * Appends input string value to current description {@link MatchDescription}
+     * Appends input string value to current {@link MatchDescription}
      *
      * @param value - initial input string value to be appended {@link String}
-     * @return current description instance {@link MatchDescription}
+     * @return current {@link MatchDescription}
      */
     @Override
     public MatchDescription append(final String value) {
@@ -65,10 +67,10 @@ public class BaseMatchDescription implements MatchDescription {
     }
 
     /**
-     * Appends input object value to current description {@link MatchDescription}
+     * Appends input object value to current {@link MatchDescription}
      *
      * @param value - initial input object value to be appended {@link Object}
-     * @return current description instance {@link MatchDescription}
+     * @return current {@link MatchDescription}
      */
     @Override
     public MatchDescription append(final Object value) {
@@ -77,14 +79,14 @@ public class BaseMatchDescription implements MatchDescription {
     }
 
     /**
-     * Appends input collection of values to current description {@link MatchDescription} by start/delimiter/end tokens
+     * Appends input collection of values to current {@link MatchDescription} by start/delimiter/end tokens
      *
      * @param start     - initial input start token {@link String}
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input collection of values to be appended
      * @param <T>       type of input element to be processed by matchable operation
-     * @return current description instance {@link MatchDescription}
+     * @return current {@link MatchDescription}
      */
     @Override
     public <T> MatchDescription append(final String start, final String delimiter, final String end, final T... values) {
@@ -92,20 +94,20 @@ public class BaseMatchDescription implements MatchDescription {
     }
 
     /**
-     * Appends input iterable collection of values to current description {@link MatchDescription} by start/delimiter/end tokens
+     * Appends input iterable collection of values to current {@link MatchDescription} by start/delimiter/end tokens
      *
      * @param start     -  initial input start token {@link String}
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
      * @param values    - initial input iterable collection of values to be appended {@link Iterable}
      * @param <T>       type of input element to be processed by matchable operation
-     * @return current description instance {@link MatchDescription}
+     * @return current {@link MatchDescription}
      */
     @Override
     public <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values) {
         boolean separate = false;
         append(start);
-        final Iterator<? extends T> it = values.iterator();
+        final Iterator<? extends T> it = Optional.ofNullable(values).orElseGet(Collections::emptyList).iterator();
         while (it.hasNext()) {
             if (separate) append(delimiter);
             append(wrapInBrackets.apply(it.next()));

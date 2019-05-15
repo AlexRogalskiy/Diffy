@@ -72,7 +72,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      * @param matchers - initial input iterable collection of matchers {@link Iterable}
      */
     public AbstractMatcher(final Iterable<Matcher<? super T>> matchers) {
-        withMatchers(matchers);
+        this.withMatchers(matchers);
     }
 
     /**
@@ -83,24 +83,20 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      */
     @Override
     public boolean matches(final T value) {
-        getFailedMatchers().clear();
-        getMatchers().forEach(matcher -> {
-            if (!matcher.matches(value)) {
-                getFailedMatchers().add(matcher);
-            }
-        });
-        return getFailedMatchers().isEmpty();
+        this.getFailedMatchers().clear();
+        this.getMatchers().stream().filter(i -> !i.matches(value)).forEach(this.failedMatchers::add);
+        return this.getFailedMatchers().isEmpty();
     }
 
     /**
      * Removes input iterable collection of matchers {@link Matcher} from current matchers collection {@link List}
      *
-     * @param matchers - initial input collection of matchers {@link Iterable}
+     * @param matchers - initial input collection of {@link Matcher} {@link Iterable}
      */
     public AbstractMatcher<T> withoutMatchers(final Iterable<Matcher<? super T>> matchers) {
         Optional.ofNullable(matchers)
-                .orElseGet(Collections::emptyList)
-                .forEach(this::withoutMatcher);
+            .orElseGet(Collections::emptyList)
+            .forEach(this::withoutMatcher);
         return this;
     }
 
@@ -111,7 +107,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      */
     public AbstractMatcher<T> withoutMatcher(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
-            getMatchers().remove(matcher);
+            this.getMatchers().remove(matcher);
         }
         return this;
     }
@@ -119,13 +115,13 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     /**
      * Adds input iterable collection of matchers {@link Iterable} to current matchers collection {@link List}
      *
-     * @param matchers - initial input collection of matchers {@link Iterable}
+     * @param matchers - initial input collection of {@link Matcher} {@link Iterable}
      */
     public AbstractMatcher<T> withMatchers(final Iterable<Matcher<? super T>> matchers) {
-        getMatchers().clear();
+        this.getMatchers().clear();
         Optional.ofNullable(matchers)
-                .orElseGet(Collections::emptyList)
-                .forEach(this::withMatcher);
+            .orElseGet(Collections::emptyList)
+            .forEach(this::withMatcher);
         return this;
     }
 
@@ -136,7 +132,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
      */
     public AbstractMatcher<T> withMatcher(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
-            getMatchers().add(matcher);
+            this.getMatchers().add(matcher);
         }
         return this;
     }

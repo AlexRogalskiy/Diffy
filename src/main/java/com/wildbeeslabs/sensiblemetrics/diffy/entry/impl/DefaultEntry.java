@@ -52,6 +52,11 @@ import java.util.Optional;
 public class DefaultEntry<K, V> implements Entry<K, V> {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 5764115349513946799L;
+
+    /**
      * Default entry key {@code K}
      */
     @JsonView(DiffEntryView.External.class)

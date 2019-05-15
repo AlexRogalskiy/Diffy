@@ -32,6 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
  * String {@link BaseMatchDescription} implementation
  *
@@ -74,15 +76,15 @@ public class StringMatchDescription extends BaseMatchDescription {
     /**
      * Appends input string value to curernt description {@link MatchDescription}
      *
-     * @param value - initial input string value to be appended {@link String}
-     * @return current description instance {@link MatchDescription}
+     * @param value - initial input value to be appended {@link String}
+     * @return current {@link MatchDescription}
      */
     @Override
     public MatchDescription append(final String value) {
         try {
-            out.append(value);
+            this.getOut().append(value);
         } catch (IOException e) {
-            BadOperationException.throwBadOperation(String.format("ERROR: cannot append value: {%s}", value), e);
+            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot append value: {%s}", value), e);
         }
         return this;
     }

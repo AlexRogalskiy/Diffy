@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
  * Matcher interface declaration by input object instance
@@ -78,7 +79,7 @@ public interface Matcher<T> extends Serializable {
      * @throws NullPointerException if {@code after} is null
      */
     default Matcher<T> and(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "matcher must not be null");
+        Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> matches(t) && other.matches(t);
     }
 
@@ -90,7 +91,7 @@ public interface Matcher<T> extends Serializable {
      * @throws NullPointerException if matchers is {@code null}
      */
     default Matcher<T> not(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "matcher must not be null");
+        Objects.requireNonNull(other, "Matcher should not be null!");
         return (Matcher<T>) other.negate();
     }
 
@@ -102,7 +103,7 @@ public interface Matcher<T> extends Serializable {
      * @throws NullPointerException if matchers is {@code null}
      */
     default Matcher<T> or(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "matcher must not be null");
+        Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> matches(t) || other.matches(t);
     }
 
@@ -114,7 +115,7 @@ public interface Matcher<T> extends Serializable {
      * @throws NullPointerException if matchers is {@code null}
      */
     default Matcher<T> xor(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "matcher must not be null");
+        Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> matches(t) ^ other.matches(t);
     }
 
@@ -127,8 +128,8 @@ public interface Matcher<T> extends Serializable {
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "matchers must not be null");
-        return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
+        Objects.requireNonNull(matchers, "Matcher should not be null!");
+        return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -140,8 +141,8 @@ public interface Matcher<T> extends Serializable {
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "matchers must not be null");
-        return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
+        Objects.requireNonNull(matchers, "Matcher should not be null!");
+        return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -153,8 +154,8 @@ public interface Matcher<T> extends Serializable {
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "matchers must not be null");
-        return Arrays.stream(matchers).reduce(Matcher::xor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(String.format("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
+        Objects.requireNonNull(matchers, "Matcher should not be null!");
+        return Arrays.stream(matchers).reduce(Matcher::xor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
     }
 
     /**

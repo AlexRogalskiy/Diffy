@@ -89,7 +89,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
      *
      * @return first {@link Entry}
      */
-    public Entry<String, Object> firstEntry() {
+    public Entry<String, Object> first() {
         return DefaultEntry.of(this.getPropertyName(), this.getFirst());
     }
 
@@ -98,7 +98,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
      *
      * @return last {@link Entry}
      */
-    public Entry<String, Object> lastEntry() {
+    public Entry<String, Object> last() {
         return DefaultEntry.of(this.getPropertyName(), this.getLast());
     }
 

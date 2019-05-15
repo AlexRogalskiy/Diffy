@@ -65,7 +65,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = urlString;
 
-        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
+        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
         assertTrue(urlParametersMatcher.matchesSafe(testString));
     }
 
@@ -75,7 +75,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3&arg4=val4";
 
-        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
+        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
 
@@ -85,7 +85,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
         final String urlString = "arg1=val1&arg22=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
 
-        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
+        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
 
@@ -95,7 +95,7 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
         final String urlString = "arg1=val1&arg2=val22&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
 
-        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.getInstance(urlString);
+        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
 }

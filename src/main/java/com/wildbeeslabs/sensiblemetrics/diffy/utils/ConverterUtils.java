@@ -32,6 +32,8 @@ import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
  * Converter utilities implementation {@link Converter}
  *
@@ -71,11 +73,11 @@ public class ConverterUtils {
             method = toType.getMethod(parserMethod, String.class);
             return method.invoke(toType, value);
         } catch (NoSuchMethodException e) {
-            log.error(String.format("ERROR: cannot find method={%s} in type={%s},", parserMethod, toType));
+            log.error(formatMessage("ERROR: cannot find method={%s} in type={%s},", parserMethod, toType));
         } catch (IllegalAccessException e) {
-            log.error(String.format("ERROR: cannot access method={%s} in type={%s},", parserMethod, toType));
+            log.error(formatMessage("ERROR: cannot access method={%s} in type={%s},", parserMethod, toType));
         } catch (InvocationTargetException e) {
-            log.error(String.format("ERROR: cannot convert value={%s} to type={%s},", value, toType));
+            log.error(formatMessage("ERROR: cannot convert value={%s} to type={%s},", value, toType));
         }
         return null;
     }

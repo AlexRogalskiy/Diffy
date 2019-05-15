@@ -49,7 +49,7 @@ public class DeliveryInfo implements Serializable {
     private static final long serialVersionUID = 8170421693292671905L;
 
     /**
-     * Default delivery status
+     * Default delivery status enum
      */
     public enum DeliveryStatus {
         DELIVERED, REJECTED, PENDING

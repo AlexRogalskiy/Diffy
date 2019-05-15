@@ -663,7 +663,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
     @Test
     @DisplayName("Test different class objects by default comparator and negate priority nulls")
-    public void test_СlassObjects_by_defaultComparator() {
+    public void test_classObjects_by_defaultComparator() {
         // given
         final Class<DeliveryInfo> d1 = DeliveryInfo.class;
         final Class<AddressInfo> d2 = AddressInfo.class;

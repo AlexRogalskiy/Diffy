@@ -31,6 +31,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
+
 /**
  * Abstract field matcher implementation by input object instance
  *
@@ -73,18 +75,19 @@ public abstract class AbstractFieldMatcher<T, E> extends AbstractTypeSafeMatcher
     /**
      * Returns binary flag by field type safe comparison
      *
-     * @param value - initial input argument value
+     * @param value - initial input argument value {@code T}
      * @return if initial value matches input argument, false - otherwise
      */
+    @Override
     public boolean matchesSafe(final T value) {
-        return getMatcher().matches(this.valueOf(value));
+        return Objects.nonNull(this.getMatcher()) && this.getMatcher().matches(this.valueOf(value));
     }
 
     /**
      * Returns field value by input argument instance
      *
-     * @param value - initial input argument value
-     * @return field value
+     * @param value - initial input argument value {@code T}
+     * @return field value {@code E}
      */
     protected abstract E valueOf(final T value);
 }

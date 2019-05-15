@@ -45,7 +45,7 @@ public class LazyStreamable<T> implements Streamable<T> {
     /**
      * Default {@link Supplier} instance
      */
-    private final Supplier<? extends Stream<T>> stream;
+    private final Supplier<? extends Stream<T>> supplier;
 
     /**
      * Returns default {@link Iterator} instance
@@ -64,6 +64,6 @@ public class LazyStreamable<T> implements Streamable<T> {
      */
     @Override
     public Stream<T> stream() {
-        return this.stream.get();
+        return this.getSupplier().get();
     }
 }

@@ -24,8 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.SortComparator;
-import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,12 +58,18 @@ public class DeliveryInfoSortComparator implements SortComparator {
     private static final long serialVersionUID = -96283263770009545L;
 
     /**
-     * Default delivery info sort order functional comparator {@link Function}
+     * Default {@link DeliveryInfoSortOrderComparator}
      */
     private final transient DeliveryInfoSortOrderComparator sortOrderComparator;
 
+    /**
+     * Returns {@link DeliveryInfo} {@link Comparator} by input {@link SortManager}
+     *
+     * @param sortManager - initial input {@link SortManager}
+     * @return {@link DeliveryInfo} {@link Comparator}
+     */
     public Comparator<? super DeliveryInfo> getComparator(final SortManager sortManager) {
-        Objects.requireNonNull(sortManager);
+        Objects.requireNonNull(sortManager, "Sort manager should not be null!");
         final List<Comparator<? super DeliveryInfo>> comparatorList = StreamSupport.stream(sortManager.spliterator(), false)
             .map(getSortOrderComparator())
             .collect(Collectors.toList());

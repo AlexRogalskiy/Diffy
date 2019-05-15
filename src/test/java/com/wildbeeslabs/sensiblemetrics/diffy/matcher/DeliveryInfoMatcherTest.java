@@ -120,7 +120,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
         final DeliveryInfoMatcher deliveryInfoMatcher2 = null;
@@ -139,10 +139,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
@@ -160,10 +160,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
@@ -181,12 +181,12 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(4)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // then
@@ -197,10 +197,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test delivery info entity by invalid custom delivery info andAll-chained matchers")
     public void test_deliveryInfo_by_invalidAndAllMatcher() {
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(4)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
         final DeliveryInfoMatcher deliveryInfoMatcher3 = null;
 
@@ -238,7 +238,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
         final DeliveryInfoMatcher deliveryInfoMatcher2 = null;
@@ -257,10 +257,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT))
             .withUpdatedDate(toDate("26/09/2018", DEFAULT_DATE_FORMAT));
 
@@ -278,7 +278,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
         final DeliveryInfoMatcher deliveryInfoMatcher2 = null;
@@ -297,10 +297,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("10/06/2013", DEFAULT_DATE_FORMAT))
             .withUpdatedDate(toDate("2/09/2018", DEFAULT_DATE_FORMAT));
 
@@ -318,10 +318,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("10/06/2013", DEFAULT_DATE_FORMAT))
             .withUpdatedDate(toDate("2/09/2018", DEFAULT_DATE_FORMAT));
 
@@ -339,12 +339,12 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("10/06/2013", DEFAULT_DATE_FORMAT));
-        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // then
@@ -361,10 +361,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("10/06/2013", DEFAULT_DATE_FORMAT));
         final DeliveryInfoMatcher deliveryInfoMatcher3 = null;
 
@@ -402,7 +402,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
         final DeliveryInfoMatcher deliveryInfoMatcher2 = null;
@@ -421,10 +421,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("10/06/2013", DEFAULT_DATE_FORMAT))
             .withUpdatedDate(toDate("2/09/2018", DEFAULT_DATE_FORMAT));
 
@@ -442,10 +442,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
@@ -463,12 +463,12 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT));
-        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // then
@@ -485,10 +485,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(5)
             .withGid(DEFAULT_GID_PREFIX);
-        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
             .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT));
         final DeliveryInfoMatcher deliveryInfoMatcher3 = null;
 
@@ -526,7 +526,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withType(50)
             .withGid(DEFAULT_GID_PREFIX);
 
@@ -586,7 +586,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
                     && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
             }
         };
-        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
+        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.of().withMatcher(matcher);
 
         // when
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
@@ -615,7 +615,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         };
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.getInstance().withMatcher(matcher);
+        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.of().withMatcher(matcher);
         getDeliveryInfo().setType(1);
 
         // then
@@ -649,7 +649,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         };
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.getInstance()
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
             .withGidMatcher(gidMatcher)
             .withTypeMatcher(typeMatcher);
 
@@ -672,6 +672,26 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
     }
 
+    @Test
+    @DisplayName("Test delivery info entity by nullable custom gid/type fields matchers")
+    public void test_deliveryInfoList_by_nullableGidAndTypeMatcher() {
+        // given
+        final Matcher<? super String> gidMatcher = new AbstractTypeSafeMatcher<>() {
+            @Override
+            public boolean matchesSafe(final String value) {
+                return String.valueOf(value).substring(0, 4).equalsIgnoreCase(DEFAULT_GID_PREFIX);
+            }
+        };
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withGidMatcher(gidMatcher)
+            .withTypeMatcher(null);
+
+        // then
+        assertFalse(deliveryInfoMatcher.matches(getDeliveryInfo()));
+    }
+
     /**
      * Returns new delivery info matcher {@link DeliveryInfoMatcher} instance by initial input arguments
      *
@@ -682,7 +702,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
      * @return new delivery info matcher {@link DeliveryInfoMatcher} instance
      */
     protected DeliveryInfoMatcher getDeliveryInfoMatcher(final Integer type, final String gid, final Date createdDate, final Date updatedDate) {
-        return DeliveryInfoMatcher.getInstance()
+        return DeliveryInfoMatcher.of()
             .withType(type)
             .withGid(gid)
             .withCreatedDate(createdDate)

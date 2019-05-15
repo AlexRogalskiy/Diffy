@@ -36,6 +36,7 @@ import java.net.URL;
 import java.util.*;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.setAccessible;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.sanitize;
 
 /**
@@ -126,7 +127,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                         result.add(DefaultDiffEntry.of(property, firstValue, lastValue));
                     }
                 } catch (IllegalAccessException e) {
-                    log.error(String.format("ERROR: cannot get value of property: {%s}, message: {%s}", property, e.getMessage()));
+                    log.error(formatMessage("ERROR: cannot get value of property: {%s}, message: {%s}", property, e.getMessage()));
                 }
             });
         return (S) result;

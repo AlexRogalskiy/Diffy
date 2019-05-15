@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.NullPriority.NATIVE;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
  * Default {@link Streamable} sort manager implementation
@@ -73,7 +74,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @param orders must negate be {@literal null} or contain {@literal null}.
      */
     public SortManager(final List<SortOrder> orders) {
-        Objects.requireNonNull(orders, "Orders must negate be null!");
+        Objects.requireNonNull(orders, "Orders should not be null!");
         this.orders = Collections.unmodifiableList(orders);
     }
 
@@ -119,7 +120,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final String... properties) {
-        Objects.requireNonNull(properties, "Properties must negate be null!");
+        Objects.requireNonNull(properties, "Properties should not be null!");
         return properties.length == 0 ? SortManager.unsorted() : new SortManager(properties);
     }
 
@@ -130,7 +131,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final List<SortOrder> orders) {
-        Objects.requireNonNull(orders, "Orders must negate be null!");
+        Objects.requireNonNull(orders, "Orders should not be null!");
         return orders.isEmpty() ? SortManager.unsorted() : new SortManager(orders);
     }
 
@@ -141,7 +142,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final SortOrder... orders) {
-        Objects.requireNonNull(orders, "Orders must negate be null!");
+        Objects.requireNonNull(orders, "Orders should not be null!");
         return new SortManager(orders);
     }
 
@@ -153,8 +154,8 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return sort stream instance {@link SortManager}
      */
     public static SortManager by(final SortDirection direction, final String... properties) {
-        Objects.requireNonNull(direction, "SortDirection must negate be null!");
-        Objects.requireNonNull(properties, "Properties must negate be null!");
+        Objects.requireNonNull(direction, "Sort direction should not be null!");
+        Objects.requireNonNull(properties, "Properties should not be null!");
         Objects.requireNonNull(properties.length > 0, "At least one property must be given!");
         return SortManager.by(Arrays.stream(properties)
             .map(it -> new SortOrder(direction, it))
@@ -176,7 +177,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return sort stream instance {@link SortManager}
      */
     public SortManager descending() {
-        return withDirection(SortDirection.DESC);
+        return this.withDirection(SortDirection.DESC);
     }
 
     /**
@@ -185,7 +186,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return sort stream instance {@link SortManager}
      */
     public SortManager ascending() {
-        return withDirection(SortDirection.ASC);
+        return this.withDirection(SortDirection.ASC);
     }
 
     /**
@@ -194,7 +195,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return true if orders sorted, false - otherwise
      */
     public boolean isSorted() {
-        return !getOrders().isEmpty();
+        return !this.getOrders().isEmpty();
     }
 
     /**
@@ -203,7 +204,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return true if orders unsorted, false - otherwise
      */
     public boolean isUnsorted() {
-        return !isSorted();
+        return !this.isSorted();
     }
 
     /**
@@ -214,9 +215,9 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @return sort stream instance {@link SortManager}
      */
     public SortManager and(final SortManager sort) {
-        Objects.requireNonNull(sort, "Sort must negate be null!");
+        Objects.requireNonNull(sort, "Sort should not be null!");
         final List<SortOrder> these = new ArrayList<>(getOrders());
-        for (SortOrder order : sort) {
+        for (final SortOrder order : sort) {
             these.add(order);
         }
         return SortManager.by(these);
@@ -329,7 +330,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
             try {
                 return SortDirection.valueOf(value.toUpperCase(locale));
             } catch (Exception e) {
-                throw new IllegalArgumentException(String.format("Invalid value '%s' for orders given! Has to be either 'desc' or 'asc' (case insensitive).", value), e);
+                throw new IllegalArgumentException(formatMessage("Invalid value '%s' for orders given! Has to be either 'desc' or 'asc' (case insensitive).", value), e);
             }
         }
 

@@ -52,19 +52,19 @@ import static java.util.Comparator.comparingDouble;
 public class DeliveryInfoFactory {
 
     /**
-     * Default delivery info comparator by "id" field
+     * {@link DeliveryInfo} comparator by "id" field
      */
     public static final Comparator<DeliveryInfo> SORT_BY_ID = comparing(DeliveryInfo::getId);
     /**
-     * Default delivery info comparator by "gid" field
+     * {@link DeliveryInfo} comparator by "gid" field
      */
     public static final Comparator<DeliveryInfo> SORT_BY_GID = comparing(DeliveryInfo::getGid, String.CASE_INSENSITIVE_ORDER);
     /**
-     * Default delivery info comparator by "status" field
+     * {@link DeliveryInfo} comparator by "status" field
      */
     public static final Comparator<DeliveryInfo> SORT_BY_STATUS = comparing(DeliveryInfo::getStatus, ComparableComparator.getInstance());
     /**
-     * Default delivery info comparator by "balance" field
+     * {@link DeliveryInfo} comparator by "balance" field
      */
     public static final Comparator<DeliveryInfo> SORT_BY_BALANCE = comparingDouble(DeliveryInfo::getBalance);
 
@@ -79,56 +79,56 @@ public class DeliveryInfoFactory {
     );
 
     /**
-     * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
+     * Creates new {@link DeliveryInfoDiffComparator}
      *
      * @param <E> type of entity to be compared by
-     * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
+     * @return {@link DeliveryInfoDiffComparator}
      */
     public static <E extends DiffComparator<DeliveryInfo>> E createDiffComparator() {
         return (E) new DeliveryInfoDiffComparator();
     }
 
     /**
-     * Creates delivery information difference comparator {@link DeliveryInfoDiffComparator}
+     * Creates new {@link DeliveryInfoDiffComparator}
      *
      * @param <E>        type of entity to be compared by
-     * @param comparator - initial comparator instance {@link Comparator}
-     * @return delivery information difference comparator {@link DeliveryInfoDiffComparator}
+     * @param comparator - initial input comparator {@link DeliveryInfo} {@link Comparator}
+     * @return {@link DeliveryInfoDiffComparator}
      */
     public static <E extends DiffComparator<DeliveryInfo>> E createDiffComparator(final Comparator<? super DeliveryInfo> comparator) {
         return (E) new DeliveryInfoDiffComparator(comparator);
     }
 
     /**
-     * Returns default delivery info sort order comparator {@link DeliveryInfoSortOrderComparator}
+     * Creates new {@link DeliveryInfoSortOrderComparator}
      *
-     * @return delivery info sort order comparator {@link DeliveryInfoSortOrderComparator}
+     * @return {@link DeliveryInfoSortOrderComparator}
      */
     public static DeliveryInfoSortOrderComparator createDefaultSortOrderComparator() {
         return createSortOrderComparator(DEFAULT_COMPARATOR_MAP, SORT_BY_ID);
     }
 
     /**
-     * Returns delivery info sort order comparator {@link DeliveryInfoSortOrderComparator} by input comparator map {@link Map} and default comparator {@link Comparator}
+     * Creates {@link DeliveryInfoSortOrderComparator} by input comparator {@link Map} and {@link DeliveryInfo} {@link Comparator}
      *
-     * @param comparatorMap - initial input comparator map {@link Map}
-     * @param comparator    - initial input default comparator {@link Comparator}
-     * @return delivery info sort order comparator {@link DeliveryInfoSortOrderComparator}
+     * @param comparatorMap - initial input comparator {@link Map}
+     * @param comparator    - initial input {@link DeliveryInfo} {@link Comparator}
+     * @return {@link DeliveryInfoSortOrderComparator}
      */
     public static DeliveryInfoSortOrderComparator createSortOrderComparator(final Map<String, Comparator<? super DeliveryInfo>> comparatorMap, final Comparator<? super DeliveryInfo> comparator) {
-        Objects.requireNonNull(comparatorMap);
-        Objects.requireNonNull(comparator);
+        Objects.requireNonNull(comparatorMap, "Map should not be null!");
+        Objects.requireNonNull(comparator, "Comparator should not be null!");
         return new DeliveryInfoSortOrderComparator(comparatorMap, comparator);
     }
 
     /**
-     * Returns delivery info sort comparator {@link DeliveryInfoSortComparator} by input sort order comparator {@link DeliveryInfoSortOrderComparator}
+     * Returns {@link DeliveryInfoSortComparator} by input sort order comparator {@link DeliveryInfoSortOrderComparator}
      *
-     * @param sortOrderComparator - initial input sort order comparator {@link DeliveryInfoSortOrderComparator}
-     * @return delivery info sort comparator {@link DeliveryInfoSortComparator}
+     * @param sortOrderComparator - initial input {@link DeliveryInfoSortOrderComparator}
+     * @return {@link DeliveryInfoSortComparator}
      */
     public static DeliveryInfoSortComparator createSortOrder(final DeliveryInfoSortOrderComparator sortOrderComparator) {
-        Objects.requireNonNull(sortOrderComparator);
+        Objects.requireNonNull(sortOrderComparator, "Comparator should not be null");
         return new DeliveryInfoSortComparator(sortOrderComparator);
     }
 }

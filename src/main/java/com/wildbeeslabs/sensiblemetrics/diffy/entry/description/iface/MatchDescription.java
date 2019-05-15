@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.Value;
 
 import java.io.Serializable;
 
@@ -40,7 +41,7 @@ public interface MatchDescription extends Serializable {
     /**
      * A description that consumes input but does nothing.
      */
-    MatchDescription DEFAULT_EMPTY_MATCH_DESCRIPTION = new EmptyMatchDescription();
+    MatchDescription DEFAULT_EMPTY_MATCH_DESCRIPTION = EmptyMatchDescription.of();
 
     /**
      * Appends input string value to current description {@link MatchDescription}
@@ -88,6 +89,7 @@ public interface MatchDescription extends Serializable {
      */
     @EqualsAndHashCode
     @ToString
+    @Value(staticConstructor = "of")
     final class EmptyMatchDescription implements MatchDescription {
 
         /**

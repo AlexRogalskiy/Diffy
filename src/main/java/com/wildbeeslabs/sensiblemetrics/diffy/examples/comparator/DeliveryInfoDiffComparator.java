@@ -51,16 +51,16 @@ public class DeliveryInfoDiffComparator extends DefaultDiffComparator<DeliveryIn
     private static final long serialVersionUID = 436117742331557518L;
 
     /**
-     * Creates delivery information difference comparator
+     * Default {@link DeliveryInfo} difference comparator constructor
      */
     public DeliveryInfoDiffComparator() {
         super(DeliveryInfo.class);
     }
 
     /**
-     * Creates delivery information difference comparator with comparator instance {@link Comparator}
+     * Default {@link DeliveryInfo} difference comparator constructor with {@link Comparator}
      *
-     * @param comparator - initial comparator instance {@link Comparator}
+     * @param comparator - initial input {@link Comparator}
      */
     public DeliveryInfoDiffComparator(final Comparator<? super DeliveryInfo> comparator) {
         super(DeliveryInfo.class, comparator);

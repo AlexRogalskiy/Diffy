@@ -22,6 +22,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.*;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
  * Types utilities implementation
  *
@@ -276,7 +278,7 @@ public class TypeUtils {
             } else if (Collection.class.isAssignableFrom(type.getErasedType()) && !Maps.isMapType(type)) {
                 return "List";
             }
-            throw new UnsupportedOperationException(String.format("Type is negate collection type %s", type));
+            throw new UnsupportedOperationException(formatMessage("Type is negate collection type %s", type));
         }
 
         private static <T extends Collection> ResolvedType elementType(final ResolvedType container, final Class<T> collectionType) {

@@ -57,7 +57,7 @@ public interface Converter<T, R> {
      * @throws NullPointerException if before is null
      */
     default <V> Converter<V, R> compose(final Converter<? super V, ? extends T> before) {
-        Objects.requireNonNull(before, "converter must not be null");
+        Objects.requireNonNull(before, "Converter should not be null!");
         return (final V v) -> convert(before.convert(v));
     }
 
@@ -71,7 +71,7 @@ public interface Converter<T, R> {
      * @throws NullPointerException if after is null
      */
     default <V> Converter<T, V> andThen(final Converter<? super R, ? extends V> after) {
-        Objects.requireNonNull(after, "converter must not be null");
+        Objects.requireNonNull(after, "Converter should not be null!");
         return (final T t) -> after.convert(convert(t));
     }
 

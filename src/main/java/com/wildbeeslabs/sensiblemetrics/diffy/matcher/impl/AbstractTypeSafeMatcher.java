@@ -98,6 +98,6 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @Override
     public final boolean matches(final T value) {
-        return Objects.nonNull(value) && getClazz().isInstance(value) && this.matchesSafe(value);
+        return Objects.nonNull(value) && this.getClazz().isInstance(value) && this.matchesSafe(value);
     }
 }

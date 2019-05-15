@@ -37,6 +37,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
  * Abstract {@link PropertyInfo} implementation
  */
@@ -92,7 +94,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         @Override
         public <T extends Annotation> T getAnnotation(final Class<T> annotationClass) {
-            return member.getAnnotation(annotationClass);
+            return this.getMember().getAnnotation(annotationClass);
         }
     }
 
@@ -122,7 +124,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         @Override
         public <T extends Annotation> T getAnnotation(final Class<T> annotationClass) {
-            return this.member.getAnnotation(annotationClass);
+            return this.getMember().getAnnotation(annotationClass);
         }
 
         /**
@@ -132,7 +134,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         @Override
         public Type getGenericType() {
-            return this.member.getGenericType();
+            return this.getMember().getGenericType();
         }
 
         /**
@@ -143,9 +145,9 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         public Object getValue(final Object subject) {
             try {
-                return this.member.get(subject);
+                return this.getMember().get(subject);
             } catch (Exception e) {
-                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot get member: {%s} of type: {%s}", subject, this.member), e);
+                IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: cannot get member: {%s} of type: {%s}", subject, this.member), e);
             }
             return null;
         }
@@ -158,9 +160,9 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         public void setValue(final Object subject, final Object value) {
             try {
-                this.member.set(subject, value);
+                this.getMember().set(subject, value);
             } catch (Exception e) {
-                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot set value: {%s} for member: {%s} of type: {%s}", value, subject, this.member), e);
+                IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: cannot set value: {%s} for member: {%s} of type: {%s}", value, subject, this.member), e);
             }
         }
     }
@@ -188,7 +190,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         @Override
         public Type getGenericType() {
-            return this.member.getGenericReturnType();
+            return this.getMember().getGenericReturnType();
         }
 
         /**
@@ -199,9 +201,9 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         public Object getValue(final Object subject) {
             try {
-                return this.member.invoke(subject);
+                return this.getMember().invoke(subject);
             } catch (Exception e) {
-                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot get member: {%s} of type: {%s}", subject, this.member), e);
+                IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: cannot get member: {%s} of type: {%s}", subject, this.member), e);
             }
             return null;
         }
@@ -230,7 +232,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         @Override
         public Type getGenericType() {
-            return this.member.getGenericParameterTypes()[0];
+            return this.getMember().getGenericParameterTypes()[0];
         }
 
         /**
@@ -241,9 +243,9 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
          */
         public void setValue(final Object subject, final Object value) {
             try {
-                this.member.invoke(subject, value);
+                this.getMember().invoke(subject, value);
             } catch (Exception e) {
-                IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot set value={%s} for member={%s} of type={%s}, message={%s}", value, subject, this.member), e);
+                IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: cannot set value={%s} for member={%s} of type={%s}, message={%s}", value, subject, this.member), e);
             }
         }
     }

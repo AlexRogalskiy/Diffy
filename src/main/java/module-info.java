@@ -18,12 +18,12 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires java.desktop;
     requires com.fasterxml.classmate;
 
-    // comparator interface exports
+    // exports comparator interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
-    // converter interface exports
+    // exports converter interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
-    // matcher interface exports
+    // exports matcher interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
-    // entry interface exports
+    // exports entry interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 }

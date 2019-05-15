@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import java.util.stream.Stream;
  * @version 1.1
  * @since 1.0
  */
-public interface Entry<K, V> {
+public interface Entry<K, V> extends Serializable {
 
     /**
      * Returns entry key {@code T}
@@ -56,9 +57,9 @@ public interface Entry<K, V> {
      * @param consumer - initial input {@link BiConsumer} operator
      */
     static <K, V> void ifAllPresent(final Optional<K> key, final Optional<V> value, final BiConsumer<K, V> consumer) {
-        Objects.requireNonNull(key, "Optional key must not be null!");
-        Objects.requireNonNull(value, "Optional value must not be null!");
-        Objects.requireNonNull(consumer, "Consumer must not be null!");
+        Objects.requireNonNull(key, "Optional key should not be null!");
+        Objects.requireNonNull(value, "Optional value should not be null!");
+        Objects.requireNonNull(consumer, "Consumer should not be null!");
 
         mapIfAllPresent(key, value, (k, v) -> {
             consumer.accept(k, v);
@@ -78,9 +79,9 @@ public interface Entry<K, V> {
      * @return {@link Optional} of {@link BiFunction} operator result {@code R}
      */
     static <K, V, R> Optional<R> mapIfAllPresent(final Optional<K> key, final Optional<V> value, final BiFunction<K, V, R> function) {
-        Objects.requireNonNull(key, "Optional key must not be null!");
-        Objects.requireNonNull(value, "Optional value must not be null!");
-        Objects.requireNonNull(function, "BiFunction must not be null!");
+        Objects.requireNonNull(key, "Optional key should not be null!");
+        Objects.requireNonNull(value, "Optional value should not be null!");
+        Objects.requireNonNull(function, "Binary function should not be null!");
 
         return key.flatMap(k -> value.map(v -> function.apply(k, v)));
     }

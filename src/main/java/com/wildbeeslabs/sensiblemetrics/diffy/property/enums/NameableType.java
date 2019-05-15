@@ -50,7 +50,7 @@ public enum NameableType {
      * @param propertyType - initial input {@link PropertyType} instance
      * @return {@link NameableType} instance
      */
-    public static NameableType forPropertyType(final PropertyType propertyType) {
+    public static NameableType from(final PropertyType propertyType) {
         if (PropertyType.FIELD.equals(propertyType)) {
             return FIELD;
         } else if (PropertyType.METHOD.equals(propertyType)) {

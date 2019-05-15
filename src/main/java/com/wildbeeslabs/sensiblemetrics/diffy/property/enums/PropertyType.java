@@ -48,7 +48,7 @@ public enum PropertyType {
      * @param propertyType - initial input property type value {@link String}
      * @return {@link PropertyType} instance
      */
-    public static PropertyType forType(final String propertyType) {
+    public static PropertyType from(final String propertyType) {
         return Arrays.stream(values())
             .filter(type -> type.name().equalsIgnoreCase(propertyType))
             .findFirst()

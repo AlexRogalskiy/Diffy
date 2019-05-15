@@ -45,10 +45,10 @@ import java.util.Map;
 public class DeliveryInfoSortOrderComparator extends DefaultSortOrderComparator<DeliveryInfo> {
 
     /**
-     * Default delivery info sort order comparator constructor with input comparator map {@link Map} and default comparator instance {@link Comparator}
+     * Default {@link DeliveryInfo} sort order comparator constructor with input comparator {@link Map} and {@link Comparator}
      *
-     * @param comparatorMap     - initial input comparator {@link Map}
-     * @param defaultComparator - initial input default {@link Comparator}
+     * @param comparatorMap     - initial input {@link DeliveryInfo} {@link Map}
+     * @param defaultComparator - initial input {@link DeliveryInfo} {@link Comparator}
      */
     public DeliveryInfoSortOrderComparator(final Map<String, Comparator<? super DeliveryInfo>> comparatorMap, final Comparator<? super DeliveryInfo> defaultComparator) {
         super(comparatorMap, defaultComparator);

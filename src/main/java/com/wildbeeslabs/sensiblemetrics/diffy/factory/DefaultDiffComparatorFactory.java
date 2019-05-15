@@ -61,10 +61,7 @@ public class DefaultDiffComparatorFactory {
      * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
-    public static <T, E extends DiffComparator<T>> E create(
-        final Class<? extends T> clazz,
-        final Iterable<String> includeProperties,
-        final Iterable<String> excludeProperties) {
+    public static <T, E extends DiffComparator<T>> E create(final Class<? extends T> clazz, final Iterable<String> includeProperties, final Iterable<String> excludeProperties) {
         final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz);
         defaultDiffComparator.includeProperties(includeProperties);
         defaultDiffComparator.excludeProperties(excludeProperties);
@@ -80,9 +77,7 @@ public class DefaultDiffComparatorFactory {
      * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
-    public static <T, E extends DiffComparator<T>> E create(
-        final Class<? extends T> clazz,
-        final Iterable<String> excludeProperties) {
+    public static <T, E extends DiffComparator<T>> E create(final Class<? extends T> clazz, final Iterable<String> excludeProperties) {
         final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz);
         defaultDiffComparator.excludeProperties(excludeProperties);
         return (E) defaultDiffComparator;
@@ -112,11 +107,7 @@ public class DefaultDiffComparatorFactory {
      * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
-    public static <T, E extends DiffComparator<T>> E create(
-        final Class<? extends T> clazz,
-        final Comparator<? super T> comparator,
-        final Iterable<String> includeProperties,
-        final Iterable<String> excludeProperties) {
+    public static <T, E extends DiffComparator<T>> E create(final Class<? extends T> clazz, final Comparator<? super T> comparator, final Iterable<String> includeProperties, final Iterable<String> excludeProperties) {
         final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz, comparator);
         defaultDiffComparator.includeProperties(includeProperties);
         defaultDiffComparator.excludeProperties(excludeProperties);
@@ -133,10 +124,7 @@ public class DefaultDiffComparatorFactory {
      * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
-    public static <T, E extends DiffComparator<T>> E create(
-        final Class<? extends T> clazz,
-        final Comparator<? super T> comparator,
-        final Iterable<String> excludeProperties) {
+    public static <T, E extends DiffComparator<T>> E create(final Class<? extends T> clazz, final Comparator<? super T> comparator, final Iterable<String> excludeProperties) {
         final DefaultDiffComparator<T> defaultDiffComparator = new DefaultDiffComparator<>(clazz, comparator);
         defaultDiffComparator.excludeProperties(excludeProperties);
         return (E) defaultDiffComparator;

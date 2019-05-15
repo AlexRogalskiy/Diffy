@@ -68,7 +68,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @throws NullPointerException if iterable is null
      */
     static <T> Streamable<T> of(final Iterable<T> iterable) {
-        Objects.requireNonNull(iterable, "Iterable must not be null!");
+        Objects.requireNonNull(iterable, "Iterable should not be null!");
         return iterable::iterator;
     }
 
@@ -101,7 +101,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @see Stream#map(Function)
      */
     default <R> Streamable<R> map(final Function<? super T, ? extends R> mapper) {
-        Objects.requireNonNull(mapper, "Mapping interfaces must negate be null!");
+        Objects.requireNonNull(mapper, "Function should not be null!");
         return Streamable.of(() -> stream().map(mapper));
     }
 
@@ -114,7 +114,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @see Stream#flatMap(Function)
      */
     default <R> Streamable<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
-        Objects.requireNonNull(mapper, "Mapping interfaces must negate be null!");
+        Objects.requireNonNull(mapper, "Function should not be null!");
         return Streamable.of(() -> stream().flatMap(mapper));
     }
 
@@ -127,7 +127,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @see Stream#filter(Predicate) of values {@code T}
      */
     default Streamable<T> filter(final Predicate<? super T> predicate) {
-        Objects.requireNonNull(predicate, "Filter predicate must negate be null!");
+        Objects.requireNonNull(predicate, "Predicate should not be null!");
         return Streamable.of(() -> stream().filter(predicate));
     }
 
@@ -148,7 +148,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @throws NullPointerException if supplier is null
      */
     default Streamable<T> and(final Supplier<? extends Stream<? extends T>> supplier) {
-        Objects.requireNonNull(supplier, "Supplier must not be null!");
+        Objects.requireNonNull(supplier, "Supplier should not be null!");
         return Streamable.of(() -> Stream.concat(this.stream(), supplier.get()));
     }
 

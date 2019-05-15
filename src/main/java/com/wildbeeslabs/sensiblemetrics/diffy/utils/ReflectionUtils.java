@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.sanitize;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.TypeUtils.*;
 
 /**
@@ -149,14 +151,14 @@ public class ReflectionUtils {
         try {
             constructor = clazz.getDeclaredConstructor();
         } catch (final NoSuchMethodException e) {
-            BadOperationException.throwBadOperation(String.format("ERROR: missing default constructor for class: {%s}", clazz.getName()), e);
+            BadOperationException.throwBadOperation(formatMessage("ERROR: missing default constructor for class: {%s}", clazz.getName()), e);
             return null;
         }
         try {
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (Exception e) {
-            BadOperationException.throwBadOperation(String.format("ERROR: cannot create instance by class: {%s}", clazz), e);
+            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot create instance by class: {%s}", clazz), e);
             return null;
         }
     }
@@ -192,7 +194,7 @@ public class ReflectionUtils {
      * @return property value of input object {@link Object}
      */
     public static Object getProperty(final Object value, final String propertyName) {
-        return getProperty(value, StringUtils.sanitize(propertyName), Object.class);
+        return getProperty(value, sanitize(propertyName), Object.class);
     }
 
     /**
@@ -241,7 +243,7 @@ public class ReflectionUtils {
         if (member instanceof Method) {
             return ((Method) member).getGenericReturnType();
         }
-        IllegalAccessException.throwInvalidAccess(String.format("ERROR: no such class member = {%s}, neither a field nor a method", member));
+        IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: no such class member = {%s}, neither a field nor a method", member));
         return null;
     }
 
@@ -359,7 +361,7 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has subclass implementation, false - otherwise
      */
-    public static boolean isSubClass(final Method parent, final Method toCheck) {
+    public static boolean isSubClass(@NonNull final Method parent, @NonNull final Method toCheck) {
         return parent.getDeclaringClass().isAssignableFrom(toCheck.getDeclaringClass());
     }
 
@@ -370,7 +372,7 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has same name, false - otherwise
      */
-    public static boolean sameMethodName(final Method parent, final Method toCheck) {
+    public static boolean sameMethodName(@NonNull final Method parent, @NonNull final Method toCheck) {
         return parent.getName().equals(toCheck.getName());
     }
 
@@ -381,7 +383,7 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has covariant return type, false - otherwise
      */
-    public static boolean returnTypeCovariant(final Method parent, final Method toCheck) {
+    public static boolean returnTypeCovariant(@NonNull final Method parent, @NonNull final Method toCheck) {
         return parent.getReturnType().isAssignableFrom(toCheck.getReturnType());
     }
 
@@ -392,7 +394,7 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has same arguments, false - otherwise
      */
-    public static boolean sameArguments(final Method parent, final Method toCheck) {
+    public static boolean sameArguments(@NonNull final Method parent, @NonNull final Method toCheck) {
         return Arrays.equals(parent.getParameterTypes(), toCheck.getParameterTypes());
     }
 
@@ -496,7 +498,7 @@ public class ReflectionUtils {
         } else if (javaType instanceof Class) {
             return (Class) javaType;
         }
-        IllegalAccessException.throwInvalidAccess(String.format("ERROR: cannot get class by type: {%s}", javaType));
+        IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: cannot get class by type: {%s}", javaType));
         return null;
     }
 
@@ -572,7 +574,7 @@ public class ReflectionUtils {
      * @return true - if method has a prefix, false - otherwise
      */
     private static boolean hasGetOrIsPrefix(final Method rawMethod) {
-        return rawMethod.getName().startsWith("get") || rawMethod.getName().startsWith("is");
+        return rawMethod.getName().startsWith(PropertyUtils.GETTER_ACCESSOR_PREFIX) || rawMethod.getName().startsWith(PropertyUtils.BOOLEAN_ACCESSOR_PREFIX);
     }
 
     /**
@@ -696,12 +698,12 @@ public class ReflectionUtils {
                         final Comparable<Object> val2 = (Comparable<Object>) getter.invoke(e2);
                         return val1.compareTo(val2);
                     } catch (Exception e) {
-                        BadOperationException.throwBadOperation(String.format("ERROR: cannot invoke getter method = {%s} on field = {%s}", getter.getName(), field), e);
+                        BadOperationException.throwBadOperation(formatMessage("ERROR: cannot invoke getter method: {%s} on field: {%s} of first: {%s} / last: {%s}", getter.getName(), field, e1, e2), e);
                     }
                     return 0;
                 });
         } else {
-            BadOperationException.throwBadOperation(String.format("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", org.apache.commons.lang3.StringUtils.join(list, "|"), field, returnType.getName()));
+            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", org.apache.commons.lang3.StringUtils.join(list, "|"), field, returnType.getName()));
         }
         return list;
     }
@@ -744,7 +746,7 @@ public class ReflectionUtils {
                     return getParameterType(methodOptional.get());
                 }
             }
-            BadOperationException.throwBadOperation(String.format("ERROR: cannot determine correct type for method={%s}", getMethodName()));
+            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot determine correct type for method={%s}", getMethodName()));
             return null;
         }
 

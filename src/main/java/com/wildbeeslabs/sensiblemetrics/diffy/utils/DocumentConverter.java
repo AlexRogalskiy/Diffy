@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
  * Document converter utilities implementation
  */
@@ -128,6 +130,6 @@ public class DocumentConverter {
             return id;
         }
 
-        throw new IllegalArgumentException(String.format("ERROR: unsupported object type: {%s}", dbObject.getClass().getSimpleName()));
+        throw new IllegalArgumentException(formatMessage("ERROR: unsupported object type: {%s}", dbObject.getClass().getSimpleName()));
     }
 }

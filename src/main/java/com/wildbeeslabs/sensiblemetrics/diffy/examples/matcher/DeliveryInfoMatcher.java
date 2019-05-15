@@ -37,10 +37,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Date;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.IntFunction;
 
 /**
- * Custom delivery info matcher implementation {@link DeliveryInfo}
+ * Custom {@link DeliveryInfo} {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -60,7 +59,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Type" field matcher {@link Matcher}
      */
-    public static final IntFunction<Matcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final Function<Integer, Matcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> new AbstractTypeSafeMatcher<>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(type, value.getType());
@@ -70,7 +69,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Gid" field matcher {@link Matcher}
      */
-    public static final Function<String, Matcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final Function<String, Matcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> new AbstractTypeSafeMatcher<>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(gid, value.getGid());
@@ -80,7 +79,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Created date" matcher {@link Matcher}
      */
-    public static final Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(date, value.getCreatedAt());
@@ -90,7 +89,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
     /**
      * Determines delivery info "Updated date" matcher {@link Matcher}
      */
-    public static final Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<DeliveryInfo>() {
+    public static final Function<Date, Matcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> new AbstractTypeSafeMatcher<>() {
         @Override
         public boolean matchesSafe(final DeliveryInfo value) {
             return Objects.equals(date, value.getUpdatedAt());
@@ -155,67 +154,67 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
      */
     @Override
     public boolean matches(final DeliveryInfo value) {
-        return getMatchers().stream().allMatch(matcher -> matcher.matches(value));
+        return this.getMatchers().stream().allMatch(matcher -> matcher.matches(value));
     }
 
     /**
      * Default private delivery info constructor
      */
     private DeliveryInfoMatcher() {
-        withMatcher(InstanceMatcher.getMatcher(DeliveryInfo.class));
+        this.withMatcher(InstanceMatcher.getMatcher(DeliveryInfo.class));
     }
 
     public DeliveryInfoMatcher withType(final Integer type) {
-        getMatchers().add(DELIVERY_TYPE_MATCHER.apply(type));
+        this.getMatchers().add(DELIVERY_TYPE_MATCHER.apply(type));
         return this;
     }
 
     public DeliveryInfoMatcher withGid(final String gid) {
-        getMatchers().add(DELIVERY_GID_MATCHER.apply(gid));
+        this.getMatchers().add(DELIVERY_GID_MATCHER.apply(gid));
         return this;
     }
 
     public DeliveryInfoMatcher withCreatedDate(final Date createdDate) {
-        getMatchers().add(DELIVERY_CREATED_DATE_MATCHER.apply(createdDate));
+        this.getMatchers().add(DELIVERY_CREATED_DATE_MATCHER.apply(createdDate));
         return this;
     }
 
     public DeliveryInfoMatcher withUpdatedDate(final Date createdDate) {
-        getMatchers().add(DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
+        this.getMatchers().add(DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
         return this;
     }
 
     public DeliveryInfoMatcher withIdMatcher(final Matcher<? super Long> matcher) {
-        getMatchers().add(FIELD_ID_MATCHER.apply(matcher));
+        this.getMatchers().add(FIELD_ID_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoMatcher withCreatedDateMatcher(final Matcher<? super Date> matcher) {
-        getMatchers().add(FIELD_CREATED_DATE_MATCHER.apply(matcher));
+        this.getMatchers().add(FIELD_CREATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoMatcher withUpdatedDateMatcher(final Matcher<? super Date> matcher) {
-        getMatchers().add(FIELD_UPDATED_DATE_MATCHER.apply(matcher));
+        this.getMatchers().add(FIELD_UPDATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoMatcher withTypeMatcher(final Matcher<? super Integer> matcher) {
-        getMatchers().add(FIELD_TYPE_MATCHER.apply(matcher));
+        this.getMatchers().add(FIELD_TYPE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoMatcher withGidMatcher(final Matcher<? super String> matcher) {
-        getMatchers().add(FIELD_GID_MATCHER.apply(matcher));
+        this.getMatchers().add(FIELD_GID_MATCHER.apply(matcher));
         return this;
     }
 
     /**
-     * Returns delivery info matcher instance {@link DeliveryInfoMatcher}
+     * Returns {@link DeliveryInfoMatcher}
      *
-     * @return delivery info matcher instance {@link DeliveryInfoMatcher}
+     * @return {@link DeliveryInfoMatcher}
      */
-    public static DeliveryInfoMatcher getInstance() {
+    public static DeliveryInfoMatcher of() {
         return new DeliveryInfoMatcher();
     }
 }

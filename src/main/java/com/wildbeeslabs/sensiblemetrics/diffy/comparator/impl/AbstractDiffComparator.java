@@ -81,22 +81,22 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     private final Set<String> propertySet = new HashSet<>();
 
     /**
-     * Creates difference comparator with initial class {@link Class}
+     * Creates difference comparator with initial input {@link Class}
      *
-     * @param clazz - initial class instance {@link Class}
+     * @param clazz - initial input {@link Class}
      */
     public AbstractDiffComparator(final Class<? extends T> clazz) {
         this(clazz, null);
     }
 
     /**
-     * Creates difference comparator with initial class {@link Class} and comparator {@link Comparator}
+     * Creates difference comparator with initial input {@link Class} and {@link Comparator}
      *
-     * @param clazz      - initial class instance {@link Class}
-     * @param comparator - initial comparator instance {@link Comparator}
+     * @param clazz      - initial input {@link Class}
+     * @param comparator - initial input {@link Comparator}
      */
     public AbstractDiffComparator(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
-        this.clazz = Objects.requireNonNull(clazz);
+        this.clazz = Objects.requireNonNull(clazz, "Class should not be null!");
         this.comparator = Objects.nonNull(comparator)
             ? comparator
             : ComparableComparator.getInstance();
@@ -105,9 +105,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Excludes properties from compare collection
+     * Excludes {@link Iterable} collection of properties {@link String} from comparison
      *
-     * @param properties - collection of properties to be updated in exclude compare collection
+     * @param properties - initial input {@link Iterable} collection of properties {@link String} to exclude from comparison
      */
     public void excludeProperties(final Iterable<String> properties) {
         Optional.ofNullable(properties)
@@ -116,67 +116,67 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Exclude property from compare collection
+     * Exclude property {@link String} from comparison
      *
-     * @param property - property to be added to exclude compare collection
+     * @param property - initial input property {@link String} to exclude from comparison
      */
     public void excludeProperty(final String property) {
         if (Objects.nonNull(property)) {
-            getPropertySet().remove(property);
+            this.getPropertySet().remove(property);
         }
     }
 
     /**
-     * Adds iterable collection of property names {@link Iterable} to compare collection
+     * Includes {@link Iterable} collection of properties {@link String} in comparison
      *
-     * @param properties - collection of properties to be added to compare collection
+     * @param properties - initial input {@link Iterable} collection of properties to include in comparison
      */
     public void includeProperties(final Iterable<String> properties) {
-        getPropertySet().clear();
+        this.getPropertySet().clear();
         Optional.ofNullable(properties)
             .orElseGet(Collections::emptyList)
             .forEach(this::includeProperty);
     }
 
     /**
-     * Adds property name {@link String} to compare collection
+     * Includes property {@link String} in comparison
      *
-     * @param property - property to be added to compare collection
+     * @param property - initial input property {@link String} to include in comparison
      */
     protected void includeProperty(final String property) {
         if (Objects.nonNull(property)) {
-            getPropertySet().add(property);
+            this.getPropertySet().add(property);
         }
     }
 
     /**
-     * Updates property name {@link String} by related comparator instance {@link Comparator}
+     * Sets property {@link String} {@link Comparator}
      *
-     * @param property   - initial property name {@link String}
-     * @param comparator -  initial comparator instance {@link Comparator}
+     * @param property   - initial input property {@link String}
+     * @param comparator -  initial input property {@link Comparator}
      */
     public void setComparator(final String property, final Comparator<?> comparator) {
-        Objects.requireNonNull(property);
+        Objects.requireNonNull(property, "Property should not be null!");
         log.debug("DEBUG <{}>: storing property by name={}, comparator={}", getClass().getName(), property, comparator);
         this.getPropertyComparatorMap().put(sanitize(property), comparator);
     }
 
     /**
-     * Updates properties {@link Map} by related comparator instances {@link Comparator}
+     * Sets {@link Map} collection of properties {@link String} with related {@link Comparator}'s
      *
-     * @param propertyMap - initial property map {@link Map} with names {@link String} and comparators {@link Comparator}
+     * @param propertyMap - initial input {@link Map} collection of properties {@link String} with related {@link Comparator}'s
      */
     public void setComparators(final Map<String, Comparator<?>> propertyMap) {
         Optional.ofNullable(propertyMap)
             .orElseGet(Collections::emptyMap)
             .entrySet()
-            .forEach(entry -> setComparator(entry.getKey(), entry.getValue()));
+            .forEach(entry -> this.setComparator(entry.getKey(), entry.getValue()));
     }
 
     /**
-     * Removes comparator from compare collection by property name {@link String}
+     * Removes comparator from comparison by property {@link String}
      *
-     * @param property - initial property name {@link String}
+     * @param property - initial input property {@link String}
      */
     public void removeComparator(final String property) {
         log.debug("DEBUG: <{}>: removing comparator for property={}", getClass().getName(), property);
@@ -184,9 +184,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Removes comparators from compare collection by iterable collection of property names {@link List}
+     * Removes comparators from comparison by {@link Iterable} collection of properties {@link String}
      *
-     * @param properties - initial collection of property names to be removed (@link List)
+     * @param properties - initial input {@link Iterable} collection of properties {@link String}
      */
     protected void removeComparators(final Iterable<String> properties) {
         Optional.ofNullable(properties)
@@ -206,11 +206,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     @SuppressWarnings("unchecked")
     protected int compare(final T first, final T last, final String property, final Comparator<? super Object> comparator) {
         if (Objects.isNull(property)) {
-            return getComparator().compare(first, last);
+            return this.getComparator().compare(first, last);
         }
-        final Object firstValue = getProperty(first, property);
-        final Object lastValue = getProperty(first, property);
-        return ComparatorUtils.compare(firstValue, lastValue, comparator);
+        return ComparatorUtils.compare(getProperty(first, property), getProperty(first, property), comparator);
     }
 
     /**
@@ -221,7 +219,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     @SuppressWarnings("unchecked")
     protected Comparator<?> getPropertyComparator(final String property) {
-        return getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+        return this.getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
     }
 
     /**
