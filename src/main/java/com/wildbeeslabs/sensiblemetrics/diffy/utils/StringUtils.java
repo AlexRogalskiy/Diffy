@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -143,5 +144,14 @@ public class StringUtils {
         char chars[] = value.toCharArray();
         chars[0] = Character.toLowerCase(chars[0]);
         return String.valueOf(chars);
+    }
+
+    /**
+     * Returns random {@link String}
+     *
+     * @return random {@link String}
+     */
+    public static String getRandomString() {
+        return UUID.randomUUID().toString();
     }
 }

@@ -32,7 +32,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
 import lombok.*;
 
-import java.util.UUID;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.getRandomString;
 
 /**
  * Default difference entry implementation
@@ -113,7 +113,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     public static DefaultDiffEntry of(final String propertyName, final Object first, final Object last) {
         return DefaultDiffEntry
             .builder()
-            .id(UUID.randomUUID().toString())
+            .id(getRandomString())
             .propertyName(propertyName)
             .first(first)
             .last(last)

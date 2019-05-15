@@ -32,7 +32,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffMatchEntryView;
 import lombok.*;
 
-import java.util.UUID;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.getRandomString;
 
 /**
  * Default difference match entry implementation
@@ -87,7 +87,7 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
     public static DefaultDiffMatchEntry of(final Object value, final MatchDescription description) {
         return DefaultDiffMatchEntry
             .builder()
-            .id(UUID.randomUUID().toString())
+            .id(getRandomString())
             .value(value)
             .description(description)
             .build();
