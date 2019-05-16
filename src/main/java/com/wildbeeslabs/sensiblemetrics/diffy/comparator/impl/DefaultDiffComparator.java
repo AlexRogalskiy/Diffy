@@ -127,7 +127,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                         result.add(DefaultDiffEntry.of(property, firstValue, lastValue));
                     }
                 } catch (IllegalAccessException e) {
-                    log.error(formatMessage("ERROR: cannot get value of property: {%s}, message: {%s}", property, e.getMessage()));
+                    log.error(formatMessage("ERROR: cannot get property: {%s}, message: {%s}", property, e.getMessage()));
                 }
             });
         return (S) result;

@@ -190,6 +190,35 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
+    @DisplayName("Test different arrays by default literal comparator, nullable predefined order and priority nulls")
+    public void test_objectsWithLastNull_by_defaultEmptyLiteralComparator() {
+        // given
+        final Integer d1 = 3;
+        final Integer d2 = 12;
+
+        // when
+        final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>();
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    @DisplayName("Test different arrays by default literal comparator, predefined order and priority nulls")
+    public void test_objectsWithLastNull_by_defaultLiteralComparator() {
+        // given
+        final Integer[] predefinedOrder = new Integer[]{5, 6, 13, 2, 12, 4, 3};
+        final Integer d1 = 3;
+        final Integer d2 = 12;
+
+        // when
+        final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
     @DisplayName("Test different double objects by default comparator and negate priority nulls")
     public void test_doubleObjects_by_defaultComparator() {
         // given

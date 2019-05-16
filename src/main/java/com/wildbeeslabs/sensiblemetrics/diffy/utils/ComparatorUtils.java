@@ -1648,17 +1648,20 @@ public class ComparatorUtils {
      * @param <T> type of list element
      */
     @Data
-    @EqualsAndHashCode
-    @ToString
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
     public static class DefaultLiteralComparator<T> extends DefaultNullSafeObjectComparator<T> {
 
+        /**
+         * Default predefined elements {@code T} order
+         */
         private final T[] predefinedOrder;
 
         /**
          * Default null-safe currency {@link Currency} comparator constructor
          */
         public DefaultLiteralComparator() {
-            this(null);
+            this((T[]) null);
         }
 
         /**
@@ -1668,6 +1671,15 @@ public class ComparatorUtils {
          */
         public DefaultLiteralComparator(@Nullable final Comparator<? super T> comparator) {
             this(comparator, false);
+        }
+
+        /**
+         * Default null-safe currency {@link Currency} comparator constructor with initial predefinedOrder {@code T}
+         *
+         * @param predefinedOrder - initial input elements {@code T} that define the order of comparison
+         */
+        public DefaultLiteralComparator(final T[] predefinedOrder) {
+            this(predefinedOrder, null, false);
         }
 
         /**
@@ -1683,7 +1695,9 @@ public class ComparatorUtils {
         /**
          * Default null-safe literal {@code T} comparator constructor with input predefined order, {@link Comparator} and null-priority argument {@link Boolean}
          *
-         * @param predefinedOrder objects that define the order of comparison.
+         * @param predefinedOrder - initial input elements {@code T} that define the order of comparison
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
         public DefaultLiteralComparator(final T[] predefinedOrder, @Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super(comparator, nullsInPriority);
@@ -1692,8 +1706,8 @@ public class ComparatorUtils {
 
         @Override
         public int safeCompare(final T first, final T last) {
-            final int indexO1 = ArrayUtils.indexOf(getPredefinedOrder(), first);
-            final int indexO2 = ArrayUtils.indexOf(getPredefinedOrder(), last);
+            final int indexO1 = ArrayUtils.indexOf(this.getPredefinedOrder(), first);
+            final int indexO2 = ArrayUtils.indexOf(this.getPredefinedOrder(), last);
             if (indexO1 != ArrayUtils.INDEX_NOT_FOUND) {
                 if (indexO2 == ArrayUtils.INDEX_NOT_FOUND) {
                     return -1;

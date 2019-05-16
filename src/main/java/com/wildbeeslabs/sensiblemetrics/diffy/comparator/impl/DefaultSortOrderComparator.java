@@ -31,6 +31,7 @@ import lombok.ToString;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -64,6 +65,7 @@ public abstract class DefaultSortOrderComparator<T> implements Function<SortMana
      */
     @Override
     public Comparator<? super T> apply(final SortManager.SortOrder order) {
+        Objects.requireNonNull(order, "Order should not be null!");
         final Comparator<? super T> comparator = getComparatorMap().getOrDefault(order.getProperty(), getDefaultComparator());
         return order.getDirection().isDescending() ? comparator.reversed() : comparator;
     }

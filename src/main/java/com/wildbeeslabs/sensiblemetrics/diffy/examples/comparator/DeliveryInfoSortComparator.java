@@ -68,6 +68,7 @@ public class DeliveryInfoSortComparator implements SortComparator {
      * @param sortManager - initial input {@link SortManager}
      * @return {@link DeliveryInfo} {@link Comparator}
      */
+    @Override
     public Comparator<? super DeliveryInfo> getComparator(final SortManager sortManager) {
         Objects.requireNonNull(sortManager, "Sort manager should not be null!");
         final List<Comparator<? super DeliveryInfo>> comparatorList = StreamSupport.stream(sortManager.spliterator(), false)
