@@ -29,6 +29,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.apache.commons.collections.comparators.NullComparator;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -1607,7 +1608,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default multi comparator implementation {@link DefaultNullSafeObjectComparator}
+     * Default multi comparator implementation {@link Comparator}
      *
      * @param <T> type of list element
      */
@@ -1638,6 +1639,72 @@ public class ComparatorUtils {
 
         public static <T> void sort(final List<T> list, final Comparator<? super T>... comparators) {
             Collections.sort(list, new DefaultMultiComparator<>(comparators));
+        }
+    }
+
+    /**
+     * Default literal comparator implementation {@link Comparator}
+     *
+     * @param <T> type of list element
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class DefaultLiteralComparator<T> extends DefaultNullSafeObjectComparator<T> {
+
+        private final T[] predefinedOrder;
+
+        /**
+         * Default null-safe currency {@link Currency} comparator constructor
+         */
+        public DefaultLiteralComparator() {
+            this(null);
+        }
+
+        /**
+         * Default null-safe currency {@link Currency} comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultLiteralComparator(@Nullable final Comparator<? super T> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe currency {@link Currency} comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultLiteralComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+            this(null, comparator, nullsInPriority);
+        }
+
+        /**
+         * Default null-safe literal {@code T} comparator constructor with input predefined order, {@link Comparator} and null-priority argument {@link Boolean}
+         *
+         * @param predefinedOrder objects that define the order of comparison.
+         */
+        public DefaultLiteralComparator(final T[] predefinedOrder, @Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super(comparator, nullsInPriority);
+            this.predefinedOrder = Objects.isNull(predefinedOrder) ? null : Arrays.copyOf(predefinedOrder, predefinedOrder.length);
+        }
+
+        @Override
+        public int safeCompare(final T first, final T last) {
+            final int indexO1 = ArrayUtils.indexOf(getPredefinedOrder(), first);
+            final int indexO2 = ArrayUtils.indexOf(getPredefinedOrder(), last);
+            if (indexO1 != ArrayUtils.INDEX_NOT_FOUND) {
+                if (indexO2 == ArrayUtils.INDEX_NOT_FOUND) {
+                    return -1;
+                }
+                return Integer.compare(indexO1, indexO2);
+            } else {
+                if (indexO2 == ArrayUtils.INDEX_NOT_FOUND) {
+                    return super.safeCompare(first, last);
+                }
+                return 1;
+            }
         }
     }
 }
