@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
+import lombok.NonNull;
 
 import java.io.Serializable;
 
@@ -45,5 +46,5 @@ public interface DiffComparator<T> extends Serializable {
      * @param last  - initial last argument to be compared with {@code T}
      * @return {@link Iterable} collection of {@link DiffEntry}
      */
-    <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last);
+    <S extends Iterable<? extends DiffEntry<?>>> @NonNull S diffCompare(final T first, final T last);
 }

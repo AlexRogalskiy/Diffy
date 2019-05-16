@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.examples.factory;
 import com.google.common.collect.ImmutableMap;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoDiffComparator;
-import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparatorDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import lombok.experimental.UtilityClass;
@@ -122,13 +122,13 @@ public class DeliveryInfoFactory {
     }
 
     /**
-     * Returns {@link DeliveryInfoSortComparator} by input sort order comparator {@link DeliveryInfoSortOrderComparator}
+     * Returns {@link DeliveryInfoSortComparatorDispatcher} by input sort order comparator {@link DeliveryInfoSortOrderComparator}
      *
      * @param sortOrderComparator - initial input {@link DeliveryInfoSortOrderComparator}
-     * @return {@link DeliveryInfoSortComparator}
+     * @return {@link DeliveryInfoSortComparatorDispatcher}
      */
-    public static DeliveryInfoSortComparator createSortOrder(final DeliveryInfoSortOrderComparator sortOrderComparator) {
+    public static DeliveryInfoSortComparatorDispatcher createSortOrder(final DeliveryInfoSortOrderComparator sortOrderComparator) {
         Objects.requireNonNull(sortOrderComparator, "Comparator should not be null");
-        return new DeliveryInfoSortComparator(sortOrderComparator);
+        return new DeliveryInfoSortComparatorDispatcher(sortOrderComparator);
     }
 }

@@ -41,14 +41,30 @@ InvalidParameterException extends RuntimeException {
      */
     private static final long serialVersionUID = 5312338835743224799L;
 
+    /**
+     * Invalid parameter exception constructor with initial input message
+     *
+     * @param message - initial input message {@link String}
+     */
     public InvalidParameterException(final String message) {
         super(message);
     }
 
+    /**
+     * Invalid parameter exception constructor with initial input {@link Throwable}
+     *
+     * @param cause - initial input {@link Throwable}
+     */
     public InvalidParameterException(final Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Invalid parameter operation exception constructor with initial input message and {@link Throwable}
+     *
+     * @param message - initial input message {@link String}
+     * @param cause   - initial input {@link Throwable}
+     */
     public InvalidParameterException(final String message, final Throwable cause) {
         super(message, cause);
     }
@@ -58,7 +74,7 @@ InvalidParameterException extends RuntimeException {
      *
      * @param message   - initial input raw message {@link String}
      * @param throwable - initial input cause instance {@link Throwable}
-     * @return {@link InvalidParameterException} instance
+     * @return {@link InvalidParameterException}
      */
     public static final InvalidParameterException throwInvalidParameter(final String message, final Throwable throwable) {
         throw new InvalidParameterException(message, throwable);
@@ -68,7 +84,7 @@ InvalidParameterException extends RuntimeException {
      * Returns {@link InvalidParameterException} instance by input parameters
      *
      * @param message - initial input raw message {@link String}
-     * @return {@link InvalidParameterException} instance
+     * @return {@link InvalidParameterException}
      */
     public static final InvalidParameterException throwInvalidParameter(final String message) {
         throw new InvalidParameterException(message);

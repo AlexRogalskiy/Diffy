@@ -454,6 +454,132 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info nand-chained matchers")
+    public void test_deliveryInfo_by_validNandMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertFalse(deliveryInfoMatcher.nand(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info nand-chained matchers")
+    public void test_deliveryInfo_by_invalidNandMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(6)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/05/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/08/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(deliveryInfoMatcher.nand(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info nor-chained matchers")
+    public void test_deliveryInfo_by_validNorMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(6)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(deliveryInfoMatcher.nor(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info nor-chained matchers")
+    public void test_deliveryInfo_by_invalidNorMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(6)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertFalse(deliveryInfoMatcher.nor(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info xnor-chained matchers")
+    public void test_deliveryInfo_by_validXnorMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(deliveryInfoMatcher.xnor(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info xnor-chained matchers")
+    public void test_deliveryInfo_by_invalidXnorMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(6)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertFalse(deliveryInfoMatcher.xnor(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
     @DisplayName("Test delivery info entity by valid custom delivery info xorAll-chained matchers")
     public void test_deliveryInfo_by_validXorAllMatcher() {
         // given
@@ -514,6 +640,138 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertFalse(Matcher.xorAll(matcher).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info nandAll-chained matchers")
+    public void test_deliveryInfo_by_validNandAllMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(Matcher.nandAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info nandAll-chained matchers")
+    public void test_deliveryInfo_by_invalidNandAllMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(6)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertFalse(Matcher.nandAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info norAll-chained matchers")
+    public void test_deliveryInfo_by_validNorAllMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("28/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(Matcher.norAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info norAll-chained matchers")
+    public void test_deliveryInfo_by_invalidNorAllMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(5)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertFalse(Matcher.norAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info xnorAll-chained matchers")
+    public void test_deliveryInfo_by_validXnorAllMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(6)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("28/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertTrue(Matcher.xnorAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info xnorAll-chained matchers")
+    public void test_deliveryInfo_by_invalidXnorAllMatcher() {
+        // given
+        getDeliveryInfo().setType(5);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
+            .withType(6)
+            .withGid(DEFAULT_GID_PREFIX);
+        final DeliveryInfoMatcher deliveryInfoMatcher2 = DeliveryInfoMatcher.of()
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        final DeliveryInfoMatcher deliveryInfoMatcher3 = DeliveryInfoMatcher.of()
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // then
+        assertFalse(Matcher.xnorAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3).matches(getDeliveryInfo()));
     }
 
     @Test

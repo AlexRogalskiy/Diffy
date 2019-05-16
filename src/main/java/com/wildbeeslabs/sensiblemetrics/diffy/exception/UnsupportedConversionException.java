@@ -42,23 +42,39 @@ public class UnsupportedConversionException extends RuntimeException {
      */
     private static final long serialVersionUID = -4325886623981761909L;
 
+    /**
+     * Unsupported conversion exception constructor with initial input message
+     *
+     * @param message - initial input message {@link String}
+     */
     public UnsupportedConversionException(final String message) {
         super(message);
     }
 
+    /**
+     * Unsupported conversion exception constructor with initial input {@link Throwable}
+     *
+     * @param cause - initial input {@link Throwable}
+     */
     public UnsupportedConversionException(final Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Unsupported conversion exception constructor with initial input message and {@link Throwable}
+     *
+     * @param message - initial input message {@link String}
+     * @param cause   - initial input {@link Throwable}
+     */
     public UnsupportedConversionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link UnsupportedConversionException} instance by input parameters
+     * Returns {@link UnsupportedConversionException} by input parameters
      *
      * @param target - initial input source target {@link Object}
-     * @return {@link UnsupportedConversionException} instance
+     * @return {@link UnsupportedConversionException}
      */
     public static final UnsupportedConversionException throwUnsupportedConversion(final Object target) {
         throw new UnsupportedConversionException(formatMessage("ERROR: unsupported conversion on target {%s}", target));

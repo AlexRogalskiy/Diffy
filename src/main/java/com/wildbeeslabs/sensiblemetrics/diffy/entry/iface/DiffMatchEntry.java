@@ -27,6 +27,11 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescr
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Difference match entry declaration
@@ -53,4 +58,22 @@ public interface DiffMatchEntry<T> extends Serializable {
      */
     @Nullable
     T getValue();
+
+    /**
+     * Returns binary flag based on nullable value comparison
+     *
+     * @return true - if value is nullable, false - otherwise
+     */
+    default boolean isNull() {
+        return Objects.isNull(this.getValue());
+    }
+
+    /**
+     * A collector to create {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     *
+     * @return {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     */
+    static <T> Collector<DiffMatchEntry<T>, ?, List<T>> toList() {
+        return Collectors.mapping(DiffMatchEntry::getValue, Collectors.toList());
+    }
 }

@@ -40,14 +40,30 @@ public class BadOperationException extends RuntimeException {
      */
     private static final long serialVersionUID = -8529822101880469339L;
 
+    /**
+     * Bad operation exception constructor with initial input message
+     *
+     * @param message - initial input message {@link String}
+     */
     public BadOperationException(final String message) {
         super(message);
     }
 
+    /**
+     * Bad operation exception constructor with initial input {@link Throwable}
+     *
+     * @param cause - initial input {@link Throwable}
+     */
     public BadOperationException(final Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Bad operation exception constructor with initial input message and {@link Throwable}
+     *
+     * @param message - initial input message {@link String}
+     * @param cause   - initial input {@link Throwable}
+     */
     public BadOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
@@ -57,7 +73,7 @@ public class BadOperationException extends RuntimeException {
      *
      * @param message   - initial input raw message {@link String}
      * @param throwable - initial input cause instance {@link Throwable}
-     * @return {@link BadOperationException} instance
+     * @return {@link BadOperationException}
      */
     public static final BadOperationException throwBadOperation(final String message, final Throwable throwable) {
         throw new BadOperationException(message, throwable);
@@ -67,7 +83,7 @@ public class BadOperationException extends RuntimeException {
      * Returns {@link BadOperationException} instance by input parameters
      *
      * @param message - initial input raw message {@link String}
-     * @return {@link BadOperationException} instance
+     * @return {@link BadOperationException}
      */
     public static final BadOperationException throwBadOperation(final String message) {
         throw new BadOperationException(message);

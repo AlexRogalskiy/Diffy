@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
 
 import com.google.common.collect.ImmutableList;
-import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparatorDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.factory.DeliveryInfoFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
@@ -58,14 +58,14 @@ import static org.assertj.core.api.BDDAssertions.then;
 public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest {
 
     /**
-     * Default {@link DeliveryInfoSortComparator} instance
+     * Default {@link DeliveryInfoSortComparatorDispatcher} instance
      */
-    private DeliveryInfoSortComparator sortComparator;
+    private DeliveryInfoSortComparatorDispatcher sortComparator;
 
     @Before
     public void setUp() {
         final DeliveryInfoSortOrderComparator sortOrderComparator = DeliveryInfoFactory.createDefaultSortOrderComparator();
-        this.sortComparator = new DeliveryInfoSortComparator(sortOrderComparator);
+        this.sortComparator = new DeliveryInfoSortComparatorDispatcher(sortOrderComparator);
     }
 
     @Test

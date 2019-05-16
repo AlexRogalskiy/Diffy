@@ -40,14 +40,30 @@ public class IllegalAccessException extends RuntimeException {
      */
     private static final long serialVersionUID = 8083840060136145248L;
 
+    /**
+     * Illegal access exception constructor with initial input message
+     *
+     * @param message - initial input message {@link String}
+     */
     public IllegalAccessException(final String message) {
         super(message);
     }
 
+    /**
+     * Illegal access exception constructor with initial input {@link Throwable}
+     *
+     * @param cause - initial input {@link Throwable}
+     */
     public IllegalAccessException(final Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Illegal access exception constructor with initial input message and {@link Throwable}
+     *
+     * @param message - initial input message {@link String}
+     * @param cause   - initial input {@link Throwable}
+     */
     public IllegalAccessException(final String message, final Throwable cause) {
         super(message, cause);
     }
@@ -56,7 +72,7 @@ public class IllegalAccessException extends RuntimeException {
      * Returns {@link IllegalAccessException} instance by input parameters
      *
      * @param message - initial input raw message {@link String}
-     * @return {@link IllegalAccessException} instance
+     * @return {@link IllegalAccessException}
      */
     public static final IllegalAccessException throwInvalidAccess(final String message) {
         throw new IllegalAccessException(message);
@@ -67,7 +83,7 @@ public class IllegalAccessException extends RuntimeException {
      *
      * @param message   - initial input raw message {@link String}
      * @param throwable - initial input cause instance {@link Throwable}
-     * @return {@link IllegalAccessException} instance
+     * @return {@link IllegalAccessException}
      */
     public static final IllegalAccessException throwInvalidAccess(final String message, final Throwable throwable) {
         throw new IllegalAccessException(message, throwable);

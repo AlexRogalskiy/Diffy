@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.SortComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.ComparatorDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
@@ -50,7 +50,7 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class DeliveryInfoSortComparator implements SortComparator {
+public class DeliveryInfoSortComparatorDispatcher implements ComparatorDispatcher {
 
     /**
      * Default explicit serialVersionUID for interoperability

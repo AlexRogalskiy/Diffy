@@ -23,11 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -73,6 +76,42 @@ public interface DiffEntry<T> extends Serializable {
 //     */
 //    @Nullable
 //    Entry<T, T> getEntry();
+
+    /**
+     * Returns binary flag based on first/last values comparison
+     *
+     * @return true - if first/last values are equal, false - otherwise
+     */
+    default boolean areEqual() {
+        return Objects.equals(getFirst(), getLast());
+    }
+
+    /**
+     * Returns {@link Entry} of first {@code T} elements
+     *
+     * @return {@link Entry} of first {@code T} elements
+     */
+    default Entry<String, Object> first() {
+        return DefaultEntry.of(getPropertyName(), getFirst());
+    }
+
+    /**
+     * Returns {@link Entry} of last {@code T} elements
+     *
+     * @return {@link Entry} of last {@code T} elements
+     */
+    default Entry<String, Object> last() {
+        return DefaultEntry.of(getPropertyName(), getLast());
+    }
+
+    /**
+     * A collector to create {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     *
+     * @return {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     */
+    static <T> Collector<DiffEntry<T>, ?, List<Entry<T, T>>> entries() {
+        return Collectors.mapping((final DiffEntry<T> e) -> DefaultEntry.of(e.getFirst(), e.getLast()), Collectors.toList());
+    }
 
     /**
      * A collector to create {@link Map} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements

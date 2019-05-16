@@ -28,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
 import lombok.*;
 
@@ -83,24 +82,6 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     @JsonView(DiffEntryView.External.class)
     @JsonProperty("last")
     private transient Object last;
-
-    /**
-     * Returns {@link Entry} of first {@code T} elements
-     *
-     * @return first {@link Entry}
-     */
-    public Entry<String, Object> first() {
-        return DefaultEntry.of(this.getPropertyName(), this.getFirst());
-    }
-
-    /**
-     * Returns {@link Entry} of last {@code T} elements
-     *
-     * @return last {@link Entry}
-     */
-    public Entry<String, Object> last() {
-        return DefaultEntry.of(this.getPropertyName(), this.getLast());
-    }
 
     /**
      * Creates new {@link DefaultDiffEntry}

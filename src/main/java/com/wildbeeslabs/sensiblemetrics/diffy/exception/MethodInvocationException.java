@@ -42,14 +42,30 @@ public class MethodInvocationException extends RuntimeException {
      */
     private static final long serialVersionUID = -6770900397605904118L;
 
+    /**
+     * Method invocation exception constructor with initial input message
+     *
+     * @param message - initial input message {@link String}
+     */
     public MethodInvocationException(final String message) {
         super(message);
     }
 
+    /**
+     * Method invocation exception constructor with initial input {@link Throwable}
+     *
+     * @param cause - initial input {@link Throwable}
+     */
     public MethodInvocationException(final Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Method invocation exception constructor with initial input message and {@link Throwable}
+     *
+     * @param message - initial input message {@link String}
+     * @param cause   - initial input {@link Throwable}
+     */
     public MethodInvocationException(final String message, final Throwable cause) {
         super(message, cause);
     }
@@ -60,7 +76,7 @@ public class MethodInvocationException extends RuntimeException {
      * @param methodName - initial input property name {@link String}
      * @param target     - initial input source target {@link Object}
      * @param throwable  - initial input cause instance {@link Throwable}
-     * @return {@link MethodInvocationException} instance
+     * @return {@link MethodInvocationException}
      */
     public static final MethodInvocationException throwMethodInvocation(final String methodName, final Object target, final Throwable throwable) {
         throw new MethodInvocationException(formatMessage("ERROR: cannot invoke method: {%s} on target: {%s}", methodName, target), throwable);

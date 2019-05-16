@@ -120,6 +120,42 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of this predicate and another
+     *
+     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    default Matcher<T> nand(final Matcher<? super T> other) {
+        Objects.requireNonNull(other, "Matcher should not be null!");
+        return (final T t) -> not(and(other)).matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of this predicate and another
+     *
+     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    default Matcher<T> nor(final Matcher<? super T> other) {
+        Objects.requireNonNull(other, "Matcher should not be null!");
+        return (final T t) -> not(or(other)).matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XNOR" of this predicate and another
+     *
+     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    default Matcher<T> xnor(final Matcher<? super T> other) {
+        Objects.requireNonNull(other, "Matcher should not be null!");
+        return (final T t) -> not(xor(other)).matches(t);
+    }
+
+    /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of {@link Matcher} collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
@@ -128,7 +164,7 @@ public interface Matcher<T> extends Serializable {
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matcher should not be null!");
+        Objects.requireNonNull(matchers, "Matchers should not be null!");
         return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
     }
 
@@ -141,7 +177,7 @@ public interface Matcher<T> extends Serializable {
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matcher should not be null!");
+        Objects.requireNonNull(matchers, "Matchers should not be null!");
         return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
     }
 
@@ -154,8 +190,47 @@ public interface Matcher<T> extends Serializable {
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matcher should not be null!");
+        Objects.requireNonNull(matchers, "Matchers should not be null!");
         return Arrays.stream(matchers).reduce(Matcher::xor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of {@link Matcher} collection
+     *
+     * @param matchers - initial input {@link Matcher} operators to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    @SuppressWarnings("varargs")
+    static <T> Matcher<T> nandAll(final Matcher<T>... matchers) {
+        Objects.requireNonNull(matchers, "Matchers should not be null!");
+        return Arrays.stream(matchers).reduce(Matcher::nand).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NAND", StringUtils.join(matchers, "|"))));
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of {@link Matcher} collection
+     *
+     * @param matchers - initial input {@link Matcher} operators to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    @SuppressWarnings("varargs")
+    static <T> Matcher<T> norAll(final Matcher<T>... matchers) {
+        Objects.requireNonNull(matchers, "Matchers should not be null!");
+        return Arrays.stream(matchers).reduce(Matcher::nor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NOR", StringUtils.join(matchers, "|"))));
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XNOR" of {@link Matcher} collection
+     *
+     * @param matchers - initial input {@link Matcher} operators to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    @SuppressWarnings("varargs")
+    static <T> Matcher<T> xnorAll(final Matcher<T>... matchers) {
+        Objects.requireNonNull(matchers, "Matchers should not be null!");
+        return Arrays.stream(matchers).reduce(Matcher::xnor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XNOR", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -167,8 +242,6 @@ public interface Matcher<T> extends Serializable {
      * to {@link Objects#equals(Object, Object)}
      */
     static <T> Matcher<T> isEqual(final T value) {
-        return (Objects.isNull(value))
-            ? Objects::isNull
-            : (final T t) -> value.equals(t);
+        return (Objects.isNull(value)) ? Objects::isNull : (final T t) -> value.equals(t);
     }
 }

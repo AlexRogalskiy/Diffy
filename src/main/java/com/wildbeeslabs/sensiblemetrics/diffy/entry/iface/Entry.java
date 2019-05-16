@@ -39,6 +39,15 @@ public interface Entry<K, V> extends Serializable {
     V getLast();
 
     /**
+     * Returns binary flag based on first/last values comparison
+     *
+     * @return true - if first/last values are equal, false - otherwise
+     */
+    default boolean areEqual() {
+        return Objects.equals(this.getFirst(), this.getLast());
+    }
+
+    /**
      * A collector to create a {@link Map} from a {@link Stream} of {@link Entry}s.
      *
      * @param <K> type of entry first value

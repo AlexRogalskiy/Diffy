@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
+import lombok.NonNull;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -37,7 +38,7 @@ import java.util.Comparator;
  * @since 1.0
  */
 @FunctionalInterface
-public interface SortComparator<T> extends Serializable {
+public interface ComparatorDispatcher<T> extends Serializable {
 
     /**
      * Returns {@link Comparator} by input {@link SortManager} instance
@@ -45,5 +46,6 @@ public interface SortComparator<T> extends Serializable {
      * @param sortManager - initial input {@link SortManager} instance
      * @return {@link Comparator} instance
      */
+    @NonNull
     Comparator<? super T> getComparator(final SortManager sortManager);
 }

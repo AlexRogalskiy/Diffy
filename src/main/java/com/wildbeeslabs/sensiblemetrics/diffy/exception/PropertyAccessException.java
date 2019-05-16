@@ -42,37 +42,53 @@ public class PropertyAccessException extends RuntimeException {
      */
     private static final long serialVersionUID = 531677297942341865L;
 
+    /**
+     * Property access exception constructor with initial input message
+     *
+     * @param message - initial input message {@link String}
+     */
     public PropertyAccessException(final String message) {
         super(message);
     }
 
+    /**
+     * Property access exception constructor with initial input {@link Throwable}
+     *
+     * @param cause - initial input {@link Throwable}
+     */
     public PropertyAccessException(final Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Property access exception constructor with initial input message and {@link Throwable}
+     *
+     * @param message - initial input message {@link String}
+     * @param cause   - initial input {@link Throwable}
+     */
     public PropertyAccessException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link PropertyAccessException} instance by input parameters
+     * Returns {@link PropertyAccessException} by input parameters
      *
      * @param propertyName  - initial input property name {@link String}
      * @param propertyValue - initial input property value {@link String}
      * @param throwable     - initial input cause instance {@link Throwable}
-     * @return {@link PropertyAccessException} instance
+     * @return {@link PropertyAccessException}
      */
     public static final PropertyAccessException throwIllegalAccess(final String propertyName, final Object propertyValue, final Throwable throwable) {
         throw new PropertyAccessException(formatMessage("ERROR: cannot access property: {%s} with value: {%s}", propertyName, propertyValue), throwable);
     }
 
     /**
-     * Returns {@link PropertyAccessException} instance by input parameters
+     * Returns {@link PropertyAccessException} by input parameters
      *
      * @param throwable - initial input cause instance {@link Throwable}
      * @param target    - initial input raw message {@link String}
      * @param target    - initial input source target {@link Object}
-     * @return {@link PropertyAccessException} instance
+     * @return {@link PropertyAccessException}
      */
     public static final PropertyAccessException throwIllegalAccess(final Throwable throwable, final String message, final Object... target) {
         throw new PropertyAccessException(formatMessage(message, target), throwable);

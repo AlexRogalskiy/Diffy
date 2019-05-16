@@ -45,5 +45,5 @@ public interface DiffMatcher<T> extends Serializable {
      * @param value - initial input argument to be matched by {@code T}
      * @return {@link Iterable} collection of difference match entries
      */
-    @NonNull <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value);
+    <S extends Iterable<? extends DiffMatchEntry<?>>> @NonNull S diffMatch(final T value);
 }
