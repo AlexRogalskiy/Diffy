@@ -36,8 +36,8 @@ import java.util.Optional;
 /**
  * Default {@link Entry} implementation
  *
- * @param <K> type of node key
- * @param <V> type of node value
+ * @param <K> type of node first value
+ * @param <V> type of node last value
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -57,42 +57,42 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     private static final long serialVersionUID = 5764115349513946799L;
 
     /**
-     * Default entry key {@code K}
+     * Default entry first value {@code K}
      */
     @JsonView(DiffEntryView.External.class)
-    @JsonProperty(value = "key", required = true)
-    private K key;
+    @JsonProperty("first")
+    private K first;
     /**
-     * Default entry value {@code V}
+     * Default entry last value {@code V}
      */
     @JsonView(DiffEntryView.External.class)
-    @JsonProperty(value = "value")
-    private V value;
+    @JsonProperty("last")
+    private V last;
 
     /**
      * Returns {@link Entry} by input parameters
      *
-     * @param <K>    type of node key
-     * @param <V>    type of node value
-     * @param first  - initial input node key {@code K}
-     * @param second - initial input node value {@code V}
+     * @param <K>   type of entry first value
+     * @param <V>   type of entry last value
+     * @param first - initial input first value {@code K}
+     * @param last  - initial input last value {@code V}
      * @return {@link Entry}
      */
-    public static <K, V> Entry<K, V> of(final K first, final V second) {
-        return new DefaultEntry<>(first, second);
+    public static <K, V> Entry<K, V> of(final K first, final V last) {
+        return new DefaultEntry<>(first, last);
     }
 
     /**
      * Returns {@link Entry} if both {@link Optional} instances have values or {@link Optional#empty()} if one or both
      * are missing.
      *
-     * @param <K>   type of node key
-     * @param <V>   type of node value
-     * @param key   - initial input key {@link Optional}
-     * @param value - initial input value {@link Optional}
+     * @param <K>   type of entry key
+     * @param <V>   type of entry value
+     * @param first - initial input first value {@link Optional}
+     * @param last  - initial input last value {@link Optional}
      * @return {@link Optional} of {@link Entry}
      */
-    public static <K, V> Optional<Entry<K, V>> with(final Optional<K> key, final Optional<V> value) {
-        return key.flatMap(k -> value.map(v -> DefaultEntry.of(k, v)));
+    public static <K, V> Optional<Entry<K, V>> with(final Optional<K> first, final Optional<V> last) {
+        return first.flatMap(f -> last.map(l -> DefaultEntry.of(f, l)));
     }
 }

@@ -103,7 +103,7 @@ public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
      * @return {@link DeliveryInfo} {@link MockUnit}
      */
     protected MockUnit<DeliveryInfo> getDeliveryInfoMock() {
-        return getDeliveryInfoMock(DEFAULT_ADDRESS_INFO_COUNT);
+        return this.getDeliveryInfoMock(DEFAULT_ADDRESS_INFO_COUNT);
     }
 
     /**

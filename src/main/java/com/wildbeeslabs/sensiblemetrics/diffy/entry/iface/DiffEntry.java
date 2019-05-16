@@ -66,6 +66,14 @@ public interface DiffEntry<T> extends Serializable {
     @Nullable
     T getLast();
 
+//    /**
+//     * Returns property {@link Entry} value
+//     *
+//     * @return property {@link Entry} value
+//     */
+//    @Nullable
+//    Entry<T, T> getEntry();
+
     /**
      * A collector to create {@link Map} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
      *

@@ -190,8 +190,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays by default literal comparator, nullable predefined order and priority nulls")
-    public void test_objectsWithLastNull_by_defaultEmptyLiteralComparator() {
+    @DisplayName("Test different arrays by default literal comparator, nullable predefined order elements and priority nulls")
+    public void test_integerObjects_by_defaultEmptyLiteralComparator() {
         // given
         final Integer d1 = 3;
         final Integer d2 = 12;
@@ -204,8 +204,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
-    @DisplayName("Test different arrays by default literal comparator, predefined order and priority nulls")
-    public void test_objectsWithLastNull_by_defaultLiteralComparator() {
+    @DisplayName("Test different arrays by default literal comparator, predefined order elements and priority nulls")
+    public void test_integerObjectsWithPredefinedOrderElements_by_defaultLiteralComparator() {
         // given
         final Integer[] predefinedOrder = new Integer[]{5, 6, 13, 2, 12, 4, 3};
         final Integer d1 = 3;
@@ -216,6 +216,65 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // then
         assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Test different arrays by default literal comparator, nullable predefined order elements and priority nulls")
+    public void test_integerObjectsWithNullablePredefinedOrderElements_by_defaultLiteralComparator() {
+        // given
+        final Integer[] predefinedOrder = new Integer[]{5, 6, 78, 2, 12, null, 4, 3};
+        final Integer d1 = null;
+        final Integer d2 = 12;
+
+        // when
+        final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Test different arrays by default literal comparator, multiple nullable predefined order elements and priority nulls")
+    public void test_integerObjectsWithMultipleNullablePredefinedOrderElements_by_defaultLiteralComparator() {
+        // given
+        final Integer[] predefinedOrder = new Integer[]{5, 6, null, 2, 12, null, 4, 3};
+        final Integer d1 = null;
+        final Integer d2 = 12;
+
+        // when
+        final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(-1));
+    }
+
+    @Test
+    @DisplayName("Test different arrays by default literal comparator, predefined order elements and priority nulls")
+    public void test_invalidIntegerObjectsWithPredefinedOrderElements_by_defaultLiteralComparator() {
+        // given
+        final Integer[] predefinedOrder = new Integer[]{5, 6, null, 2, 12, null, 4, 3};
+        final Integer d1 = 130;
+        final Integer d2 = 120;
+
+        // when
+        final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Test different arrays by default literal comparator and priority nulls")
+    public void test_nullableIntegerObjects_by_defaultLiteralComparator() {
+        // given
+        final Integer d1 = null;
+        final Integer d2 = null;
+
+        // when
+        final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>();
+
+        // then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(0));
     }
 
     @Test

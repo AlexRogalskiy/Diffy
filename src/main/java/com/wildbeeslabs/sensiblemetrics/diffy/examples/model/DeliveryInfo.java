@@ -52,7 +52,9 @@ public class DeliveryInfo implements Serializable {
      * Default delivery status enum
      */
     public enum DeliveryStatus {
-        DELIVERED, REJECTED, PENDING
+        DELIVERED,
+        REJECTED,
+        PENDING
     }
 
     /**

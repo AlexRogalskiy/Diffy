@@ -33,6 +33,8 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
+
 /**
  * String utilities implementation
  *
@@ -58,6 +60,12 @@ public class StringUtils {
      * Default quotes wrapper {@link Function}
      */
     public static final Function<Object, String> wrapInQuotes = s -> "\" " + s + " \"";
+
+    /**
+     * Default escape wrapper {@link Function}
+     */
+    public static Function<String, String> wrapInEscapeHtml = s -> "'" + escapeHtml(s) + "'";
+
     /**
      * Default numeric pattern format
      */
