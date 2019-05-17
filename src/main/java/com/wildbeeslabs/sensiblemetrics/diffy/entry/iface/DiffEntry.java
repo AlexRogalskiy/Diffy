@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -105,12 +106,21 @@ public interface DiffEntry<T> extends Serializable {
     }
 
     /**
-     * A collector to create {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     * Returns {@link Collector} to create {@link List} from {@link Stream} of {@link DiffEntry}'s {@code T} elements
      *
-     * @return {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     * @return {@link List} from {@link Stream} of {@link DiffEntry}'s {@code T} elements
      */
     static <T> Collector<DiffEntry<T>, ?, List<Entry<T, T>>> entries() {
         return Collectors.mapping((final DiffEntry<T> e) -> DefaultEntry.of(e.getFirst(), e.getLast()), Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Collector} to create {@link Set} from {@link Stream} of {@link DiffEntry}'s properties {@link String}
+     *
+     * @return {@link Set} from {@link Stream} of {@link DiffEntry}'s properties {@link String}
+     */
+    static <T> Collector<DiffEntry<T>, ?, Set<String>> properties() {
+        return Collectors.mapping(DiffEntry::getPropertyName, Collectors.toSet());
     }
 
     /**

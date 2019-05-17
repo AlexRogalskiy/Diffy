@@ -65,7 +65,7 @@ public interface DiffMatchEntry<T> extends Serializable {
      * @return true - if value is nullable, false - otherwise
      */
     default boolean isNull() {
-        return Objects.isNull(this.getValue());
+        return Objects.isNull(getValue());
     }
 
     /**

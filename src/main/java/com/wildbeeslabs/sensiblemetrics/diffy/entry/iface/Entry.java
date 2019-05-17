@@ -44,7 +44,7 @@ public interface Entry<K, V> extends Serializable {
      * @return true - if first/last values are equal, false - otherwise
      */
     default boolean areEqual() {
-        return Objects.equals(this.getFirst(), this.getLast());
+        return Objects.equals(getFirst(), getLast());
     }
 
     /**

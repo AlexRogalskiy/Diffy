@@ -72,7 +72,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
     /**
      * Returns new matcher instance {@link Matcher} by input class instance {@link Class}
      *
-     * @param <T>
+     * @param <T>   type of matcher value
      * @param clazz - initial input class argument instance {@link Class}
      * @return matcher instance {@link Matcher}
      */
