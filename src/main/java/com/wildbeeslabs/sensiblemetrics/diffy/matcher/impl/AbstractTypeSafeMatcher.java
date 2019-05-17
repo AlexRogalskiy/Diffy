@@ -33,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.getMethodType;
+
 /**
  * Abstract type safe matcher implementation by input class instance {@link Class}
  *
@@ -55,7 +57,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     /**
      * Default method type instance
      */
-    private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = ReflectionUtils.getMethodType("matchesSafe", 1, 0);
+    private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = getMethodType("matchesSafe", 1, 0);
 
     /**
      * Default input argument class instance
