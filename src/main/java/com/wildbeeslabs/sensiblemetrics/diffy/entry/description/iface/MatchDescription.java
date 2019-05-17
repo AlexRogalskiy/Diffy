@@ -41,7 +41,7 @@ public interface MatchDescription extends Serializable {
     /**
      * A description that consumes input but does nothing.
      */
-    MatchDescription DEFAULT_EMPTY_MATCH_DESCRIPTION = EmptyMatchDescription.of();
+    MatchDescription EMPTY_MATCH_DESCRIPTION = EmptyMatchDescription.of();
 
     /**
      * Appends input string value to current description {@link MatchDescription}

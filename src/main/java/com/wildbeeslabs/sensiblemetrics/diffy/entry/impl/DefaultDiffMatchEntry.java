@@ -61,6 +61,7 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
      */
     @JsonView(DiffMatchEntryView.Internal.class)
     @JsonProperty(value = "id", required = true)
+    @EqualsAndHashCode.Exclude
     private transient String id;
 
     /**

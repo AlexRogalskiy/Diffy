@@ -248,10 +248,10 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns list of super-classes {@link List} of the supplied class {@link Class}
+     * Returns {@link List} of super-classes by the supplied {@link Class}
      *
      * @param clazz - class to reflect on {@link Class}
-     * @return list of super-classes of the supplied class {@link Class}
+     * @return list of super-classes of the supplied {@link Class}
      */
     public static List<Class<?>> getAllSuperclasses(@NonNull final Class<?> clazz) {
         final List<Class<?>> classes = new ArrayList<>();
@@ -261,6 +261,37 @@ public class ReflectionUtils {
             superclass = superclass.getSuperclass();
         }
         return classes;
+    }
+
+    /**
+     * Returns {@link List} of interfaces by the supplied {@link Class}
+     *
+     * @param clazz - class to reflect on {@link Class}
+     * @return list of super-classes of the supplied {@link Class}
+     */
+    public static Set<Class<?>> getAllInterfaces(final Class<?> clazz) {
+        if (Objects.isNull(clazz)) return null;
+        final LinkedHashSet<Class<?>> interfacesFound = new LinkedHashSet<>();
+        getAllInterfaces(clazz, interfacesFound);
+        return interfacesFound;
+    }
+
+    /**
+     * Get the interfaces for the specified class.
+     *
+     * @param clazz           the class to look up, may be {@code null}
+     * @param interfacesFound the {@code Set} of interfaces for the class
+     */
+    private static void getAllInterfaces(Class<?> clazz, Set<Class<?>> interfacesFound) {
+        while (Objects.nonNull(clazz)) {
+            final Class<?>[] interfaces = clazz.getInterfaces();
+            for (final Class<?> i : interfaces) {
+                if (interfacesFound.add(i)) {
+                    getAllInterfaces(i, interfacesFound);
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
     }
 
     /**

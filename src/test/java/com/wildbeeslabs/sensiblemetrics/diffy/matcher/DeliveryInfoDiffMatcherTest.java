@@ -25,12 +25,14 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
 import com.google.common.collect.Lists;
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
+import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffMatcherFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -41,13 +43,14 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -94,20 +97,32 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     }
 
     @Test
+    @DisplayName("Test nullable delivery info entity by default diff matcher")
+    public void test_nullableDeliveryInfo_by_defaultTypeDiffMatcher() {
+        // given
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create();
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(null);
+        assertNotNull("Should not be null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(empty()));
+    }
+
+    @Test
     @DisplayName("Test delivery info entity by custom created/update date fields diff matcher")
     public void test_deliveryInfo_by_dateDiffMatcher() {
         // given
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
-        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(
-            new AbstractTypeSafeMatcher<>() {
-                @Override
-                public boolean matchesSafe(final DeliveryInfo value) {
-                    return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
-                        && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
-                }
-            });
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> (
+            LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
+                && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20
+        );
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
@@ -128,26 +143,37 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
-            .builder()
-            .value(getDeliveryInfo())
-            .build();
-        assertFalse(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
     }
 
-    @Test
-    @DisplayName("Test delivery info entity by custom type field diff matcher")
-    public void test_deliveryInfo_by_customTypeDiffMatcher() {
+    @Test(expected = MatchOperationException.class)
+    @DisplayName("Test nullable delivery info entity by custom type field diff matcher")
+    public void test_nullableDeliveryInfo_by_customTypeDiffMatcher() {
         // given
         getDeliveryInfo().setType(getCodeMock().val());
 
-        DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(
-            new AbstractTypeSafeMatcher<>() {
-                @Override
-                public boolean matchesSafe(final DeliveryInfo value) {
-                    return value.getType() > 1000 && value.getType() < 5000;
-                }
-            });
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> (value.getType() > 1000 && value.getType() < 5000);
+        DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(null);
+        assertNotNull("Should not be null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
+
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(null, MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by custom type field diff matcher with comparator")
+    public void test_deliveryInfo_by_customTypeDiffMatcherWithComparator() {
+        // given
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> (0 == Objects.compare(value, null, new ComparatorUtils.DefaultNullSafeObjectComparator()));
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
         Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
@@ -156,20 +182,61 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
-            .builder()
-            .value(getDeliveryInfo())
-            .build();
-        assertFalse(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
+    }
+
+    @Test(expected = MatchOperationException.class)
+    @DisplayName("Test invalid delivery info entity by custom type field diff matcher with comparator")
+    public void test_invalidDeliveryInfo_by_customTypeDiffMatcherWithComparator() {
+        // given
+        getDeliveryInfo().setCreatedAt(null);
+
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5;
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+
+        // when
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by custom type field diff matcher with identity comparator")
+    public void test_deliveryInfo_by_customTypeDiffMatcherWithIdentityComparator() {
+        // given
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> (0 == Objects.compare(value, value, new ComparatorUtils.DefaultNullSafeObjectComparator()));
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+
+        // when
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
+        List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(empty()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by custom type field diff matcher")
+    public void test_deliveryInfo_by_customTypeDiffMatcher() {
+        // given
+        getDeliveryInfo().setType(getCodeMock().val());
+
+        TypeSafeMatcher<DeliveryInfo> matcher = value -> (value.getType() > 1000 && value.getType() < 5000);
+        DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+
+        // when
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
+        List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
 
         // given
-        diffMatcher = DefaultDiffMatcherFactory.create(
-            new AbstractTypeSafeMatcher<>() {
-                @Override
-                public boolean matchesSafe(final DeliveryInfo value) {
-                    return (value.getType() >= 0 && value.getType() <= 10);
-                }
-            });
+        matcher = value -> (value.getType() >= 0 && value.getType() <= 10);
+        diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
         iterable = diffMatcher.diffMatch(getDeliveryInfo());
@@ -184,19 +251,11 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test delivery info entity by custom type/date fields diff matchers")
     public void test_deliveryInfo_by_customTypeAndDateDiffMatcher() {
         // given
-        final Matcher<DeliveryInfo> dateMatcher = new AbstractTypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafe(final DeliveryInfo value) {
-                return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
-                    && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
-            }
-        };
-        final Matcher<DeliveryInfo> typeMatcher = new AbstractTypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafe(final DeliveryInfo value) {
-                return value.getType() > 1000 && value.getType() < 5000;
-            }
-        };
+        final TypeSafeMatcher<DeliveryInfo> dateMatcher = value -> (
+            LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
+                && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20
+        );
+        final TypeSafeMatcher<DeliveryInfo> typeMatcher = value -> (value.getType() > 1000 && value.getType() < 5000);
 
         getDeliveryInfo().setType(getCodeMock().val());
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
@@ -211,11 +270,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry
-            .builder()
-            .value(getDeliveryInfo())
-            .build();
-        assertFalse(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
 
         // given
         getDeliveryInfo().setType(1001);

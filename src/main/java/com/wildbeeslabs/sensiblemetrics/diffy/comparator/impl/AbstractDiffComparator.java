@@ -100,8 +100,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
         this.comparator = Objects.nonNull(comparator)
             ? comparator
             : ComparableComparator.getInstance();
-        this.propertyMap.putAll(this.getFieldsMap(this.clazz));
-        this.propertySet.addAll(this.getPropertyMap().keySet());
+        this.getPropertyMap().putAll(this.getFieldsMap(this.clazz));
+        this.getPropertySet().addAll(this.getPropertyMap().keySet());
     }
 
     /**

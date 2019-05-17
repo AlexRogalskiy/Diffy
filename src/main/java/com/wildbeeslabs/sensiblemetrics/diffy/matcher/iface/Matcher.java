@@ -31,7 +31,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription.DEFAULT_EMPTY_MATCH_DESCRIPTION;
+import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription.EMPTY_MATCH_DESCRIPTION;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
@@ -59,7 +59,7 @@ public interface Matcher<T> extends Serializable {
      * @return matcher description {@link MatchDescription}
      */
     default MatchDescription getDescription() {
-        return DEFAULT_EMPTY_MATCH_DESCRIPTION;
+        return EMPTY_MATCH_DESCRIPTION;
     }
 
     /**

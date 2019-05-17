@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+
 /**
  * Type safe matcher interface declaration by input object instance
  *
@@ -41,7 +43,12 @@ public interface TypeSafeMatcher<T> extends Matcher<T> {
      * @return true - if initial value matches input argument, false - otherwise
      */
     default boolean matches(final T value) {
-        return matchesSafe(value);
+        try {
+            return this.matchesSafe(value);
+        } catch (RuntimeException e) {
+            MatchOperationException.throwIncorrectMatch(value, e);
+        }
+        return false;
     }
 
     /**

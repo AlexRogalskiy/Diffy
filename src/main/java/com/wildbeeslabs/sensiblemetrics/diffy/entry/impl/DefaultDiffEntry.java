@@ -60,6 +60,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
      */
     @JsonView(DiffEntryView.Internal.class)
     @JsonProperty(value = "id", required = true)
+    @EqualsAndHashCode.Exclude
     private transient String id;
 
     /**
