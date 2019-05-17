@@ -30,12 +30,12 @@ import lombok.ToString;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
- * Unsupported conversion {@link RuntimeException} implementation
+ * Unsupported operation {@link RuntimeException} implementation
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UnsupportedConversionException extends RuntimeException {
+public class UnsupportedOperationException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -43,40 +43,41 @@ public class UnsupportedConversionException extends RuntimeException {
     private static final long serialVersionUID = -4325886623981761909L;
 
     /**
-     * Unsupported conversion exception constructor with initial input message
+     * Unsupported operation exception constructor with initial input message
      *
      * @param message - initial input message {@link String}
      */
-    public UnsupportedConversionException(final String message) {
+    public UnsupportedOperationException(final String message) {
         super(message);
     }
 
     /**
-     * Unsupported conversion exception constructor with initial input {@link Throwable}
+     * Unsupported operation exception constructor with initial input {@link Throwable}
      *
      * @param cause - initial input {@link Throwable}
      */
-    public UnsupportedConversionException(final Throwable cause) {
+    public UnsupportedOperationException(final Throwable cause) {
         super(cause);
     }
 
     /**
-     * Unsupported conversion exception constructor with initial input message and {@link Throwable}
+     * Unsupported operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
      * @param cause   - initial input {@link Throwable}
      */
-    public UnsupportedConversionException(final String message, final Throwable cause) {
+    public UnsupportedOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link UnsupportedConversionException} by input parameters
+     * Returns {@link UnsupportedOperationException} by input parameters
      *
-     * @param target - initial input source target {@link Object}
-     * @return {@link UnsupportedConversionException}
+     * @param target    - initial input source target {@link Object}
+     * @param throwable - initial input cause instance {@link Throwable}
+     * @return {@link UnsupportedOperationException}
      */
-    public static final UnsupportedConversionException throwUnsupportedConversion(final Object target) {
-        throw new UnsupportedConversionException(formatMessage("ERROR: unsupported conversion on target {%s}", target));
+    public static final UnsupportedOperationException throwUnsupportedParsing(final Object target, final Throwable throwable) {
+        throw new UnsupportedOperationException(formatMessage("ERROR: unsupported parsing on target = {%s}", target), throwable);
     }
 }

@@ -26,16 +26,14 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 /**
- * Default {@link Integer} converter implementation {@link NumericConverter}
+ * Default {@link Integer} {@link NumericConverter} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

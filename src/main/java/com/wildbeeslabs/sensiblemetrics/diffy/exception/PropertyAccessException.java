@@ -79,7 +79,7 @@ public class PropertyAccessException extends RuntimeException {
      * @return {@link PropertyAccessException}
      */
     public static final PropertyAccessException throwIllegalAccess(final String propertyName, final Object propertyValue, final Throwable throwable) {
-        throw new PropertyAccessException(formatMessage("ERROR: cannot access property: {%s} with value: {%s}", propertyName, propertyValue), throwable);
+        throw new PropertyAccessException(formatMessage("ERROR: cannot access property = {%s} with value = {%s}", propertyName, propertyValue), throwable);
     }
 
     /**

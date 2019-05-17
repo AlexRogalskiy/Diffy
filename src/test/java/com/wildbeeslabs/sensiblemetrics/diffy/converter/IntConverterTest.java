@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.impl.IntConverter;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
@@ -55,7 +56,7 @@ public class IntConverterTest {
         this.intConverter = new IntConverter();
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting invalid integer value")
     public void test_invalidInt_Converter() {
         // given
@@ -124,7 +125,7 @@ public class IntConverterTest {
         assertThat(result, IsEqual.equalTo(value));
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting empty integer value")
     public void test_emptyInt_Converter() {
         // given
@@ -134,7 +135,7 @@ public class IntConverterTest {
         this.getIntConverter().convert(value);
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting nullable integer value")
     public void test_nullableInt_Converter() {
         // given

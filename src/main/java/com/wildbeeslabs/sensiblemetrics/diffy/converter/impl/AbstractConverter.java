@@ -23,20 +23,53 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.annotation.Nullable;
 
 /**
- * Default {@link Number} {@link AbstractConverter} implementation
+ * Abstract {@link Converter} implementation
  *
- * @param <R> type of input value {@link Number} to be converted to
+ * @param <T> type of input element to be converted from
+ * @param <R> type of input element to be converted to
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
+@Slf4j
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public abstract class NumericConverter<R extends Number> extends AbstractConverter<String, R> {
+@EqualsAndHashCode
+@ToString
+public abstract class AbstractConverter<T, R> implements Converter<T, R> {
+
+    /**
+     * Returns converted value {@code R} by converter operation applied to input value {@code T}
+     *
+     * @param value - initial input argument value {@code T}
+     * @return converted value {@code R}
+     */
+    @Override
+    @Nullable
+    public R convert(final T value) {
+        try {
+            return this.valueOf(value);
+        } catch (RuntimeException e) {
+            log.error("ERROR: cannot convert value = {}", value);
+            ConvertOperationException.throwIncorrectConversion(value, e);
+        }
+        return null;
+    }
+
+    /**
+     * Returns converted value {@code R} by initial input value {@code T}
+     *
+     * @param value - initial input argument value {@code T}
+     * @return converted value {@code R}
+     */
+    protected abstract R valueOf(final T value);
 }

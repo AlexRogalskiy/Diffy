@@ -35,49 +35,49 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMes
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MatchOperationException extends RuntimeException {
+public class ConvertOperationException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -6770900397605904118L;
+    private static final long serialVersionUID = -5516269727409146559L;
 
     /**
-     * Match operation exception constructor with initial input message
+     * Convert operation exception constructor with initial input message
      *
      * @param message - initial input message {@link String}
      */
-    public MatchOperationException(final String message) {
+    public ConvertOperationException(final String message) {
         super(message);
     }
 
     /**
-     * Match operation exception constructor with initial input {@link Throwable}
+     * Convert operation exception constructor with initial input {@link Throwable}
      *
      * @param cause - initial input {@link Throwable}
      */
-    public MatchOperationException(final Throwable cause) {
+    public ConvertOperationException(final Throwable cause) {
         super(cause);
     }
 
     /**
-     * Match operation exception constructor with initial input message and {@link Throwable}
+     * Convert operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
      * @param cause   - initial input {@link Throwable}
      */
-    public MatchOperationException(final String message, final Throwable cause) {
+    public ConvertOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link MatchOperationException} instance by input parameters
+     * Returns {@link ConvertOperationException} instance by input parameters
      *
      * @param target    - initial input source target {@link Object}
      * @param throwable - initial input cause instance {@link Throwable}
-     * @return {@link MatchOperationException}
+     * @return {@link ConvertOperationException}
      */
-    public static final MatchOperationException throwIncorrectMatch(final Object target, final Throwable throwable) {
-        throw new MatchOperationException(formatMessage("ERROR: cannot process match operation on target = {%s}", target), throwable);
+    public static final ConvertOperationException throwIncorrectConversion(final Object target, final Throwable throwable) {
+        throw new ConvertOperationException(formatMessage("ERROR: cannot process convert operation on target = {%s}", target), throwable);
     }
 }

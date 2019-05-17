@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.impl.BigDecimalConverter;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
@@ -56,7 +57,7 @@ public class BigDecimalConverterTest {
         this.bigDecimalConverter = new BigDecimalConverter();
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting invalid big decimal value")
     public void test_invalidBigDecimal_Converter() {
         // given
@@ -126,7 +127,7 @@ public class BigDecimalConverterTest {
         assertThat(result, IsEqual.equalTo(value));
     }
 
-    @Test(expected = NumberFormatException.class)
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting empty big decimal value")
     public void test_emptyBigDecimal_Converter() {
         // given
@@ -136,7 +137,7 @@ public class BigDecimalConverterTest {
         this.getBigDecimalConverter().convert(value);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting nullable big decimal value")
     public void test_nullableBigDecimal_Converter() {
         // given

@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.impl.DateConverter;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
@@ -61,7 +62,7 @@ public class DateConverterTest {
         this.dateConverter = new DateConverter(DEFAULT_DATE_FORMAT);
     }
 
-    @Test
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting invalid date value")
     public void test_invalidDate_Converter() {
         // given
@@ -130,7 +131,7 @@ public class DateConverterTest {
         assertThat(result, IsEqual.equalTo(value));
     }
 
-    @Test
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting empty date value")
     public void test_emptyDate_Converter() {
         // given
@@ -140,7 +141,7 @@ public class DateConverterTest {
         this.getDateConverter().convert(value);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = ConvertOperationException.class)
     @DisplayName("Test converting nullable date value")
     public void test_nullableDate_Converter() {
         // given

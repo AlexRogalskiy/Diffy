@@ -23,31 +23,27 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
-import javax.annotation.Nullable;
 import java.util.Date;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.DEFAULT_DATE_FORMAT_PATTERN;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
 
 /**
- * Default {@link Date} converter implementation {@link Converter}
+ * Default {@link Date} {@link AbstractConverter} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
-@EqualsAndHashCode
-@ToString
-public class DateConverter implements Converter<String, Date> {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class DateConverter extends AbstractConverter<String, Date> {
 
     /**
      * Initial date format pattern
@@ -62,7 +58,7 @@ public class DateConverter implements Converter<String, Date> {
     }
 
     /**
-     * Default date converter constructor with initial input date format
+     * Default date converter constructor with initial input date format {@link String}
      *
      * @param format - initial input date format
      */
@@ -77,8 +73,7 @@ public class DateConverter implements Converter<String, Date> {
      * @return converted integer value {@link Date}
      */
     @Override
-    @Nullable
-    public Date convert(final String value) {
+    public Date valueOf(final String value) {
         return toDate(value, getFormat());
     }
 }

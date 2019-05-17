@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
- * Custom converter interface declaration
+ * Converter interface declaration
  *
  * @param <T> type of input element to be converted from
  * @param <R> type of input element to be converted to
