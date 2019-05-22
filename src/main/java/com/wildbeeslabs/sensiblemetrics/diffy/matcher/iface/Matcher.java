@@ -23,15 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherMode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription.EMPTY_MATCH_DESCRIPTION;
+import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription.EMPTY_MATCH_DESCRIPTION;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
@@ -54,12 +55,21 @@ public interface Matcher<T> extends Serializable {
     boolean matches(final T value);
 
     /**
-     * Returns default matcher description {@link MatchDescription}
+     * Returns default {@link MatchDescription}
      *
-     * @return matcher description {@link MatchDescription}
+     * @return {@link MatchDescription}
      */
     default MatchDescription getDescription() {
         return EMPTY_MATCH_DESCRIPTION;
+    }
+
+    /**
+     * Returns default {@link MatcherMode}
+     *
+     * @return {@link MatcherMode}
+     */
+    default MatcherMode getMode() {
+        return MatcherMode.SILENT;
     }
 
     /**
@@ -242,6 +252,6 @@ public interface Matcher<T> extends Serializable {
      * to {@link Objects#equals(Object, Object)}
      */
     static <T> Matcher<T> isEqual(final T value) {
-        return (Objects.isNull(value)) ? Objects::isNull : (final T t) -> value.equals(t);
+        return (Objects.isNull(value)) ? Objects::isNull : (final T t) -> Objects.equals(value, t);
     }
 }

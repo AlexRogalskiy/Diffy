@@ -32,6 +32,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.getMethodType;
 
@@ -78,7 +79,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @SuppressWarnings("unchecked")
     public AbstractTypeSafeMatcher(final ReflectionUtils.ReflectionMethodType methodType) {
-        this.clazz = (Class<? extends T>) (Objects.isNull(methodType) ? DEFAULT_TYPE : methodType).getType(this.getClass());
+        this.clazz = (Class<? extends T>) (Optional.ofNullable(methodType).orElse(DEFAULT_TYPE)).getType(this.getClass());
     }
 
     /**

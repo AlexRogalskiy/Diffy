@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.description.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,7 +42,6 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.wrapInBra
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode
 @ToString

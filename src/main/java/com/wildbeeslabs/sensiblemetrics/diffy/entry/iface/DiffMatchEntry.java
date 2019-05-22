@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;

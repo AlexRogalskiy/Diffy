@@ -21,14 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.description.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -41,7 +40,6 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMes
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -61,7 +59,7 @@ public class StringMatchDescription extends BaseMatchDescription {
      * Default empty string match description constructor
      */
     public StringMatchDescription() {
-        this(new StringBuilder());
+        this(new StringBuffer());
     }
 
     /**

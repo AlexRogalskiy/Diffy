@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffMatchEntryView;
 import lombok.*;
