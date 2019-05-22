@@ -408,6 +408,34 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     }
 
     @Test
+    @DisplayName("Test different string array objects by custom null-safe comparator and negate priority nulls")
+    public void test_stringArrayObjectsWithoutNulls_by_customComparator() {
+        // given
+        final String[] d1 = {"a", "bb", "ccc"};
+        final String[] d2 = {"dd", "nn"};
+
+        // when
+        final Comparator<? super String[]> comparator = new ComparatorUtils.DefaultNullSafeStringArrayComparator();
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
+    @DisplayName("Test different string array objects with nulls by custom null-safe comparator and negate priority nulls")
+    public void test_stringArrayObjectsWithNulls_by_customComparator() {
+        // given
+        final String[] d1 = {"a", "bb", "ccc", null};
+        final String[] d2 = {"dd", "nn", null};
+
+        // when
+        final Comparator<? super String[]> comparator = new ComparatorUtils.DefaultNullSafeStringArrayComparator();
+
+        //then
+        assertThat(comparator.compare(d1, d2), IsEqual.equalTo(1));
+    }
+
+    @Test
     @DisplayName("Test equal double array objects by default comparator and negate priority nulls")
     public void test_equalDoubleArrayObjects_by_defaultComparator() {
         // given
