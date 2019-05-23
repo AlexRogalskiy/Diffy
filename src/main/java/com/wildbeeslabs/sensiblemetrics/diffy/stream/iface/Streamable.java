@@ -101,7 +101,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @see Stream#map(Function)
      */
     default <R> Streamable<R> map(final Function<? super T, ? extends R> mapper) {
-        Objects.requireNonNull(mapper, "Function should not be null!");
+        Objects.requireNonNull(mapper, "Mapper function should not be null!");
         return Streamable.of(() -> stream().map(mapper));
     }
 
@@ -114,7 +114,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      * @see Stream#flatMap(Function)
      */
     default <R> Streamable<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
-        Objects.requireNonNull(mapper, "Function should not be null!");
+        Objects.requireNonNull(mapper, "Mapper function should not be null!");
         return Streamable.of(() -> stream().flatMap(mapper));
     }
 

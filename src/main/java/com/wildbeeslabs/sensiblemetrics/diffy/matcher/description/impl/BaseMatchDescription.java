@@ -23,17 +23,20 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.wrapInBrackets;
+import static java.util.Arrays.asList;
 
 /**
  * Base {@link MatchDescription} implementation
@@ -53,6 +56,20 @@ public class BaseMatchDescription implements MatchDescription {
     private static final long serialVersionUID = -8697254240651372713L;
 
     /**
+     * Default {@link Appendable} output stream
+     */
+    private final transient Appendable out;
+
+    /**
+     * Default base match description constructor with input output source {@link Appendable}
+     *
+     * @param out - initial input {@link Appendable} output source instance
+     */
+    public BaseMatchDescription(final Appendable out) {
+        this.out = out;
+    }
+
+    /**
      * Appends input string value to current {@link MatchDescription}
      *
      * @param value - initial input string value to be appended {@link String}
@@ -60,7 +77,11 @@ public class BaseMatchDescription implements MatchDescription {
      */
     @Override
     public MatchDescription append(final String value) {
-        append(value);
+        try {
+            this.getOut().append(value);
+        } catch (IOException e) {
+            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot append value: {%s}", value), e);
+        }
         return this;
     }
 
@@ -72,7 +93,11 @@ public class BaseMatchDescription implements MatchDescription {
      */
     @Override
     public MatchDescription append(final Object value) {
-        append(value);
+        try {
+            this.getOut().append(String.valueOf(value));
+        } catch (IOException e) {
+            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot append value: {%s}", value), e);
+        }
         return this;
     }
 
@@ -88,7 +113,7 @@ public class BaseMatchDescription implements MatchDescription {
      */
     @Override
     public <T> MatchDescription append(final String start, final String delimiter, final String end, final T... values) {
-        return append(start, delimiter, end, Arrays.asList(values));
+        return this.append(start, delimiter, end, asList(values));
     }
 
     /**
@@ -104,14 +129,16 @@ public class BaseMatchDescription implements MatchDescription {
     @Override
     public <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values) {
         boolean separate = false;
-        append(start);
+        this.append(start);
         final Iterator<? extends T> it = Optional.ofNullable(values).orElseGet(Collections::emptyList).iterator();
         while (it.hasNext()) {
-            if (separate) append(delimiter);
-            append(wrapInBrackets.apply(it.next()));
+            if (separate) {
+                this.append(delimiter);
+            }
+            this.append(wrapInBrackets.apply(it.next()));
             separate = true;
         }
-        append(end);
+        this.append(end);
         return this;
     }
 }

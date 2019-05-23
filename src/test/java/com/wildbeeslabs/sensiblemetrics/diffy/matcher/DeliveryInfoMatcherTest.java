@@ -28,7 +28,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.DeliveryInfoMatch
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -809,7 +809,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DeliveryInfo deliveryInfo = getDeliveryInfo();
 
         // then
-        assertFalse(Matcher.isEqual(getDeliveryInfo()).matches(null));
+        assertFalse(Matcher.isEqual(deliveryInfo).matches(null));
     }
 
     @Test
@@ -837,16 +837,12 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test delivery info entity by valid custom created/update date fields matcher")
     public void test_deliveryInfo_by_customDateMatcher() {
         // given
-        final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafe(final DeliveryInfo value) {
-                return LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
-                    && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
-            }
-        };
-        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.of().withMatcher(matcher);
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
+            && LocalDateTime.fromDateFields(value.getUpdatedAt()).getDayOfMonth() < 20;
 
         // when
+        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.of().include(matcher);
+
         getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
         getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
@@ -865,15 +861,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test delivery info entity by custom type field matcher")
     public void test_deliveryInfo_by_customTypeMatcher() {
         // given
-        final Matcher<DeliveryInfo> matcher = new AbstractTypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafe(final DeliveryInfo value) {
-                return (1 == value.getType());
-            }
-        };
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> (1 == value.getType());
+        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.of().include(matcher);
 
         // when
-        final DeliveryInfoMatcher deliveryInfoMatcher = (DeliveryInfoMatcher) DeliveryInfoMatcher.of().withMatcher(matcher);
         getDeliveryInfo().setType(1);
 
         // then
@@ -893,18 +884,8 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Integer DELIVERY_INFO_LOWER_TYPE_BOUND = 100;
         final Integer DELIVERY_INFO_UPPER_TYPE_BOUND = 1000;
 
-        final Matcher<? super String> gidMatcher = new AbstractTypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafe(final String value) {
-                return String.valueOf(value).substring(0, 4).equalsIgnoreCase(DEFAULT_GID_PREFIX);
-            }
-        };
-        final Matcher<? super Integer> typeMatcher = new AbstractTypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafe(final Integer value) {
-                return DELIVERY_INFO_LOWER_TYPE_BOUND < value && value < DELIVERY_INFO_UPPER_TYPE_BOUND;
-            }
-        };
+        final TypeSafeMatcher<String> gidMatcher = value -> String.valueOf(value).substring(0, 4).equalsIgnoreCase(DEFAULT_GID_PREFIX);
+        final TypeSafeMatcher<Integer> typeMatcher = value -> DELIVERY_INFO_LOWER_TYPE_BOUND < value && value < DELIVERY_INFO_UPPER_TYPE_BOUND;
 
         // when
         final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()
@@ -934,12 +915,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test delivery info entity by nullable custom gid/type fields matchers")
     public void test_deliveryInfoList_by_nullableGidAndTypeMatcher() {
         // given
-        final Matcher<? super String> gidMatcher = new AbstractTypeSafeMatcher<>() {
-            @Override
-            public boolean matchesSafe(final String value) {
-                return String.valueOf(value).substring(0, 4).equalsIgnoreCase(DEFAULT_GID_PREFIX);
-            }
-        };
+        final TypeSafeMatcher<String> gidMatcher = value -> String.valueOf(value).substring(0, 4).equalsIgnoreCase(DEFAULT_GID_PREFIX);
 
         // when
         final DeliveryInfoMatcher deliveryInfoMatcher = DeliveryInfoMatcher.of()

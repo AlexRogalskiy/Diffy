@@ -23,15 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.io.IOException;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
  * String {@link BaseMatchDescription} implementation
@@ -51,39 +45,9 @@ public class StringMatchDescription extends BaseMatchDescription {
     private static final long serialVersionUID = 1115429688276595763L;
 
     /**
-     * Default appendable output stream {@link Appendable}
-     */
-    private final transient Appendable out;
-
-    /**
      * Default empty string match description constructor
      */
     public StringMatchDescription() {
-        this(new StringBuffer());
-    }
-
-    /**
-     * Default string match description constructor with input appendable output source {@link Appendable}
-     *
-     * @param out - initial input {@link Appendable} output source instance
-     */
-    public StringMatchDescription(final Appendable out) {
-        this.out = out;
-    }
-
-    /**
-     * Appends input string value to curernt description {@link MatchDescription}
-     *
-     * @param value - initial input value to be appended {@link String}
-     * @return current {@link MatchDescription}
-     */
-    @Override
-    public MatchDescription append(final String value) {
-        try {
-            this.getOut().append(value);
-        } catch (IOException e) {
-            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot append value: {%s}", value), e);
-        }
-        return this;
+        super(new StringBuffer());
     }
 }

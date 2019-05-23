@@ -161,7 +161,7 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
      * Default private delivery info constructor
      */
     private DeliveryInfoMatcher() {
-        this.withMatcher(InstanceMatcher.getMatcher(DeliveryInfo.class));
+        this.include(InstanceMatcher.getMatcher(DeliveryInfo.class));
     }
 
     public DeliveryInfoMatcher withType(final Integer type) {
