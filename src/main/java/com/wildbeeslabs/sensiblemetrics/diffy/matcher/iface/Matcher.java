@@ -26,13 +26,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherMode;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.MatcherHandler;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription.EMPTY_MATCH_DESCRIPTION;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
@@ -55,21 +55,30 @@ public interface Matcher<T> extends Serializable {
     boolean matches(final T value);
 
     /**
-     * Returns default {@link MatchDescription}
+     * Returns {@link MatchDescription}
      *
      * @return {@link MatchDescription}
      */
     default MatchDescription getDescription() {
-        return EMPTY_MATCH_DESCRIPTION;
+        return MatchDescription.EMPTY_MATCH_DESCRIPTION;
     }
 
     /**
-     * Returns default {@link MatcherMode}
+     * Returns {@link MatcherMode}
      *
      * @return {@link MatcherMode}
      */
     default MatcherMode getMode() {
         return MatcherMode.STRICT;
+    }
+
+    /**
+     * Returns {@link MatcherHandler}
+     *
+     * @return {@link MatcherHandler}
+     */
+    default MatcherHandler getHandler() {
+        return MatcherHandler.LOGGING_HANDLER;
     }
 
     /**
@@ -175,7 +184,7 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return Arrays.stream(matchers).reduce(Matcher::and).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
+        return Arrays.stream(matchers).filter(m -> m.getMode().isEnable()).reduce(Matcher::and).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -188,7 +197,7 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return Arrays.stream(matchers).reduce(Matcher::or).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
+        return Arrays.stream(matchers).filter(m -> m.getMode().isEnable()).reduce(Matcher::or).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -201,7 +210,7 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return Arrays.stream(matchers).reduce(Matcher::xor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
+        return Arrays.stream(matchers).filter(m -> m.getMode().isEnable()).reduce(Matcher::xor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -214,7 +223,7 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> nandAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return Arrays.stream(matchers).reduce(Matcher::nand).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NAND", StringUtils.join(matchers, "|"))));
+        return Arrays.stream(matchers).filter(m -> m.getMode().isEnable()).reduce(Matcher::nand).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NAND", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -227,7 +236,7 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> norAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return Arrays.stream(matchers).reduce(Matcher::nor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NOR", StringUtils.join(matchers, "|"))));
+        return Arrays.stream(matchers).filter(m -> m.getMode().isEnable()).reduce(Matcher::nor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NOR", StringUtils.join(matchers, "|"))));
     }
 
     /**
@@ -240,7 +249,7 @@ public interface Matcher<T> extends Serializable {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xnorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return Arrays.stream(matchers).reduce(Matcher::xnor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XNOR", StringUtils.join(matchers, "|"))));
+        return Arrays.stream(matchers).filter(m -> m.getMode().isEnable()).reduce(Matcher::xnor).orElseThrow(() -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XNOR", StringUtils.join(matchers, "|"))));
     }
 
     /**
