@@ -23,15 +23,24 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingPredicate;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTokenizer;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTransformer;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.invoke.*;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.TypeUtils.DEFAULT_PRIMITIVE_TYPES;
 
 /**
  * Property utilities implementation {@link NamingPredicate}, {@link NamingTransformer}, {@link NamingTokenizer}
@@ -87,6 +96,72 @@ public class PropertyUtils {
         }
         return name;
     };
+
+    public static <T> Map<String, Function> getAccessors(final Class<T> clazz) {
+        final Map<String, Function> getters = new HashMap<>();
+        Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(GETTER_ACCESSOR_PREFIX) && m.getParameterTypes().length == 0).forEach(m -> {
+                final Function getter = createGetter(clazz, m);
+                final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(3));
+                getters.put(name, getter);
+            }
+        );
+        return getters;
+    }
+
+    public static <T> Map<String, Function> isAccessors(final Class<T> clazz) {
+        final Map<String, Function> getters = new HashMap<>();
+        Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(BOOLEAN_ACCESSOR_PREFIX) && m.getParameterTypes().length == 0).forEach(m -> {
+                final Function getter = createGetter(clazz, m);
+                final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(2));
+                getters.put(name, getter);
+            }
+        );
+        return getters;
+    }
+
+    public static <T> Map<String, BiConsumer> setAccessors(final Class<T> clazz) {
+        final Map<String, BiConsumer> setters = new HashMap<>();
+        Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(SETTER_ACCESSOR_PREFIX) && m.getParameterTypes().length == 1).forEach(m -> {
+                final BiConsumer setter = createSetter(clazz, m);
+                final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(3));
+                setters.put(name, setter);
+            }
+        );
+        return setters;
+    }
+
+    protected static <T> Function createGetter(final Class<T> clazz, final Method method) {
+        try {
+            final MethodHandles.Lookup caller = MethodHandles.lookup();
+            final CallSite site = LambdaMetafactory.metafactory(caller,
+                "apply",
+                MethodType.methodType(Function.class),
+                MethodType.methodType(Object.class, Object.class),
+                caller.findVirtual(clazz, method.getName(), MethodType.methodType(method.getReturnType())),
+                MethodType.methodType(method.getReturnType(), clazz));
+            final MethodHandle factory = site.getTarget();
+            return (Function) factory.invoke();
+        } catch (Throwable t) {
+            throw new RuntimeException("Can not create getter", t);
+        }
+    }
+
+    protected static <T> BiConsumer createSetter(final Class<T> clazz, final Method method) {
+        final Class valueType = method.getParameterTypes()[0];
+        try {
+            final MethodHandles.Lookup caller = MethodHandles.lookup();
+            final CallSite site = LambdaMetafactory.metafactory(caller,
+                "accept",
+                MethodType.methodType(BiConsumer.class),
+                MethodType.methodType(void.class, Object.class, Object.class),
+                caller.findVirtual(clazz, method.getName(), MethodType.methodType(method.getReturnType(), method.getParameterTypes()[0])),
+                MethodType.methodType(void.class, clazz, valueType.isPrimitive() ? DEFAULT_PRIMITIVE_TYPES.get(valueType) : valueType));
+            final MethodHandle factory = site.getTarget();
+            return (BiConsumer) factory.invoke();
+        } catch (Throwable t) {
+            throw new RuntimeException("Can not create setter", t);
+        }
+    }
 
     /**
      * Default property setter {@link NamingTransformer}

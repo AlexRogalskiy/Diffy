@@ -3,8 +3,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Objects;
-
 /**
  * Matcher mode type {@link Enum} to process malformed and unexpected data
  * <p>
@@ -31,6 +29,6 @@ public enum MatcherMode {
      * @return true - if current status is {@code STRICT}, false - otherwise
      */
     public boolean isStrict() {
-        return Objects.equals(this, STRICT);
+        return this.equals(STRICT);
     }
 }

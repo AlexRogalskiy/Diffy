@@ -2,14 +2,14 @@ package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Entry declaration
@@ -95,5 +95,36 @@ public interface Entry<K, V> extends Serializable {
         Objects.requireNonNull(function, "Binary function operator should not be null!");
 
         return first.flatMap(f -> last.map(l -> function.apply(f, l)));
+    }
+
+    /**
+     * Zips the given {@link Stream}s using the given {@link BiFunction}. The resulting {@link Stream} will have the
+     * length of the shorter of the two, abbreviating the zipping when the shorter of the two {@link Stream}s is
+     * exhausted.
+     *
+     * @param first    must not be {@literal null}.
+     * @param last     must not be {@literal null}.
+     * @param combiner must not be {@literal null}.
+     * @return
+     * @since 2.1
+     */
+    static <K, V, T> Stream<T> zip(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, T> combiner) {
+        Objects.requireNonNull(first, "Key stream should not be null!");
+        Objects.requireNonNull(last, "Value stream should not be null!");
+        Objects.requireNonNull(combiner, "Combiner should not be null!");
+
+        final Spliterator<K> firsts = first.spliterator();
+        final Spliterator<V> lasts = last.spliterator();
+
+        long size = Long.min(firsts.estimateSize(), lasts.estimateSize());
+        int characteristics = firsts.characteristics() & lasts.characteristics();
+        boolean parallel = first.isParallel() || last.isParallel();
+
+        return StreamSupport.stream(new Spliterators.AbstractSpliterator<>(size, characteristics) {
+            @Override
+            public boolean tryAdvance(final Consumer<? super T> action) {
+                return firsts.tryAdvance(f -> lasts.tryAdvance(l -> action.accept(combiner.apply(f, l))));
+            }
+        }, parallel);
     }
 }

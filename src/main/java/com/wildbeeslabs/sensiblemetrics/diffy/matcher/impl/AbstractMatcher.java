@@ -23,7 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherHandlerListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -43,7 +45,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractMatcher<T> implements Matcher<T> {
+public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerListener<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -51,13 +53,17 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     private static final long serialVersionUID = 4127438327874076332L;
 
     /**
-     * Default collection of matchers {@link List}
+     * Default {@link List} collection of {@link Matcher}s
      */
     private final List<Matcher<? super T>> matchers = new ArrayList<>();
     /**
-     * Default collection of failed matchers {@link List}
+     * Default {@link List} collection of failed {@link Matcher}s
      */
     private final List<Matcher<? super T>> failedMatchers = new ArrayList<>();
+    /**
+     * Default {@link List} collection of {@link MatcherHandler}s
+     */
+    private final List<MatcherHandler<? super T>> handlers = new ArrayList<>();
 
     /**
      * Default abstract matcher constructor
@@ -89,9 +95,41 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Removes input iterable collection of matchers {@link Matcher} from current matchers collection {@link List}
+     * Removes {@link MatcherHandler} from current {@link List} collection of {@link MatcherHandler}s
      *
-     * @param matchers - initial input collection of {@link Matcher} {@link Iterable}
+     * @param handler - initial input {@link MatcherHandler} to remove
+     */
+    @Override
+    public void removeHandler(final MatcherHandler<? super T> handler) {
+        if (Objects.nonNull(handler)) {
+            this.getHandlers().remove(handler);
+        }
+    }
+
+    /**
+     * Adds {@link MatcherHandler} to current {@link List} collection of {@link MatcherHandler}s
+     *
+     * @param handler - initial input {@link MatcherHandler} to add
+     */
+    @Override
+    public void addHandler(final MatcherHandler<? super T> handler) {
+        if (Objects.nonNull(handler)) {
+            this.getHandlers().add(handler);
+        }
+    }
+
+    /**
+     * Removes all {@link MatcherHandler}s from current {@link List} collection of {@link MatcherHandler}s
+     */
+    @Override
+    public void removeAllHandlers() {
+        this.getHandlers().clear();
+    }
+
+    /**
+     * Removes input {@link Iterable} collection of {@link Matcher}s from current {@link List} collection of {@link Matcher}s
+     *
+     * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
      */
     public AbstractMatcher<T> exclude(final Iterable<Matcher<? super T>> matchers) {
         Optional.ofNullable(matchers)
@@ -101,9 +139,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Removes input matcher {@link Matcher} from current matchers collection {@link List}
+     * Removes input {@link Matcher} from current {@link List} collection of {@link Matcher}s
      *
-     * @param matcher - initial input matcher argument {@link Matcher}
+     * @param matcher - initial input {@link Matcher} to remove
      */
     public AbstractMatcher<T> exclude(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
@@ -113,9 +151,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Adds input iterable collection of matchers {@link Iterable} to current matchers collection {@link List}
+     * Adds input {@link Iterable} collection of {@link Matcher}s to current {@link List} collection
      *
-     * @param matchers - initial input collection of {@link Matcher} {@link Iterable}
+     * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
      */
     public AbstractMatcher<T> include(final Iterable<Matcher<? super T>> matchers) {
         this.getMatchers().clear();
@@ -126,9 +164,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T> {
     }
 
     /**
-     * Adds input matcher {@link Matcher} to current matchers collection {@link List}
+     * Adds input {@link Matcher} to current {@link List} collection of {@link Matcher}s
      *
-     * @param matcher - initial input matcher argument {@link Matcher}
+     * @param matcher - initial input matcher {@link Matcher} to add
      */
     public AbstractMatcher<T> include(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
