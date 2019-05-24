@@ -108,8 +108,8 @@ public class PropertyUtils {
         return getters;
     }
 
-    public static <T> Map<String, Function> isAccessors(final Class<T> clazz) {
-        final Map<String, Function> getters = new HashMap<>();
+    public static <T, K, V> Map<String, Function<K, V>> isAccessors(final Class<T> clazz) {
+        final Map<String, Function<K, V>> getters = new HashMap<>();
         Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(BOOLEAN_ACCESSOR_PREFIX) && m.getParameterTypes().length == 0).forEach(m -> {
                 final Function getter = createGetter(clazz, m);
                 final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(2));
@@ -119,8 +119,8 @@ public class PropertyUtils {
         return getters;
     }
 
-    public static <T> Map<String, BiConsumer> setAccessors(final Class<T> clazz) {
-        final Map<String, BiConsumer> setters = new HashMap<>();
+    public static <T, K, V> Map<String, BiConsumer<K, V>> setAccessors(final Class<T> clazz) {
+        final Map<String, BiConsumer<K, V>> setters = new HashMap<>();
         Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(SETTER_ACCESSOR_PREFIX) && m.getParameterTypes().length == 1).forEach(m -> {
                 final BiConsumer setter = createSetter(clazz, m);
                 final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(3));
@@ -130,7 +130,7 @@ public class PropertyUtils {
         return setters;
     }
 
-    protected static <T> Function createGetter(final Class<T> clazz, final Method method) {
+    protected static <T, K, V> Function<K, V> createGetter(final Class<T> clazz, final Method method) {
         try {
             final MethodHandles.Lookup caller = MethodHandles.lookup();
             final CallSite site = LambdaMetafactory.metafactory(caller,
@@ -146,7 +146,7 @@ public class PropertyUtils {
         }
     }
 
-    protected static <T> BiConsumer createSetter(final Class<T> clazz, final Method method) {
+    protected static <T, K, V> BiConsumer<K, V> createSetter(final Class<T> clazz, final Method method) {
         final Class valueType = method.getParameterTypes()[0];
         try {
             final MethodHandles.Lookup caller = MethodHandles.lookup();
