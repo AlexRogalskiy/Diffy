@@ -35,7 +35,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMes
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UnsupportedOperationException extends RuntimeException {
+public class InvalidOperationException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -43,41 +43,41 @@ public class UnsupportedOperationException extends RuntimeException {
     private static final long serialVersionUID = -4325886623981761909L;
 
     /**
-     * Unsupported operation exception constructor with initial input message
+     * Invalid operation exception constructor with initial input message
      *
      * @param message - initial input message {@link String}
      */
-    public UnsupportedOperationException(final String message) {
+    public InvalidOperationException(final String message) {
         super(message);
     }
 
     /**
-     * Unsupported operation exception constructor with initial input {@link Throwable}
+     * Invalid operation exception constructor with initial input {@link Throwable}
      *
      * @param cause - initial input {@link Throwable}
      */
-    public UnsupportedOperationException(final Throwable cause) {
+    public InvalidOperationException(final Throwable cause) {
         super(cause);
     }
 
     /**
-     * Unsupported operation exception constructor with initial input message and {@link Throwable}
+     * Invalid operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
      * @param cause   - initial input {@link Throwable}
      */
-    public UnsupportedOperationException(final String message, final Throwable cause) {
+    public InvalidOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link UnsupportedOperationException} by input parameters
+     * Returns {@link InvalidOperationException} by input parameters
      *
      * @param target    - initial input source target {@link Object}
      * @param throwable - initial input cause instance {@link Throwable}
-     * @return {@link UnsupportedOperationException}
+     * @return {@link InvalidOperationException}
      */
-    public static final UnsupportedOperationException throwUnsupportedParsing(final Object target, final Throwable throwable) {
-        throw new UnsupportedOperationException(formatMessage("ERROR: unsupported parsing on target = {%s}", target), throwable);
+    public static final InvalidOperationException throwInvalidParseFormat(final Object target, final Throwable throwable) {
+        throw new InvalidOperationException(formatMessage("ERROR: unsupported parsing on target = {%s}", target), throwable);
     }
 }

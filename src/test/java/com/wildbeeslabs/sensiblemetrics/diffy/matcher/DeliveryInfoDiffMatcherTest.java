@@ -25,11 +25,12 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
 import com.google.common.collect.Lists;
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.DeliveryInfoDiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffMatcherFactory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
@@ -42,6 +43,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -70,6 +72,14 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
      * Default date format pattern
      */
     private final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+    /**
+     * Default {@link DeliveryInfo} gid prefix
+     */
+    private final String DEFAULT_GID_PREFIX = "TEST";
+    /**
+     * Default {@link DeliveryInfo} type
+     */
+    public static final int DEFAULT_TYPE = 5;
 
     /**
      * Default {@link DeliveryInfo} model
@@ -79,6 +89,51 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
     @Before
     public void setUp() {
         this.deliveryInfo = getDeliveryInfoMock().val();
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by custom delivery info matcher")
+    public void test_deliveryInfo_by_Matcher() {
+        // given
+        DeliveryInfo deliveryInfo = getDeliveryInfo();
+        DeliveryInfoDiffMatcher deliveryInfoMatcher = getDeliveryInfoMatcher(
+            getIntMock().val(),
+            getAlphaNumericStringMock().val(),
+            getLocalDateMock().toUtilDate().val(),
+            getLocalDateMock().toUtilDate().val()
+        );
+
+        // when
+        Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(deliveryInfo);
+        assertNotNull("Should not be null", iterable);
+        List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(deliveryInfo, MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
+
+        // given
+        getDeliveryInfo().setType(DEFAULT_TYPE);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        deliveryInfoMatcher = getDeliveryInfoMatcher(
+            DEFAULT_TYPE,
+            DEFAULT_GID_PREFIX,
+            toDate("17/06/2013", DEFAULT_DATE_FORMAT),
+            toDate("27/09/2018", DEFAULT_DATE_FORMAT)
+        );
+
+        // when
+        iterable = deliveryInfoMatcher.diffMatch(deliveryInfo);
+        assertNotNull("Should not be null", iterable);
+        diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(empty()));
     }
 
     @Test
@@ -196,7 +251,126 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
+        diffMatcher.diffMatch(getDeliveryInfo());
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by nullable custom delivery info and-chained matchers")
+    public void test_deliveryInfo_by_validDiffMatcher() {
+        // given
+        getDeliveryInfo().setType(DEFAULT_TYPE);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
+            .withType(DEFAULT_TYPE)
+            .withGid(DEFAULT_GID_PREFIX);
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(empty()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info and-chained matchers")
+    public void test_deliveryInfo_by_validDiffMatcherWithDates() {
+        // given
+        getDeliveryInfo().setType(DEFAULT_TYPE);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
+            .withType(DEFAULT_TYPE)
+            .withGid(DEFAULT_GID_PREFIX)
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(empty()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by invalid custom delivery info and-chained matchers")
+    public void test_deliveryInfo_by_invalidDiffMatcherWithDates() {
+        // given
+        getDeliveryInfo().setType(4);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
+            .withType(DEFAULT_TYPE)
+            .withGid(DEFAULT_GID_PREFIX)
+            .withCreatedDate(toDate("17/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by nullable custom delivery info not-chained matchers")
+    public void test_deliveryInfo_by_invalidDiffMatcher2() {
+        // given
+        getDeliveryInfo().setType(4);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
+            .withType(DEFAULT_TYPE)
+            .withGid(DEFAULT_GID_PREFIX);
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by custom delivery info not-chained matchers")
+    public void test_deliveryInfo_by_invalidDiffMatcher3() {
+        // given
+        getDeliveryInfo().setType(4);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
+            .withType(DEFAULT_TYPE)
+            .withGid(DEFAULT_GID_PREFIX)
+            .withCreatedDate(toDate("18/06/2013", DEFAULT_DATE_FORMAT))
+            .withUpdatedDate(toDate("26/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
+        assertNotNull("Should not be null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
     }
 
     @Test
@@ -283,5 +457,22 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(diffMatchEntryList, is(empty()));
+    }
+
+    /**
+     * Returns new delivery info matcher {@link DeliveryInfoDiffMatcher} instance by initial input arguments
+     *
+     * @param type        - initial input type value
+     * @param gid         - initial input global id value
+     * @param createdDate - initial input created date value {@link Date}
+     * @param updatedDate - initial input udpated date value {@link Date}
+     * @return new delivery info matcher {@link DeliveryInfoDiffMatcher} instance
+     */
+    protected DeliveryInfoDiffMatcher getDeliveryInfoMatcher(final Integer type, final String gid, final Date createdDate, final Date updatedDate) {
+        return DeliveryInfoDiffMatcher.of()
+            .withType(type)
+            .withGid(gid)
+            .withCreatedDate(createdDate)
+            .withUpdatedDate(updatedDate);
     }
 }

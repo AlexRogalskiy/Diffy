@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.UnsupportedOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidOperationException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -116,7 +116,7 @@ public class DateUtils {
             return formatter.parse(date);
         } catch (ParseException e) {
             log.error(formatMessage("ERROR: cannot parse date by format={%s}", dateFormat));
-            UnsupportedOperationException.throwUnsupportedParsing(date, e);
+            InvalidOperationException.throwInvalidParseFormat(date, e);
         }
         return null;
     }

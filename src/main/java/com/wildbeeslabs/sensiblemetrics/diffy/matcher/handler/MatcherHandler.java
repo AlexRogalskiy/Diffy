@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Matcher handler implementation to process {@link Matcher}s by defined rules
@@ -66,24 +68,28 @@ public abstract class MatcherHandler<T> {
         /**
          * Default {@link List} collection of failed {@link Matcher}
          */
-        private final List<Matcher<? extends T>> failedMatchers = new ArrayList<>();
+        private final List<Matcher<? super T>> failedMatchers = new ArrayList<>();
         /**
          * Default {@link List} collection of success {@link Matcher}
          */
-        private final List<Matcher<? extends T>> successMatchers = new ArrayList<>();
+        private final List<Matcher<? super T>> successMatchers = new ArrayList<>();
 
         @Override
-        public void onSuccess(final Matcher<? extends T> matcher) {
-            if (matcher.getMode().isEnable()) {
-                this.failedMatchers.add(matcher);
+        public void onSuccess(final MatcherEvent<? super T> event) {
+            if (this.isEnableMode(event)) {
+                this.failedMatchers.add(event.getMatcher());
             }
         }
 
         @Override
-        public void onError(final Matcher<? extends T> matcher) {
-            if (matcher.getMode().isEnable()) {
-                this.successMatchers.add(matcher);
+        public void onError(final MatcherEvent<? super T> event) {
+            if (this.isEnableMode(event)) {
+                this.successMatchers.add(event.getMatcher());
             }
+        }
+
+        private boolean isEnableMode(final MatcherEvent<? super T> event) {
+            return Objects.nonNull(event.getMatcher()) && event.getMatcher().getMode().isEnable();
         }
     }
 
@@ -96,27 +102,27 @@ public abstract class MatcherHandler<T> {
     @ToString(callSuper = true)
     public static class LoggingMatcherHandler<T> extends MatcherHandler<T> {
         @Override
-        public void onSuccess(final Matcher<? extends T> matcher) {
-            log.info("{}, on success matcher: {}, description: {}", this.getClass().getName(), matcher, matcher.getDescription());
+        public void onSuccess(final MatcherEvent<? super T> event) {
+            log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getDescription());
         }
 
         @Override
-        public void onError(final Matcher<? extends T> matcher) {
-            log.info("{}, on error matcher: {}, description: {}", this.getClass().getName(), matcher, matcher.getDescription());
+        public void onError(final MatcherEvent<? super T> event) {
+            log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getDescription());
         }
     }
 
     /**
      * On success {@link MatcherHandler}
      *
-     * @param matcher - initial input {@link Matcher}
+     * @param event - initial input {@link MatcherEvent}
      */
-    public abstract void onSuccess(final Matcher<? extends T> matcher);
+    public abstract void onSuccess(final MatcherEvent<? super T> event);
 
     /**
      * On error {@link MatcherHandler}
      *
-     * @param matcher - initial input {@link Matcher}
+     * @param event - initial input {@link MatcherEvent}
      */
-    public abstract void onError(final Matcher<? extends T> matcher);
+    public abstract void onError(final MatcherEvent<? super T> event);
 }
