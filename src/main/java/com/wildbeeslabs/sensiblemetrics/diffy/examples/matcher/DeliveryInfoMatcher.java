@@ -25,10 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractFieldMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.InstanceMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -49,7 +46,7 @@ import java.util.function.Function;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
+public class DeliveryInfoMatcher extends DefaultDiffMatcher<DeliveryInfo> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -145,17 +142,6 @@ public class DeliveryInfoMatcher extends AbstractMatcher<DeliveryInfo> {
             return value.getGid();
         }
     };
-
-    /**
-     * Returns binary flag depending on initial argument value by comparison {@link DeliveryInfo}
-     *
-     * @param value - initial input value {@link DeliveryInfo}
-     * @return true - if input value matches, false - otherwise
-     */
-    @Override
-    public boolean matches(final DeliveryInfo value) {
-        return this.getMatchers().stream().allMatch(matcher -> matcher.matches(value));
-    }
 
     /**
      * Default private delivery info constructor

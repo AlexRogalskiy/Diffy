@@ -58,7 +58,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     /**
      * Default method type instance
      */
-    private static final ReflectionUtils.ReflectionMethodType DEFAULT_TYPE = getMethodType("matchesSafe", 1, 0);
+    private static final ReflectionUtils.ReflectionMethodType DEFAULT_METHOD_TYPE = getMethodType("matchesSafe", 1, 0);
 
     /**
      * Default input argument class instance
@@ -69,7 +69,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      * Default abstract type safe matcher constructor
      */
     public AbstractTypeSafeMatcher() {
-        this(DEFAULT_TYPE);
+        this(DEFAULT_METHOD_TYPE);
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @SuppressWarnings("unchecked")
     public AbstractTypeSafeMatcher(final ReflectionUtils.ReflectionMethodType methodType) {
-        this.clazz = (Class<? extends T>) (Optional.ofNullable(methodType).orElse(DEFAULT_TYPE)).getType(this.getClass());
+        this.clazz = (Class<? extends T>) (Optional.ofNullable(methodType).orElse(DEFAULT_METHOD_TYPE)).getType(this.getClass());
     }
 
     /**
@@ -90,7 +90,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     @SuppressWarnings("unchecked")
     public AbstractTypeSafeMatcher(final Class<? extends T> clazz) {
         this.clazz = Objects.isNull(clazz)
-            ? (Class<? extends T>) DEFAULT_TYPE.getType(this.getClass())
+            ? (Class<? extends T>) DEFAULT_METHOD_TYPE.getType(this.getClass())
             : clazz;
     }
 

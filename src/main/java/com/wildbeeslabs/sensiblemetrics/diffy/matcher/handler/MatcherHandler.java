@@ -43,7 +43,7 @@ public abstract class MatcherHandler<T> {
     /**
      * Logging {@link MatcherHandler}
      */
-    public static final MatcherHandler LOGGING_HANDLER = new LoggingMatcherHandler<>();
+    public static final MatcherHandler LOGGING_MATCHER_HANDLER = new LoggingMatcherHandler<>();
 
     /**
      * Returns {@link MatcherHandler}

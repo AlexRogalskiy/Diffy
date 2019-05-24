@@ -25,13 +25,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DefaultDiffMatcher<T> extends AbstractMatcher<T> implements DiffMatcher<T> {
+public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -70,14 +70,14 @@ public class DefaultDiffMatcher<T> extends AbstractMatcher<T> implements DiffMat
     }
 
     /**
-     * Returns iterable collection of difference match entries {@link Iterable}
+     * Returns {@link Iterable} collection of {@link DiffMatchEntry}s
      *
      * @param value - initial input argument to be matched by
-     * @return iterable collection of difference match entries {@link Iterable}
+     * @return {@link Iterable} collection of {@link DiffMatchEntry}s
      */
     @Override
     public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
-        super.matches(value);
-        return (S) getFailedMatchers().stream().map(m -> DefaultDiffMatchEntry.of(value, m.getDescription())).collect(Collectors.toList());
+        final List<Matcher<? super T>> failedMatchers = this.getMatchers().stream().filter(m -> m.negate().matches(value)).collect(Collectors.toList());
+        return (S) failedMatchers.stream().map(m -> DefaultDiffMatchEntry.of(value, m.getDescription())).collect(Collectors.toList());
     }
 }
