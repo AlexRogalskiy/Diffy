@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 import java.util.Arrays;
 
 /**
- * Property type enumeration
+ * Property type {@link Enum}
  */
 public enum PropertyType {
     /**
@@ -43,10 +43,10 @@ public enum PropertyType {
     GENERIC;
 
     /**
-     * Returns {@link PropertyType} instance by input property type value {@link String}
+     * Returns {@link PropertyType} by input property type value {@link String}
      *
      * @param propertyType - initial input property type value {@link String}
-     * @return {@link PropertyType} instance
+     * @return {@link PropertyType}
      */
     public static PropertyType from(final String propertyType) {
         return Arrays.stream(values())

@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
 import lombok.Data;
@@ -103,7 +104,18 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     @Override
     public final boolean matches(final T value) {
         try {
-            return this.getClazz().isInstance(value) && this.matchesSafe(value);
+            final boolean result = this.getClazz().isInstance(value) && this.matchesSafe(value);
+            final MatcherEvent<T> event = MatcherEvent.of(this, this.getDescription().toString(), value);
+            if (this.getMode().isEnable()) {
+                this.getHandlers().forEach(handler -> {
+                    if (result) {
+                        handler.onSuccess(event);
+                    } else {
+                        handler.onError(event);
+                    }
+                });
+            }
+            return result;
         } catch (RuntimeException e) {
             MatchOperationException.throwIncorrectMatch(value, e);
         }

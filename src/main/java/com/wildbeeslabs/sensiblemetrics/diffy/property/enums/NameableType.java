@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
 /**
- * Nameable property type enumeration
+ * Nameable type {@link Enum}
  */
 public enum NameableType {
     /**
@@ -45,10 +45,10 @@ public enum NameableType {
     GENERIC;
 
     /**
-     * Returns {@link NameableType} for corresponding {@link PropertyType} instance, else {@link #CLASS}
+     * Returns {@link NameableType} for corresponding {@link PropertyType}, else {@link #CLASS}
      *
-     * @param propertyType - initial input {@link PropertyType} instance
-     * @return {@link NameableType} instance
+     * @param propertyType - initial input {@link PropertyType}
+     * @return {@link NameableType}
      */
     public static NameableType from(final PropertyType propertyType) {
         if (PropertyType.FIELD.equals(propertyType)) {

@@ -36,6 +36,8 @@ import java.util.Objects;
 
 /**
  * Matcher handler implementation to process {@link Matcher}s by defined rules
+ *
+ * @param <T> type of input element to be matched by operation
  */
 @Slf4j
 @EqualsAndHashCode
@@ -46,15 +48,10 @@ public abstract class MatcherHandler<T> {
      * Logging {@link MatcherHandler}
      */
     public static final MatcherHandler LOGGING_MATCHER_HANDLER = new LoggingMatcherHandler<>();
-
     /**
-     * Returns {@link MatcherHandler}
-     *
-     * @return {@link MatcherHandler}
+     * Default {@link MatcherHandler}
      */
-    public MatcherHandler getDefaultHandler() {
-        return new DefaultMatcherHandler<>();
-    }
+    public static final MatcherHandler DEFAULT_MATCHER_HANDLER = new DefaultMatcherHandler<>();
 
     /**
      * Default {@link MatcherHandler} implementation
@@ -75,16 +72,16 @@ public abstract class MatcherHandler<T> {
         private final List<Matcher<? super T>> successMatchers = new ArrayList<>();
 
         @Override
-        public void onSuccess(final MatcherEvent<? super T> event) {
+        public void onSuccess(final MatcherEvent<T> event) {
             if (this.isEnableMode(event)) {
-                this.failedMatchers.add(event.getMatcher());
+                this.getFailedMatchers().add(event.getMatcher());
             }
         }
 
         @Override
-        public void onError(final MatcherEvent<? super T> event) {
+        public void onError(final MatcherEvent<T> event) {
             if (this.isEnableMode(event)) {
-                this.successMatchers.add(event.getMatcher());
+                this.getSuccessMatchers().add(event.getMatcher());
             }
         }
 
@@ -102,12 +99,12 @@ public abstract class MatcherHandler<T> {
     @ToString(callSuper = true)
     public static class LoggingMatcherHandler<T> extends MatcherHandler<T> {
         @Override
-        public void onSuccess(final MatcherEvent<? super T> event) {
+        public void onSuccess(final MatcherEvent<T> event) {
             log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getDescription());
         }
 
         @Override
-        public void onError(final MatcherEvent<? super T> event) {
+        public void onError(final MatcherEvent<T> event) {
             log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getDescription());
         }
     }
@@ -117,12 +114,12 @@ public abstract class MatcherHandler<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    public abstract void onSuccess(final MatcherEvent<? super T> event);
+    public abstract void onSuccess(final MatcherEvent<T> event);
 
     /**
      * On error {@link MatcherHandler}
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    public abstract void onError(final MatcherEvent<? super T> event);
+    public abstract void onError(final MatcherEvent<T> event);
 }

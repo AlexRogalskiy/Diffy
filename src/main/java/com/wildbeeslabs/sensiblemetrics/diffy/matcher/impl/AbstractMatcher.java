@@ -55,7 +55,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerLi
     /**
      * Default {@link List} collection of {@link MatcherHandler}s
      */
-    private final List<MatcherHandler<? super T>> handlers = new ArrayList<>();
+    private final List<MatcherHandler<T>> handlers = new ArrayList<>();
 
     /**
      * Default abstract matcher constructor
@@ -69,8 +69,8 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerLi
      *
      * @param handlers - initial input iterable collection of matchers {@link Iterable}
      */
-    public AbstractMatcher(final Iterable<MatcherHandler<? super T>> handlers) {
-        Optional.ofNullable(handlers).orElseGet(Collections::emptyList).forEach(this::addHandler);
+    public AbstractMatcher(final Iterable<MatcherHandler<T>> handlers) {
+        this.addHandlers(handlers);
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerLi
      * @param handler - initial input {@link MatcherHandler} to remove
      */
     @Override
-    public void removeHandler(final MatcherHandler<? super T> handler) {
+    public void removeHandler(final MatcherHandler<T> handler) {
         if (Objects.nonNull(handler)) {
             this.getHandlers().remove(handler);
         }
@@ -91,10 +91,18 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerLi
      * @param handler - initial input {@link MatcherHandler} to add
      */
     @Override
-    public void addHandler(final MatcherHandler<? super T> handler) {
+    public void addHandler(final MatcherHandler<T> handler) {
         if (Objects.nonNull(handler)) {
             this.getHandlers().add(handler);
         }
+    }
+
+    /**
+     * Adds all {@link MatcherHandler} to current {@link List} collection of {@link MatcherHandler}s
+     */
+    @Override
+    public void addHandlers(final Iterable<MatcherHandler<T>> handlers) {
+        Optional.ofNullable(handlers).orElseGet(Collections::emptyList).forEach(this::addHandler);
     }
 
     /**
