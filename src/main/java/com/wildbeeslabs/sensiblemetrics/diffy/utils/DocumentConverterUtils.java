@@ -42,7 +42,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMes
  */
 @Slf4j
 @UtilityClass
-public class DocumentConverter {
+public class DocumentConverterUtils {
 
     public static Document toDocument(final JsonObject jsonObject) {
         final Document document = new Document();
