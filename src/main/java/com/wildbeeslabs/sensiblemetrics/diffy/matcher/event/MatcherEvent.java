@@ -23,7 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,9 +42,9 @@ public class MatcherEvent<T> {
      */
     private final Matcher<? super T> matcher;
     /**
-     * Default event description
+     * Default match status
      */
-    private final String description;
+    private final boolean match;
     /**
      * Default matchable {@link Object}
      */
@@ -54,17 +53,17 @@ public class MatcherEvent<T> {
     /**
      * Creates new {@link MatcherEvent}
      *
-     * @param matcher     - initial input event {@link Matcher}
-     * @param description - initial input event description {@link String}
-     * @param value       - initial input event value {@link Object}
-     * @return {@link DefaultDiffEntry}
+     * @param matcher - initial input {@link Matcher}
+     * @param value   - initial input matchable {@link Object}
+     * @param match   - initial input match status
+     * @return {@link MatcherEvent}
      */
-    public static <T> MatcherEvent<T> of(final Matcher<? super T> matcher, final String description, final Object value) {
+    public static <T> MatcherEvent<T> of(final Matcher<? super T> matcher, final Object value, final boolean match) {
         return MatcherEvent
             .<T>builder()
             .matcher(matcher)
-            .description(description)
             .value(value)
+            .match(match)
             .build();
     }
 }

@@ -48,7 +48,7 @@ public enum MatcherMode {
      */
     public enum MatcherStatus {
         ENABLE,
-        DISABLE;
+        DISABLE
     }
 
     /**

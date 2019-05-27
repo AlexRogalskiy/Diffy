@@ -23,40 +23,40 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherListener;
 
 import java.io.Serializable;
 
 /**
- * {@link MatcherHandler} listener declaration
+ * {@link MatcherListener} listener declaration
  *
  * @param <T> type of input element to be matched by operation
  */
-public interface MatcherHandlerListener<T> extends Serializable {
+public interface MatcherEventListener<T> extends Serializable {
 
     /**
-     * Removes {@link MatcherHandler} from current {@link Matcher}
+     * Removes {@link MatcherListener} from current {@link Matcher}
      *
-     * @param handler - initial input {@link MatcherHandler} to remove
+     * @param handler - initial input {@link MatcherListener} to remove
      */
-    void removeHandler(final MatcherHandler<T> handler);
+    void removeListener(final MatcherListener<T> handler);
 
     /**
-     * Adds {@link MatcherHandler} to current {@link Matcher}
+     * Adds {@link MatcherListener} to current {@link Matcher}
      *
-     * @param handler - initial input {@link MatcherHandler} to add
+     * @param handler - initial input {@link MatcherListener} to add
      */
-    void addHandler(final MatcherHandler<T> handler);
+    void addListener(final MatcherListener<T> handler);
 
     /**
-     * Adds {@link Iterable} collection of {@link MatcherHandler}s to current {@link Matcher}
+     * Adds {@link Iterable} collection of {@link MatcherListener}s to current {@link Matcher}
      *
-     * @param handlers - initial input {@link Iterable} collection of {@link MatcherHandler}s to add
+     * @param handlers - initial input {@link Iterable} collection of {@link MatcherListener}s to add
      */
-    void addHandlers(final Iterable<MatcherHandler<T>> handlers);
+    void addListeners(final Iterable<MatcherListener<T>> handlers);
 
     /**
-     * Removes all {@link MatcherHandler}s from current {@link Matcher}
+     * Removes all {@link MatcherListener}s from current {@link Matcher}
      */
-    void removeAllHandlers();
+    void removeAllListeners();
 }

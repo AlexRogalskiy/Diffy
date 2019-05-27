@@ -31,11 +31,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Default difference matcher implementation by input object instance
+ * Default {@link AbstractDiffMatcher} implementation
  *
  * @param <T> type of input element to be matched by difference operation
  * @author Alexander Rogalskiy
@@ -77,7 +76,10 @@ public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T> {
      */
     @Override
     public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
-        final List<Matcher<? super T>> failedMatchers = this.getMatchers().stream().filter(m -> m.negate().matches(value)).collect(Collectors.toList());
-        return (S) failedMatchers.stream().map(m -> DefaultDiffMatchEntry.of(value, m.getDescription())).collect(Collectors.toList());
+        return (S) this.getMatchers()
+            .stream()
+            .filter(m -> m.negate().matches(value))
+            .map(m -> DefaultDiffMatchEntry.of(value, m.getDescription()))
+            .collect(Collectors.toList());
     }
 }

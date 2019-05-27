@@ -30,10 +30,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Objects;
-
 /**
- * Custom instance matcher implementation by object instance {@link Object}
+ * Custom {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
@@ -35,33 +35,33 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Matcher handler implementation to process {@link Matcher}s by defined rules
+ * Matcher listener implementation to process {@link Matcher}s by defined rules
  *
  * @param <T> type of input element to be matched by operation
  */
 @Slf4j
 @EqualsAndHashCode
 @ToString
-public abstract class MatcherHandler<T> {
+public abstract class MatcherListener<T> {
 
     /**
-     * Logging {@link MatcherHandler}
+     * Logging {@link MatcherListener}
      */
-    public static final MatcherHandler LOGGING_MATCHER_HANDLER = new LoggingMatcherHandler<>();
+    public static final MatcherListener LOGGING_MATCHER_HANDLER = new LoggingMatcherListener<>();
     /**
-     * Default {@link MatcherHandler}
+     * Default {@link MatcherListener}
      */
-    public static final MatcherHandler DEFAULT_MATCHER_HANDLER = new DefaultMatcherHandler<>();
+    public static final MatcherListener DEFAULT_MATCHER_HANDLER = new DefaultMatcherListener<>();
 
     /**
-     * Default {@link MatcherHandler} implementation
+     * Default {@link MatcherListener} implementation
      *
      * @param <T> type of matcher item
      */
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultMatcherHandler<T> extends MatcherHandler<T> {
+    public static class DefaultMatcherListener<T> extends MatcherListener<T> {
         /**
          * Default {@link List} collection of failed {@link Matcher}
          */
@@ -91,33 +91,33 @@ public abstract class MatcherHandler<T> {
     }
 
     /**
-     * Logging {@link MatcherHandler} implementation
+     * Logging {@link MatcherListener} implementation
      *
      * @param <T> type of matcher item
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LoggingMatcherHandler<T> extends MatcherHandler<T> {
+    public static class LoggingMatcherListener<T> extends MatcherListener<T> {
         @Override
         public void onSuccess(final MatcherEvent<T> event) {
-            log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getDescription());
+            log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
         }
 
         @Override
         public void onError(final MatcherEvent<T> event) {
-            log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getDescription());
+            log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
         }
     }
 
     /**
-     * On success {@link MatcherHandler}
+     * {@link MatcherListener} on success {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */
     public abstract void onSuccess(final MatcherEvent<T> event);
 
     /**
-     * On error {@link MatcherHandler}
+     * {@link MatcherListener} on error {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */

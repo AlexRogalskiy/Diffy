@@ -23,9 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherHandlerListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -34,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 /**
- * Abstract matcher implementation
+ * Abstract {@link Matcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -45,7 +47,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerListener<T> {
+public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherEventListener<T>, MatcherHandler<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -53,9 +55,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerLi
     private static final long serialVersionUID = 4127438327874076332L;
 
     /**
-     * Default {@link List} collection of {@link MatcherHandler}s
+     * Default {@link List} collection of {@link MatcherListener}s
      */
-    private final List<MatcherHandler<T>> handlers = new ArrayList<>();
+    private final List<MatcherListener<T>> handlers = new ArrayList<>();
 
     /**
      * Default abstract matcher constructor
@@ -65,51 +67,69 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherHandlerLi
     }
 
     /**
-     * Default abstract matcher constructor with input iterable collection of matchers {@link Iterable}
+     * Default abstract matcher constructor with input {@link Iterable} collection of {@link MatcherListener}s
      *
-     * @param handlers - initial input iterable collection of matchers {@link Iterable}
+     * @param handlers - initial input {@link Iterable} collection of {@link MatcherListener}s
      */
-    public AbstractMatcher(final Iterable<MatcherHandler<T>> handlers) {
-        this.addHandlers(handlers);
+    public AbstractMatcher(final Iterable<MatcherListener<T>> handlers) {
+        this.addListeners(handlers);
     }
 
     /**
-     * Removes {@link MatcherHandler} from current {@link List} collection of {@link MatcherHandler}s
+     * Removes {@link MatcherListener} from current {@link List} collection of {@link MatcherListener}s
      *
-     * @param handler - initial input {@link MatcherHandler} to remove
+     * @param handler - initial input {@link MatcherListener} to remove
      */
     @Override
-    public void removeHandler(final MatcherHandler<T> handler) {
+    public void removeListener(final MatcherListener<T> handler) {
         if (Objects.nonNull(handler)) {
             this.getHandlers().remove(handler);
         }
     }
 
     /**
-     * Adds {@link MatcherHandler} to current {@link List} collection of {@link MatcherHandler}s
+     * Adds {@link MatcherListener} to current {@link List} collection of {@link MatcherListener}s
      *
-     * @param handler - initial input {@link MatcherHandler} to add
+     * @param handler - initial input {@link MatcherListener} to add
      */
     @Override
-    public void addHandler(final MatcherHandler<T> handler) {
+    public void addListener(final MatcherListener<T> handler) {
         if (Objects.nonNull(handler)) {
             this.getHandlers().add(handler);
         }
     }
 
     /**
-     * Adds all {@link MatcherHandler} to current {@link List} collection of {@link MatcherHandler}s
+     * Adds {@link Iterable} collection of {@link MatcherListener}s to current {@link List} collection of {@link MatcherListener}s
      */
     @Override
-    public void addHandlers(final Iterable<MatcherHandler<T>> handlers) {
-        Optional.ofNullable(handlers).orElseGet(Collections::emptyList).forEach(this::addHandler);
+    public void addListeners(final Iterable<MatcherListener<T>> handlers) {
+        Optional.ofNullable(handlers).orElseGet(Collections::emptyList).forEach(this::addListener);
     }
 
     /**
-     * Removes all {@link MatcherHandler}s from current {@link List} collection of {@link MatcherHandler}s
+     * Removes all {@link MatcherListener}s from current {@link List} collection of {@link MatcherListener}s
      */
     @Override
-    public void removeAllHandlers() {
+    public void removeAllListeners() {
         this.getHandlers().clear();
+    }
+
+    /**
+     * Operates on {@link MatcherEvent}s
+     *
+     * @param event - initial input {@link MatcherEvent} to handle
+     */
+    @Override
+    public void handleMatchEvent(final MatcherEvent<T> event) {
+        if (this.getMode().isEnable()) {
+            this.getHandlers().forEach(handler -> {
+                if (event.isMatch()) {
+                    handler.onSuccess(event);
+                } else {
+                    handler.onError(event);
+                }
+            });
+        }
     }
 }
