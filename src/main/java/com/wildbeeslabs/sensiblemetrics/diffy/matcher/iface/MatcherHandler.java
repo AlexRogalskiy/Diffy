@@ -1,10 +1,10 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherEventListener;
 
 /**
- * {@link MatcherListener} listener declaration
+ * {@link MatcherEventListener} listener declaration
  *
  * @param <T> type of input element to be handled by operation
  */

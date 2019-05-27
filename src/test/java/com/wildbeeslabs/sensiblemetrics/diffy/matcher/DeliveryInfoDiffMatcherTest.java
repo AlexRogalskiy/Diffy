@@ -325,6 +325,9 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
+
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
     }
 
     @Test
@@ -347,6 +350,9 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
+
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
     }
 
     @Test
@@ -371,6 +377,9 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
+
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
+        assertTrue(diffMatchEntryList.contains(entry));
     }
 
     @Test

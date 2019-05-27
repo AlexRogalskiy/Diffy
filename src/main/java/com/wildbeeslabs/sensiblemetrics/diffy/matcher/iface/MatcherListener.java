@@ -23,40 +23,40 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherEventListener;
 
 import java.io.Serializable;
 
 /**
- * {@link MatcherListener} listener declaration
+ * {@link MatcherEventListener} listener declaration
  *
  * @param <T> type of input element to be matched by operation
  */
-public interface MatcherEventListener<T> extends Serializable {
+public interface MatcherListener<T> extends Serializable {
 
     /**
-     * Removes {@link MatcherListener} from current {@link Matcher}
+     * Removes {@link MatcherEventListener} from current {@link Matcher}
      *
-     * @param handler - initial input {@link MatcherListener} to remove
+     * @param handler - initial input {@link MatcherEventListener} to remove
      */
-    void removeListener(final MatcherListener<T> handler);
+    void removeListener(final MatcherEventListener<T> handler);
 
     /**
-     * Adds {@link MatcherListener} to current {@link Matcher}
+     * Adds {@link MatcherEventListener} to current {@link Matcher}
      *
-     * @param handler - initial input {@link MatcherListener} to add
+     * @param handler - initial input {@link MatcherEventListener} to add
      */
-    void addListener(final MatcherListener<T> handler);
+    void addListener(final MatcherEventListener<T> handler);
 
     /**
-     * Adds {@link Iterable} collection of {@link MatcherListener}s to current {@link Matcher}
+     * Adds {@link Iterable} collection of {@link MatcherEventListener}s to current {@link Matcher}
      *
-     * @param handlers - initial input {@link Iterable} collection of {@link MatcherListener}s to add
+     * @param handlers - initial input {@link Iterable} collection of {@link MatcherEventListener}s to add
      */
-    void addListeners(final Iterable<MatcherListener<T>> handlers);
+    void addListeners(final Iterable<MatcherEventListener<T>> handlers);
 
     /**
-     * Removes all {@link MatcherListener}s from current {@link Matcher}
+     * Removes all {@link MatcherEventListener}s from current {@link Matcher}
      */
     void removeAllListeners();
 }

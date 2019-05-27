@@ -86,6 +86,13 @@ public interface Matcher<T> extends Serializable {
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if {@code after} is null
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0		1		0
+     *                              1	 	0		0
+     *                              1		1		1
+     *                              </p>
      */
     default Matcher<T> and(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
@@ -98,6 +105,11 @@ public interface Matcher<T> extends Serializable {
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Output
+     *                              0		1
+     *                              1 		0
+     *                              </p>
      */
     default Matcher<T> not(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
@@ -110,6 +122,13 @@ public interface Matcher<T> extends Serializable {
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0 		1		1
+     *                              1		0 		1
+     *                              1		1		1
+     *                              </p>
      */
     default Matcher<T> or(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
@@ -122,6 +141,13 @@ public interface Matcher<T> extends Serializable {
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0		1		1
+     *                              1		0 		1
+     *                              1		1		0
+     *                              </p>
      */
     default Matcher<T> xor(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
@@ -134,6 +160,13 @@ public interface Matcher<T> extends Serializable {
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0 		0 		1
+     *                              0 		1		1
+     *                              1		0 		1
+     *                              1		1	 	0
+     *                              </p>
      */
     default Matcher<T> nand(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
@@ -146,6 +179,13 @@ public interface Matcher<T> extends Serializable {
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0 	 	1
+     *                              0 		1		0
+     *                              1		0		0
+     *                              1		1		0
+     *                              </p>
      */
     default Matcher<T> nor(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
@@ -158,6 +198,13 @@ public interface Matcher<T> extends Serializable {
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0 	 	1
+     *                              0 		1	 	0
+     *                              1		0		0
+     *                              1		1		1
+     *                              </p>
      */
     default Matcher<T> xnor(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
@@ -170,6 +217,13 @@ public interface Matcher<T> extends Serializable {
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0		1		0
+     *                              1	 	0		0
+     *                              1		1		1
+     *                              </p>
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
@@ -183,6 +237,13 @@ public interface Matcher<T> extends Serializable {
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0 		1		1
+     *                              1		0 		1
+     *                              1		1		1
+     *                              </p>
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
@@ -196,6 +257,13 @@ public interface Matcher<T> extends Serializable {
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0		1		1
+     *                              1		0 		1
+     *                              1		1		0
+     *                              </p>
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
@@ -209,6 +277,13 @@ public interface Matcher<T> extends Serializable {
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0 		0 		1
+     *                              0 		1		1
+     *                              1		0 		1
+     *                              1		1	 	0
+     *                              </p>
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> nandAll(final Matcher<T>... matchers) {
@@ -222,6 +297,13 @@ public interface Matcher<T> extends Serializable {
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0 	 	1
+     *                              0 		1		0
+     *                              1		0		0
+     *                              1		1		0
+     *                              </p>
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> norAll(final Matcher<T>... matchers) {
@@ -235,6 +317,13 @@ public interface Matcher<T> extends Serializable {
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0 	 	1
+     *                              0 		1	 	0
+     *                              1		0		0
+     *                              1		1		1
+     *                              </p>
      */
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xnorAll(final Matcher<T>... matchers) {

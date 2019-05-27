@@ -48,7 +48,15 @@ public enum MatcherMode {
      */
     public enum MatcherStatus {
         ENABLE,
-        DISABLE
+        DISABLE;
+
+        public static MatcherStatus from(final boolean value) {
+            return value ? ENABLE : DISABLE;
+        }
+
+        public static boolean equals(final MatcherStatus s1, final MatcherStatus s2) {
+            return Objects.equals(s1, s2);
+        }
     }
 
     /**

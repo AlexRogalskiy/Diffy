@@ -42,26 +42,21 @@ import java.util.Objects;
 @Slf4j
 @EqualsAndHashCode
 @ToString
-public abstract class MatcherListener<T> {
+public abstract class MatcherEventListener<T> {
+    /**
+     * Logging {@link MatcherEventListener}
+     */
+    public static final MatcherEventListener LOGGING_MATCHER_HANDLER = new LoggingMatcherEventListener<>();
 
     /**
-     * Logging {@link MatcherListener}
-     */
-    public static final MatcherListener LOGGING_MATCHER_HANDLER = new LoggingMatcherListener<>();
-    /**
-     * Default {@link MatcherListener}
-     */
-    public static final MatcherListener DEFAULT_MATCHER_HANDLER = new DefaultMatcherListener<>();
-
-    /**
-     * Default {@link MatcherListener} implementation
+     * Default {@link MatcherEventListener} implementation
      *
      * @param <T> type of matcher item
      */
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class DefaultMatcherListener<T> extends MatcherListener<T> {
+    public static class DefaultMatcherEventListener<T> extends MatcherEventListener<T> {
         /**
          * Default {@link List} collection of failed {@link Matcher}
          */
@@ -71,6 +66,11 @@ public abstract class MatcherListener<T> {
          */
         private final List<Matcher<? super T>> successMatchers = new ArrayList<>();
 
+        /**
+         * {@link MatcherEventListener} on success {@link MatcherEvent}
+         *
+         * @param event - initial input {@link MatcherEvent}
+         */
         @Override
         public void onSuccess(final MatcherEvent<T> event) {
             if (this.isEnableMode(event)) {
@@ -78,6 +78,11 @@ public abstract class MatcherListener<T> {
             }
         }
 
+        /**
+         * {@link MatcherEventListener} on error {@link MatcherEvent}
+         *
+         * @param event - initial input {@link MatcherEvent}
+         */
         @Override
         public void onError(final MatcherEvent<T> event) {
             if (this.isEnableMode(event)) {
@@ -85,24 +90,40 @@ public abstract class MatcherListener<T> {
             }
         }
 
+        /**
+         * Returns binary flag based on matcher mode by input {@link MatcherEvent}
+         *
+         * @param event - initial input {@link MatcherEvent}
+         * @return true - if current matcher mode is enabled, false - otherwise
+         */
         private boolean isEnableMode(final MatcherEvent<? super T> event) {
             return Objects.nonNull(event.getMatcher()) && event.getMatcher().getMode().isEnable();
         }
     }
 
     /**
-     * Logging {@link MatcherListener} implementation
+     * Logging {@link MatcherEventListener} implementation
      *
      * @param <T> type of matcher item
      */
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class LoggingMatcherListener<T> extends MatcherListener<T> {
+    public static class LoggingMatcherEventListener<T> extends MatcherEventListener<T> {
+        /**
+         * {@link MatcherEventListener} on success {@link MatcherEvent}
+         *
+         * @param event - initial input {@link MatcherEvent}
+         */
         @Override
         public void onSuccess(final MatcherEvent<T> event) {
             log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
         }
 
+        /**
+         * {@link MatcherEventListener} on error {@link MatcherEvent}
+         *
+         * @param event - initial input {@link MatcherEvent}
+         */
         @Override
         public void onError(final MatcherEvent<T> event) {
             log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
@@ -110,14 +131,14 @@ public abstract class MatcherListener<T> {
     }
 
     /**
-     * {@link MatcherListener} on success {@link MatcherEvent}
+     * {@link MatcherEventListener} on success {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */
     public abstract void onSuccess(final MatcherEvent<T> event);
 
     /**
-     * {@link MatcherListener} on error {@link MatcherEvent}
+     * {@link MatcherEventListener} on error {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */

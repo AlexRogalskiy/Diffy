@@ -30,6 +30,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidOperationExceptio
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -41,12 +44,15 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertFalse;
 
 /**
@@ -101,6 +107,33 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertTrue(deliveryInfoMatcher.and(deliveryInfoMatcher2).and(deliveryInfoMatcher3).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test delivery info entity by valid custom delivery info matchers and default matcher handler")
+    public void test_deliveryInfo_by_validMatcherAndDefaultHandler() {
+        // given
+        getDeliveryInfo().setType(DEFAULT_TYPE);
+        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+
+        // when
+        final MatcherEventListener.DefaultMatcherEventListener<DeliveryInfo> listener = new MatcherEventListener.DefaultMatcherEventListener<>();
+        final AbstractMatcher<DeliveryInfo> deliveryInfoMatcher = new AbstractTypeSafeMatcher<>() {
+            @Override
+            public boolean matchesSafe(final DeliveryInfo value) {
+                return Objects.equals(DEFAULT_GID_PREFIX, value.getGid())
+                    && Objects.equals(DEFAULT_TYPE, value.getType())
+                    && Objects.equals(toDate("17/06/2013", DEFAULT_DATE_FORMAT), value.getCreatedAt());
+            }
+        };
+        deliveryInfoMatcher.addListener(listener);
+
+        // then
+        assertTrue(deliveryInfoMatcher.matches(getDeliveryInfo()));
+        assertThat(listener.getSuccessMatchers(), is(empty()));
+        assertThat(listener.getFailedMatchers(), is(empty()));
     }
 
     @Test
