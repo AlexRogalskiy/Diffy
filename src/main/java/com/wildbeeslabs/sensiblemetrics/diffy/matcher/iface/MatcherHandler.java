@@ -7,6 +7,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
  *
  * @param <T> type of input element to be handled by operation
  */
+@FunctionalInterface
 public interface MatcherHandler<T> {
 
     /**
@@ -14,5 +15,5 @@ public interface MatcherHandler<T> {
      *
      * @param event - initial input {@link MatcherEvent} to handle
      */
-    void handleMatchEvent(final MatcherEvent<T> event);
+    void handleEvent(final MatcherEvent<T> event);
 }

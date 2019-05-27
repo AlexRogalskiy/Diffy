@@ -107,7 +107,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
         boolean result = false;
         try {
             result = this.getClazz().isInstance(value) && this.matchesSafe(value);
-            this.handleMatchEvent(MatcherEvent.of(this, value, result));
+            this.handleEvent(MatcherEvent.of(this, value, result));
         } catch (RuntimeException e) {
             MatchOperationException.throwIncorrectMatch(value, e);
         }

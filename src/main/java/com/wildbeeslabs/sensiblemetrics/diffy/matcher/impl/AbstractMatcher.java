@@ -122,7 +122,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
      * @param event - initial input {@link MatcherEvent} to handle
      */
     @Override
-    public void handleMatchEvent(final MatcherEvent<T> event) {
+    public void handleEvent(final MatcherEvent<T> event) {
         if (this.getMode().isEnable()) {
             this.getHandlers().forEach(handler -> {
                 if (event.isMatch()) {
