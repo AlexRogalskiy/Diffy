@@ -50,10 +50,23 @@ public enum MatcherMode {
         ENABLE,
         DISABLE;
 
+        /**
+         * Returns {@link MatcherStatus} by input value
+         *
+         * @param value - initial input value to match by
+         * @return {@link MatcherStatus}
+         */
         public static MatcherStatus from(final boolean value) {
             return value ? ENABLE : DISABLE;
         }
 
+        /**
+         * Returns binary flag based on input {@link MatcherStatus}es comparison
+         *
+         * @param s1 - initial input {@link MatcherStatus} to compare with
+         * @param s2 - initial input {@link MatcherStatus} to compare by
+         * @return true - if {@link MatcherStatus} are equal, false - otherwise
+         */
         public static boolean equals(final MatcherStatus s1, final MatcherStatus s2) {
             return Objects.equals(s1, s2);
         }

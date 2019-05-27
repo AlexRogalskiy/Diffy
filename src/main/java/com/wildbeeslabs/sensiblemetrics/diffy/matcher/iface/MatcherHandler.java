@@ -1,7 +1,6 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherEventListener;
 
 /**
  * {@link MatcherEventListener} listener declaration

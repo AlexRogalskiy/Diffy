@@ -23,8 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.MatcherEventListener;
-
 import java.io.Serializable;
 
 /**
