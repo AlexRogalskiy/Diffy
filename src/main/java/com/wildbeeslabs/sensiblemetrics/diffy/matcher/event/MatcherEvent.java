@@ -28,6 +28,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -57,6 +58,19 @@ public class MatcherEvent<T> {
          */
         public static EventType fromBoolean(final boolean value) {
             return value ? MATCH_SUCCESS : MATCH_FAILURE;
+        }
+
+        /**
+         * Returns {@link EventType} by input event type {@link String}
+         *
+         * @param name - initial input event type {@link String}
+         * @return {@link EventType}
+         */
+        public static EventType fromName(final String name) {
+            return Arrays.stream(values())
+                .filter(type -> type.name().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
         }
     }
 
