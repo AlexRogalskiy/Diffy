@@ -44,8 +44,10 @@ public class MatcherEvent<T> {
      * Default event type {@link Enum}
      */
     public enum EventType {
+        MATCH_START,
         MATCH_SUCCESS,
-        MATCH_FAILURE;
+        MATCH_FAILURE,
+        MATCH_END;
 
         /**
          * Returns {@link EventType} by input binary value

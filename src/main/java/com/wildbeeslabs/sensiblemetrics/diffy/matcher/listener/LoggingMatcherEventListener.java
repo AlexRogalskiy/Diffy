@@ -38,7 +38,6 @@ import lombok.extern.slf4j.Slf4j;
 @EqualsAndHashCode
 @ToString
 public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
-
     /**
      * Logging {@link MatcherEventListener}
      */
@@ -49,6 +48,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
+    @Override
     public void onSuccess(final MatcherEvent<T> event) {
         log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
@@ -58,6 +58,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
+    @Override
     public void onError(final MatcherEvent<T> event) {
         log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }

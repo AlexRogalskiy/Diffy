@@ -57,6 +57,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
+    @Override
     public void onSuccess(final MatcherEvent<T> event) {
         if (this.isEnableMode(event)) {
             this.getSuccessMatchers().add(event.getMatcher());
@@ -68,6 +69,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
+    @Override
     public void onError(final MatcherEvent<T> event) {
         if (this.isEnableMode(event)) {
             this.getFailedMatchers().add(event.getMatcher());

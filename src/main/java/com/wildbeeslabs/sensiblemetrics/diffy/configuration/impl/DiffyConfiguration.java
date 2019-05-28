@@ -21,23 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.configuration;
+package com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.configuration.iface.Configuration;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
- * Diffy configuration implementation
+ * Diffy {@link Configuration} implementation
  */
 @Data
 @Builder
 @EqualsAndHashCode
 @ToString
-public final class DiffyConfiguration {
+public final class DiffyConfiguration implements Configuration {
 
     public static final DiffyConfiguration DEFAULT = DiffyConfiguration.builder().build();
     public static final DiffyConfiguration PERMISSIVE = DiffyConfiguration.builder()
@@ -51,6 +54,11 @@ public final class DiffyConfiguration {
         .malformedHeaderStartsBody(false)
         .build();
 
+    /**
+     * Default {@link Map} collection of properties
+     */
+    private final Map<String, String> properties = new HashMap<>();
+
     private final boolean strictParsing;
     private final int maxLineLen;
     private final int maxHeaderCount;
@@ -59,6 +67,26 @@ public final class DiffyConfiguration {
     private final boolean countLineNumbers;
     private final String headlessParsing;
     private final boolean malformedHeaderStartsBody;
+
+    @Override
+    public Object getProperty(final String key) {
+        return this.getProperties().get(key);
+    }
+
+    @Override
+    public void addProperty(final String key, final String value) {
+        this.getProperties().putIfAbsent(key, value);
+    }
+
+    @Override
+    public void updateProperty(final String key, final String value) {
+        this.getProperties().put(key, value);
+    }
+
+    @Override
+    public void clearProperty(final String key) {
+        this.getProperties().remove(key);
+    }
 
     public static DiffyConfiguration copy(final DiffyConfiguration configuration) {
         Objects.requireNonNull(configuration, "Configuration should not be null");

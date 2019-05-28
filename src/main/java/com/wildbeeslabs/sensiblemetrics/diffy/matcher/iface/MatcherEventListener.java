@@ -31,18 +31,35 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
  * @param <T> type of input element to be matched by operation
  */
 public interface MatcherEventListener<T> {
+    /**
+     * {@link MatcherEventListener} on start {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    default void onStart(final MatcherEvent<T> event) {
+    }
 
     /**
      * {@link MatcherEventListener} on success {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    void onSuccess(final MatcherEvent<T> event);
+    default void onSuccess(final MatcherEvent<T> event) {
+    }
 
     /**
      * {@link MatcherEventListener} on error {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    void onError(final MatcherEvent<T> event);
+    default void onError(final MatcherEvent<T> event) {
+    }
+
+    /**
+     * {@link MatcherEventListener} on end {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    default void onEnd(final MatcherEvent<T> event) {
+    }
 }

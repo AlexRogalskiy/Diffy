@@ -59,75 +59,82 @@ public class DeliveryInfoDiffMatcher extends DefaultDiffMatcher<DeliveryInfo> {
      */
     private static final long serialVersionUID = 5301800742465906044L;
 
-    /**
-     * Determines delivery info "Type" field matcher {@link Matcher}
-     */
-    public static final Function<Integer, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> value -> Objects.equals(type, value.getType());
+    public static class Factory {
+        /**
+         * Determines delivery info "Type" field matcher {@link Matcher}
+         */
+        public static final Function<Integer, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> value -> Objects.equals(type, value.getType());
 
-    /**
-     * Determines delivery info "Gid" field matcher {@link Matcher}
-     */
-    public static final Function<String, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> value -> Objects.equals(gid, value.getGid());
+        /**
+         * Determines delivery info "Gid" field matcher {@link Matcher}
+         */
+        public static final Function<String, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> value -> Objects.equals(gid, value.getGid());
 
-    /**
-     * Determines delivery info "Created date" matcher {@link Matcher}
-     */
-    public static final Function<Date, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> value -> Objects.equals(date, value.getCreatedAt());
+        /**
+         * Determines delivery info "Created date" matcher {@link Matcher}
+         */
+        public static final Function<Date, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> value -> Objects.equals(date, value.getCreatedAt());
 
-    /**
-     * Determines delivery info "Updated date" matcher {@link Matcher}
-     */
-    public static final Function<Date, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> value -> Objects.equals(date, value.getUpdatedAt());
+        /**
+         * Determines delivery info "Updated date" matcher {@link Matcher}
+         */
+        public static final Function<Date, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> value -> Objects.equals(date, value.getUpdatedAt());
 
-    /**
-     * Determines delivery info "ID" matcher {@link Matcher}
-     */
-    public static final Function<Matcher<? super Long>, Matcher<? super DeliveryInfo>> FIELD_ID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Long>(matcher) {
-        @Override
-        protected Long valueOf(final DeliveryInfo value) {
-            return value.getId();
-        }
-    };
+        /**
+         * Determines delivery info "ID" matcher {@link Matcher}
+         */
+        public static final Function<Matcher<? super Long>, Matcher<? super DeliveryInfo>> FIELD_ID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Long>(matcher) {
+            @Override
+            protected Long valueOf(final DeliveryInfo value) {
+                return value.getId();
+            }
+        };
 
-    /**
-     * Determines delivery info "Created date" matcher {@link Matcher}
-     */
-    public static final Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_CREATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
-        @Override
-        protected Date valueOf(final DeliveryInfo value) {
-            return value.getCreatedAt();
-        }
-    };
+        /**
+         * Determines delivery info "Created date" matcher {@link Matcher}
+         */
+        public static final Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_CREATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
+            @Override
+            protected Date valueOf(final DeliveryInfo value) {
+                return value.getCreatedAt();
+            }
+        };
 
-    /**
-     * Determines delivery info "Updated date" matcher {@link Matcher}
-     */
-    public static final Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_UPDATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
-        @Override
-        protected Date valueOf(final DeliveryInfo value) {
-            return value.getUpdatedAt();
-        }
-    };
+        /**
+         * Determines delivery info "Updated date" matcher {@link Matcher}
+         */
+        public static final Function<Matcher<? super Date>, Matcher<? super DeliveryInfo>> FIELD_UPDATED_DATE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Date>(matcher) {
+            @Override
+            protected Date valueOf(final DeliveryInfo value) {
+                return value.getUpdatedAt();
+            }
+        };
 
-    /**
-     * Determines delivery info "Type" field matcher {@link Matcher}
-     */
-    public static final Function<Matcher<? super Integer>, Matcher<? super DeliveryInfo>> FIELD_TYPE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Integer>(matcher) {
-        @Override
-        protected Integer valueOf(final DeliveryInfo value) {
-            return value.getType();
-        }
-    };
+        /**
+         * Determines delivery info "Type" field matcher {@link Matcher}
+         */
+        public static final Function<Matcher<? super Integer>, Matcher<? super DeliveryInfo>> FIELD_TYPE_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, Integer>(matcher) {
+            @Override
+            protected Integer valueOf(final DeliveryInfo value) {
+                return value.getType();
+            }
+        };
 
-    /**
-     * Determines delivery info "Gid" field matcher {@link Matcher}
-     */
-    public static final Function<Matcher<? super String>, Matcher<? super DeliveryInfo>> FIELD_GID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, String>(matcher) {
-        @Override
-        protected String valueOf(final DeliveryInfo value) {
-            return value.getGid();
-        }
-    };
+        /**
+         * Determines delivery info "Gid" field matcher {@link Matcher}
+         */
+        public static final Function<Matcher<? super String>, Matcher<? super DeliveryInfo>> FIELD_GID_MATCHER = matcher -> new AbstractFieldMatcher<DeliveryInfo, String>(matcher) {
+            @Override
+            protected String valueOf(final DeliveryInfo value) {
+                return value.getGid();
+            }
+        };
+
+        /**
+         * Determines delivery info "null" field matcher {@link Matcher}
+         */
+        public static final Function<Matcher<? super String>, Matcher<? super DeliveryInfo>> NULL_MATCHER = matcher -> null;
+    }
 
     /**
      * Default private delivery info constructor
@@ -137,47 +144,47 @@ public class DeliveryInfoDiffMatcher extends DefaultDiffMatcher<DeliveryInfo> {
     }
 
     public DeliveryInfoDiffMatcher withType(final Integer type) {
-        this.include(DELIVERY_TYPE_MATCHER.apply(type));
+        this.include(Factory.DELIVERY_TYPE_MATCHER.apply(type));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withGid(final String gid) {
-        this.include(DELIVERY_GID_MATCHER.apply(gid));
+        this.include(Factory.DELIVERY_GID_MATCHER.apply(gid));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withCreatedDate(final Date createdDate) {
-        this.include(DELIVERY_CREATED_DATE_MATCHER.apply(createdDate));
+        this.include(Factory.DELIVERY_CREATED_DATE_MATCHER.apply(createdDate));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withUpdatedDate(final Date createdDate) {
-        this.include(DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
+        this.include(Factory.DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withIdMatcher(final Matcher<? super Long> matcher) {
-        this.include(FIELD_ID_MATCHER.apply(matcher));
+        this.include(Factory.FIELD_ID_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withCreatedDateMatcher(final Matcher<? super Date> matcher) {
-        this.include(FIELD_CREATED_DATE_MATCHER.apply(matcher));
+        this.include(Factory.FIELD_CREATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withUpdatedDateMatcher(final Matcher<? super Date> matcher) {
-        this.include(FIELD_UPDATED_DATE_MATCHER.apply(matcher));
+        this.include(Factory.FIELD_UPDATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withTypeMatcher(final Matcher<? super Integer> matcher) {
-        this.include(FIELD_TYPE_MATCHER.apply(matcher));
+        this.include(Factory.FIELD_TYPE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withGidMatcher(final Matcher<? super String> matcher) {
-        this.include(FIELD_GID_MATCHER.apply(matcher));
+        this.include(Factory.FIELD_GID_MATCHER.apply(matcher));
         return this;
     }
 
