@@ -78,7 +78,7 @@ public interface Matcher<T> extends Serializable {
      *
      * @return {@link List} of {@link MatcherEventListener}
      */
-    default List<MatcherEventListener<T>> getHandlers() {
+    default List<MatcherEventListener<T>> getListener() {
         return Collections.emptyList();
     }
 

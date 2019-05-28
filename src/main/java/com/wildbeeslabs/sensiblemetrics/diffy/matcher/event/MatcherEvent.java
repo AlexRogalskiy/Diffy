@@ -48,7 +48,7 @@ public class MatcherEvent<T> {
         MATCH_START,
         MATCH_SUCCESS,
         MATCH_FAILURE,
-        MATCH_END;
+        MATCH_COMPLETE;
 
         /**
          * Returns {@link EventType} by input binary value
@@ -96,20 +96,41 @@ public class MatcherEvent<T> {
      * @return {@link MatcherEvent}
      */
     public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final Object value, final boolean status) {
+        return of(matcher, value, EventType.fromBoolean(status));
+    }
+
+    /**
+     * Creates new {@link MatcherEvent}
+     *
+     * @param matcher - initial input {@link Matcher}
+     * @param value   - initial input matchable {@link Object}
+     * @param type    - initial input event type {@link EventType}
+     * @return {@link MatcherEvent}
+     */
+    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final Object value, final EventType type) {
         return MatcherEvent
             .<T>builder()
             .matcher(matcher)
             .value(value)
-            .type(EventType.fromBoolean(status))
+            .type(type)
             .build();
     }
 
     /**
-     * Returns binary flag based on current event type {@code MATCH_SUCCESS}
+     * Returns binary flag based on current {@link EventType} {@code MATCH_SUCCESS}
      *
-     * @return true - if current event type is {@code MATCH_SUCCESS}, false - otherwise
+     * @return true - if current {@link EventType} is {@code MATCH_SUCCESS}, false - otherwise
      */
     public boolean isSuccess() {
         return Objects.equals(this.getType(), EventType.MATCH_SUCCESS);
+    }
+
+    /**
+     * Returns binary flag based on current {@link EventType} {@code MATCH_FAILURE}
+     *
+     * @return true - if current {@link EventType} is {@code MATCH_FAILURE}, false - otherwise
+     */
+    public boolean isFailure() {
+        return Objects.equals(this.getType(), EventType.MATCH_FAILURE);
     }
 }

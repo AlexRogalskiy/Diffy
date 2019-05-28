@@ -57,7 +57,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     /**
      * Default {@link List} collection of {@link MatcherEventListener}s
      */
-    private final List<MatcherEventListener<T>> handlers = new ArrayList<>();
+    private final List<MatcherEventListener<T>> listener = new ArrayList<>();
 
     /**
      * Default abstract matcher constructor
@@ -83,7 +83,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     @Override
     public void removeListener(final MatcherEventListener<T> listener) {
         if (Objects.nonNull(listener)) {
-            this.getHandlers().remove(listener);
+            this.getListener().remove(listener);
         }
     }
 
@@ -95,7 +95,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     @Override
     public void addListener(final MatcherEventListener<T> listener) {
         if (Objects.nonNull(listener)) {
-            this.getHandlers().add(listener);
+            this.getListener().add(listener);
         }
     }
 
@@ -114,7 +114,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
      */
     @Override
     public void removeAllListeners() {
-        this.getHandlers().clear();
+        this.getListener().clear();
     }
 
     /**
@@ -125,11 +125,22 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     @Override
     public void handleEvent(final MatcherEvent<T> event) {
         if (this.getMode().isEnable()) {
-            this.getHandlers().forEach(handler -> {
-                if (event.isSuccess()) {
-                    handler.onSuccess(event);
-                } else {
-                    handler.onError(event);
+            this.getListener().forEach(handler -> {
+                switch (event.getType()) {
+                    case MATCH_SUCCESS:
+                        handler.onSuccess(event);
+                        break;
+                    case MATCH_FAILURE:
+                        handler.onError(event);
+                        break;
+                    case MATCH_START:
+                        handler.onStart(event);
+                        break;
+                    case MATCH_COMPLETE:
+                        handler.onComplete(event);
+                        break;
+                    default:
+                        break;
                 }
             });
         }

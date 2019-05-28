@@ -123,14 +123,30 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
         return this;
     }
 
+    /**
+     * Operates on {@link MatcherEvent}s
+     *
+     * @param event - initial input {@link MatcherEvent} to handle
+     */
     @Override
     public void handleEvent(final MatcherEvent<T> event) {
         if (event.getMatcher().getMode().isEnable()) {
-            event.getMatcher().getHandlers().forEach(handler -> {
-                if (event.isSuccess()) {
-                    handler.onSuccess(event);
-                } else {
-                    handler.onError(event);
+            event.getMatcher().getListener().forEach(handler -> {
+                switch (event.getType()) {
+                    case MATCH_SUCCESS:
+                        handler.onSuccess(event);
+                        break;
+                    case MATCH_FAILURE:
+                        handler.onError(event);
+                        break;
+                    case MATCH_START:
+                        handler.onStart(event);
+                        break;
+                    case MATCH_COMPLETE:
+                        handler.onComplete(event);
+                        break;
+                    default:
+                        break;
                 }
             });
         }
