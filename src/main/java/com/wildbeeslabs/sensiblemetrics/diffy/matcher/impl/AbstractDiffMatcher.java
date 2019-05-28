@@ -1,7 +1,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +23,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
+public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherHandler<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -96,5 +98,18 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
             this.getMatchers().add(matcher);
         }
         return this;
+    }
+
+    @Override
+    public void handleEvent(final MatcherEvent<T> event) {
+        if (event.getMatcher().getMode().isEnable()) {
+            event.getMatcher().getHandlers().forEach(handler -> {
+                if (event.isMatch()) {
+                    handler.onSuccess(event);
+                } else {
+                    handler.onError(event);
+                }
+            });
+        }
     }
 }

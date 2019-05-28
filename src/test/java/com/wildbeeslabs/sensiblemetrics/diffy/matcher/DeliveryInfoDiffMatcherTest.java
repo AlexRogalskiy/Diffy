@@ -209,7 +209,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         getDeliveryInfo().setType(getCodeMock().val());
 
         final TypeSafeMatcher<DeliveryInfo> matcher = value -> (value.getType() > 1000 && value.getType() < 5000);
-        DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
         final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(null);
@@ -231,9 +231,9 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
         assertNotNull("Should not be null", iterable);
-        List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));

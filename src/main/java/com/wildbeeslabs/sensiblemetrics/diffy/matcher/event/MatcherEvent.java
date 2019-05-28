@@ -40,7 +40,7 @@ public class MatcherEvent<T> {
     /**
      * Default {@link Matcher}
      */
-    private final Matcher<? super T> matcher;
+    private final Matcher<T> matcher;
     /**
      * Default match status
      */
@@ -58,7 +58,7 @@ public class MatcherEvent<T> {
      * @param match   - initial input match status
      * @return {@link MatcherEvent}
      */
-    public static <T> MatcherEvent<T> of(final Matcher<? super T> matcher, final Object value, final boolean match) {
+    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final Object value, final boolean match) {
         return MatcherEvent
             .<T>builder()
             .matcher(matcher)

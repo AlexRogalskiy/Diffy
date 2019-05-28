@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
 /**
- * Property accessor {@linkn Enum}
+ * Property accessor type {@linkn Enum}
  */
-public enum PropertyAccessor {
+public enum PropertyAccessorType {
     /**
      * Getters are methods used to get a POJO field value for serialization,
      * or, under certain conditions also for de-serialization. Latter

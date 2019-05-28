@@ -27,9 +27,8 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
-import lombok.AccessLevel;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +46,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.getMe
  * @since 1.0
  */
 @Slf4j
-@Getter(AccessLevel.PROTECTED)
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> implements TypeSafeMatcher<T> {
@@ -106,7 +105,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     public final boolean matches(final T value) {
         boolean result = false;
         try {
-            result = this.getClazz().isInstance(value) && this.matchesSafe(value);
+            result = this.clazz.isInstance(value) && this.matchesSafe(value);
             this.handleEvent(MatcherEvent.of(this, value, result));
         } catch (RuntimeException e) {
             MatchOperationException.throwIncorrectMatch(value, e);

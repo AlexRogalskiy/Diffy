@@ -25,11 +25,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherMode;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherMode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
@@ -69,6 +71,15 @@ public interface Matcher<T> extends Serializable {
      */
     default MatcherMode getMode() {
         return MatcherMode.STRICT;
+    }
+
+    /**
+     * Returns {@link List} of {@link MatcherEventListener}
+     *
+     * @return {@link List} of {@link MatcherEventListener}
+     */
+    default List<MatcherEventListener<T>> getHandlers() {
+        return Collections.emptyList();
     }
 
     /**

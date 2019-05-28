@@ -28,9 +28,8 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherListener;
-import lombok.AccessLevel;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,7 +44,7 @@ import java.util.*;
  * @since 1.0
  */
 @Slf4j
-@Getter(AccessLevel.PROTECTED)
+@Data
 @EqualsAndHashCode
 @ToString
 public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<T>, MatcherHandler<T> {
@@ -58,7 +57,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     /**
      * Default {@link List} collection of {@link MatcherEventListener}s
      */
-    private final List<MatcherEventListener> handlers = new ArrayList<>();
+    private final List<MatcherEventListener<T>> handlers = new ArrayList<>();
 
     /**
      * Default abstract matcher constructor
@@ -70,42 +69,44 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     /**
      * Default abstract matcher constructor with input {@link Iterable} collection of {@link MatcherEventListener}s
      *
-     * @param handlers - initial input {@link Iterable} collection of {@link MatcherEventListener}s
+     * @param listeners - initial input {@link Iterable} collection of {@link MatcherEventListener}s
      */
-    public AbstractMatcher(final Iterable<MatcherEventListener<T>> handlers) {
-        this.addListeners(handlers);
+    public AbstractMatcher(final Iterable<MatcherEventListener<T>> listeners) {
+        this.addListeners(listeners);
     }
 
     /**
      * Removes {@link MatcherEventListener} from current {@link List} collection of {@link MatcherEventListener}s
      *
-     * @param handler - initial input {@link MatcherEventListener} to remove
+     * @param listener - initial input {@link MatcherEventListener} to remove
      */
     @Override
-    public void removeListener(final MatcherEventListener<T> handler) {
-        if (Objects.nonNull(handler)) {
-            this.getHandlers().remove(handler);
+    public void removeListener(final MatcherEventListener<T> listener) {
+        if (Objects.nonNull(listener)) {
+            this.getHandlers().remove(listener);
         }
     }
 
     /**
      * Adds {@link MatcherEventListener} to current {@link List} collection of {@link MatcherEventListener}s
      *
-     * @param handler - initial input {@link MatcherEventListener} to add
+     * @param listener - initial input {@link MatcherEventListener} to add
      */
     @Override
-    public void addListener(final MatcherEventListener<T> handler) {
-        if (Objects.nonNull(handler)) {
-            this.getHandlers().add(handler);
+    public void addListener(final MatcherEventListener<T> listener) {
+        if (Objects.nonNull(listener)) {
+            this.getHandlers().add(listener);
         }
     }
 
     /**
      * Adds {@link Iterable} collection of {@link MatcherEventListener}s to current {@link List} collection of {@link MatcherEventListener}s
+     *
+     * @param listeners - initial input {@link MatcherEventListener}s to add
      */
     @Override
-    public void addListeners(final Iterable<MatcherEventListener<T>> handlers) {
-        Optional.ofNullable(handlers).orElseGet(Collections::emptyList).forEach(this::addListener);
+    public void addListeners(final Iterable<MatcherEventListener<T>> listeners) {
+        Optional.ofNullable(listeners).orElseGet(Collections::emptyList).forEach(this::addListener);
     }
 
     /**
