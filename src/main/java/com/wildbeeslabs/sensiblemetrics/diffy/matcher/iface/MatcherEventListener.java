@@ -56,10 +56,10 @@ public interface MatcherEventListener<T> {
     }
 
     /**
-     * {@link MatcherEventListener} on end {@link MatcherEvent}
+     * {@link MatcherEventListener} on complete {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    default void onEnd(final MatcherEvent<T> event) {
+    default void onComplete(final MatcherEvent<T> event) {
     }
 }
