@@ -126,7 +126,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     public void handleEvent(final MatcherEvent<T> event) {
         if (this.getMode().isEnable()) {
             this.getHandlers().forEach(handler -> {
-                if (event.isMatch()) {
+                if (event.isSuccess()) {
                     handler.onSuccess(event);
                 } else {
                     handler.onError(event);

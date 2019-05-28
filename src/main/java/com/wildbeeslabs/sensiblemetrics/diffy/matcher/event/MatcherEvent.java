@@ -28,6 +28,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
  * Matcher event implementation
  *
@@ -37,6 +39,25 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class MatcherEvent<T> {
+
+    /**
+     * Default event type {@link Enum}
+     */
+    public enum EventType {
+        MATCH_SUCCESS,
+        MATCH_FAILURE;
+
+        /**
+         * Returns {@link EventType} by input binary value
+         *
+         * @param value - initial input binary value
+         * @return {@link EventType}
+         */
+        public static EventType fromBoolean(final boolean value) {
+            return value ? MATCH_SUCCESS : MATCH_FAILURE;
+        }
+    }
+
     /**
      * Default {@link Matcher}
      */
@@ -44,7 +65,7 @@ public class MatcherEvent<T> {
     /**
      * Default match status
      */
-    private final boolean match;
+    private final EventType type;
     /**
      * Default matchable {@link Object}
      */
@@ -55,15 +76,24 @@ public class MatcherEvent<T> {
      *
      * @param matcher - initial input {@link Matcher}
      * @param value   - initial input matchable {@link Object}
-     * @param match   - initial input match status
+     * @param status  - initial input match status
      * @return {@link MatcherEvent}
      */
-    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final Object value, final boolean match) {
+    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final Object value, final boolean status) {
         return MatcherEvent
             .<T>builder()
             .matcher(matcher)
             .value(value)
-            .match(match)
+            .type(EventType.fromBoolean(status))
             .build();
+    }
+
+    /**
+     * Returns binary flag based on current event type {@code MATCH_SUCCESS}
+     *
+     * @return true - if current event type is {@code MATCH_SUCCESS}, false - otherwise
+     */
+    public boolean isSuccess() {
+        return Objects.equals(this.getType(), EventType.MATCH_SUCCESS);
     }
 }
