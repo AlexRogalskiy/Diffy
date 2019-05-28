@@ -39,9 +39,19 @@ import lombok.extern.slf4j.Slf4j;
 @ToString
 public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
     /**
-     * Logging {@link MatcherEventListener}
+     * Logging {@link MatcherEventListener} instance
      */
-    public static final MatcherEventListener LOGGING_MATCHER_HANDLER = new LoggingMatcherEventListener<>();
+    public static final MatcherEventListener INSTANCE = new LoggingMatcherEventListener<>();
+
+    /**
+     * {@link MatcherEventListener} on start {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    @Override
+    public void onStart(final MatcherEvent<T> event) {
+        log.info("{}, on start event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    }
 
     /**
      * {@link MatcherEventListener} on success {@link MatcherEvent}
@@ -61,5 +71,25 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
     @Override
     public void onError(final MatcherEvent<T> event) {
         log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    }
+
+    /**
+     * {@link MatcherEventListener} on complete {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    @Override
+    public void onComplete(final MatcherEvent<T> event) {
+        log.info("{}, on complete event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    }
+
+    /**
+     * Returns {@link MatcherEventListener} instance
+     *
+     * @param <T> type of input element to be matched by operation
+     * @return {@link MatcherEventListener} instance
+     */
+    public static <T> MatcherEventListener<T> getInstance() {
+        return INSTANCE;
     }
 }
