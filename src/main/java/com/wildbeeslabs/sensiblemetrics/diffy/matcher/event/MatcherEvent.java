@@ -40,7 +40,6 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 public class MatcherEvent<T> {
-
     /**
      * Default event type {@link Enum}
      */

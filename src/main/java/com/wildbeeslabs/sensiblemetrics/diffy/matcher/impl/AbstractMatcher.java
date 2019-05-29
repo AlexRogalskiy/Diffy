@@ -24,14 +24,14 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListener;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherSelectable;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
@@ -43,11 +43,10 @@ import java.util.*;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<T>, MatcherHandler<T> {
+public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherSelectable<T>, MatcherHandler<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -57,7 +56,11 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     /**
      * Default {@link List} collection of {@link MatcherEventListener}s
      */
-    private final List<MatcherEventListener<T>> listener = new ArrayList<>();
+    private final List<MatcherEventListener<T>> listeners = new ArrayList<>();
+    /**
+     * Default {@link MatcherHandler} implementation
+     */
+    private final MatcherHandler<T> handler;
 
     /**
      * Default abstract matcher constructor
@@ -67,12 +70,12 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
     }
 
     /**
-     * Default abstract matcher constructor with input {@link Iterable} collection of {@link MatcherEventListener}s
+     * Default abstract matcher constructor with input {@link MatcherHandler}
      *
-     * @param listeners - initial input {@link Iterable} collection of {@link MatcherEventListener}s
+     * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractMatcher(final Iterable<MatcherEventListener<T>> listeners) {
-        this.addListeners(listeners);
+    public AbstractMatcher(final MatcherHandler<T> handler) {
+        this.handler = Optional.ofNullable(handler).orElse(DefaultMatcherHandler.INSTANCE);
     }
 
     /**
@@ -81,9 +84,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
      * @param listener - initial input {@link MatcherEventListener} to remove
      */
     @Override
-    public void removeListener(final MatcherEventListener<T> listener) {
+    public <E extends MatcherEventListener<T>> void removeListener(final E listener) {
         if (Objects.nonNull(listener)) {
-            this.getListener().remove(listener);
+            this.getListeners().remove(listener);
         }
     }
 
@@ -93,9 +96,9 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
      * @param listener - initial input {@link MatcherEventListener} to add
      */
     @Override
-    public void addListener(final MatcherEventListener<T> listener) {
+    public <E extends MatcherEventListener<T>> void addListener(final E listener) {
         if (Objects.nonNull(listener)) {
-            this.getListener().add(listener);
+            this.getListeners().add(listener);
         }
     }
 
@@ -105,7 +108,7 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
      * @param listeners - initial input {@link MatcherEventListener}s to add
      */
     @Override
-    public void addListeners(final Iterable<MatcherEventListener<T>> listeners) {
+    public <E extends MatcherEventListener<T>> void addListeners(final Iterable<E> listeners) {
         Optional.ofNullable(listeners).orElseGet(Collections::emptyList).forEach(this::addListener);
     }
 
@@ -114,35 +117,16 @@ public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherListener<
      */
     @Override
     public void removeAllListeners() {
-        this.getListener().clear();
+        this.getListeners().clear();
     }
 
     /**
-     * Operates on {@link MatcherEvent}s
+     * {@link MatcherEvent} handler
      *
      * @param event - initial input {@link MatcherEvent} to handle
      */
     @Override
     public void handleEvent(final MatcherEvent<T> event) {
-        if (this.getMode().isEnable()) {
-            this.getListener().forEach(handler -> {
-                switch (event.getType()) {
-                    case MATCH_SUCCESS:
-                        handler.onSuccess(event);
-                        break;
-                    case MATCH_FAILURE:
-                        handler.onError(event);
-                        break;
-                    case MATCH_START:
-                        handler.onStart(event);
-                        break;
-                    case MATCH_COMPLETE:
-                        handler.onComplete(event);
-                        break;
-                    default:
-                        break;
-                }
-            });
-        }
+        this.getHandler().handleEvent(event);
     }
 }

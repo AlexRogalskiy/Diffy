@@ -24,13 +24,13 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
@@ -42,7 +42,6 @@ import java.util.*;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode
 @ToString
@@ -57,6 +56,10 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
      * Default {@link List} collection of {@link Matcher}s
      */
     private final List<Matcher<? super T>> matchers = new ArrayList<>();
+    /**
+     * Default {@link MatcherHandler} implementation
+     */
+    private final MatcherHandler<T> handler;
 
     /**
      * Default abstract matcher constructor
@@ -66,12 +69,12 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
     }
 
     /**
-     * Default abstract matcher constructor with input iterable collection of matchers {@link Iterable}
+     * Default abstract matcher constructor with input {@link MatcherHandler}
      *
-     * @param matchers - initial input iterable collection of matchers {@link Iterable}
+     * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractDiffMatcher(final Iterable<Matcher<? super T>> matchers) {
-        this.include(matchers);
+    public AbstractDiffMatcher(final MatcherHandler<T> handler) {
+        this.handler = Optional.ofNullable(handler).orElse(DefaultMatcherHandler.INSTANCE);
     }
 
     /**
@@ -124,31 +127,12 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
     }
 
     /**
-     * Operates on {@link MatcherEvent}s
+     * {@link MatcherEvent} handler
      *
      * @param event - initial input {@link MatcherEvent} to handle
      */
     @Override
     public void handleEvent(final MatcherEvent<T> event) {
-        if (event.getMatcher().getMode().isEnable()) {
-            event.getMatcher().getListener().forEach(handler -> {
-                switch (event.getType()) {
-                    case MATCH_SUCCESS:
-                        handler.onSuccess(event);
-                        break;
-                    case MATCH_FAILURE:
-                        handler.onError(event);
-                        break;
-                    case MATCH_START:
-                        handler.onStart(event);
-                        break;
-                    case MATCH_COMPLETE:
-                        handler.onComplete(event);
-                        break;
-                    default:
-                        break;
-                }
-            });
-        }
+        this.getHandler().handleEvent(event);
     }
 }

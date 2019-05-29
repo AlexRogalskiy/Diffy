@@ -32,7 +32,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.DefaultMatcherEventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.impl.DefaultMatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

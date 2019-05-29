@@ -25,11 +25,10 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.stream.Collectors;
 
@@ -41,7 +40,6 @@ import java.util.stream.Collectors;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -60,12 +58,12 @@ public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T> {
     }
 
     /**
-     * Default difference matcher constructor with input iterable collection of matchers {@link Iterable}
+     * Default difference matcher constructor with input {@link MatcherHandler}
      *
-     * @param matchers - initial input iterable collection of matchers {@link Iterable}
+     * @param handler - initial input {@link MatcherHandler}
      */
-    public DefaultDiffMatcher(final Iterable<Matcher<? super T>> matchers) {
-        super(matchers);
+    public DefaultDiffMatcher(final MatcherHandler<T> handler) {
+        super(handler);
     }
 
     /**

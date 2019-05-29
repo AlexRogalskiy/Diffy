@@ -28,7 +28,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Custom {@link AbstractMatcher} implementation
@@ -37,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -62,6 +60,12 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
         this.matchableClazz = ReflectionUtils.getMatchableClass(clazz);
     }
 
+    /**
+     * Returns binary flag by initial argument match comparison
+     *
+     * @param value - initial input argument value to be matched {@link Object}
+     * @return true - if initial value matches input argument {@link Object}, false - otherwise
+     */
     @Override
     public boolean matches(final Object value) {
         return getMatchableClazz().isInstance(value);

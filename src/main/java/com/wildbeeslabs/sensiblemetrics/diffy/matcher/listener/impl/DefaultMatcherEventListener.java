@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -33,6 +34,8 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static java.util.Arrays.asList;
 
 /**
  * Default {@link MatcherEventListener} implementation
@@ -46,11 +49,19 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
     /**
      * Default {@link List} collection of failed {@link Matcher}
      */
-    private final List<Matcher<? super T>> failedMatchers = new ArrayList<>();
+    private final List<Matcher<? super T>> failedMatchers;
     /**
      * Default {@link List} collection of success {@link Matcher}
      */
-    private final List<Matcher<? super T>> successMatchers = new ArrayList<>();
+    private final List<Matcher<? super T>> successMatchers;
+
+    /**
+     * Default matcher event listener constructor
+     */
+    public DefaultMatcherEventListener() {
+        this.failedMatchers = new ArrayList<>();
+        this.successMatchers = new ArrayList<>();
+    }
 
     /**
      * {@link MatcherEventListener} on success {@link MatcherEvent}
@@ -58,7 +69,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onSuccess(final MatcherEvent<T> event) {
+    public <E extends MatcherEvent<T>> void onSuccess(final E event) {
         if (this.isEnableMode(event)) {
             this.getSuccessMatchers().add(event.getMatcher());
         }
@@ -70,7 +81,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onError(final MatcherEvent<T> event) {
+    public <E extends MatcherEvent<T>> void onError(final E event) {
         if (this.isEnableMode(event)) {
             this.getFailedMatchers().add(event.getMatcher());
         }
@@ -84,5 +95,15 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      */
     private boolean isEnableMode(final MatcherEvent<? super T> event) {
         return (Objects.nonNull(event.getMatcher()) && event.getMatcher().getMode().isEnable());
+    }
+
+    /**
+     * Returns {@link List} of supported {@link EventListener}s
+     *
+     * @return {@link List} of supported {@link EventListener}s
+     */
+    @Override
+    public List<? extends EventListener<T>> getSupportedListeners() {
+        return asList((EventListener<T>) new DefaultMatcherEventListener<>());
     }
 }

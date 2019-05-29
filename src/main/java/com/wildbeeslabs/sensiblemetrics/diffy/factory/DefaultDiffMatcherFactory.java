@@ -28,7 +28,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultDiffMatcher;
 import lombok.experimental.UtilityClass;
 
-import java.util.Arrays;
+import java.util.Optional;
+
+import static java.util.Arrays.asList;
 
 /**
  * Default difference matcher factory implementation
@@ -60,7 +62,9 @@ public class DefaultDiffMatcherFactory {
      * @return difference matcher {@link DiffMatcher}
      */
     public static <T, E extends DiffMatcher<T>> E create(final Matcher<? super T> matcher) {
-        return (E) new DefaultDiffMatcher<>(Arrays.asList(matcher));
+        final DefaultDiffMatcher result = new DefaultDiffMatcher<>();
+        result.include(matcher);
+        return (E) result;
     }
 
     /**
@@ -72,7 +76,9 @@ public class DefaultDiffMatcherFactory {
      * @return difference matcher {@link DiffMatcher}
      */
     public static <T, E extends DiffMatcher<T>> E create(final Matcher<? super T>... matchers) {
-        return (E) new DefaultDiffMatcher<T>(Arrays.asList(matchers));
+        final DefaultDiffMatcher result = new DefaultDiffMatcher<>();
+        result.include(asList(Optional.ofNullable(matchers).orElse(new Matcher[0])));
+        return (E) result;
     }
 
     /**
@@ -84,6 +90,8 @@ public class DefaultDiffMatcherFactory {
      * @return difference matcher {@link DiffMatcher}
      */
     public static <T, E extends DiffMatcher<T>> E create(final Iterable<Matcher<? super T>> matchers) {
-        return (E) new DefaultDiffMatcher<T>(matchers);
+        final DefaultDiffMatcher result = new DefaultDiffMatcher<>();
+        result.include(matchers);
+        return (E) result;
     }
 }

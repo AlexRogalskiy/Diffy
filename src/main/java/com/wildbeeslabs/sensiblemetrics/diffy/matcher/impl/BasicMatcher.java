@@ -24,27 +24,34 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Basic {@link Matcher} implementation
  *
- * @param <T> type of input element to be matched by type safe operation
+ * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public final class BasicMatcher<T> implements Matcher<T> {
-
     /**
      * Filter that matches all metrics.
      */
     public static final Matcher MATCH_ALL = new BasicMatcher<>(true);
-
     /**
      * Filter that does not match any metrics.
      */
     public static final Matcher MATCH_NONE = new BasicMatcher<>(false);
 
+    /**
+     * Default boolean match flag
+     */
     private final boolean match;
 
     /**
@@ -53,13 +60,14 @@ public final class BasicMatcher<T> implements Matcher<T> {
      *
      * @param match should this filter match?
      */
-    public BasicMatcher(boolean match) {
+    public BasicMatcher(final boolean match) {
         this.match = match;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean matches(final T value) {
         return match;
     }

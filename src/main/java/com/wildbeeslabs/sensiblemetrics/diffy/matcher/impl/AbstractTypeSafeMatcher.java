@@ -30,7 +30,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -45,7 +44,6 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.getMe
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -110,9 +108,8 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
             this.handleEvent(MatcherEvent.of(this, value, result));
         } catch (RuntimeException e) {
             MatchOperationException.throwIncorrectMatch(value, e);
-        } finally {
-            this.handleEvent(MatcherEvent.of(this, value, MatcherEvent.EventType.MATCH_COMPLETE));
         }
+        this.handleEvent(MatcherEvent.of(this, value, MatcherEvent.EventType.MATCH_COMPLETE));
         return result;
     }
 }

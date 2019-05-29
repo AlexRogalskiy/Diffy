@@ -21,36 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListener;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
 
 /**
- * Logging {@link MatcherEventListener} implementation
+ * {@link MatcherEvent} listener declaration
  *
  * @param <T> type of input element to be matched by operation
  */
-@Slf4j
-@EqualsAndHashCode
-@ToString
-public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
-    /**
-     * Logging {@link MatcherEventListener} instance
-     */
-    public static final MatcherEventListener INSTANCE = new LoggingMatcherEventListener<>();
-
+public interface MatcherEventListener<T> extends EventListener<T> {
     /**
      * {@link MatcherEventListener} on start {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    @Override
-    public void onStart(final MatcherEvent<T> event) {
-        log.info("{}, on start event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    default <E extends MatcherEvent<T>> void onStart(final E event) {
     }
 
     /**
@@ -58,9 +45,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    @Override
-    public void onSuccess(final MatcherEvent<T> event) {
-        log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    default <E extends MatcherEvent<T>> void onSuccess(final E event) {
     }
 
     /**
@@ -68,9 +53,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    @Override
-    public void onError(final MatcherEvent<T> event) {
-        log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    default <E extends MatcherEvent<T>> void onError(final E event) {
     }
 
     /**
@@ -78,18 +61,6 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      *
      * @param event - initial input {@link MatcherEvent}
      */
-    @Override
-    public void onComplete(final MatcherEvent<T> event) {
-        log.info("{}, on complete event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
-    }
-
-    /**
-     * Returns {@link MatcherEventListener} instance
-     *
-     * @param <T> type of input element to be matched by operation
-     * @return {@link MatcherEventListener} instance
-     */
-    public static <T> MatcherEventListener<T> getInstance() {
-        return INSTANCE;
+    default <E extends MatcherEvent<T>> void onComplete(final E event) {
     }
 }

@@ -39,35 +39,35 @@ import java.util.Objects;
  */
 @Getter
 @RequiredArgsConstructor
-public enum MatcherMode {
-    STRICT(MatcherStatus.ENABLE),
-    SILENT(MatcherStatus.DISABLE);
+public enum MatcherModeType {
+    STRICT(MatcherStatusType.ENABLE),
+    SILENT(MatcherStatusType.DISABLE);
 
     /**
      * Matcher status type {@link Enum}
      */
-    public enum MatcherStatus {
+    public enum MatcherStatusType {
         ENABLE,
         DISABLE;
 
         /**
-         * Returns {@link MatcherStatus} by input value
+         * Returns {@link MatcherStatusType} by input value
          *
          * @param value - initial input value to match by
-         * @return {@link MatcherStatus}
+         * @return {@link MatcherStatusType}
          */
-        public static MatcherStatus from(final boolean value) {
+        public static MatcherStatusType from(final boolean value) {
             return value ? ENABLE : DISABLE;
         }
 
         /**
-         * Returns binary flag based on input {@link MatcherStatus}es comparison
+         * Returns binary flag based on input {@link MatcherStatusType}es comparison
          *
-         * @param s1 - initial input {@link MatcherStatus} to compare with
-         * @param s2 - initial input {@link MatcherStatus} to compare by
-         * @return true - if {@link MatcherStatus} are equal, false - otherwise
+         * @param s1 - initial input {@link MatcherStatusType} to compare with
+         * @param s2 - initial input {@link MatcherStatusType} to compare by
+         * @return true - if {@link MatcherStatusType} are equal, false - otherwise
          */
-        public static boolean equals(final MatcherStatus s1, final MatcherStatus s2) {
+        public static boolean equals(final MatcherStatusType s1, final MatcherStatusType s2) {
             return Objects.equals(s1, s2);
         }
     }
@@ -75,7 +75,7 @@ public enum MatcherMode {
     /**
      * Binary flag based on current status
      */
-    private final MatcherStatus status;
+    private final MatcherStatusType status;
 
     /**
      * Return binary flag based on current mode {@code STRICT}
@@ -92,6 +92,6 @@ public enum MatcherMode {
      * @return true - if current mode status is {@code ENABLE}, false - otherwise
      */
     public boolean isEnable() {
-        return Objects.equals(this.getStatus(), MatcherStatus.ENABLE);
+        return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
     }
 }
