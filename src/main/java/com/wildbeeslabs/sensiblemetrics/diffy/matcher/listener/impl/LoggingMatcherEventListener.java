@@ -105,6 +105,6 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      */
     @Override
     public List<? extends EventListener<T>> getSupportedListeners() {
-        return asList((EventListener<T>) LoggingMatcherEventListener.INSTANCE);
+        return asList((EventListener<T>) getInstance());
     }
 }
