@@ -27,65 +27,56 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
- * Bad operation {@link RuntimeException} implementation
+ * Reject {@link RuntimeException} implementation
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BadOperationException extends RuntimeException {
+public class RejectMatcherException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -8529822101880469339L;
+    private static final long serialVersionUID = -6733607419898881202L;
 
     /**
-     * Bad operation exception constructor with initial input message
+     * Reject matcher exception constructor with initial input message
      *
      * @param message - initial input message {@link String}
      */
-    public BadOperationException(final String message) {
+    public RejectMatcherException(final String message) {
         super(message);
     }
 
     /**
-     * Bad operation exception constructor with initial input {@link Throwable}
+     * Reject matcher exception constructor with initial input {@link Throwable}
      *
      * @param cause - initial input {@link Throwable}
      */
-    public BadOperationException(final Throwable cause) {
+    public RejectMatcherException(final Throwable cause) {
         super(cause);
     }
 
     /**
-     * Bad operation exception constructor with initial input message and {@link Throwable}
+     * Reject matcher exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
      * @param cause   - initial input {@link Throwable}
      */
-    public BadOperationException(final String message, final Throwable cause) {
+    public RejectMatcherException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link BadOperationException} instance by input parameters
+     * Returns {@link RejectMatcherException} by input parameters
      *
-     * @param message   - initial input raw message {@link String}
-     * @param throwable - initial input cause instance {@link Throwable}
-     * @return {@link BadOperationException}
+     * @param target - initial input target {@link Object}
+     * @return {@link RejectMatcherException}
      */
-    public static BadOperationException throwBadOperation(final String message, final Throwable throwable) {
-        throw new BadOperationException(message, throwable);
-    }
-
-    /**
-     * Returns {@link BadOperationException} instance by input parameters
-     *
-     * @param message - initial input raw message {@link String}
-     * @return {@link BadOperationException}
-     */
-    public static BadOperationException throwBadOperation(final String message) {
-        throw new BadOperationException(message);
+    public static RejectMatcherException throwReject(final Object target) {
+        throw new RejectMatcherException(formatMessage("ERROR: cannot process target: {%s}", target));
     }
 }

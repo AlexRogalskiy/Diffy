@@ -77,7 +77,7 @@ public class InvalidOperationException extends RuntimeException {
      * @param throwable - initial input cause instance {@link Throwable}
      * @return {@link InvalidOperationException}
      */
-    public static final InvalidOperationException throwInvalidParseFormat(final Object target, final Throwable throwable) {
+    public static InvalidOperationException throwInvalidParseFormat(final Object target, final Throwable throwable) {
         throw new InvalidOperationException(formatMessage("ERROR: unsupported parsing on target = {%s}", target), throwable);
     }
 }

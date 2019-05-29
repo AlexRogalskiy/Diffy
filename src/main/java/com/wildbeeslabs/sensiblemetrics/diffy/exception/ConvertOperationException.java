@@ -77,7 +77,7 @@ public class ConvertOperationException extends RuntimeException {
      * @param throwable - initial input cause instance {@link Throwable}
      * @return {@link ConvertOperationException}
      */
-    public static final ConvertOperationException throwIncorrectConversion(final Object target, final Throwable throwable) {
+    public static ConvertOperationException throwIncorrectConversion(final Object target, final Throwable throwable) {
         throw new ConvertOperationException(formatMessage("ERROR: cannot process convert operation on target = {%s}", target), throwable);
     }
 }

@@ -76,7 +76,7 @@ InvalidParameterException extends RuntimeException {
      * @param throwable - initial input cause instance {@link Throwable}
      * @return {@link InvalidParameterException}
      */
-    public static final InvalidParameterException throwInvalidParameter(final String message, final Throwable throwable) {
+    public static InvalidParameterException throwInvalidParameter(final String message, final Throwable throwable) {
         throw new InvalidParameterException(message, throwable);
     }
 
@@ -86,7 +86,7 @@ InvalidParameterException extends RuntimeException {
      * @param message - initial input raw message {@link String}
      * @return {@link InvalidParameterException}
      */
-    public static final InvalidParameterException throwInvalidParameter(final String message) {
+    public static InvalidParameterException throwInvalidParameter(final String message) {
         throw new InvalidParameterException(message);
     }
 }

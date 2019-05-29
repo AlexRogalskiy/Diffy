@@ -78,7 +78,7 @@ public class MethodInvocationException extends RuntimeException {
      * @param throwable  - initial input cause instance {@link Throwable}
      * @return {@link MethodInvocationException}
      */
-    public static final MethodInvocationException throwMethodInvocation(final String methodName, final Object target, final Throwable throwable) {
+    public static MethodInvocationException throwMethodInvocation(final String methodName, final Object target, final Throwable throwable) {
         throw new MethodInvocationException(formatMessage("ERROR: cannot invoke method = {%s} on target = {%s}", methodName, target), throwable);
     }
 }
