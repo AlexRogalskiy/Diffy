@@ -39,7 +39,7 @@ public interface EventListener<T> extends Serializable {
      * @return {@link Class} of {@link EventListener}
      */
     default Class<? extends EventListener<T>> getListenerType(final EventListener<T> listener) {
-        for (final EventListener<T> listenerType : getSupportedListeners()) {
+        for (final EventListener<T> listenerType : this.getSupportedListeners()) {
             if (listenerType.getClass().isAssignableFrom(listener.getClass())) {
                 return (Class<? extends EventListener<T>>) listenerType.getClass();
             }

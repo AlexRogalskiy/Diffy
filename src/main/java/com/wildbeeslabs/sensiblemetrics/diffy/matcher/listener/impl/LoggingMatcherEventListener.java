@@ -89,22 +89,12 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
     }
 
     /**
-     * Returns {@link MatcherEventListener} instance
-     *
-     * @param <T> type of input element to be matched by operation
-     * @return {@link MatcherEventListener} instance
-     */
-    public static <T> MatcherEventListener<T> getInstance() {
-        return INSTANCE;
-    }
-
-    /**
      * Returns {@link List} of supported {@link EventListener}s
      *
      * @return {@link List} of supported {@link EventListener}s
      */
     @Override
     public List<? extends EventListener<T>> getSupportedListeners() {
-        return asList((EventListener<T>) getInstance());
+        return asList((EventListener<T>) INSTANCE);
     }
 }

@@ -47,6 +47,10 @@ import static java.util.Arrays.asList;
 @ToString
 public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
     /**
+     * Default {@link MatcherEventListener} instance
+     */
+    public static final MatcherEventListener INSTANCE = new DefaultMatcherEventListener<>();
+    /**
      * Default {@link List} collection of failed {@link Matcher}
      */
     private final List<Matcher<? super T>> failedMatchers;
@@ -104,6 +108,6 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      */
     @Override
     public List<? extends EventListener<T>> getSupportedListeners() {
-        return asList((EventListener<T>) new DefaultMatcherEventListener<>());
+        return asList((EventListener<T>) INSTANCE);
     }
 }
