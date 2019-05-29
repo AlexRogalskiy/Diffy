@@ -24,59 +24,55 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
-
 /**
- * Reject {@link RuntimeException} implementation
+ * Value matcher {@link RuntimeException} implementation
  */
-@NoArgsConstructor
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RejectMatcherException extends RuntimeException {
+public class ValueMatcherException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -6733607419898881202L;
+    private static final long serialVersionUID = -4545255095576355819L;
 
     /**
-     * Reject matcher exception constructor with initial input message
-     *
-     * @param message - initial input message {@link String}
+     * Default expected value
      */
-    public RejectMatcherException(final String message) {
+    private final String expected;
+    /**
+     * Default actual value
+     */
+    private final String actual;
+
+    /**
+     * Create new ValueMatcherException
+     *
+     * @param message  description of exception
+     * @param expected value expected by ValueMatcher
+     * @param actual   value being tested by ValueMatcher
+     */
+    public ValueMatcherException(final String message, final String expected, final String actual) {
         super(message);
+        this.expected = expected;
+        this.actual = actual;
     }
 
     /**
-     * Reject matcher exception constructor with initial input {@link Throwable}
+     * Create new ValueMatcherException
      *
-     * @param cause - initial input {@link Throwable}
+     * @param message  description of exception
+     * @param cause    cause of ValueMatcherException
+     * @param expected value expected by ValueMatcher
+     * @param actual   value being tested by ValueMatcher
      */
-    public RejectMatcherException(final Throwable cause) {
-        super(cause);
-    }
-
-    /**
-     * Reject matcher exception constructor with initial input message and {@link Throwable}
-     *
-     * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
-     */
-    public RejectMatcherException(final String message, final Throwable cause) {
+    public ValueMatcherException(final String message, final Throwable cause, final String expected, final String actual) {
         super(message, cause);
-    }
-
-    /**
-     * Returns {@link RejectMatcherException} by input parameters
-     *
-     * @param target - initial input target {@link Object}
-     * @return {@link RejectMatcherException}
-     */
-    public static final RejectMatcherException throwReject(final Object target) {
-        throw new RejectMatcherException(formatMessage("ERROR: cannot process target: {%s}", target));
+        this.expected = expected;
+        this.actual = actual;
     }
 }

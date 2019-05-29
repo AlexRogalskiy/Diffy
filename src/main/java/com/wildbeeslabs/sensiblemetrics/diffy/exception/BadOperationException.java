@@ -75,7 +75,7 @@ public class BadOperationException extends RuntimeException {
      * @param throwable - initial input cause instance {@link Throwable}
      * @return {@link BadOperationException}
      */
-    public static BadOperationException throwBadOperation(final String message, final Throwable throwable) {
+    public static final BadOperationException throwBadOperation(final String message, final Throwable throwable) {
         throw new BadOperationException(message, throwable);
     }
 
@@ -85,7 +85,7 @@ public class BadOperationException extends RuntimeException {
      * @param message - initial input raw message {@link String}
      * @return {@link BadOperationException}
      */
-    public static BadOperationException throwBadOperation(final String message) {
+    public static final BadOperationException throwBadOperation(final String message) {
         throw new BadOperationException(message);
     }
 }

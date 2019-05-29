@@ -37,6 +37,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.hamcrest.core.IsEqual;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
@@ -71,6 +72,10 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
      * Default date format pattern
      */
     private final String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+    /**
+     * Default number format pattern
+     */
+    private static final String DEFAULT_NUMBER_REGEX = "-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?";
     /**
      * Default {@link DeliveryInfo} gid prefix
      */
@@ -204,6 +209,36 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertFalse(deliveryInfoMatcher.and(deliveryInfoMatcher2).and(deliveryInfoMatcher3).and(deliveryInfoMatcher4).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test valid delivery info entity by regex pattern")
+    public void test_deliveryInfo_by_validRegexMatcher() {
+        // given
+        getDeliveryInfo().setType(DEFAULT_TYPE);
+        getDeliveryInfo().setGid("5678");
+
+        // when
+        final Matcher<DeliveryInfo> deliveryInfoMatcher = DeliveryInfoMatcherUtils.withType(DEFAULT_TYPE);
+        final TypeSafeMatcher<DeliveryInfo> deliveryInfoMatcher2 = value -> Objects.nonNull(value) && StringUtils.trim(value.getGid()).matches(DEFAULT_NUMBER_REGEX);
+
+        // then
+        assertTrue(deliveryInfoMatcher.and(deliveryInfoMatcher2).matches(getDeliveryInfo()));
+    }
+
+    @Test
+    @DisplayName("Test invalid delivery info entity by regex pattern")
+    public void test_deliveryInfo_by_invalidRegexMatcher() {
+        // given
+        getDeliveryInfo().setType(DEFAULT_TYPE);
+        getDeliveryInfo().setGid("5678d");
+
+        // when
+        final Matcher<DeliveryInfo> deliveryInfoMatcher = DeliveryInfoMatcherUtils.withType(DEFAULT_TYPE);
+        final TypeSafeMatcher<DeliveryInfo> deliveryInfoMatcher2 = value -> Objects.nonNull(value) && StringUtils.trim(value.getGid()).matches(DEFAULT_NUMBER_REGEX);
+
+        // then
+        assertFalse(deliveryInfoMatcher.and(deliveryInfoMatcher2).matches(getDeliveryInfo()));
     }
 
     @Test

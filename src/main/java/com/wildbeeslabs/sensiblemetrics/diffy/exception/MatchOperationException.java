@@ -77,7 +77,7 @@ public class MatchOperationException extends RuntimeException {
      * @param throwable - initial input cause instance {@link Throwable}
      * @return {@link MatchOperationException}
      */
-    public static MatchOperationException throwIncorrectMatch(final Object target, final Throwable throwable) {
+    public static final MatchOperationException throwIncorrectMatch(final Object target, final Throwable throwable) {
         throw new MatchOperationException(formatMessage("ERROR: cannot process match operation on target = {%s}", target), throwable);
     }
 }

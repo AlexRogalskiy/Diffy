@@ -21,42 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
-
-import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * {@link MatcherEventListener} listener declaration
- *
- * @param <T> type of input element to be matched by operation
+ * Matcher status type {@link Enum}
  */
-public interface MatcherSelectable<T> extends Serializable {
+public enum MatcherStatusType {
+    ENABLE,
+    DISABLE;
 
     /**
-     * Removes {@link MatcherEventListener} from current {@link Matcher}
+     * Returns {@link MatcherStatusType} by input value
      *
-     * @param listener - initial input {@link MatcherEventListener} to remove
+     * @param value - initial input value to match by
+     * @return {@link MatcherStatusType}
      */
-    <E extends MatcherEventListener<T>> void removeListener(final E listener);
+    public static MatcherStatusType from(final boolean value) {
+        return value ? ENABLE : DISABLE;
+    }
 
     /**
-     * Adds {@link MatcherEventListener} to current {@link Matcher}
+     * Return binary flag based on current status {@code ENABLE}
      *
-     * @param listener - initial input {@link MatcherEventListener} to add
+     * @return true - if current status is {@code ENABLE}, false - otherwise
      */
-    <E extends MatcherEventListener<T>> void addListener(final E listener);
+    public boolean isEnable() {
+        return this.equals(ENABLE);
+    }
 
     /**
-     * Adds {@link Iterable} collection of {@link MatcherEventListener}s to current {@link Matcher}
+     * Returns binary flag based on input {@link MatcherStatusType}es comparison
      *
-     * @param listeners - initial input {@link Iterable} collection of {@link MatcherEventListener}s to add
+     * @param s1 - initial input {@link MatcherStatusType} to compare with
+     * @param s2 - initial input {@link MatcherStatusType} to compare by
+     * @return true - if {@link MatcherStatusType} are equal, false - otherwise
      */
-    <E extends MatcherEventListener<T>> void addListeners(final Iterable<E> listeners);
-
-    /**
-     * Removes all {@link MatcherEventListener}s from current {@link Matcher}
-     */
-    void removeAllListeners();
+    public static boolean equals(final MatcherStatusType s1, final MatcherStatusType s2) {
+        return Objects.equals(s1, s2);
+    }
 }

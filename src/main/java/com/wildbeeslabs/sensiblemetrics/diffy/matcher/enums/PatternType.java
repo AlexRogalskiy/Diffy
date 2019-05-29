@@ -23,46 +23,32 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.Objects;
 
 /**
- * Matcher mode type {@link Enum} to process malformed and unexpected data
- * <p>
- * 2 basic implementations are provided:
- * <ul>
- * <li>{@link #STRICT} return "true" on any occurrence</li>
- * <li>{@link #SILENT} ignores any problem</li>
- * </ul>
+ * Pattern type {@link Enum}
  */
-@Getter
-@RequiredArgsConstructor
-public enum MatcherModeType {
-    STRICT(MatcherStatusType.ENABLE),
-    SILENT(MatcherStatusType.DISABLE);
+public enum PatternType {
+    STATIC,
+    DYNAMIC;
 
     /**
-     * Binary flag based on current status
-     */
-    private final MatcherStatusType status;
-
-    /**
-     * Return binary flag based on current mode {@code STRICT}
+     * Return binary flag based on current mode {@code STATIC}
      *
-     * @return true - if current mode is {@code STRICT}, false - otherwise
+     * @return true - if current mode is {@code STATIC}, false - otherwise
      */
-    public boolean isStrict() {
-        return this.equals(STRICT);
+    public boolean isStatic() {
+        return this.equals(STATIC);
     }
 
     /**
-     * Returns binary flag based on current mode status {@code ENABLE}
+     * Returns binary flag based on input {@link PatternType}es comparison
      *
-     * @return true - if current mode status is {@code ENABLE}, false - otherwise
+     * @param p1 - initial input {@link PatternType} to compare with
+     * @param p2 - initial input {@link PatternType} to compare by
+     * @return true - if {@link PatternType} are equal, false - otherwise
      */
-    public boolean isEnable() {
-        return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
+    public static boolean equals(final PatternType p1, final PatternType p2) {
+        return Objects.equals(p1, p2);
     }
 }

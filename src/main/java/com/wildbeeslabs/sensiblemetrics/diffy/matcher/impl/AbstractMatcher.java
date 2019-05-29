@@ -27,7 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherSelectable;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherAdapter;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,7 +46,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherSelectable<T>, MatcherHandler<T> {
+public abstract class AbstractMatcher<T> implements Matcher<T>, MatcherAdapter<T>, MatcherHandler<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability

@@ -77,6 +77,7 @@ public class MapperUtils {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.disable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 
         objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
