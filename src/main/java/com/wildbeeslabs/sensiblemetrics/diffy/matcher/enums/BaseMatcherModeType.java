@@ -23,47 +23,20 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Objects;
-
 /**
- * Matcher mode type {@link Enum} to process malformed and unexpected data
- * <p>
- * 2 basic implementations are provided:
- * <ul>
- * <li>{@link #STRICT} return "true" on any occurrence</li>
- * <li>{@link #SILENT} ignores any problem</li>
- * </ul>
+ * Base matcher mode type interface declaration
  */
-@Getter
-@RequiredArgsConstructor
-public enum MatcherModeType implements BaseMatcherModeType {
-    STRICT(MatcherStatusType.ENABLE),
-    SILENT(MatcherStatusType.DISABLE);
+public interface BaseMatcherModeType {
 
     /**
-     * Binary flag based on current status
+     * A description that consumes input but does nothing.
      */
-    private final MatcherStatusType status;
-
-    /**
-     * Return binary flag based on current mode {@code STRICT}
-     *
-     * @return true - if current mode is {@code STRICT}, false - otherwise
-     */
-    public boolean isStrict() {
-        return this.equals(STRICT);
-    }
+    BaseMatcherModeType DEFAULT_MATCHER_MODE_TYPE = () -> true;
 
     /**
      * Returns binary flag based on current mode status {@code ENABLE}
      *
      * @return true - if current mode status is {@code ENABLE}, false - otherwise
      */
-    @Override
-    public boolean isEnable() {
-        return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
-    }
+    boolean isEnable();
 }

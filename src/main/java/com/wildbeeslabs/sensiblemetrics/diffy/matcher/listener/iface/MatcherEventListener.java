@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
 
@@ -33,34 +34,34 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
  */
 public interface MatcherEventListener<T> extends EventListener<T> {
     /**
-     * {@link MatcherEventListener} on start {@link MatcherEvent}
+     * {@link MatcherEventListener} on start {@link BaseMatcherEvent}
      *
-     * @param event - initial input {@link MatcherEvent}
+     * @param event - initial input event {@code E}
      */
-    default <E extends MatcherEvent<T>> void onStart(final E event) {
+    default <E extends BaseMatcherEvent<T>> void onStart(final E event) {
     }
 
     /**
-     * {@link MatcherEventListener} on success {@link MatcherEvent}
+     * {@link MatcherEventListener} on success {@link BaseMatcherEvent}
      *
-     * @param event - initial input {@link MatcherEvent}
+     * @param event - initial input event {@code E}
      */
-    default <E extends MatcherEvent<T>> void onSuccess(final E event) {
+    default <E extends BaseMatcherEvent<T>> void onSuccess(final E event) {
     }
 
     /**
-     * {@link MatcherEventListener} on error {@link MatcherEvent}
+     * {@link MatcherEventListener} on error {@link BaseMatcherEvent}
      *
-     * @param event - initial input {@link MatcherEvent}
+     * @param event - initial input event {@code E}
      */
-    default <E extends MatcherEvent<T>> void onError(final E event) {
+    default <E extends BaseMatcherEvent<T>> void onError(final E event) {
     }
 
     /**
-     * {@link MatcherEventListener} on complete {@link MatcherEvent}
+     * {@link MatcherEventListener} on complete {@link BaseMatcherEvent}
      *
-     * @param event - initial input {@link MatcherEvent}
+     * @param event - initial input event {@code E}
      */
-    default <E extends MatcherEvent<T>> void onComplete(final E event) {
+    default <E extends BaseMatcherEvent<T>> void onComplete(final E event) {
     }
 }

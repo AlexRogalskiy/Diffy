@@ -23,47 +23,37 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Objects;
+import java.util.Arrays;
 
 /**
- * Matcher mode type {@link Enum} to process malformed and unexpected data
- * <p>
- * 2 basic implementations are provided:
- * <ul>
- * <li>{@link #STRICT} return "true" on any occurrence</li>
- * <li>{@link #SILENT} ignores any problem</li>
- * </ul>
+ * Matcher event type {@link Enum}
  */
-@Getter
-@RequiredArgsConstructor
-public enum MatcherModeType implements BaseMatcherModeType {
-    STRICT(MatcherStatusType.ENABLE),
-    SILENT(MatcherStatusType.DISABLE);
+public enum MatcherEventType {
+    MATCH_START,
+    MATCH_SUCCESS,
+    MATCH_FAILURE,
+    MATCH_COMPLETE;
 
     /**
-     * Binary flag based on current status
-     */
-    private final MatcherStatusType status;
-
-    /**
-     * Return binary flag based on current mode {@code STRICT}
+     * Returns {@link MatcherEventType} by input binary value
      *
-     * @return true - if current mode is {@code STRICT}, false - otherwise
+     * @param value - initial input binary value
+     * @return {@link MatcherEventType}
      */
-    public boolean isStrict() {
-        return this.equals(STRICT);
+    public static MatcherEventType fromBoolean(final boolean value) {
+        return value ? MATCH_SUCCESS : MATCH_FAILURE;
     }
 
     /**
-     * Returns binary flag based on current mode status {@code ENABLE}
+     * Returns {@link MatcherEventType} by input event type {@link String}
      *
-     * @return true - if current mode status is {@code ENABLE}, false - otherwise
+     * @param name - initial input event type {@link String}
+     * @return {@link MatcherEventType}
      */
-    @Override
-    public boolean isEnable() {
-        return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
+    public static MatcherEventType fromName(final String name) {
+        return Arrays.stream(values())
+            .filter(type -> type.name().equalsIgnoreCase(name))
+            .findFirst()
+            .orElse(null);
     }
 }

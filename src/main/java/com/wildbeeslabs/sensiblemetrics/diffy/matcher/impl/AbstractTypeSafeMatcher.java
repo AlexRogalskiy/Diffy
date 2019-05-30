@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
@@ -94,22 +95,22 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     }
 
     /**
-     * Returns binary flag depending on initial argument value by type safe comparison
+     * Returns binary flag depending on initial argument value {@code T} type safe comparison
      *
-     * @param value - initial input argument value
-     * @return true - if initial value matches input argument, false - otherwise
+     * @param value - initial input argument value {@code T}
+     * @return true - if initial value matches input argument {@code T}, false - otherwise
      */
     @Override
     public final boolean matches(final T value) {
         boolean result = false;
         try {
-            this.handleEvent(MatcherEvent.of(this, value, MatcherEvent.EventType.MATCH_START));
+            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_START));
             result = this.clazz.isInstance(value) && this.matchesSafe(value);
             this.handleEvent(MatcherEvent.of(this, value, result));
         } catch (RuntimeException e) {
             MatchOperationException.throwIncorrectMatch(value, e);
         }
-        this.handleEvent(MatcherEvent.of(this, value, MatcherEvent.EventType.MATCH_COMPLETE));
+        this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_COMPLETE));
         return result;
     }
 }

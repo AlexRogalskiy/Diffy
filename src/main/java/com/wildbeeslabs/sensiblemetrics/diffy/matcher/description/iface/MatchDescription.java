@@ -93,6 +93,11 @@ public interface MatchDescription extends Serializable {
     final class EmptyMatchDescription implements MatchDescription {
 
         /**
+         * Default explicit serialVersionUID for interoperability
+         */
+        private static final long serialVersionUID = 4137851868640666192L;
+
+        /**
          * Returns current empty description {@link MatchDescription}
          *
          * @param value - initial input string value to be appended {@link String}

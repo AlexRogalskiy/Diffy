@@ -33,7 +33,7 @@ import java.util.List;
  */
 public interface EventListener<T> extends Serializable {
     /**
-     * Returns {@link Class} of {@link EventListener} by input {@link EventListener} instance
+     * Returns {@link Class} of {@link EventListener} by input {@link EventListener}
      *
      * @param listener - initial input {@link EventListener}
      * @return {@link Class} of {@link EventListener}

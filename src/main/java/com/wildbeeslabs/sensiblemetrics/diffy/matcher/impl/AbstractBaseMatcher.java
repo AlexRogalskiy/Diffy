@@ -24,11 +24,10 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherAdapter;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -36,7 +35,7 @@ import lombok.ToString;
 import java.util.*;
 
 /**
- * Abstract matcher implementation
+ * Abstract base matcher implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -46,17 +45,17 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherHandler<T> {
+public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T>, MatcherHandler<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 4127438327874076332L;
+    private static final long serialVersionUID = 1554614973461840605L;
 
     /**
-     * Default {@link List} collection of {@link Matcher}s
+     * Default {@link List} collection of {@link MatcherEventListener}s
      */
-    private final List<Matcher<? super T>> matchers = new ArrayList<>();
+    private final List<MatcherEventListener<T>> listeners = new ArrayList<>();
     /**
      * Default {@link MatcherHandler} implementation
      */
@@ -65,7 +64,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
     /**
      * Default abstract matcher constructor
      */
-    public AbstractDiffMatcher() {
+    public AbstractBaseMatcher() {
         this(null);
     }
 
@@ -74,63 +73,56 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractDiffMatcher(final MatcherHandler<T> handler) {
+    public AbstractBaseMatcher(final MatcherHandler<T> handler) {
         this.handler = Optional.ofNullable(handler).orElse(DefaultMatcherHandler.INSTANCE);
     }
 
     /**
-     * Removes input {@link Iterable} collection of {@link Matcher}s from current {@link List} collection of {@link Matcher}s
+     * Removes {@link MatcherEventListener} from current {@link List} collection of {@link MatcherEventListener}s
      *
-     * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
+     * @param listener - initial input {@link MatcherEventListener} to remove
      */
-    public AbstractDiffMatcher<T> exclude(final Iterable<Matcher<? super T>> matchers) {
-        Optional.ofNullable(matchers)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::exclude);
-        return this;
-    }
-
-    /**
-     * Removes input {@link Matcher} from current {@link List} collection of {@link Matcher}s
-     *
-     * @param matcher - initial input {@link Matcher} to remove
-     */
-    public AbstractDiffMatcher<T> exclude(final Matcher<? super T> matcher) {
-        if (Objects.nonNull(matcher)) {
-            this.getMatchers().remove(matcher);
+    @Override
+    public <E extends MatcherEventListener<T>> void removeListener(final E listener) {
+        if (Objects.nonNull(listener)) {
+            this.getListeners().remove(listener);
         }
-        return this;
     }
 
     /**
-     * Adds input {@link Iterable} collection of {@link Matcher}s to current {@link List} collection
+     * Adds {@link MatcherEventListener} to current {@link List} collection of {@link MatcherEventListener}s
      *
-     * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
+     * @param listener - initial input {@link MatcherEventListener} to add
      */
-    public AbstractDiffMatcher<T> include(final Iterable<Matcher<? super T>> matchers) {
-        this.getMatchers().clear();
-        Optional.ofNullable(matchers)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::include);
-        return this;
-    }
-
-    /**
-     * Adds input {@link Matcher} to current {@link List} collection of {@link Matcher}s
-     *
-     * @param matcher - initial input matcher {@link Matcher} to add
-     */
-    public AbstractDiffMatcher<T> include(final Matcher<? super T> matcher) {
-        if (Objects.nonNull(matcher)) {
-            this.getMatchers().add(matcher);
+    @Override
+    public <E extends MatcherEventListener<T>> void addListener(final E listener) {
+        if (Objects.nonNull(listener)) {
+            this.getListeners().add(listener);
         }
-        return this;
     }
 
     /**
-     * {@link MatcherEvent} handler operator
+     * Adds {@link Iterable} collection of {@link MatcherEventListener}s to current {@link List} collection of {@link MatcherEventListener}s
      *
-     * @param event - initial input {@link MatcherEvent} to handle
+     * @param listeners - initial input {@link MatcherEventListener}s to add
+     */
+    @Override
+    public <E extends MatcherEventListener<T>> void addListeners(final Iterable<E> listeners) {
+        Optional.ofNullable(listeners).orElseGet(Collections::emptyList).forEach(this::addListener);
+    }
+
+    /**
+     * Removes all {@link MatcherEventListener}s from current {@link List} collection of {@link MatcherEventListener}s
+     */
+    @Override
+    public void removeAllListeners() {
+        this.getListeners().clear();
+    }
+
+    /**
+     * {@link BaseMatcherEvent} handler by input event {@code E}
+     *
+     * @param event - initial input event {@link E} to handle
      */
     @Override
     public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {

@@ -24,64 +24,55 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherEventType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 /**
- * Matcher event implementation
+ * Base matcher event implementation
  *
  * @param <T> type of input element to be matched by operation
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class MatcherEvent<T> extends BaseMatcherEvent<T> {
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
+public abstract class BaseMatcherEvent<T> implements Serializable {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 1178474426881849360L;
+    private static final long serialVersionUID = 6800879300758322485L;
 
     /**
-     * Default matchable value {@code T}
+     * Default {@link BaseMatcher}
      */
-    private final T value;
+    private final BaseMatcher<T> matcher;
+    /**
+     * Default {@link MatcherEventType}
+     */
+    private final MatcherEventType type;
 
     /**
-     * Default matcher event constructor by input parameters
+     * Returns binary flag based on current {@link MatcherEventType} {@code MATCH_SUCCESS}
      *
-     * @param matcher - initial input {BiMatcher}
-     * @param value   - initial input matchable {@code T}
-     * @param type    - initial input event type {@link MatcherEventType}
+     * @return true - if current {@link MatcherEventType} is {@code MATCH_SUCCESS}, false - otherwise
      */
-    public MatcherEvent(final Matcher<T> matcher, final T value, final MatcherEventType type) {
-        super(matcher, type);
-        this.value = value;
+    public boolean isSuccess() {
+        return Objects.equals(this.getType(), MatcherEventType.MATCH_SUCCESS);
     }
 
     /**
-     * Creates new {@link MatcherEvent}
+     * Returns binary flag based on current {@link MatcherEventType} {@code MATCH_FAILURE}
      *
-     * @param matcher - initial input {@link Matcher}
-     * @param value   - initial input matchable {@code T}
-     * @param status  - initial input match status
-     * @return {@link MatcherEvent}
+     * @return true - if current {@link MatcherEventType} is {@code MATCH_FAILURE}, false - otherwise
      */
-    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final boolean status) {
-        return of(matcher, value, MatcherEventType.fromBoolean(status));
-    }
-
-    /**
-     * Creates new {@link MatcherEvent}
-     *
-     * @param matcher - initial input {@link Matcher}
-     * @param value   - initial input matchable {@code T}
-     * @param type    - initial input event type {@link MatcherEventType}
-     * @return {@link MatcherEvent}
-     */
-    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final MatcherEventType type) {
-        return new MatcherEvent(matcher, value, type);
+    public boolean isFailure() {
+        return Objects.equals(this.getType(), MatcherEventType.MATCH_FAILURE);
     }
 }

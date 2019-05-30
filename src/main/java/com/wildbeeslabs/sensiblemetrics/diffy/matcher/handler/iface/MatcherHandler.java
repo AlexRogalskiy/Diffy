@@ -23,11 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 
 /**
- * {@link MatcherEventListener} listener declaration
+ * Matcher handler declaration
  *
  * @param <T> type of input element to be handled by operation
  */
@@ -35,9 +34,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEven
 public interface MatcherHandler<T> {
 
     /**
-     * {@link MatcherEvent} handler
+     * {@link BaseMatcherEvent} handler by input event {@code E}
      *
-     * @param event - initial input {@link MatcherEvent} to handle
+     * @param event - initial input event {@link E} to handle
      */
-    void handleEvent(final MatcherEvent<T> event);
+    <E extends BaseMatcherEvent<T>> void handleEvent(final E event);
 }

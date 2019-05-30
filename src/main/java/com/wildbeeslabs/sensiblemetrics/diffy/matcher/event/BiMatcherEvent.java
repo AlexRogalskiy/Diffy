@@ -24,64 +24,72 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherEventType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Matcher event implementation
+ * Binary matcher event implementation
  *
  * @param <T> type of input element to be matched by operation
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MatcherEvent<T> extends BaseMatcherEvent<T> {
+public class BiMatcherEvent<T> extends BaseMatcherEvent<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 1178474426881849360L;
+    private static final long serialVersionUID = 5500034904779767930L;
 
     /**
-     * Default matchable value {@code T}
+     * Default first matchable {@code T}
      */
-    private final T value;
+    private final T first;
+    /**
+     * Default last matchable {@code T}
+     */
+    private final T last;
 
     /**
-     * Default matcher event constructor by input parameters
+     * Default binary matcher event constructor by input parameters
      *
      * @param matcher - initial input {BiMatcher}
-     * @param value   - initial input matchable {@code T}
+     * @param first   - initial input first matchable {@code T}
+     * @param last    - initial input last matchable {@code T}
      * @param type    - initial input event type {@link MatcherEventType}
      */
-    public MatcherEvent(final Matcher<T> matcher, final T value, final MatcherEventType type) {
+    public BiMatcherEvent(final BiMatcher<T> matcher, final T first, final T last, final MatcherEventType type) {
         super(matcher, type);
-        this.value = value;
+        this.first = first;
+        this.last = last;
     }
 
     /**
-     * Creates new {@link MatcherEvent}
+     * Creates new {@link BiMatcherEvent}
      *
-     * @param matcher - initial input {@link Matcher}
-     * @param value   - initial input matchable {@code T}
+     * @param matcher - initial input {@link BiMatcher}
+     * @param first   - initial input first matchable {@code T}
+     * @param last    - initial input last matchable {@code T}
      * @param status  - initial input match status
-     * @return {@link MatcherEvent}
+     * @return {@link BiMatcherEvent}
      */
-    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final boolean status) {
-        return of(matcher, value, MatcherEventType.fromBoolean(status));
+    public static <T> BiMatcherEvent<T> of(final BiMatcher<T> matcher, final T first, final T last, final boolean status) {
+        return of(matcher, first, last, MatcherEventType.fromBoolean(status));
     }
 
     /**
-     * Creates new {@link MatcherEvent}
+     * Creates new {@link BiMatcherEvent}
      *
-     * @param matcher - initial input {@link Matcher}
-     * @param value   - initial input matchable {@code T}
+     * @param matcher - initial input {@link BiMatcher}
+     * @param first   - initial input first matchable {@code T}
+     * @param last    - initial input last matchable {@code T}
      * @param type    - initial input event type {@link MatcherEventType}
-     * @return {@link MatcherEvent}
+     * @return {@link BiMatcherEvent}
      */
-    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final MatcherEventType type) {
-        return new MatcherEvent(matcher, value, type);
+    public static <T> BiMatcherEvent<T> of(final BiMatcher<T> matcher, final T first, final T last, final MatcherEventType type) {
+        return new BiMatcherEvent(matcher, first, last, type);
     }
 }

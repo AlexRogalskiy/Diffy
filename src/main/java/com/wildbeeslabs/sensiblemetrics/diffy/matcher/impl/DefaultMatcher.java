@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Basic {@link Matcher} implementation
+ * Default {@link Matcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -39,15 +39,21 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode
 @ToString
-public final class BasicMatcher<T> implements Matcher<T> {
+public final class DefaultMatcher<T> implements Matcher<T> {
+
     /**
-     * Filter that matches all metrics.
+     * Default explicit serialVersionUID for interoperability
      */
-    public static final Matcher MATCH_ALL = new BasicMatcher<>(true);
+    private static final long serialVersionUID = -4225822605560867574L;
+
     /**
-     * Filter that does not match any metrics.
+     * {@link Matcher} filter that matches all metrics
      */
-    public static final Matcher MATCH_NONE = new BasicMatcher<>(false);
+    public static final Matcher MATCH_ALL = new DefaultMatcher<>(true);
+    /**
+     * {@link Matcher} filter that does not match any metrics
+     */
+    public static final Matcher MATCH_NONE = new DefaultMatcher<>(false);
 
     /**
      * Default boolean match flag
@@ -56,19 +62,22 @@ public final class BasicMatcher<T> implements Matcher<T> {
 
     /**
      * Creates a new instance with a boolean indicating whether it should
-     * always match or always fail.
+     * always match or always fail
      *
      * @param match should this filter match?
      */
-    public BasicMatcher(final boolean match) {
+    public DefaultMatcher(final boolean match) {
         this.match = match;
     }
 
     /**
-     * {@inheritDoc}
+     * Returns binary flag by initial argument {@code T} match comparison
+     *
+     * @param value - initial input argument value to be matched {@code T}
+     * @return true - if initial value matches input argument, false - otherwise
      */
     @Override
     public boolean matches(final T value) {
-        return match;
+        return this.match;
     }
 }

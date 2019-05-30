@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValueMatcherException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.PatternType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.ValueMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractBiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -36,7 +37,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * Custom regular expression {@link ValueMatcher} implementation
+ * Custom regular expression {@link BiMatcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -44,9 +45,14 @@ import java.util.regex.PatternSyntaxException;
  * @since 1.0
  */
 @Data
-@EqualsAndHashCode
-@ToString
-public class RegexValueMatcher<T> implements ValueMatcher<T> {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class RegexValueMatcher<T> extends AbstractBiMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -8015934407469822842L;
 
     /**
      * Default expected pattern {@link Pattern}
@@ -71,6 +77,12 @@ public class RegexValueMatcher<T> implements ValueMatcher<T> {
         this.expectedPattern = this.getPattern(pattern);
     }
 
+    /**
+     * Returns {@link Pattern} by input pattern {@link String}
+     *
+     * @param pattern - initial input pattern {@link String}
+     * @return {@link Pattern}
+     */
     private Pattern getPattern(final String pattern) {
         try {
             return Pattern.compile(pattern);
@@ -80,6 +92,13 @@ public class RegexValueMatcher<T> implements ValueMatcher<T> {
         return null;
     }
 
+    /**
+     * Compares the two provided objects whether they are equal
+     *
+     * @param actual   - initial input actual value {@code T}
+     * @param expected - initial input expected value {@code T}
+     * @return true - if objects {@code T} are equal, false - otherwise
+     */
     @Override
     public boolean matches(final T actual, final T expected) {
         final String actualString = actual.toString();
@@ -95,10 +114,20 @@ public class RegexValueMatcher<T> implements ValueMatcher<T> {
         return true;
     }
 
+    /**
+     * Returns binary flag by expected pattern static pattern
+     *
+     * @return true - if expected pattern is static, false - otherwise
+     */
     private boolean isStaticPattern() {
         return Objects.nonNull(this.expectedPattern);
     }
 
+    /**
+     * Returns {@link PatternType} by current static pattern flag
+     *
+     * @return {@link PatternType}
+     */
     private PatternType getPatternType() {
         return this.isStaticPattern() ? PatternType.STATIC : PatternType.DYNAMIC;
     }

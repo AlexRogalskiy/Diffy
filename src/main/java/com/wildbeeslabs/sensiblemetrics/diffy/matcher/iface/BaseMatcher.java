@@ -21,45 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BaseMatcherModeType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BiMatcherModeType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Abstract {@link Matcher} implementation
+ * Base matcher interface declaration
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public abstract class AbstractMatcher<T> extends AbstractBaseMatcher<T> implements Matcher<T> {
+public interface BaseMatcher<T> extends Serializable {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Returns {@link List} of {@link MatcherEventListener}
+     *
+     * @return {@link List} of {@link MatcherEventListener}
      */
-    private static final long serialVersionUID = 4127438327874076332L;
-
-    /**
-     * Default abstract matcher constructor
-     */
-    public AbstractMatcher() {
-        this(null);
+    default <E extends MatcherEventListener<T>> List<E> getListeners() {
+        return Collections.emptyList();
     }
 
     /**
-     * Default abstract matcher constructor with input {@link MatcherHandler}
+     * Returns {@link BiMatcherModeType}
      *
-     * @param handler - initial input {@link MatcherHandler}
+     * @return {@link BiMatcherModeType}
      */
-    public AbstractMatcher(final MatcherHandler<T> handler) {
-        super(handler);
+    default BaseMatcherModeType getMode() {
+        return BaseMatcherModeType.DEFAULT_MATCHER_MODE_TYPE;
+    }
+
+    /**
+     * Returns {@link MatchDescription}
+     *
+     * @return {@link MatchDescription}
+     */
+    default MatchDescription getDescription() {
+        return MatchDescription.EMPTY_MATCH_DESCRIPTION;
     }
 }

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
@@ -54,7 +55,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends MatcherEvent<T>> void onStart(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onStart(final E event) {
         log.info("{}, on start event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
 
@@ -64,7 +65,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends MatcherEvent<T>> void onSuccess(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onSuccess(final E event) {
         log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
 
@@ -74,7 +75,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends MatcherEvent<T>> void onError(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onError(final E event) {
         log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
 
@@ -84,7 +85,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends MatcherEvent<T>> void onComplete(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onComplete(final E event) {
         log.info("{}, on complete event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
 

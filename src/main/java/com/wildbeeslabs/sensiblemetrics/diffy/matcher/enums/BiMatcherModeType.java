@@ -39,49 +39,12 @@ import java.util.Objects;
  */
 @Getter
 @RequiredArgsConstructor
-public enum ValueMatcherModeType {
+public enum BiMatcherModeType implements BaseMatcherModeType {
+
     STRICT(MatcherStatusType.ENABLE, true),
     SILENT(MatcherStatusType.DISABLE, false),
     LENIENT(MatcherStatusType.DISABLE, true),
     SEALED(MatcherStatusType.ENABLE, false);
-
-    /**
-     * Matcher status type {@link Enum}
-     */
-    public enum MatcherStatusType {
-        ENABLE,
-        DISABLE;
-
-        /**
-         * Returns {@link MatcherStatusType} by input value
-         *
-         * @param value - initial input value to match by
-         * @return {@link MatcherStatusType}
-         */
-        public static MatcherStatusType from(final boolean value) {
-            return value ? ENABLE : DISABLE;
-        }
-
-        /**
-         * Return binary flag based on current status {@code ENABLE}
-         *
-         * @return true - if current status is {@code ENABLE}, false - otherwise
-         */
-        public boolean isEnable() {
-            return this.equals(ENABLE);
-        }
-
-        /**
-         * Returns binary flag based on input {@link MatcherStatusType}es comparison
-         *
-         * @param s1 - initial input {@link MatcherStatusType} to compare with
-         * @param s2 - initial input {@link MatcherStatusType} to compare by
-         * @return true - if {@link MatcherStatusType} are equal, false - otherwise
-         */
-        public static boolean equals(final MatcherStatusType s1, final MatcherStatusType s2) {
-            return Objects.equals(s1, s2);
-        }
-    }
 
     /**
      * {@link MatcherStatusType} status
@@ -106,17 +69,18 @@ public enum ValueMatcherModeType {
      *
      * @return true - if current mode status is {@code ENABLE}, false - otherwise
      */
+    @Override
     public boolean isEnable() {
         return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
     }
 
     /**
-     * Returns {@link ValueMatcherModeType} ordered by input {@link MatcherStatusType}
+     * Returns {@link BiMatcherModeType} ordered by input {@link MatcherStatusType}
      *
      * @param statusType - initial input status type {@link MatcherStatusType}
-     * @return {@link ValueMatcherModeType}
+     * @return {@link BiMatcherModeType}
      */
-    public ValueMatcherModeType byStatusType(final MatcherStatusType statusType) {
+    public BiMatcherModeType byStatusType(final MatcherStatusType statusType) {
         if (statusType.isEnable()) {
             return this.isExtensible() ? STRICT : SEALED;
         }
@@ -124,12 +88,12 @@ public enum ValueMatcherModeType {
     }
 
     /**
-     * Returns {@link ValueMatcherModeType} ordered by input extensibility
+     * Returns {@link BiMatcherModeType} ordered by input extensibility
      *
      * @param extensible - initial input extensible (if true - allows keys in actual that don't appear in expected, false - otherwise)
-     * @return {@link ValueMatcherModeType}
+     * @return {@link BiMatcherModeType}
      */
-    public ValueMatcherModeType byExtensionMode(final boolean extensible) {
+    public BiMatcherModeType byExtensionMode(final boolean extensible) {
         if (extensible) {
             return this.isEnable() ? STRICT : LENIENT;
         }

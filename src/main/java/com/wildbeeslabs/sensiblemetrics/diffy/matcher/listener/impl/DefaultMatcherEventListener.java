@@ -23,7 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
@@ -53,11 +55,11 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
     /**
      * Default {@link List} collection of failed {@link Matcher}
      */
-    private final List<Matcher<? super T>> failedMatchers;
+    private final List<? super BaseMatcher<T>> failedMatchers;
     /**
      * Default {@link List} collection of success {@link Matcher}
      */
-    private final List<Matcher<? super T>> successMatchers;
+    private final List<? super BaseMatcher<T>> successMatchers;
 
     /**
      * Default matcher event listener constructor
@@ -73,7 +75,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends MatcherEvent<T>> void onSuccess(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onSuccess(final E event) {
         if (this.isEnableMode(event)) {
             this.getSuccessMatchers().add(event.getMatcher());
         }
@@ -85,7 +87,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends MatcherEvent<T>> void onError(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onError(final E event) {
         if (this.isEnableMode(event)) {
             this.getFailedMatchers().add(event.getMatcher());
         }
@@ -97,7 +99,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      * @return true - if current matcher mode is enabled, false - otherwise
      */
-    private boolean isEnableMode(final MatcherEvent<? super T> event) {
+    private <E extends BaseMatcherEvent<T>> boolean isEnableMode(final E event) {
         return (Objects.nonNull(event.getMatcher()) && event.getMatcher().getMode().isEnable());
     }
 

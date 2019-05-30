@@ -26,19 +26,15 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherModeType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
- * Matcher interface declaration by input object instance
+ * Matcher interface declaration {@link BaseMatcher}
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -46,10 +42,10 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMes
  * @since 1.0
  */
 @FunctionalInterface
-public interface Matcher<T> extends Serializable {
+public interface Matcher<T> extends BaseMatcher<T> {
 
     /**
-     * Returns binary flag by initial argument match comparison
+     * Returns binary flag by initial argument {@code T} match comparison
      *
      * @param value - initial input argument value to be matched {@code T}
      * @return true - if initial value matches input argument, false - otherwise
@@ -70,17 +66,9 @@ public interface Matcher<T> extends Serializable {
      *
      * @return {@link MatcherModeType}
      */
+    @Override
     default MatcherModeType getMode() {
         return MatcherModeType.STRICT;
-    }
-
-    /**
-     * Returns {@link List} of {@link MatcherEventListener}
-     *
-     * @return {@link List} of {@link MatcherEventListener}
-     */
-    default <E extends MatcherEventListener<T>> List<E> getListeners() {
-        return Collections.emptyList();
     }
 
     /**
@@ -224,7 +212,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of {@link Matcher} collection
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of {@link Matcher}s collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
@@ -244,7 +232,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of {@link Matcher} collection
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of {@link Matcher}s collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
@@ -264,7 +252,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of {@link Matcher} collection
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of {@link Matcher}s collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
@@ -284,7 +272,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of {@link Matcher} collection
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of {@link Matcher}s collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
@@ -304,7 +292,7 @@ public interface Matcher<T> extends Serializable {
     }
 
     /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of {@link Matcher} collection
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of {@link Matcher}s collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator

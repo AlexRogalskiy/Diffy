@@ -53,8 +53,8 @@ public class ValueMatcherException extends RuntimeException {
      * Create new ValueMatcherException
      *
      * @param message  description of exception
-     * @param expected value expected by ValueMatcher
-     * @param actual   value being tested by ValueMatcher
+     * @param expected value expected by BiMatcher
+     * @param actual   value being tested by BiMatcher
      */
     public ValueMatcherException(final String message, final String expected, final String actual) {
         super(message);
@@ -67,8 +67,8 @@ public class ValueMatcherException extends RuntimeException {
      *
      * @param message  description of exception
      * @param cause    cause of ValueMatcherException
-     * @param expected value expected by ValueMatcher
-     * @param actual   value being tested by ValueMatcher
+     * @param expected value expected by BiMatcher
+     * @param actual   value being tested by BiMatcher
      */
     public ValueMatcherException(final String message, final Throwable cause, final String expected, final String actual) {
         super(message, cause);

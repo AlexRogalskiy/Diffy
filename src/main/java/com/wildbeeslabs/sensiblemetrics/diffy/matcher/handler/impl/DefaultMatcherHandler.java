@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,17 +43,17 @@ import java.util.Optional;
 @ToString
 public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
     /**
-     * Default {@link MatcherHandler} instance
+     * Default {@link MatcherHandler}
      */
     public static final MatcherHandler INSTANCE = new DefaultMatcherHandler<>();
 
     /**
-     * {@link MatcherEvent} handler
+     * {@link BaseMatcherEvent} handler by input event {@code E}
      *
-     * @param event - initial input {@link MatcherEvent} to handle
+     * @param event - initial input event {@link E} to handle
      */
     @Override
-    public void handleEvent(final MatcherEvent<T> event) {
+    public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {
         if (Objects.nonNull(event) && event.getMatcher().getMode().isEnable()) {
             Optional.ofNullable(event.getMatcher().getListeners())
                 .orElseGet(Collections::emptyList)
