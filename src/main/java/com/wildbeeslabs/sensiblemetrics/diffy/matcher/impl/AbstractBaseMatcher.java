@@ -78,7 +78,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T>, Match
     }
 
     /**
-     * Removes {@link MatcherEventListener} from current {@link List} collection of {@link MatcherEventListener}s
+     * Removes {@link MatcherEventListener} fromName current {@link List} collection of {@link MatcherEventListener}s
      *
      * @param listener - initial input {@link MatcherEventListener} to remove
      */
@@ -112,7 +112,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T>, Match
     }
 
     /**
-     * Removes all {@link MatcherEventListener}s from current {@link List} collection of {@link MatcherEventListener}s
+     * Removes all {@link MatcherEventListener}s fromName current {@link List} collection of {@link MatcherEventListener}s
      */
     @Override
     public void removeAllListeners() {

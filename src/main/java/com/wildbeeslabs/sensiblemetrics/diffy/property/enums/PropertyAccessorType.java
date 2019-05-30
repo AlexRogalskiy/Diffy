@@ -39,18 +39,15 @@ public enum PropertyAccessorType {
      * {@link #IS_GETTER} is used}.
      */
     GETTER,
-
     /**
      * Setters are methods used to set a POJO value for deserialization.
      */
     SETTER,
-
     /**
      * Creators are constructors and (static) factory methods used to
      * construct POJO instances for deserialization
      */
     CREATOR,
-
     /**
      * Field refers to fields of regular Java objects. Although
      * they are not really methods, addition of optional field-discovery
@@ -58,19 +55,16 @@ public enum PropertyAccessorType {
      * their auto-detection, and this is the place to add it in.
      */
     FIELD,
-
     /**
      * "Is getters" are getter-like methods that are named "isXxx"
      * (instead of "getXxx" for getters) and return boolean value
      * (either primitive, or {@link java.lang.Boolean}).
      */
     IS_GETTER,
-
     /**
      * This pseudo-type indicates that none of accessors if affected.
      */
     NONE,
-
     /**
      * This pseudo-type indicates that all accessors are affected.
      */

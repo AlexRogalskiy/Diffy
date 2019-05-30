@@ -189,7 +189,7 @@ public class ReflectionUtils {
     /**
      * Returns property value of an object
      *
-     * @param value        - initial argument {@link Object} to get property value from
+     * @param value        - initial argument {@link Object} to get property value fromName
      * @param propertyName - initial property name {@link String}
      * @return property value of input object {@link Object}
      */
@@ -200,8 +200,8 @@ public class ReflectionUtils {
     /**
      * Returns property value of an object {@code T} by name {@link String}
      *
-     * @param <T>          type of input element to get property value from
-     * @param value        - initial argument to get property value from
+     * @param <T>          type of input element to get property value fromName
+     * @param value        - initial argument to get property value fromName
      * @param propertyName - initial property name {@link String}
      * @param clazz        - initial class to be casted to {@link Class}
      * @return property value

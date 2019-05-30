@@ -31,11 +31,15 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.BinaryOperator;
+import java.util.function.Predicate;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
- * Converter utilities implementation {@link Converter}
+ * Service utilities implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -43,15 +47,15 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMes
  */
 @Slf4j
 @UtilityClass
-public class ConverterUtils {
+public class ServiceUtils {
 
     /**
      * Returns converted value by converter instance {@link Converter}
      *
+     * @param <T>       type of input element to be converted fromName by operation
+     * @param <R>       type of input element to be converted to by operation
      * @param value     - initial argument value to be converted
      * @param converter - initial converter to process on {@link Converter}
-     * @param <T>       type of input element to be converted from by operation
-     * @param <R>       type of input element to be converted to by operation
      * @return converted value
      */
     public static <T, R> R convert(final T value, @NonNull final Converter<T, R> converter) {
@@ -59,7 +63,7 @@ public class ConverterUtils {
     }
 
     /**
-     * Returns converted from string value to type {@link Class} by method name {@link String}
+     * Returns converted fromName string value to type {@link Class} by method name {@link String}
      *
      * @param value        - initial argument value to be converted {@link String}
      * @param toType       - initial type to be converted to {@link Converter}
@@ -67,7 +71,7 @@ public class ConverterUtils {
      * @return converted value {@link Object}
      */
     @Nullable
-    public static Object convertFromString(final String value, @NonNull final Class<?> toType, final String parserMethod) {
+    public static Object convert(final String value, @NonNull final Class<?> toType, final String parserMethod) {
         final Method method;
         try {
             method = toType.getMethod(parserMethod, String.class);
@@ -80,5 +84,19 @@ public class ConverterUtils {
             log.error(formatMessage("ERROR: cannot convert value={%s} to type={%s},", value, toType));
         }
         return null;
+    }
+
+    /**
+     * Returns {@link Optional} of {@code T} by input parameters
+     *
+     * @param <T>       type of input element to be converted fromName by operation
+     * @param predicate - initial input {@link Predicate}
+     * @param reducer   - initial input {@link BinaryOperator}
+     * @param values    - initial input collection of {@code T}
+     * @return {@link Optional} of {@code T}
+     */
+    public static <T> Optional<T> reduce(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer) {
+        final T[] traversableValues = Optional.ofNullable(values).orElseGet(() -> (T[]) new Object[]{});
+        return Arrays.stream(traversableValues).filter(predicate).reduce(reducer);
     }
 }

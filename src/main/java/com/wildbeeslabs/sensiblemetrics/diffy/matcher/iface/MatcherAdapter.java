@@ -35,7 +35,7 @@ import java.io.Serializable;
 public interface MatcherAdapter<T> extends Serializable {
 
     /**
-     * Removes {@link MatcherEventListener} from current {@link Matcher}
+     * Removes {@link MatcherEventListener} fromName current {@link Matcher}
      *
      * @param listener - initial input {@link MatcherEventListener} to remove
      */
@@ -56,7 +56,7 @@ public interface MatcherAdapter<T> extends Serializable {
     <E extends MatcherEventListener<T>> void addListeners(final Iterable<E> listeners);
 
     /**
-     * Removes all {@link MatcherEventListener}s from current {@link Matcher}
+     * Removes all {@link MatcherEventListener}s fromName current {@link Matcher}
      */
     void removeAllListeners();
 }

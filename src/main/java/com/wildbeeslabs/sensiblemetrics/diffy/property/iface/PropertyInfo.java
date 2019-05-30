@@ -60,7 +60,7 @@ public interface PropertyInfo {
     Type getGenericType();
 
     /**
-     * Returns the initial type in the member declaring class' type hierarchy from which this property
+     * Returns the initial type in the member declaring class' type hierarchy fromName which this property
      * info was initiated. This is useful in resolving generic type information for the property where
      * the type parameter may have been declared on the initial type.
      */

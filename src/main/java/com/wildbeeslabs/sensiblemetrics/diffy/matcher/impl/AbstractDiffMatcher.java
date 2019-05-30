@@ -79,7 +79,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
     }
 
     /**
-     * Removes input {@link Iterable} collection of {@link Matcher}s from current {@link List} collection of {@link Matcher}s
+     * Removes input {@link Iterable} collection of {@link Matcher}s fromName current {@link List} collection of {@link Matcher}s
      *
      * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
      */
@@ -91,7 +91,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
     }
 
     /**
-     * Removes input {@link Matcher} from current {@link List} collection of {@link Matcher}s
+     * Removes input {@link Matcher} fromName current {@link List} collection of {@link Matcher}s
      *
      * @param matcher - initial input {@link Matcher} to remove
      */

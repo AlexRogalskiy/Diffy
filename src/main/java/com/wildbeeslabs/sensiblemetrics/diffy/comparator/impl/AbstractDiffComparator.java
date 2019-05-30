@@ -105,9 +105,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Excludes {@link Iterable} collection of properties {@link String} from comparison
+     * Excludes {@link Iterable} collection of properties {@link String} fromName comparison
      *
-     * @param properties - initial input {@link Iterable} collection of properties {@link String} to exclude from comparison
+     * @param properties - initial input {@link Iterable} collection of properties {@link String} to exclude fromName comparison
      */
     public void excludeProperties(final Iterable<String> properties) {
         Optional.ofNullable(properties)
@@ -116,9 +116,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Exclude property {@link String} from comparison
+     * Exclude property {@link String} fromName comparison
      *
-     * @param property - initial input property {@link String} to exclude from comparison
+     * @param property - initial input property {@link String} to exclude fromName comparison
      */
     public void excludeProperty(final String property) {
         if (Objects.nonNull(property)) {
@@ -174,7 +174,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Removes comparator from comparison by property {@link String}
+     * Removes comparator fromName comparison by property {@link String}
      *
      * @param property - initial input property {@link String}
      */
@@ -184,7 +184,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Removes comparators from comparison by {@link Iterable} collection of properties {@link String}
+     * Removes comparators fromName comparison by {@link Iterable} collection of properties {@link String}
      *
      * @param properties - initial input {@link Iterable} collection of properties {@link String}
      */
@@ -231,7 +231,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @return result of comparison {@code SortManager.SortDirection}
      */
     protected <T> SortManager.SortDirection compare(final T first, final T last, final String property) {
-        return SortManager.SortDirection.getDirectionByCode(Objects.compare(first, last, (Comparator<? super T>) this.getPropertyComparator(property)));
+        return SortManager.SortDirection.fromCode(Objects.compare(first, last, (Comparator<? super T>) this.getPropertyComparator(property)));
     }
 
     /**

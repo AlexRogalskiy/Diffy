@@ -45,12 +45,12 @@ public enum PropertyType {
     /**
      * Returns {@link PropertyType} by input property type value {@link String}
      *
-     * @param propertyType - initial input property type value {@link String}
+     * @param name - initial input property type value {@link String}
      * @return {@link PropertyType}
      */
-    public static PropertyType from(final String propertyType) {
+    public static PropertyType fromName(final String name) {
         return Arrays.stream(values())
-            .filter(type -> type.name().equalsIgnoreCase(propertyType))
+            .filter(type -> type.name().equalsIgnoreCase(name))
             .findFirst()
             .orElse(null);
     }

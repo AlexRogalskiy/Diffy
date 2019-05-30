@@ -24,9 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.sort;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -261,32 +259,30 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     /**
      * Default sort direction enumeration
      */
+    @Getter
+    @RequiredArgsConstructor
     public enum SortDirection {
         ASC(1),
         DESC(-1),
         EQ(0);
 
         /**
-         * Default sort direction value
+         * Default sort direction code
          */
-        private final int value;
+        private final int code;
 
         /**
-         * Default sort direction constructor with initial direction code value
+         * Returns direction {@link SortDirection} by input code code
          *
-         * @param value - initial input code value
+         * @param code - initial input code direction
+         * @return direction {@link SortDirection}
          */
-        SortDirection(int value) {
-            this.value = value;
-        }
-
-        /**
-         * Returns current direction code value
-         *
-         * @return direction code value
-         */
-        public int getValue() {
-            return this.value;
+        @Nullable
+        public static SortDirection fromCode(final int code) {
+            return Arrays.stream(values())
+                .filter(type -> type.getCode() == (code))
+                .findFirst()
+                .orElse(null);
         }
 
         /**
@@ -308,54 +304,47 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
         }
 
         /**
-         * Returns the {@link SortDirection} enum for the given {@link String} value
+         * Returns whether the direction is {@code EQ}
          *
-         * @param value - initial input string value to be converted
-         * @return enum for the given {@link SortDirection} string value
-         * @throws IllegalArgumentException in case the given value cannot be parsed into an enum value
+         * @return true - if direction is {@code EQ}, false - otherwise
+         */
+        public static boolean isEqual(final int code) {
+            return Objects.equals(fromCode(code), EQ);
+        }
+
+        /**
+         * Returns the {@link SortDirection} enum for the given {@link String} code
+         *
+         * @param value - initial input string code to be converted
+         * @return enum for the given {@link SortDirection} string code
+         * @throws IllegalArgumentException in case the given code cannot be parsed into an enum code
          */
         public static SortDirection fromString(final String value) {
             return fromString(value, Locale.getDefault());
         }
 
         /**
-         * Returns the {@link SortDirection} enum for the given {@link String} value and locale {@link Locale}
+         * Returns the {@link SortDirection} enum for the given {@link String} code and locale {@link Locale}
          *
-         * @param value  - initial input string value to be converted
-         * @param locale - initial input locale value {@link Locale}
-         * @return enum for the given {@link SortDirection} string value
-         * @throws IllegalArgumentException in case the given value cannot be parsed into an enum value
+         * @param value  - initial input string code to be converted
+         * @param locale - initial input locale code {@link Locale}
+         * @return enum for the given {@link SortDirection} string code
+         * @throws IllegalArgumentException in case the given code cannot be parsed into an enum code
          */
         public static SortDirection fromString(final String value, final Locale locale) {
             try {
                 return SortDirection.valueOf(value.toUpperCase(locale));
             } catch (Exception e) {
-                throw new IllegalArgumentException(formatMessage("Invalid value '%s' for orders given! Has to be either 'desc' or 'asc' (case insensitive).", value), e);
+                throw new IllegalArgumentException(formatMessage("Invalid code '%s' for orders given! Has to be either 'desc' or 'asc' (case insensitive).", value), e);
             }
-        }
-
-        /**
-         * Returns direction {@link SortDirection} by input code value
-         *
-         * @param code - initial input code direction
-         * @return direction {@link SortDirection}
-         */
-        @Nullable
-        public static SortDirection getDirectionByCode(int code) {
-            for (final SortDirection direction : SortDirection.values()) {
-                if (code == direction.getValue()) {
-                    return direction;
-                }
-            }
-            return null;
         }
 
         /**
          * Returns the {@link SortDirection} enum for the given {@link String} or null if it cannot be parsed into an enum
-         * value.
+         * code.
          *
-         * @param value - initial input string value to be converted
-         * @return wrapped enum {@link SortDirection} for the given string value
+         * @param value - initial input string code to be converted
+         * @return wrapped enum {@link SortDirection} for the given string code
          */
         public static Optional<SortDirection> fromOptionalString(final String value) {
             try {
@@ -370,17 +359,14 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * Enumeration for null priority hints that can be used in {@link SortOrder} expressions
      */
     public enum NullPriority {
-
         /**
          * Lets the data store decide what to do with nulls.
          */
         NATIVE,
-
         /**
          * A hint to the used data store to order entries with null values before non null entries.
          */
         NULLS_FIRST,
-
         /**
          * A hint to the used data store to order entries with null values after non null entries.
          */
@@ -402,11 +388,11 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
         private static final long serialVersionUID = 4258090812324252424L;
 
         /**
-         * Default ignore case value {@link Boolean}
+         * Default ignore case code {@link Boolean}
          */
         private static final boolean DEFAULT_IGNORE_CASE = false;
         /**
-         * Default null priority value {@link NullPriority}
+         * Default null priority code {@link NullPriority}
          */
         private static final NullPriority DEFAULT_NULL_HANDLING = NATIVE;
 

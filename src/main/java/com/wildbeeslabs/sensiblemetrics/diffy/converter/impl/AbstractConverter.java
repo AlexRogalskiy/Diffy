@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 /**
  * Abstract {@link Converter} implementation
  *
- * @param <T> type of input element to be converted from
+ * @param <T> type of input element to be converted fromName
  * @param <R> type of input element to be converted to
  * @author Alexander Rogalskiy
  * @version 1.1

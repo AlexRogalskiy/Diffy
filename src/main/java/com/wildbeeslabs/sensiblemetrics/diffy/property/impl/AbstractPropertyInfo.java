@@ -140,7 +140,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
         /**
          * Returns {@link Field} value on target {@link Object}
          *
-         * @param subject - initial input target to get field from {@link Object}
+         * @param subject - initial input target to get field fromName {@link Object}
          * @return updated {@link Object}
          */
         public Object getValue(final Object subject) {
@@ -196,7 +196,7 @@ public abstract class AbstractPropertyInfo<M extends Member> implements Property
         /**
          * Returns result set by {@link Method} on target {@link Object}
          *
-         * @param subject - initial input target {@link Object} to get result set from
+         * @param subject - initial input target {@link Object} to get result set fromName
          * @return method result set {@link Object}
          */
         public Object getValue(final Object subject) {

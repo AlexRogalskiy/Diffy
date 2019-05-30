@@ -34,7 +34,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils.compare;
@@ -50,7 +49,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils.compa
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMatcher<T> {
+public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -65,7 +64,7 @@ public abstract class AbstractBiMatcher<T> extends AbstractBaseMatcher<T> implem
     /**
      * Default abstract matcher constructor
      */
-    public AbstractBiMatcher() {
+    public DefaultBiMatcher() {
         this(null, null);
     }
 
@@ -74,7 +73,7 @@ public abstract class AbstractBiMatcher<T> extends AbstractBaseMatcher<T> implem
      *
      * @param comparator - initial input {@link Comparator}
      */
-    public AbstractBiMatcher(final Comparator<? super T> comparator) {
+    public DefaultBiMatcher(final Comparator<? super T> comparator) {
         this(null, comparator);
     }
 
@@ -84,7 +83,7 @@ public abstract class AbstractBiMatcher<T> extends AbstractBaseMatcher<T> implem
      * @param handler    - initial input {@link MatcherHandler}
      * @param comparator - initial input {@link Comparator}
      */
-    public AbstractBiMatcher(final MatcherHandler<T> handler, final Comparator<? super T> comparator) {
+    public DefaultBiMatcher(final MatcherHandler<T> handler, final Comparator<? super T> comparator) {
         super(handler);
         this.comparator = Optional.ofNullable(comparator).orElseGet(() -> Comparator.comparing(Object::toString));
     }
@@ -101,7 +100,7 @@ public abstract class AbstractBiMatcher<T> extends AbstractBaseMatcher<T> implem
         boolean result = false;
         try {
             this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_START));
-            result = Objects.equals(compare(value1, value2, this.getComparator()), SortManager.SortDirection.EQ);
+            result = SortManager.SortDirection.isEqual(compare(value1, value2, this.getComparator()));
             this.handleEvent(BiMatcherEvent.of(this, value1, value2, result));
         } catch (RuntimeException e) {
             BiMatchOperationException.throwIncorrectMatch(value1, value2, e);

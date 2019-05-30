@@ -73,7 +73,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     }
 
     /**
-     * Returns streamable instance {@link Streamable} from input supplier {@link Supplier}
+     * Returns streamable instance {@link Streamable} fromName input supplier {@link Supplier}
      *
      * @param <T>
      * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
@@ -141,7 +141,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     }
 
     /**
-     * Creates a new {@link Streamable} instance from the current supplier {@link Supplier} and the given {@link Stream} concatenated.
+     * Creates a new {@link Streamable} instance fromName the current supplier {@link Supplier} and the given {@link Stream} concatenated.
      *
      * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
      * @return {@link Streamable} of values {@code T}
