@@ -52,7 +52,7 @@ public class IllegalAccessException extends RuntimeException {
     /**
      * Illegal access exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public IllegalAccessException(final Throwable cause) {
         super(cause);
@@ -62,14 +62,14 @@ public class IllegalAccessException extends RuntimeException {
      * Illegal access exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public IllegalAccessException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link IllegalAccessException} instance by input parameters
+     * Returns {@link IllegalAccessException} by input parameters
      *
      * @param message - initial input raw message {@link String}
      * @return {@link IllegalAccessException}
@@ -79,10 +79,10 @@ public class IllegalAccessException extends RuntimeException {
     }
 
     /**
-     * Returns {@link IllegalAccessException} instance by input parameters
+     * Returns {@link IllegalAccessException} by input parameters
      *
      * @param message   - initial input raw message {@link String}
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @return {@link IllegalAccessException}
      */
     public static final IllegalAccessException throwInvalidAccess(final String message, final Throwable throwable) {

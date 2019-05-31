@@ -52,7 +52,7 @@ public class InvalidParameterException extends RuntimeException {
     /**
      * Invalid parameter exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public InvalidParameterException(final Throwable cause) {
         super(cause);
@@ -62,7 +62,7 @@ public class InvalidParameterException extends RuntimeException {
      * Invalid parameter operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public InvalidParameterException(final String message, final Throwable cause) {
         super(message, cause);
@@ -72,7 +72,7 @@ public class InvalidParameterException extends RuntimeException {
      * Returns {@link InvalidParameterException} instance by input parameters
      *
      * @param message   - initial input raw message {@link String}
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @return {@link InvalidParameterException}
      */
     public static final InvalidParameterException throwInvalidParameter(final String message, final Throwable throwable) {

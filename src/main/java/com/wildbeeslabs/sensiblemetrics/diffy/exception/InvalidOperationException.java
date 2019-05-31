@@ -54,7 +54,7 @@ public class InvalidOperationException extends RuntimeException {
     /**
      * Invalid operation exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public InvalidOperationException(final Throwable cause) {
         super(cause);
@@ -64,7 +64,7 @@ public class InvalidOperationException extends RuntimeException {
      * Invalid operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public InvalidOperationException(final String message, final Throwable cause) {
         super(message, cause);
@@ -74,7 +74,7 @@ public class InvalidOperationException extends RuntimeException {
      * Returns {@link InvalidOperationException} by input parameters
      *
      * @param target    - initial input source target {@link Object}
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @return {@link InvalidOperationException}
      */
     public static final InvalidOperationException throwInvalidParseFormat(final Object target, final Throwable throwable) {

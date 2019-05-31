@@ -42,6 +42,7 @@ import java.util.Optional;
 @EqualsAndHashCode
 @ToString
 public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
+
     /**
      * Default {@link MatcherHandler}
      */

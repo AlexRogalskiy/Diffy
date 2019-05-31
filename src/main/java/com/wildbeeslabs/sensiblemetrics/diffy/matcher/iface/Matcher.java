@@ -24,11 +24,14 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherModeType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.reduceOrThrow;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
@@ -48,11 +51,33 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Default true {@link Matcher}
      */
-    Matcher DEFAULT_TRUE_MATCHER = (value) -> true;
+    Matcher<?> DEFAULT_TRUE_MATCHER = (value) -> true;
     /**
      * Default false {@link Matcher}
      */
-    Matcher DEFAULT_FALSE_MATCHER = (value) -> false;
+    Matcher<?> DEFAULT_FALSE_MATCHER = (value) -> false;
+    /**
+     * Default null {@link Matcher}
+     */
+    Matcher<?> DEFAULT_NULL_MATCHER = (value) -> Objects.isNull(value);
+    /**
+     * Default non-null {@link Matcher}
+     */
+    Matcher<?> DEFAULT_NOTNULL_MATCHER = (value) -> Objects.nonNull(value);
+    /**
+     * Default class {@link Matcher}
+     */
+    Function<Class<?>, Matcher<?>> DEFAULT_CLASS_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isInstance(value);
+    /**
+     * Default unique {@link Matcher}
+     */
+    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> (value) -> set.add(value);
+    /**
+     * Default exception {@link Matcher}
+     */
+    Matcher DEFAULT_EXCEPTION_MATCHER = (Matcher<?>) value -> {
+        throw new MatchOperationException();
+    };
 
     /**
      * Returns binary flag by initial argument {@code T} match comparison

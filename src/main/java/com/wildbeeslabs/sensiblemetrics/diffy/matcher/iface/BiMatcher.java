@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BiMatcherModeType;
 import org.apache.commons.lang3.StringUtils;
@@ -50,11 +51,17 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Default true {@link BiMatcher}
      */
-    BiMatcher DEFAULT_TRUE_BIMATCHER = (value1, value2) -> true;
+    BiMatcher<?> DEFAULT_TRUE_MATCHER = (value1, value2) -> true;
     /**
      * Default false {@link BiMatcher}
      */
-    BiMatcher DEFAULT_FALSE_BIMATCHER = (value1, value2) -> false;
+    BiMatcher<?> DEFAULT_FALSE_MATCHER = (value1, value2) -> false;
+    /**
+     * Default exception {@link BiMatcher}
+     */
+    BiMatcher<?> DEFAULT_EXCEPTION_MATCHER = (BiMatcher<?>) (value1, value2) -> {
+        throw new BiMatchOperationException();
+    };
 
     /**
      * Compares the two provided objects whether they are equal.

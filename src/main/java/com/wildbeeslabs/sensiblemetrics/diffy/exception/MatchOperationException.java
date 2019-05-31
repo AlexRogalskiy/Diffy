@@ -54,7 +54,7 @@ public class MatchOperationException extends RuntimeException {
     /**
      * Match operation exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public MatchOperationException(final Throwable cause) {
         super(cause);
@@ -64,17 +64,17 @@ public class MatchOperationException extends RuntimeException {
      * Match operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public MatchOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link MatchOperationException} instance by input parameters
+     * Returns {@link MatchOperationException} by input parameters
      *
      * @param target    - initial input source target {@link Object}
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @return {@link MatchOperationException}
      */
     public static final MatchOperationException throwIncorrectMatch(final Object target, final Throwable throwable) {

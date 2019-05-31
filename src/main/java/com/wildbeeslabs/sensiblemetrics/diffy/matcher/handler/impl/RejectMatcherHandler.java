@@ -41,6 +41,11 @@ import lombok.ToString;
 public class RejectMatcherHandler<T> implements MatcherHandler<T> {
 
     /**
+     * Default {@link MatcherHandler}
+     */
+    public static final MatcherHandler INSTANCE = new RejectMatcherHandler<>();
+
+    /**
      * {@link BaseMatcherEvent} handler by input event {@code E}
      *
      * @param event - initial input event {@link E} to handle

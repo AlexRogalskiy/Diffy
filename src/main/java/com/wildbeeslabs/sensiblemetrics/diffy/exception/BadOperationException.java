@@ -52,7 +52,7 @@ public class BadOperationException extends RuntimeException {
     /**
      * Bad operation exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public BadOperationException(final Throwable cause) {
         super(cause);
@@ -62,17 +62,17 @@ public class BadOperationException extends RuntimeException {
      * Bad operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public BadOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link BadOperationException} instance by input parameters
+     * Returns {@link BadOperationException} by input parameters
      *
      * @param message   - initial input raw message {@link String}
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @return {@link BadOperationException}
      */
     public static final BadOperationException throwBadOperation(final String message, final Throwable throwable) {
@@ -80,7 +80,7 @@ public class BadOperationException extends RuntimeException {
     }
 
     /**
-     * Returns {@link BadOperationException} instance by input parameters
+     * Returns {@link BadOperationException} by input parameters
      *
      * @param message - initial input raw message {@link String}
      * @return {@link BadOperationException}

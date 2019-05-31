@@ -54,7 +54,7 @@ public class RejectMatcherException extends RuntimeException {
     /**
      * Reject matcher exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public RejectMatcherException(final Throwable cause) {
         super(cause);
@@ -64,7 +64,7 @@ public class RejectMatcherException extends RuntimeException {
      * Reject matcher exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public RejectMatcherException(final String message, final Throwable cause) {
         super(message, cause);

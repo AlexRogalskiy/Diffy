@@ -28,12 +28,12 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * Value matcher {@link RuntimeException} implementation
+ * Binary matcher {@link RuntimeException} implementation
  */
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ValueMatcherException extends RuntimeException {
+public class BiMatcherException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -41,36 +41,36 @@ public class ValueMatcherException extends RuntimeException {
     private static final long serialVersionUID = -4545255095576355819L;
 
     /**
-     * Default expected value
+     * Default expected value {@link Object}
      */
-    private final String expected;
+    private final Object expected;
     /**
-     * Default actual value
+     * Default actual value {@link Object}
      */
-    private final String actual;
+    private final Object actual;
 
     /**
-     * Create new ValueMatcherException
+     * Binary matcher exception constructor
      *
-     * @param message  description of exception
-     * @param expected value expected by BiMatcher
-     * @param actual   value being tested by BiMatcher
+     * @param message  - description of exception {@link String}
+     * @param expected - value expected by matcher {@link Object}
+     * @param actual   - value being tested by matcher {@link Object}
      */
-    public ValueMatcherException(final String message, final String expected, final String actual) {
+    public BiMatcherException(final String message, final Object expected, final Object actual) {
         super(message);
         this.expected = expected;
         this.actual = actual;
     }
 
     /**
-     * Create new ValueMatcherException
+     * Binary matcher exception constructor
      *
-     * @param message  description of exception
-     * @param cause    cause of ValueMatcherException
-     * @param expected value expected by BiMatcher
-     * @param actual   value being tested by BiMatcher
+     * @param message  - description of exception {@link String}
+     * @param cause    - cause of exception {@link Throwable}
+     * @param expected - value expected by matcher {@link Object}
+     * @param actual   - value being tested by matcher {@link Object}
      */
-    public ValueMatcherException(final String message, final Throwable cause, final String expected, final String actual) {
+    public BiMatcherException(final String message, final Throwable cause, final Object expected, final Object actual) {
         super(message, cause);
         this.expected = expected;
         this.actual = actual;

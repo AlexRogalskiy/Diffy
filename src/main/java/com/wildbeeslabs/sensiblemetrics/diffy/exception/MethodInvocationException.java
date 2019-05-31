@@ -54,7 +54,7 @@ public class MethodInvocationException extends RuntimeException {
     /**
      * Method invocation exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public MethodInvocationException(final Throwable cause) {
         super(cause);
@@ -64,7 +64,7 @@ public class MethodInvocationException extends RuntimeException {
      * Method invocation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public MethodInvocationException(final String message, final Throwable cause) {
         super(message, cause);
@@ -75,7 +75,7 @@ public class MethodInvocationException extends RuntimeException {
      *
      * @param methodName - initial input property name {@link String}
      * @param target     - initial input source target {@link Object}
-     * @param throwable  - initial input cause instance {@link Throwable}
+     * @param throwable  - initial input cause target {@link Throwable}
      * @return {@link MethodInvocationException}
      */
     public static final MethodInvocationException throwMethodInvocation(final String methodName, final Object target, final Throwable throwable) {

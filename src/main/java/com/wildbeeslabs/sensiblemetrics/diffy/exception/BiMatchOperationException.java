@@ -54,7 +54,7 @@ public class BiMatchOperationException extends RuntimeException {
     /**
      * Match operation exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public BiMatchOperationException(final Throwable cause) {
         super(cause);
@@ -64,18 +64,18 @@ public class BiMatchOperationException extends RuntimeException {
      * Match operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public BiMatchOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link BiMatchOperationException} instance by input parameters
+     * Returns {@link BiMatchOperationException} by input parameters
      *
      * @param value1    - initial input first source target {@link Object}
      * @param value2    - initial input last source target {@link Object}
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @return {@link BiMatchOperationException}
      */
     public static final BiMatchOperationException throwIncorrectMatch(final Object value1, final Object value2, final Throwable throwable) {

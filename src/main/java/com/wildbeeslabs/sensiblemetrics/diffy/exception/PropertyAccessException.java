@@ -54,7 +54,7 @@ public class PropertyAccessException extends RuntimeException {
     /**
      * Property access exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public PropertyAccessException(final Throwable cause) {
         super(cause);
@@ -64,7 +64,7 @@ public class PropertyAccessException extends RuntimeException {
      * Property access exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public PropertyAccessException(final String message, final Throwable cause) {
         super(message, cause);
@@ -75,7 +75,7 @@ public class PropertyAccessException extends RuntimeException {
      *
      * @param propertyName  - initial input property name {@link String}
      * @param propertyValue - initial input property value {@link String}
-     * @param throwable     - initial input cause instance {@link Throwable}
+     * @param throwable     - initial input cause target {@link Throwable}
      * @return {@link PropertyAccessException}
      */
     public static final PropertyAccessException throwIllegalAccess(final String propertyName, final Object propertyValue, final Throwable throwable) {
@@ -85,7 +85,7 @@ public class PropertyAccessException extends RuntimeException {
     /**
      * Returns {@link PropertyAccessException} by input parameters
      *
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @param target    - initial input raw message {@link String}
      * @param target    - initial input source target {@link Object}
      * @return {@link PropertyAccessException}

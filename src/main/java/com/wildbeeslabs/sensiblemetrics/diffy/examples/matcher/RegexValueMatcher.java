@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValueMatcherException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatcherException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.PatternType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultBiMatcher;
@@ -106,10 +106,10 @@ public class RegexValueMatcher<T> extends DefaultBiMatcher<T> {
         try {
             final Pattern pattern = isStaticPattern() ? this.expectedPattern : Pattern.compile(expectedString);
             if (!pattern.matcher(actualString).matches()) {
-                throw new ValueMatcherException(String.format("ERROR: expected pattern with type = {%s} did not match value", this.getPatternType()), pattern.toString(), actualString);
+                throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} did not match value", this.getPatternType()), pattern.toString(), actualString);
             }
         } catch (PatternSyntaxException e) {
-            throw new ValueMatcherException(String.format("ERROR: expected pattern with type = {%s} is invalid, message ={%s} ", this.getPatternType(), e.getMessage()), e, expectedString, actualString);
+            throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} is invalid, message ={%s} ", this.getPatternType(), e.getMessage()), e, expectedString, actualString);
         }
         return true;
     }

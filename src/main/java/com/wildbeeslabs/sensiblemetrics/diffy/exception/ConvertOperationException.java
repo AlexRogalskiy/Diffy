@@ -54,7 +54,7 @@ public class ConvertOperationException extends RuntimeException {
     /**
      * Convert operation exception constructor with initial input {@link Throwable}
      *
-     * @param cause - initial input {@link Throwable}
+     * @param cause - initial input cause target {@link Throwable}
      */
     public ConvertOperationException(final Throwable cause) {
         super(cause);
@@ -64,17 +64,17 @@ public class ConvertOperationException extends RuntimeException {
      * Convert operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
-     * @param cause   - initial input {@link Throwable}
+     * @param cause   - initial input cause target {@link Throwable}
      */
     public ConvertOperationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link ConvertOperationException} instance by input parameters
+     * Returns {@link ConvertOperationException} by input parameters
      *
      * @param target    - initial input source target {@link Object}
-     * @param throwable - initial input cause instance {@link Throwable}
+     * @param throwable - initial input cause target {@link Throwable}
      * @return {@link ConvertOperationException}
      */
     public static final ConvertOperationException throwIncorrectConversion(final Object target, final Throwable throwable) {
