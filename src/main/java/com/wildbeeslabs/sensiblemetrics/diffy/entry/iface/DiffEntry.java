@@ -106,36 +106,36 @@ public interface DiffEntry<T> extends Serializable {
     }
 
     /**
-     * Returns {@link Collector} to create {@link List} fromName {@link Stream} of {@link DiffEntry}'s {@code T} elements
+     * Returns {@link Collector} to create {@link List} from {@link Stream} of {@link DiffEntry}'s {@code T} elements
      *
-     * @return {@link List} fromName {@link Stream} of {@link DiffEntry}'s {@code T} elements
+     * @return {@link List} from {@link Stream} of {@link DiffEntry}'s {@code T} elements
      */
     static <T> Collector<DiffEntry<T>, ?, List<Entry<T, T>>> entries() {
         return Collectors.mapping((final DiffEntry<T> e) -> DefaultEntry.of(e.getFirst(), e.getLast()), Collectors.toList());
     }
 
     /**
-     * Returns {@link Collector} to create {@link Set} fromName {@link Stream} of {@link DiffEntry}'s properties {@link String}
+     * Returns {@link Collector} to create {@link Set} from {@link Stream} of {@link DiffEntry}'s properties {@link String}
      *
-     * @return {@link Set} fromName {@link Stream} of {@link DiffEntry}'s properties {@link String}
+     * @return {@link Set} from {@link Stream} of {@link DiffEntry}'s properties {@link String}
      */
     static <T> Collector<DiffEntry<T>, ?, Set<String>> properties() {
         return Collectors.mapping(DiffEntry::getPropertyName, Collectors.toSet());
     }
 
     /**
-     * A collector to create {@link Map} fromName {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     * A collector to create {@link Map} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
      *
-     * @return {@link Map} fromName {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     * @return {@link Map} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
      */
     static <T> Collector<DiffEntry<T>, ?, Map<String, T>> firstToMap() {
         return Collectors.toMap(DiffEntry::getPropertyName, DiffEntry::getFirst);
     }
 
     /**
-     * A collector to create {@link Map} fromName {@link Stream} of {@link DiffEntry}s last {@code T} elements
+     * A collector to create {@link Map} from {@link Stream} of {@link DiffEntry}s last {@code T} elements
      *
-     * @return {@link Map} fromName {@link Stream} of {@link DiffEntry}s last {@code T} elements
+     * @return {@link Map} from {@link Stream} of {@link DiffEntry}s last {@code T} elements
      */
     static <T> Collector<DiffEntry<T>, ?, Map<String, T>> lastToMap() {
         return Collectors.toMap(DiffEntry::getPropertyName, DiffEntry::getLast);

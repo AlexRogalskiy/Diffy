@@ -30,10 +30,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.Optional;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.iterableOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.wrapInBrackets;
 import static java.util.Arrays.asList;
@@ -130,7 +129,7 @@ public class BaseMatchDescription implements MatchDescription {
     public <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values) {
         boolean separate = false;
         this.append(start);
-        final Iterator<? extends T> it = Optional.ofNullable(values).orElseGet(Collections::emptyList).iterator();
+        final Iterator<? extends T> it = iterableOf(values).iterator();
         while (it.hasNext()) {
             if (separate) {
                 this.append(delimiter);

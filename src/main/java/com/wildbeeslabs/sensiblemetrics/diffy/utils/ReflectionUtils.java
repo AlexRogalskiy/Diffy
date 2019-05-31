@@ -48,6 +48,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.sanitize;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.TypeUtils.*;
@@ -69,14 +70,15 @@ public class ReflectionUtils {
      * @param expectedClass - initial argument class instance {@link Class}
      * @return matchable class instance {@link Class}
      */
-    public static Class<?> getMatchableClass(final Class<?> expectedClass) {
-        final Optional<? extends Class<?>> optionalClass = DEFAULT_PRIMITIVE_TYPES
+    public static <T> Class<T> getMatchableClass(final Class<T> expectedClass) {
+        return DEFAULT_PRIMITIVE_TYPES
             .keySet()
             .stream()
             .filter(type -> type.equals(expectedClass))
             .map(DEFAULT_PRIMITIVE_TYPES::get)
-            .findFirst();
-        return (optionalClass.isPresent()) ? optionalClass.get() : expectedClass;
+            .map(v -> (Class<T>) v)
+            .findFirst()
+            .orElse(expectedClass);
     }
 
     /**
@@ -170,8 +172,7 @@ public class ReflectionUtils {
      * @return traversable collection of types {@link Set}
      */
     public static Set<Class<?>> typesOf(final Object... values) {
-        final Object[] traversableType = Optional.ofNullable(values).orElseGet(() -> new Object[]{});
-        return Stream.of(traversableType).filter(Objects::nonNull).map(Object::getClass).collect(Collectors.toSet());
+        return streamOf(values).filter(Objects::nonNull).map(Object::getClass).collect(Collectors.toSet());
     }
 
     /**
@@ -189,7 +190,7 @@ public class ReflectionUtils {
     /**
      * Returns property value of an object
      *
-     * @param value        - initial argument {@link Object} to get property value fromName
+     * @param value        - initial argument {@link Object} to get property value from
      * @param propertyName - initial property name {@link String}
      * @return property value of input object {@link Object}
      */
@@ -200,8 +201,8 @@ public class ReflectionUtils {
     /**
      * Returns property value of an object {@code T} by name {@link String}
      *
-     * @param <T>          type of input element to get property value fromName
-     * @param value        - initial argument to get property value fromName
+     * @param <T>          type of input element to get property value from
+     * @param value        - initial argument to get property value from
      * @param propertyName - initial property name {@link String}
      * @param clazz        - initial class to be casted to {@link Class}
      * @return property value
@@ -475,7 +476,7 @@ public class ReflectionUtils {
      * @return collection of persistent fields {@link List}
      */
     public static List<Field> getAllPersistentFields(final Class clazz) {
-        return Arrays.stream(Optional.ofNullable(getAllFields(clazz)).orElseGet(() -> new Field[]{})).filter(ReflectionUtils::isPersistentField).collect(Collectors.toList());
+        return streamOf(getAllFields(clazz)).filter(ReflectionUtils::isPersistentField).collect(Collectors.toList());
     }
 
     /**
@@ -774,7 +775,7 @@ public class ReflectionUtils {
             for (Class c = clazz; c != Object.class; c = c.getSuperclass()) {
                 final Optional<Method> methodOptional = Stream.of(c.getDeclaredMethods()).filter(this::hasSignature).findFirst();
                 if (methodOptional.isPresent()) {
-                    return getParameterType(methodOptional.get());
+                    return this.getParameterType(methodOptional.get());
                 }
             }
             BadOperationException.throwBadOperation(formatMessage("ERROR: cannot determine correct type for method={%s}", getMethodName()));

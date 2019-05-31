@@ -280,7 +280,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
         @Nullable
         public static SortDirection fromCode(final int code) {
             return Arrays.stream(values())
-                .filter(type -> type.getCode() == (code))
+                .filter(type -> type.getCode() == code)
                 .findFirst()
                 .orElse(null);
         }

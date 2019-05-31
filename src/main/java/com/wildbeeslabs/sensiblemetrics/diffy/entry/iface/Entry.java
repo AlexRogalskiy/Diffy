@@ -71,11 +71,11 @@ public interface Entry<K, V> extends Serializable {
     }
 
     /**
-     * A collector to create a {@link Map} fromName a {@link Stream} of {@link Entry}s.
+     * A collector to create a {@link Map} from a {@link Stream} of {@link Entry}s.
      *
      * @param <K> type of entry first value
      * @param <V> type of entry last value
-     * @return {@link Map} fromName a {@link Stream} of {@link Entry}s
+     * @return {@link Map} from a {@link Stream} of {@link Entry}s
      */
     static <K, V> Collector<Entry<K, V>, ?, Map<K, V>> toMap() {
         return Collectors.toMap(Entry::getFirst, Entry::getLast);

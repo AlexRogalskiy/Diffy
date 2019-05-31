@@ -90,7 +90,7 @@ public class MapperUtils {
      *
      * <p>Note: outClass object must have default constructor with no arguments</p>
      *
-     * @param <T>      type of object to be converted fromName
+     * @param <T>      type of object to be converted from
      * @param <D>      type of objects in result list
      * @param source   - initial input object to be mapped {@code T}
      * @param outClass - initial input class to map by {@link Class}
@@ -103,9 +103,9 @@ public class MapperUtils {
     /**
      * Converts input object {@code source} to destination object {@code destination}
      *
-     * @param <T>      type of object to be converted fromName
+     * @param <T>      type of object to be converted from
      * @param <D>      type of object to be converted to
-     * @param source   - initial input source to be mapped fromName {@code T}
+     * @param source   - initial input source to be mapped from {@code T}
      * @param javaType - initial java type to be mapped to {@link JavaType}
      * @return mapped object with <code><D></code> type
      */
@@ -117,7 +117,7 @@ public class MapperUtils {
      * Converts input collection of objects {@link Collection} by initial output class instance {@link Class}
      * <p>Note: outClass object must have default constructor with no arguments</p>
      *
-     * @param <T>      type of object to be converted fromName
+     * @param <T>      type of object to be converted from
      * @param <D>      type of objects in result list
      * @param source   - initial input collection of objects {@code T} to be mapped {@link Collection}
      * @param outClass - initial input class to map by {@link Class}
@@ -136,7 +136,7 @@ public class MapperUtils {
      *
      * @param <D>       type of object to be converted to
      * @param <V>       type of object to be mapped by
-     * @param source    - initial input source to be mapped fromName {@code T}
+     * @param source    - initial input source to be mapped from {@code T}
      * @param outClass  - initial input class to convert to {@link Class}
      * @param viewClazz - initial input view class to converted by {@link Class}
      * @return mapped object with <code><D></code> type
@@ -150,7 +150,7 @@ public class MapperUtils {
      * Returns converted input object {@code source} to destination object {@code destination}
      *
      * @param <D>      type of object to be converted to
-     * @param source   - initial input source to be mapped fromName {@code T}
+     * @param source   - initial input source to be mapped from {@code T}
      * @param outClass - initial input class to convert to {@link Class}
      * @return mapped object with <code><D></code> type
      * @throws IOException
@@ -163,7 +163,7 @@ public class MapperUtils {
      * Returns converted input object {@code source} to destination object {@link List}
      *
      * @param <D>    type of element to be converted to
-     * @param source - initial input source to be mapped fromName
+     * @param source - initial input source to be mapped from
      * @return mapped object {@link List} with <code><D></code> type
      * @throws IOException
      */
@@ -177,7 +177,7 @@ public class MapperUtils {
      *
      * @param <K>    type of key element
      * @param <V>    type of value element
-     * @param source - initial input source to be mapped fromName
+     * @param source - initial input source to be mapped from
      * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
      * @throws IOException
      */
@@ -190,7 +190,7 @@ public class MapperUtils {
      * Returns converted input object {@code source} to destination object {@link List}
      *
      * @param <T>    type of key element
-     * @param source - initial input source to be mapped fromName
+     * @param source - initial input source to be mapped from
      * @param clazz  - initial input element {@link Class}
      * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
      * @throws IOException
@@ -203,7 +203,7 @@ public class MapperUtils {
      * Returns converted input object {@code source} to destination object {@link Set}
      *
      * @param <T>    type of key element
-     * @param source - initial input source to be mapped fromName
+     * @param source - initial input source to be mapped from
      * @param clazz  - initial input element {@link Class}
      * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
      * @throws IOException
@@ -216,7 +216,7 @@ public class MapperUtils {
      * Returns converted input object {@code source} to destination object {@link Set}
      *
      * @param <T>             type of key element
-     * @param source          - initial input source to be mapped fromName
+     * @param source          - initial input source to be mapped from
      * @param collectionClazz - initial input collection {@link Class}
      * @param elementClazz    - initial input element {@link Class}
      * @return mapped object {@link Map} with <code><K></code> key type, <code><V></code> value type
@@ -230,9 +230,9 @@ public class MapperUtils {
     /**
      * Returns converted input object {@code T} as string value
      *
-     * @param <T>       type of object to be converted fromName
+     * @param <T>       type of object to be converted from
      * @param <V>       type of object to be mapped by
-     * @param source    - initial input source to be mapped fromName {@code T}
+     * @param source    - initial input source to be mapped from {@code T}
      * @param viewClazz - initial input view class to converted by {@link Class}
      * @return string representation of input object
      * @throws JsonProcessingException
@@ -244,9 +244,9 @@ public class MapperUtils {
     /**
      * Returns formatted input object {@code T} as string value
      *
-     * @param <T>       type of object to be converted fromName
+     * @param <T>       type of object to be converted from
      * @param <V>       type of object to be mapped by
-     * @param source    - initial input source to be mapped fromName {@code T}
+     * @param source    - initial input source to be mapped from {@code T}
      * @param viewClazz - initial input view class to converted by {@link Class}
      * @return string representation of input object
      * @throws JsonProcessingException
@@ -258,8 +258,8 @@ public class MapperUtils {
     /**
      * Returns converted input object {@code T} as string value
      *
-     * @param <T>    type of object to be converted fromName
-     * @param source - initial input source to be mapped fromName {@code T}
+     * @param <T>    type of object to be converted from
+     * @param source - initial input source to be mapped from {@code T}
      * @return string representation of input object
      * @throws JsonProcessingException
      */
@@ -270,8 +270,8 @@ public class MapperUtils {
     /**
      * Returns formatted input object {@code T} as string value
      *
-     * @param <T>    type of object to be converted fromName
-     * @param source - initial input source to be mapped fromName {@code T}
+     * @param <T>    type of object to be converted from
+     * @param source - initial input source to be mapped from {@code T}
      * @return string representation of input object
      * @throws JsonProcessingException
      */

@@ -32,9 +32,13 @@ import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
@@ -52,18 +56,20 @@ public class ServiceUtils {
     /**
      * Returns converted value by converter instance {@link Converter}
      *
-     * @param <T>       type of input element to be converted fromName by operation
+     * @param <T>       type of input element to be converted from by operation
      * @param <R>       type of input element to be converted to by operation
      * @param value     - initial argument value to be converted
      * @param converter - initial converter to process on {@link Converter}
      * @return converted value
      */
+    @Nullable
     public static <T, R> R convert(final T value, @NonNull final Converter<T, R> converter) {
+        Objects.requireNonNull(converter, "Converter should not be null");
         return converter.convert(value);
     }
 
     /**
-     * Returns converted fromName string value to type {@link Class} by method name {@link String}
+     * Returns converted from string value to type {@link Class} by method name {@link String}
      *
      * @param value        - initial argument value to be converted {@link String}
      * @param toType       - initial type to be converted to {@link Converter}
@@ -72,9 +78,8 @@ public class ServiceUtils {
      */
     @Nullable
     public static Object convert(final String value, @NonNull final Class<?> toType, final String parserMethod) {
-        final Method method;
         try {
-            method = toType.getMethod(parserMethod, String.class);
+            final Method method = toType.getMethod(parserMethod, String.class);
             return method.invoke(toType, value);
         } catch (NoSuchMethodException e) {
             log.error(formatMessage("ERROR: cannot find method={%s} in type={%s},", parserMethod, toType));
@@ -89,14 +94,59 @@ public class ServiceUtils {
     /**
      * Returns {@link Optional} of {@code T} by input parameters
      *
-     * @param <T>       type of input element to be converted fromName by operation
+     * @param <T>       type of input element to be converted from by operation
      * @param predicate - initial input {@link Predicate}
      * @param reducer   - initial input {@link BinaryOperator}
      * @param values    - initial input collection of {@code T}
      * @return {@link Optional} of {@code T}
      */
+    @NonNull
     public static <T> Optional<T> reduce(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer) {
-        final T[] traversableValues = Optional.ofNullable(values).orElseGet(() -> (T[]) new Object[]{});
-        return Arrays.stream(traversableValues).filter(predicate).reduce(reducer);
+        Objects.requireNonNull(predicate, "Predicate should not be null");
+        Objects.requireNonNull(reducer, "Reducer should not be null");
+
+        return streamOf(values).filter(predicate).reduce(reducer);
+    }
+
+    /**
+     * Returns {@link Optional} of {@code T} by input parameters
+     *
+     * @param <T>       type of input element to be converted from by operation
+     * @param predicate - initial input {@link Predicate}
+     * @param reducer   - initial input {@link BinaryOperator}
+     * @param values    - initial input collection of {@code T}
+     * @return {@link Optional} of {@code T}
+     */
+    @NonNull
+    public static <T, K extends RuntimeException> T reduceOrThrow(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer, final Supplier<? extends K> supplier) {
+        Objects.requireNonNull(predicate, "Predicate should not be null");
+        Objects.requireNonNull(reducer, "Reducer should not be null");
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+
+        return reduce(values, predicate, reducer).orElseThrow(supplier);
+    }
+
+    /**
+     * Returns non-nullable {@link Stream} of {@code T} by input collection of {@code T} values
+     *
+     * @param <T>    type of input element to be converted from by operation
+     * @param values - initial input collection of {@code T} values
+     * @return non-nullable {@link Stream} of {@code T}
+     */
+    @NonNull
+    public static <T> Stream<T> streamOf(final T... values) {
+        return Arrays.stream(Optional.ofNullable(values).orElseGet(() -> (T[]) new Objects[]{}));
+    }
+
+    /**
+     * Returns non-nullable {@link Iterable} collection from input {@link Iterable} collection of values {@code T}
+     *
+     * @param <T>    type of input element to be converted from by operation
+     * @param values - initial input {@link Iterable} collection of {@code T} values
+     * @return non-nullable {@link Iterable} collection
+     */
+    @NonNull
+    public static <T> Iterable<T> iterableOf(final Iterable<T> values) {
+        return Optional.ofNullable(values).orElseGet(Collections::emptyList);
     }
 }

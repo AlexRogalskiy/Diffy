@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BaseMatcherModeType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BaseMatcherMode;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BiMatcherModeType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 
@@ -56,8 +56,8 @@ public interface BaseMatcher<T> extends Serializable {
      *
      * @return {@link BiMatcherModeType}
      */
-    default BaseMatcherModeType getMode() {
-        return BaseMatcherModeType.DEFAULT_MATCHER_MODE_TYPE;
+    default BaseMatcherMode getMode() {
+        return BaseMatcherMode.DEFAULT_MATCHER_MODE_TYPE;
     }
 
     /**

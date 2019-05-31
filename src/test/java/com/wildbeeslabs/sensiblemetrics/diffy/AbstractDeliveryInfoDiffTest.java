@@ -53,7 +53,6 @@ import static net.andreinc.mockneat.unit.types.Ints.ints;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class AbstractDeliveryInfoDiffTest extends AbstractDiffTest {
-
     /**
      * Default number of {@link AddressInfo} items
      */

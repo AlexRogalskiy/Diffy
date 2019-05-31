@@ -39,7 +39,7 @@ import java.util.Objects;
  */
 @Getter
 @RequiredArgsConstructor
-public enum BiMatcherModeType implements BaseMatcherModeType {
+public enum BiMatcherModeType implements BaseMatcherMode {
     STRICT(MatcherStatusType.ENABLE, true),
     SILENT(MatcherStatusType.DISABLE, false),
     LENIENT(MatcherStatusType.DISABLE, true),

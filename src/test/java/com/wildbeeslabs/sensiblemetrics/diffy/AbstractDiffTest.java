@@ -60,7 +60,6 @@ import static net.andreinc.mockneat.unit.types.Longs.longs;
 @EqualsAndHashCode
 @ToString
 public abstract class AbstractDiffTest {
-
     /**
      * Default thread local mock instance {@link MockNeat}
      */

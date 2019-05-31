@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 /**
@@ -50,6 +51,7 @@ public enum MatcherEventType {
      * @param name - initial input event type {@link String}
      * @return {@link MatcherEventType}
      */
+    @Nullable
     public static MatcherEventType fromName(final String name) {
         return Arrays.stream(values())
             .filter(type -> type.name().equalsIgnoreCase(name))

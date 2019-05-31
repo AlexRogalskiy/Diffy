@@ -69,9 +69,9 @@ public interface DiffMatchEntry<T> extends Serializable {
     }
 
     /**
-     * A collector to create {@link List} fromName {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     * A collector to create {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
      *
-     * @return {@link List} fromName {@link Stream} of {@link DiffEntry}'s first {@code T} elements
+     * @return {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
      */
     static <T> Collector<DiffMatchEntry<T>, ?, List<T>> toList() {
         return Collectors.mapping(DiffMatchEntry::getValue, Collectors.toList());

@@ -29,7 +29,7 @@ import java.util.Objects;
 /**
  * Converter interface declaration
  *
- * @param <T> type of input element to be converted fromName
+ * @param <T> type of input element to be converted from
  * @param <R> type of input element to be converted to
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -51,7 +51,7 @@ public interface Converter<T, R> {
      * Returns composed {@link Converter} function that applies input {@link Converter}
      * function to its input, and then applies current {@link Converter} function to the result
      *
-     * @param <V>    the type of input to be converted fromName
+     * @param <V>    the type of input to be converted from
      * @param before - initial input {@link Converter} function to apply before current function is applied
      * @return composed {@link Converter} function
      * @throws NullPointerException if before is null
@@ -65,7 +65,7 @@ public interface Converter<T, R> {
      * Returns composed {@link Converter} function that first applies current {@link Converter} function to
      * its input, and then applies input {@link Converter} function to the result
      *
-     * @param <V>   type of input element to be converted fromName
+     * @param <V>   type of input element to be converted from
      * @param after - initial input {@link Converter} function to apply after current function is applied
      * @return composed {@link Converter} function
      * @throws NullPointerException if after is null
@@ -78,7 +78,7 @@ public interface Converter<T, R> {
     /**
      * Returns {@link Converter} function that always returns its input argument
      *
-     * @param <T> type of input element to be converted fromName
+     * @param <T> type of input element to be converted from
      * @return {@link Converter} function
      */
     static <T> Converter<T, T> identity() {

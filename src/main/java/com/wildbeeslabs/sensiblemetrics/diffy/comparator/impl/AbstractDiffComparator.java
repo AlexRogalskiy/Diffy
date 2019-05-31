@@ -105,9 +105,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Excludes {@link Iterable} collection of properties {@link String} fromName comparison
+     * Excludes {@link Iterable} collection of properties {@link String} from comparison
      *
-     * @param properties - initial input {@link Iterable} collection of properties {@link String} to exclude fromName comparison
+     * @param properties - initial input {@link Iterable} collection of properties {@link String} to exclude from comparison
      */
     public void excludeProperties(final Iterable<String> properties) {
         Optional.ofNullable(properties)
@@ -116,9 +116,9 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Exclude property {@link String} fromName comparison
+     * Exclude property {@link String} from comparison
      *
-     * @param property - initial input property {@link String} to exclude fromName comparison
+     * @param property - initial input property {@link String} to exclude from comparison
      */
     public void excludeProperty(final String property) {
         if (Objects.nonNull(property)) {
@@ -174,7 +174,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Removes comparator fromName comparison by property {@link String}
+     * Removes comparator from comparison by property {@link String}
      *
      * @param property - initial input property {@link String}
      */
@@ -184,7 +184,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     }
 
     /**
-     * Removes comparators fromName comparison by {@link Iterable} collection of properties {@link String}
+     * Removes comparators from comparison by {@link Iterable} collection of properties {@link String}
      *
      * @param properties - initial input {@link Iterable} collection of properties {@link String}
      */

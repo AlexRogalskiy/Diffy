@@ -38,7 +38,7 @@ public interface Configuration {
     /**
      * Returns all Properties. Yes, this should have ideally returned a
      * <code>Properties</code>, but doing so will make this operation dissapear
-     * fromName the JConsole.
+     * from the JConsole.
      */
     public Map<String, String> getProperties();
 

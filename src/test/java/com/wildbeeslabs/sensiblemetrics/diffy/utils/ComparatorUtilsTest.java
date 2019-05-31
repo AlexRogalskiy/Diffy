@@ -739,8 +739,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test different string objects by custom natural order comparator and negate priority nulls")
     public void test_StringObjects_by_customNaturalOrderComparator() {
         // given
-        final String d1 = "acde";
-        final String d2 = "abcd";
+        final CharSequence d1 = "acde";
+        final CharSequence d2 = "abcd";
 
         // when
         final Comparator<? super CharSequence> comparator = ComparatorUtils.getCharSequenceComparator((o1, o2) -> Objects.compare(String.valueOf(o1), String.valueOf(o2), Comparator.naturalOrder()), false);
@@ -1151,8 +1151,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test different list objects by default comparator and negate priority nulls")
     public void test_iterableListObjects_by_defaultComparator() {
         // given
-        final List<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
-        final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+        final Iterable<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
+        final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
 
         // when
         final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
@@ -1165,8 +1165,8 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test different null list objects by default comparator and negate priority nulls")
     public void test_nullListObjects_by_defaultComparator() {
         // given
-        final List<String> d1 = null;
-        final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+        final Iterable<String> d1 = null;
+        final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
 
         // when
         final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
@@ -1179,14 +1179,14 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test different set objects by default comparator and negate priority nulls")
     public void test_setObjects_by_defaultComparator() {
         // given
-        final Set<String> d1 = new ImmutableSet.Builder<String>()
+        final Iterable<String> d1 = new ImmutableSet.Builder<String>()
             .add("saf")
             .add("fas")
             .add("sfa")
             .add("sadf")
             .add("fsa")
             .build();
-        final Set<String> d2 = new ImmutableSet.Builder<String>()
+        final Iterable<String> d2 = new ImmutableSet.Builder<String>()
             .add("saf")
             .add("fas")
             .add("sfaa")
@@ -1227,14 +1227,14 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     @DisplayName("Test different list / set objects by default comparator and negate priority nulls")
     public void test_listAndSetObjects_by_defaultComparator() {
         // given
-        final Set<String> d1 = new ImmutableSet.Builder<String>()
+        final Iterable<String> d1 = new ImmutableSet.Builder<String>()
             .add("saf")
             .add("fas")
             .add("sfa")
             .add("sadf")
             .add("fsa")
             .build();
-        final List<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+        final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
 
         // when
         final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();

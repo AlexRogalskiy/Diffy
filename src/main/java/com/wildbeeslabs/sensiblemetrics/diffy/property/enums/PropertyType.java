@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 /**
@@ -48,6 +49,7 @@ public enum PropertyType {
      * @param name - initial input property type value {@link String}
      * @return {@link PropertyType}
      */
+    @Nullable
     public static PropertyType fromName(final String name) {
         return Arrays.stream(values())
             .filter(type -> type.name().equalsIgnoreCase(name))

@@ -33,8 +33,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class
-InvalidParameterException extends RuntimeException {
+public class InvalidParameterException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability

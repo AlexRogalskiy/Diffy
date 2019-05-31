@@ -24,14 +24,14 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
 /**
- * Base matcher mode type interface declaration
+ * Base matcher mode interface declaration
  */
-public interface BaseMatcherModeType {
+public interface BaseMatcherMode {
 
     /**
-     * A description that consumes input but does nothing.
+     * Default {@link BaseMatcherMode} instance
      */
-    BaseMatcherModeType DEFAULT_MATCHER_MODE_TYPE = () -> true;
+    BaseMatcherMode DEFAULT_MATCHER_MODE_TYPE = () -> true;
 
     /**
      * Returns binary flag based on current mode status {@code ENABLE}
