@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @since 1.0
  */
 @FunctionalInterface
-public interface DiffComparator<T> extends Serializable {
+public interface DiffComparator<N, V> extends Serializable {
 
     /**
      * Returns {@link Iterable} collection of {@link DiffEntry} by initial arguments comparison {@code T}

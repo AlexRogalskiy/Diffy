@@ -44,7 +44,7 @@ public interface ComparatorDispatcher<T> extends Serializable {
      * Returns {@link Comparator} by input {@link SortManager} instance
      *
      * @param sortManager - initial input {@link SortManager} instance
-     * @return {@link Comparator} instance
+     * @return {@link Comparator}
      */
     @NonNull
     Comparator<? super T> getComparator(final SortManager sortManager);
