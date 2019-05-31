@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.function.Function;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 
 /**
@@ -152,6 +153,16 @@ public class StringUtils {
         char chars[] = value.toCharArray();
         chars[0] = Character.toLowerCase(chars[0]);
         return String.valueOf(chars);
+    }
+
+    /**
+     * Returns sum length by input array of {@link String}
+     *
+     * @param array - initial input array of {@link String}
+     * @return sum length
+     */
+    public static int length(final String[] array) {
+        return streamOf(array).filter(org.apache.commons.lang3.StringUtils::isNoneBlank).map(String::length).mapToInt(Integer::intValue).sum();
     }
 
     /**

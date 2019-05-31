@@ -695,7 +695,7 @@ public class ComparatorUtils {
             if (first == last) return 0;
             if (Objects.isNull(first)) return (this.isNullsInPriority() ? 1 : -1);
             if (Objects.isNull(last)) return (this.isNullsInPriority() ? -1 : 1);
-            return (Objects.isNull(getComparator()) ? 0 : Objects.compare(first, last, getComparator()));
+            return (Objects.isNull(this.getComparator()) ? 0 : Objects.compare(first, last, this.getComparator()));
         }
 
         /**
@@ -707,8 +707,8 @@ public class ComparatorUtils {
         @Override
         public Comparator<T> thenComparing(@Nonnull final Comparator<? super T> otherComparator) {
             return new DefaultNullSafeComparator<>(
-                Objects.isNull(getComparator()) ? otherComparator : ((Comparator<T>) getComparator()).thenComparing(otherComparator),
-                isNullsInPriority()
+                Objects.isNull(this.getComparator()) ? otherComparator : ((Comparator<T>) this.getComparator()).thenComparing(otherComparator),
+                this.isNullsInPriority()
             );
         }
 
@@ -720,8 +720,8 @@ public class ComparatorUtils {
         @Override
         public Comparator<T> reversed() {
             return new DefaultNullSafeComparator<>(
-                Objects.isNull(getComparator()) ? null : getComparator().reversed(),
-                !isNullsInPriority()
+                Objects.isNull(this.getComparator()) ? null : this.getComparator().reversed(),
+                !this.isNullsInPriority()
             );
         }
     }
@@ -1637,17 +1637,7 @@ public class ComparatorUtils {
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
         public DefaultNullSafeStringArrayComparator(@Nullable final Comparator<? super String[]> comparator, boolean nullsInPriority) {
-            super(Objects.isNull(comparator) ? (o1, o2) -> {
-                int length1 = 0;
-                int length2 = 0;
-                for (final String s : o1) {
-                    length1 += Optional.ofNullable(s).map(String::length).orElse(0);
-                }
-                for (final String s : o2) {
-                    length2 += Optional.ofNullable(s).map(String::length).orElse(0);
-                }
-                return Integer.compare(length1, length2);
-            } : comparator, nullsInPriority);
+            super(Objects.isNull(comparator) ? Comparator.comparingInt(StringUtils::length) : comparator, nullsInPriority);
         }
     }
 
