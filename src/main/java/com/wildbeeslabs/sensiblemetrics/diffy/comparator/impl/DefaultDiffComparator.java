@@ -33,7 +33,11 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Currency;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.setAccessible;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
@@ -114,22 +118,25 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
      */
     @Override
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {
-        final List<DiffEntry<?>> result = new ArrayList<>();
-        this.getPropertySet()
+        return (S) this.getPropertySet()
             .stream()
             .filter(property -> this.getPropertyMap().containsKey(property))
-            .forEach(property -> {
-                try {
-                    setAccessible(this.getPropertyMap().get(property));
-                    final Object firstValue = this.getPropertyMap().get(property).get(first);
-                    final Object lastValue = this.getPropertyMap().get(property).get(last);
-                    if (!Objects.equals(compare(firstValue, lastValue, property), SortManager.SortDirection.EQ)) {
-                        result.add(DefaultDiffEntry.of(property, firstValue, lastValue));
-                    }
-                } catch (IllegalAccessException e) {
-                    log.error(formatMessage("ERROR: cannot get property: {%s}, message: {%s}", property, e.getMessage()));
-                }
-            });
-        return (S) result;
+            .map(property -> this.processProperty(first, last, property))
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+    }
+
+    private DiffEntry<?> processProperty(final T first, final T last, final String property) {
+        try {
+            setAccessible(this.getPropertyMap().get(property));
+            final Object firstValue = this.getPropertyMap().get(property).get(first);
+            final Object lastValue = this.getPropertyMap().get(property).get(last);
+            if (!Objects.equals(compare(firstValue, lastValue, property), SortManager.SortDirection.EQ)) {
+                return DefaultDiffEntry.of(property, firstValue, lastValue);
+            }
+        } catch (IllegalAccessException e) {
+            log.error(formatMessage("ERROR: cannot process property: {%s}, message: {%s}", property, e.getMessage()));
+        }
+        return null;
     }
 }
