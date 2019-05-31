@@ -1363,7 +1363,7 @@ public class ComparatorUtils {
                 if (firstSize > lastSize) return 1;
                 final Iterator<T> iteratorFirst = o1.iterator();
                 final Iterator<T> iteratorLast = o2.iterator();
-                final Comparator<? super T> comp = Optional.ofNullable(comparator).orElseGet(ComparableComparator::getInstance);
+                final Comparator<? super T> comp = Optional.ofNullable(comparator).orElseGet(() -> Comparator.comparing(Object::toString));
                 while (iteratorFirst.hasNext()) {
                     int temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), comp);
                     if (0 != temp) return temp;

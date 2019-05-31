@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.Currency;
@@ -99,6 +100,10 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
             return new ComparatorUtils.DefaultNullSafeClassComparator();
         } else if (URL.class.isAssignableFrom(fieldClazz)) {
             return new ComparatorUtils.DefaultNullSafeUrlComparator();
+        } else if (Iterable.class.isAssignableFrom(fieldClazz)) {
+            return new ComparatorUtils.DefaultNullSafeIterableComparator<>();
+        } else if (BigDecimal.class.isAssignableFrom(fieldClazz)) {
+            return new ComparatorUtils.DefaultNullSafeBigDecimalComparator();
         }
         if (fieldClazz.isArray()) {
             if (Object.class.isAssignableFrom(fieldClazz.getComponentType())) {
@@ -118,8 +123,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
      */
     @Override
     public <S extends Iterable<? extends DiffEntry<?>>> S diffCompare(final T first, final T last) {
-        return (S) this.getPropertySet()
-            .stream()
+        return (S) this.getPropertySet().stream()
             .filter(property -> this.getPropertyMap().containsKey(property))
             .map(property -> this.processProperty(first, last, property))
             .filter(Objects::nonNull)
