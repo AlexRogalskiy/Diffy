@@ -26,8 +26,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Objects;
-
 /**
  * Matcher mode type {@link Enum} to process malformed and unexpected data
  * <p>
@@ -64,6 +62,6 @@ public enum MatcherModeType implements BaseMatcherMode {
      */
     @Override
     public boolean isEnable() {
-        return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
+        return this.getStatus().isEnable();
     }
 }

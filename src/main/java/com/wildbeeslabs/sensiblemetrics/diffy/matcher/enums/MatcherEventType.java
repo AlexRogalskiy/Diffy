@@ -46,6 +46,33 @@ public enum MatcherEventType {
     }
 
     /**
+     * Returns binary flag based on current event type {@code MATCH_SUCCESS}
+     *
+     * @return true - if current event type is {@code MATCH_SUCCESS}, false - otherwise
+     */
+    public boolean isSuccess() {
+        return this.equals(MATCH_SUCCESS);
+    }
+
+    /**
+     * Returns binary flag based on current event type {@code MATCH_START}
+     *
+     * @return true - if current event type is {@code MATCH_START}, false - otherwise
+     */
+    public boolean isStart() {
+        return this.equals(MATCH_START);
+    }
+
+    /**
+     * Returns binary flag based on current event type {@code MATCH_COMPLETE}
+     *
+     * @return true - if current event type is {@code MATCH_COMPLETE}, false - otherwise
+     */
+    public boolean isComplete() {
+        return this.equals(MATCH_COMPLETE);
+    }
+
+    /**
      * Returns {@link MatcherEventType} by input event type {@link String}
      *
      * @param name - initial input event type {@link String}

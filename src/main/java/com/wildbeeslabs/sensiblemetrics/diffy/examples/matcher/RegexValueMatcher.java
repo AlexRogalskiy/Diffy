@@ -87,7 +87,7 @@ public class RegexValueMatcher<T> extends DefaultBiMatcher<T> {
         try {
             return Pattern.compile(pattern);
         } catch (PatternSyntaxException e) {
-            InvalidParameterException.throwInvalidParameter(String.format("ERROR: invalid pattern = {%s}, message = {%s}", pattern, e.getMessage()), e);
+            InvalidParameterException.throwError(String.format("ERROR: invalid pattern = {%s}, message = {%s}", pattern, e.getMessage()), e);
         }
         return null;
     }

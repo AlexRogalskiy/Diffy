@@ -35,7 +35,6 @@ import java.util.function.Function;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.reduceOrThrow;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 
 /**
  * Matcher interface declaration {@link BaseMatcher}
@@ -283,7 +282,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::and, () -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|"))));
+        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|")));
     }
 
     /**
@@ -303,7 +302,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::or, () -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|"))));
+        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|")));
     }
 
     /**
@@ -323,7 +322,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::xor, () -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|"))));
+        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|")));
     }
 
     /**
@@ -343,7 +342,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> nandAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::nand, () -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NAND", StringUtils.join(matchers, "|"))));
+        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", StringUtils.join(matchers, "|")));
     }
 
     /**
@@ -363,7 +362,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> norAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::nor, () -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical NOR", StringUtils.join(matchers, "|"))));
+        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", StringUtils.join(matchers, "|")));
     }
 
     /**
@@ -383,7 +382,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xnorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::xnor, () -> InvalidParameterException.throwInvalidParameter(formatMessage("Unable to combine matchers = {%s} via logical XNOR", StringUtils.join(matchers, "|"))));
+        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", StringUtils.join(matchers, "|")));
     }
 
     /**

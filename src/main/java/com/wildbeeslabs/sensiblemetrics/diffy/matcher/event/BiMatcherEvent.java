@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Binary matcher event implementation
+ * Binary {@link BaseMatcherEvent} implementation
  *
  * @param <T> type of input element to be matched by operation
  */
@@ -56,7 +56,7 @@ public class BiMatcherEvent<T> extends BaseMatcherEvent<T> {
     /**
      * Default binary matcher event constructor by input parameters
      *
-     * @param matcher - initial input {BiMatcher}
+     * @param matcher - initial input {@link BiMatcher}
      * @param first   - initial input first matchable {@code T}
      * @param last    - initial input last matchable {@code T}
      * @param type    - initial input event type {@link MatcherEventType}

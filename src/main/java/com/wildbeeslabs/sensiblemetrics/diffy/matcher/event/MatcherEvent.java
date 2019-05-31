@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Matcher event implementation
+ * Matcher {@link BaseMatcherEvent} implementation
  *
  * @param <T> type of input element to be matched by operation
  */
@@ -62,7 +62,7 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T> {
     }
 
     /**
-     * Creates new {@link MatcherEvent}
+     * Creates new {@link MatcherEvent} by input parameters
      *
      * @param matcher - initial input {@link Matcher}
      * @param value   - initial input matchable {@code T}
@@ -74,7 +74,7 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T> {
     }
 
     /**
-     * Creates new {@link MatcherEvent}
+     * Creates new {@link MatcherEvent} by input parameters
      *
      * @param matcher - initial input {@link Matcher}
      * @param value   - initial input matchable {@code T}

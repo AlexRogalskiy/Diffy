@@ -27,6 +27,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+
 /**
  * Invalid parameter {@link RuntimeException} implementation
  */
@@ -75,7 +77,7 @@ public class InvalidParameterException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link InvalidParameterException}
      */
-    public static final InvalidParameterException throwInvalidParameter(final String message, final Throwable throwable) {
+    public static final InvalidParameterException throwError(final String message, final Throwable throwable) {
         throw new InvalidParameterException(message, throwable);
     }
 
@@ -85,7 +87,17 @@ public class InvalidParameterException extends RuntimeException {
      * @param message - initial input raw message {@link String}
      * @return {@link InvalidParameterException}
      */
-    public static final InvalidParameterException throwInvalidParameter(final String message) {
+    public static final InvalidParameterException throwError(final String message) {
         throw new InvalidParameterException(message);
+    }
+
+    /**
+     * Returns {@link InvalidParameterException} instance by input parameters
+     *
+     * @param message - initial input raw message {@link String}
+     * @return {@link InvalidParameterException}
+     */
+    public static final InvalidParameterException throwError(final String message, final Object... args) {
+        throw new InvalidParameterException(formatMessage(message, args));
     }
 }
