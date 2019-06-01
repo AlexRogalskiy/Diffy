@@ -33,7 +33,7 @@ import lombok.NonNull;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.iterableOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.reduceOrThrow;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -238,7 +238,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @return true - if all input values {@link DefaultEntry} matches, false - otherwise
      */
     default boolean allMatch(final Iterable<Entry<T, T>> values) {
-        return iterableOf(values).stream().allMatch(v -> this.matches(v.getFirst(), v.getLast()));
+        return listOf(values).stream().allMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**
@@ -248,7 +248,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @return true - if all input values {@link DefaultEntry} matches, false - otherwise
      */
     default boolean noneMatch(final Iterable<Entry<T, T>> values) {
-        return iterableOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
+        return listOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**

@@ -151,7 +151,19 @@ public class ServiceUtils {
      * @return non-nullable {@link Iterable} collection
      */
     @NonNull
-    public static <T> List<T> iterableOf(final Iterable<T> iterable) {
+    public static <T> List<T> listOf(final Iterable<T> iterable) {
         return StreamSupport.stream(Optional.ofNullable(iterable).orElseGet(Collections::emptyList).spliterator(), false).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Iterable} by input {@link Iterator}
+     *
+     * @param <T>      type of input element to be converted from by operation
+     * @param iterator - initial input {@link Iterator}
+     * @return {@link Iterable}
+     */
+    @NonNull
+    public static <T> Iterable<T> iterableOf(final Iterator<T> iterator) {
+        return () -> iterator;
     }
 }

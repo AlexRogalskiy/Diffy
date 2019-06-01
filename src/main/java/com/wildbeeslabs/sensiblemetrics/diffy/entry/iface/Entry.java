@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.*;
@@ -60,6 +62,26 @@ public interface Entry<K, V> extends Serializable {
      */
     @Nullable
     V getLast();
+
+    /**
+     * Returns binary flag based on current first item value {@code V}
+     *
+     * @return true - if first item is {@code null}, false - otherwise
+     */
+    @JsonIgnore
+    default boolean isFirstNull() {
+        return Objects.isNull(this.getFirst());
+    }
+
+    /**
+     * Returns binary flag based on current last item value {@code V}
+     *
+     * @return true - if last item is {@code null}, false - otherwise
+     */
+    @JsonIgnore
+    default boolean isLastNull() {
+        return Objects.isNull(this.getLast());
+    }
 
     /**
      * Returns binary flag based on first/last values comparison

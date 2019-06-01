@@ -26,11 +26,8 @@ package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
 import lombok.NonNull;
 
-import javax.annotation.Nullable;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -44,7 +41,7 @@ import java.util.stream.Stream;
  * @version 1.1
  * @since 1.0
  */
-public interface DiffEntry<T> extends Serializable {
+public interface DiffEntry<T> extends Entry<T, T> {
 
     /**
      * Returns property name {@link String} to compare by
@@ -53,22 +50,6 @@ public interface DiffEntry<T> extends Serializable {
      */
     @NonNull
     String getPropertyName();
-
-    /**
-     * Returns property value {@code T} of first argument
-     *
-     * @return property value {@code T}
-     */
-    @Nullable
-    T getFirst();
-
-    /**
-     * Returns property value {@code T} of last argument
-     *
-     * @return property value {@code T}
-     */
-    @Nullable
-    T getLast();
 
 //    /**
 //     * Returns property {@link Entry} value
@@ -79,21 +60,12 @@ public interface DiffEntry<T> extends Serializable {
 //    Entry<T, T> getEntry();
 
     /**
-     * Returns binary flag based on first/last values comparison
-     *
-     * @return true - if first/last values are equal, false - otherwise
-     */
-    default boolean areEqual() {
-        return Objects.equals(getFirst(), getLast());
-    }
-
-    /**
      * Returns {@link Entry} of first {@code T} elements
      *
      * @return {@link Entry} of first {@code T} elements
      */
     default Entry<String, Object> first() {
-        return DefaultEntry.of(getPropertyName(), getFirst());
+        return DefaultEntry.of(this.getPropertyName(), this.getFirst());
     }
 
     /**
@@ -102,7 +74,7 @@ public interface DiffEntry<T> extends Serializable {
      * @return {@link Entry} of last {@code T} elements
      */
     default Entry<String, Object> last() {
-        return DefaultEntry.of(getPropertyName(), getLast());
+        return DefaultEntry.of(this.getPropertyName(), this.getLast());
     }
 
     /**

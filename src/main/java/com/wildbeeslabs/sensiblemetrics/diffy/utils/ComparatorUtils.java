@@ -41,7 +41,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.iterableOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
 
 /**
@@ -1674,7 +1674,7 @@ public class ComparatorUtils {
          * @param comparators - initial input {@link Iterable} collection of {@link Comparator}s
          */
         public DefaultMultiComparator(final Iterable<Comparator<? super T>> comparators) {
-            this.comparators = iterableOf(comparators);
+            this.comparators = listOf(comparators);
         }
 
         /**
