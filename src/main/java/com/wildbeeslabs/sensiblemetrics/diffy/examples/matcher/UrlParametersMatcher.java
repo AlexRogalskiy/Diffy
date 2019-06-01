@@ -28,12 +28,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Custom {@link String} {@link AbstractTypeSafeMatcher} implementation
@@ -63,10 +64,10 @@ public class UrlParametersMatcher extends AbstractTypeSafeMatcher<String> {
     }
 
     protected final Map<String, String> paramStringToMap(final String string) {
-        return Arrays.stream(Optional.ofNullable(string).orElse(StringUtils.EMPTY).split("&"))
+        return Arrays.stream(Optional.ofNullable(string).orElse(EMPTY).split("&"))
             .collect(Collectors.toMap(
                 (String s) -> s.split("=")[0],
-                (String s) -> s.split("=").length == 2 ? s.split("=")[1] : StringUtils.EMPTY));
+                (String s) -> s.split("=").length == 2 ? s.split("=")[1] : EMPTY));
     }
 
     @Override

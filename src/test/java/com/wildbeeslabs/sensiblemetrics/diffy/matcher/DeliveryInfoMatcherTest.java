@@ -37,7 +37,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.hamcrest.core.IsEqual;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
@@ -51,6 +50,7 @@ import java.util.UUID;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertTrue;
+import static org.apache.commons.lang3.StringUtils.trim;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertFalse;
@@ -220,7 +220,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         final Matcher<DeliveryInfo> deliveryInfoMatcher = DeliveryInfoMatcherUtils.withType(DEFAULT_TYPE);
-        final TypeSafeMatcher<DeliveryInfo> deliveryInfoMatcher2 = value -> Objects.nonNull(value) && StringUtils.trim(value.getGid()).matches(DEFAULT_NUMBER_REGEX);
+        final TypeSafeMatcher<DeliveryInfo> deliveryInfoMatcher2 = value -> Objects.nonNull(value) && trim(value.getGid()).matches(DEFAULT_NUMBER_REGEX);
 
         // then
         assertTrue(deliveryInfoMatcher.and(deliveryInfoMatcher2).matches(getDeliveryInfo()));
@@ -235,7 +235,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         final Matcher<DeliveryInfo> deliveryInfoMatcher = DeliveryInfoMatcherUtils.withType(DEFAULT_TYPE);
-        final TypeSafeMatcher<DeliveryInfo> deliveryInfoMatcher2 = value -> Objects.nonNull(value) && StringUtils.trim(value.getGid()).matches(DEFAULT_NUMBER_REGEX);
+        final TypeSafeMatcher<DeliveryInfo> deliveryInfoMatcher2 = value -> Objects.nonNull(value) && trim(value.getGid()).matches(DEFAULT_NUMBER_REGEX);
 
         // then
         assertFalse(deliveryInfoMatcher.and(deliveryInfoMatcher2).matches(getDeliveryInfo()));
@@ -260,7 +260,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertTrue(Matcher.andAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3, deliveryInfoMatcher4).matches(getDeliveryInfo()));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = InvalidParameterException.class)
     @DisplayName("Test delivery info entity by invalid custom delivery info andAll-chained matchers")
     public void test_deliveryInfo_by_invalidAndAllMatcher() {
         // when
@@ -273,7 +273,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertTrue(Matcher.andAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3, deliveryInfoMatcher4).matches(getDeliveryInfo()));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = InvalidParameterException.class)
     @DisplayName("Test delivery info entity by nullable custom delivery info andAll-chained matchers")
     public void test_deliveryInfo_by_nullableAndAllMatcher() {
         // when
@@ -405,7 +405,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertTrue(Matcher.orAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3, deliveryInfoMatcher4).matches(getDeliveryInfo()));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = InvalidParameterException.class)
     @DisplayName("Test delivery info entity by invalid custom delivery info orAll-chained matchers")
     public void test_deliveryInfo_by_invalidOrAllMatcher() {
         // given
@@ -424,7 +424,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertTrue(Matcher.orAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3, deliveryInfoMatcher4).matches(getDeliveryInfo()));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = InvalidParameterException.class)
     @DisplayName("Test delivery info entity by nullable custom delivery info orAll-chained matchers")
     public void test_deliveryInfo_by_nullableOrAllMatcher() {
         // when
@@ -633,7 +633,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertTrue(Matcher.xorAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3, deliveryInfoMatcher4).matches(getDeliveryInfo()));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = InvalidParameterException.class)
     @DisplayName("Test delivery info entity by invalid custom delivery info xorAll-chained matchers")
     public void test_deliveryInfo_by_invalidXorAllMatcher() {
         // given
@@ -652,7 +652,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertFalse(Matcher.xorAll(deliveryInfoMatcher, deliveryInfoMatcher2, deliveryInfoMatcher3, deliveryInfoMatcher4).matches(getDeliveryInfo()));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = InvalidParameterException.class)
     @DisplayName("Test delivery info entity by nullable custom delivery info xorAll-chained matchers")
     public void test_deliveryInfo_by_nullableXorAllMatcher() {
         // when

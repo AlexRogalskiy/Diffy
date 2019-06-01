@@ -35,6 +35,8 @@ import java.util.function.Function;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * String utilities implementation
@@ -124,7 +126,7 @@ public class StringUtils {
      * @return formatted string stripped by default regex pattern {@link String}
      */
     public static String sanitize(final String initialValue, final String pattern) {
-        return replaceAll(initialValue, pattern, org.apache.commons.lang3.StringUtils.EMPTY).trim();
+        return replaceAll(initialValue, pattern, EMPTY).trim();
     }
 
     /**
@@ -144,7 +146,7 @@ public class StringUtils {
      * @return decapitalized string {@link String}
      */
     public static String decapitalize(final String value) {
-        if (org.apache.commons.lang3.StringUtils.isEmpty(value)) {
+        if (isEmpty(value)) {
             return value;
         }
         if (value.length() > 1 && Character.isUpperCase(value.charAt(1)) && Character.isUpperCase(value.charAt(0))) {

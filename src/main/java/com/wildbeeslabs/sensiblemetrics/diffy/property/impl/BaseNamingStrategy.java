@@ -29,6 +29,8 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 
 import java.util.Objects;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 /**
  * Default base naming strategy implementation
  */
@@ -218,7 +220,7 @@ public class BaseNamingStrategy {
          */
         @Override
         public String translate(final String propertyName) {
-            if (org.apache.commons.lang3.StringUtils.isEmpty(propertyName)) {
+            if (isEmpty(propertyName)) {
                 return propertyName;
             }
             char c = propertyName.charAt(0);
@@ -262,7 +264,7 @@ public class BaseNamingStrategy {
          */
         @Override
         public String translate(final String propertyName) {
-            if (org.apache.commons.lang3.StringUtils.isEmpty(propertyName)) {
+            if (isEmpty(propertyName)) {
                 return null;
             }
             int length = propertyName.length();

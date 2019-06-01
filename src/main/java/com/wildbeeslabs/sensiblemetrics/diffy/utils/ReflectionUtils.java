@@ -52,6 +52,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.sanitize;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.TypeUtils.*;
+import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * Reflection utilities implementation
@@ -735,7 +736,7 @@ public class ReflectionUtils {
                     return 0;
                 });
         } else {
-            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", org.apache.commons.lang3.StringUtils.join(list, "|"), field, returnType.getName()));
+            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", join(list, "|"), field, returnType.getName()));
         }
         return list;
     }

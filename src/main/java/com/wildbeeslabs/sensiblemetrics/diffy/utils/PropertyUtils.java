@@ -34,13 +34,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.TypeUtils.DEFAULT_PRIMITIVE_TYPES;
+import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 /**
  * Property utilities implementation {@link NamingPredicate}, {@link NamingTransformer}, {@link NamingTokenizer}
@@ -98,36 +99,18 @@ public class PropertyUtils {
     };
 
     public static <T> Map<String, Function> getAccessors(final Class<T> clazz) {
-        final Map<String, Function> getters = new HashMap<>();
-        Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(GETTER_ACCESSOR_PREFIX) && m.getParameterTypes().length == 0).forEach(m -> {
-                final Function getter = createGetter(clazz, m);
-                final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(3));
-                getters.put(name, getter);
-            }
-        );
-        return getters;
+        return Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(GETTER_ACCESSOR_PREFIX) && m.getParameterTypes().length == 0)
+            .collect(Collectors.toUnmodifiableMap(m -> uncapitalize(m.getName().substring(3)), m -> createGetter(clazz, m), (m1, m2) -> m1));
     }
 
     public static <T, K, V> Map<String, Function<K, V>> isAccessors(final Class<T> clazz) {
-        final Map<String, Function<K, V>> getters = new HashMap<>();
-        Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(BOOLEAN_ACCESSOR_PREFIX) && m.getParameterTypes().length == 0).forEach(m -> {
-                final Function getter = createGetter(clazz, m);
-                final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(2));
-                getters.put(name, getter);
-            }
-        );
-        return getters;
+        return Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(BOOLEAN_ACCESSOR_PREFIX) && m.getParameterTypes().length == 0)
+            .collect(Collectors.toUnmodifiableMap(m -> uncapitalize(m.getName().substring(2)), m -> createGetter(clazz, m), (m1, m2) -> m1));
     }
 
     public static <T, K, V> Map<String, BiConsumer<K, V>> setAccessors(final Class<T> clazz) {
-        final Map<String, BiConsumer<K, V>> setters = new HashMap<>();
-        Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(SETTER_ACCESSOR_PREFIX) && m.getParameterTypes().length == 1).forEach(m -> {
-                final BiConsumer setter = createSetter(clazz, m);
-                final String name = org.apache.commons.lang3.StringUtils.uncapitalize(m.getName().substring(3));
-                setters.put(name, setter);
-            }
-        );
-        return setters;
+        return Arrays.stream(clazz.getMethods()).filter(m -> m.getName().startsWith(SETTER_ACCESSOR_PREFIX) && m.getParameterTypes().length == 1)
+            .collect(Collectors.toUnmodifiableMap(m -> uncapitalize(m.getName().substring(3)), m -> createSetter(clazz, m), (m1, m2) -> m1));
     }
 
     protected static <T, K, V> Function<K, V> createGetter(final Class<T> clazz, final Method method) {

@@ -11,7 +11,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -23,6 +22,7 @@ import java.net.URL;
 import java.util.*;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
  * Types utilities implementation
@@ -341,7 +341,7 @@ public class TypeUtils {
 
         public static String memberName(final AnnotatedMember member) {
             if (Objects.isNull(member) || Objects.isNull(member.getMember())) {
-                return StringUtils.EMPTY;
+                return EMPTY;
             }
             return member.getMember().getName();
         }

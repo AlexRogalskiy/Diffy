@@ -26,7 +26,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.sort;
 import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
 import lombok.*;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
@@ -35,6 +34,7 @@ import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.NullPriority.NATIVE;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Default {@link Streamable} sort manager implementation
@@ -486,7 +486,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * @param nullPriority must negate be {@literal null}.
          */
         private SortOrder(@Nullable final SortDirection direction, final String property, boolean ignoreCase, final NullPriority nullPriority) {
-            if (!StringUtils.isNotBlank(property)) {
+            if (!isNotBlank(property)) {
                 throw new IllegalArgumentException("Property must negate null or empty!");
             }
             this.direction = direction == null ? DEFAULT_DIRECTION : direction;

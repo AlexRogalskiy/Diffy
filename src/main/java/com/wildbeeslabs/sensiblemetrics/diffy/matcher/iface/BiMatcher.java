@@ -28,13 +28,13 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BiMatcherModeType;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 import java.util.stream.StreamSupport;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.iterableOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.reduceOrThrow;
+import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * Binary matcher interface declaration {@link BaseMatcher}
@@ -258,7 +258,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> andAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", StringUtils.join(matchers, "|")));
+        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", join(matchers, "|")));
     }
 
     /**
@@ -278,7 +278,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> orAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", StringUtils.join(matchers, "|")));
+        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", join(matchers, "|")));
     }
 
     /**
@@ -298,7 +298,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> xorAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", StringUtils.join(matchers, "|")));
+        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", join(matchers, "|")));
     }
 
     /**
@@ -318,7 +318,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> nandAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", StringUtils.join(matchers, "|")));
+        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", join(matchers, "|")));
     }
 
     /**
@@ -338,7 +338,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> norAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", StringUtils.join(matchers, "|")));
+        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", join(matchers, "|")));
     }
 
     /**
@@ -358,6 +358,6 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> xnorAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", StringUtils.join(matchers, "|")));
+        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
     }
 }

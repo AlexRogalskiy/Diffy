@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * Service utilities implementation
@@ -118,12 +120,16 @@ public class ServiceUtils {
      * @return {@link Optional} of {@code T}
      */
     @NonNull
-    public static <T, K extends RuntimeException> T reduceOrThrow(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer, final Supplier<? extends K> supplier) {
+    public static <T, K extends Throwable> T reduceOrThrow(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer, final Supplier<? extends K> supplier) {
         Objects.requireNonNull(predicate, "Predicate should not be null");
         Objects.requireNonNull(reducer, "Reducer should not be null");
         Objects.requireNonNull(supplier, "Supplier should not be null");
 
-        return reduce(values, predicate, reducer).orElseThrow(supplier);
+        try {
+            return reduce(values, predicate, reducer).orElseThrow(supplier);
+        } catch (Throwable k) {
+            throw new InvalidParameterException(String.format("ERROR: cannot operate reducer on values = {%s}", join(values, "|")), k);
+        }
     }
 
     /**
