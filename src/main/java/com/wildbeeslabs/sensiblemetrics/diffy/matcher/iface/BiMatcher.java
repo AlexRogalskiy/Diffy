@@ -27,14 +27,14 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BiMatcherModeType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeType;
 import lombok.NonNull;
 
 import java.util.Comparator;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.reduceOrThrow;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
@@ -66,11 +66,11 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Compares the two provided objects whether they are equal.
      *
-     * @param value1 - initial input first value {@code T}
-     * @param value2 - initial input last value {@code T}
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
      * @return true - if objects {@code T} are equal, false - otherwise
      */
-    boolean matches(final T value1, final T value2);
+    boolean matches(final T first, final T last);
 
     /**
      * Returns {@link BiMatcherModeType}

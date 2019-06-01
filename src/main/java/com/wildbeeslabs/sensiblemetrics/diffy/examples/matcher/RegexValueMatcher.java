@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatcherException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.PatternType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.PatternType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultBiMatcher;
 import lombok.Data;
@@ -96,21 +96,21 @@ public class RegexValueMatcher<T> extends DefaultBiMatcher<T> {
     /**
      * Compares the two provided objects whether they are equal
      *
-     * @param actual   - initial input actual value {@code T}
-     * @param expected - initial input expected value {@code T}
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
      * @return true - if objects {@code T} are equal, false - otherwise
      */
     @Override
-    public boolean matches(final T actual, final T expected) {
-        final String actualString = actual.toString();
-        final String expectedString = expected.toString();
+    public boolean matches(final T first, final T last) {
+        final String actualString = String.valueOf(first);
+        final String expectedString = String.valueOf(last);
         try {
             final Pattern pattern = isStaticPattern() ? this.expectedPattern : Pattern.compile(expectedString);
             if (!pattern.matcher(actualString).matches()) {
-                throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} did not match value", this.getPatternType()), pattern.toString(), actualString);
+                throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} did not match, expected value = {%s}, actual value = {%s}", this.getPatternType()), pattern.toString(), actualString);
             }
         } catch (PatternSyntaxException e) {
-            throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} is invalid, message ={%s} ", this.getPatternType(), e.getMessage()), e, expectedString, actualString);
+            throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} is invalid, message ={%s}", this.getPatternType(), e.getMessage()), e, expectedString, actualString);
         }
         return true;
     }

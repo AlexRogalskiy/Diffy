@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.examples.utils.DeliveryInfoMatcherUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.examples.utility.DeliveryInfoMatcherUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.DateUtils.toDate;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertTrue;
 import static org.apache.commons.lang3.StringUtils.trim;

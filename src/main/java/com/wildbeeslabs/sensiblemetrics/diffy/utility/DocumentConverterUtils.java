@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import com.google.gson.*;
 import lombok.experimental.UtilityClass;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
 
 /**
  * Document converter utilities implementation

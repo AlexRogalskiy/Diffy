@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
@@ -47,7 +47,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.MapperUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.MapperUtils.*;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNull;

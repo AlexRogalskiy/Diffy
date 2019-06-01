@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl;
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -37,8 +37,8 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.*;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.sanitize;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
 
 /**
  * Abstract difference comparator implementation by input object instance

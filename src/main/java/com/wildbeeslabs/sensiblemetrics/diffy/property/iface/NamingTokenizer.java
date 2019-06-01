@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.NameableType;
 
 /**
  * Tokenizes property accessor names to an array of simple property names according to the JavaBeans convention

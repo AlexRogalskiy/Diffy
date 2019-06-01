@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
 
 /**
  * Determines properties to be eligible for matching based on their name

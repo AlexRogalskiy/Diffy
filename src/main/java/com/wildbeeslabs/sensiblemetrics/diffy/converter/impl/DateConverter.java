@@ -30,8 +30,8 @@ import lombok.ToString;
 
 import java.util.Date;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.DEFAULT_DATE_FORMAT_PATTERN;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.DateUtils.DEFAULT_DATE_FORMAT_PATTERN;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.DateUtils.toDate;
 
 /**
  * Default {@link Date} {@link AbstractConverter} implementation

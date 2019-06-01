@@ -32,7 +32,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffMatchEntryView;
 import lombok.*;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.getRandomString;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.getRandomString;
 
 /**
  * Default difference match entry implementation

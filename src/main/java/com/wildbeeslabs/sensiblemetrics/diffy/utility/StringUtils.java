@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -33,7 +33,7 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isEmpty;

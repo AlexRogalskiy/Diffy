@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration;
 
 import lombok.NonNull;
 

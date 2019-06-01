@@ -33,7 +33,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffMatcherFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -47,7 +47,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.DateUtils.toDate;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.DateUtils.toDate;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

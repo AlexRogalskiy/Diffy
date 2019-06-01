@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -48,10 +48,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.sanitize;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.TypeUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.TypeUtils.*;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**

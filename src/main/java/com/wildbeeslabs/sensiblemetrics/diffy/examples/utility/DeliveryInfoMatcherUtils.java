@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.examples.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.examples.utility;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;

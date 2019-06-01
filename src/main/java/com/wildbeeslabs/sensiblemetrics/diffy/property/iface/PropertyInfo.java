@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;

@@ -32,9 +32,9 @@ import lombok.ToString;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.wrapInBrackets;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBrackets;
 import static java.util.Arrays.asList;
 
 /**

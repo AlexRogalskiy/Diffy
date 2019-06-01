@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.property.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.IllegalAccessException;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.PropertyInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +37,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
 
 /**
  * Abstract {@link PropertyInfo} implementation

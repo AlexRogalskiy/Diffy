@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
@@ -36,7 +36,7 @@ import lombok.ToString;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils.compare;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.compare;
 
 /**
  * Abstract {@link BiMatcher} implementation
@@ -91,24 +91,35 @@ public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMat
     /**
      * Compares the two provided objects whether they are equal.
      *
-     * @param value1 - initial input first value {@code T}
-     * @param value2 - initial input last value {@code T}
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
      * @return true - if objects {@code T} are equal, false - otherwise
      */
     @Override
-    public boolean matches(final T value1, final T value2) {
-        this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_START));
+    public boolean matches(final T first, final T last) {
+        this.emit(first, last, MatcherEventType.MATCH_START);
         boolean result = false;
         try {
-            this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_BEFORE));
-            result = SortManager.SortDirection.isEqual(compare(value1, value2, this.getComparator()));
-            this.handleEvent(BiMatcherEvent.of(this, value1, value2, result));
-            this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_AFTER));
+            this.emit(first, last, MatcherEventType.MATCH_BEFORE);
+            result = SortManager.SortDirection.isEqual(compare(first, last, this.getComparator()));
+            this.emit(first, last, MatcherEventType.fromBoolean(result));
+            this.emit(first, last, MatcherEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
-            BiMatchOperationException.throwIncorrectMatch(value1, value2, e);
+            BiMatchOperationException.throwIncorrectMatch(first, last, e);
         } finally {
-            this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_COMPLETE));
+            this.emit(first, last, MatcherEventType.MATCH_COMPLETE);
         }
         return result;
+    }
+
+    /**
+     * Emits {@link BiMatcherEvent} by input parameters
+     *
+     * @param first - initial input first matchable value {@code T}
+     * @param last  - initial input last matchable value {@code T}
+     * @param type  - initial input {@link MatcherEventType}
+     */
+    protected void emit(final T first, final T last, final MatcherEventType type) {
+        this.handleEvent(BiMatcherEvent.of(this, first, last, type));
     }
 }

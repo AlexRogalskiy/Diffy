@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.NameableType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enums.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingPredicate;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTokenizer;
 import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTransformer;
@@ -40,7 +40,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.TypeUtils.DEFAULT_PRIMITIVE_TYPES;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.TypeUtils.DEFAULT_PRIMITIVE_TYPES;
 import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 /**

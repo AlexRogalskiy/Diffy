@@ -31,7 +31,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultBiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -47,7 +47,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.*;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtilsTest.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtilsTest.*;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 

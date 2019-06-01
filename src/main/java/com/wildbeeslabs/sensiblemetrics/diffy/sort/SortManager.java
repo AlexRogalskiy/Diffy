@@ -33,7 +33,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.NullPriority.NATIVE;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**

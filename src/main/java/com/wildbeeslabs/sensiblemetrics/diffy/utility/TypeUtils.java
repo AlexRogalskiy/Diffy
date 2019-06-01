@@ -1,4 +1,4 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.TypeResolver;
@@ -21,7 +21,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.*;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**

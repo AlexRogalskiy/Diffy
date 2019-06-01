@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

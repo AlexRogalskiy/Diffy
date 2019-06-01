@@ -21,47 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
+
+import java.util.Objects;
 
 /**
- * Matcher mode type {@link Enum} to process malformed and unexpected data
- * <p>
- * 2 basic implementations are provided:
- * <ul>
- * <li>{@link #STRICT} return "true" on any occurrence</li>
- * <li>{@link #SILENT} ignores any problem</li>
- * </ul>
+ * Matcher status type {@link Enum}
  */
-@Getter
-@RequiredArgsConstructor
-public enum MatcherModeType implements BaseMatcherMode {
-    STRICT(MatcherStatusType.ENABLE),
-    SILENT(MatcherStatusType.DISABLE);
+public enum MatcherStatusType {
+    ENABLE,
+    DISABLE;
 
     /**
-     * Binary flag based on current status
-     */
-    private final MatcherStatusType status;
-
-    /**
-     * Return binary flag based on current mode {@code STRICT}
+     * Returns {@link MatcherStatusType} by input value
      *
-     * @return true - if current mode is {@code STRICT}, false - otherwise
+     * @param value - initial input value to match by
+     * @return {@link MatcherStatusType}
      */
-    public boolean isStrict() {
-        return this.equals(STRICT);
+    @NonNull
+    public static MatcherStatusType from(final boolean value) {
+        return value ? ENABLE : DISABLE;
     }
 
     /**
-     * Returns binary flag based on current mode status {@code ENABLE}
+     * Return binary flag based on current status {@code ENABLE}
      *
-     * @return true - if current mode status is {@code ENABLE}, false - otherwise
+     * @return true - if current status is {@code ENABLE}, false - otherwise
      */
-    @Override
     public boolean isEnable() {
-        return this.getStatus().isEnable();
+        return this.equals(ENABLE);
+    }
+
+    /**
+     * Returns binary flag based on input {@link MatcherStatusType}es comparison
+     *
+     * @param s1 - initial input {@link MatcherStatusType} to compare with
+     * @param s2 - initial input {@link MatcherStatusType} to compare by
+     * @return true - if {@link MatcherStatusType} are equal, false - otherwise
+     */
+    public static boolean equals(final MatcherStatusType s1, final MatcherStatusType s2) {
+        return Objects.equals(s1, s2);
     }
 }

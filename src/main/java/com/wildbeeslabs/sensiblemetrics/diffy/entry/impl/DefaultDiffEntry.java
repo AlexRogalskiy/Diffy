@@ -31,7 +31,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
 import lombok.*;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.getRandomString;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.getRandomString;
 
 /**
  * Default difference entry implementation

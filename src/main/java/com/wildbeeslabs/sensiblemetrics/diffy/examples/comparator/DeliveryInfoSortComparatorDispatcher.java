@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.ComparatorDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;

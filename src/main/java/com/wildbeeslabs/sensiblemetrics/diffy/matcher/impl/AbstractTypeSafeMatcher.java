@@ -24,10 +24,10 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -35,7 +35,7 @@ import lombok.ToString;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.getMethodType;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getMethodType;
 
 /**
  * Abstract type safe matcher implementation by input class instance {@link Class}
@@ -102,18 +102,28 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @Override
     public final boolean matches(final T value) {
-        this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_START));
+        this.emit(value, MatcherEventType.MATCH_START);
         boolean result = false;
         try {
-            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_BEFORE));
+            this.emit(value, MatcherEventType.MATCH_BEFORE);
             result = this.clazz.isInstance(value) && this.matchesSafe(value);
-            this.handleEvent(MatcherEvent.of(this, value, result));
-            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_AFTER));
+            this.emit(value, MatcherEventType.fromBoolean(result));
+            this.emit(value, MatcherEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
             MatchOperationException.throwIncorrectMatch(value, e);
         } finally {
-            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_COMPLETE));
+            this.emit(value, MatcherEventType.MATCH_COMPLETE);
         }
         return result;
+    }
+
+    /**
+     * Emits {@link MatcherEvent} by input parameters
+     *
+     * @param value - initial input matchable value {@code T}
+     * @param type  - initial input {@link MatcherEventType}
+     */
+    protected void emit(final T value, final MatcherEventType type) {
+        this.handleEvent(MatcherEvent.of(this, value, type));
     }
 }

@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -40,9 +40,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils.setAccessible;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.sanitize;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.setAccessible;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
 
 /**
  * Difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}

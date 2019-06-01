@@ -26,15 +26,15 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherModeType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeType;
 import lombok.NonNull;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.reduceOrThrow;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**

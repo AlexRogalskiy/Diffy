@@ -24,8 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BaseMatcherMode;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BiMatcherModeType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BaseMatcherMode;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 
 import java.io.Serializable;
