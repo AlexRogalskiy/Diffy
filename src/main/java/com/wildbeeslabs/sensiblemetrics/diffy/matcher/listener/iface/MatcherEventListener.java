@@ -33,12 +33,29 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
  * @param <T> type of input element to be matched by operation
  */
 public interface MatcherEventListener<T> extends EventListener<T> {
+
     /**
      * {@link MatcherEventListener} on start {@link BaseMatcherEvent}
      *
      * @param event - initial input event {@code E}
      */
     default <E extends BaseMatcherEvent<T>> void onStart(final E event) {
+    }
+
+    /**
+     * {@link MatcherEventListener} on before {@link BaseMatcherEvent}
+     *
+     * @param event - initial input event {@code E}
+     */
+    default <E extends BaseMatcherEvent<T>> void onBefore(final E event) {
+    }
+
+    /**
+     * {@link MatcherEventListener} on after {@link BaseMatcherEvent}
+     *
+     * @param event - initial input event {@code E}
+     */
+    default <E extends BaseMatcherEvent<T>> void onAfter(final E event) {
     }
 
     /**

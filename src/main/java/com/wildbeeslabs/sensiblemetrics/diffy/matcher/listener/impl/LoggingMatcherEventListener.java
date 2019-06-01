@@ -44,6 +44,7 @@ import static java.util.Arrays.asList;
 @EqualsAndHashCode
 @ToString
 public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
+
     /**
      * Logging {@link MatcherEventListener} instance
      */
@@ -57,6 +58,26 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
     @Override
     public <E extends BaseMatcherEvent<T>> void onStart(final E event) {
         log.info("{}, on start event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    }
+
+    /**
+     * {@link MatcherEventListener} on before {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    @Override
+    public <E extends BaseMatcherEvent<T>> void onBefore(final E event) {
+        log.info("{}, on before event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    }
+
+    /**
+     * {@link MatcherEventListener} on after {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    @Override
+    public <E extends BaseMatcherEvent<T>> void onAfter(final E event) {
+        log.info("{}, on after event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
 
     /**

@@ -48,6 +48,7 @@ import static java.util.Arrays.asList;
 @EqualsAndHashCode
 @ToString
 public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
+
     /**
      * Default {@link MatcherEventListener} instance
      */

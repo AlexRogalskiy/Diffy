@@ -102,15 +102,18 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @Override
     public final boolean matches(final T value) {
+        this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_START));
         boolean result = false;
         try {
-            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_START));
+            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_BEFORE));
             result = this.clazz.isInstance(value) && this.matchesSafe(value);
             this.handleEvent(MatcherEvent.of(this, value, result));
+            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_AFTER));
         } catch (RuntimeException e) {
             MatchOperationException.throwIncorrectMatch(value, e);
+        } finally {
+            this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_COMPLETE));
         }
-        this.handleEvent(MatcherEvent.of(this, value, MatcherEventType.MATCH_COMPLETE));
         return result;
     }
 }

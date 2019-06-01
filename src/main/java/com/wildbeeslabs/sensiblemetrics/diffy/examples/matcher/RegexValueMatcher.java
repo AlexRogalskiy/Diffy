@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatcherException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.PatternType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultBiMatcher;
@@ -71,6 +71,7 @@ public class RegexValueMatcher<T> extends DefaultBiMatcher<T> {
      *
      * @param pattern - initial input pattern {@link String}
      * @throws IllegalArgumentException if pattern is non-null and not a valid regular expression.
+     * @throws NullPointerException     if the argument is {@code null}
      */
     public RegexValueMatcher(final String pattern) throws IllegalArgumentException {
         Objects.requireNonNull(pattern, "Pattern should not be null");

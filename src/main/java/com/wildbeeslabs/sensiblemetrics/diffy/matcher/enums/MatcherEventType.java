@@ -33,9 +33,11 @@ import java.util.Arrays;
  */
 public enum MatcherEventType {
     MATCH_START,
+    MATCH_COMPLETE,
+    MATCH_BEFORE,
+    MATCH_AFTER,
     MATCH_SUCCESS,
-    MATCH_FAILURE,
-    MATCH_COMPLETE;
+    MATCH_FAILURE;
 
     /**
      * Returns {@link MatcherEventType} by input binary value

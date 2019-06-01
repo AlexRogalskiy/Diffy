@@ -97,15 +97,18 @@ public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMat
      */
     @Override
     public boolean matches(final T value1, final T value2) {
+        this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_START));
         boolean result = false;
         try {
-            this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_START));
+            this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_BEFORE));
             result = SortManager.SortDirection.isEqual(compare(value1, value2, this.getComparator()));
             this.handleEvent(BiMatcherEvent.of(this, value1, value2, result));
+            this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_AFTER));
         } catch (RuntimeException e) {
             BiMatchOperationException.throwIncorrectMatch(value1, value2, e);
+        } finally {
+            this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_COMPLETE));
         }
-        this.handleEvent(BiMatcherEvent.of(this, value1, value2, MatcherEventType.MATCH_COMPLETE));
         return result;
     }
 }

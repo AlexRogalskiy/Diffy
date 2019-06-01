@@ -98,6 +98,12 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
             case MATCH_COMPLETE:
                 listener.onComplete(event);
                 break;
+            case MATCH_BEFORE:
+                listener.onBefore(event);
+                break;
+            case MATCH_AFTER:
+                listener.onAfter(event);
+                break;
             default:
                 break;
         }

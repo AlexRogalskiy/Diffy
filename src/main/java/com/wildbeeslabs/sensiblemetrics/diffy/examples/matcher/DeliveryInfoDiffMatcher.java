@@ -59,7 +59,10 @@ public class DeliveryInfoDiffMatcher extends DefaultDiffMatcher<DeliveryInfo> {
      */
     private static final long serialVersionUID = 5301800742465906044L;
 
-    public static class Factory {
+    /**
+     * Default matcher factory implementation
+     */
+    public static class MatcherFactory {
         /**
          * Determines delivery info "Type" field matcher {@link Matcher}
          */
@@ -144,47 +147,47 @@ public class DeliveryInfoDiffMatcher extends DefaultDiffMatcher<DeliveryInfo> {
     }
 
     public DeliveryInfoDiffMatcher withType(final Integer type) {
-        this.include(Factory.DELIVERY_TYPE_MATCHER.apply(type));
+        this.include(MatcherFactory.DELIVERY_TYPE_MATCHER.apply(type));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withGid(final String gid) {
-        this.include(Factory.DELIVERY_GID_MATCHER.apply(gid));
+        this.include(MatcherFactory.DELIVERY_GID_MATCHER.apply(gid));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withCreatedDate(final Date createdDate) {
-        this.include(Factory.DELIVERY_CREATED_DATE_MATCHER.apply(createdDate));
+        this.include(MatcherFactory.DELIVERY_CREATED_DATE_MATCHER.apply(createdDate));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withUpdatedDate(final Date createdDate) {
-        this.include(Factory.DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
+        this.include(MatcherFactory.DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withIdMatcher(final Matcher<? super Long> matcher) {
-        this.include(Factory.FIELD_ID_MATCHER.apply(matcher));
+        this.include(MatcherFactory.FIELD_ID_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withCreatedDateMatcher(final Matcher<? super Date> matcher) {
-        this.include(Factory.FIELD_CREATED_DATE_MATCHER.apply(matcher));
+        this.include(MatcherFactory.FIELD_CREATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withUpdatedDateMatcher(final Matcher<? super Date> matcher) {
-        this.include(Factory.FIELD_UPDATED_DATE_MATCHER.apply(matcher));
+        this.include(MatcherFactory.FIELD_UPDATED_DATE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withTypeMatcher(final Matcher<? super Integer> matcher) {
-        this.include(Factory.FIELD_TYPE_MATCHER.apply(matcher));
+        this.include(MatcherFactory.FIELD_TYPE_MATCHER.apply(matcher));
         return this;
     }
 
     public DeliveryInfoDiffMatcher withGidMatcher(final Matcher<? super String> matcher) {
-        this.include(Factory.FIELD_GID_MATCHER.apply(matcher));
+        this.include(MatcherFactory.FIELD_GID_MATCHER.apply(matcher));
         return this;
     }
 
