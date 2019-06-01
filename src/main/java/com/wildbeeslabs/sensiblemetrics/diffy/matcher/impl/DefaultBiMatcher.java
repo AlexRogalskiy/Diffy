@@ -107,6 +107,7 @@ public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMat
             this.emit(first, last, MatcherEventType.fromBoolean(result));
             this.emit(first, last, MatcherEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
+            this.emit(first, last, MatcherEventType.MATCH_ERROR);
             BiMatchOperationException.throwIncorrectMatch(first, last, e);
         } finally {
             this.emit(first, last, MatcherEventType.MATCH_COMPLETE);

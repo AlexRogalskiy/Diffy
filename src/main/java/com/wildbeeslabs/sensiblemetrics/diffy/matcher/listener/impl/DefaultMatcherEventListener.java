@@ -83,12 +83,12 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
     }
 
     /**
-     * {@link MatcherEventListener} on error {@link MatcherEvent}
+     * {@link MatcherEventListener} on failure {@link MatcherEvent}
      *
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onError(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onFailure(final E event) {
         if (this.isEnableMode(event)) {
             this.getFailedMatchers().add(event.getMatcher());
         }

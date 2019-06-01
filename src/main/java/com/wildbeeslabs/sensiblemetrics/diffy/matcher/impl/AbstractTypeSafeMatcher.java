@@ -112,6 +112,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
             this.emit(value, MatcherEventType.fromBoolean(result));
             this.emit(value, MatcherEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
+            this.emit(value, MatcherEventType.MATCH_ERROR);
             MatchOperationException.throwIncorrectMatch(value, e);
         } finally {
             this.emit(value, MatcherEventType.MATCH_COMPLETE);

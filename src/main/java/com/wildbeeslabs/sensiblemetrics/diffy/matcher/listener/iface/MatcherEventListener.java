@@ -67,11 +67,11 @@ public interface MatcherEventListener<T> extends EventListener<T> {
     }
 
     /**
-     * {@link MatcherEventListener} on error {@link BaseMatcherEvent}
+     * {@link MatcherEventListener} on failure {@link BaseMatcherEvent}
      *
      * @param event - initial input event {@code E}
      */
-    default <E extends BaseMatcherEvent<T>> void onError(final E event) {
+    default <E extends BaseMatcherEvent<T>> void onFailure(final E event) {
     }
 
     /**
@@ -88,5 +88,13 @@ public interface MatcherEventListener<T> extends EventListener<T> {
      * @param event - initial input event {@code E}
      */
     default <E extends BaseMatcherEvent<T>> void onSkip(final E event) {
+    }
+
+    /**
+     * {@link MatcherEventListener} on error {@link BaseMatcherEvent}
+     *
+     * @param event - initial input event {@code E}
+     */
+    default <E extends BaseMatcherEvent<T>> void onError(final E event) {
     }
 }

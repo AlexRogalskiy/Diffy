@@ -96,7 +96,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onError(final E event) {
+    public <E extends BaseMatcherEvent<T>> void onFailure(final E event) {
         log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
 
@@ -118,6 +118,16 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
     @Override
     public <E extends BaseMatcherEvent<T>> void onSkip(final E event) {
         log.info("{}, on skip event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    }
+
+    /**
+     * {@link MatcherEventListener} on error {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    @Override
+    public <E extends BaseMatcherEvent<T>> void onError(final E event) {
+        log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
     }
 
     /**

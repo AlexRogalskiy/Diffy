@@ -35,6 +35,7 @@ public enum MatcherEventType {
     MATCH_START,
     MATCH_COMPLETE,
     MATCH_SKIP,
+    MATCH_ERROR,
     MATCH_BEFORE,
     MATCH_AFTER,
     MATCH_SUCCESS,
@@ -76,6 +77,15 @@ public enum MatcherEventType {
      */
     public boolean isComplete() {
         return this.equals(MATCH_COMPLETE);
+    }
+
+    /**
+     * Returns binary flag based on current event type {@code MATCH_ERROR}
+     *
+     * @return true - if current event type is {@code MATCH_ERROR}, false - otherwise
+     */
+    public boolean isError() {
+        return this.equals(MATCH_ERROR);
     }
 
     /**
