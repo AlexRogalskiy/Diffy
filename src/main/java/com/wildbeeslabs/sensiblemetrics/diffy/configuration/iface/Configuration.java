@@ -1,75 +1,113 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software andAll associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, andAll/or sell
+ * copies of the Software, andAll to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice andAll this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.configuration.iface;
 
-import java.util.Collections;
+import com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl.DiffyConfigurationKey;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+
 import java.util.Map;
 
 /**
  * Default configuration declaration
+ *
+ * @param <T> type of key
  */
-public interface Configuration {
+public interface Configuration<T> {
 
     /**
      * Default empty {@link Configuration} implementation
      */
-    Configuration EMPTY_CONFIGURATION = new Configuration() {
+    Configuration<?> EMPTY_CONFIGURATION = new Configuration<>() {
         @Override
-        public Map<String, String> getProperties() {
-            return Collections.emptyMap();
-        }
-
-        @Override
-        public Object getProperty(final String key) {
+        public Map<String, DiffyConfigurationKey<Object>> getKeys() {
             return null;
         }
 
         @Override
-        public void addProperty(final String key, final String value) {
+        public DiffyConfigurationKey<Object> getKey(final String keyName) {
+            return null;
         }
 
         @Override
-        public void updateProperty(final String key, final String value) {
+        public void registerKey(final DiffyConfigurationKey<Object> key) {
         }
 
         @Override
-        public void clearProperty(final String key) {
+        public void updateKey(final DiffyConfigurationKey<Object> key) {
+        }
+
+        @Override
+        public DiffyConfigurationKey<Object> removeKey(final String keyName) {
+            return null;
+        }
+
+        @Override
+        public void clearKeys() {
         }
     };
 
     /**
-     * Returns all Properties. Yes, this should have ideally returned a
-     * <code>Properties</code>, but doing so will make this operation dissapear
-     * from the JConsole.
+     * Returns immutable {@link Map} collection of currently registered {@link DiffyConfigurationKey}s
+     *
+     * @return immutable copy of {@link Map} collection of currently registered {@link DiffyConfigurationKey}s
+     * @throws InvalidParameterException - if key name is invalid
      */
-    public Map<String, String> getProperties();
+    Map<String, DiffyConfigurationKey<T>> getKeys();
 
     /**
-     * Returns the current value of a property given a key
+     * Returns {@link DiffyConfigurationKey} by input key name {@link String}
      *
-     * @param key
+     * @param - initial input key name {@link String}
+     * @return {@link DiffyConfigurationKey}
      */
-    public Object getProperty(final String key);
+    DiffyConfigurationKey<T> getKey(final String keyName);
 
     /**
-     * Adds a new property to the configuration
+     * Registers {@link DiffyConfigurationKey} by input parameters
      *
-     * @param key
-     * @param value
+     * @param key - initial input {@link DiffyConfigurationKey}
      */
-    public void addProperty(final String key, final String value);
+    void registerKey(final DiffyConfigurationKey<T> key);
 
     /**
-     * Updates an existing property with the new value
+     * Updates current key by input {@link DiffyConfigurationKey}
      *
-     * @param key
-     * @param value
+     * @param key - initial input {@link DiffyConfigurationKey}
+     * @return {@link DiffyConfigurationKey}
      */
-    public void updateProperty(final String key, final String value);
+    void updateKey(final DiffyConfigurationKey<T> key);
 
     /**
-     * Deletes the property identified by the passed in key
+     * Removes {@link DiffyConfigurationKey} by input key name {@link String}
      *
-     * @param key
+     * @param - initial input key name {@link String}
+     * @return {@link DiffyConfigurationKey}
      */
-    public void clearProperty(final String key);
+    DiffyConfigurationKey<T> removeKey(final String keyName);
 
+    /**
+     * Removes all registered {@link DiffyConfigurationKey}s from current {@link Map} collection
+     */
+    void clearKeys();
 }
