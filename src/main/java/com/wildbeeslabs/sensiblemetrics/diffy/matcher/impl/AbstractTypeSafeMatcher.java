@@ -31,6 +31,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -45,6 +46,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.get
  * @version 1.1
  * @since 1.0
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -124,6 +126,13 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      * @param type  - initial input {@link MatcherEventType}
      */
     protected void emit(final T value, final MatcherEventType type) {
-        this.handleEvent(MatcherEvent.of(this, value, type));
+        log.info("Emitting event with type = {%s}, value = {%s}", type, value);
+        MatcherEvent<T> event = null;
+        try {
+            event = MatcherEvent.of(this, value, type);
+            this.getHandler().handleEvent(event);
+        } catch (Exception e) {
+            log.error("ERROR: cannot handle event = {%s}", event);
+        }
     }
 }

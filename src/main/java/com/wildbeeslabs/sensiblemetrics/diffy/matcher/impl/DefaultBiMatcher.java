@@ -32,6 +32,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -46,6 +47,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.com
  * @version 1.1
  * @since 1.0
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -120,6 +122,13 @@ public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMat
      * @param type  - initial input {@link MatcherEventType}
      */
     protected void emit(final T first, final T last, final MatcherEventType type) {
-        this.handleEvent(BiMatcherEvent.of(this, first, last, type));
+        log.info("Emitting event with type = {%s}, first value = {%s}, last value = {%s}", type, first, last);
+        BiMatcherEvent<T> event = null;
+        try {
+            event = BiMatcherEvent.of(this, first, last, type);
+            this.getHandler().handleEvent(event);
+        } catch (Exception ex) {
+            log.error("ERROR: cannot handle event = {%s}", event);
+        }
     }
 }

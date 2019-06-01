@@ -23,8 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
@@ -46,7 +44,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherHandler<T> {
+public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -125,15 +123,5 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T>, MatcherH
             this.getMatchers().add(matcher);
         }
         return this;
-    }
-
-    /**
-     * {@link MatcherEvent} handler operator
-     *
-     * @param event - initial input {@link MatcherEvent} to handle
-     */
-    @Override
-    public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {
-        this.getHandler().handleEvent(event);
     }
 }

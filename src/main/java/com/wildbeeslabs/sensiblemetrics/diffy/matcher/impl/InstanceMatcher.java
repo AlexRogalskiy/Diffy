@@ -48,7 +48,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
     private static final long serialVersionUID = 296097385512552875L;
 
     /**
-     * Default matchable class instance {@link Class}
+     * Default matchable {@link Class}
      */
     private final Class<?> matchableClazz;
 
@@ -73,11 +73,11 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
     }
 
     /**
-     * Returns new matcher instance {@link Matcher} by input class instance {@link Class}
+     * Returns new matcher instance {@link Matcher} by input {@link Class}
      *
      * @param <T>   type of matcher value
-     * @param clazz - initial input class argument instance {@link Class}
-     * @return matcher instance {@link Matcher}
+     * @param clazz - initial input class argument {@link Class}
+     * @return {@link Matcher}
      */
     @NonNull
     @SuppressWarnings("unchecked")

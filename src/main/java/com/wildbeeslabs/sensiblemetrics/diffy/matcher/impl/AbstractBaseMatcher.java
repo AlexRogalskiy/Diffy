@@ -23,14 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherAdapter;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.*;
 
@@ -45,7 +42,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T>, MatcherHandler<T> {
+public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -59,6 +56,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T>, Match
     /**
      * Default {@link MatcherHandler} implementation
      */
+    @Getter(AccessLevel.PROTECTED)
     private final MatcherHandler<T> handler;
 
     /**
@@ -117,15 +115,5 @@ public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T>, Match
     @Override
     public void removeAllListeners() {
         this.getListeners().clear();
-    }
-
-    /**
-     * {@link BaseMatcherEvent} handler by input event {@code E}
-     *
-     * @param event - initial input event {@link E} to handle
-     */
-    @Override
-    public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {
-        this.getHandler().handleEvent(event);
     }
 }
