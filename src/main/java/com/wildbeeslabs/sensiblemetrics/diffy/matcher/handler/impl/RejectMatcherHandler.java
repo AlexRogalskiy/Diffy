@@ -46,9 +46,9 @@ public class RejectMatcherHandler<T> implements MatcherHandler<T> {
     public static final MatcherHandler INSTANCE = new RejectMatcherHandler<>();
 
     /**
-     * {@link BaseMatcherEvent} handler by input event {@code E}
+     * {@link BaseMatcherEvent} handler by input event {@link BaseMatcherEvent}
      *
-     * @param event - initial input event {@link E} to handle
+     * @param event - initial input event {@link BaseMatcherEvent} to handle
      */
     @Override
     public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {

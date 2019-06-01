@@ -52,7 +52,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
     /**
      * {@link BaseMatcherEvent} handler by input event {@code E}
      *
-     * @param <E>   type of input event
+     * @param <E>   type of processing event
      * @param event - initial input event {@link E} to handle
      */
     @Override
@@ -69,7 +69,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
     /**
      * Returns binary flag by input {@link BaseMatcherEvent}
      *
-     * @param <E>   type of input event
+     * @param <E>   type of processing event
      * @param event - initial input {@link BaseMatcherEvent}
      * @return true - if event handler is enabled, false - otherwise
      */
@@ -80,7 +80,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
     /**
      * Invokes {@link MatcherEventListener} by {@link BaseMatcherEvent} type
      *
-     * @param <E>      type of input event
+     * @param <E>      type of processing event
      * @param event    - initial input {@link BaseMatcherEvent}
      * @param listener - initial input {@link MatcherEventListener}
      */
