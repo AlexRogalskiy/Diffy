@@ -70,26 +70,56 @@ public enum PropertyAccessorType {
      */
     ALL;
 
+    /**
+     * Returns binary flag based on property accessor type {@code CREATOR} or {@code ALL}
+     *
+     * @return true - if current property accessor type is {@code CREATOR} or {@code ALL}, false - otherwise
+     */
     public boolean creatorEnabled() {
         return (this.equals(CREATOR) || this.isAll());
     }
 
+    /**
+     * Returns binary flag based on property accessor type {@code GETTER} or {@code ALL}
+     *
+     * @return true - if current property accessor type is {@code GETTER} or {@code ALL}, false - otherwise
+     */
     public boolean getterEnabled() {
         return (this.equals(GETTER) || this.isAll());
     }
 
+    /**
+     * Returns binary flag based on property accessor type {@code IS_GETTER} or {@code ALL}
+     *
+     * @return true - if current property accessor type is {@code IS_GETTER} or {@code ALL}, false - otherwise
+     */
     public boolean isGetterEnabled() {
         return (this.equals(IS_GETTER) || this.isAll());
     }
 
+    /**
+     * Returns binary flag based on property accessor type {@code SETTER} or {@code ALL}
+     *
+     * @return true - if current property accessor type is {@code SETTER} or {@code ALL}, false - otherwise
+     */
     public boolean setterEnabled() {
         return (this.equals(SETTER) || this.isAll());
     }
 
+    /**
+     * Returns binary flag based on property accessor type {@code FIELD} or {@code ALL}
+     *
+     * @return true - if current property accessor type is {@code SETTER} or {@code ALL}, false - otherwise
+     */
     public boolean fieldEnabled() {
         return (this.equals(FIELD) || this.isAll());
     }
 
+    /**
+     * Returns binary flag based on property accessor type is {@code ALL}
+     *
+     * @return true - if current property accessor type is {@code ALL}, false - otherwise
+     */
     public boolean isAll() {
         return this.equals(ALL);
     }
