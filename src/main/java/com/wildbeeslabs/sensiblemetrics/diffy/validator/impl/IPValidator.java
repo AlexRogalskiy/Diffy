@@ -39,8 +39,11 @@ import java.util.Set;
 @Slf4j
 public class IPValidator implements Validator<String> {
 
-    private static final Set<String> whiteListedIPs = ImmutableSet.of("127.0.0.1", "0:0:0:0:0:0:0:1");
-    private List<String[]> masks = new ArrayList<>();
+    /**
+     * Default valid IP addresses
+     */
+    private static final Set<String> DEFAULT_VALID_IP_ADDRESS_SET = ImmutableSet.of("127.0.0.1", "0:0:0:0:0:0:0:1");
+    private final List<String[]> masks = new ArrayList<>();
 
     public IPValidator(final String source) {
         Objects.requireNonNull(source, "IP source should not be null");
@@ -59,8 +62,9 @@ public class IPValidator implements Validator<String> {
         }
     }
 
+    @Override
     public boolean validate(final String value) {
-        if (StringUtils.isBlank(value) || this.whiteListedIPs.contains(value)) {
+        if (StringUtils.isBlank(value) || this.DEFAULT_VALID_IP_ADDRESS_SET.contains(value)) {
             return true;
         }
         if (this.masks.isEmpty()) {
