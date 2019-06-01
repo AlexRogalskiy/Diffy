@@ -81,4 +81,12 @@ public interface MatcherEventListener<T> extends EventListener<T> {
      */
     default <E extends BaseMatcherEvent<T>> void onComplete(final E event) {
     }
+
+    /**
+     * {@link MatcherEventListener} on skip {@link BaseMatcherEvent}
+     *
+     * @param event - initial input event {@code E}
+     */
+    default <E extends BaseMatcherEvent<T>> void onSkip(final E event) {
+    }
 }

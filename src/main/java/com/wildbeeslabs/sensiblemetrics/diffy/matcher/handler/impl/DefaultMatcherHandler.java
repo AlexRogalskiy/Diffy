@@ -92,6 +92,9 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
             case MATCH_FAILURE:
                 listener.onError(event);
                 break;
+            case MATCH_SKIP:
+                listener.onSkip(event);
+                break;
             case MATCH_START:
                 listener.onStart(event);
                 break;

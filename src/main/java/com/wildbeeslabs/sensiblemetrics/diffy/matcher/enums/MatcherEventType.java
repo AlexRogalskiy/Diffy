@@ -34,6 +34,7 @@ import java.util.Arrays;
 public enum MatcherEventType {
     MATCH_START,
     MATCH_COMPLETE,
+    MATCH_SKIP,
     MATCH_BEFORE,
     MATCH_AFTER,
     MATCH_SUCCESS,

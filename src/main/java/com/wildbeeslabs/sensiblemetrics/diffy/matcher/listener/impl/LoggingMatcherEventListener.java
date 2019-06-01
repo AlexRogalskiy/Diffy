@@ -111,6 +111,16 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
     }
 
     /**
+     * {@link MatcherEventListener} on skip {@link MatcherEvent}
+     *
+     * @param event - initial input {@link MatcherEvent}
+     */
+    @Override
+    public <E extends BaseMatcherEvent<T>> void onSkip(final E event) {
+        log.info("{}, on skip event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    }
+
+    /**
      * Returns {@link List} of supported {@link EventListener}s
      *
      * @return {@link List} of supported {@link EventListener}s
