@@ -62,7 +62,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .filter(Objects::nonNull)
-                .forEach(listener -> this.invokeEventListener(event, listener));
+                .forEach(listener -> new Thread(() -> invokeEventListener(event, listener)).start());
         }
     }
 
