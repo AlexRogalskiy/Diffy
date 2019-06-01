@@ -50,7 +50,7 @@ import java.util.stream.StreamSupport;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class DeliveryInfoSortComparatorDispatcher implements ComparatorDispatcher {
+public class DeliveryInfoSortComparatorDispatcher implements ComparatorDispatcher<DeliveryInfo> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -67,12 +67,13 @@ public class DeliveryInfoSortComparatorDispatcher implements ComparatorDispatche
      *
      * @param sortManager - initial input {@link SortManager}
      * @return {@link DeliveryInfo} {@link Comparator}
+     * @throws NullPointerException if the argument is {@code null}
      */
     @Override
     public Comparator<? super DeliveryInfo> getComparator(final SortManager sortManager) {
         Objects.requireNonNull(sortManager, "Sort manager should not be null!");
         final List<Comparator<? super DeliveryInfo>> comparatorList = StreamSupport.stream(sortManager.spliterator(), false)
-            .map(getSortOrderComparator())
+            .map(this.getSortOrderComparator())
             .collect(Collectors.toList());
         return new ComparatorUtils.DefaultMultiComparator<>(comparatorList);
     }

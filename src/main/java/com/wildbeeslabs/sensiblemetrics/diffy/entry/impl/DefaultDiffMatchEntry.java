@@ -85,6 +85,7 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
      * @param description - initial input {@link MatchDescription}
      * @return {@link DefaultDiffMatchEntry}
      */
+    @NonNull
     public static DefaultDiffMatchEntry of(final Object value, final MatchDescription description) {
         return DefaultDiffMatchEntry
             .builder()

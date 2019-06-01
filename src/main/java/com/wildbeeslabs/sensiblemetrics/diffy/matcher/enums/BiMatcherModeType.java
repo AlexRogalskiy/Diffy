@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
@@ -79,11 +80,12 @@ public enum BiMatcherModeType implements BaseMatcherMode {
      * @param statusType - initial input status type {@link MatcherStatusType}
      * @return {@link BiMatcherModeType}
      */
+    @NonNull
     public BiMatcherModeType byStatusType(final MatcherStatusType statusType) {
         if (statusType.isEnable()) {
-            return this.isExtensible() ? STRICT : SEALED;
+            return isExtensible() ? STRICT : SEALED;
         }
-        return this.isExtensible() ? LENIENT : SILENT;
+        return isExtensible() ? LENIENT : SILENT;
     }
 
     /**
@@ -92,10 +94,11 @@ public enum BiMatcherModeType implements BaseMatcherMode {
      * @param extensible - initial input extensible (if true - allows keys in actual that don't appear in expected, false - otherwise)
      * @return {@link BiMatcherModeType}
      */
+    @NonNull
     public BiMatcherModeType byExtensionMode(final boolean extensible) {
         if (extensible) {
-            return this.isEnable() ? STRICT : LENIENT;
+            return isEnable() ? STRICT : LENIENT;
         }
-        return this.isEnable() ? SEALED : SILENT;
+        return isEnable() ? SEALED : SILENT;
     }
 }

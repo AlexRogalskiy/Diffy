@@ -28,6 +28,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.beanutils.ConversionException;
+import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.converters.BooleanConverter;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -86,7 +88,7 @@ public class BoolLiteralConverter extends AbstractConverter<String, Boolean> {
         if (isEmpty(value)) {
             return null;
         }
-        org.apache.commons.beanutils.Converter bc = new org.apache.commons.beanutils.converters.BooleanConverter(this.getTrueStrings(), this.getFalseStrings());
+        final Converter bc = new BooleanConverter(this.getTrueStrings(), this.getFalseStrings());
         try {
             return bc.convert(Boolean.class, value.trim());
         } catch (ConversionException e) {

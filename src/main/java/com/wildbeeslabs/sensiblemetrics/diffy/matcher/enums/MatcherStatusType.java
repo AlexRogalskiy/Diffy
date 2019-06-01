@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
+import lombok.NonNull;
+
 import java.util.Objects;
 
 /**
@@ -38,6 +40,7 @@ public enum MatcherStatusType {
      * @param value - initial input value to match by
      * @return {@link MatcherStatusType}
      */
+    @NonNull
     public static MatcherStatusType from(final boolean value) {
         return value ? ENABLE : DISABLE;
     }

@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums;
 
+import lombok.NonNull;
+
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
@@ -41,6 +43,7 @@ public enum MatcherEventType {
      * @param value - initial input binary value
      * @return {@link MatcherEventType}
      */
+    @NonNull
     public static MatcherEventType fromBoolean(final boolean value) {
         return value ? MATCH_SUCCESS : MATCH_FAILURE;
     }

@@ -92,6 +92,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
      * @param last         - initial input last element value {@link Object}
      * @return {@link DefaultDiffEntry}
      */
+    @NonNull
     public static DefaultDiffEntry of(final String propertyName, final Object first, final Object last) {
         return DefaultDiffEntry
             .builder()

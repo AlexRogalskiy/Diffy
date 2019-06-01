@@ -62,6 +62,7 @@ public abstract class DefaultSortOrderComparator<T> implements Function<SortMana
      *
      * @param order - initial input {@code SortManager.SortOrder}
      * @return {@link Comparator}
+     * @throws NullPointerException if the argument is {@code null}
      */
     @Override
     public Comparator<? super T> apply(final SortManager.SortOrder order) {

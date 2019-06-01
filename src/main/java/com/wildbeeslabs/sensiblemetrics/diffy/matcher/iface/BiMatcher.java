@@ -28,9 +28,10 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.BiMatcherModeType;
+import lombok.NonNull;
 
+import java.util.Comparator;
 import java.util.Objects;
-import java.util.stream.StreamSupport;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.iterableOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.reduceOrThrow;
@@ -76,6 +77,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @return {@link BiMatcherModeType}
      */
+    @NonNull
     @Override
     default BiMatcherModeType getMode() {
         return BiMatcherModeType.STRICT;
@@ -86,6 +88,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @return negated {@link BiMatcher} operator
      */
+    @NonNull
     default BiMatcher<T> negate() {
         return (final T t1, final T t2) -> !matches(t1, t2);
     }
@@ -104,6 +107,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     default BiMatcher<T> and(final BiMatcher<? super T> other) {
         Objects.requireNonNull(other, "BiMatcher should not be null!");
         return (final T t1, final T t2) -> matches(t1, t2) && other.matches(t1, t2);
@@ -121,6 +125,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1 		0
      *                              </p>
      */
+    @NonNull
     default BiMatcher<T> not(final BiMatcher<? super T> other) {
         Objects.requireNonNull(other, "BiMatcher should not be null!");
         return (BiMatcher<T>) other.negate();
@@ -140,6 +145,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     default BiMatcher<T> or(final BiMatcher<? super T> other) {
         Objects.requireNonNull(other, "BiMatcher should not be null!");
         return (final T t1, final T t2) -> matches(t1, t2) || other.matches(t1, t2);
@@ -159,6 +165,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     default BiMatcher<T> xor(final BiMatcher<? super T> other) {
         Objects.requireNonNull(other, "BiMatcher should not be null!");
         return (final T t1, final T t2) -> matches(t1, t2) ^ other.matches(t1, t2);
@@ -178,6 +185,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1	 	0
      *                              </p>
      */
+    @NonNull
     default BiMatcher<T> nand(final BiMatcher<? super T> other) {
         Objects.requireNonNull(other, "BiMatcher should not be null!");
         return (final T t1, final T t2) -> not(and(other)).matches(t1, t2);
@@ -197,6 +205,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     default BiMatcher<T> nor(final BiMatcher<? super T> other) {
         Objects.requireNonNull(other, "BiMatcher should not be null!");
         return (final T t1, final T t2) -> not(or(other)).matches(t1, t2);
@@ -216,6 +225,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     default BiMatcher<T> xnor(final BiMatcher<? super T> other) {
         Objects.requireNonNull(other, "BiMatcher should not be null!");
         return (final T t1, final T t2) -> not(xor(other)).matches(t1, t2);
@@ -228,7 +238,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @return true - if all input values {@link DefaultEntry} matches, false - otherwise
      */
     default boolean allMatch(final Iterable<Entry<T, T>> values) {
-        return StreamSupport.stream(iterableOf(values).spliterator(), false).allMatch(v -> this.matches(v.getFirst(), v.getLast()));
+        return iterableOf(values).stream().allMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**
@@ -238,7 +248,20 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @return true - if all input values {@link DefaultEntry} matches, false - otherwise
      */
     default boolean noneMatch(final Iterable<Entry<T, T>> values) {
-        return StreamSupport.stream(iterableOf(values).spliterator(), false).noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
+        return iterableOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
+    }
+
+    /**
+     * Returns {@link BiMatcher} by input {@link Comparator}
+     *
+     * @param <T>        type of input element to be compared by operation
+     * @param comparator - initial input {@link Comparator}
+     * @return {@link BiMatcher}
+     */
+    @NonNull
+    static <T> BiMatcher<T> equalBy(final Comparator<? super T> comparator) {
+        Objects.requireNonNull(comparator, "Comparator should not be null");
+        return (final T a, final T b) -> Objects.compare(a, b, comparator) == 0;
     }
 
     /**
@@ -255,6 +278,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> andAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
@@ -275,6 +299,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> orAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
@@ -295,6 +320,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> xorAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
@@ -315,6 +341,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1	 	0
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> nandAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
@@ -335,6 +362,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> norAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
@@ -355,6 +383,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> xnorAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");

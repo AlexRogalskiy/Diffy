@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -78,6 +79,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
      * @param clazz - initial input class argument instance {@link Class}
      * @return matcher instance {@link Matcher}
      */
+    @NonNull
     @SuppressWarnings("unchecked")
     public static <T> Matcher<T> getMatcher(final Class<? extends T> clazz) {
         return (Matcher<T>) new InstanceMatcher(clazz);

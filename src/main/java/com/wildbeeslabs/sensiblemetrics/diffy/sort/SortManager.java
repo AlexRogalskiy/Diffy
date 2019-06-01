@@ -288,7 +288,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
         /**
          * Returns whether the direction is ascending {@code ASC}
          *
-         * @return true - if ascending order, false - otherwise
+         * @return true - if direction is {@code ASC}, false - otherwise
          */
         public boolean isAscending() {
             return this.equals(ASC);
@@ -297,10 +297,19 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
         /**
          * Returns whether the direction is descending {@code DESC}
          *
-         * @return true - if descending order, false - otherwise
+         * @return true - if direction is {@code DESC}, false - otherwise
          */
         public boolean isDescending() {
             return this.equals(DESC);
+        }
+
+        /**
+         * Returns whether the direction is descending {@code EQ}
+         *
+         * @return true - if direction is {@code EQ}, false - otherwise
+         */
+        public boolean isEqual() {
+            return this.equals(EQ);
         }
 
         /**
@@ -346,6 +355,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * @param value - initial input string code to be converted
          * @return wrapped enum {@link SortDirection} for the given string code
          */
+        @NonNull
         public static Optional<SortDirection> fromOptionalString(final String value) {
             try {
                 return Optional.of(fromString(value));

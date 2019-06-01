@@ -28,6 +28,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractFieldMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractMatcher;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.util.Date;
@@ -114,38 +115,47 @@ public class DeliveryInfoMatcherUtils {
         }
     };
 
+    @NonNull
     public static Matcher<DeliveryInfo> withType(final Integer type) {
         return (Matcher<DeliveryInfo>) DELIVERY_TYPE_MATCHER.apply(type);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withGid(final String gid) {
         return (Matcher<DeliveryInfo>) DELIVERY_GID_MATCHER.apply(gid);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withCreatedDate(final Date createdDate) {
         return (Matcher<DeliveryInfo>) DELIVERY_CREATED_DATE_MATCHER.apply(createdDate);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withUpdatedDate(final Date createdDate) {
         return (Matcher<DeliveryInfo>) DELIVERY_UPDATED_DATE_MATCHER.apply(createdDate);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withIdMatcher(final Matcher<? super Long> matcher) {
         return (Matcher<DeliveryInfo>) FIELD_ID_MATCHER.apply(matcher);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withCreatedDateMatcher(final Matcher<? super Date> matcher) {
         return (Matcher<DeliveryInfo>) FIELD_CREATED_DATE_MATCHER.apply(matcher);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withUpdatedDateMatcher(final Matcher<? super Date> matcher) {
         return (Matcher<DeliveryInfo>) FIELD_UPDATED_DATE_MATCHER.apply(matcher);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withTypeMatcher(final Matcher<? super Integer> matcher) {
         return (Matcher<DeliveryInfo>) FIELD_TYPE_MATCHER.apply(matcher);
     }
 
+    @NonNull
     public Matcher<DeliveryInfo> withGidMatcher(final Matcher<? super String> matcher) {
         return (Matcher<DeliveryInfo>) FIELD_GID_MATCHER.apply(matcher);
     }

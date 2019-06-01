@@ -94,6 +94,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      *
      * @param clazz      - initial input {@link Class}
      * @param comparator - initial input {@link Comparator}
+     * @throws NullPointerException if clazz argument is {@code null}
      */
     public AbstractDiffComparator(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
         this.clazz = Objects.requireNonNull(clazz, "Class should not be null!");

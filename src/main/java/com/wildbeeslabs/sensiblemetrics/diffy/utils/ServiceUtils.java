@@ -32,14 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utils.StringUtils.formatMessage;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -147,12 +146,12 @@ public class ServiceUtils {
     /**
      * Returns non-nullable {@link Iterable} collection from input {@link Iterable} collection of values {@code T}
      *
-     * @param <T>    type of input element to be converted from by operation
-     * @param values - initial input {@link Iterable} collection of {@code T} values
+     * @param <T>      type of input element to be converted from by operation
+     * @param iterable - initial input {@link Iterable} collection of {@code T} values
      * @return non-nullable {@link Iterable} collection
      */
     @NonNull
-    public static <T> Iterable<T> iterableOf(final Iterable<T> values) {
-        return Optional.ofNullable(values).orElseGet(Collections::emptyList);
+    public static <T> List<T> iterableOf(final Iterable<T> iterable) {
+        return StreamSupport.stream(Optional.ofNullable(iterable).orElseGet(Collections::emptyList).spliterator(), false).collect(Collectors.toList());
     }
 }

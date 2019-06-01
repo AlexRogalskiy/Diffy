@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.property.enums;
 
+import lombok.NonNull;
+
 /**
  * Nameable type {@link Enum}
  */
@@ -50,6 +52,7 @@ public enum NameableType {
      * @param propertyType - initial input {@link PropertyType}
      * @return {@link NameableType}
      */
+    @NonNull
     public static NameableType from(final PropertyType propertyType) {
         if (PropertyType.FIELD.equals(propertyType)) {
             return FIELD;

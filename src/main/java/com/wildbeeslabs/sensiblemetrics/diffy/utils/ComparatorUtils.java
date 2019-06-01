@@ -39,6 +39,10 @@ import java.math.RoundingMode;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.iterableOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utils.ServiceUtils.streamOf;
 
 /**
  * Comparator utilities implementation {@link Comparator}
@@ -1517,8 +1521,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial input first argument
-         * @param last  - initial input last argument
+         * @param first - initial input first argument {@code T}
+         * @param last  - initial input last argument {@code T}
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -1563,8 +1567,8 @@ public class ComparatorUtils {
          * "1" - last argument is greater than the first one
          * "0" - arguments are equal
          *
-         * @param first - initial input input first argument
-         * @param last  - initial input input last argument
+         * @param first - initial input first argument {@link Map.Entry}
+         * @param last  - initial input last argument {@link Map.Entry}
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         @Override
@@ -1655,20 +1659,42 @@ public class ComparatorUtils {
          */
         private final List<Comparator<? super T>> comparators;
 
-        public DefaultMultiComparator(final List<Comparator<? super T>> comparators) {
-            this.comparators = comparators;
-        }
-
+        /**
+         * Default multi comparator constructor by input array of {@link Comparator}s
+         *
+         * @param comparators - initial input array of {@link Comparator}
+         */
         public DefaultMultiComparator(final Comparator<? super T>... comparators) {
-            this(Arrays.asList(comparators));
+            this.comparators = streamOf(comparators).collect(Collectors.toList());
         }
 
-        public int compare(final T o1, final T o2) {
-            for (final Comparator<? super T> c : getComparators()) {
-                int result = c.compare(o1, o2);
-                if (0 != result) return result;
-            }
-            return 0;
+        /**
+         * Default multi comparator constructor by input {@link Iterable} collection of {@link Comparator}s
+         *
+         * @param comparators - initial input {@link Iterable} collection of {@link Comparator}s
+         */
+        public DefaultMultiComparator(final Iterable<Comparator<? super T>> comparators) {
+            this.comparators = iterableOf(comparators);
+        }
+
+        /**
+         * Returns numeric result of arguments comparison:
+         * "-1" - first argument is greater than the last one
+         * "1" - last argument is greater than the first one
+         * "0" - arguments are equal
+         *
+         * @param first - initial input first argument {@code T}
+         * @param last  - initial input last argument {@code T}
+         * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
+         */
+        @Override
+        public int compare(final T first, final T last) {
+            return this.getComparators().stream()
+                .filter(Objects::nonNull)
+                .map(c -> Objects.compare(first, last, c))
+                .filter(r -> 0 != r)
+                .findFirst()
+                .orElse(0);
         }
 
         public static <T> void sort(final List<T> list, final Comparator<? super T>... comparators) {

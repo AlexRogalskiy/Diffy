@@ -60,6 +60,8 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
         if (this.isEnableMode(event)) {
             Optional.ofNullable(event.getMatcher().getListeners())
                 .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(Objects::nonNull)
                 .forEach(listener -> this.invokeEventListener(event, listener));
         }
     }

@@ -23,11 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import lombok.NonNull;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Objects;
+import java.util.function.BinaryOperator;
 
 /**
  * Sort comparator declaration
@@ -41,11 +44,50 @@ import java.util.Comparator;
 public interface ComparatorDispatcher<T> extends Serializable {
 
     /**
-     * Returns {@link Comparator} by input {@link SortManager} instance
+     * Returns {@link Comparator} by input {@link SortManager}
      *
-     * @param sortManager - initial input {@link SortManager} instance
+     * @param sortManager - initial input {@link SortManager}
      * @return {@link Comparator}
      */
     @NonNull
     Comparator<? super T> getComparator(final SortManager sortManager);
+
+    /**
+     * Returns {@link BiMatcher} by input {@link Comparator}
+     *
+     * @param sortManager - initial input {@link SortManager}
+     * @return {@link BiMatcher}
+     * @throws NullPointerException if the argument is {@code null}
+     */
+    @NonNull
+    default BiMatcher<T> equalBy(final SortManager sortManager) {
+        Objects.requireNonNull(sortManager, "SortManager should not be null");
+        return (final T a, final T b) -> Objects.compare(a, b, this.getComparator(sortManager)) == 0;
+    }
+
+    /**
+     * Returns {@link BinaryOperator} which returns the greater of two elements according to the specified {@link SortManager}
+     *
+     * @param sortManager - initial input {@link SortManager}
+     * @return {@link BinaryOperator}
+     * @throws NullPointerException if the argument is {@code null}
+     */
+    @NonNull
+    default BinaryOperator<T> maxBy(final SortManager sortManager) {
+        Objects.requireNonNull(sortManager, "SortManager should not be null");
+        return (final T a, final T b) -> Objects.compare(a, b, this.getComparator(sortManager)) > 0 ? a : b;
+    }
+
+    /**
+     * Returns {@link BinaryOperator} which returns the lesser of two elements according to the specified {@link SortManager}
+     *
+     * @param sortManager - initial input {@link SortManager}
+     * @return {@link BinaryOperator}
+     * @throws NullPointerException if the argument is {@code null}
+     */
+    @NonNull
+    default BinaryOperator<T> minBy(final SortManager sortManager) {
+        Objects.requireNonNull(sortManager, "SortManager should not be null");
+        return (a, b) -> Objects.compare(a, b, this.getComparator(sortManager)) < 0 ? a : b;
+    }
 }

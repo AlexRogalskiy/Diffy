@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterExceptio
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enums.MatcherModeType;
+import lombok.NonNull;
 
 import java.util.Objects;
 import java.util.Set;
@@ -91,6 +92,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @return {@link MatchDescription}
      */
+    @NonNull
     default MatchDescription getDescription() {
         return MatchDescription.EMPTY_MATCH_DESCRIPTION;
     }
@@ -100,6 +102,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @return {@link MatcherModeType}
      */
+    @NonNull
     @Override
     default MatcherModeType getMode() {
         return MatcherModeType.STRICT;
@@ -110,6 +113,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @return negated {@link Matcher} operator
      */
+    @NonNull
     default Matcher<T> negate() {
         return (final T t) -> !matches(t);
     }
@@ -128,6 +132,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     default Matcher<T> and(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> matches(t) && other.matches(t);
@@ -145,6 +150,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1 		0
      *                              </p>
      */
+    @NonNull
     default Matcher<T> not(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
         return (Matcher<T>) other.negate();
@@ -164,6 +170,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     default Matcher<T> or(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> matches(t) || other.matches(t);
@@ -183,6 +190,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     default Matcher<T> xor(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> matches(t) ^ other.matches(t);
@@ -202,6 +210,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1	 	0
      *                              </p>
      */
+    @NonNull
     default Matcher<T> nand(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> not(and(other)).matches(t);
@@ -221,6 +230,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     default Matcher<T> nor(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> not(or(other)).matches(t);
@@ -240,6 +250,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     default Matcher<T> xnor(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
         return (final T t) -> not(xor(other)).matches(t);
@@ -279,6 +290,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
@@ -299,6 +311,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
@@ -319,6 +332,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
@@ -339,6 +353,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1	 	0
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> nandAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
@@ -359,6 +374,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		0
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> norAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
@@ -379,6 +395,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              1		1		1
      *                              </p>
      */
+    @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xnorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
@@ -393,6 +410,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @return {@link Matcher} operator that tests if two arguments are equal according
      * to {@link Objects#equals(Object, Object)}
      */
+    @NonNull
     static <T> Matcher<T> isEqual(final T value) {
         return Objects.isNull(value) ? Objects::isNull : (final T t) -> Objects.equals(value, t);
     }
