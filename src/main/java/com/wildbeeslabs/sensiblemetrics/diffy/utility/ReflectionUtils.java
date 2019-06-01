@@ -805,4 +805,13 @@ public class ReflectionUtils {
             return method.getParameterTypes()[getTypeParameter()];
         }
     }
+
+    public static <T> T convertToType(final Class<T> clazz, final Object value, final String errorMessage) {
+        Objects.requireNonNull(clazz, "Class should not be null");
+        Objects.requireNonNull(value, "Value should not be null");
+        if (!clazz.isAssignableFrom(value.getClass())) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+        return (T) value;
+    }
 }
