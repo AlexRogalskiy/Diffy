@@ -23,16 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -40,18 +37,17 @@ import java.util.Optional;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.compare;
 
 /**
- * Abstract {@link BiMatcher} implementation
+ * Comparator {@link BiMatcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMatcher<T> {
+public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -66,8 +62,8 @@ public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMat
     /**
      * Default abstract matcher constructor
      */
-    public DefaultBiMatcher() {
-        this(null, null);
+    public ComparatorBiMatcher() {
+        this(null);
     }
 
     /**
@@ -75,7 +71,7 @@ public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMat
      *
      * @param comparator - initial input {@link Comparator}
      */
-    public DefaultBiMatcher(final Comparator<? super T> comparator) {
+    public ComparatorBiMatcher(final Comparator<? super T> comparator) {
         this(null, comparator);
     }
 
@@ -85,51 +81,30 @@ public class DefaultBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMat
      * @param handler    - initial input {@link MatcherHandler}
      * @param comparator - initial input {@link Comparator}
      */
-    public DefaultBiMatcher(final MatcherHandler<T> handler, final Comparator<? super T> comparator) {
+    public ComparatorBiMatcher(final MatcherHandler<T> handler, final Comparator<? super T> comparator) {
         super(handler);
         this.comparator = Optional.ofNullable(comparator).orElseGet(() -> Comparator.comparing(Object::toString));
     }
 
     /**
-     * Compares the two provided objects whether they are equal.
+     * Returns binary flag depending on initial argument value by type safe comparison
      *
      * @param first - initial input first value {@code T}
      * @param last  - initial input last value {@code T}
-     * @return true - if objects {@code T} are equal, false - otherwise
+     * @return true - if input values {@code T} matches safely, false - otherwise
      */
     @Override
-    public boolean matches(final T first, final T last) {
-        this.emit(first, last, MatcherEventType.MATCH_START);
-        boolean result = false;
-        try {
-            this.emit(first, last, MatcherEventType.MATCH_BEFORE);
-            result = SortManager.SortDirection.isEqual(compare(first, last, this.getComparator()));
-            this.emit(first, last, MatcherEventType.fromBoolean(result));
-            this.emit(first, last, MatcherEventType.MATCH_AFTER);
-        } catch (RuntimeException e) {
-            this.emit(first, last, MatcherEventType.MATCH_ERROR);
-            BiMatchOperationException.throwIncorrectMatch(first, last, e);
-        } finally {
-            this.emit(first, last, MatcherEventType.MATCH_COMPLETE);
-        }
-        return result;
+    public boolean matchesSafe(final T first, final T last) {
+        return SortManager.SortDirection.isEqual(compare(first, last, this.getComparator()));
     }
 
     /**
-     * Emits {@link BiMatcherEvent} by input parameters
+     * Appends input {@link MatchDescription} by current description
      *
-     * @param first - initial input first matchable value {@code T}
-     * @param last  - initial input last matchable value {@code T}
-     * @param type  - initial input {@link MatcherEventType}
+     * @param description - initial input {@link MatchDescription}
      */
-    protected void emit(final T first, final T last, final MatcherEventType type) {
-        log.info("Emitting event with type = {%s}, first value = {%s}, last value = {%s}", type, first, last);
-        BiMatcherEvent<T> event = null;
-        try {
-            event = BiMatcherEvent.of(this, first, last, type);
-            this.getHandler().handleEvent(event);
-        } catch (Exception ex) {
-            log.error("ERROR: cannot handle event = {%s}", event);
-        }
+    @Override
+    public void describeBy(final MatchDescription description) {
+        description.append("matches(\"" + this.getComparator() + "\")");
     }
 }

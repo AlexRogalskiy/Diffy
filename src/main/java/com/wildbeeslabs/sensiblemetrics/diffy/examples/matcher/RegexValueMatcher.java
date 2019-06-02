@@ -27,7 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatcherException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.PatternType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultBiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.ComparatorBiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -47,7 +47,7 @@ import java.util.regex.PatternSyntaxException;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RegexValueMatcher<T> extends DefaultBiMatcher<T> {
+public class RegexValueMatcher<T> extends ComparatorBiMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability

@@ -50,6 +50,7 @@ public class IPValidator implements Validator<String> {
         final String[] parts = source.split("[,;]");
         for (final String part : parts) {
             final String m = part.trim();
+
             String[] mask = this.ipv4(m);
             if (Objects.isNull(mask)) {
                 mask = this.ipv6(m);
@@ -62,6 +63,12 @@ public class IPValidator implements Validator<String> {
         }
     }
 
+    /**
+     * Returns true if input value {@link String} is valid, false - otherwise
+     *
+     * @param value - initial input value to be validated {@link String }
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
     @Override
     public boolean validate(final String value) {
         if (StringUtils.isBlank(value) || this.DEFAULT_VALID_IP_ADDRESS_SET.contains(value)) {
@@ -71,17 +78,17 @@ public class IPValidator implements Validator<String> {
             return true;
         }
 
-        String[] ipv = ipv4(value);
+        String[] ipv = this.ipv4(value);
         if (Objects.isNull(ipv)) {
-            ipv = ipv6(value);
+            ipv = this.ipv6(value);
             if (Objects.isNull(ipv)) {
                 log.warn("IP format not supported: '{}'", value);
                 return true;
             }
         }
 
-        for (final String[] mask : masks) {
-            if (match(mask, ipv)) {
+        for (final String[] mask : this.masks) {
+            if (this.match(mask, ipv)) {
                 return true;
             }
         }
@@ -115,5 +122,15 @@ public class IPValidator implements Validator<String> {
             return null;
         }
         return ipp;
+    }
+
+    /**
+     * Returns {@link IPValidator} by input parameters
+     *
+     * @param value - initial input value {@link String}
+     * @return {@link IPValidator}
+     */
+    public static IPValidator of(final String value) {
+        return new IPValidator(value);
     }
 }

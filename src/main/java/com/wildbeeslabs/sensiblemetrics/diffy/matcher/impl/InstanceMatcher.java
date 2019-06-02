@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
 import lombok.Data;
@@ -70,6 +71,16 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
     @Override
     public boolean matches(final Object value) {
         return getMatchableClazz().isInstance(value);
+    }
+
+    /**
+     * Appends input {@link MatchDescription} by current description
+     *
+     * @param description - initial input {@link MatchDescription}
+     */
+    @Override
+    public void describeBy(final MatchDescription description) {
+        description.append("matches(\"" + this.matchableClazz.getName() + "\")");
     }
 
     /**

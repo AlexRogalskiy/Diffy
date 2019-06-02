@@ -32,6 +32,12 @@ import java.util.Objects;
  */
 public class HexValidator implements Validator<String> {
 
+    /**
+     * Returns true if input value {@link String} is valid, false - otherwise
+     *
+     * @param value - initial input value to be validated {@link String }
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
     @Override
     public boolean validate(final String value) {
         if (Objects.isNull(value)) {
@@ -57,5 +63,14 @@ public class HexValidator implements Validator<String> {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Returns {@link HexValidator}
+     *
+     * @return {@link HexValidator}
+     */
+    public static HexValidator of() {
+        return new HexValidator();
     }
 }

@@ -19,6 +19,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires com.fasterxml.classmate;
     requires commons.lang;
     requires org.jetbrains.annotations;
+    requires org.apache.commons.text;
 
     // exports comparator interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;

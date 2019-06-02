@@ -23,10 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 
 /**
- * Type safe {@link Matcher} interface declaration
+ * Type safe {@link BiMatcher} interface declaration
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -34,19 +34,20 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
  * @since 1.0
  */
 @FunctionalInterface
-public interface TypeSafeMatcher<T> extends Matcher<T> {
+public interface TypeSafeBiMatcher<T> extends BiMatcher<T> {
 
     /**
-     * Returns binary flag depending on initial argument value by comparison
+     * Compares provided objects by equality constraint
      *
-     * @param value - initial input argument value {@code T}
-     * @return true - if input value {@code T} matches, false - otherwise
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
+     * @return true - if input values {@code T} matches, false - otherwise
      */
-    default boolean matches(final T value) {
+    default boolean matches(final T first, final T last) {
         try {
-            return this.matchesSafe(value);
+            return this.matchesSafe(first, last);
         } catch (RuntimeException e) {
-            MatchOperationException.throwIncorrectMatch(value, e);
+            BiMatchOperationException.throwIncorrectMatch(first, last, e);
         }
         return false;
     }
@@ -54,8 +55,9 @@ public interface TypeSafeMatcher<T> extends Matcher<T> {
     /**
      * Returns binary flag depending on initial argument value by type safe comparison
      *
-     * @param value - initial input argument value {@code T}
-     * @return true - if input value {@code T} matches safely, false - otherwise
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
+     * @return true - if input values {@code T} matches safely, false - otherwise
      */
-    boolean matchesSafe(final T value);
+    boolean matchesSafe(final T first, final T last);
 }

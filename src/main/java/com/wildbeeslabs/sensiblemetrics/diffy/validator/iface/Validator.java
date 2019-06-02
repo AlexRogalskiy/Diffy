@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.iface;
 
+import lombok.NonNull;
+
 /**
  * Validator interface declaration
  *
@@ -49,12 +51,13 @@ public interface Validator<T> {
     boolean validate(final T value);
 
     /**
-     * Gets a new validator to use for the value of the field with the given name.
+     * Gets new {@link Validator} to use for the value of the field with the given name.
      *
-     * @param fieldName the field name
-     * @return a non-null validator
+     * @param value - initial input value {@code T}
+     * @return {@link Validator}
      */
-    default Validator<T> getValidatorForField(final String fieldName) {
+    @NonNull
+    default Validator<T> getValidatorFor(final T value) {
         return (Validator<T>) DEFAULT_TRUE_INSTANCE;
     }
 }

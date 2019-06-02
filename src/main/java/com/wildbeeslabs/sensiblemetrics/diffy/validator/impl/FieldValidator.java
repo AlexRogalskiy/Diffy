@@ -27,16 +27,39 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
 /**
  * Field name {@link Validator}
+ *
+ * @param <T> type of validated value
  */
-public class FieldNameValidator<T> implements Validator<T> {
+public class FieldValidator<T> implements Validator<T> {
 
+    /**
+     * Default {@code T} value
+     */
+    private final T value;
+
+    public FieldValidator(final T value) {
+        this.value = value;
+    }
+
+    /**
+     * Returns true if input value {@code T} is valid, false - otherwise
+     *
+     * @param value - initial input value to be validated {@code T}
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
     @Override
     public boolean validate(final T value) {
         return true;
     }
 
-    @Override
-    public Validator getValidatorForField(final String fieldName) {
-        return this;
+    /**
+     * Returns {@link FieldValidator} by input value {@code T}
+     *
+     * @param <T>   type of validated value
+     * @param value - initial input value {@code T}
+     * @return {@link FieldValidator}
+     */
+    public static <T> FieldValidator<T> of(final T value) {
+        return new FieldValidator<>(value);
     }
 }

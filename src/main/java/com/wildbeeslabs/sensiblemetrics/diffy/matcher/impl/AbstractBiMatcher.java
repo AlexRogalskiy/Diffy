@@ -21,41 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Type safe {@link Matcher} interface declaration
+ * Abstract {@link Matcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@FunctionalInterface
-public interface TypeSafeMatcher<T> extends Matcher<T> {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public abstract class AbstractBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMatcher<T> {
 
     /**
-     * Returns binary flag depending on initial argument value by comparison
-     *
-     * @param value - initial input argument value {@code T}
-     * @return true - if input value {@code T} matches, false - otherwise
+     * Default explicit serialVersionUID for interoperability
      */
-    default boolean matches(final T value) {
-        try {
-            return this.matchesSafe(value);
-        } catch (RuntimeException e) {
-            MatchOperationException.throwIncorrectMatch(value, e);
-        }
-        return false;
+    private static final long serialVersionUID = -8095028622799973957L;
+
+    /**
+     * Default abstract matcher constructor
+     */
+    public AbstractBiMatcher() {
+        this(null);
     }
 
     /**
-     * Returns binary flag depending on initial argument value by type safe comparison
+     * Default abstract matcher constructor with input {@link MatcherHandler}
      *
-     * @param value - initial input argument value {@code T}
-     * @return true - if input value {@code T} matches safely, false - otherwise
+     * @param handler - initial input {@link MatcherHandler}
      */
-    boolean matchesSafe(final T value);
+    public AbstractBiMatcher(final MatcherHandler<T> handler) {
+        super(handler);
+    }
 }

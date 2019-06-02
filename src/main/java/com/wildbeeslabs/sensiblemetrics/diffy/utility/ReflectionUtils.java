@@ -162,8 +162,8 @@ public class ReflectionUtils {
             return constructor.newInstance();
         } catch (Exception e) {
             BadOperationException.throwBadOperation(formatMessage("ERROR: cannot create instance by class: {%s}", clazz), e);
-            return null;
         }
+        return null;
     }
 
     /**
@@ -222,7 +222,7 @@ public class ReflectionUtils {
     /**
      * Returns null-safe argument cast {@link Class}
      *
-     * @param <T>
+     * @param <T>   type of class item
      * @param value - initial argument to be casted {@link Object}
      * @param clazz - initial class to be casted to {@link Class}
      * @return casted object
@@ -284,7 +284,7 @@ public class ReflectionUtils {
      * @param clazz           the class to look up, may be {@code null}
      * @param interfacesFound the {@code Set} of interfaces for the class
      */
-    private static void getAllInterfaces(Class<?> clazz, Set<Class<?>> interfacesFound) {
+    private static void getAllInterfaces(Class<?> clazz, final Set<Class<?>> interfacesFound) {
         while (Objects.nonNull(clazz)) {
             final Class<?>[] interfaces = clazz.getInterfaces();
             for (final Class<?> i : interfaces) {

@@ -28,6 +28,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeType;
 import lombok.NonNull;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Objects;
 import java.util.Set;
@@ -72,6 +73,10 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * Default unique {@link Matcher}
      */
     Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> (value) -> set.add(value);
+    /**
+     * Default identity {@link Matcher}
+     */
+    Function<String, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final String identity) -> (value) -> Objects.equals(identity, ObjectUtils.identityToString(value));
     /**
      * Default exception {@link Matcher}
      */
@@ -274,6 +279,16 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     default boolean noneMatch(final T... values) {
         return streamOf(values).noneMatch(this::matches);
+    }
+
+    /**
+     * Returns binary flag based on any-match input collection of values {@code T}
+     *
+     * @param values - initial input collection of values {@code T}
+     * @return true - if all input values {@code T} matches, false - otherwise
+     */
+    default boolean anyMatch(final T... values) {
+        return streamOf(values).anyMatch(this::matches);
     }
 
     /**

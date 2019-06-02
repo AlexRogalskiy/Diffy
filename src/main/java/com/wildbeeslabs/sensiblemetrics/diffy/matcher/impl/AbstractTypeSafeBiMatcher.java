@@ -23,11 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeBiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +40,7 @@ import java.util.Optional;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getMethodType;
 
 /**
- * Abstract type safe matcher implementation by input class instance {@link Class}
+ * Abstract type safe binary matcher implementation by input class instance {@link Class}
  *
  * @param <T> type of input element to be matched by type safe operation
  * @author Alexander Rogalskiy
@@ -51,17 +51,17 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.get
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> implements TypeSafeMatcher<T> {
+public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> implements TypeSafeBiMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -4312818637038122609L;
+    private static final long serialVersionUID = -5270645820774938396L;
 
     /**
      * Default method type instance
      */
-    private static final ReflectionUtils.ReflectionMethodType DEFAULT_METHOD_TYPE = getMethodType("matchesSafe", 1, 0);
+    private static final ReflectionUtils.ReflectionMethodType DEFAULT_METHOD_TYPE = getMethodType("matchesSafe", 2, 0);
 
     /**
      * Default input argument class instance
@@ -69,51 +69,51 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     private final Class<? extends T> clazz;
 
     /**
-     * Default abstract type safe matcher constructor
+     * Default abstract type safe binary matcher constructor
      */
-    public AbstractTypeSafeMatcher() {
+    public AbstractTypeSafeBiMatcher() {
         this(null, DEFAULT_METHOD_TYPE);
     }
 
     /**
-     * Default abstract type safe matcher constructor with input {@link MatcherHandler}
+     * Default abstract type safe binary matcher constructor with input {@link MatcherHandler}
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractTypeSafeMatcher(final MatcherHandler<T> handler) {
+    public AbstractTypeSafeBiMatcher(final MatcherHandler<T> handler) {
         this(handler, DEFAULT_METHOD_TYPE);
     }
 
     /**
-     * Default abstract type safe matcher constructor with input {@link ReflectionUtils.ReflectionMethodType}
+     * Default abstract type safe binary matcher constructor with input {@link ReflectionUtils.ReflectionMethodType}
      *
      * @param methodType - initial input {@link ReflectionUtils.ReflectionMethodType}
      */
     @SuppressWarnings("unchecked")
-    public AbstractTypeSafeMatcher(final ReflectionUtils.ReflectionMethodType methodType) {
+    public AbstractTypeSafeBiMatcher(final ReflectionUtils.ReflectionMethodType methodType) {
         this(null, methodType);
     }
 
     /**
-     * Default abstract type safe matcher constructor with input {@link MatcherHandler} and {@link ReflectionUtils.ReflectionMethodType}
+     * Default abstract type safe binary matcher constructor with input {@link MatcherHandler} and {@link ReflectionUtils.ReflectionMethodType}
      *
      * @param handler    - initial input {@link MatcherHandler}
      * @param methodType - initial input {@link ReflectionUtils.ReflectionMethodType}
      */
     @SuppressWarnings("unchecked")
-    public AbstractTypeSafeMatcher(final MatcherHandler<T> handler, final ReflectionUtils.ReflectionMethodType methodType) {
+    public AbstractTypeSafeBiMatcher(final MatcherHandler<T> handler, final ReflectionUtils.ReflectionMethodType methodType) {
         super(handler);
         this.clazz = (Class<? extends T>) (Optional.ofNullable(methodType).orElse(DEFAULT_METHOD_TYPE)).getType(this.getClass());
     }
 
     /**
-     * Default abstract type safe matcher constructor with input {@link MatcherHandler} and {@link Class}
+     * Default abstract type safe binary matcher constructor with input {@link MatcherHandler} and {@link Class}
      *
      * @param handler - initial input {@link MatcherHandler}
      * @param clazz   - initial input {@link Class}
      */
     @SuppressWarnings("unchecked")
-    public AbstractTypeSafeMatcher(final MatcherHandler<T> handler, final Class<? extends T> clazz) {
+    public AbstractTypeSafeBiMatcher(final MatcherHandler<T> handler, final Class<? extends T> clazz) {
         super(handler);
         this.clazz = Objects.isNull(clazz)
             ? (Class<? extends T>) DEFAULT_METHOD_TYPE.getType(this.getClass())
@@ -121,25 +121,26 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     }
 
     /**
-     * Returns binary flag depending on initial argument value {@code T} type safe comparison
+     * Returns binary flag depending on initial argument value {@code T} by type safe comparison
      *
-     * @param value - initial input argument value {@code T}
-     * @return true - if initial value matches input argument {@code T}, false - otherwise
+     * @param first - initial input first argument value {@code T}
+     * @param last  - initial input last argument value {@code T}
+     * @return true - if input values {@code T} matches, false - otherwise
      */
     @Override
-    public final boolean matches(final T value) {
-        this.emit(value, MatcherEventType.MATCH_START);
+    public boolean matches(final T first, final T last) {
+        this.emit(first, last, MatcherEventType.MATCH_START);
         boolean result = false;
         try {
-            this.emit(value, MatcherEventType.MATCH_BEFORE);
-            result = this.clazz.isInstance(value) && this.matchesSafe(value);
-            this.emit(value, MatcherEventType.fromBoolean(result));
-            this.emit(value, MatcherEventType.MATCH_AFTER);
+            this.emit(first, last, MatcherEventType.MATCH_BEFORE);
+            result = this.matchesInstance(first) && this.matchesInstance(last) && this.matchesSafe(first, last);
+            this.emit(first, last, MatcherEventType.fromBoolean(result));
+            this.emit(first, last, MatcherEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.emit(value, MatcherEventType.MATCH_ERROR);
-            MatchOperationException.throwIncorrectMatch(value, e);
+            this.emit(first, last, MatcherEventType.MATCH_ERROR);
+            BiMatchOperationException.throwIncorrectMatch(first, last, e);
         } finally {
-            this.emit(value, MatcherEventType.MATCH_COMPLETE);
+            this.emit(first, last, MatcherEventType.MATCH_COMPLETE);
         }
         return result;
     }
@@ -155,18 +156,19 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     }
 
     /**
-     * Emits {@link MatcherEvent} by input parameters
+     * Emits {@link BiMatcherEvent} by input parameters
      *
-     * @param value - initial input matchable value {@code T}
+     * @param first - initial input first matchable value {@code T}
+     * @param last  - initial input last matchable value {@code T}
      * @param type  - initial input {@link MatcherEventType}
      */
-    protected void emit(final T value, final MatcherEventType type) {
-        log.info("Emitting event with type = {%s}, value = {%s}", type, value);
-        MatcherEvent<T> event = null;
+    protected void emit(final T first, final T last, final MatcherEventType type) {
+        log.info("Emitting event with type = {%s}, first value = {%s}, last value = {%s}", type, first, last);
+        BiMatcherEvent<T> event = null;
         try {
-            event = MatcherEvent.of(this, value, type);
+            event = BiMatcherEvent.of(this, first, last, type);
             this.getHandler().handleEvent(event);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             log.error("ERROR: cannot handle event = {%s}", event);
         }
     }

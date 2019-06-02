@@ -30,7 +30,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultBiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.ComparatorBiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -97,10 +97,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final DeliveryInfo d1 = getDeliveryInfoMock().val();
         final DeliveryInfo d2 = getDeliveryInfoMock().val();
-        final Comparator<? super DeliveryInfo> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
+        final Comparator<? super DeliveryInfo> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator<>();
 
         // when
-        final BiMatcher<DeliveryInfo> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<DeliveryInfo> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -112,10 +112,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final DeliveryInfo d1 = getDeliveryInfo();
         final DeliveryInfo d2 = getDeliveryInfo();
-        final Comparator<? super DeliveryInfo> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
+        final Comparator<? super DeliveryInfo> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator<>();
 
         // when
-        final BiMatcher<DeliveryInfo> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<DeliveryInfo> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -130,7 +130,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Object> comparator = ComparatorUtils.getObjectComparator(DEFAULT_OBJECT_COMPARATOR, false);
 
         // when
-        final BiMatcher<Object> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Object> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -142,10 +142,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Object d1 = null;
         final Object d2 = null;
-        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
+        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator<>();
 
         // when
-        final BiMatcher<Object> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Object> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -157,10 +157,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Object d1 = null;
         final Object d2 = new Object();
-        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
+        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator<>();
 
         // when
-        final BiMatcher<Object> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Object> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -172,10 +172,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Object d1 = new Object();
         final Object d2 = null;
-        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator();
+        final Comparator<? super Object> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator<>();
 
         // when
-        final BiMatcher<Object> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Object> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -190,7 +190,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>();
 
         // when
-        final BiMatcher<Integer> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Integer> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -206,7 +206,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
 
         // when
-        final BiMatcher<Integer> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Integer> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -222,7 +222,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
 
         // when
-        final BiMatcher<Integer> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Integer> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -238,7 +238,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
 
         // when
-        final BiMatcher<Integer> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Integer> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -254,7 +254,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>(predefinedOrder);
 
         // when
-        final BiMatcher<Integer> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Integer> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -269,7 +269,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Integer> comparator = new ComparatorUtils.DefaultLiteralComparator<>();
 
         // when
-        final BiMatcher<Integer> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Integer> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -281,10 +281,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Double d1 = Double.valueOf(0.1233334);
         final Double d2 = Double.valueOf(0.1233335);
-        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator<>();
 
         // when
-        final BiMatcher<Double> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -299,7 +299,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(DEFAULT_DOUBLE_COMPARATOR, false);
 
         // when
-        final BiMatcher<Double> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -311,10 +311,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Double d1 = null;
         final Double d2 = Double.valueOf(0.1233335);
-        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator<>();
 
         // when
-        final BiMatcher<Double> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -326,10 +326,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Double d1 = null;
         final Double d2 = Double.valueOf(0.1233335);
-        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator<>();
 
         // when
-        final BiMatcher<Double> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -341,10 +341,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Double d1 = null;
         final Double d2 = null;
-        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator();
+        final Comparator<? super Double> comparator = new ComparatorUtils.DefaultNullSafeNumberComparator<>();
 
         // when
-        final BiMatcher<Double> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -359,7 +359,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Double> comparator = Comparator.comparingDouble((Double o) -> o);
 
         // when
-        final BiMatcher<Double> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -374,7 +374,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super String[]> comparator = new ComparatorUtils.DefaultNullSafeStringArrayComparator();
 
         // when
-        final BiMatcher<String[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -389,7 +389,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super String[]> comparator = new ComparatorUtils.DefaultNullSafeStringArrayComparator();
 
         // when
-        final BiMatcher<String[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -404,7 +404,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Double[]> comparator = new ComparatorUtils.LexicographicalNullSafeArrayComparator<>();
 
         // when
-        final BiMatcher<Double[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertTrue(biMatcher.matches(d1, d2));
@@ -419,7 +419,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Double[]> comparator = new ComparatorUtils.LexicographicalNullSafeArrayComparator<>();
 
         // when
-        final BiMatcher<Double[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertTrue(biMatcher.matches(d1, d2));
@@ -434,7 +434,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Double[]> comparator = new ComparatorUtils.DefaultNullSafeArrayComparator<>();
 
         // when
-        final BiMatcher<Double[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -450,7 +450,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Object[]> comparator = new ComparatorUtils.DefaultNullSafeArrayComparator<>();
 
         // when
-        final BiMatcher<Object[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Object[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertTrue(biMatcher.matches(d1, d2));
@@ -470,7 +470,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         }, false);
 
         // when
-        final BiMatcher<Double[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Double[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -485,7 +485,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super double[]> comparator = ComparatorUtils.getDoubleArrayComparator(false);
 
         // when
-        final BiMatcher<double[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<double[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -500,7 +500,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super double[]> comparator = ComparatorUtils.getDoubleArrayComparator(false);
 
         // when
-        final BiMatcher<double[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<double[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -515,7 +515,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super float[]> comparator = ComparatorUtils.getFloatArrayComparator(false);
 
         // when
-        final BiMatcher<float[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<float[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -530,7 +530,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super float[]> comparator = ComparatorUtils.getFloatArrayComparator(false);
 
         // when
-        final BiMatcher<float[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<float[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -545,7 +545,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super int[]> comparator = ComparatorUtils.getIntArrayComparator(false);
 
         // when
-        final BiMatcher<int[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<int[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -560,7 +560,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super int[]> comparator = ComparatorUtils.getIntArrayComparator(false);
 
         // when
-        final BiMatcher<int[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<int[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -575,7 +575,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super long[]> comparator = ComparatorUtils.getLongArrayComparator(false);
 
         // when
-        final BiMatcher<long[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<long[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -590,7 +590,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super long[]> comparator = ComparatorUtils.getLongArrayComparator(false);
 
         // when
-        final BiMatcher<long[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<long[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -605,7 +605,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super boolean[]> comparator = ComparatorUtils.getBooleanArrayComparator(false);
 
         // when
-        final BiMatcher<boolean[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<boolean[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -620,7 +620,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super boolean[]> comparator = ComparatorUtils.getBooleanArrayComparator(false);
 
         // when
-        final BiMatcher<boolean[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<boolean[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -635,7 +635,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super byte[]> comparator = ComparatorUtils.getByteArrayComparator(false);
 
         // when
-        final BiMatcher<byte[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<byte[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -650,7 +650,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super byte[]> comparator = ComparatorUtils.getByteArrayComparator(false);
 
         // when
-        final BiMatcher<byte[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<byte[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -665,7 +665,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super short[]> comparator = ComparatorUtils.getShortArrayComparator(false);
 
         // when
-        final BiMatcher<short[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<short[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -680,7 +680,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super short[]> comparator = ComparatorUtils.getShortArrayComparator(false);
 
         // when
-        final BiMatcher<short[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<short[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -695,7 +695,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super char[]> comparator = ComparatorUtils.getCharacterArrayComparator(false);
 
         // when
-        final BiMatcher<char[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<char[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -710,7 +710,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super char[]> comparator = ComparatorUtils.getCharacterArrayComparator(false);
 
         // when
-        final BiMatcher<char[]> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<char[]> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         //then
         assertFalse(biMatcher.matches(d1, d2));
@@ -725,7 +725,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super CharSequence> comparator = ComparatorUtils.getCharSequenceComparator((o1, o2) -> Objects.compare(String.valueOf(o1), String.valueOf(o2), Comparator.naturalOrder()), false);
 
         // when
-        final BiMatcher<CharSequence> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<CharSequence> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -740,7 +740,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeCharSequenceComparator(DEFAULT_CHAR_SEQUENCE_COMPARATOR);
 
         // when
-        final BiMatcher<String> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -755,7 +755,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super String> comparator = new ComparatorUtils.DefaultNullSafeCharSequenceComparator();
 
         // when
-        final BiMatcher<String> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -770,7 +770,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Class<?>> comparator = new ComparatorUtils.DefaultNullSafeClassComparator();
 
         // when
-        final BiMatcher<Class<?>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Class<?>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -785,7 +785,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Class<?>> comparator = new ComparatorUtils.DefaultNullSafeClassComparator();
 
         // when
-        final BiMatcher<Class<?>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Class<?>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -800,7 +800,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Class<?>> comparator = new ComparatorUtils.DefaultNullSafeClassComparator(DEFAULT_CLASS_COMPARATOR.apply("java.util."));
 
         // when
-        final BiMatcher<Class<?>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Class<?>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -815,7 +815,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Class<?>> comparator = new ComparatorUtils.DefaultNullSafeClassComparator(DEFAULT_CLASS_COMPARATOR.apply("com.wildbeeslabs.sensiblemetrics.diffy."));
 
         // when
-        final BiMatcher<Class<?>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Class<?>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -830,7 +830,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Locale> comparator = new ComparatorUtils.DefaultNullSafeLocaleComparator();
 
         // when
-        final BiMatcher<Locale> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Locale> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -845,7 +845,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Locale> comparator = new ComparatorUtils.DefaultNullSafeLocaleComparator();
 
         // when
-        final BiMatcher<Locale> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Locale> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -860,7 +860,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Currency> comparator = new ComparatorUtils.DefaultNullSafeCurrencyComparator();
 
         // when
-        final BiMatcher<Currency> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Currency> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -875,7 +875,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super Currency> comparator = new ComparatorUtils.DefaultNullSafeCurrencyComparator();
 
         // when
-        final BiMatcher<Currency> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Currency> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -890,7 +890,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super URL> comparator = new ComparatorUtils.DefaultNullSafeUrlComparator();
 
         // when
-        final BiMatcher<URL> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<URL> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -905,7 +905,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super URL> comparator = new ComparatorUtils.DefaultNullSafeUrlComparator();
 
         // when
-        final BiMatcher<URL> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<URL> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -920,7 +920,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super BigDecimal> comparator = new ComparatorUtils.DefaultNullSafeBigDecimalComparator();
 
         // when
-        final BiMatcher<BigDecimal> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<BigDecimal> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -935,7 +935,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super BigDecimal> comparator = new ComparatorUtils.DefaultNullSafeBigDecimalComparator();
 
         // when
-        final BiMatcher<BigDecimal> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<BigDecimal> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -959,10 +959,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
             .put("ww", 56)
             .build();
 
-        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator(map, Comparator.naturalOrder(), false);
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator<>(map, Comparator.naturalOrder(), false);
 
         // when
-        final BiMatcher<String> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -986,10 +986,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
             .put("ww", 56)
             .build();
 
-        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator(map);
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator<>(map);
 
         // when
-        final BiMatcher<String> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1013,10 +1013,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
             .put("ww", 56)
             .build();
 
-        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator(map);
+        final Comparator<? super String> comparator = new ComparatorUtils.DefaultMapValueComparator<>(map);
 
         // when
-        final BiMatcher<String> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1032,7 +1032,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super String> comparator = new ComparatorUtils.DefaultListPositionComparator<>(list);
 
         // when
-        final BiMatcher<String> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1048,7 +1048,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         final Comparator<? super String> comparator = new ComparatorUtils.DefaultListPositionComparator<>(list);
 
         // when
-        final BiMatcher<String> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<String> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1060,10 +1060,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
-        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator(ComparableComparator.getInstance());
+        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>(ComparableComparator.getInstance());
 
         // when
-        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1075,10 +1075,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
-        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator(DEFAULT_OBJECT_COMPARATOR);
+        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>(DEFAULT_OBJECT_COMPARATOR);
 
         // when
-        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));
@@ -1090,10 +1090,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
-        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator();
+        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>();
 
         // when
-        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1105,10 +1105,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Map.Entry<String, Integer> d1 = null;
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
-        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator();
+        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>();
 
         // when
-        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Map.Entry<String, Integer>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1120,10 +1120,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Iterable<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
         final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
-        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
+        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator<>();
 
         // when
-        final BiMatcher<Iterable<String>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Iterable<String>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1135,10 +1135,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Iterable<String> d1 = null;
         final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
-        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
+        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator<>();
 
         // when
-        final BiMatcher<Iterable<String>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Iterable<String>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1162,10 +1162,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
             .add("sadf")
             .build();
 
-        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
+        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator<>();
 
         // when
-        final BiMatcher<Iterable<String>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Iterable<String>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1175,14 +1175,14 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test different set objects by custom comparator")
     public void test_setObjects_by_customComparator() {
         // given
-        final Iterable<String> d1 = new ImmutableSet.Builder<String>()
+        final Set<String> d1 = new ImmutableSet.Builder<String>()
             .add("saf")
             .add("fas")
             .add("sfa")
             .add("sadf")
             .add("fsa")
             .build();
-        final Iterable<String> d2 = new ImmutableSet.Builder<String>()
+        final Set<String> d2 = new ImmutableSet.Builder<String>()
             .add("saf")
             .add("fas")
             .add("sfaa")
@@ -1191,7 +1191,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
             .build();
 
         // when
-        final BiMatcher<Iterable<String>> biMatcher = new DefaultBiMatcher(DEFAULT_SET_COMPARATOR);
+        final BiMatcher<Set<?>> biMatcher = new ComparatorBiMatcher<>(DEFAULT_SET_COMPARATOR);
 
         // then
         assertFalse(biMatcher.matches(d1, d2));
@@ -1210,10 +1210,10 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
             .build();
         final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
 
-        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator();
+        final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator<>();
 
         // when
-        final BiMatcher<Iterable<String>> biMatcher = new DefaultBiMatcher(comparator);
+        final BiMatcher<Iterable<String>> biMatcher = new ComparatorBiMatcher<>(comparator);
 
         // then
         assertTrue(biMatcher.matches(d1, d2));

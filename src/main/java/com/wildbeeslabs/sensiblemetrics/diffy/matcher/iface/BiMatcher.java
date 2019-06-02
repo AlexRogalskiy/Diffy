@@ -24,7 +24,6 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
@@ -58,6 +57,14 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      */
     BiMatcher<?> DEFAULT_FALSE_MATCHER = (value1, value2) -> false;
     /**
+     * Default null {@link BiMatcher}
+     */
+    BiMatcher<?> DEFAULT_NULL_MATCHER = (value1, value2) -> Objects.isNull(value1) && Objects.isNull(value2);
+    /**
+     * Default identity {@link BiMatcher}
+     */
+    BiMatcher<?> DEFAULT_IDENTITY_MATCHER = (value1, value2) -> Objects.deepEquals(value1, value2);
+    /**
      * Default exception {@link BiMatcher}
      */
     BiMatcher<?> DEFAULT_EXCEPTION_MATCHER = (BiMatcher<?>) (value1, value2) -> {
@@ -65,7 +72,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     };
 
     /**
-     * Compares the two provided objects whether they are equal.
+     * Compares provided objects by equality constraint
      *
      * @param first - initial input first value {@code T}
      * @param last  - initial input last value {@code T}
@@ -233,23 +240,33 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     }
 
     /**
-     * Returns binary flag based on all-match input collection of {@link Iterable} collection of {@link DefaultEntry} values
+     * Returns binary flag based on all-match input collection of {@link Iterable} collection of {@link Entry} values
      *
-     * @param values - initial input {@link Iterable} collection of {@link DefaultEntry} values
-     * @return true - if all input values {@link DefaultEntry} matches, false - otherwise
+     * @param values - initial input {@link Iterable} collection of {@link Entry} values
+     * @return true - if all input values {@link Entry} matches, false - otherwise
      */
     default boolean allMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().allMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**
-     * Returns binary flag based on non-match input collection of {@link Iterable} collection of {@link DefaultEntry} values
+     * Returns binary flag based on non-match input collection of {@link Iterable} collection of {@link Entry} values
      *
-     * @param values - initial input {@link Iterable} collection of {@link DefaultEntry} values
-     * @return true - if all input values {@link DefaultEntry} matches, false - otherwise
+     * @param values - initial input {@link Iterable} collection of {@link Entry} values
+     * @return true - if all input values {@link Entry} matches, false - otherwise
      */
     default boolean noneMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
+    }
+
+    /**
+     * Returns binary flag based on any-match input collection of {@link Iterable} collection of {@link Entry} values
+     *
+     * @param values - initial input {@link Iterable} collection of {@link Entry} values
+     * @return true - if all input values {@link Entry} matches, false - otherwise
+     */
+    default boolean anyMatch(final Iterable<Entry<T, T>> values) {
+        return listOf(values).stream().anyMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**
@@ -262,7 +279,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
         description.append(this.getDescription());
         description.append(")");
     }
-    
+
     /**
      * Returns {@link BiMatcher} by input {@link Comparator}
      *
