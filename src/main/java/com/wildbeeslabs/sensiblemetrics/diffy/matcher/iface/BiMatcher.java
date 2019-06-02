@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeType;
 import lombok.NonNull;
 
@@ -251,6 +252,17 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
         return listOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
+    /**
+     * Appends input {@link MatchDescription} by current description
+     *
+     * @param description - initial input {@link MatchDescription}
+     */
+    default void describeBy(final MatchDescription description) {
+        description.append("(");
+        description.append(this.getDescription());
+        description.append(")");
+    }
+    
     /**
      * Returns {@link BiMatcher} by input {@link Comparator}
      *

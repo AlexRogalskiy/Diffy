@@ -31,7 +31,7 @@ public interface BaseMatcherMode {
     /**
      * Default {@link BaseMatcherMode} instance
      */
-    BaseMatcherMode DEFAULT_MATCHER_MODE_TYPE = () -> true;
+    BaseMatcherMode DEFAULT_MATCHER_MODE = () -> true;
 
     /**
      * Returns binary flag based on current mode status {@code ENABLE}

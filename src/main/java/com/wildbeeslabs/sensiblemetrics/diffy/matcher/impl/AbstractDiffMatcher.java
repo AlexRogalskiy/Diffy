@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
@@ -123,5 +124,16 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
             this.getMatchers().add(matcher);
         }
         return this;
+    }
+
+    public void describeBy(final MatchDescription description) {
+        description.append("[");
+        for (Iterator<Matcher<? super T>> it = this.matchers.iterator(); it.hasNext(); ) {
+            it.next().describeBy(description);
+            if (it.hasNext()) {
+                description.append(", ");
+            }
+        }
+        description.append("]");
     }
 }

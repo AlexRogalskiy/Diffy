@@ -83,7 +83,6 @@ public interface MatchDescription extends Serializable {
      */
     <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values);
 
-
     /**
      * Default empty match description implementation {@link MatchDescription}
      */

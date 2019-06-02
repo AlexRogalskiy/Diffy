@@ -277,6 +277,17 @@ public interface Matcher<T> extends BaseMatcher<T> {
     }
 
     /**
+     * Appends input {@link MatchDescription} by current description
+     *
+     * @param description - initial input {@link MatchDescription}
+     */
+    default void describeBy(final MatchDescription description) {
+        description.append("(");
+        description.append(this.getDescription());
+        description.append(")");
+    }
+
+    /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of {@link Matcher}s collection
      *
      * @param matchers - initial input {@link Matcher} operators to perform operation by

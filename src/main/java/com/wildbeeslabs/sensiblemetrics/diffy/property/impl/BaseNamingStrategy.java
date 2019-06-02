@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.property.impl;
 import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
 import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Objects;
 
@@ -247,7 +248,24 @@ public class BaseNamingStrategy {
          */
         @Override
         public String translate(final String propertyName) {
-            return propertyName.toLowerCase();
+            return StringUtils.lowerCase(propertyName);
+        }
+    }
+
+    /**
+     * Default upper case {@link AbstractBaseNamingStrategy} implementation
+     */
+    public static class UpperCaseStrategy extends AbstractBaseNamingStrategy {
+
+        /**
+         * Returns "lower case" {@link String} property name by input parameter value
+         *
+         * @param propertyName - initial input property name {@link String} to translate
+         * @return translated {@link String} property name
+         */
+        @Override
+        public String translate(final String propertyName) {
+            return StringUtils.upperCase(propertyName);
         }
     }
 

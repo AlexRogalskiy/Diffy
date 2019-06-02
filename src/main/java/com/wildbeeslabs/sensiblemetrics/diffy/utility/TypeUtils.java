@@ -5,10 +5,7 @@ import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,6 +44,8 @@ public class TypeUtils {
      * Default {@link ImmutableBiMap} map of primitive types
      */
     public static final ImmutableBiMap<Class<?>, Class<?>> DEFAULT_PRIMITIVE_TYPES = getPrimitiveTypes();
+
+    public static final ImmutableMultimap<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES = getPrimitiveOrWrapperDefaultValues();
 
     /**
      * Default collection {@link Set} of base name types
@@ -146,6 +145,32 @@ public class TypeUtils {
     }
 
     /**
+     * Returns {@link ImmutableBiMap} of primitive / wrapper default values
+     *
+     * @return collection of primitive / wrapper default values {@link ImmutableBiMap}
+     */
+    public static ImmutableMultimap<Class<?>, Object> getPrimitiveOrWrapperDefaultValues() {
+        return ImmutableMultimap.<Class<?>, Object>builder()
+            .put(Boolean.class, false)
+            .put(Character.class, '\u0000')
+            .put(Byte.class, (byte) 0)
+            .put(Short.class, (short) 0)
+            .put(Integer.class, 0)
+            .put(Long.class, 0L)
+            .put(Float.class, 0F)
+            .put(Double.class, 0D)
+            .put(boolean.class, false)
+            .put(char.class, '\u0000')
+            .put(byte.class, (byte) 0)
+            .put(short.class, (short) 0)
+            .put(int.class, 0)
+            .put(long.class, 0L)
+            .put(float.class, 0F)
+            .put(double.class, 0D)
+            .build();
+    }
+
+    /**
      * Returns {@link ImmutableCollection} of primitive numeric types
      *
      * @return collection of primitive numeric types {@link ImmutableCollection}
@@ -180,6 +205,34 @@ public class TypeUtils {
             .put(float.class, Float.class)
             .put(double.class, Double.class)
             .build();
+    }
+
+    public static <T> Class<T> primitiveTypeOf(Class<T> clazz) {
+        if (clazz.isPrimitive()) {
+            return clazz;
+        }
+        return (Class<T>) DEFAULT_PRIMITIVE_TYPES.get(clazz);
+    }
+
+    /**
+     * Indicates if the given class is primitive type or a primitive wrapper.
+     *
+     * @param type The type to check
+     * @return <code>true</code> if primitive or wrapper, <code>false</code> otherwise.
+     */
+    public static boolean isPrimitiveOrWrapper(Class<?> type) {
+        return PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.containsKey(type);
+    }
+
+    /**
+     * Returns the boxed default value for a primitive or a primitive wrapper.
+     *
+     * @param primitiveOrWrapperType The type to lookup the default value
+     * @return The boxed default values as defined in Java Language Specification,
+     * <code>null</code> if the type is neither a primitive nor a wrapper
+     */
+    public static <T> T defaultValueForPrimitiveOrWrapper(Class<T> primitiveOrWrapperType) {
+        return (T) PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.get(primitiveOrWrapperType);
     }
 
     /**

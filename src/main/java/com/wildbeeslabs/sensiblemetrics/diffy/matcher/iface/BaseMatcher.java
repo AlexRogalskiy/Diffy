@@ -57,7 +57,7 @@ public interface BaseMatcher<T> extends Serializable {
      * @return {@link BiMatcherModeType}
      */
     default BaseMatcherMode getMode() {
-        return BaseMatcherMode.DEFAULT_MATCHER_MODE_TYPE;
+        return BaseMatcherMode.DEFAULT_MATCHER_MODE;
     }
 
     /**

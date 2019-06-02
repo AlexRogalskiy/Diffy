@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.factory;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultDiffMatcher;
@@ -49,6 +50,7 @@ public class DefaultDiffMatcherFactory {
      * @param <E> type of difference matcher instance
      * @return difference matcher {@link DiffMatcher}
      */
+    @Factory
     public static <T, E extends DiffMatcher<T>> E create() {
         return (E) new DefaultDiffMatcher<>();
     }
@@ -61,6 +63,7 @@ public class DefaultDiffMatcherFactory {
      * @param matcher - initial input argument matcher {@link Matcher}
      * @return difference matcher {@link DiffMatcher}
      */
+    @Factory
     public static <T, E extends DiffMatcher<T>> E create(final Matcher<? super T> matcher) {
         final DefaultDiffMatcher result = new DefaultDiffMatcher<>();
         result.include(matcher);
@@ -75,6 +78,7 @@ public class DefaultDiffMatcherFactory {
      * @param matchers - initial input collection of matchers
      * @return difference matcher {@link DiffMatcher}
      */
+    @Factory
     public static <T, E extends DiffMatcher<T>> E create(final Matcher<? super T>... matchers) {
         final DefaultDiffMatcher result = new DefaultDiffMatcher<>();
         result.include(asList(Optional.ofNullable(matchers).orElse(new Matcher[0])));
@@ -89,6 +93,7 @@ public class DefaultDiffMatcherFactory {
      * @param matchers - initial input iterable collection of matchers {@link Iterable}
      * @return difference matcher {@link DiffMatcher}
      */
+    @Factory
     public static <T, E extends DiffMatcher<T>> E create(final Iterable<Matcher<? super T>> matchers) {
         final DefaultDiffMatcher result = new DefaultDiffMatcher<>();
         result.include(matchers);
