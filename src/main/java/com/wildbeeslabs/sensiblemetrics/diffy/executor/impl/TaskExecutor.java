@@ -1,0 +1,154 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.executor.impl;
+
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.ExecutionOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.TimeoutOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
+import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.ThrowingSupplier;
+import lombok.experimental.UtilityClass;
+
+import java.time.Duration;
+import java.util.concurrent.*;
+
+/**
+ * Task executor service implementation
+ */
+@UtilityClass
+public class TaskExecutor {
+
+    /**
+     * Executes input {@link Executable} task by {@link ExecutorService} and {@link Duration} timeout
+     *
+     * @param timeout    - initial input {@link Duration} timeout
+     * @param executable - initial input {@link Executable} task
+     * @param executor   - initial input {@link ExecutorService}
+     */
+    public static void execute(final Duration timeout, final Executable executable, final ExecutorService executor) {
+        executeSupplier(timeout, () -> {
+            executable.execute();
+            return null;
+        }, executor);
+    }
+
+    /**
+     * Executes input {@link Runnable} task by {@link Duration} timeout
+     *
+     * @param timeout  - initial input {@link Duration} timeout
+     * @param runnable - initial input {@link Runnable} task
+     */
+    public static void execute(final Duration timeout, final Runnable runnable) {
+        final ExecutorService executorService = Executors.newSingleThreadExecutor();
+        try {
+            executeRunnable(timeout, runnable, executorService);
+        } finally {
+            executorService.shutdownNow();
+        }
+    }
+
+    /**
+     * Executes input {@link ThrowingSupplier} task by {@link Duration} timeout
+     *
+     * @param <T>      type of executable task result
+     * @param timeout  - initial input {@link Duration} timeout
+     * @param supplier - initial input {@link ThrowingSupplier} task
+     * @return {@link ThrowingSupplier} task result {@code T}
+     */
+    public static <T> T execute(final Duration timeout, final ThrowingSupplier<T> supplier) {
+        final ExecutorService executorService = Executors.newSingleThreadExecutor();
+        try {
+            return executeSupplier(timeout, supplier, executorService);
+        } finally {
+            executorService.shutdownNow();
+        }
+    }
+
+    /**
+     * Executes input {@link Runnable} task by {@link ExecutorService} and {@link Duration} timeout
+     *
+     * @param timeout  - initial input {@link Duration} timeout
+     * @param runnable - initial input {@link Runnable} task
+     * @param executor - initial input {@link ExecutorService}
+     */
+    public static void executeRunnable(final Duration timeout, final Runnable runnable, final ExecutorService executor) {
+        execute(timeout, executor.submit(runnable));
+    }
+
+    /**
+     * Executes input {@link Callable} task by {@link ExecutorService} and {@link Duration} timeout
+     *
+     * @param <T>      type of executable task result
+     * @param timeout  - initial input {@link Duration} timeout
+     * @param callable - initial input {@link Callable} task
+     * @param executor - initial input {@link ExecutorService}
+     * @return {@link Callable} task result {@code T}
+     */
+    public static <T> T executeCallable(final Duration timeout, final Callable<T> callable, final ExecutorService executor) {
+        return execute(timeout, executor.submit(callable));
+    }
+
+    /**
+     * Executes input {@link ThrowingSupplier} task by {@link ExecutorService} and {@link Duration} timeout
+     *
+     * @param <T>      type of executable task result
+     * @param timeout  - initial input {@link Duration} timeout
+     * @param supplier - initial input {@link ThrowingSupplier} task
+     * @param executor - initial input {@link ExecutorService}
+     * @return {@link ThrowingSupplier} task result {@code T}
+     */
+    private static <T> T executeSupplier(final Duration timeout, final ThrowingSupplier<T> supplier, final ExecutorService executor) {
+        final Callable<T> callable = () -> {
+            try {
+                return supplier.get();
+            } catch (Throwable throwable) {
+                throw InvalidParameterException.throwError(String.format("ERROR: cannot operate on input supplier = {%s}", supplier), throwable);
+            }
+        };
+        return execute(timeout, executor.submit(callable));
+    }
+
+    /**
+     * Executes input {@link ThrowingSupplier} task by {@link ExecutorService} and {@link Duration} timeout
+     *
+     * @param <T>     type of executable task result
+     * @param timeout - initial input {@link Duration} timeout
+     * @param future  - initial input {@link Future} task
+     * @return {@link Future} task result {@code T}
+     */
+    private static <T> T execute(final Duration timeout, final Future<T> future) {
+        long timeoutInMillis = timeout.toMillis();
+        try {
+            return future.get(timeoutInMillis, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException ex) {
+            TimeoutOperationException.throwTimeoutError(String.format("ERROR: execution timed out on target = {%s} after = {%s} ms", future, timeoutInMillis), ex);
+        } catch (ExecutionException ex) {
+            ExecutionOperationException.throwExecutionError(String.format("ERROR: cannot operate on executor service, message = {%s}", ex.getMessage()), ex);
+        } catch (Throwable ex) {
+            BadOperationException.throwBadOperation(String.format("ERROR: cannot operate on future = {%s}, message = {%s}", future, ex.getMessage()), ex);
+        }
+        return null;
+    }
+}

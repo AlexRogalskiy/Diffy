@@ -30,9 +30,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.executor.impl.TaskExecutor.execute;
 
 /**
  * Default {@link MatcherHandler} implementation
@@ -45,9 +50,35 @@ import java.util.Optional;
 public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
 
     /**
+     * Default {@link Duration} timeout (5000 in millis)
+     */
+    public static final Duration DEFAULT_TIMEOUT = Duration.ofMillis(5000);
+
+    /**
      * Default {@link MatcherHandler}
      */
     public static final MatcherHandler INSTANCE = new DefaultMatcherHandler<>();
+
+    /**
+     * Default task {@link ExecutorService}
+     */
+    private final ExecutorService executor;
+
+    /**
+     * Default matcher handler constructor
+     */
+    public DefaultMatcherHandler() {
+        this(null);
+    }
+
+    /**
+     * Default matcher handler constructor with input task {@link ExecutorService}
+     *
+     * @param executor - initial input task {@link ExecutorService}
+     */
+    public DefaultMatcherHandler(final ExecutorService executor) {
+        this.executor = Optional.ofNullable(executor).orElseGet(Executors::newSingleThreadExecutor);
+    }
 
     /**
      * {@link BaseMatcherEvent} handler by input event {@code E}
@@ -62,7 +93,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .filter(Objects::nonNull)
-                .forEach(listener -> new Thread(() -> invokeEventListener(event, listener)).start());
+                .forEach(listener -> execute(DEFAULT_TIMEOUT, () -> this.invokeEventListener(event, listener), this.getExecutor()));
         }
     }
 
@@ -74,7 +105,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @return true - if event handler is enabled, false - otherwise
      */
     private <E extends BaseMatcherEvent<T>> boolean isEnableMode(final E event) {
-        return Objects.nonNull(event) && event.getMatcher().getMode().isEnable();
+        return Objects.nonNull(event) && event.getMatcher().isEnable();
     }
 
     /**

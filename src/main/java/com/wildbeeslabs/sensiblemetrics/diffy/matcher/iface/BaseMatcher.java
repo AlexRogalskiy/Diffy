@@ -68,4 +68,13 @@ public interface BaseMatcher<T> extends Serializable {
     default MatchDescription getDescription() {
         return MatchDescription.EMPTY_MATCH_DESCRIPTION;
     }
+
+    /**
+     * Returns binary flag by input {@link BaseMatcher} mode status
+     *
+     * @return true - if {@link BaseMatcher} is enabled, false - otherwise
+     */
+    default boolean isEnable() {
+        return this.getMode().isEnable();
+    }
 }
