@@ -29,16 +29,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.text.WordUtils.capitalize;
 import static org.apache.commons.text.WordUtils.capitalizeFully;
 
@@ -255,5 +254,66 @@ public class StringUtils {
 
     public static String titleCaseWord(final String text) {
         return capitalize(text);
+    }
+
+    /**
+     * Check whether string consists of unique set of characters
+     *
+     * @param value - input string
+     * @return true - if string is unique, false - otherwise
+     */
+    public static boolean isUnique(final String value) {
+        if (isEmpty(value)) {
+            return false;
+        }
+        return value.codePoints().allMatch(new HashSet<>()::add);
+    }
+
+    public boolean isPalindrome(final String value) {
+        if (isEmpty(value)) {
+            return false;
+        }
+        final String temp = value.replaceAll("\\s+", org.apache.commons.lang3.StringUtils.EMPTY).toLowerCase();
+        return IntStream.range(0, temp.length() / 2).noneMatch(i -> temp.charAt(i) != temp.charAt(temp.length() - i - 1));
+    }
+
+    public static boolean isPermutationOfPalindrome(final String value) {
+        if (isEmpty(value)) {
+            return false;
+        }
+        final AtomicInteger count = new AtomicInteger();
+        value.codePoints().mapToObj(ch -> (char) ch).collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).forEach((k, v) -> {
+            if (v % 2 == 1) {
+                if (count.get() > 1) {
+                    return;
+                }
+                count.incrementAndGet();
+            }
+        });
+        return count.get() <= 1;
+    }
+
+    /**
+     * Determine if the supplied {@link String} contains any ISO control characters.
+     *
+     * @param value the string to check; may be {@code null}
+     * @return {@code true} if the string contains an ISO control character
+     * @see Character#isISOControl(int)
+     */
+    public static boolean containsIsoControlCharacter(final String value) {
+        return isNotEmpty(value) && value.codePoints().anyMatch(Character::isISOControl);
+    }
+
+    /**
+     * Determine if the supplied {@link String} does not contain any ISO control
+     * characters.
+     *
+     * @param value the string to check; may be {@code null}
+     * @return {@code true} if the string does not contain an ISO control character
+     * @see #containsIsoControlCharacter(String)
+     * @see Character#isISOControl(int)
+     */
+    public static boolean doesNotContainIsoControlCharacter(final String value) {
+        return !containsIsoControlCharacter(value);
     }
 }

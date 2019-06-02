@@ -32,11 +32,11 @@ import org.apache.commons.text.WordUtils;
 import java.util.function.Function;
 
 /**
- * String format type {@link Enum}
+ * String converter type {@link Enum}
  */
 @Getter
 @RequiredArgsConstructor
-public enum StringFormatType {
+public enum StringConverterType {
     UPPER_CASE(StringUtils::upperCase),
     LOWER_CASE(StringUtils::lowerCase),
     CAPITALIZE(StringUtils::capitalize),
@@ -63,8 +63,8 @@ public enum StringFormatType {
 
     ESCAPE_JAVA(StringEscapeUtils::escapeJava),
     UNESCAPE_JAVA(StringEscapeUtils::unescapeJava),
-    ESCAPE_ECMASCRIPT(StringEscapeUtils::escapeEcmaScript),
-    UNESCAPE_ECMASCRIPT(StringEscapeUtils::unescapeEcmaScript),
+    ESCAPE_ECMA_SCRIPT(StringEscapeUtils::escapeEcmaScript),
+    UNESCAPE_ECMA_SCRIPT(StringEscapeUtils::unescapeEcmaScript),
     ESCAPE_JSON(StringEscapeUtils::escapeJson),
     UNESCAPE_JSON(StringEscapeUtils::unescapeJson),
     ESCAPE_HTML(StringEscapeUtils::escapeHtml4),
@@ -77,7 +77,7 @@ public enum StringFormatType {
     ESCAPE_XSI(StringEscapeUtils::escapeXSI);
 
     /**
-     * String {@link Function} operator
+     * String {@link Function} converter operator
      */
-    private final Function<String, String> format;
+    private final Function<String, String> converter;
 }
