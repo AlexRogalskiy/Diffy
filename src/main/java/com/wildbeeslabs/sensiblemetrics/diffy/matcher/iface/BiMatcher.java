@@ -32,6 +32,7 @@ import lombok.NonNull;
 
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
@@ -243,7 +244,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * Returns binary flag based on all-match input collection of {@link Iterable} collection of {@link Entry} values
      *
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
-     * @return true - if all input values {@link Entry} matches, false - otherwise
+     * @return true - if all input values {@link Entry} match, false - otherwise
      */
     default boolean allMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().allMatch(v -> this.matches(v.getFirst(), v.getLast()));
@@ -253,7 +254,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * Returns binary flag based on non-match input collection of {@link Iterable} collection of {@link Entry} values
      *
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
-     * @return true - if all input values {@link Entry} matches, false - otherwise
+     * @return true - if all input values {@link Entry} match, false - otherwise
      */
     default boolean noneMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
@@ -263,7 +264,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * Returns binary flag based on any-match input collection of {@link Iterable} collection of {@link Entry} values
      *
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
-     * @return true - if all input values {@link Entry} matches, false - otherwise
+     * @return true - if all input values {@link Entry} match, false - otherwise
      */
     default boolean anyMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().anyMatch(v -> this.matches(v.getFirst(), v.getLast()));
@@ -278,6 +279,31 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
         description.append("(");
         description.append(this.getDescription());
         description.append(")");
+    }
+
+    /**
+     * Tests input {@link Supplier} by {@link Matcher}
+     *
+     * @param <T>           type of input element to be matched by operation
+     * @param matcher       - initial input {@link BiMatcher}
+     * @param firstSupplier - initial input first {@link Supplier}
+     * @param lastSupplier  - initial input last {@link Supplier}
+     * @return true - if input {@link Supplier}s matches {@link BiMatcher}, false - otherwise
+     * @throws NullPointerException if matcher is {@code null}
+     * @throws NullPointerException if suppliers are {@code null}
+     */
+    @NonNull
+    static <T> boolean test(final BiMatcher<T> matcher, final Supplier<T> firstSupplier, final Supplier<T> lastSupplier) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        Objects.requireNonNull(firstSupplier, "First supplier should not be null!");
+        Objects.requireNonNull(lastSupplier, "Last supplier should not be null!");
+
+        try {
+            return matcher.matches(firstSupplier.get(), lastSupplier.get());
+        } catch (Throwable t) {
+            BiMatchOperationException.throwIncorrectMatch(firstSupplier, lastSupplier, t);
+        }
+        return false;
     }
 
     /**
@@ -317,6 +343,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link BiMatcher} operator that represents a short-circuiting logical "OR" of {@link BiMatcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link BiMatcher} operators to perform operation by
      * @return composed {@link BiMatcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -338,6 +365,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link BiMatcher} operator that represents a short-circuiting logical "XOR" of {@link BiMatcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link BiMatcher} operators to perform operation by
      * @return composed {@link BiMatcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -359,6 +387,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link BiMatcher} operator that represents a short-circuiting logical "NAND" of {@link BiMatcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link BiMatcher} operators to perform operation by
      * @return composed {@link BiMatcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -380,6 +409,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link BiMatcher} operator that represents a short-circuiting logical "NOR" of {@link BiMatcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link BiMatcher} operators to perform operation by
      * @return composed {@link BiMatcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -401,6 +431,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link BiMatcher} operator that represents a short-circuiting logical "XNOR" of {@link BiMatcher} collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link BiMatcher} operators to perform operation by
      * @return composed {@link BiMatcher} operator
      * @throws NullPointerException if matchers is {@code null}

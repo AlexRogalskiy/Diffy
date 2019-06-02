@@ -33,6 +33,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
@@ -120,7 +121,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     @NonNull
     default Matcher<T> negate() {
-        return (final T t) -> !matches(t);
+        return (final T t) -> !this.matches(t);
     }
 
     /**
@@ -140,7 +141,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @NonNull
     default Matcher<T> and(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> matches(t) && other.matches(t);
+        return (final T t) -> this.matches(t) && other.matches(t);
     }
 
     /**
@@ -178,7 +179,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @NonNull
     default Matcher<T> or(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> matches(t) || other.matches(t);
+        return (final T t) -> this.matches(t) || other.matches(t);
     }
 
     /**
@@ -198,7 +199,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @NonNull
     default Matcher<T> xor(final Matcher<? super T> other) {
         Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> matches(t) ^ other.matches(t);
+        return (final T t) -> this.matches(t) ^ other.matches(t);
     }
 
     /**
@@ -265,7 +266,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * Returns binary flag based on all-match input collection of values {@code T}
      *
      * @param values - initial input collection of values {@code T}
-     * @return true - if all input values {@code T} matches, false - otherwise
+     * @return true - if all input values {@code T} match, false - otherwise
      */
     default boolean allMatch(final T... values) {
         return streamOf(values).allMatch(this::matches);
@@ -275,7 +276,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * Returns binary flag based on non-match input collection of values {@code T}
      *
      * @param values - initial input collection of values {@code T}
-     * @return true - if all input values {@code T} matches, false - otherwise
+     * @return true - if all input values {@code T} match, false - otherwise
      */
     default boolean noneMatch(final T... values) {
         return streamOf(values).noneMatch(this::matches);
@@ -285,7 +286,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * Returns binary flag based on any-match input collection of values {@code T}
      *
      * @param values - initial input collection of values {@code T}
-     * @return true - if all input values {@code T} matches, false - otherwise
+     * @return true - if all input values {@code T} match, false - otherwise
      */
     default boolean anyMatch(final T... values) {
         return streamOf(values).anyMatch(this::matches);
@@ -303,8 +304,31 @@ public interface Matcher<T> extends BaseMatcher<T> {
     }
 
     /**
+     * Tests input {@link Supplier} by {@link Matcher}
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param matcher  - initial input {@link Matcher}
+     * @param supplier - initial input {@link Supplier}
+     * @return true - if input {@link Supplier} matches {@link Matcher}, false - otherwise
+     * @throws NullPointerException if matchers is {@code null}
+     */
+    @NonNull
+    static <T> boolean test(final Matcher<T> matcher, final Supplier<T> supplier) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        Objects.requireNonNull(supplier, "Supplier should not be null!");
+
+        try {
+            return matcher.matches(supplier.get());
+        } catch (Throwable t) {
+            MatchOperationException.throwIncorrectMatch(supplier, t);
+        }
+        return false;
+    }
+
+    /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of {@link Matcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -326,6 +350,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of {@link Matcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -347,6 +372,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of {@link Matcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -368,6 +394,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of {@link Matcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -389,6 +416,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of {@link Matcher}s collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -410,6 +438,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XNOR" of {@link Matcher} collection
      *
+     * @param <T>      type of input element to be matched by operation
      * @param matchers - initial input {@link Matcher} operators to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if matchers is {@code null}
@@ -432,6 +461,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * Returns {@link Matcher} operator that tests if two arguments are equal according
      * to {@link Objects#equals(Object, Object)}.
      *
+     * @param <T>   type of input element to be matched by operation
      * @param value - initial input argument value to be matched {@code T}
      * @return {@link Matcher} operator that tests if two arguments are equal according
      * to {@link Objects#equals(Object, Object)}
