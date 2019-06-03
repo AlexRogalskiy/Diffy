@@ -21,29 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.configuration.enums;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.event;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.io.Serializable;
 
 /**
- * Configuration key type {@link Enum}
+ * Event interface declaration
+ *
+ * @param <T> type of event item
  */
-public enum ConfigurationKeyType {
-    READ_ONLY,
-    READ_WRITE;
+public interface Event<T> extends Serializable {
 
     /**
-     * Returns {@link ConfigurationKeyType} by input configuration key type value {@link String}
-     *
-     * @param name - initial input configuration key type value {@link String}
-     * @return {@link ConfigurationKeyType}
+     * The name of the event (case-insensitive). The name must be an XML name.
      */
-    @Nullable
-    public static ConfigurationKeyType fromName(final String name) {
-        return Arrays.stream(values())
-            .filter(type -> type.name().equalsIgnoreCase(name))
-            .findFirst()
-            .orElse(null);
-    }
+//    String getType();
+
+    /**
+     * Used to indicate the <code>EventTarget</code> to which the event was
+     * originally dispatched.
+     */
+//    EventAdapter<T> getTarget();
 }

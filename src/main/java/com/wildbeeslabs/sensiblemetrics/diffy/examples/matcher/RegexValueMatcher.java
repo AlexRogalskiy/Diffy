@@ -71,7 +71,7 @@ public class RegexValueMatcher<T> extends ComparatorBiMatcher<T> {
      *
      * @param pattern - initial input pattern {@link String}
      * @throws IllegalArgumentException if pattern is non-null and not a valid regular expression.
-     * @throws NullPointerException     if the argument is {@code null}
+     * @throws NullPointerException     if pattern is {@code null}
      */
     public RegexValueMatcher(final String pattern) throws IllegalArgumentException {
         Objects.requireNonNull(pattern, "Pattern should not be null");
@@ -106,13 +106,10 @@ public class RegexValueMatcher<T> extends ComparatorBiMatcher<T> {
         final String expectedString = String.valueOf(last);
         try {
             final Pattern pattern = isStaticPattern() ? this.expectedPattern : Pattern.compile(expectedString);
-            if (!pattern.matcher(actualString).matches()) {
-                throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} did not match, expected value = {%s}, actual value = {%s}", this.getPatternType()), pattern.toString(), actualString);
-            }
+            return pattern.matcher(actualString).matches();
         } catch (PatternSyntaxException e) {
             throw new BiMatcherException(String.format("ERROR: expected pattern with type = {%s} is invalid, message ={%s}", this.getPatternType(), e.getMessage()), e, expectedString, actualString);
         }
-        return true;
     }
 
     /**

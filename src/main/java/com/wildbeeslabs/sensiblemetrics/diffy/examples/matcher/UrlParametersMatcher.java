@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -81,6 +82,7 @@ public class UrlParametersMatcher extends AbstractTypeSafeMatcher<String> {
      * @param urlString - initial argument url string to match
      * @return url parameters matcher instance {@link UrlParametersMatcher}
      */
+    @Factory
     public static UrlParametersMatcher of(final String urlString) {
         return new UrlParametersMatcher(urlString);
     }

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.Event;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -42,7 +42,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public abstract class BaseMatcherEvent<T> implements Serializable {
+public abstract class BaseMatcherEvent<T> implements Event<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability

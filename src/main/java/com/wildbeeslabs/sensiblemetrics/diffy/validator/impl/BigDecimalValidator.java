@@ -84,7 +84,6 @@ public class BigDecimalValidator implements Validator<BigDecimal> {
      * @param error - initial input {@link BigDecimal} error
      * @return big decimal {@link Validator}
      */
-    @NotNull
     @Contract("_, _ -> new")
     @Factory
     public static Validator<BigDecimal> of(final BigDecimal value, final BigDecimal error) {

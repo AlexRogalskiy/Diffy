@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherAdapter;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventAdapter;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.*;
 
@@ -42,7 +42,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T> {
+public abstract class AbstractBaseMatcher<T> implements MatcherEventAdapter<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -81,7 +81,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T> {
      * @param listener - initial input {@link MatcherEventListener} to remove
      */
     @Override
-    public <E extends MatcherEventListener<T>> void removeListener(final E listener) {
+    public void removeListener(final MatcherEventListener<T> listener) {
         if (Objects.nonNull(listener)) {
             this.getListeners().remove(listener);
         }
@@ -93,7 +93,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T> {
      * @param listener - initial input {@link MatcherEventListener} to add
      */
     @Override
-    public <E extends MatcherEventListener<T>> void addListener(final E listener) {
+    public void addListener(final MatcherEventListener<T> listener) {
         if (Objects.nonNull(listener)) {
             this.getListeners().add(listener);
         }
@@ -105,7 +105,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherAdapter<T> {
      * @param listeners - initial input {@link MatcherEventListener}s to add
      */
     @Override
-    public <E extends MatcherEventListener<T>> void addListeners(final Iterable<E> listeners) {
+    public void addListeners(final Iterable<MatcherEventListener<T>> listeners) {
         Optional.ofNullable(listeners).orElseGet(Collections::emptyList).forEach(this::addListener);
     }
 

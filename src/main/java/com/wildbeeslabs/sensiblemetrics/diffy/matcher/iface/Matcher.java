@@ -37,6 +37,7 @@ import java.util.function.Supplier;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
@@ -89,7 +90,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Default exception {@link Matcher}
      */
-    Matcher DEFAULT_EXCEPTION_MATCHER = (Matcher<?>) value -> {
+    Matcher DEFAULT_EXCEPTION_MATCHER = (value) -> {
         throw new MatchOperationException();
     };
 
@@ -137,7 +138,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if {@code after} is null
+     * @throws NullPointerException if {@code other} is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0		0
@@ -157,7 +158,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Output
      *                              0		1
@@ -175,7 +176,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0		0
@@ -195,7 +196,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0		0
@@ -215,7 +216,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0 		0 		1
@@ -235,7 +236,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0 	 	1
@@ -255,7 +256,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0 	 	1
@@ -306,9 +307,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param description - initial input {@link MatchDescription}
      */
     default void describeBy(final MatchDescription description) {
-        description.append("(");
-        description.append(this.getDescription());
-        description.append(")");
+        description.append(wrapInBraces.apply(this.getDescription()));
     }
 
     /**
@@ -318,7 +317,8 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param matcher  - initial input {@link Matcher}
      * @param supplier - initial input {@link Supplier}
      * @return true - if input {@link Supplier} matches {@link Matcher}, false - otherwise
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if matcher is {@code null}
+     * @throws NullPointerException if supplier is {@code null}
      */
     @NonNull
     static <T> boolean test(final Matcher<T> matcher, final Supplier<T> supplier) {

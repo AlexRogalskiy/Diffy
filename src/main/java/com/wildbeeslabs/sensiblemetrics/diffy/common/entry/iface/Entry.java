@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -111,6 +111,9 @@ public interface Entry<K, V> extends Serializable {
      * @param first    - initial input entry first value {@link Optional}
      * @param last     - initial input entry last value {@link Optional}
      * @param consumer - initial input {@link BiConsumer} operator
+     * @throws NullPointerException if first is {@code null}
+     * @throws NullPointerException if last is {@code null}
+     * @throws NullPointerException if consumer is {@code null}
      */
     static <K, V> void ifAllPresent(final Optional<K> first, final Optional<V> last, final BiConsumer<K, V> consumer) {
         Objects.requireNonNull(first, "Optional entry first value should not be null!");
@@ -133,6 +136,9 @@ public interface Entry<K, V> extends Serializable {
      * @param last     - initial input entry last value {@link Optional}
      * @param function - initial input {@link BiFunction} operator
      * @return {@link Optional} of {@link BiFunction} operator result {@code R}
+     * @throws NullPointerException if first is {@code null}
+     * @throws NullPointerException if last is {@code null}
+     * @throws NullPointerException if function is {@code null}
      */
     static <K, V, R> Optional<R> mapIfAllPresent(final Optional<K> first, final Optional<V> last, final BiFunction<K, V, R> function) {
         Objects.requireNonNull(first, "Optional entry first value should not be null!");
@@ -150,7 +156,10 @@ public interface Entry<K, V> extends Serializable {
      * @param first    must not be {@literal null}.
      * @param last     must not be {@literal null}.
      * @param combiner must not be {@literal null}.
-     * @return
+     * @throws NullPointerException if first is {@code null}
+     * @throws NullPointerException if last is {@code null}
+     * @throws NullPointerException if combiner is {@code null}
+     * @return {@link Stream} of {@code T}
      * @since 2.1
      */
     static <K, V, T> Stream<T> zip(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, T> combiner) {

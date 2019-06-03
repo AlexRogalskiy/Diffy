@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.sort;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
 import lombok.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -70,6 +71,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * Creates a new {@link SortManager} instance.
      *
      * @param orders must negate be {@literal null} or contain {@literal null}.
+     * @throws NullPointerException if orders is {@code null}
      */
     public SortManager(final List<SortOrder> orders) {
         Objects.requireNonNull(orders, "Orders should not be null!");
@@ -116,6 +118,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      *
      * @param properties must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
+     * @throws NullPointerException if properties is {@code null}
      */
     public static SortManager by(final String... properties) {
         Objects.requireNonNull(properties, "Properties should not be null!");
@@ -127,6 +130,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      *
      * @param orders must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
+     * @throws NullPointerException if orders is {@code null}
      */
     public static SortManager by(final List<SortOrder> orders) {
         Objects.requireNonNull(orders, "Orders should not be null!");
@@ -136,12 +140,13 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     /**
      * Creates a new {@link SortManager} for the given {@link SortOrder}s.
      *
-     * @param orders must negate be {@literal null}.
+     * @param sortOrder must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
+     * @throws NullPointerException if sortOrder is {@code null}
      */
-    public static SortManager by(final SortOrder... orders) {
-        Objects.requireNonNull(orders, "Orders should not be null!");
-        return new SortManager(orders);
+    public static SortManager by(final SortOrder... sortOrder) {
+        Objects.requireNonNull(sortOrder, "SortOrder should not be null!");
+        return new SortManager(sortOrder);
     }
 
     /**
@@ -150,11 +155,13 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @param direction  must negate be {@literal null}.
      * @param properties must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
+     * @throws NullPointerException if direction is {@code null}
+     * @throws NullPointerException if properties is {@code null}
      */
     public static SortManager by(final SortDirection direction, final String... properties) {
         Objects.requireNonNull(direction, "Sort direction should not be null!");
         Objects.requireNonNull(properties, "Properties should not be null!");
-        Objects.requireNonNull(properties.length > 0, "At least one property must be given!");
+        assert properties.length > 0 : "At least one property must be given!";
         return SortManager.by(Arrays.stream(properties)
             .map(it -> new SortOrder(direction, it))
             .collect(Collectors.toList()));
@@ -211,6 +218,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      *
      * @param sort must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
+     * @throws NullPointerException if sort is {@code null}
      */
     public SortManager and(final SortManager sort) {
         Objects.requireNonNull(sort, "Sort should not be null!");
@@ -462,6 +470,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          *
          * @param property must negate be {@literal null} or empty.
          */
+        @Factory
         public static SortOrder by(final String property) {
             return new SortOrder(DEFAULT_DIRECTION, property);
         }
@@ -472,6 +481,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          *
          * @param property must negate be {@literal null} or empty.
          */
+        @Factory
         public static SortOrder asc(final String property) {
             return new SortOrder(SortDirection.ASC, property, DEFAULT_NULL_HANDLING);
         }
@@ -482,6 +492,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          *
          * @param property must negate be {@literal null} or empty.
          */
+        @Factory
         public static SortOrder desc(final String property) {
             return new SortOrder(SortDirection.DESC, property, DEFAULT_NULL_HANDLING);
         }
@@ -527,6 +538,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * @param direction - initial input sort direction {@link SortDirection}
          * @return sort order instance {@link SortOrder}
          */
+        @NonNull
         public SortOrder with(final SortDirection direction) {
             return new SortOrder(direction, getProperty(), isIgnoreCase(), getNullPriority());
         }
@@ -536,6 +548,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          *
          * @param property must negate be {@literal null} or empty.
          */
+        @NonNull
         public SortOrder withProperty(final String property) {
             return new SortOrder(getDirection(), property, isIgnoreCase(), getNullPriority());
         }
@@ -555,6 +568,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          *
          * @return sort order instance {@link SortOrder}
          */
+        @NonNull
         public SortOrder ignoreCase() {
             return new SortOrder(getDirection(), getProperty(), true, getNullPriority());
         }
@@ -565,6 +579,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
          * @param nullPriority can be {@literal null}.
          * @return sort order instance {@link SortOrder}
          */
+        @NonNull
         public SortOrder with(final NullPriority nullPriority) {
             return new SortOrder(getDirection(), getProperty(), isIgnoreCase(), nullPriority);
         }

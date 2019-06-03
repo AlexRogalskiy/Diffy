@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.configuration.enums.ConfigurationKeyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.configuration.enumeration.ConfigurationKeyType;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -103,6 +103,7 @@ public class DiffyConfigurationKey<T> {
      *
      * @param keyName - initial input key name {@link String}
      * @return key name {@link String}
+     * @throws NullPointerException if keyName is {@code null}
      * @throws InvalidParameterException - if key name is invalid
      */
     private String checkName(final String keyName) {

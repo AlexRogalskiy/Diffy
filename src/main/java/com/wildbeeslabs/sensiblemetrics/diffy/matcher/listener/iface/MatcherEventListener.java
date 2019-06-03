@@ -23,47 +23,22 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
 
 /**
- * {@link MatcherEvent} listener declaration
+ * Match {@link EventListener} interface declaration
  *
  * @param <T> type of input element to be matched by operation
  */
-public interface MatcherEventListener<T> extends EventListener<T> {
-
-    /**
-     * {@link MatcherEventListener} on start {@link BaseMatcherEvent}
-     *
-     * @param event - initial input event {@code E}
-     */
-    default <E extends BaseMatcherEvent<T>> void onStart(final E event) {
-    }
-
-    /**
-     * {@link MatcherEventListener} on before {@link BaseMatcherEvent}
-     *
-     * @param event - initial input event {@code E}
-     */
-    default <E extends BaseMatcherEvent<T>> void onBefore(final E event) {
-    }
-
-    /**
-     * {@link MatcherEventListener} on after {@link BaseMatcherEvent}
-     *
-     * @param event - initial input event {@code E}
-     */
-    default <E extends BaseMatcherEvent<T>> void onAfter(final E event) {
-    }
+public interface MatcherEventListener<T> extends EventListener<T, BaseMatcherEvent<T>> {
 
     /**
      * {@link MatcherEventListener} on success {@link BaseMatcherEvent}
      *
      * @param event - initial input event {@code E}
      */
-    default <E extends BaseMatcherEvent<T>> void onSuccess(final E event) {
+    default void onSuccess(final BaseMatcherEvent<T> event) {
     }
 
     /**
@@ -71,15 +46,7 @@ public interface MatcherEventListener<T> extends EventListener<T> {
      *
      * @param event - initial input event {@code E}
      */
-    default <E extends BaseMatcherEvent<T>> void onFailure(final E event) {
-    }
-
-    /**
-     * {@link MatcherEventListener} on complete {@link BaseMatcherEvent}
-     *
-     * @param event - initial input event {@code E}
-     */
-    default <E extends BaseMatcherEvent<T>> void onComplete(final E event) {
+    default void onFailure(final BaseMatcherEvent<T> event) {
     }
 
     /**
@@ -87,7 +54,7 @@ public interface MatcherEventListener<T> extends EventListener<T> {
      *
      * @param event - initial input event {@code E}
      */
-    default <E extends BaseMatcherEvent<T>> void onSkip(final E event) {
+    default void onSkip(final BaseMatcherEvent<T> event) {
     }
 
     /**
@@ -95,6 +62,6 @@ public interface MatcherEventListener<T> extends EventListener<T> {
      *
      * @param event - initial input event {@code E}
      */
-    default <E extends BaseMatcherEvent<T>> void onError(final E event) {
+    default void onError(final BaseMatcherEvent<T> event) {
     }
 }

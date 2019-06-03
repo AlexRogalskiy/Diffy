@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.Data;
@@ -69,6 +70,7 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T> {
      * @param status  - initial input match status
      * @return {@link MatcherEvent}
      */
+    @Factory
     public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final boolean status) {
         return of(matcher, value, MatcherEventType.fromBoolean(status));
     }
@@ -81,6 +83,7 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T> {
      * @param type    - initial input event type {@link MatcherEventType}
      * @return {@link MatcherEvent}
      */
+    @Factory
     public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final MatcherEventType type) {
         return new MatcherEvent(matcher, value, type);
     }

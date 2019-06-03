@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -77,6 +78,7 @@ public class InvalidOperationException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link InvalidOperationException}
      */
+    @Factory
     public static final InvalidOperationException throwInvalidParseFormat(final Object target, final Throwable throwable) {
         throw new InvalidOperationException(formatMessage("ERROR: unsupported parsing on target = {%s}", target), throwable);
     }

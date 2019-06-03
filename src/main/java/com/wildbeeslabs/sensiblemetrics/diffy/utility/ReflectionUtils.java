@@ -154,14 +154,14 @@ public class ReflectionUtils {
         try {
             constructor = clazz.getDeclaredConstructor();
         } catch (final NoSuchMethodException e) {
-            BadOperationException.throwBadOperation(formatMessage("ERROR: missing default constructor for class: {%s}", clazz.getName()), e);
+            BadOperationException.throwError(formatMessage("ERROR: missing default constructor for class: {%s}", clazz.getName()), e);
             return null;
         }
         try {
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (Exception e) {
-            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot create instance by class: {%s}", clazz), e);
+            BadOperationException.throwError(formatMessage("ERROR: cannot create instance by class: {%s}", clazz), e);
         }
         return null;
     }
@@ -731,12 +731,12 @@ public class ReflectionUtils {
                         final Comparable<Object> val2 = (Comparable<Object>) getter.invoke(e2);
                         return val1.compareTo(val2);
                     } catch (Exception e) {
-                        BadOperationException.throwBadOperation(formatMessage("ERROR: cannot invoke getter method: {%s} on field: {%s} of first: {%s} / last: {%s}", getter.getName(), field, e1, e2), e);
+                        BadOperationException.throwError(formatMessage("ERROR: cannot invoke getter method: {%s} on field: {%s} of first: {%s} / last: {%s}", getter.getName(), field, e1, e2), e);
                     }
                     return 0;
                 });
         } else {
-            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", join(list, "|"), field, returnType.getName()));
+            BadOperationException.throwError(formatMessage("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", join(list, "|"), field, returnType.getName()));
         }
         return list;
     }
@@ -779,7 +779,7 @@ public class ReflectionUtils {
                     return this.getParameterType(methodOptional.get());
                 }
             }
-            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot determine correct type for method={%s}", getMethodName()));
+            BadOperationException.throwError(formatMessage("ERROR: cannot determine correct type for method={%s}", getMethodName()));
             return null;
         }
 
@@ -806,6 +806,17 @@ public class ReflectionUtils {
         }
     }
 
+    /**
+     * Converts input value {@link Object} of {@link Class} to {@code T}
+     *
+     * @param clazz        - initial input {@link Class}
+     * @param value        - initial input value {@link Object}
+     * @param errorMessage - initial input error message {@link String}
+     * @param <T>
+     * @return converted {@code T} value
+     * @throws NullPointerException if clazz is {@code null}
+     * @throws NullPointerException if value is {@code null}
+     */
     public static <T> T convertToType(final Class<T> clazz, final Object value, final String errorMessage) {
         Objects.requireNonNull(clazz, "Class should not be null");
         Objects.requireNonNull(value, "Value should not be null");

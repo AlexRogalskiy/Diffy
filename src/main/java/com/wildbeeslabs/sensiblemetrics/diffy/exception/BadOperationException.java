@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -75,7 +76,8 @@ public class BadOperationException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link BadOperationException}
      */
-    public static final BadOperationException throwBadOperation(final String message, final Throwable throwable) {
+    @Factory
+    public static final BadOperationException throwError(final String message, final Throwable throwable) {
         throw new BadOperationException(message, throwable);
     }
 
@@ -85,7 +87,8 @@ public class BadOperationException extends RuntimeException {
      * @param message - initial input raw message {@link String}
      * @return {@link BadOperationException}
      */
-    public static final BadOperationException throwBadOperation(final String message) {
+    @Factory
+    public static final BadOperationException throwError(final String message) {
         throw new BadOperationException(message);
     }
 }

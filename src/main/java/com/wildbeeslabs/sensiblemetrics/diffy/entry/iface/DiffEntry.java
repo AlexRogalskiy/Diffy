@@ -23,7 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import lombok.NonNull;
 
 import java.util.List;
@@ -51,19 +52,12 @@ public interface DiffEntry<T> extends Entry<T, T> {
     @NonNull
     String getPropertyName();
 
-//    /**
-//     * Returns property {@link Entry} value
-//     *
-//     * @return property {@link Entry} value
-//     */
-//    @Nullable
-//    Entry<T, T> getEntry();
-
     /**
      * Returns {@link Entry} of first {@code T} elements
      *
      * @return {@link Entry} of first {@code T} elements
      */
+    @NonNull
     default Entry<String, Object> first() {
         return DefaultEntry.of(this.getPropertyName(), this.getFirst());
     }
@@ -73,6 +67,7 @@ public interface DiffEntry<T> extends Entry<T, T> {
      *
      * @return {@link Entry} of last {@code T} elements
      */
+    @NonNull
     default Entry<String, Object> last() {
         return DefaultEntry.of(this.getPropertyName(), this.getLast());
     }
@@ -82,6 +77,7 @@ public interface DiffEntry<T> extends Entry<T, T> {
      *
      * @return {@link List} from {@link Stream} of {@link DiffEntry}'s {@code T} elements
      */
+    @NonNull
     static <T> Collector<DiffEntry<T>, ?, List<Entry<T, T>>> entries() {
         return Collectors.mapping((final DiffEntry<T> e) -> DefaultEntry.of(e.getFirst(), e.getLast()), Collectors.toList());
     }
@@ -91,6 +87,7 @@ public interface DiffEntry<T> extends Entry<T, T> {
      *
      * @return {@link Set} from {@link Stream} of {@link DiffEntry}'s properties {@link String}
      */
+    @NonNull
     static <T> Collector<DiffEntry<T>, ?, Set<String>> properties() {
         return Collectors.mapping(DiffEntry::getPropertyName, Collectors.toSet());
     }
@@ -100,6 +97,7 @@ public interface DiffEntry<T> extends Entry<T, T> {
      *
      * @return {@link Map} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
      */
+    @NonNull
     static <T> Collector<DiffEntry<T>, ?, Map<String, T>> firstToMap() {
         return Collectors.toMap(DiffEntry::getPropertyName, DiffEntry::getFirst);
     }
@@ -109,6 +107,7 @@ public interface DiffEntry<T> extends Entry<T, T> {
      *
      * @return {@link Map} from {@link Stream} of {@link DiffEntry}s last {@code T} elements
      */
+    @NonNull
     static <T> Collector<DiffEntry<T>, ?, Map<String, T>> lastToMap() {
         return Collectors.toMap(DiffEntry::getPropertyName, DiffEntry::getLast);
     }

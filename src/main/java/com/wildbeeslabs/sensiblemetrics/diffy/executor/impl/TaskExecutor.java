@@ -27,12 +27,15 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.ExecutionOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.TimeoutOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.executor.handler.DefaultRejectedExecutionHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.ThrowingConsumer;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.ThrowingSupplier;
 import lombok.experimental.UtilityClass;
 
 import java.time.Duration;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 /**
@@ -40,6 +43,59 @@ import java.util.concurrent.*;
  */
 @UtilityClass
 public class TaskExecutor {
+
+    /**
+     * Default thread executor properties
+     */
+    public static final int DEFAULT_EXECUTOR_POOL_SIZE = 5;
+    public static final int DEFAULT_EXECUTOR_MAX_POOL_SIZE = 10;
+    public static final int DEFAULT_EXECUTOR_ALIVE_TIMEOUT = 60;
+    public static final int DEFAULT_EXECUTOR_QUEUE_SIZE = 8 * 1024;
+
+    /**
+     * Default {@link ThreadPoolExecutor} instance
+     */
+    public static final ThreadPoolExecutor INSTANCE = getExecutor();
+
+    /**
+     * Returns default {@link ThreadPoolExecutor} by input parameters
+     *
+     * @param handler - initial input {@link RejectedExecutionHandler}
+     * @return {@link ThreadPoolExecutor}
+     */
+    public static ThreadPoolExecutor getExecutor(final RejectedExecutionHandler handler) {
+        final ThreadPoolExecutor executor = new ThreadPoolExecutor(
+            DEFAULT_EXECUTOR_POOL_SIZE,
+            DEFAULT_EXECUTOR_MAX_POOL_SIZE,
+            DEFAULT_EXECUTOR_ALIVE_TIMEOUT,
+            TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<>(DEFAULT_EXECUTOR_QUEUE_SIZE),
+            Optional.ofNullable(handler).orElseGet(() -> new ThreadPoolExecutor.CallerRunsPolicy()));
+        return executor;
+    }
+
+    /**
+     * Returns default {@link ThreadPoolExecutor} by input {@link ThreadFactory}
+     *
+     * @param threadFactory - initial input {@link ThreadFactory}
+     * @return {@link ThreadPoolExecutor}
+     * @throws NullPointerException if threadFactory is {@code null}
+     */
+    public static ThreadPoolExecutor getExecutor(final ThreadFactory threadFactory) {
+        Objects.requireNonNull(threadFactory, "Thread factory should not be null");
+        final ThreadPoolExecutor executor = getExecutor();
+        executor.setThreadFactory(threadFactory);
+        return executor;
+    }
+
+    /**
+     * Returns default {@link ThreadPoolExecutor}
+     *
+     * @return {@link ThreadPoolExecutor}
+     */
+    public static ThreadPoolExecutor getExecutor() {
+        return getExecutor(new DefaultRejectedExecutionHandler());
+    }
 
     /**
      * Executes input {@link ThrowingSupplier} task with corresponding {@link ThrowingConsumer} by {@link ExecutorService} and {@link Duration} timeout
@@ -210,8 +266,10 @@ public class TaskExecutor {
      * @param timeout - initial input {@link Duration} timeout
      * @param future  - initial input {@link Future} task
      * @return {@link Future} task result {@code T}
+     * @throws NullPointerException timeout is {@code null}
      */
     private static <T> T execute(final Duration timeout, final Future<T> future) {
+        Objects.requireNonNull(timeout, "Timeout should not be null");
         long timeoutInMillis = timeout.toMillis();
         try {
             return future.get(timeoutInMillis, TimeUnit.MILLISECONDS);
@@ -220,7 +278,7 @@ public class TaskExecutor {
         } catch (ExecutionException ex) {
             ExecutionOperationException.throwExecutionError(String.format("ERROR: cannot operate on executor service, message = {%s}", ex.getMessage()), ex);
         } catch (Throwable ex) {
-            BadOperationException.throwBadOperation(String.format("ERROR: cannot operate on future = {%s}, message = {%s}", future, ex.getMessage()), ex);
+            BadOperationException.throwError(String.format("ERROR: cannot operate on future = {%s}, message = {%s}", future, ex.getMessage()), ex);
         }
         return null;
     }

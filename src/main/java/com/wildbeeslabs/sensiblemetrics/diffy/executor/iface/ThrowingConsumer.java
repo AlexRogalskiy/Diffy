@@ -35,6 +35,7 @@ public interface ThrowingConsumer<T> {
      * Consumes the supplied argument {@code T}, potentially throwing an exception
      *
      * @param value - initial input argument {@code T} to consume
+     * @throw {@link Throwable}
      */
     void accept(final T value) throws Throwable;
 }

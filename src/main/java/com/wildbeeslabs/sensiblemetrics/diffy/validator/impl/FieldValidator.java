@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
 /**
@@ -59,6 +60,7 @@ public class FieldValidator<T> implements Validator<T> {
      * @param value - initial input value {@code T}
      * @return {@link FieldValidator}
      */
+    @Factory
     public static <T> FieldValidator<T> of(final T value) {
         return new FieldValidator<>(value);
     }

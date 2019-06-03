@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValidationException;
 import lombok.NonNull;
 
 /**
@@ -41,6 +42,12 @@ public interface Validator<T> {
      * Default false {@link Validator}
      */
     Validator<?> DEFAULT_FALSE_INSTANCE = (value) -> false;
+    /**
+     * Default throwable {@link Validator}
+     */
+    Validator<?> DEFAULT_THROWABLE_INSTANCE = (value) -> {
+        throw new ValidationException();
+    };
 
     /**
      * Returns true if input value {@code T} is valid, false - otherwise
@@ -48,7 +55,7 @@ public interface Validator<T> {
      * @param value - initial input value to be validated {@code T}
      * @return true - if input value {@code T} is valid, false - otherwise
      */
-    boolean validate(final T value);
+    boolean validate(final T value) throws Throwable;
 
     /**
      * Gets new {@link Validator} to use for the value of the field with the given name.

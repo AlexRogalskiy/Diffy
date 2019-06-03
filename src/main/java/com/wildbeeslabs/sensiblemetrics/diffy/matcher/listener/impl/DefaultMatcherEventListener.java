@@ -23,17 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,14 +52,15 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * Default {@link MatcherEventListener} instance
      */
     public static final MatcherEventListener INSTANCE = new DefaultMatcherEventListener<>();
+
     /**
-     * Default {@link List} collection of failed {@link Matcher}
+     * Default {@link Collection} collection of failed {@link BaseMatcher}
      */
-    private final List<? super BaseMatcher<T>> failedMatchers;
+    private final Collection<? super BaseMatcher<T>> failedMatchers;
     /**
-     * Default {@link List} collection of success {@link Matcher}
+     * Default {@link Collection} collection of success {@link BaseMatcher}
      */
-    private final List<? super BaseMatcher<T>> successMatchers;
+    private final Collection<? super BaseMatcher<T>> successMatchers;
 
     /**
      * Default matcher event listener constructor
@@ -71,36 +71,36 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
     }
 
     /**
-     * {@link MatcherEventListener} on success {@link MatcherEvent}
+     * {@link MatcherEventListener} on success {@link BaseMatcherEvent}
      *
-     * @param event - initial input {@link MatcherEvent}
+     * @param event - initial input {@link BaseMatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onSuccess(final E event) {
+    public void onSuccess(final BaseMatcherEvent<T> event) {
         if (this.isEnableMode(event)) {
             this.getSuccessMatchers().add(event.getMatcher());
         }
     }
 
     /**
-     * {@link MatcherEventListener} on failure {@link MatcherEvent}
+     * {@link MatcherEventListener} on failure {@link BaseMatcherEvent}
      *
-     * @param event - initial input {@link MatcherEvent}
+     * @param event - initial input {@link BaseMatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onFailure(final E event) {
+    public void onFailure(final BaseMatcherEvent<T> event) {
         if (this.isEnableMode(event)) {
             this.getFailedMatchers().add(event.getMatcher());
         }
     }
 
     /**
-     * Returns binary flag based on matcher mode by input {@link MatcherEvent}
+     * Returns binary flag based on matcher mode by input {@link BaseMatcherEvent}
      *
-     * @param event - initial input {@link MatcherEvent}
+     * @param event - initial input {@link BaseMatcherEvent}
      * @return true - if current matcher mode is enabled, false - otherwise
      */
-    private <E extends BaseMatcherEvent<T>> boolean isEnableMode(final E event) {
+    private boolean isEnableMode(final BaseMatcherEvent<T> event) {
         return (Objects.nonNull(event.getMatcher()) && event.getMatcher().getMode().isEnable());
     }
 
@@ -110,7 +110,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @return {@link List} of supported {@link EventListener}s
      */
     @Override
-    public List<? extends EventListener<T>> getSupportedListeners() {
-        return asList((EventListener<T>) INSTANCE);
+    public Collection<? extends EventListener<T, BaseMatcherEvent<T>>> getSupportedListeners() {
+        return asList((EventListener<T, BaseMatcherEvent<T>>) INSTANCE);
     }
 }

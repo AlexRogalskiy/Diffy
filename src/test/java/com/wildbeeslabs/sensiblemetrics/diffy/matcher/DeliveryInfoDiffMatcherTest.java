@@ -36,6 +36,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
@@ -477,6 +478,7 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
      * @param updatedDate - initial input udpated date value {@link Date}
      * @return new delivery info matcher {@link DeliveryInfoDiffMatcher} instance
      */
+    @NonNull
     protected DeliveryInfoDiffMatcher getDeliveryInfoMatcher(final Integer type, final String gid, final Date createdDate, final Date updatedDate) {
         return DeliveryInfoDiffMatcher.of()
             .withType(type)

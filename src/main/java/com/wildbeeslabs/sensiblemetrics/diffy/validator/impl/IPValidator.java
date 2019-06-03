@@ -45,6 +45,12 @@ public class IPValidator implements Validator<String> {
     private static final Set<String> DEFAULT_VALID_IP_ADDRESS_SET = ImmutableSet.of("127.0.0.1", "0:0:0:0:0:0:0:1");
     private final List<String[]> masks = new ArrayList<>();
 
+    /**
+     * Default ip validator constructor by input source
+     *
+     * @param source - initial input source {@link String}
+     * @throws NullPointerException if source is {@code null}
+     */
     public IPValidator(final String source) {
         Objects.requireNonNull(source, "IP source should not be null");
         final String[] parts = source.split("[,;]");

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -77,7 +78,8 @@ public class MatchOperationException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link MatchOperationException}
      */
+    @Factory
     public static final MatchOperationException throwIncorrectMatch(final Object target, final Throwable throwable) {
-        throw new MatchOperationException(formatMessage("ERROR: cannot process match operation on target = {%s}", target), throwable);
+        throw new MatchOperationException(formatMessage("ERROR: cannot process match operation on target = {%s}, message = {%s}", target, throwable.getMessage()), throwable);
     }
 }

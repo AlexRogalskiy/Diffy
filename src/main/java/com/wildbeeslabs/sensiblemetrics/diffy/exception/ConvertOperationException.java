@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -77,6 +78,7 @@ public class ConvertOperationException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link ConvertOperationException}
      */
+    @Factory
     public static final ConvertOperationException throwIncorrectConversion(final Object target, final Throwable throwable) {
         throw new ConvertOperationException(formatMessage("ERROR: cannot process convert operation on target = {%s}", target), throwable);
     }

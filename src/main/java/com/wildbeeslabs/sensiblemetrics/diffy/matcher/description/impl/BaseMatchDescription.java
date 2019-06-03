@@ -99,7 +99,7 @@ public class BaseMatchDescription implements MatchDescription {
         try {
             this.getOut().append(convertValue(value));
         } catch (IOException e) {
-            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot append value: {%s}", value), e);
+            BadOperationException.throwError(formatMessage("ERROR: cannot append value: {%s}", value), e);
         }
         return this;
     }

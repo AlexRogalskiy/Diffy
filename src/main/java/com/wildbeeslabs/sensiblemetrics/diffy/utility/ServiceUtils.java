@@ -61,6 +61,7 @@ public class ServiceUtils {
      * @param <R>       type of input element to be converted to by operation
      * @param value     - initial argument value to be converted
      * @param converter - initial converter to process on {@link Converter}
+     * @throws NullPointerException if converter is {@code null}
      * @return converted value
      */
     @Nullable
@@ -99,6 +100,8 @@ public class ServiceUtils {
      * @param predicate - initial input {@link Predicate}
      * @param reducer   - initial input {@link BinaryOperator}
      * @param values    - initial input collection of {@code T}
+     * @throws NullPointerException if predicate is {@code null}
+     * @throws NullPointerException if reducer is {@code null}
      * @return {@link Optional} of {@code T}
      */
     @NonNull
@@ -117,6 +120,9 @@ public class ServiceUtils {
      * @param reducer   - initial input {@link BinaryOperator}
      * @param values    - initial input collection of {@code T}
      * @return {@link Optional} of {@code T}
+     * @throws NullPointerException if predicate is {@code null}
+     * @throws NullPointerException if reducer is {@code null}
+     * @throws NullPointerException if supplier is {@code null}
      */
     @NonNull
     public static <T, K extends Throwable> T reduceOrThrow(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer, final Supplier<? extends K> supplier) {

@@ -23,13 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInQuotes;
+import static java.lang.String.join;
 
 /**
  * Custom {@link AbstractMatcher} implementation
@@ -80,7 +83,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
      */
     @Override
     public void describeBy(final MatchDescription description) {
-        description.append("matches(\"" + this.matchableClazz.getName() + "\")");
+        description.append(join("matches", wrapInQuotes.apply(this.matchableClazz.getName())));
     }
 
     /**
@@ -90,7 +93,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
      * @param clazz - initial input class argument {@link Class}
      * @return {@link Matcher}
      */
-    @NonNull
+    @Factory
     @SuppressWarnings("unchecked")
     public static <T> Matcher<T> getMatcher(final Class<? extends T> clazz) {
         return (Matcher<T>) new InstanceMatcher(clazz);

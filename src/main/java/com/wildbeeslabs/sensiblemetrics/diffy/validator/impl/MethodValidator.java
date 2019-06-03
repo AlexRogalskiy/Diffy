@@ -45,6 +45,7 @@ public class MethodValidator<T> implements Validator<Method> {
      * Default method validator constructor by input parameters
      *
      * @param method - initial method {@link Method}
+     * @throws NullPointerException if method is {@code null}
      */
     public MethodValidator(final Method method) {
         Objects.requireNonNull(method, "Method should not be null");

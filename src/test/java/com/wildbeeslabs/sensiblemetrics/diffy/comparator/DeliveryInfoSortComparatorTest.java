@@ -24,14 +24,15 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator;
 
 import com.google.common.collect.ImmutableList;
+import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparatorDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.factory.DeliveryInfoFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -111,6 +112,7 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
      * @param balance - initial input balance value
      * @return new instance of {@link DeliveryInfo}
      */
+    @NonNull
     private DeliveryInfo createDeliveryInfo(final Long id, final String gid, final DeliveryInfo.DeliveryStatus status, final double balance) {
         final DeliveryInfo deliveryInfo = new DeliveryInfo();
         deliveryInfo.setId(id);

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.configuration.iface.Configuration;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import lombok.EqualsAndHashCode;
@@ -164,7 +165,7 @@ public final class DiffyConfiguration<T> implements Configuration<T> {
      *
      * @return {@link DiffyConfiguration}
      */
-    @NonNull
+    @Factory
     public static <T> DiffyConfiguration<T> of() {
         return new DiffyConfiguration<>();
     }
@@ -174,8 +175,9 @@ public final class DiffyConfiguration<T> implements Configuration<T> {
      *
      * @param configuration - initial input {@link DiffyConfiguration} to be copied
      * @return copy of {@link DiffyConfiguration}
+     * @throws NullPointerException if configuration is {@code null}
      */
-    @NonNull
+    @Factory
     public static <T> DiffyConfiguration<T> copy(final DiffyConfiguration<T> configuration) {
         Objects.requireNonNull(configuration, "Configuration should not be null");
         return new DiffyConfiguration<>(configuration.getKeys().values());

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -50,11 +51,11 @@ public class BiMatcherException extends RuntimeException {
     private final Object actual;
 
     /**
-     * Binary matcher exception constructor
+     * Binary matcher exception constructor by input parameters
      *
-     * @param message  - description of exception {@link String}
-     * @param expected - value expected by matcher {@link Object}
-     * @param actual   - value being tested by matcher {@link Object}
+     * @param message  - initial input description of exception {@link String}
+     * @param expected - initial input value expected by matcher {@link Object}
+     * @param actual   - initial value being tested by matcher {@link Object}
      */
     public BiMatcherException(final String message, final Object expected, final Object actual) {
         super(message);
@@ -63,16 +64,30 @@ public class BiMatcherException extends RuntimeException {
     }
 
     /**
-     * Binary matcher exception constructor
+     * Binary matcher exception constructor by input parameters
      *
-     * @param message  - description of exception {@link String}
-     * @param cause    - cause of exception {@link Throwable}
-     * @param expected - value expected by matcher {@link Object}
-     * @param actual   - value being tested by matcher {@link Object}
+     * @param message  - initial input description of exception {@link String}
+     * @param cause    - initial input cause of exception {@link Throwable}
+     * @param expected - initial input value expected by matcher {@link Object}
+     * @param actual   - initial value being tested by matcher {@link Object}
      */
     public BiMatcherException(final String message, final Throwable cause, final Object expected, final Object actual) {
         super(message, cause);
         this.expected = expected;
         this.actual = actual;
+    }
+
+    /**
+     * Returns {@link BiMatcherException} by input parameters
+     *
+     * @param message  - initial input description of exception {@link String}
+     * @param cause    - initial input cause of exception {@link Throwable}
+     * @param expected - initial input value expected by matcher {@link Object}
+     * @param actual   - initial value being tested by matcher {@link Object}
+     * @return {@link BiMatcherException}
+     */
+    @Factory
+    public static final BiMatcherException throwError(final String message, final Throwable cause, final Object expected, final Object actual) {
+        throw new BiMatcherException(message, cause, expected, actual);
     }
 }

@@ -57,7 +57,7 @@ public interface ComparatorDispatcher<T> extends Serializable {
      *
      * @param sortManager - initial input {@link SortManager}
      * @return {@link BiMatcher}
-     * @throws NullPointerException if the argument is {@code null}
+     * @throws NullPointerException if sortManager is {@code null}
      */
     @NonNull
     default BiMatcher<T> equalBy(final SortManager sortManager) {
@@ -70,7 +70,7 @@ public interface ComparatorDispatcher<T> extends Serializable {
      *
      * @param sortManager - initial input {@link SortManager}
      * @return {@link BinaryOperator}
-     * @throws NullPointerException if the argument is {@code null}
+     * @throws NullPointerException if sortManager is {@code null}
      */
     @NonNull
     default BinaryOperator<T> maxBy(final SortManager sortManager) {
@@ -83,7 +83,7 @@ public interface ComparatorDispatcher<T> extends Serializable {
      *
      * @param sortManager - initial input {@link SortManager}
      * @return {@link BinaryOperator}
-     * @throws NullPointerException if the argument is {@code null}
+     * @throws NullPointerException if sortManager is {@code null}
      */
     @NonNull
     default BinaryOperator<T> minBy(final SortManager sortManager) {

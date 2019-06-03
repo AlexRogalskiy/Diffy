@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -78,6 +79,7 @@ public class MethodInvocationException extends RuntimeException {
      * @param throwable  - initial input cause target {@link Throwable}
      * @return {@link MethodInvocationException}
      */
+    @Factory
     public static final MethodInvocationException throwMethodInvocation(final String methodName, final Object target, final Throwable throwable) {
         throw new MethodInvocationException(formatMessage("ERROR: cannot invoke method = {%s} on target = {%s}", methodName, target), throwable);
     }

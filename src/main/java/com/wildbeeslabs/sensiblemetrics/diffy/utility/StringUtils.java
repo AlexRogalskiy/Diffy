@@ -58,6 +58,11 @@ public class StringUtils {
     public static final String DEFAULT_ALPHANUMERIC_PATTERN = "[^a-zA-Z0-9]";
 
     /**
+     * Default braces wrapper {@link Function}
+     */
+    public static final Function<Object, String> wrapInBraces = s -> "( " + s + " )";
+
+    /**
      * Default brackets wrapper {@link Function}
      */
     public static final Function<Object, String> wrapInBrackets = s -> "[ " + s + " ]";

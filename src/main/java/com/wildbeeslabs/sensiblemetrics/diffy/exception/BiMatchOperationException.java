@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -78,7 +79,8 @@ public class BiMatchOperationException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link BiMatchOperationException}
      */
+    @Factory
     public static final BiMatchOperationException throwIncorrectMatch(final Object value1, final Object value2, final Throwable throwable) {
-        throw new BiMatchOperationException(formatMessage("ERROR: cannot process match operation on first target = {%s}, last target = {%s}", value1, value2), throwable);
+        throw new BiMatchOperationException(formatMessage("ERROR: cannot process match operation on first target = {%s}, last target = {%s}, message = {%s}", value1, value2, throwable.getMessage()), throwable);
     }
 }

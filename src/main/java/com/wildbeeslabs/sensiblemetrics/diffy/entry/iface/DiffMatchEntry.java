@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
+import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
@@ -73,6 +74,7 @@ public interface DiffMatchEntry<T> extends Serializable {
      *
      * @return {@link List} from {@link Stream} of {@link DiffEntry}'s first {@code T} elements
      */
+    @NonNull
     static <T> Collector<DiffMatchEntry<T>, ?, List<T>> toList() {
         return Collectors.mapping(DiffMatchEntry::getValue, Collectors.toList());
     }

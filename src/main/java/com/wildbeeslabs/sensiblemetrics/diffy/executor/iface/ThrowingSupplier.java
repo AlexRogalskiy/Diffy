@@ -35,6 +35,7 @@ public interface ThrowingSupplier<T> {
      * Returns supplier result {@code T}, potentially throwing an exception
      *
      * @return supplier result {@code T}
+     * @throw {@link Throwable}
      */
     T get() throws Throwable;
 

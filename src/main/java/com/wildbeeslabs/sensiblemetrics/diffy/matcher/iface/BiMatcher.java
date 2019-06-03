@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
@@ -68,7 +68,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     /**
      * Default exception {@link BiMatcher}
      */
-    BiMatcher<?> DEFAULT_EXCEPTION_MATCHER = (BiMatcher<?>) (value1, value2) -> {
+    BiMatcher<?> DEFAULT_EXCEPTION_MATCHER = (value1, value2) -> {
         throw new BiMatchOperationException();
     };
 
@@ -107,7 +107,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link BiMatcher} operator to perform operation by
      * @return composed {@link BiMatcher} operator
-     * @throws NullPointerException if {@code after} is null
+     * @throws NullPointerException if {@code other} is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0		0
@@ -127,7 +127,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link BiMatcher} operator to perform operation by
      * @return composed {@link BiMatcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Output
      *                              0		1
@@ -145,7 +145,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link BiMatcher} operator to perform operation by
      * @return composed {@link BiMatcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0		0
@@ -165,7 +165,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link BiMatcher} operator to perform operation by
      * @return composed {@link BiMatcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0		0
@@ -185,7 +185,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link BiMatcher} operator to perform operation by
      * @return composed {@link BiMatcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0 		0 		1
@@ -205,7 +205,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link BiMatcher} operator to perform operation by
      * @return composed {@link BiMatcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0 	 	1
@@ -225,7 +225,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param other - initial input {@link BiMatcher} operator to perform operation by
      * @return composed {@link BiMatcher} operator
-     * @throws NullPointerException if matchers is {@code null}
+     * @throws NullPointerException if other is {@code null}
      *                              <p>
      *                              Input 1	Input 2	Output
      *                              0		0 	 	1
@@ -290,7 +290,8 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @param lastSupplier  - initial input last {@link Supplier}
      * @return true - if input {@link Supplier}s matches {@link BiMatcher}, false - otherwise
      * @throws NullPointerException if matcher is {@code null}
-     * @throws NullPointerException if suppliers are {@code null}
+     * @throws NullPointerException if firstSupplier are {@code null}
+     * @throws NullPointerException if lastSupplier are {@code null}
      */
     @NonNull
     static <T> boolean test(final BiMatcher<T> matcher, final Supplier<T> firstSupplier, final Supplier<T> lastSupplier) {
@@ -311,6 +312,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param <T>        type of input element to be compared by operation
      * @param comparator - initial input {@link Comparator}
+     * @throws NullPointerException if comparator is {@code null}
      * @return {@link BiMatcher}
      */
     @NonNull

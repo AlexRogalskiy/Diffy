@@ -21,32 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.view;
+package com.wildbeeslabs.sensiblemetrics.diffy.executor.factory;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.ThreadFactory;
 
 /**
- * {@link Entry} view declaration
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Logging {@link ThreadFactory} implementation
  */
-public interface EntryView {
+@Slf4j
+public class LoggingThreadFactory implements ThreadFactory {
 
-    /**
-     * {@link DiffEntryView.External} declaration
-     */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class External {
-    }
-
-    /**
-     * {@link DiffEntryView.Internal} declaration
-     */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class Internal extends EntryView.External {
+    @Override
+    public Thread newThread(final Runnable runnable) {
+        final Thread thread = new Thread(runnable);
+        thread.setUncaughtExceptionHandler((t1, e) -> log.error(e.getMessage(), e));
+        return thread;
     }
 }

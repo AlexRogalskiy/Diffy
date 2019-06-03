@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -74,6 +75,7 @@ public class ExecutionOperationException extends RuntimeException {
      * @param message - initial input raw message {@link String}
      * @return {@link ExecutionOperationException}
      */
+    @Factory
     public static final ExecutionOperationException throwExecutionError(final String message) {
         throw new ExecutionOperationException(message);
     }
@@ -85,6 +87,7 @@ public class ExecutionOperationException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link ExecutionOperationException}
      */
+    @Factory
     public static final ExecutionOperationException throwExecutionError(final String message, final Throwable throwable) {
         throw new ExecutionOperationException(message, throwable);
     }

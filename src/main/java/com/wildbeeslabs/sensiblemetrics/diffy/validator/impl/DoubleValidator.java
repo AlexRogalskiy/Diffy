@@ -27,7 +27,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Double {@link Validator} implementation
@@ -88,7 +87,6 @@ public class DoubleValidator implements Validator<Double> {
      * @param error - initial input error value
      * @return double {@link Validator}
      */
-    @NotNull
     @Contract("_, _ -> new")
     @Factory
     public static Validator<Double> closeTo(double value, double error) {

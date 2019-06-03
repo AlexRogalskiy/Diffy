@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import com.google.common.collect.Iterables;
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -218,6 +219,7 @@ public class ComparatorUtils {
      * @return object {@link Object} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super Object> getObjectComparator(@Nullable final Comparator<? super Object> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeObjectComparator(comparator, nullsInPriority);
     }
@@ -230,6 +232,7 @@ public class ComparatorUtils {
      * @return char sequence {@link CharSequence} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super CharSequence> getCharSequenceComparator(@Nullable final Comparator<? super CharSequence> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeCharSequenceComparator(comparator, nullsInPriority);
     }
@@ -241,6 +244,7 @@ public class ComparatorUtils {
      * @return comparable {@link Comparable} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static <T> Comparator<? super T> getComparableComparator() {
         return new DefaultComparableComparator();
     }
@@ -253,6 +257,7 @@ public class ComparatorUtils {
      * @return class {@link Class} comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super Class<?>> getClassComparator(final Comparator<? super Class<?>> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeClassComparator(comparator, nullsInPriority);
     }
@@ -266,6 +271,7 @@ public class ComparatorUtils {
      * @return iterable comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static <T> Comparator<? super Iterable<T>> getIterableComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeIterableComparator(comparator, nullsInPriority);
     }
@@ -279,6 +285,7 @@ public class ComparatorUtils {
      * @return big decimal comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super BigDecimal> getBigDecimalComparator(int significantDecimalPlaces, @Nullable final Comparator<? super BigDecimal> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeBigDecimalComparator(significantDecimalPlaces, comparator, nullsInPriority);
     }
@@ -294,6 +301,7 @@ public class ComparatorUtils {
      * @return value map comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static <K, V> Comparator<? super K> getValueMapComparator(final Map<K, V> map, @Nullable final Comparator<? super V> comparator, boolean nullsInPriority) {
         return new DefaultMapValueComparator(map, comparator, nullsInPriority);
     }
@@ -323,6 +331,7 @@ public class ComparatorUtils {
      * @return array comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static <T> Comparator<? super T[]> getArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeArrayComparator(comparator, nullsInPriority);
     }
@@ -336,6 +345,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical array comparator instance {@link LexicographicalNullSafeArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static <T> Comparator<? super T[]> getLexicographicalArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
         return new LexicographicalNullSafeArrayComparator<>(comparator, nullsInPriority);
     }
@@ -349,6 +359,7 @@ public class ComparatorUtils {
      * @return null-safe number {@link Number} comparator instance {@link DefaultNullSafeNumberComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static <T extends Number> Comparator<? super T> getNumberComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeNumberComparator(comparator, nullsInPriority);
     }
@@ -360,6 +371,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical byte array comparator instance {@link LexicographicalNullSafeByteArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super byte[]> getByteArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeByteArrayComparator(nullsInPriority);
     }
@@ -371,6 +383,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical short array comparator instance {@link LexicographicalNullSafeShortArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super short[]> getShortArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeShortArrayComparator(nullsInPriority);
     }
@@ -382,6 +395,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical int array comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super int[]> getIntArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeIntArrayComparator(nullsInPriority);
     }
@@ -393,6 +407,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical long array comparator instance {@link LexicographicalNullSafeLongArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super long[]> getLongArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeLongArrayComparator(nullsInPriority);
     }
@@ -404,6 +419,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical double array comparator instance {@link LexicographicalNullSafeDoubleArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super double[]> getDoubleArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeDoubleArrayComparator(nullsInPriority);
     }
@@ -415,6 +431,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical float array comparator instance {@link LexicographicalNullSafeFloatArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super float[]> getFloatArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeFloatArrayComparator(nullsInPriority);
     }
@@ -426,6 +443,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographicalchar array comparator instance {@link LexicographicalNullSafeCharacterArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super char[]> getCharacterArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeCharacterArrayComparator(nullsInPriority);
     }
@@ -437,6 +455,7 @@ public class ComparatorUtils {
      * @return null-safe lexicographical boolean array comparator instance {@link LexicographicalNullSafeBooleanArrayComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super boolean[]> getBooleanArrayComparator(boolean nullsInPriority) {
         return new LexicographicalNullSafeBooleanArrayComparator(nullsInPriority);
     }
@@ -449,6 +468,7 @@ public class ComparatorUtils {
      * @return null-safe locale {@link Locale} comparator instance {@link DefaultNullSafeLocaleComparator}
      */
     @SuppressWarnings("unchecked")
+    @Factory
     public static Comparator<? super Locale> getLocaleComparator(@Nullable final Comparator<? super Locale> comparator, boolean nullsInPriority) {
         return new DefaultNullSafeLocaleComparator(comparator, nullsInPriority);
     }
@@ -709,6 +729,7 @@ public class ComparatorUtils {
          * @return comparator instance {@link Comparator}
          */
         @Override
+        @NonNull
         public Comparator<T> thenComparing(@Nonnull final Comparator<? super T> otherComparator) {
             return new DefaultNullSafeComparator<>(
                 Objects.isNull(this.getComparator()) ? otherComparator : ((Comparator<T>) this.getComparator()).thenComparing(otherComparator),
@@ -722,6 +743,7 @@ public class ComparatorUtils {
          * @return reversed comparator instance {@link Comparator}, or null if no comparator exists
          */
         @Override
+        @NonNull
         public Comparator<T> reversed() {
             return new DefaultNullSafeComparator<>(
                 Objects.isNull(this.getComparator()) ? null : this.getComparator().reversed(),

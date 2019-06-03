@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -78,6 +79,7 @@ public class PropertyAccessException extends RuntimeException {
      * @param throwable     - initial input cause target {@link Throwable}
      * @return {@link PropertyAccessException}
      */
+    @Factory
     public static final PropertyAccessException throwIllegalAccess(final String propertyName, final Object propertyValue, final Throwable throwable) {
         throw new PropertyAccessException(formatMessage("ERROR: cannot access property = {%s} with value = {%s}", propertyName, propertyValue), throwable);
     }
@@ -90,6 +92,7 @@ public class PropertyAccessException extends RuntimeException {
      * @param target    - initial input source target {@link Object}
      * @return {@link PropertyAccessException}
      */
+    @Factory
     public static final PropertyAccessException throwIllegalAccess(final Throwable throwable, final String message, final Object... target) {
         throw new PropertyAccessException(formatMessage(message, target), throwable);
     }

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -76,6 +77,7 @@ public class RejectMatcherException extends RuntimeException {
      * @param target - initial input target {@link Object}
      * @return {@link RejectMatcherException}
      */
+    @Factory
     public static final RejectMatcherException throwReject(final Object target) {
         throw new RejectMatcherException(formatMessage("ERROR: cannot process target: {%s}", target));
     }

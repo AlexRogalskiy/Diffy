@@ -21,36 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.event;
 
-import java.io.Serializable;
-import java.util.List;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.ApplicationContext;
 
 /**
- * Event listener declaration
+ * Event dispatcher interface declaration
  *
- * @param <T> type of event element
+ * @param <T> type of event item
  */
-public interface EventListener<T> extends Serializable {
-    /**
-     * Returns {@link Class} of {@link EventListener} by input {@link EventListener}
-     *
-     * @param listener - initial input {@link EventListener}
-     * @return {@link Class} of {@link EventListener}
-     */
-    default Class<? extends EventListener<T>> getListenerType(final EventListener<T> listener) {
-        for (final EventListener<T> listenerType : this.getSupportedListeners()) {
-            if (listenerType.getClass().isAssignableFrom(listener.getClass())) {
-                return (Class<? extends EventListener<T>>) listenerType.getClass();
-            }
-        }
-        return null;
-    }
+public interface EventDispatcher<T> {
 
     /**
-     * Returns {@link List} of supported {@link EventListener}s
+     * Dispatches {@link Event} by {@link ApplicationContext}
      *
-     * @return {@link List} of supported {@link EventListener}s
+     * @param event   - initial input {@link Event}
+     * @param context - initial input {@link ApplicationContext}
      */
-    List<? extends EventListener<T>> getSupportedListeners();
+    void dispatch(final Event<T> event, final ApplicationContext context);
 }

@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
 import lombok.*;
 
@@ -78,6 +79,7 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
      * @param last  - initial input last value {@code V}
      * @return {@link Entry}
      */
+    @Factory
     public static <K, V> Entry<K, V> of(final K first, final V last) {
         return new DefaultEntry<>(first, last);
     }
@@ -92,6 +94,7 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
      * @param last  - initial input last value {@link Optional}
      * @return {@link Optional} of {@link Entry}
      */
+    @NonNull
     public static <K, V> Optional<Entry<K, V>> with(final Optional<K> first, final Optional<V> last) {
         return first.flatMap(f -> last.map(l -> DefaultEntry.of(f, l)));
     }

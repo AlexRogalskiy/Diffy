@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -76,6 +77,7 @@ public class TimeoutOperationException extends RuntimeException {
      * @param target - initial input target {@link Object}
      * @return {@link TimeoutOperationException}
      */
+    @Factory
     public static final TimeoutOperationException throwTimeoutError(final Object target) {
         throw new TimeoutOperationException(formatMessage("ERROR: cannot process target = {%s} due to timeout", target));
     }
@@ -87,6 +89,7 @@ public class TimeoutOperationException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link TimeoutOperationException}
      */
+    @Factory
     public static final TimeoutOperationException throwTimeoutError(final String message, final Throwable throwable) {
         throw new TimeoutOperationException(message, throwable);
     }

@@ -54,7 +54,7 @@ public interface Converter<T, R> {
      * @param <V>    the type of input to be converted from
      * @param before - initial input {@link Converter} function to apply before current function is applied
      * @return composed {@link Converter} function
-     * @throws NullPointerException if before is null
+     * @throws NullPointerException if before is {@code null}
      */
     default <V> Converter<V, R> compose(final Converter<? super V, ? extends T> before) {
         Objects.requireNonNull(before, "Converter should not be null!");
@@ -68,7 +68,7 @@ public interface Converter<T, R> {
      * @param <V>   type of input element to be converted from
      * @param after - initial input {@link Converter} function to apply after current function is applied
      * @return composed {@link Converter} function
-     * @throws NullPointerException if after is null
+     * @throws NullPointerException if after is {@code null}
      */
     default <V> Converter<T, V> andThen(final Converter<? super R, ? extends V> after) {
         Objects.requireNonNull(after, "Converter should not be null!");

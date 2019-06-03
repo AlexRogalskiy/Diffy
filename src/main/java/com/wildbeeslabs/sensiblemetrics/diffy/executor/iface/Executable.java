@@ -32,7 +32,7 @@ public interface Executable {
     /**
      * Executes any defined operation
      *
-     * @throws Throwable
+     * @throws {@link Throwable}
      */
     void execute() throws Throwable;
 }

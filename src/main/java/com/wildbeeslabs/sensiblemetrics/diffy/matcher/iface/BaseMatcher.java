@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDes
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BaseMatcherMode;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
+import lombok.NonNull;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -47,6 +48,7 @@ public interface BaseMatcher<T> extends Serializable {
      *
      * @return {@link List} of {@link MatcherEventListener}
      */
+    @NonNull
     default <E extends MatcherEventListener<T>> List<E> getListeners() {
         return Collections.emptyList();
     }
@@ -56,6 +58,7 @@ public interface BaseMatcher<T> extends Serializable {
      *
      * @return {@link BiMatcherModeType}
      */
+    @NonNull
     default BaseMatcherMode getMode() {
         return BaseMatcherMode.DEFAULT_MATCHER_MODE;
     }
@@ -65,6 +68,7 @@ public interface BaseMatcher<T> extends Serializable {
      *
      * @return {@link MatchDescription}
      */
+    @NonNull
     default MatchDescription getDescription() {
         return MatchDescription.EMPTY_MATCH_DESCRIPTION;
     }

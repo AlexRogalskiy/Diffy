@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.factory;
 
 import com.google.common.collect.ImmutableMap;
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparatorDispatcher;
@@ -84,6 +85,7 @@ public class DeliveryInfoFactory {
      * @param <E> type of entity to be compared by
      * @return {@link DeliveryInfoDiffComparator}
      */
+    @Factory
     public static <E extends DiffComparator<DeliveryInfo>> E createDiffComparator() {
         return (E) new DeliveryInfoDiffComparator();
     }
@@ -95,6 +97,7 @@ public class DeliveryInfoFactory {
      * @param comparator - initial input comparator {@link DeliveryInfo} {@link Comparator}
      * @return {@link DeliveryInfoDiffComparator}
      */
+    @Factory
     public static <E extends DiffComparator<DeliveryInfo>> E createDiffComparator(final Comparator<? super DeliveryInfo> comparator) {
         return (E) new DeliveryInfoDiffComparator(comparator);
     }
@@ -104,6 +107,7 @@ public class DeliveryInfoFactory {
      *
      * @return {@link DeliveryInfoSortOrderComparator}
      */
+    @Factory
     public static DeliveryInfoSortOrderComparator createDefaultSortOrderComparator() {
         return createSortOrderComparator(DEFAULT_COMPARATOR_MAP, SORT_BY_ID);
     }
@@ -114,10 +118,14 @@ public class DeliveryInfoFactory {
      * @param comparatorMap - initial input comparator {@link Map}
      * @param comparator    - initial input {@link DeliveryInfo} {@link Comparator}
      * @return {@link DeliveryInfoSortOrderComparator}
+     * @throws NullPointerException if comparatorMap is {@code null}
+     * @throws NullPointerException if comparator is {@code null}
      */
+    @Factory
     public static DeliveryInfoSortOrderComparator createSortOrderComparator(final Map<String, Comparator<? super DeliveryInfo>> comparatorMap, final Comparator<? super DeliveryInfo> comparator) {
         Objects.requireNonNull(comparatorMap, "Map should not be null!");
         Objects.requireNonNull(comparator, "Comparator should not be null!");
+
         return new DeliveryInfoSortOrderComparator(comparatorMap, comparator);
     }
 
@@ -127,6 +135,7 @@ public class DeliveryInfoFactory {
      * @param sortOrderComparator - initial input {@link DeliveryInfoSortOrderComparator}
      * @return {@link DeliveryInfoSortComparatorDispatcher}
      */
+    @Factory
     public static DeliveryInfoSortComparatorDispatcher createSortOrder(final DeliveryInfoSortOrderComparator sortOrderComparator) {
         Objects.requireNonNull(sortOrderComparator, "Comparator should not be null");
         return new DeliveryInfoSortComparatorDispatcher(sortOrderComparator);

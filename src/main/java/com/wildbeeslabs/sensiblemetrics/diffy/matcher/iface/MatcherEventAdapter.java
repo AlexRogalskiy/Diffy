@@ -23,40 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.EventAdapter;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 
-import java.io.Serializable;
-
 /**
- * {@link MatcherEventListener} listener declaration
+ * Matcher {@link EventAdapter} interface declaration
  *
  * @param <T> type of input element to be matched by operation
  */
-public interface MatcherAdapter<T> extends Serializable {
-
-    /**
-     * Removes {@link MatcherEventListener} from current {@link Matcher}
-     *
-     * @param listener - initial input {@link MatcherEventListener} to remove
-     */
-    <E extends MatcherEventListener<T>> void removeListener(final E listener);
-
-    /**
-     * Adds {@link MatcherEventListener} to current {@link Matcher}
-     *
-     * @param listener - initial input {@link MatcherEventListener} to add
-     */
-    <E extends MatcherEventListener<T>> void addListener(final E listener);
-
-    /**
-     * Adds {@link Iterable} collection of {@link MatcherEventListener}s to current {@link Matcher}
-     *
-     * @param listeners - initial input {@link Iterable} collection of {@link MatcherEventListener}s to add
-     */
-    <E extends MatcherEventListener<T>> void addListeners(final Iterable<E> listeners);
-
-    /**
-     * Removes all {@link MatcherEventListener}s from current {@link Matcher}
-     */
-    void removeAllListeners();
+public interface MatcherEventAdapter<T> extends EventAdapter<T, BaseMatcherEvent<T>, MatcherEventListener<T>> {
 }

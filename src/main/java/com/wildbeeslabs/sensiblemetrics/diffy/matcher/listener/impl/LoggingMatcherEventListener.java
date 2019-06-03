@@ -23,14 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -56,8 +57,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onStart(final E event) {
-        log.info("{}, on start event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onStart(final BaseMatcherEvent<T> event) {
+        log.info("On start event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -66,8 +67,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onBefore(final E event) {
-        log.info("{}, on before event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onBefore(final BaseMatcherEvent<T> event) {
+        log.info("On before event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -76,8 +77,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onAfter(final E event) {
-        log.info("{}, on after event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onAfter(final BaseMatcherEvent<T> event) {
+        log.info("On after event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -86,8 +87,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onSuccess(final E event) {
-        log.info("{}, on success event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onSuccess(final BaseMatcherEvent<T> event) {
+        log.info("On success event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -96,8 +97,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onFailure(final E event) {
-        log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onFailure(final BaseMatcherEvent<T> event) {
+        log.info("On error event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -106,8 +107,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onComplete(final E event) {
-        log.info("{}, on complete event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onComplete(final BaseMatcherEvent<T> event) {
+        log.info("On complete event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -116,8 +117,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onSkip(final E event) {
-        log.info("{}, on skip event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onSkip(final BaseMatcherEvent<T> event) {
+        log.info("On skip event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -126,8 +127,8 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void onError(final E event) {
-        log.info("{}, on error event: {}, description: {}", this.getClass().getName(), event, event.getMatcher().getDescription());
+    public void onError(final BaseMatcherEvent<T> event) {
+        log.info("On error event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
     /**
@@ -136,7 +137,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @return {@link List} of supported {@link EventListener}s
      */
     @Override
-    public List<? extends EventListener<T>> getSupportedListeners() {
-        return asList((EventListener<T>) INSTANCE);
+    public Collection<? extends EventListener<T, BaseMatcherEvent<T>>> getSupportedListeners() {
+        return asList((EventListener<T, BaseMatcherEvent<T>>) INSTANCE);
     }
 }

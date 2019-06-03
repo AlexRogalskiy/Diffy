@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
@@ -35,7 +36,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 import java.util.Objects;
@@ -196,7 +196,7 @@ public class DeliveryInfoDiffMatcher extends DefaultDiffMatcher<DeliveryInfo> {
      *
      * @return {@link DeliveryInfoDiffMatcher}
      */
-    @NotNull
+    @Factory
     @Contract(" -> new")
     public static DeliveryInfoDiffMatcher of() {
         return new DeliveryInfoDiffMatcher();

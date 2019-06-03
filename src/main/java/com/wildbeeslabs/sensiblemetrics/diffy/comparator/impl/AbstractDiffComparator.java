@@ -155,6 +155,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      *
      * @param property   - initial input property {@link String}
      * @param comparator -  initial input property {@link Comparator}
+     * @throws NullPointerException if comparator is {@code null}
      */
     public void setComparator(final String property, final Comparator<?> comparator) {
         Objects.requireNonNull(property, "Property should not be null!");

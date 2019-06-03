@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.exception;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -74,6 +75,7 @@ public class IllegalAccessException extends RuntimeException {
      * @param message - initial input raw message {@link String}
      * @return {@link IllegalAccessException}
      */
+    @Factory
     public static final IllegalAccessException throwInvalidAccess(final String message) {
         throw new IllegalAccessException(message);
     }
@@ -85,6 +87,7 @@ public class IllegalAccessException extends RuntimeException {
      * @param throwable - initial input cause target {@link Throwable}
      * @return {@link IllegalAccessException}
      */
+    @Factory
     public static final IllegalAccessException throwInvalidAccess(final String message, final Throwable throwable) {
         throw new IllegalAccessException(message, throwable);
     }

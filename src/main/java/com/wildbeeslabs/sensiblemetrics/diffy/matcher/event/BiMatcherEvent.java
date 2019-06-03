@@ -23,11 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -77,7 +77,7 @@ public class BiMatcherEvent<T> extends BaseMatcherEvent<T> {
      * @param status  - initial input match status
      * @return {@link BiMatcherEvent}
      */
-    @NonNull
+    @Factory
     public static <T> BiMatcherEvent<T> of(final BiMatcher<T> matcher, final T first, final T last, final boolean status) {
         return of(matcher, first, last, MatcherEventType.fromBoolean(status));
     }
@@ -91,7 +91,7 @@ public class BiMatcherEvent<T> extends BaseMatcherEvent<T> {
      * @param type    - initial input event type {@link MatcherEventType}
      * @return {@link BiMatcherEvent}
      */
-    @NonNull
+    @Factory
     public static <T> BiMatcherEvent<T> of(final BiMatcher<T> matcher, final T first, final T last, final MatcherEventType type) {
         return new BiMatcherEvent(matcher, first, last, type);
     }

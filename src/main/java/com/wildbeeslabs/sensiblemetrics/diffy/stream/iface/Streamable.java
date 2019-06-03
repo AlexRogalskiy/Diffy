@@ -65,7 +65,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      *
      * @param iterable - initial input iterable collection {@link Iterable}
      * @return {@link Streamable} of values {@code T}
-     * @throws NullPointerException if iterable is null
+     * @throws NullPointerException if iterable is {@code null}
      */
     static <T> Streamable<T> of(final Iterable<T> iterable) {
         Objects.requireNonNull(iterable, "Iterable should not be null!");
@@ -97,7 +97,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      *
      * @param mapper - initial input mapper instance {@link Function}
      * @return {@link Streamable} of values {@code T}
-     * @throws NullPointerException if mapper is null
+     * @throws NullPointerException if mapper is {@code null}
      * @see Stream#map(Function)
      */
     default <R> Streamable<R> map(final Function<? super T, ? extends R> mapper) {
@@ -110,7 +110,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      *
      * @param mapper - initial input mapper instance {@link Function}
      * @return streamable instance {@link Streamable} of values {@code T}
-     * @throws NullPointerException if mapper is null
+     * @throws NullPointerException if mapper is {@code null}
      * @see Stream#flatMap(Function)
      */
     default <R> Streamable<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
@@ -123,8 +123,8 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      *
      * @param predicate - initial input predicate instance {@link Predicate}
      * @return {@link Streamable} of values {@code T}
-     * @throws NullPointerException if predicate is null
-     * @see Stream#filter(Predicate) of values {@code T}
+     * @throws NullPointerException if predicate is {@code null}
+     * @see Stream#filter(Predicate) of predicate {@code T}
      */
     default Streamable<T> filter(final Predicate<? super T> predicate) {
         Objects.requireNonNull(predicate, "Predicate should not be null!");
@@ -145,7 +145,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
      *
      * @param supplier - initial input supplier {@link Supplier} of elements {@code T}
      * @return {@link Streamable} of values {@code T}
-     * @throws NullPointerException if supplier is null
+     * @throws NullPointerException if supplier is {@code null}
      */
     default Streamable<T> and(final Supplier<? extends Stream<? extends T>> supplier) {
         Objects.requireNonNull(supplier, "Supplier should not be null!");

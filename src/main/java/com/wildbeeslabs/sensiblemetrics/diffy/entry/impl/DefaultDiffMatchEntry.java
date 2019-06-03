@@ -27,9 +27,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffMatchEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.*;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.getRandomString;
@@ -85,7 +86,7 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
      * @param description - initial input {@link MatchDescription}
      * @return {@link DefaultDiffMatchEntry}
      */
-    @NonNull
+    @Factory
     public static DefaultDiffMatchEntry of(final Object value, final MatchDescription description) {
         return DefaultDiffMatchEntry
             .builder()
