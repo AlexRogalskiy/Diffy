@@ -24,15 +24,17 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
 
 /**
- * Executable interface declaration
+ * Throwing consumer interface declaration
+ *
+ * @param <T> type of consumer value
  */
 @FunctionalInterface
-public interface Executable {
+public interface ThrowingConsumer<T> {
 
     /**
-     * Executes any defined operation
+     * Consumes the supplied argument {@code T}, potentially throwing an exception
      *
-     * @throws Throwable
+     * @param value - initial input argument {@code T} to consume
      */
-    void execute() throws Throwable;
+    void accept(final T value) throws Throwable;
 }
