@@ -75,6 +75,10 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> (value) -> set.add(value);
     /**
+     * Default instance {@link Matcher}
+     */
+    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isInstance(value);
+    /**
      * Default identity {@link Matcher}
      */
     Function<String, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final String identity) -> (value) -> Objects.equals(identity, ObjectUtils.identityToString(value));
