@@ -952,13 +952,51 @@ public class ComparatorUtils {
          */
         public DefaultNullSafeLocaleComparator(@Nullable final Comparator<? super Locale> comparator, boolean nullsInPriority) {
             super(Objects.isNull(comparator) ? (o1, o2) -> {
-                if (o1.getLanguage().equals(o2.getLanguage())) {
+                if (Objects.equals(o1.getLanguage(), o2.getLanguage())) {
                     if (Objects.equals(o1.getCountry(), o2.getCountry())) {
                         return 0;
                     }
                     return 1;
                 }
                 return -1;
+            } : comparator, nullsInPriority);
+        }
+    }
+
+    /**
+     * Default null-safe throwable {@link Throwable} comparator implementation {@link DefaultNullSafeObjectComparator}
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultNullSafeThrowableComparator<T extends Throwable> extends DefaultNullSafeObjectComparator<T> {
+
+        /**
+         * Default null safe locale comparator constructor
+         */
+        public DefaultNullSafeThrowableComparator() {
+            this(null);
+        }
+
+        /**
+         * Default null safe {@link Throwable} comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultNullSafeThrowableComparator(@Nullable final Comparator<? super T> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe {@link Throwable} comparator constructor with comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultNullSafeThrowableComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super(Objects.isNull(comparator) ? (o1, o2) -> {
+                if (o1.getClass().isAssignableFrom(o2.getClass())) return 1;
+                if (o2.getClass().isAssignableFrom(o1.getClass())) return -1;
+                return Objects.compare(o1.getMessage(), o2.getMessage(), String::compareToIgnoreCase);
             } : comparator, nullsInPriority);
         }
     }

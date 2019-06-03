@@ -79,6 +79,10 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isInstance(value);
     /**
+     * Default assignable {@link Matcher}
+     */
+    Function<Class<?>, Matcher<Class<?>>> DEFAULT_ASSIGNABLE_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isAssignableFrom(value);
+    /**
      * Default identity {@link Matcher}
      */
     Function<String, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final String identity) -> (value) -> Objects.equals(identity, ObjectUtils.identityToString(value));

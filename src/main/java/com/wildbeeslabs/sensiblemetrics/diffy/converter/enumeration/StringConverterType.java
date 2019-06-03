@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.enumeration;
 
+import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +54,9 @@ public enum StringConverterType {
     TRIM_TO_NULL(StringUtils::trimToNull),
     TRIM(StringUtils::trim),
     CHOP(StringUtils::chop),
+
+    EMPTY_TO_NULL(Strings::emptyToNull),
+    NULL_TO_EMPTY(Strings::nullToEmpty),
 
     SORT(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::sort),
     COMPRESS(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::compress),

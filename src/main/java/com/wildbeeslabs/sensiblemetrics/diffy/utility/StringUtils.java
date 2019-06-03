@@ -68,6 +68,46 @@ public class StringUtils {
     public static final Function<Object, String> wrapInQuotes = s -> "\" " + s + " \"";
 
     /**
+     * Default string wrapper {@link Function}
+     */
+    public static final Function<String, String> wrapStr = s -> formatNative(s);
+
+    /**
+     * Default character wrapper {@link Function}
+     */
+    public static final Function<Character, String> wrapChar = s -> "\" " + toNativeSyntax(s) + " \"";
+
+    /**
+     * Default short wrapper {@link Function}
+     */
+    public static final Function<Short, String> wrapShort = s -> "< " + s + " S>";
+
+    /**
+     * Default long wrapper {@link Function}
+     */
+    public static final Function<Long, String> wrapLong = s -> "< " + s + " L>";
+
+    /**
+     * Default float wrapper {@link Function}
+     */
+    public static final Function<Float, String> wrapFloat = s -> "< " + s + " F>";
+
+    /**
+     * Default double wrapper {@link Function}
+     */
+    public static final Function<Double, String> wrapDouble = s -> "< " + s + " D>";
+
+    /**
+     * Default int wrapper {@link Function}
+     */
+    public static final Function<Integer, String> wrapInt = s -> "< " + s + " I>";
+
+    /**
+     * Default array wrapper {@link Function}
+     */
+    public static final Function<Object[], String> wrapArray = s -> "< " + join(s, "|") + " A>";
+
+    /**
      * Default escape wrapper {@link Function}
      */
     public static Function<String, String> wrapInEscapeHtml = s -> "'" + escapeHtml(s) + "'";
@@ -85,6 +125,48 @@ public class StringUtils {
         decimalSymbols.setDecimalSeparator('.');
         return new DecimalFormat(DEFAULT_FORMAT_PATTERN, decimalSymbols);
     });
+
+    private static String formatNative(final String value) {
+        final StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < value.length(); i++) {
+            sb.append(toNativeSyntax(value.charAt(i)));
+        }
+        return sb.toString();
+    }
+
+    private static String toNativeSyntax(char ch) {
+        switch (ch) {
+            case '"':
+                return "\\\"";
+            case '\n':
+                return "\\n";
+            case '\r':
+                return "\\r";
+            case '\t':
+                return "\\t";
+            default:
+                return String.valueOf(ch);
+        }
+    }
+
+    public static String convertValue(final Object value) {
+        if (Objects.isNull(value)) {
+            return "null";
+        } else if (value instanceof String) {
+            return wrapStr.apply((String) value);
+        } else if (value instanceof Character) {
+            return wrapChar.apply((Character) value);
+        } else if (value instanceof Short) {
+            return wrapShort.apply((Short) value);
+        } else if (value instanceof Long) {
+            return wrapLong.apply((Long) value);
+        } else if (value instanceof Float) {
+            return wrapFloat.apply((Float) value);
+        } else if (value.getClass().isArray()) {
+            return wrapArray.apply((Object[]) value);
+        }
+        return wrapInBrackets.apply(value);
+    }
 
     /**
      * Returns {@link String} message by default {@link Locale} instance, initial string message {@link String} and array of arguments

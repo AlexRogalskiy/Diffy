@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
 /**
- * Field name {@link Validator}
+ * Field name {@link Validator} implementation
  *
  * @param <T> type of validated value
  */

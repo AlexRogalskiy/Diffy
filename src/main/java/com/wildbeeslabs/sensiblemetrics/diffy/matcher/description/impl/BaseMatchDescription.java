@@ -33,8 +33,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBrackets;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -69,31 +68,36 @@ public class BaseMatchDescription implements MatchDescription {
     }
 
     /**
-     * Appends input string value to current {@link MatchDescription}
+     * Appends input {@link String} value to current {@link MatchDescription}
      *
      * @param value - initial input string value to be appended {@link String}
-     * @return current {@link MatchDescription}
+     * @return {@link MatchDescription}
      */
     @Override
     public MatchDescription append(final String value) {
-        try {
-            this.getOut().append(value);
-        } catch (IOException e) {
-            BadOperationException.throwBadOperation(formatMessage("ERROR: cannot append value: {%s}", value), e);
-        }
-        return this;
+        return this.appendBy(value);
     }
 
     /**
-     * Appends input object value to current {@link MatchDescription}
+     * Appends input {@link Object} value to current {@link MatchDescription}
      *
      * @param value - initial input object value to be appended {@link Object}
-     * @return current {@link MatchDescription}
+     * @return {@link MatchDescription}
      */
     @Override
     public MatchDescription append(final Object value) {
+        return this.appendBy(value);
+    }
+
+    /**
+     * Appends input {@link Object} value to current {@link MatchDescription}
+     *
+     * @param value - initial input object value to be appended {@link Object}
+     * @return {@link MatchDescription}
+     */
+    protected MatchDescription appendBy(final Object value) {
         try {
-            this.getOut().append(String.valueOf(value));
+            this.getOut().append(convertValue(value));
         } catch (IOException e) {
             BadOperationException.throwBadOperation(formatMessage("ERROR: cannot append value: {%s}", value), e);
         }
