@@ -8,4 +8,3 @@ Application-Version: 1.0.0-RElEASE
 Built-By: SensibleMetrics, Inc.
 Build-Jdk: 11
 Automatic-Module-Name: ${project.groupId}.${project.artifactId}
-
