@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
@@ -33,6 +34,10 @@ import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -55,17 +60,108 @@ import static org.apache.commons.lang3.StringUtils.join;
 public class ServiceUtils {
 
     /**
+     * Default completable {@link BiConsumer} action
+     */
+    private static final BiConsumer<? super Object, ? super Throwable> DEFAULT_COMPLETABLE_ACTION = (response, error) -> {
+        try {
+            if (Objects.isNull(error)) {
+                log.debug("Received completable future response [from={}]", response);
+            } else {
+                log.debug("Canceled completable future request [response={}, error={}]", response, error);
+            }
+        } catch (RuntimeException | Error e) {
+            log.error("ERROR: cannot process completable future request callback", e);
+        }
+    };
+
+    public static <E extends Enum<E>> E toEnum(final String propValue, final Class<E> enumType) throws IllegalArgumentException {
+        try {
+            return Enum.valueOf(enumType, propValue);
+        } catch (IllegalArgumentException e) {
+            BadOperationException.throwError(String.format("ERROR: cannot process enum type: {%s} by class: {%s}", enumType, propValue), e);
+        }
+        return null;
+    }
+
+    /**
+     * Returns result {@code T} of {@link CompletableFuture} by initial input collection of {@link CompletableFuture} and {@link Executor} instance
+     *
+     * @param <T>      type of {@link CompletableFuture} result
+     * @param executor - initial input {@link Executor} instance
+     * @param futures   - initial input collection of {@link CompletableFuture}
+     * @throws NullPointerException if futures is {@code null}
+     */
+    public static <T> void getResultAsync(final Executor executor, final CompletableFuture<T>... futures) {
+        Objects.requireNonNull(futures, "Array of futures should not be null");
+        CompletableFuture.allOf(futures).whenCompleteAsync(DEFAULT_COMPLETABLE_ACTION, executor).join();
+    }
+
+    /**
+     * Returns result {@code T} of {@link CompletableFuture} by initial input {@link CompletableFuture} and {@link Executor} instance
+     *
+     * @param <T>      type of {@link CompletableFuture} result
+     * @param executor - initial input {@link Executor} instance
+     * @param future   - initial input {@link CompletableFuture} instance
+     * @return result {@code T} of {@link CompletableFuture}
+     * @throws NullPointerException if future is {@code null}
+     */
+    public static <T> T getResultAsync(final Executor executor, final CompletableFuture<T> future) {
+        Objects.requireNonNull(future, "Future should not be null");
+        return future.whenCompleteAsync(DEFAULT_COMPLETABLE_ACTION, executor).join();
+    }
+
+    /**
+     * Returns result {@code T} of {@link CompletableFuture} by initial input {@link CompletableFuture}
+     *
+     * @param <T>    type of {@link CompletableFuture} result
+     * @param future - initial input {@link CompletableFuture} instance
+     * @return result {@code T} of {@link CompletableFuture}
+     * @throws NullPointerException if future is {@code null}
+     */
+    public static <T> T getResultAsync(final CompletableFuture<T> future) {
+        Objects.requireNonNull(future, "Future should not be null");
+        return getResultAsync(Executors.newSingleThreadExecutor(), future);
+    }
+
+    /**
+     * Checks if {@link Collection} matches {@link Predicate}
+     *
+     * @param <T>
+     * @param list      - initial input {@link Collection}
+     * @param predicate - initial input {@link Predicate}
+     * @return true - if {@link Collection} matches, false - otherwise
+     * @throws NullPointerException if list is {@code null}
+     * @throws NullPointerException if predicate is {@code null}
+     */
+    public static <T> boolean contains(final Collection<T> list, final Predicate<? super T> predicate) {
+        Objects.requireNonNull(list, "List should not be null");
+        Objects.requireNonNull(predicate, "Predicate should not be null");
+
+        return Optional.ofNullable(list).orElseGet(Collections::emptyList).stream().filter(predicate).findFirst().isPresent();
+    }
+
+    public static <T> Stream<T> asStream(final Iterator<T> sourceIterator) {
+        return asStream(sourceIterator, false);
+    }
+
+    public static <T> Stream<T> asStream(final Iterator<T> sourceIterator, final boolean parallel) {
+        Objects.requireNonNull(sourceIterator, "Source iterator should not be null");
+        final Iterable<T> iterable = () -> sourceIterator;
+        return StreamSupport.stream(iterable.spliterator(), parallel);
+    }
+
+    /**
      * Returns converted value by converter instance {@link Converter}
      *
      * @param <T>       type of input element to be converted from by operation
      * @param <R>       type of input element to be converted to by operation
      * @param value     - initial argument value to be converted
      * @param converter - initial converter to process on {@link Converter}
-     * @throws NullPointerException if converter is {@code null}
      * @return converted value
+     * @throws NullPointerException if converter is {@code null}
      */
     @Nullable
-    public static <T, R> R convert(final T value, @NonNull final Converter<T, R> converter) {
+    public static <T, R> R convert(final T value, final Converter<T, R> converter) {
         Objects.requireNonNull(converter, "Converter should not be null");
         return converter.convert(value);
     }
@@ -77,9 +173,11 @@ public class ServiceUtils {
      * @param toType       - initial type to be converted to {@link Converter}
      * @param parserMethod - initial method name to process the conversion {@link String}
      * @return converted value {@link Object}
+     * @throws NullPointerException if toType is {@code null}
      */
     @Nullable
-    public static Object convert(final String value, @NonNull final Class<?> toType, final String parserMethod) {
+    public static Object convert(final String value, final Class<?> toType, final String parserMethod) {
+        Objects.requireNonNull(toType, "Destination type should not be null");
         try {
             final Method method = toType.getMethod(parserMethod, String.class);
             return method.invoke(toType, value);
@@ -100,9 +198,9 @@ public class ServiceUtils {
      * @param predicate - initial input {@link Predicate}
      * @param reducer   - initial input {@link BinaryOperator}
      * @param values    - initial input collection of {@code T}
+     * @return {@link Optional} of {@code T}
      * @throws NullPointerException if predicate is {@code null}
      * @throws NullPointerException if reducer is {@code null}
-     * @return {@link Optional} of {@code T}
      */
     @NonNull
     public static <T> Optional<T> reduce(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer) {
