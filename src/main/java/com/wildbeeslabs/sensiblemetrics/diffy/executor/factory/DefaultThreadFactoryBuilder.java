@@ -23,6 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.executor.factory;
 
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
@@ -32,23 +36,44 @@ import static org.apache.commons.lang3.StringUtils.join;
 /**
  * Default thread factory builder implementation
  */
+@Slf4j
 public class DefaultThreadFactoryBuilder {
 
     private String namePrefix = null;
     private boolean daemon = false;
     private int priority = Thread.NORM_PRIORITY;
+    private Thread.UncaughtExceptionHandler exceptionHandler = (t1, e) -> log.error(e.getMessage(), e);
 
+    /**
+     * Sets name prefx {@link String} to current {@link DefaultThreadFactoryBuilder}
+     *
+     * @param namePrefix - initial input name prefix {@link String}
+     * @return {@link DefaultThreadFactoryBuilder}
+     * @throws NullPointerException if name prefix is {@code null}
+     */
     public DefaultThreadFactoryBuilder setNamePrefix(final String namePrefix) {
         Objects.requireNonNull(namePrefix, "Name prefix should not be null");
         this.namePrefix = namePrefix;
         return this;
     }
 
+    /**
+     * Sets daemon status to current {@link DefaultThreadFactoryBuilder}
+     *
+     * @param daemon - initial input daemon status
+     * @return {@link DefaultThreadFactoryBuilder}
+     */
     public DefaultThreadFactoryBuilder setDaemon(boolean daemon) {
         this.daemon = daemon;
         return this;
     }
 
+    /**
+     * Sets priority to current {@link DefaultThreadFactoryBuilder}
+     *
+     * @param priority - initial input priority
+     * @return {@link DefaultThreadFactoryBuilder}
+     */
     public DefaultThreadFactoryBuilder setPriority(int priority) {
         if (priority < Thread.MIN_PRIORITY) {
             throw new IllegalArgumentException(String.format("Thread priority (%s) must be >= %s", priority, Thread.MIN_PRIORITY));
@@ -61,14 +86,39 @@ public class DefaultThreadFactoryBuilder {
         return this;
     }
 
+    /**
+     * Sets {@link Thread.UncaughtExceptionHandler} to current {@link DefaultThreadFactoryBuilder}
+     *
+     * @param exceptionHandler - initial input {@link Thread.UncaughtExceptionHandler}
+     * @return {@link DefaultThreadFactoryBuilder}
+     */
+    public DefaultThreadFactoryBuilder setExceptionHandler(final Thread.UncaughtExceptionHandler exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
+        return this;
+    }
+
+    /**
+     * Returns {@link ThreadFactory}
+     *
+     * @return {@link ThreadFactory}
+     */
     public ThreadFactory build() {
         return build(this);
     }
 
+    /**
+     * Constructs {@link ThreadFactory} by {@link DefaultThreadFactoryBuilder}
+     *
+     * @param builder - initial input {@link DefaultThreadFactoryBuilder}
+     * @return {@link ThreadFactory}
+     */
+    @NotNull
+    @Contract(pure = true)
     private static ThreadFactory build(final DefaultThreadFactoryBuilder builder) {
         final String namePrefix = builder.namePrefix;
         final Boolean daemon = builder.daemon;
         final Integer priority = builder.priority;
+        final Thread.UncaughtExceptionHandler exceptionHandler = builder.exceptionHandler;
 
         final AtomicLong count = new AtomicLong(0);
 
@@ -82,6 +132,9 @@ public class DefaultThreadFactoryBuilder {
             }
             if (Objects.nonNull(priority)) {
                 thread.setPriority(priority);
+            }
+            if (Objects.nonNull(exceptionHandler)) {
+                thread.setUncaughtExceptionHandler(exceptionHandler);
             }
             return thread;
         };

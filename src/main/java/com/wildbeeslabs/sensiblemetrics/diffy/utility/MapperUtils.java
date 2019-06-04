@@ -36,8 +36,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.*;
@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
 /**
  * Mapper utilities implementation
  */
-@Slf4j
 @UtilityClass
 public class MapperUtils {
 
@@ -83,6 +82,16 @@ public class MapperUtils {
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
         objectMapper.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
         //objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+    }
+
+    /**
+     * Returns {@link ObjectMapper}
+     *
+     * @return {@link ObjectMapper}
+     */
+    @NonNull
+    public static ObjectMapper getObjectMapper() {
+        return objectMapper;
     }
 
     /**

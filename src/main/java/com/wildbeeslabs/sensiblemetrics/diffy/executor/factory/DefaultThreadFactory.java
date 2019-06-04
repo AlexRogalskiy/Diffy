@@ -50,6 +50,12 @@ public class DefaultThreadFactory implements ThreadFactory {
         this.stats = new ArrayList<>();
     }
 
+    /**
+     * Returns new {@link Thread} by input {@link Runnable}
+     *
+     * @param runnable - initial input {@link Runnable}
+     * @return new {@link Thread}
+     */
     @Override
     public Thread newThread(final Runnable runnable) {
         final Thread thread = new Thread(runnable, join(this.name, "-Thread-", this.counter));
@@ -58,6 +64,11 @@ public class DefaultThreadFactory implements ThreadFactory {
         return thread;
     }
 
+    /**
+     * Returns thread statistics {@link String}
+     *
+     * @return thread statistics {@link String}
+     */
     public String getStats() {
         final StringBuffer buffer = new StringBuffer();
         final Iterator<String> it = this.stats.iterator();

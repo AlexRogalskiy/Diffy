@@ -21,34 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.handler;
+package com.wildbeeslabs.sensiblemetrics.diffy.executor.property;
 
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 /**
- * Default {@link RejectedExecutionHandler} implementation
+ * Task executor properties
  */
-@Slf4j
-public class DefaultRejectedExecutionHandler implements RejectedExecutionHandler {
+@Data
+public class TaskExecutorProperty {
 
-    /**
-     * Invokes by {@link ThreadPoolExecutor} when {@link ThreadPoolExecutor} cannot accept task
-     *
-     * @param runnable - initial input {@link Runnable} task
-     * @param executor - initial input {@link ThreadPoolExecutor}
-     * @throws InterruptedException if current thread is interrupted
-     */
-    @Override
-    public void rejectedExecution(final Runnable runnable, final ThreadPoolExecutor executor) {
-        try {
-            executor.getQueue().put(runnable);
-        } catch (InterruptedException e) {
-            log.error("ERROR: cannot handle queued task: {}, message: {}", runnable, e.getMessage(), e);
-            throw new RejectedExecutionException(e);
-        }
+    @JsonProperty(value = "executor", required = true)
+    private ExecutorProperty executor;
+
+    @Data
+    public static class ExecutorProperty {
+        /**
+         * Default thread executor pool size
+         */
+        @JsonProperty(value = "corePoolSize", required = true)
+        private int corePoolSize = 5;
+        /**
+         * Default thread executor max pool size
+         */
+        @JsonProperty(value = "maxPoolSize", required = true)
+        private int maxPoolSize = 10;
+        /**
+         * Default thread executor keep alive timeout
+         */
+        @JsonProperty(value = "keepAliveTimeout", required = true)
+        private int keepAliveTimeout = 0;
+        /**
+         * Default thread executor queue size
+         */
+        @JsonProperty(value = "queueSize", required = true)
+        private int queueSize = 8 * 1024;
     }
 }

@@ -21,34 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.handler;
-
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
+package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
 
 /**
- * Default {@link RejectedExecutionHandler} implementation
+ * Throwing processor interface declaration
+ *
+ * @param <T> type of consumed value
+ * @param <R> type of produced value
  */
-@Slf4j
-public class DefaultRejectedExecutionHandler implements RejectedExecutionHandler {
+@FunctionalInterface
+public interface ThrowingProcessor<T, R> {
 
     /**
-     * Invokes by {@link ThreadPoolExecutor} when {@link ThreadPoolExecutor} cannot accept task
+     * Processes the supplied argument {@code T} to result argument {@code R}, potentially throwing an exception
      *
-     * @param runnable - initial input {@link Runnable} task
-     * @param executor - initial input {@link ThreadPoolExecutor}
-     * @throws InterruptedException if current thread is interrupted
+     * @param value - initial input argument {@code T} to consume
+     * @return processed result {@code R}
+     * @throw {@link Throwable}
      */
-    @Override
-    public void rejectedExecution(final Runnable runnable, final ThreadPoolExecutor executor) {
-        try {
-            executor.getQueue().put(runnable);
-        } catch (InterruptedException e) {
-            log.error("ERROR: cannot handle queued task: {}, message: {}", runnable, e.getMessage(), e);
-            throw new RejectedExecutionException(e);
-        }
-    }
+    R process(final T value) throws Throwable;
 }

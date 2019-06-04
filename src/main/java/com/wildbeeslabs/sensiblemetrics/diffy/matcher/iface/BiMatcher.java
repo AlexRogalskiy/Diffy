@@ -312,8 +312,8 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      *
      * @param <T>        type of input element to be compared by operation
      * @param comparator - initial input {@link Comparator}
-     * @throws NullPointerException if comparator is {@code null}
      * @return {@link BiMatcher}
+     * @throws NullPointerException if comparator is {@code null}
      */
     @NonNull
     static <T> BiMatcher<T> equalBy(final Comparator<? super T> comparator) {

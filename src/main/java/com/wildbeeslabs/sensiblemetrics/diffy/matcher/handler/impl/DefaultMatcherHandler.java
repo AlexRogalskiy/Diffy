@@ -37,7 +37,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.executor.impl.TaskExecutor.execute;
+import static com.wildbeeslabs.sensiblemetrics.diffy.executor.impl.TaskExecutorService.execute;
 
 /**
  * Default {@link MatcherHandler} implementation

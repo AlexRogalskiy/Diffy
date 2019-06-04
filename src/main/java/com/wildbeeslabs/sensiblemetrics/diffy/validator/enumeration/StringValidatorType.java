@@ -27,6 +27,7 @@ import com.google.common.base.Strings;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.function.Predicate;
 
@@ -43,6 +44,11 @@ public enum StringValidatorType {
     IS_UNIQUE(StringUtils::isUnique),
 
     IS_NULL_OR_EMPTY(Strings::isNullOrEmpty),
+
+    IS_CREATABLE(NumberUtils::isCreatable),
+    IS_DIGITS(NumberUtils::isDigits),
+    IS_PARSABLE(NumberUtils::isParsable),
+    IS_NUMBER(org.apache.commons.lang.math.NumberUtils::isNumber),
 
     IS_LOWER_CASE(org.apache.commons.lang3.StringUtils::isAllLowerCase),
     IS_UPPER_CASE(org.apache.commons.lang3.StringUtils::isAllUpperCase),

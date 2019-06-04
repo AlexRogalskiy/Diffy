@@ -21,34 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.handler;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
- * Default {@link RejectedExecutionHandler} implementation
+ * Object validator type {@link Enum}
  */
-@Slf4j
-public class DefaultRejectedExecutionHandler implements RejectedExecutionHandler {
+@Getter
+@RequiredArgsConstructor
+public enum ObjectValidatorType {
+    IS_NULL(Objects::isNull),
+    IS_NON_NULL(Objects::nonNull);
 
     /**
-     * Invokes by {@link ThreadPoolExecutor} when {@link ThreadPoolExecutor} cannot accept task
-     *
-     * @param runnable - initial input {@link Runnable} task
-     * @param executor - initial input {@link ThreadPoolExecutor}
-     * @throws InterruptedException if current thread is interrupted
+     * Object {@link Predicate} validator operator
      */
-    @Override
-    public void rejectedExecution(final Runnable runnable, final ThreadPoolExecutor executor) {
-        try {
-            executor.getQueue().put(runnable);
-        } catch (InterruptedException e) {
-            log.error("ERROR: cannot handle queued task: {}, message: {}", runnable, e.getMessage(), e);
-            throw new RejectedExecutionException(e);
-        }
-    }
+    private final Predicate<Object> validator;
 }

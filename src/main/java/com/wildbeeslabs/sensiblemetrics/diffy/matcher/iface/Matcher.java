@@ -30,6 +30,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeTyp
 import lombok.NonNull;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -68,13 +69,27 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     Matcher<?> DEFAULT_NOTNULL_MATCHER = (value) -> Objects.nonNull(value);
     /**
+     * Default exception {@link Matcher}
+     */
+    Matcher<?> DEFAULT_EXCEPTION_MATCHER = (value) -> {
+        throw new MatchOperationException();
+    };
+    /**
      * Default class {@link Matcher}
      */
     Function<Class<?>, Matcher<?>> DEFAULT_CLASS_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isInstance(value);
     /**
+     * Default equals {@link Matcher}
+     */
+    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER = (final Object object) -> (value) -> Objects.equals(object, value);
+    /**
      * Default unique {@link Matcher}
      */
     Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> (value) -> set.add(value);
+    /**
+     * Default contains {@link Matcher}
+     */
+    Function<Collection, Matcher<?>> DEFAULT_CONTAINS_MATCHER = (final Collection collection) -> (value) -> collection.contains(value);
     /**
      * Default instance {@link Matcher}
      */
@@ -87,12 +102,6 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * Default identity {@link Matcher}
      */
     Function<String, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final String identity) -> (value) -> Objects.equals(identity, ObjectUtils.identityToString(value));
-    /**
-     * Default exception {@link Matcher}
-     */
-    Matcher DEFAULT_EXCEPTION_MATCHER = (value) -> {
-        throw new MatchOperationException();
-    };
 
     /**
      * Returns binary flag by initial argument {@code T} match comparison

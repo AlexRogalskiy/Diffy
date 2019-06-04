@@ -33,6 +33,12 @@ import java.util.concurrent.ThreadFactory;
 @Slf4j
 public class LoggingThreadFactory implements ThreadFactory {
 
+    /**
+     * Returns new {@link Thread} by input {@link Runnable}
+     *
+     * @param runnable - initial input {@link Runnable}
+     * @return new {@link Thread}
+     */
     @Override
     public Thread newThread(final Runnable runnable) {
         final Thread thread = new Thread(runnable);

@@ -30,7 +30,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
 public interface Executable {
 
     /**
-     * Executes any defined operation
+     * Executes any operation
      *
      * @throws {@link Throwable}
      */

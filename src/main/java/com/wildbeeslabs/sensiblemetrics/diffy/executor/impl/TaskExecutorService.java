@@ -27,10 +27,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.ExecutionOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.TimeoutOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.executor.configuration.TaskExecutorConfiguration;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.handler.DefaultRejectedExecutionHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.ThrowingConsumer;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.ThrowingSupplier;
+import com.wildbeeslabs.sensiblemetrics.diffy.executor.property.TaskExecutorProperty;
 import lombok.experimental.UtilityClass;
 
 import java.time.Duration;
@@ -42,34 +44,29 @@ import java.util.concurrent.*;
  * Task executor service implementation
  */
 @UtilityClass
-public class TaskExecutor {
+public class TaskExecutorService {
 
-    /**
-     * Default thread executor properties
-     */
-    public static final int DEFAULT_EXECUTOR_POOL_SIZE = 5;
-    public static final int DEFAULT_EXECUTOR_MAX_POOL_SIZE = 10;
-    public static final int DEFAULT_EXECUTOR_ALIVE_TIMEOUT = 60;
-    public static final int DEFAULT_EXECUTOR_QUEUE_SIZE = 8 * 1024;
-
+    public static final String DEFAULT_PROPERTY_FILE = "application.yml";
     /**
      * Default {@link ThreadPoolExecutor} instance
      */
-    public static final ThreadPoolExecutor INSTANCE = getExecutor();
+    public static final ThreadPoolExecutor INSTANCE = getExecutor(DEFAULT_PROPERTY_FILE);
 
     /**
      * Returns default {@link ThreadPoolExecutor} by input parameters
      *
      * @param handler - initial input {@link RejectedExecutionHandler}
      * @return {@link ThreadPoolExecutor}
+     * @throws NullPointerException if task executor property is {@code null}
      */
-    public static ThreadPoolExecutor getExecutor(final RejectedExecutionHandler handler) {
+    public static ThreadPoolExecutor getExecutor(final TaskExecutorProperty property, final RejectedExecutionHandler handler) {
+        Objects.requireNonNull(property, "Task executor property should not be null");
         final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            DEFAULT_EXECUTOR_POOL_SIZE,
-            DEFAULT_EXECUTOR_MAX_POOL_SIZE,
-            DEFAULT_EXECUTOR_ALIVE_TIMEOUT,
+            property.getExecutor().getCorePoolSize(),
+            property.getExecutor().getMaxPoolSize(),
+            property.getExecutor().getKeepAliveTimeout(),
             TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<>(DEFAULT_EXECUTOR_QUEUE_SIZE),
+            new ArrayBlockingQueue<>(property.getExecutor().getQueueSize()),
             Optional.ofNullable(handler).orElseGet(() -> new ThreadPoolExecutor.CallerRunsPolicy()));
         return executor;
     }
@@ -83,7 +80,7 @@ public class TaskExecutor {
      */
     public static ThreadPoolExecutor getExecutor(final ThreadFactory threadFactory) {
         Objects.requireNonNull(threadFactory, "Thread factory should not be null");
-        final ThreadPoolExecutor executor = getExecutor();
+        final ThreadPoolExecutor executor = getExecutor(DEFAULT_PROPERTY_FILE);
         executor.setThreadFactory(threadFactory);
         return executor;
     }
@@ -93,8 +90,9 @@ public class TaskExecutor {
      *
      * @return {@link ThreadPoolExecutor}
      */
-    public static ThreadPoolExecutor getExecutor() {
-        return getExecutor(new DefaultRejectedExecutionHandler());
+    public static ThreadPoolExecutor getExecutor(final String fileName) {
+        final TaskExecutorProperty property = TaskExecutorConfiguration.getProperty(fileName);
+        return getExecutor(property, new DefaultRejectedExecutionHandler());
     }
 
     /**
