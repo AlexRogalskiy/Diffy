@@ -36,7 +36,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatM
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RejectMatcherException extends RuntimeException {
+public class MatchRejectionException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -48,7 +48,7 @@ public class RejectMatcherException extends RuntimeException {
      *
      * @param message - initial input message {@link String}
      */
-    public RejectMatcherException(final String message) {
+    public MatchRejectionException(final String message) {
         super(message);
     }
 
@@ -57,7 +57,7 @@ public class RejectMatcherException extends RuntimeException {
      *
      * @param cause - initial input cause target {@link Throwable}
      */
-    public RejectMatcherException(final Throwable cause) {
+    public MatchRejectionException(final Throwable cause) {
         super(cause);
     }
 
@@ -67,18 +67,18 @@ public class RejectMatcherException extends RuntimeException {
      * @param message - initial input message {@link String}
      * @param cause   - initial input cause target {@link Throwable}
      */
-    public RejectMatcherException(final String message, final Throwable cause) {
+    public MatchRejectionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link RejectMatcherException} by input parameters
+     * Returns {@link MatchRejectionException} by input parameters
      *
      * @param target - initial input target {@link Object}
-     * @return {@link RejectMatcherException}
+     * @return {@link MatchRejectionException}
      */
     @Factory
-    public static final RejectMatcherException throwReject(final Object target) {
-        throw new RejectMatcherException(formatMessage("ERROR: cannot process target: {%s}", target));
+    public static final MatchRejectionException throwReject(final Object target) {
+        throw new MatchRejectionException(formatMessage("ERROR: cannot process target: {%s}", target));
     }
 }

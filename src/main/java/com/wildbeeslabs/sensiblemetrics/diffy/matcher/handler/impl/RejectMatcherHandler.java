@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.RejectMatcherException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchRejectionException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import lombok.Data;
@@ -52,6 +52,6 @@ public class RejectMatcherHandler<T> implements MatcherHandler<T> {
      */
     @Override
     public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {
-        RejectMatcherException.throwReject(event);
+        MatchRejectionException.throwReject(event);
     }
 }
