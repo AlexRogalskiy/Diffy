@@ -35,11 +35,13 @@ public interface Event<T> extends Serializable {
     /**
      * The name of the event (case-insensitive). The name must be an XML name.
      */
-//    String getType();
+//    EventType getType();
 
     /**
      * Used to indicate the <code>EventTarget</code> to which the event was
      * originally dispatched.
      */
 //    EventAdapter<T> getTarget();
+
+//    public long getTimeStamp();
 }

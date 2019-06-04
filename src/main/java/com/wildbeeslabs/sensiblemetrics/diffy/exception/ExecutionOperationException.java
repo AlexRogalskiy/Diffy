@@ -60,7 +60,7 @@ public class ExecutionOperationException extends RuntimeException {
     }
 
     /**
-     * Illegal access exception constructor with initial input message and {@link Throwable}
+     * Execution operation exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
      * @param cause   - initial input cause target {@link Throwable}

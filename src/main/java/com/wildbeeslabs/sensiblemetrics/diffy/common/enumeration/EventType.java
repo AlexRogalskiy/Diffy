@@ -21,11 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
 
 /**
- * Default application context implementation
+ * Event type {@link Enum}
  */
-public class ApplicationContext {
+public enum EventType {
+    MATCHER_EVENT,
+    BINARY_MATCHER_EVENT,
+    COMPARATOR_EVENT,
+    VALIDATOR_EVENT;
 
+    /**
+     * Returns {@link EventType} by input event type name {@link String}
+     *
+     * @param name - initial input event type name {@link String}
+     * @return {@link EventType}
+     */
+    @Nullable
+    public static EventType fromName(final String name) {
+        return Arrays.stream(values())
+            .filter(type -> type.name().equalsIgnoreCase(name))
+            .findFirst()
+            .orElse(null);
+    }
 }

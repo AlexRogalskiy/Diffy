@@ -10,6 +10,7 @@ branches:
   only:
     - master
     - stable
+    - /^release.*$/
 jdk:
   - oraclejdk11
   - openjdk11
