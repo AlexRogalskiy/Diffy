@@ -38,6 +38,8 @@ import java.util.List;
  * @since 1.0
  */
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString

@@ -29,12 +29,15 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationExceptio
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.startsWith;
 
 /**
  * {@link IntConverter} unit test
@@ -47,6 +50,12 @@ import static org.junit.Assert.*;
 public class IntConverterTest {
 
     /**
+     * Default {@link ExpectedException} rule
+     */
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    /**
      * Default {@link IntConverter} instance
      */
     private IntConverter intConverter;
@@ -56,11 +65,15 @@ public class IntConverterTest {
         this.intConverter = new IntConverter();
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting invalid integer value")
     public void test_invalidInt_Converter() {
         // given
         final String value = "a56";
+
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
 
         // when
         final Integer intValue = this.getIntConverter().convert(value);
@@ -125,21 +138,29 @@ public class IntConverterTest {
         assertThat(result, IsEqual.equalTo(value));
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting empty integer value")
     public void test_emptyInt_Converter() {
         // given
         final String value = "";
 
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
+
         // when
         this.getIntConverter().convert(value);
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting nullable integer value")
     public void test_nullableInt_Converter() {
         // given
         final String value = null;
+
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
 
         // when
         this.getIntConverter().convert(value);

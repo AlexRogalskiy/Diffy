@@ -23,10 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -38,7 +35,9 @@ import java.io.Serializable;
  * @since 1.0
  */
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class AddressInfo implements Serializable {

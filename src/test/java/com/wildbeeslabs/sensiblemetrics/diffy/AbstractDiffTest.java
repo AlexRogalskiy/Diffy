@@ -26,7 +26,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.abstraction.*;
 
@@ -55,7 +54,6 @@ import static net.andreinc.mockneat.unit.types.Longs.longs;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode
 @ToString

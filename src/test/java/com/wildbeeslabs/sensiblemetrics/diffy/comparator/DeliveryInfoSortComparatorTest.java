@@ -34,7 +34,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -52,7 +51,6 @@ import static org.assertj.core.api.BDDAssertions.then;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -81,7 +79,7 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
         );
 
         // when
-        final Comparator<? super DeliveryInfo> comparator = getSortComparator().getComparator(sort);
+        final Comparator<? super DeliveryInfo> comparator = this.getSortComparator().getComparator(sort);
         final List<DeliveryInfo> sorted = ImmutableList.sortedCopyOf(comparator, givenDeliveryInfoList());
 
         // then
@@ -95,11 +93,11 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
      */
     private Collection<DeliveryInfo> givenDeliveryInfoList() {
         return ImmutableList.of(
-            createDeliveryInfo(3l, "test3", DeliveryInfo.DeliveryStatus.DELIVERED, 230.00),
-            createDeliveryInfo(2l, "test2", DeliveryInfo.DeliveryStatus.PENDING, 23.12),
-            createDeliveryInfo(1l, "test1", DeliveryInfo.DeliveryStatus.REJECTED, 243.3),
-            createDeliveryInfo(5l, "test5", DeliveryInfo.DeliveryStatus.PENDING, 315.4),
-            createDeliveryInfo(4l, "test4", DeliveryInfo.DeliveryStatus.DELIVERED, 31.4)
+            this.createDeliveryInfo(3l, "test3", DeliveryInfo.DeliveryStatus.DELIVERED, 230.00),
+            this.createDeliveryInfo(2l, "test2", DeliveryInfo.DeliveryStatus.PENDING, 23.12),
+            this.createDeliveryInfo(1l, "test1", DeliveryInfo.DeliveryStatus.REJECTED, 243.3),
+            this.createDeliveryInfo(5l, "test5", DeliveryInfo.DeliveryStatus.PENDING, 315.4),
+            this.createDeliveryInfo(4l, "test4", DeliveryInfo.DeliveryStatus.DELIVERED, 31.4)
         );
     }
 
@@ -114,11 +112,11 @@ public class DeliveryInfoSortComparatorTest extends AbstractDeliveryInfoDiffTest
      */
     @NonNull
     private DeliveryInfo createDeliveryInfo(final Long id, final String gid, final DeliveryInfo.DeliveryStatus status, final double balance) {
-        final DeliveryInfo deliveryInfo = new DeliveryInfo();
-        deliveryInfo.setId(id);
-        deliveryInfo.setGid(gid);
-        deliveryInfo.setStatus(status);
-        deliveryInfo.setBalance(balance);
-        return deliveryInfo;
+        return DeliveryInfo.builder()
+            .id(id)
+            .gid(gid)
+            .status(status)
+            .balance(balance)
+            .build();
     }
 }

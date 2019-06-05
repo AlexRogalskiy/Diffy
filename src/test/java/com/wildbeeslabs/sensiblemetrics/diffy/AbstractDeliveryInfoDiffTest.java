@@ -29,7 +29,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import net.andreinc.mockneat.abstraction.MockUnit;
 
 import java.math.BigDecimal;
@@ -48,7 +47,6 @@ import static net.andreinc.mockneat.unit.types.Ints.ints;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

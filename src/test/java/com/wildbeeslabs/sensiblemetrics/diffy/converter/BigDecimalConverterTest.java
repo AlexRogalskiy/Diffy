@@ -29,13 +29,16 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationExceptio
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.startsWith;
 
 /**
  * {@link BigDecimalConverter} unit test
@@ -48,6 +51,12 @@ import static org.junit.Assert.assertThat;
 public class BigDecimalConverterTest {
 
     /**
+     * Default {@link ExpectedException} rule
+     */
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    /**
      * Default {@link BigDecimalConverter} instance
      */
     private BigDecimalConverter bigDecimalConverter;
@@ -57,11 +66,15 @@ public class BigDecimalConverterTest {
         this.bigDecimalConverter = new BigDecimalConverter();
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting invalid big decimal value")
     public void test_invalidBigDecimal_Converter() {
         // given
         final String value = "4,5";
+
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
 
         // when
         final BigDecimal result = this.getBigDecimalConverter().convert(value);
@@ -127,21 +140,29 @@ public class BigDecimalConverterTest {
         assertThat(result, IsEqual.equalTo(value));
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting empty big decimal value")
     public void test_emptyBigDecimal_Converter() {
         // given
         final String value = "";
 
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
+
         // when
         this.getBigDecimalConverter().convert(value);
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting nullable big decimal value")
     public void test_nullableBigDecimal_Converter() {
         // given
         final String value = null;
+
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
 
         // when
         this.getBigDecimalConverter().convert(value);

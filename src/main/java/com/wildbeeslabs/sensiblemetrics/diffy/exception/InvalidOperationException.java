@@ -80,6 +80,6 @@ public class InvalidOperationException extends RuntimeException {
      */
     @Factory
     public static final InvalidOperationException throwInvalidParseFormat(final Object target, final Throwable throwable) {
-        throw new InvalidOperationException(formatMessage("ERROR: unsupported parsing on target = {%s}", target), throwable);
+        throw new InvalidOperationException(formatMessage("ERROR: unsupported parsing operation on target = {%s}", target), throwable);
     }
 }

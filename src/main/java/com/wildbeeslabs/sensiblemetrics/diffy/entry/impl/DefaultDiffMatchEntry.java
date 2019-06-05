@@ -82,6 +82,17 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
     /**
      * Creates new {@link DefaultDiffMatchEntry}
      *
+     * @param value - initial input argument value {@link Object}
+     * @return {@link DefaultDiffMatchEntry}
+     */
+    @Factory
+    public static DefaultDiffMatchEntry of(final Object value) {
+        return of(value, MatchDescription.EMPTY_MATCH_DESCRIPTION);
+    }
+
+    /**
+     * Creates new {@link DefaultDiffMatchEntry}
+     *
      * @param value       - initial input argument value {@link Object}
      * @param description - initial input {@link MatchDescription}
      * @return {@link DefaultDiffMatchEntry}

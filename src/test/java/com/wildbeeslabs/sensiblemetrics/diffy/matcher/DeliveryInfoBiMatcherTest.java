@@ -35,11 +35,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
@@ -48,8 +49,10 @@ import java.time.Instant;
 import java.util.*;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtilsTest.*;
+import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.startsWith;
 
 /**
  * Delivery info binary matcher unit test
@@ -58,11 +61,16 @@ import static org.junit.Assert.assertFalse;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
+
+    /**
+     * Default {@link ExpectedException} rule
+     */
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     /**
      * Default date format pattern
@@ -95,8 +103,8 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test non-equal delivery info entities by custom comparator")
     public void test_nonEqual_deliveryInfo_by_andMatcher() {
         // given
-        final DeliveryInfo d1 = getDeliveryInfoMock().val();
-        final DeliveryInfo d2 = getDeliveryInfoMock().val();
+        final DeliveryInfo d1 = this.getDeliveryInfoMock().val();
+        final DeliveryInfo d2 = this.getDeliveryInfoMock().val();
         final Comparator<? super DeliveryInfo> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator<>();
 
         // when
@@ -110,8 +118,8 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test equal delivery info entities by custom comparator")
     public void test_equal_deliveryInfo_by_andMatcher() {
         // given
-        final DeliveryInfo d1 = getDeliveryInfo();
-        final DeliveryInfo d2 = getDeliveryInfo();
+        final DeliveryInfo d1 = this.getDeliveryInfo();
+        final DeliveryInfo d2 = this.getDeliveryInfo();
         final Comparator<? super DeliveryInfo> comparator = new ComparatorUtils.DefaultNullSafeObjectComparator<>();
 
         // when
@@ -425,13 +433,17 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertTrue(biMatcher.matches(d1, d2));
     }
 
-    @Test(expected = BiMatchOperationException.class)
+    @Test
     @DisplayName("Test different double array objects by default comparator and negate priority nulls")
     public void test_doubleArrayObjectsWithNulls_by_defaultComparator() {
         // given
         final Double[] d1 = {3.4, null, 2.1, 6.2};
         final Double[] d2 = {3.4, 6.4, null, 6.2};
         final Comparator<? super Double[]> comparator = new ComparatorUtils.DefaultNullSafeArrayComparator<>();
+
+        // then
+        thrown.expect(BiMatchOperationException.class);
+        thrown.expectMessage(startsWith("cannot process match operation"));
 
         // when
         final BiMatcher<Double[]> biMatcher = new ComparatorBiMatcher<>(comparator);
@@ -1026,7 +1038,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test different string objects by default positional comparator and negate priority nulls")
     public void test_stringObjects_by_defaultComparator() {
         // given
-        final List<String> list = Arrays.asList("saf", "fas", "sfa", "sadf");
+        final List<String> list = asList("saf", "fas", "sfa", "sadf");
         final String d1 = "fas";
         final String d2 = "saf";
         final Comparator<? super String> comparator = new ComparatorUtils.DefaultListPositionComparator<>(list);
@@ -1042,7 +1054,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test different null string objects by default positional comparator and negate priority nulls")
     public void test_nullStringObjects_by_defaultComparator() {
         // given
-        final List<String> list = Arrays.asList("saf", "fas", "sfa", "sadf");
+        final List<String> list = asList("saf", "fas", "sfa", "sadf");
         final String d1 = null;
         final String d2 = "saf";
         final Comparator<? super String> comparator = new ComparatorUtils.DefaultListPositionComparator<>(list);
@@ -1054,13 +1066,17 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertFalse(biMatcher.matches(d1, d2));
     }
 
-    @Test(expected = BiMatchOperationException.class)
+    @Test
     @DisplayName("Test map entry objects with class cast exception by default comparator")
     public void test_mapEntryObjectsWithClassCastException_by_defaultComparator() {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
         final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>(ComparableComparator.getInstance());
+
+        // then
+        thrown.expect(BiMatchOperationException.class);
+        thrown.expectMessage(startsWith("cannot process match operation"));
 
         // when
         final BiMatcher<Map.Entry<String, Integer>> biMatcher = new ComparatorBiMatcher<>(comparator);
@@ -1099,13 +1115,17 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         assertFalse(biMatcher.matches(d1, d2));
     }
 
-    @Test(expected = BiMatchOperationException.class)
+    @Test
     @DisplayName("Test null map entry objects by default comparator")
     public void test_nullMapEntryObjects_by_defaultComparator() {
         // given
         final Map.Entry<String, Integer> d1 = null;
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
         final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>();
+
+        // then
+        thrown.expect(BiMatchOperationException.class);
+        thrown.expectMessage(startsWith("cannot process match operation"));
 
         // when
         final BiMatcher<Map.Entry<String, Integer>> biMatcher = new ComparatorBiMatcher<>(comparator);
@@ -1118,8 +1138,8 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
     @DisplayName("Test different list objects by default comparator and negate priority nulls")
     public void test_iterableListObjects_by_defaultComparator() {
         // given
-        final Iterable<String> d1 = Arrays.asList("saf", "fas", "sfa", "sadf");
-        final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+        final Iterable<String> d1 = asList("saf", "fas", "sfa", "sadf");
+        final Iterable<String> d2 = asList("saf", "fas", "sfa", "sadf", "fsa");
         final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator<>();
 
         // when
@@ -1134,7 +1154,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
     public void test_nullListObjects_by_defaultComparator() {
         // given
         final Iterable<String> d1 = null;
-        final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+        final Iterable<String> d2 = asList("saf", "fas", "sfa", "sadf", "fsa");
         final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator<>();
 
         // when
@@ -1208,7 +1228,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
             .add("sadf")
             .add("fsa")
             .build();
-        final Iterable<String> d2 = Arrays.asList("saf", "fas", "sfa", "sadf", "fsa");
+        final Iterable<String> d2 = asList("saf", "fas", "sfa", "sadf", "fsa");
 
         final Comparator<? super Iterable<String>> comparator = new ComparatorUtils.DefaultNullSafeIterableComparator<>();
 

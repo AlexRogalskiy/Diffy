@@ -34,7 +34,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -53,9 +52,9 @@ import java.util.function.Function;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Comparator utils unit test
@@ -64,7 +63,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -366,13 +364,13 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     public void test_doubleArray_by_defaultComparator() {
         // given
         int size = 100;
-        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0).val();
+        final Double[] doubles = this.generateDoubles(size, 1000.0, 2000.0).val();
 
         // when
         Arrays.sort(doubles, new ComparatorUtils.DefaultNullSafeNumberComparator());
 
         // then
-        assertEquals(doubles.length, size);
+        assertThat("arr size should be equal to 100", doubles, arrayWithSize(size));
         assertTrue(isSorted(doubles, SortManager.SortDirection.ASC));
     }
 
@@ -381,13 +379,13 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     public void test_sortIntegerArray_by_defaultComparator() {
         // given
         int size = 100;
-        final Integer[] ints = generateInts(size, 100, 200).val();
+        final Integer[] ints = this.generateInts(size, 100, 200).val();
 
         // when
         Arrays.sort(ints, new ComparatorUtils.DefaultNullSafeNumberComparator());
 
         // then
-        assertEquals(ints.length, size);
+        assertThat("arr size should be equal to 100", ints, arrayWithSize(size));
         assertThat(Lists.newArrayList(ints), isInAscendingOrdering());
     }
 
@@ -396,14 +394,14 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     public void test_sortDoubleArray_by_customComparator() {
         // given
         int size = 100;
-        final Double[] doubles = generateDoubles(size, 1000.0, 2000.0).val();
+        final Double[] doubles = this.generateDoubles(size, 1000.0, 2000.0).val();
 
         // when
         final Comparator<? super Double> comparator = ComparatorUtils.getNumberComparator(DEFAULT_DOUBLE_COMPARATOR, false);
         Arrays.sort(doubles, comparator);
 
         //then
-        assertEquals(doubles.length, size);
+        assertThat("arr size should be equal to 100", doubles, arrayWithSize(size));
         assertTrue(isSorted(doubles, SortManager.SortDirection.ASC));
     }
 
@@ -853,7 +851,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
     public void test_integerListObjects_by_customComparator() {
         // given
         int size = 1000;
-        List<Integer> ints = generateInts(size, 1000).val();
+        List<Integer> ints = this.generateInts(size, 1000).val();
 
         // when
         Collections.sort(ints, ComparableComparator.getInstance());
@@ -864,7 +862,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
 
         // given
         size = 100;
-        ints = generateInts(size, 2000).val();
+        ints = this.generateInts(size, 2000).val();
 
         // when
         Collections.sort(ints, Comparator.naturalOrder());

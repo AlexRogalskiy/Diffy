@@ -28,7 +28,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.UrlParametersMatc
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +42,6 @@ import static org.junit.Assert.assertTrue;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -56,46 +54,79 @@ public class UrlParametersMatcherTest extends AbstractDiffTest {
 
     @Before
     public void setUp() {
-        this.urlString = getAlphaNumericStringMock().val();
+        this.urlString = this.getAlphaNumericStringMock().val();
     }
 
     @Test
     @DisplayName("Test match url strings by default url parameters matcher")
     public void test_validUrlParameters_Matcher() {
+        // given
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = urlString;
-
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
+
+        // then
         assertTrue(urlParametersMatcher.matchesSafe(testString));
     }
 
     @Test
     @DisplayName("Test mismatch url strings length by default url parameters matcher")
     public void test_mismatchUrlParametersLength_Matcher() {
+        // given
         final String urlString = "arg1=val1&arg2=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3&arg4=val4";
-
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
+
+        // then
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
 
     @Test
     @DisplayName("Test mismatch url string names by default url parameter matcher")
     public void test_mismatchUrlParametersNames_Matcher() {
+        // given
         final String urlString = "arg1=val1&arg22=val2&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
-
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
+
+        // then
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
 
     @Test
     @DisplayName("Test mismatch url string values by default url parameter matcher")
     public void test_mismatchUrlParametersValues_Matcher() {
+        // given
         final String urlString = "arg1=val1&arg2=val22&arg3=val3";
         final String testString = "arg1=val1&arg2=val2&arg3=val3";
-
         final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
+
+        // then
+        assertFalse(urlParametersMatcher.matchesSafe(testString));
+    }
+
+    @Test
+    @DisplayName("Test mismatch nullable url string values by default url parameter matcher")
+    public void test_mismatchNullableUrlParametersValues_by_Matcher() {
+        // given
+        final String urlString = null;
+        final String testString = "arg1=val1&arg2=val2&arg3=val3";
+        final UrlParametersMatcher urlParametersMatcher = UrlParametersMatcher.of(urlString);
+        ;
+
+        // then
+        assertFalse(urlParametersMatcher.matchesSafe(testString));
+    }
+
+    @Test(expected = NullPointerException.class)
+    @DisplayName("Test mismatch url string values by nullable url parameter matcher")
+    public void test_mismatchUrlParametersValues_by_nullableMatcher() {
+        // given
+        final String urlString = "arg1=val1&arg2=val22&arg3=val3";
+        final String testString = "arg1=val1&arg2=val2&arg3=val3";
+        final UrlParametersMatcher urlParametersMatcher = null;
+
+        // then
         assertFalse(urlParametersMatcher.matchesSafe(testString));
     }
 }

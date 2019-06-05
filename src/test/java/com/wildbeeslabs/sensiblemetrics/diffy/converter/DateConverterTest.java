@@ -29,13 +29,16 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationExceptio
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.rules.ExpectedException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.startsWith;
 
 /**
  * {@link DateConverter} unit test
@@ -46,6 +49,12 @@ import static org.junit.Assert.*;
  */
 @Getter
 public class DateConverterTest {
+
+    /**
+     * Default {@link ExpectedException} rule
+     */
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     /**
      * Default date format pattern
@@ -62,11 +71,15 @@ public class DateConverterTest {
         this.dateConverter = new DateConverter(DEFAULT_DATE_FORMAT);
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting invalid date value")
     public void test_invalidDate_Converter() {
         // given
         final String value = "a3563/56/56";
+
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
 
         // when
         final Date result = this.getDateConverter().convert(value);
@@ -131,21 +144,29 @@ public class DateConverterTest {
         assertThat(result, IsEqual.equalTo(value));
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting empty date value")
     public void test_emptyDate_Converter() {
         // given
         final String value = "";
 
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
+
         // when
         this.getDateConverter().convert(value);
     }
 
-    @Test(expected = ConvertOperationException.class)
+    @Test
     @DisplayName("Test converting nullable date value")
     public void test_nullableDate_Converter() {
         // given
         final String value = null;
+
+        // then
+        thrown.expect(ConvertOperationException.class);
+        thrown.expectMessage(startsWith("cannot process convert operation"));
 
         // when
         this.getDateConverter().convert(value);

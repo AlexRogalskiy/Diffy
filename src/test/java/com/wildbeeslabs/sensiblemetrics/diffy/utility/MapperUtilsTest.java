@@ -35,11 +35,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffComparatorFacto
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -52,6 +53,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.startsWith;
 
 /**
  * Mapper utils unit test
@@ -60,11 +62,16 @@ import static org.junit.Assert.assertThat;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
+
+    /**
+     * Default {@link ExpectedException} rule
+     */
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     /**
      * Default {@link DeliveryInfo} models
@@ -74,8 +81,8 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
     @Before
     public void setUp() {
-        this.deliveryInfoFirst = getDeliveryInfoMock().val();
-        this.deliveryInfoLast = getDeliveryInfoMock().val();
+        this.deliveryInfoFirst = this.getDeliveryInfoMock().val();
+        this.deliveryInfoLast = this.getDeliveryInfoMock().val();
     }
 
     @Test
@@ -109,7 +116,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(entries, is(not(empty())));
-        assertThat(entries.size(), IsEqual.equalTo(valueChangeList.size()));
+        assertThat(entries, hasSize(valueChangeList.size()));
     }
 
     @Test
@@ -143,7 +150,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(entries, is(not(empty())));
-        assertThat(entries.size(), IsEqual.equalTo(valueChangeList.size()));
+        assertThat(entries, hasSize(valueChangeList.size()));
     }
 
     @Test
@@ -157,7 +164,7 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(entries, is(not(empty())));
-        assertThat(entries.size(), IsEqual.equalTo(3));
+        assertThat(entries, hasSize(3));
 
         // then
         assertThat(entries.get(0).get("property"), IsEqual.equalTo("description"));
@@ -249,21 +256,29 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         assertNull(entry.getLast());
     }
 
-    @Test(expected = MismatchedInputException.class)
+    @Test
     @DisplayName("Test deserialize invalid difference entry by default mapper and external view class")
     public void test_deserializeInvalidDiffEntry_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "[]";
 
+        // then
+        thrown.expect(MismatchedInputException.class);
+        thrown.expectMessage(startsWith("Cannot deserialize instance"));
+
         // when
         map(jsonString, DefaultDiffEntry.class, DiffEntryView.External.class);
     }
 
-    @Test(expected = JsonParseException.class)
+    @Test
     @DisplayName("Test deserialize unquoted difference entry by default mapper and external view class")
     public void test_deserializeUnquotedDiffEntry_by_defaultMapperAndExternalView() throws IOException {
         // given
         final String jsonString = "{[]}";
+
+        // then
+        thrown.expect(JsonParseException.class);
+        thrown.expectMessage(startsWith("Unexpected character"));
 
         // when
         map(jsonString, DefaultDiffEntry.class, DiffEntryView.External.class);
@@ -285,10 +300,10 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertThat(valueChangeList, is(not(empty())));
-        assertThat(valueChangeList.size(), IsEqual.equalTo(6));
+        assertThat(valueChangeList, hasSize(6));
 
         // when
-        String jsonString = toJson(valueChangeList, DiffEntryView.External.class);
+        final String jsonString = toJson(valueChangeList, DiffEntryView.External.class);
 
         // then
         assertThat(jsonString, IsEqual.equalTo(expectedJsonString));
@@ -316,15 +331,15 @@ public class MapperUtilsTest extends AbstractDeliveryInfoDiffTest {
         final DeliveryInfo.DeliveryStatus status,
         final BigDecimal discount,
         final Integer... codes) {
-        final DeliveryInfo deliveryInfo = new DeliveryInfo();
-        deliveryInfo.setId(id);
-        deliveryInfo.setType(type);
-        deliveryInfo.setGid(gid);
-        deliveryInfo.setBalance(balance);
-        deliveryInfo.setDescription(description);
-        deliveryInfo.setStatus(status);
-        deliveryInfo.setDiscount(discount);
-        deliveryInfo.setCodes(codes);
-        return deliveryInfo;
+        return DeliveryInfo.builder()
+            .id(id)
+            .type(type)
+            .gid(gid)
+            .balance(balance)
+            .description(description)
+            .status(status)
+            .discount(discount)
+            .codes(codes)
+            .build();
     }
 }

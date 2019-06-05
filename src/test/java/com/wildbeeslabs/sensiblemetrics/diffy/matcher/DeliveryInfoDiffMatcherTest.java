@@ -30,7 +30,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.DeliveryInfoDiffM
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffMatcherFactory;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
@@ -38,23 +37,24 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.rules.ExpectedException;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.DateUtils.toDate;
-import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.startsWith;
 
 /**
  * Delivery info difference matcher unit test {@link AbstractDeliveryInfoDiffTest}
@@ -63,12 +63,15 @@ import static org.junit.Assert.assertNotNull;
  * @version 1.1
  * @since 1.0
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
+    /**
+     * Default {@link DeliveryInfo} type
+     */
+    public static final int DEFAULT_TYPE = 5;
     /**
      * Default date format pattern
      */
@@ -78,10 +81,10 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
      */
     private final String DEFAULT_GID_PREFIX = "TEST";
     /**
-     * Default {@link DeliveryInfo} type
+     * Default {@link ExpectedException} rule
      */
-    public static final int DEFAULT_TYPE = 5;
-
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     /**
      * Default {@link DeliveryInfo} model
      */
@@ -89,15 +92,15 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     @Before
     public void setUp() {
-        this.deliveryInfo = getDeliveryInfoMock().val();
+        this.deliveryInfo = this.getDeliveryInfoMock().val();
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom delivery info matcher")
     public void test_deliveryInfo_by_Matcher() {
         // given
-        DeliveryInfo deliveryInfo = getDeliveryInfo();
-        DeliveryInfoDiffMatcher deliveryInfoMatcher = getDeliveryInfoMatcher(
+        DeliveryInfo deliveryInfo = this.getDeliveryInfo();
+        DeliveryInfoDiffMatcher deliveryInfoMatcher = this.getDeliveryInfoMatcher(
             getIntMock().val(),
             getAlphaNumericStringMock().val(),
             getLocalDateMock().toUtilDate().val(),
@@ -105,23 +108,23 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         );
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(deliveryInfo);
+        Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(this.deliveryInfo);
         assertNotNull("Should not be null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(deliveryInfo, MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.deliveryInfo);
+        assertThat(diffMatchEntryList, hasItem(entry));
 
         // given
-        getDeliveryInfo().setType(DEFAULT_TYPE);
-        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setType(DEFAULT_TYPE);
+        this.getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        this.getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        deliveryInfoMatcher = getDeliveryInfoMatcher(
+        deliveryInfoMatcher = this.getDeliveryInfoMatcher(
             DEFAULT_TYPE,
             DEFAULT_GID_PREFIX,
             toDate("17/06/2013", DEFAULT_DATE_FORMAT),
@@ -130,11 +133,8 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         iterable = deliveryInfoMatcher.diffMatch(deliveryInfo);
-        assertNotNull("Should not be null", iterable);
-        diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     @Test
@@ -144,12 +144,9 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create();
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     @Test
@@ -160,19 +157,16 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // when
         final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(null);
-        assertNotNull("Should not be null", iterable);
-        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom created/update date fields diff matcher")
     public void test_deliveryInfo_by_dateDiffMatcher() {
         // given
-        getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
         final TypeSafeMatcher<DeliveryInfo> matcher = value -> (
             LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5
@@ -181,47 +175,47 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
 
         // given
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("27/06/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
-    }
-
-    @Test(expected = MatchOperationException.class)
-    @DisplayName("Test nullable delivery info entity by custom type field diff matcher")
-    public void test_nullableDeliveryInfo_by_customTypeDiffMatcher() {
-        // given
-        getDeliveryInfo().setType(getCodeMock().val());
-
-        final TypeSafeMatcher<DeliveryInfo> matcher = value -> (value.getType() > 1000 && value.getType() < 5000);
-        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
-
-        // when
-        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(null);
-        assertNotNull("Should not be null", iterable);
+        iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.getDeliveryInfo());
+        assertThat(diffMatchEntryList, hasItem(entry));
+    }
 
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(null, MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+    @Test
+    @DisplayName("Test nullable delivery info entity by custom type field diff matcher")
+    public void test_nullableDeliveryInfo_by_customTypeDiffMatcher() {
+        // given
+        this.getDeliveryInfo().setType(getCodeMock().val());
+
+        final TypeSafeMatcher<DeliveryInfo> matcher = value -> (value.getType() > 1000 && value.getType() < 5000);
+        final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
+
+        // then
+        thrown.expect(MatchOperationException.class);
+        thrown.expectMessage(startsWith("cannot process match operation"));
+
+        // when
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(null);
+        assertNotNull("Result set is null", iterable);
+        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
+
+        // then
+        assertThat(diffMatchEntryList, is(not(empty())));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(null);
+        assertThat(diffMatchEntryList, hasItem(entry));
     }
 
     @Test
@@ -232,37 +226,41 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.getDeliveryInfo());
+        assertThat(diffMatchEntryList, hasItem(entry));
     }
 
-    @Test(expected = MatchOperationException.class)
+    @Test
     @DisplayName("Test invalid delivery info entity by custom type field diff matcher with comparator")
     public void test_invalidDeliveryInfo_by_customTypeDiffMatcherWithComparator() {
         // given
-        getDeliveryInfo().setCreatedAt(null);
+        this.getDeliveryInfo().setCreatedAt(null);
 
         final TypeSafeMatcher<DeliveryInfo> matcher = value -> LocalDateTime.fromDateFields(value.getCreatedAt()).getDayOfMonth() > 5;
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
+        // then
+        thrown.expect(MatchOperationException.class);
+        thrown.expectMessage(startsWith("cannot process match operation"));
+
         // when
-        diffMatcher.diffMatch(getDeliveryInfo());
+        diffMatcher.diffMatch(this.getDeliveryInfo());
     }
 
     @Test
     @DisplayName("Test delivery info entity by nullable custom delivery info and-chained matchers")
     public void test_deliveryInfo_by_validDiffMatcher() {
         // given
-        getDeliveryInfo().setType(DEFAULT_TYPE);
-        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setType(DEFAULT_TYPE);
+        this.getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        this.getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
         final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
@@ -270,22 +268,19 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withGid(DEFAULT_GID_PREFIX);
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     @Test
     @DisplayName("Test delivery info entity by valid custom delivery info and-chained matchers")
     public void test_deliveryInfo_by_validDiffMatcherWithDates() {
         // given
-        getDeliveryInfo().setType(DEFAULT_TYPE);
-        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setType(DEFAULT_TYPE);
+        this.getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        this.getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
         final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
@@ -295,22 +290,19 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     @Test
     @DisplayName("Test delivery info entity by invalid custom delivery info and-chained matchers")
     public void test_deliveryInfo_by_invalidDiffMatcherWithDates() {
         // given
-        getDeliveryInfo().setType(4);
-        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setType(4);
+        this.getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        this.getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
         final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
@@ -320,50 +312,48 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withUpdatedDate(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.getDeliveryInfo());
+        assertThat(diffMatchEntryList, hasItem(entry));
     }
 
     @Test
     @DisplayName("Test delivery info entity by nullable custom delivery info not-chained matchers")
     public void test_deliveryInfo_by_invalidDiffMatcher2() {
         // given
-        getDeliveryInfo().setType(4);
-        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setType(4);
+        this.getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        this.getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
             .withType(DEFAULT_TYPE)
             .withGid(DEFAULT_GID_PREFIX);
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.getDeliveryInfo());
+        assertThat(diffMatchEntryList, hasItem(entry));
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom delivery info not-chained matchers")
     public void test_deliveryInfo_by_invalidDiffMatcher3() {
         // given
-        getDeliveryInfo().setType(4);
-        getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
-        getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setType(4);
+        this.getDeliveryInfo().setGid(DEFAULT_GID_PREFIX);
+        this.getDeliveryInfo().setCreatedAt(toDate("17/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         final DeliveryInfoDiffMatcher deliveryInfoMatcher = DeliveryInfoDiffMatcher.of()
             .withType(DEFAULT_TYPE)
@@ -372,15 +362,15 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
             .withUpdatedDate(toDate("26/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
+        final Iterable<DefaultDiffMatchEntry> iterable = deliveryInfoMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
         final List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
 
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.getDeliveryInfo());
+        assertThat(diffMatchEntryList, hasItem(entry));
     }
 
     @Test
@@ -391,44 +381,38 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        final Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     @Test
     @DisplayName("Test delivery info entity by custom type field diff matcher")
     public void test_deliveryInfo_by_customTypeDiffMatcher() {
         // given
-        getDeliveryInfo().setType(getCodeMock().val());
+        this.getDeliveryInfo().setType(getCodeMock().val());
 
         TypeSafeMatcher<DeliveryInfo> matcher = value -> (value.getType() > 1000 && value.getType() < 5000);
         DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.getDeliveryInfo());
+        assertThat(diffMatchEntryList, hasItem(entry));
 
         // given
         matcher = value -> (value.getType() >= 0 && value.getType() <= 10);
         diffMatcher = DefaultDiffMatcherFactory.create(matcher);
 
         // when
-        iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     @Test
@@ -441,32 +425,29 @@ public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
         );
         final TypeSafeMatcher<DeliveryInfo> typeMatcher = value -> (value.getType() > 1000 && value.getType() < 5000);
 
-        getDeliveryInfo().setType(getCodeMock().val());
-        getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
-        getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setType(getCodeMock().val());
+        this.getDeliveryInfo().setCreatedAt(toDate("07/06/2013", DEFAULT_DATE_FORMAT));
+        this.getDeliveryInfo().setUpdatedAt(toDate("17/06/2018", DEFAULT_DATE_FORMAT));
 
         final DiffMatcher<DeliveryInfo> diffMatcher = DefaultDiffMatcherFactory.create(dateMatcher, typeMatcher);
 
         // when
-        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
+        Iterable<DefaultDiffMatchEntry> iterable = diffMatcher.diffMatch(this.getDeliveryInfo());
+        assertNotNull("Result set is null", iterable);
         List<DefaultDiffMatchEntry> diffMatchEntryList = Lists.newArrayList(iterable);
 
         // then
         assertThat(diffMatchEntryList, is(not(empty())));
-        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(getDeliveryInfo(), MatchDescription.EMPTY_MATCH_DESCRIPTION);
-        assertTrue(diffMatchEntryList.contains(entry));
+        final DefaultDiffMatchEntry entry = DefaultDiffMatchEntry.of(this.getDeliveryInfo());
+        assertThat(diffMatchEntryList, hasItem(entry));
 
         // given
-        getDeliveryInfo().setType(1001);
+        this.getDeliveryInfo().setType(1001);
 
         // when
         iterable = diffMatcher.diffMatch(getDeliveryInfo());
-        assertNotNull("Should not be null", iterable);
-        diffMatchEntryList = Lists.newArrayList(iterable);
-
-        // then
-        assertThat(diffMatchEntryList, is(empty()));
+        assertNotNull("Result set is null", iterable);
+        assertThat(iterable, emptyIterable());
     }
 
     /**
