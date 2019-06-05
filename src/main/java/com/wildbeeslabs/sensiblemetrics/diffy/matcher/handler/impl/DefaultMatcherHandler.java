@@ -50,6 +50,11 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.executor.impl.TaskExecutorS
 public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
 
     /**
+     * Default {@link Object} mutex
+     */
+    private final Object mutex = new Object();
+
+    /**
      * Default {@link Duration} timeout (5000 in millis)
      */
     public static final Duration DEFAULT_TIMEOUT = Duration.ofMillis(5000);
@@ -116,33 +121,35 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @param listener - initial input {@link MatcherEventListener}
      */
     private <E extends BaseMatcherEvent<T>> void invokeEventListener(final E event, final MatcherEventListener<T> listener) {
-        switch (event.getType()) {
-            case MATCH_SUCCESS:
-                listener.onSuccess(event);
-                break;
-            case MATCH_FAILURE:
-                listener.onFailure(event);
-                break;
-            case MATCH_SKIP:
-                listener.onSkip(event);
-                break;
-            case MATCH_ERROR:
-                listener.onError(event);
-                break;
-            case MATCH_START:
-                listener.onStart(event);
-                break;
-            case MATCH_COMPLETE:
-                listener.onComplete(event);
-                break;
-            case MATCH_BEFORE:
-                listener.onBefore(event);
-                break;
-            case MATCH_AFTER:
-                listener.onAfter(event);
-                break;
-            default:
-                break;
-        }
+        //synchronized (this.mutex) {
+            switch (event.getType()) {
+                case MATCH_SUCCESS:
+                    listener.onSuccess(event);
+                    break;
+                case MATCH_FAILURE:
+                    listener.onFailure(event);
+                    break;
+                case MATCH_SKIP:
+                    listener.onSkip(event);
+                    break;
+                case MATCH_ERROR:
+                    listener.onError(event);
+                    break;
+                case MATCH_START:
+                    listener.onStart(event);
+                    break;
+                case MATCH_COMPLETE:
+                    listener.onComplete(event);
+                    break;
+                case MATCH_BEFORE:
+                    listener.onBefore(event);
+                    break;
+                case MATCH_AFTER:
+                    listener.onAfter(event);
+                    break;
+                default:
+                    break;
+            }
+       // }
     }
 }
