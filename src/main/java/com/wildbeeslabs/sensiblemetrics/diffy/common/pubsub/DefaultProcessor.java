@@ -116,7 +116,7 @@ public class DefaultProcessor<T> implements Processor<Event<T>, String> {
             if (n < 0) {
                 this.executor.execute(() -> this.subscriber.onError(new IllegalArgumentException()));
             } else if (dataItems.size() > 0) {
-                publishItems(n);
+                this.publishItems(n);
             } else if (dataItems.size() == 0) {
                 this.subscriber.onComplete();
             }
