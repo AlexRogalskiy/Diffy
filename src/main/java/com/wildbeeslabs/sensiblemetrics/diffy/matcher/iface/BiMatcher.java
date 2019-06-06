@@ -30,9 +30,11 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDes
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeType;
 import lombok.NonNull;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
@@ -90,6 +92,18 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @Override
     default BiMatcherModeType getMode() {
         return BiMatcherModeType.STRICT;
+    }
+
+    /**
+     * Returns {@link Collection} of {@link Entry}s by input {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation {#link filter}
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Collection} of {@link Entry}s
+     */
+    static <T> Collection<Entry<T, T>> matchIf(final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        return listOf(values).stream().filter((entry -> matcher.matches(entry.getFirst(), entry.getLast()))).collect(Collectors.toList());
     }
 
     /**

@@ -145,7 +145,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
 
         // then
         assertTrue(deliveryInfoMatcher.matches(this.getDeliveryInfo()));
-        assertThat(listener.getFailedMatchers(), empty());
+        assertThat(listener.getFailedMatchers(), is(empty()));
         assertThat(listener.getSuccessMatchers(), hasSize(1));
 
         assertThat(listener.getSuccessMatchers(), hasItem(deliveryInfoMatcher));
@@ -176,7 +176,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         // then
         assertFalse(deliveryInfoMatcher.matches(this.getDeliveryInfo()));
         assertThat(listener.getFailedMatchers(), hasSize(1));
-        assertThat(listener.getSuccessMatchers(), empty());
+        assertThat(listener.getSuccessMatchers(), is(empty()));
 
         assertThat(listener.getSuccessMatchers(), not(hasItem(deliveryInfoMatcher)));
         assertThat(listener.getFailedMatchers(), hasItem(deliveryInfoMatcher));

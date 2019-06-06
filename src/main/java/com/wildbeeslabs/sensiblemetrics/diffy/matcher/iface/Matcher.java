@@ -35,9 +35,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -317,6 +317,18 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     default void describeBy(final MatchDescription description) {
         description.append(wrapInBraces.apply(this.getDescription()));
+    }
+
+    /**
+     * Returns {@link Collection} of {@code T} by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Collection} of {@code T}
+     */
+    static <T> Collection<T> matchIf(final Iterable<T> values, final Matcher<T> matcher) {
+        return listOf(values).stream().filter(value -> matcher.matches(value)).collect(Collectors.toList());
     }
 
     /**
