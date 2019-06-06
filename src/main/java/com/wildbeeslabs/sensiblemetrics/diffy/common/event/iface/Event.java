@@ -21,26 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.event;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
+
+import java.io.Serializable;
 
 /**
- * Event storage interface declaration
+ * Event interface declaration
  *
  * @param <T> type of event item
  */
-public interface EventStorage<T> {
+public interface Event<T> extends Serializable {
 
     /**
-     * Publishes {@link Event} to event storage
-     *
-     * @param event - intial input {@link Event} to publish
+     * The name of the event (case-insensitive). The name must be an XML name.
      */
-    void publish(final Event<T> event);
+//    EventType getType();
 
     /**
-     * Subscribes to {@link Event} from event storage
-     *
-     * @param event - initial input {@link Event} to subscribe to
+     * Used to indicate the <code>EventTarget</code> to which the event was
+     * originally dispatched.
      */
-    void subscribe(final Event<T> event);
+//    EventAdapter<T> getTarget();
+
+//    public long getTimeStamp();
 }

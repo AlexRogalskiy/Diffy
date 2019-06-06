@@ -21,38 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.event;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 
 /**
- * Event adapter interface declaration
+ * Event storage interface declaration
  *
  * @param <T> type of event item
  */
-public interface EventAdapter<T, E extends Event<T>, L extends EventListener<T, E>> {
+public interface EventStorage<T> {
 
     /**
-     * Removes {@link EventListener} from current adapter
+     * Publishes {@link Event} to event storage
      *
-     * @param listener - initial input {@link EventListener} to remove
+     * @param event - intial input {@link Event} to publish
      */
-    void removeListener(final L listener);
+    void publish(final Event<T> event);
 
     /**
-     * Adds {@link EventListener} to current adapter
+     * Subscribes to {@link Event} from event storage
      *
-     * @param listener - initial input {@link EventListener} to add
+     * @param event - initial input {@link Event} to subscribe to
      */
-    void addListener(final L listener);
-
-    /**
-     * Adds {@link Iterable} collection of {@link EventListener}s to current adapter
-     *
-     * @param listeners - initial input {@link Iterable} collection of {@link EventListener}s to add
-     */
-    void addListeners(final Iterable<L> listeners);
-
-    /**
-     * Removes all {@link EventListener}s from current adapter
-     */
-    void removeAllListeners();
+    void subscribe(final Event<T> event);
 }

@@ -38,7 +38,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MatcherEvent<T> extends BaseMatcherEvent<T> {
+public class MatcherEvent<T> extends BaseMatcherEvent<T, T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -46,45 +46,39 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T> {
     private static final long serialVersionUID = 1178474426881849360L;
 
     /**
-     * Default matchable value {@code T}
-     */
-    private final T value;
-
-    /**
      * Default matcher event constructor by input parameters
      *
+     * @param source  - initial input event source {@code T}
      * @param matcher - initial input {BiMatcher}
-     * @param value   - initial input matchable {@code T}
      * @param type    - initial input event type {@link MatcherEventType}
      */
-    public MatcherEvent(final Matcher<T> matcher, final T value, final MatcherEventType type) {
-        super(matcher, type);
-        this.value = value;
+    public MatcherEvent(final T source, final Matcher<T> matcher, final MatcherEventType type) {
+        super(source, matcher, type);
     }
 
     /**
      * Creates new {@link MatcherEvent} by input parameters
      *
+     * @param source  - initial input event source {@code T}
      * @param matcher - initial input {@link Matcher}
-     * @param value   - initial input matchable {@code T}
      * @param status  - initial input match status
      * @return {@link MatcherEvent}
      */
     @Factory
-    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final boolean status) {
-        return of(matcher, value, MatcherEventType.fromBoolean(status));
+    public static <T> MatcherEvent<T> of(final T source, final Matcher<T> matcher, final boolean status) {
+        return of(source, matcher, MatcherEventType.fromBoolean(status));
     }
 
     /**
      * Creates new {@link MatcherEvent} by input parameters
      *
+     * @param source  - initial input event source {@code T}
      * @param matcher - initial input {@link Matcher}
-     * @param value   - initial input matchable {@code T}
      * @param type    - initial input event type {@link MatcherEventType}
      * @return {@link MatcherEvent}
      */
     @Factory
-    public static <T> MatcherEvent<T> of(final Matcher<T> matcher, final T value, final MatcherEventType type) {
-        return new MatcherEvent(matcher, value, type);
+    public static <T> MatcherEvent<T> of(final T source, final Matcher<T> matcher, final MatcherEventType type) {
+        return new MatcherEvent(source, matcher, type);
     }
 }

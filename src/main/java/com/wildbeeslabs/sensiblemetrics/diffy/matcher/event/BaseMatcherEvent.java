@@ -23,10 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.event.Event;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.impl.BaseEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -39,10 +38,9 @@ import java.util.Objects;
  * @param <T> type of input element to be matched by operation
  */
 @Data
-@AllArgsConstructor
-@EqualsAndHashCode
-@ToString
-public abstract class BaseMatcherEvent<T> implements Event<T> {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -57,6 +55,19 @@ public abstract class BaseMatcherEvent<T> implements Event<T> {
      * Default {@link MatcherEventType}
      */
     private final MatcherEventType type;
+
+    /**
+     * Default base matcher event constructor by input arguments
+     *
+     * @param source  - initial input event source {@code }
+     * @param matcher - initial input {@link BaseMatcher}
+     * @param type    - initial input {@link MatcherEventType}
+     */
+    public BaseMatcherEvent(final S source, final BaseMatcher<T> matcher, final MatcherEventType type) {
+        super(source);
+        this.matcher = matcher;
+        this.type = type;
+    }
 
     /**
      * Returns binary flag based on current {@link MatcherEventType} {@code MATCH_SUCCESS}

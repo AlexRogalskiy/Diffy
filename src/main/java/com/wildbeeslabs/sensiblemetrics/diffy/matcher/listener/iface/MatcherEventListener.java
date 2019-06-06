@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.event.EventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 
 /**

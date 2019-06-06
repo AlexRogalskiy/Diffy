@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
@@ -166,7 +167,7 @@ public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> 
         log.info("Emitting event with type = {%s}, first value = {%s}, last value = {%s}", type, first, last);
         BiMatcherEvent<T> event = null;
         try {
-            event = BiMatcherEvent.of(this, first, last, type);
+            event = BiMatcherEvent.of(DefaultEntry.of(first, last), this, type);
             this.getHandler().handleEvent(event);
         } catch (Exception ex) {
             log.error("ERROR: cannot handle event = {%s}", event);

@@ -21,27 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.event;
-
-import java.io.Serializable;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 
 /**
- * Event interface declaration
+ * Event adapter interface declaration
  *
  * @param <T> type of event item
  */
-public interface Event<T> extends Serializable {
+public interface EventAdapter<T, E extends Event<T>, L extends EventListener<T, E>> {
 
     /**
-     * The name of the event (case-insensitive). The name must be an XML name.
+     * Removes {@link EventListener} from current adapter
+     *
+     * @param listener - initial input {@link EventListener} to remove
      */
-//    EventType getType();
+    void removeListener(final L listener);
 
     /**
-     * Used to indicate the <code>EventTarget</code> to which the event was
-     * originally dispatched.
+     * Adds {@link EventListener} to current adapter
+     *
+     * @param listener - initial input {@link EventListener} to add
      */
-//    EventAdapter<T> getTarget();
+    void addListener(final L listener);
 
-//    public long getTimeStamp();
+    /**
+     * Adds {@link Iterable} collection of {@link EventListener}s to current adapter
+     *
+     * @param listeners - initial input {@link Iterable} collection of {@link EventListener}s to add
+     */
+    void addListeners(final Iterable<L> listeners);
+
+    /**
+     * Removes all {@link EventListener}s from current adapter
+     */
+    void removeAllListeners();
 }
