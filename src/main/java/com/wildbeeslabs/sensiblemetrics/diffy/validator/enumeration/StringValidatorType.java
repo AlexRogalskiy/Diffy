@@ -37,19 +37,31 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum StringValidatorType {
+    /**
+     * com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils
+     */
     IS_CONTAIN_ISO_CHAR(StringUtils::containsIsoControlCharacter),
     IS_NOT_CONTAIN_ISO_CHAR(StringUtils::doesNotContainIsoControlCharacter),
     IS_PALINDROME(StringUtils::isPalindrome),
     IS_PERMUTATION_PALINDROME(StringUtils::isPermutationOfPalindrome),
     IS_UNIQUE(StringUtils::isUnique),
 
+    /**
+     * com.google.common.base.Strings
+     */
     IS_NULL_OR_EMPTY(Strings::isNullOrEmpty),
 
+    /**
+     * org.apache.commons.lang3.math.NumberUtils
+     */
     IS_CREATABLE(NumberUtils::isCreatable),
     IS_DIGITS(NumberUtils::isDigits),
     IS_PARSABLE(NumberUtils::isParsable),
     IS_NUMBER(org.apache.commons.lang.math.NumberUtils::isNumber),
 
+    /**
+     * org.apache.commons.lang3.StringUtils
+     */
     IS_LOWER_CASE(org.apache.commons.lang3.StringUtils::isAllLowerCase),
     IS_UPPER_CASE(org.apache.commons.lang3.StringUtils::isAllUpperCase),
     IS_ALPHA(org.apache.commons.lang3.StringUtils::isAlpha),

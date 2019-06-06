@@ -29,6 +29,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDes
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeType;
 import lombok.NonNull;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
@@ -80,7 +81,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Default class {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> value -> clazz.isInstance(value);
+    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> clazz::isInstance;
     /**
      * Default equals {@link Matcher}
      */
@@ -88,11 +89,11 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Default class nestmate {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER = (final Class<?> clazz) -> value -> clazz.isNestmateOf(value.getClass());
+    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER = (final Class<?> clazz) -> value -> value.getClass().isNestmateOf(clazz);
     /**
      * Default assignable {@link Matcher}
      */
-    Function<Class<?>, Matcher<Class<?>>> DEFAULT_ASSIGNABLE_MATCHER = (final Class<?> clazz) -> value -> clazz.isAssignableFrom(value);
+    Function<Class<?>, Matcher<?>> DEFAULT_ASSIGNABLE_MATCHER = (final Class<?> clazz) -> value -> value.getClass().isAssignableFrom(clazz);
     /**
      * Default identity {@link Matcher}
      */
@@ -103,7 +104,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> value -> set.add(value);
     /**
-     * Default contains {@link Matcher}
+     * Default exist {@link Matcher}
      */
     Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER = (final Collection<?> collection) -> value -> collection.contains(value);
 
@@ -137,11 +138,13 @@ public interface Matcher<T> extends BaseMatcher<T> {
     }
 
     /**
-     * Appends input {@link MatchDescription} by current description
+     * Wraps input {@link MatchDescription} by current description
      *
      * @param description - initial input {@link MatchDescription}
+     * @throws NullPointerException if description is {@code null}
      */
     default void describeBy(final MatchDescription description) {
+        Objects.requireNonNull(description, "Description should not be null");
         description.append(wrapInBraces.apply(this.getDescription()));
     }
 
@@ -158,7 +161,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of current predicate and another
      *
-     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if {@code other} is {@code null}
      *                              <p>
@@ -170,15 +173,15 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              </p>
      */
     @NonNull
-    default Matcher<T> and(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> this.matches(t) && other.matches(t);
+    default Matcher<T> and(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> this.matches(t) && matcher.matches(t);
     }
 
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOT" of this predicate and another
      *
-     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if other is {@code null}
      *                              <p>
@@ -188,15 +191,15 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              </p>
      */
     @NonNull
-    default Matcher<T> not(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "Matcher should not be null!");
-        return (Matcher<T>) other.negate();
+    default Matcher<T> not(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (Matcher<T>) matcher.negate();
     }
 
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of this predicate and another
      *
-     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if other is {@code null}
      *                              <p>
@@ -208,15 +211,15 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              </p>
      */
     @NonNull
-    default Matcher<T> or(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> this.matches(t) || other.matches(t);
+    default Matcher<T> or(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> this.matches(t) || matcher.matches(t);
     }
 
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of this predicate and another
      *
-     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if other is {@code null}
      *                              <p>
@@ -228,15 +231,15 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              </p>
      */
     @NonNull
-    default Matcher<T> xor(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> this.matches(t) ^ other.matches(t);
+    default Matcher<T> xor(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> this.matches(t) ^ matcher.matches(t);
     }
 
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of this predicate and another
      *
-     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if other is {@code null}
      *                              <p>
@@ -248,15 +251,15 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              </p>
      */
     @NonNull
-    default Matcher<T> nand(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> not(and(other)).matches(t);
+    default Matcher<T> nand(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> not(and(matcher)).matches(t);
     }
 
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of this predicate and another
      *
-     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if other is {@code null}
      *                              <p>
@@ -268,15 +271,15 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              </p>
      */
     @NonNull
-    default Matcher<T> nor(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> not(or(other)).matches(t);
+    default Matcher<T> nor(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> not(or(matcher)).matches(t);
     }
 
     /**
      * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XNOR" of this predicate and another
      *
-     * @param other - initial input {@link Matcher} operator to perform operation by
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
      * @return composed {@link Matcher} operator
      * @throws NullPointerException if other is {@code null}
      *                              <p>
@@ -288,9 +291,9 @@ public interface Matcher<T> extends BaseMatcher<T> {
      *                              </p>
      */
     @NonNull
-    default Matcher<T> xnor(final Matcher<? super T> other) {
-        Objects.requireNonNull(other, "Matcher should not be null!");
-        return (final T t) -> not(xor(other)).matches(t);
+    default Matcher<T> xnor(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> not(xor(matcher)).matches(t);
     }
 
     /**
@@ -301,7 +304,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     @NonNull
     @SuppressWarnings("varargs")
-    default boolean allMatch(final T... values) {
+    default boolean allMatch(@Nullable final T... values) {
         return streamOf(values).allMatch(this::matches);
     }
 
@@ -313,7 +316,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     @NonNull
     @SuppressWarnings("varargs")
-    default boolean noneMatch(final T... values) {
+    default boolean noneMatch(@Nullable final T... values) {
         return streamOf(values).noneMatch(this::matches);
     }
 
@@ -325,7 +328,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     @NonNull
     @SuppressWarnings("varargs")
-    default boolean anyMatch(final T... values) {
+    default boolean anyMatch(@Nullable final T... values) {
         return streamOf(values).anyMatch(this::matches);
     }
 
@@ -336,10 +339,12 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param values  - initial input {@link Iterable} collection of {@code T}
      * @param matcher - initial input {@link Matcher}
      * @return {@link Collection} of {@code T}
+     * @throws NullPointerException if matcher is {@code null}
      */
     @NonNull
-    static <T> Collection<T> matchIf(final Iterable<T> values, final Matcher<T> matcher) {
-        return listOf(values).stream().filter(value -> matcher.matches(value)).collect(Collectors.toList());
+    static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return listOf(values).stream().filter(matcher::matches).collect(Collectors.toList());
     }
 
     /**
@@ -351,9 +356,9 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @return {@link Collection} of {@code T}
      */
     @NonNull
-    static <T> Collection<T> matchIf(final Iterable<T> values, final Matcher<T>... matchers) {
+    static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
-        return listOf(values).stream().filter(value -> matcher.matches(value)).collect(Collectors.toList());
+        return listOf(values).stream().filter(matcher::matches).collect(Collectors.toList());
     }
 
     /**
@@ -522,7 +527,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     @NonNull
     static <T> Matcher<T> isEqual(final T value) {
-        return isNull(value) ? Objects::isNull : (final T t) -> Objects.equals(value, t);
+        return isNull(value) ? Objects::isNull : (final T other) -> Objects.equals(value, other);
     }
 
     /**
@@ -531,9 +536,11 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param <T>     type of input element to be matched by operation
      * @param matcher - initial input {@link Matcher}
      * @return identity {@link Matcher}
+     * @throws NullPointerException if matcher is {@code null}
      */
     @NonNull
     static <T> Matcher<T> identity(final Matcher<T> matcher) {
-        return (final T value) -> matcher.matches(value);
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return matcher::matches;
     }
 }

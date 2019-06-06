@@ -27,6 +27,7 @@ import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Matcher event type {@link Enum}
@@ -100,5 +101,16 @@ public enum MatcherEventType {
             .filter(type -> type.name().equalsIgnoreCase(name))
             .findFirst()
             .orElse(null);
+    }
+
+    /**
+     * Returns binary flag based on input {@link MatcherEventType}es comparison
+     *
+     * @param s1 - initial input {@link MatcherEventType} to compare with
+     * @param s2 - initial input {@link MatcherEventType} to compare by
+     * @return true - if {@link MatcherEventType} are equal, false - otherwise
+     */
+    public static boolean equals(final MatcherEventType s1, final MatcherEventType s2) {
+        return Objects.equals(s1, s2);
     }
 }

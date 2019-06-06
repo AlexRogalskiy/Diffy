@@ -35,6 +35,9 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ObjectValidatorType {
+    /**
+     * java.util.Objects
+     */
     IS_NULL(Objects::isNull),
     IS_NON_NULL(Objects::nonNull);
 

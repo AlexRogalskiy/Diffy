@@ -38,6 +38,9 @@ import java.util.function.Function;
 @Getter
 @RequiredArgsConstructor
 public enum StringConverterType {
+    /**
+     * org.apache.commons.lang3.StringUtils
+     */
     UPPER_CASE(StringUtils::upperCase),
     LOWER_CASE(StringUtils::lowerCase),
     CAPITALIZE(StringUtils::capitalize),
@@ -55,9 +58,15 @@ public enum StringConverterType {
     TRIM(StringUtils::trim),
     CHOP(StringUtils::chop),
 
+    /**
+     * com.google.common.base.Strings
+     */
     EMPTY_TO_NULL(Strings::emptyToNull),
     NULL_TO_EMPTY(Strings::nullToEmpty),
 
+    /**
+     * com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils
+     */
     SORT(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::sort),
     COMPRESS(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::compress),
     REVERSE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::reverse),
@@ -65,6 +74,9 @@ public enum StringConverterType {
     CAPITALIZE_WORD_FULLY(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWordFull),
     CAPITALIZE_TITLE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWord),
 
+    /**
+     * org.apache.commons.text.StringEscapeUtils
+     */
     ESCAPE_JAVA(StringEscapeUtils::escapeJava),
     UNESCAPE_JAVA(StringEscapeUtils::unescapeJava),
     ESCAPE_ECMA_SCRIPT(StringEscapeUtils::escapeEcmaScript),

@@ -36,6 +36,9 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum CollectionValidatorType {
+    /**
+     * org.apache.commons.collections.CollectionUtils
+     */
     IS_EMPTY(CollectionUtils::isEmpty),
     IS_FULL(CollectionUtils::isFull),
     IS_NOT_EMPTY(CollectionUtils::isNotEmpty),

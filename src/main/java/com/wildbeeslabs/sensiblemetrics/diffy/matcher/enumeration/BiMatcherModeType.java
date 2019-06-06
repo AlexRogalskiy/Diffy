@@ -29,6 +29,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStatusType.DISABLE;
+import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStatusType.ENABLE;
+
 /**
  * Matcher mode type {@link Enum} to process malformed and unexpected data
  * <p>
@@ -41,10 +44,10 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 public enum BiMatcherModeType implements BaseMatcherMode {
-    STRICT(MatcherStatusType.ENABLE, true),
-    SILENT(MatcherStatusType.DISABLE, false),
-    LENIENT(MatcherStatusType.DISABLE, true),
-    SEALED(MatcherStatusType.ENABLE, false);
+    STRICT(ENABLE, true),
+    SILENT(DISABLE, false),
+    LENIENT(DISABLE, true),
+    SEALED(ENABLE, false);
 
     /**
      * {@link MatcherStatusType} status
@@ -71,7 +74,7 @@ public enum BiMatcherModeType implements BaseMatcherMode {
      */
     @Override
     public boolean isEnable() {
-        return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
+        return Objects.equals(this.getStatus(), ENABLE);
     }
 
     /**
@@ -100,5 +103,16 @@ public enum BiMatcherModeType implements BaseMatcherMode {
             return isEnable() ? STRICT : LENIENT;
         }
         return isEnable() ? SEALED : SILENT;
+    }
+
+    /**
+     * Returns binary flag based on input {@link BiMatcherModeType}es comparison
+     *
+     * @param s1 - initial input {@link BiMatcherModeType} to compare with
+     * @param s2 - initial input {@link BiMatcherModeType} to compare by
+     * @return true - if {@link BiMatcherModeType} are equal, false - otherwise
+     */
+    public static boolean equals(final BiMatcherModeType s1, final BiMatcherModeType s2) {
+        return Objects.equals(s1, s2);
     }
 }

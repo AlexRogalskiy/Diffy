@@ -23,8 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
 
+import com.google.common.base.Function;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.NonNull;
+
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 /**
  * Converter interface declaration
@@ -37,6 +45,30 @@ import java.util.Objects;
  */
 @FunctionalInterface
 public interface Converter<T, R> {
+
+    /**
+     * Default null {@link Converter}
+     */
+    Converter<?, ?> DEFAULT_NULL_CONVERTER = value -> null;
+    /**
+     * Default true {@link Converter}
+     */
+    Converter<?, Boolean> DEFAULT_TRUE_CONVERTER = value -> true;
+    /**
+     * Default false {@link Converter}
+     */
+    Converter<?, Boolean> DEFAULT_FALSE_CONVERTER = value -> false;
+    /**
+     * Default null {@link Converter}
+     */
+    Converter<?, String> DEFAULT_STRING_CONVERTER = value -> Objects.toString(value);
+
+    /**
+     * Default exception {@link Converter}
+     */
+    Converter<?, ?> DEFAULT_EXCEPTION_CONVERTER = value -> {
+        throw new ConvertOperationException();
+    };
 
     /**
      * Returns converted value {@code R} by input argument value {@code T}
@@ -56,6 +88,7 @@ public interface Converter<T, R> {
      * @return composed {@link Converter} function
      * @throws NullPointerException if before is {@code null}
      */
+    @NonNull
     default <V> Converter<V, R> compose(final Converter<? super V, ? extends T> before) {
         Objects.requireNonNull(before, "Converter should not be null!");
         return (final V v) -> convert(before.convert(v));
@@ -70,6 +103,7 @@ public interface Converter<T, R> {
      * @return composed {@link Converter} function
      * @throws NullPointerException if after is {@code null}
      */
+    @NonNull
     default <V> Converter<T, V> andThen(final Converter<? super R, ? extends V> after) {
         Objects.requireNonNull(after, "Converter should not be null!");
         return (final T t) -> after.convert(convert(t));
@@ -81,7 +115,86 @@ public interface Converter<T, R> {
      * @param <T> type of input element to be converted from
      * @return {@link Converter} function
      */
+    @NonNull
     static <T> Converter<T, T> identity() {
         return t -> t;
+    }
+
+    /**
+     * Returns {@link Matcher} by input {@link Predicate}
+     *
+     * @param <T>       type of input element to be converted from
+     * @param predicate - initial input {@link Predicate}
+     * @return {@link Matcher}
+     */
+    @NonNull
+    static <T> Matcher<T> convert(final Predicate<T> predicate) {
+        Objects.requireNonNull(predicate, "Predicate should not be null");
+        return predicate::test;
+    }
+
+    /**
+     * Returns {@link Predicate} by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be converted from
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Matcher}
+     */
+    @NonNull
+    static <T> Predicate<T> convert(final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return matcher::matches;
+    }
+
+    /**
+     * Returns {@link BiMatcher} by input {@link BiPredicate}
+     *
+     * @param <T>       type of input element to be converted from
+     * @param predicate - initial input {@link BiPredicate}
+     * @return {@link BiMatcher}
+     */
+    @NonNull
+    static <T> BiMatcher<T> convert(final BiPredicate<T, T> predicate) {
+        Objects.requireNonNull(predicate, "Predicate should not be null");
+        return predicate::test;
+    }
+
+    /**
+     * Returns {@link BiPredicate} by input {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be converted from
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link BiPredicate}
+     */
+    @NonNull
+    static <T> BiPredicate<T, T> convert(final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return matcher::matches;
+    }
+
+    /**
+     * Returns {@link Converter} by input {@link Function}
+     *
+     * @param <T>      type of input element to be converted from
+     * @param function - initial input {@link Function}
+     * @return {@link Converter}
+     */
+    @NonNull
+    static <T, R> Converter<T, R> convert(final Function<T, R> function) {
+        Objects.requireNonNull(function, "Function should not be null");
+        return function::apply;
+    }
+
+    /**
+     * Returns {@link Function} by input {@link Converter}
+     *
+     * @param <T>       type of input element to be converted from
+     * @param converter - initial input {@link Converter}
+     * @return {@link Function}
+     */
+    @NonNull
+    static <T, R> Function<T, R> convert(final Converter<T, R> converter) {
+        Objects.requireNonNull(converter, "Converter should not be null");
+        return converter::convert;
     }
 }

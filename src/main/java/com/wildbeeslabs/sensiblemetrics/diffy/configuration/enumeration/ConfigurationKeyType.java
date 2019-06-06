@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.configuration.enumeration;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Configuration key type {@link Enum}
@@ -32,6 +33,15 @@ import java.util.Arrays;
 public enum ConfigurationKeyType {
     READ_ONLY,
     READ_WRITE;
+
+    /**
+     * Return binary flag based on current mode {@code READ_ONLY}
+     *
+     * @return true - if current mode is {@code READ_ONLY}, false - otherwise
+     */
+    public boolean isReadOnly() {
+        return this.equals(READ_ONLY);
+    }
 
     /**
      * Returns {@link ConfigurationKeyType} by input configuration key type value {@link String}
@@ -45,5 +55,16 @@ public enum ConfigurationKeyType {
             .filter(type -> type.name().equalsIgnoreCase(name))
             .findFirst()
             .orElse(null);
+    }
+
+    /**
+     * Returns binary flag based on input {@link ConfigurationKeyType}es comparison
+     *
+     * @param p1 - initial input {@link ConfigurationKeyType} to compare with
+     * @param p2 - initial input {@link ConfigurationKeyType} to compare by
+     * @return true - if {@link ConfigurationKeyType} are equal, false - otherwise
+     */
+    public static boolean equals(final ConfigurationKeyType p1, final ConfigurationKeyType p2) {
+        return Objects.equals(p1, p2);
     }
 }

@@ -88,6 +88,6 @@ public interface ComparatorDispatcher<T> extends Serializable {
     @NonNull
     default BinaryOperator<T> minBy(final SortManager sortManager) {
         Objects.requireNonNull(sortManager, "SortManager should not be null");
-        return (a, b) -> Objects.compare(a, b, this.getComparator(sortManager)) < 0 ? a : b;
+        return (final T a, final T b) -> Objects.compare(a, b, this.getComparator(sortManager)) < 0 ? a : b;
     }
 }
