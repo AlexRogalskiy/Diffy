@@ -42,7 +42,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractBaseMatcher<T> implements MatcherEventAdapter<T> {
+public abstract class AbstractBaseMatcher<T, S> implements MatcherEventAdapter<T, S> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -52,7 +52,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherEventAdapter<T> {
     /**
      * Default {@link List} collection of {@link MatcherEventListener}s
      */
-    private final List<MatcherEventListener<T>> listeners = new ArrayList<>();
+    private final List<MatcherEventListener<T, S>> listeners = new ArrayList<>();
     /**
      * Default {@link MatcherHandler} implementation
      */
@@ -81,7 +81,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherEventAdapter<T> {
      * @param listener - initial input {@link MatcherEventListener} to remove
      */
     @Override
-    public void removeListener(final MatcherEventListener<T> listener) {
+    public void removeListener(final MatcherEventListener<T, S> listener) {
         if (Objects.nonNull(listener)) {
             this.getListeners().remove(listener);
         }
@@ -93,7 +93,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherEventAdapter<T> {
      * @param listener - initial input {@link MatcherEventListener} to add
      */
     @Override
-    public void addListener(final MatcherEventListener<T> listener) {
+    public void addListener(final MatcherEventListener<T, S> listener) {
         if (Objects.nonNull(listener)) {
             this.getListeners().add(listener);
         }
@@ -105,7 +105,7 @@ public abstract class AbstractBaseMatcher<T> implements MatcherEventAdapter<T> {
      * @param listeners - initial input {@link MatcherEventListener}s to add
      */
     @Override
-    public void addListeners(final Iterable<MatcherEventListener<T>> listeners) {
+    public void addListeners(final Iterable<MatcherEventListener<T, S>> listeners) {
         Optional.ofNullable(listeners).orElseGet(Collections::emptyList).forEach(this::addListener);
     }
 

@@ -44,7 +44,7 @@ import static java.util.Arrays.asList;
 @Slf4j
 @EqualsAndHashCode
 @ToString
-public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
+public class LoggingMatcherEventListener<T, S> implements MatcherEventListener<T, S> {
 
     /**
      * Logging {@link MatcherEventListener} instance
@@ -57,7 +57,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onStart(final BaseMatcherEvent<T> event) {
+    public void onStart(final BaseMatcherEvent<T, S> event) {
         log.info("On start event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -67,7 +67,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onBefore(final BaseMatcherEvent<T> event) {
+    public void onBefore(final BaseMatcherEvent<T, S> event) {
         log.info("On before event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -77,7 +77,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onAfter(final BaseMatcherEvent<T> event) {
+    public void onAfter(final BaseMatcherEvent<T, S> event) {
         log.info("On after event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -87,7 +87,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onSuccess(final BaseMatcherEvent<T> event) {
+    public void onSuccess(final BaseMatcherEvent<T, S> event) {
         log.info("On success event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -97,7 +97,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onFailure(final BaseMatcherEvent<T> event) {
+    public void onFailure(final BaseMatcherEvent<T, S> event) {
         log.info("On error event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -107,7 +107,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onComplete(final BaseMatcherEvent<T> event) {
+    public void onComplete(final BaseMatcherEvent<T, S> event) {
         log.info("On complete event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -117,7 +117,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onSkip(final BaseMatcherEvent<T> event) {
+    public void onSkip(final BaseMatcherEvent<T, S> event) {
         log.info("On skip event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -127,7 +127,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link MatcherEvent}
      */
     @Override
-    public void onError(final BaseMatcherEvent<T> event) {
+    public void onError(final BaseMatcherEvent<T, S> event) {
         log.info("On error event: {}, description: {}", event, event.getMatcher().getDescription());
     }
 
@@ -137,7 +137,7 @@ public class LoggingMatcherEventListener<T> implements MatcherEventListener<T> {
      * @return {@link List} of supported {@link EventListener}s
      */
     @Override
-    public Collection<? extends EventListener<T, BaseMatcherEvent<T>>> getSupportedListeners() {
-        return asList((EventListener<T, BaseMatcherEvent<T>>) INSTANCE);
+    public Collection<? extends EventListener<T, S, BaseMatcherEvent<T, S>>> getSupportedListeners() {
+        return asList((EventListener<T, S, BaseMatcherEvent<T, S>>) INSTANCE);
     }
 }

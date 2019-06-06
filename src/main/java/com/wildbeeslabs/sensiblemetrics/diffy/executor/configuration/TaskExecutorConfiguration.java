@@ -23,19 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.executor.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.property.TaskExecutorProperty;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
-import java.net.URL;
-import java.util.Objects;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.MapperUtils.fromYaml;
 
 /**
  * Task executor configuration
  */
-@Slf4j
 public class TaskExecutorConfiguration {
 
     /**
@@ -43,19 +39,9 @@ public class TaskExecutorConfiguration {
      *
      * @param fileName - initial input file name {@link String}
      * @return {@link TaskExecutorProperty}
-     * @throws NullPointerException if file name is {@code null}
      */
     @Nullable
     public static TaskExecutorProperty getProperty(final String fileName) {
-        Objects.requireNonNull(fileName, "File name should not be null");
-        final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        TaskExecutorProperty property = null;
-        try {
-            final URL url = TaskExecutorConfiguration.class.getClassLoader().getResource(fileName);
-            property = mapper.readValue(url, TaskExecutorProperty.class);
-        } catch (Exception e) {
-            log.error(String.format("ERROR: cannot read properties from file = {%s}", fileName), e);
-        }
-        return property;
+        return fromYaml(fileName, TaskExecutorProperty.class);
     }
 }

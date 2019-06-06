@@ -41,7 +41,7 @@ import java.util.List;
  * @version 1.1
  * @since 1.0
  */
-public interface BaseMatcher<T> extends Serializable {
+public interface BaseMatcher<T, S> extends Serializable {
 
     /**
      * Returns {@link List} of {@link MatcherEventListener}
@@ -49,7 +49,7 @@ public interface BaseMatcher<T> extends Serializable {
      * @return {@link List} of {@link MatcherEventListener}
      */
     @NonNull
-    default <E extends MatcherEventListener<T>> List<E> getListeners() {
+    default <E extends MatcherEventListener<T, S>> List<E> getListeners() {
         return Collections.emptyList();
     }
 

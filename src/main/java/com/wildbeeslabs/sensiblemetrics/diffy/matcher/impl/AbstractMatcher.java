@@ -40,7 +40,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractMatcher<T> extends AbstractBaseMatcher<T> implements Matcher<T> {
+public abstract class AbstractMatcher<T, S> extends AbstractBaseMatcher<T, S> implements Matcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability

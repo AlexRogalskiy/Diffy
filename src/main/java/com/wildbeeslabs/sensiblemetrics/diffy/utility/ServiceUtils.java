@@ -88,7 +88,7 @@ public class ServiceUtils {
      *
      * @param <T>      type of {@link CompletableFuture} result
      * @param executor - initial input {@link Executor} instance
-     * @param futures   - initial input collection of {@link CompletableFuture}
+     * @param futures  - initial input collection of {@link CompletableFuture}
      * @throws NullPointerException if futures is {@code null}
      */
     public static <T> void getResultAsync(final Executor executor, final CompletableFuture<T>... futures) {

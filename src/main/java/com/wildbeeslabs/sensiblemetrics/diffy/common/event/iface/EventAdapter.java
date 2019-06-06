@@ -28,7 +28,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
  *
  * @param <T> type of event item
  */
-public interface EventAdapter<T, E extends Event<T>, L extends EventListener<T, E>> {
+public interface EventAdapter<T, S, E extends Event<S>, L extends EventListener<T, S, E>> {
 
     /**
      * Removes {@link EventListener} from current adapter

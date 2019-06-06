@@ -92,7 +92,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @param event - initial input event {@link E} to handle
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {
+    public <S, E extends BaseMatcherEvent<T, S>> void handleEvent(final E event) {
         if (this.isEnableMode(event)) {
             Optional.ofNullable(event.getMatcher().getListeners())
                 .orElseGet(Collections::emptyList)
@@ -109,7 +109,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @param event - initial input {@link BaseMatcherEvent}
      * @return true - if event handler is enabled, false - otherwise
      */
-    private <E extends BaseMatcherEvent<T>> boolean isEnableMode(final E event) {
+    private <S, E extends BaseMatcherEvent<T, S>> boolean isEnableMode(final E event) {
         return Objects.nonNull(event) && event.getMatcher().isEnable();
     }
 
@@ -120,36 +120,36 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @param event    - initial input {@link BaseMatcherEvent}
      * @param listener - initial input {@link MatcherEventListener}
      */
-    private <E extends BaseMatcherEvent<T>> void invokeEventListener(final E event, final MatcherEventListener<T> listener) {
+    private <S, E extends BaseMatcherEvent<T, S>> void invokeEventListener(final E event, final MatcherEventListener<T, S> listener) {
         //synchronized (this.mutex) {
-            switch (event.getType()) {
-                case MATCH_SUCCESS:
-                    listener.onSuccess(event);
-                    break;
-                case MATCH_FAILURE:
-                    listener.onFailure(event);
-                    break;
-                case MATCH_SKIP:
-                    listener.onSkip(event);
-                    break;
-                case MATCH_ERROR:
-                    listener.onError(event);
-                    break;
-                case MATCH_START:
-                    listener.onStart(event);
-                    break;
-                case MATCH_COMPLETE:
-                    listener.onComplete(event);
-                    break;
-                case MATCH_BEFORE:
-                    listener.onBefore(event);
-                    break;
-                case MATCH_AFTER:
-                    listener.onAfter(event);
-                    break;
-                default:
-                    break;
-            }
-       // }
+        switch (event.getType()) {
+            case MATCH_SUCCESS:
+                listener.onSuccess(event);
+                break;
+            case MATCH_FAILURE:
+                listener.onFailure(event);
+                break;
+            case MATCH_SKIP:
+                listener.onSkip(event);
+                break;
+            case MATCH_ERROR:
+                listener.onError(event);
+                break;
+            case MATCH_START:
+                listener.onStart(event);
+                break;
+            case MATCH_COMPLETE:
+                listener.onComplete(event);
+                break;
+            case MATCH_BEFORE:
+                listener.onBefore(event);
+                break;
+            case MATCH_AFTER:
+                listener.onAfter(event);
+                break;
+            default:
+                break;
+        }
+        // }
     }
 }

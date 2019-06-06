@@ -51,7 +51,7 @@ public class RejectMatcherHandler<T> implements MatcherHandler<T> {
      * @param event - initial input event {@link BaseMatcherEvent} to handle
      */
     @Override
-    public <E extends BaseMatcherEvent<T>> void handleEvent(final E event) {
+    public <S, E extends BaseMatcherEvent<T, S>> void handleEvent(final E event) {
         MatchRejectionException.throwReject(event);
     }
 }

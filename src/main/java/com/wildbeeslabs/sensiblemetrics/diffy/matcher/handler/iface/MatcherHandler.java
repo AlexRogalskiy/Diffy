@@ -38,5 +38,5 @@ public interface MatcherHandler<T> {
      *
      * @param event - initial input event {@link E} to handle
      */
-    <E extends BaseMatcherEvent<T>> void handleEvent(final E event);
+    <S, E extends BaseMatcherEvent<T, S>> void handleEvent(final E event);
 }

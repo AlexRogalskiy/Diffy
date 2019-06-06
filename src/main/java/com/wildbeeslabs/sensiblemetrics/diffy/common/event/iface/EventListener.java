@@ -35,7 +35,7 @@ import java.util.Objects;
  *
  * @param <T> type of event item
  */
-public interface EventListener<T, E extends Event<T>> {
+public interface EventListener<T, S, E extends Event<S>> {
 
     /**
      * {@link MatcherEventListener} on start {@link BaseMatcherEvent}
@@ -76,11 +76,11 @@ public interface EventListener<T, E extends Event<T>> {
      * @return {@link Class} of {@link EventListener}
      * @throws NullPointerException if listener is {@code null}
      */
-    default Class<? extends EventListener<T, E>> getListenerType(final EventListener<T, E> listener) {
+    default Class<? extends EventListener<T, S, E>> getListenerType(final EventListener<T, S, E> listener) {
         Objects.requireNonNull(listener, "Listener should not be null");
-        for (final EventListener<T, E> listenerType : this.getSupportedListeners()) {
+        for (final EventListener<T, S, E> listenerType : this.getSupportedListeners()) {
             if (listenerType.getClass().isAssignableFrom(listener.getClass())) {
-                return (Class<? extends EventListener<T, E>>) listenerType.getClass();
+                return (Class<? extends EventListener<T, S, E>>) listenerType.getClass();
             }
         }
         return null;
@@ -91,5 +91,5 @@ public interface EventListener<T, E extends Event<T>> {
      *
      * @return {@link List} of supported {@link EventListener}s
      */
-    Collection<? extends EventListener<T, E>> getSupportedListeners();
+    Collection<? extends EventListener<T, S, E>> getSupportedListeners();
 }

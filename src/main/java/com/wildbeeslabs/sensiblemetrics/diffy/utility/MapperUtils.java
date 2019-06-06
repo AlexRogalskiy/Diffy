@@ -36,16 +36,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Mapper utilities implementation
  */
+@Slf4j
 @UtilityClass
 public class MapperUtils {
 
@@ -286,5 +290,28 @@ public class MapperUtils {
      */
     public static <T> String toFormatString(final T source) throws JsonProcessingException {
         return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(source);
+    }
+
+    /**
+     * Returns mapped {@code T} by input file name source {@link String} and {@link Class}
+     *
+     * @param <T>      type of object to be converted to
+     * @param fileName - initial input file name source {@link String} to be mapped from
+     * @param clazz    - initial input {@link Class} source to be mapped to {@code T}
+     * @return mapped {@code T} by input source {@link String} and {@link Class}
+     * @throws NullPointerException if filename is {@code null}
+     * @throws NullPointerException if clazz is {@code null}
+     */
+    public static <T> T fromYaml(final String fileName, final Class<T> clazz) {
+        Objects.requireNonNull(fileName, "File name should not be null");
+        Objects.requireNonNull(clazz, "Class should not be null");
+        final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        try {
+            final URL url = MapperUtils.class.getClassLoader().getResource(fileName);
+            return mapper.readValue(url, clazz);
+        } catch (Exception e) {
+            log.error(String.format("ERROR: cannot read properties from file = {%s}", fileName), e);
+        }
+        return null;
     }
 }

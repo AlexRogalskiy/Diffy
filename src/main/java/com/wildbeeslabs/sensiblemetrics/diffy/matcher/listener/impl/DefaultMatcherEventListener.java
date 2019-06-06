@@ -46,7 +46,7 @@ import static java.util.Arrays.asList;
 @Data
 @EqualsAndHashCode
 @ToString
-public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
+public class DefaultMatcherEventListener<T, S> implements MatcherEventListener<T, S> {
 
     /**
      * Default {@link MatcherEventListener} instance
@@ -76,7 +76,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link BaseMatcherEvent}
      */
     @Override
-    public void onSuccess(final BaseMatcherEvent<T> event) {
+    public void onSuccess(final BaseMatcherEvent<T, S> event) {
         if (this.isEnableMode(event)) {
             this.getSuccessMatchers().add(event.getMatcher());
         }
@@ -88,7 +88,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link BaseMatcherEvent}
      */
     @Override
-    public void onFailure(final BaseMatcherEvent<T> event) {
+    public void onFailure(final BaseMatcherEvent<T, S> event) {
         if (this.isEnableMode(event)) {
             this.getFailedMatchers().add(event.getMatcher());
         }
@@ -100,7 +100,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @param event - initial input {@link BaseMatcherEvent}
      * @return true - if current matcher mode is enabled, false - otherwise
      */
-    private boolean isEnableMode(final BaseMatcherEvent<T> event) {
+    private boolean isEnableMode(final BaseMatcherEvent<T, S> event) {
         return (Objects.nonNull(event.getMatcher()) && event.getMatcher().getMode().isEnable());
     }
 
@@ -110,7 +110,7 @@ public class DefaultMatcherEventListener<T> implements MatcherEventListener<T> {
      * @return {@link List} of supported {@link EventListener}s
      */
     @Override
-    public Collection<? extends EventListener<T, BaseMatcherEvent<T>>> getSupportedListeners() {
-        return asList((EventListener<T, BaseMatcherEvent<T>>) INSTANCE);
+    public Collection<? extends EventListener<T, S, BaseMatcherEvent<T, S>>> getSupportedListeners() {
+        return asList((EventListener<T, S, BaseMatcherEvent<T, S>>) INSTANCE);
     }
 }

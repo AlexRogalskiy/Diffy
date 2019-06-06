@@ -51,7 +51,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.get
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> implements TypeSafeMatcher<T> {
+public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T, T> implements TypeSafeMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -164,7 +164,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
         log.info("Emitting event with type = {%s}, value = {%s}", type, value);
         MatcherEvent<T> event = null;
         try {
-            event = MatcherEvent.of(this, value, type);
+            event = MatcherEvent.of(value, this, type);
             this.getHandler().handleEvent(event);
         } catch (Exception e) {
             log.error("ERROR: cannot handle event = {%s}", event);

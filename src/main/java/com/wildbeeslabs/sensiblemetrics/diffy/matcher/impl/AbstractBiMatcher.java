@@ -41,7 +41,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractBiMatcher<T> extends AbstractBaseMatcher<T> implements BiMatcher<T> {
+public abstract class AbstractBiMatcher<T, S> extends AbstractBaseMatcher<T, S> implements BiMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
