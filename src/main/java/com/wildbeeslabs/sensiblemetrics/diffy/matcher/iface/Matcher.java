@@ -335,16 +335,16 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * Tests input {@link Supplier} by {@link Matcher}
      *
      * @param <T>      type of input element to be matched by operation
-     * @param matcher  - initial input {@link Matcher}
      * @param supplier - initial input {@link Supplier}
+     * @param matcher  - initial input {@link Matcher}
      * @return true - if input {@link Supplier} matches {@link Matcher}, false - otherwise
      * @throws NullPointerException if matcher is {@code null}
      * @throws NullPointerException if supplier is {@code null}
      */
     @NonNull
-    static <T> boolean test(final Matcher<T> matcher, final Supplier<T> supplier) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+    static <T> boolean test(final Supplier<T> supplier, final Matcher<T> matcher) {
         Objects.requireNonNull(supplier, "Supplier should not be null!");
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
 
         try {
             return matcher.matches(supplier.get());
@@ -498,5 +498,17 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @NonNull
     static <T> Matcher<T> isEqual(final T value) {
         return Objects.isNull(value) ? Objects::isNull : (final T t) -> Objects.equals(value, t);
+    }
+
+    /**
+     * Returns identity {@link Matcher} operator by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param matcher - initial input {@link Matcher}
+     * @return identity {@link Matcher}
+     */
+    @NonNull
+    static <T> Matcher<T> identity(final Matcher<T> matcher) {
+        return (final T value) -> matcher.matches(value);
     }
 }

@@ -308,10 +308,10 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @throws NullPointerException if lastSupplier are {@code null}
      */
     @NonNull
-    static <T> boolean test(final BiMatcher<T> matcher, final Supplier<T> firstSupplier, final Supplier<T> lastSupplier) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+    static <T> boolean test(final Supplier<T> firstSupplier, final Supplier<T> lastSupplier, final BiMatcher<T> matcher) {
         Objects.requireNonNull(firstSupplier, "First supplier should not be null!");
         Objects.requireNonNull(lastSupplier, "Last supplier should not be null!");
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
 
         try {
             return matcher.matches(firstSupplier.get(), lastSupplier.get());
@@ -464,5 +464,17 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     static <T> BiMatcher<T> xnorAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
         return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
+    }
+
+    /**
+     * Returns identity {@link BiMatcher} operator by input {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param matcher - initial input {@link BiMatcher}
+     * @return identity {@link BiMatcher}
+     */
+    @NonNull
+    static <T> BiMatcher<T> identity(final BiMatcher<T> matcher) {
+        return (final T value1, final T value2) -> matcher.matches(value1, value2);
     }
 }
