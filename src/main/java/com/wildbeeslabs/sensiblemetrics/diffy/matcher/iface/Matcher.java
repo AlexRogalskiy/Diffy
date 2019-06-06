@@ -28,7 +28,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeType;
 import lombok.NonNull;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -39,6 +38,8 @@ import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
+import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
@@ -53,55 +54,58 @@ import static org.apache.commons.lang3.StringUtils.join;
 public interface Matcher<T> extends BaseMatcher<T> {
 
     /**
-     * Default true {@link Matcher}
-     */
-    Matcher<?> DEFAULT_TRUE_MATCHER = (value) -> true;
-    /**
-     * Default false {@link Matcher}
-     */
-    Matcher<?> DEFAULT_FALSE_MATCHER = (value) -> false;
-    /**
      * Default null {@link Matcher}
      */
-    Matcher<?> DEFAULT_NULL_MATCHER = (value) -> Objects.isNull(value);
+    Matcher<?> DEFAULT_NULL_MATCHER = Objects::isNull;
     /**
      * Default non-null {@link Matcher}
      */
-    Matcher<?> DEFAULT_NOTNULL_MATCHER = (value) -> Objects.nonNull(value);
+    Matcher<?> DEFAULT_NOTNULL_MATCHER = Objects::nonNull;
+
+    /**
+     * Default true {@link Matcher}
+     */
+    Matcher<?> DEFAULT_TRUE_MATCHER = value -> true;
+    /**
+     * Default false {@link Matcher}
+     */
+    Matcher<?> DEFAULT_FALSE_MATCHER = value -> false;
     /**
      * Default exception {@link Matcher}
      */
-    Matcher<?> DEFAULT_EXCEPTION_MATCHER = (value) -> {
+    Matcher<?> DEFAULT_EXCEPTION_MATCHER = value -> {
         throw new MatchOperationException();
     };
+
     /**
      * Default class {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_CLASS_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isInstance(value);
+    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> value -> clazz.isInstance(value);
     /**
      * Default equals {@link Matcher}
      */
-    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER = (final Object object) -> (value) -> Objects.equals(object, value);
+    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER = (final Object object) -> value -> Objects.equals(object, value);
     /**
-     * Default unique {@link Matcher}
+     * Default class nestmate {@link Matcher}
      */
-    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> (value) -> set.add(value);
-    /**
-     * Default contains {@link Matcher}
-     */
-    Function<Collection, Matcher<?>> DEFAULT_CONTAINS_MATCHER = (final Collection collection) -> (value) -> collection.contains(value);
-    /**
-     * Default instance {@link Matcher}
-     */
-    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isInstance(value);
+    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER = (final Class<?> clazz) -> value -> clazz.isNestmateOf(value.getClass());
     /**
      * Default assignable {@link Matcher}
      */
-    Function<Class<?>, Matcher<Class<?>>> DEFAULT_ASSIGNABLE_MATCHER = (final Class<?> clazz) -> (value) -> clazz.isAssignableFrom(value);
+    Function<Class<?>, Matcher<Class<?>>> DEFAULT_ASSIGNABLE_MATCHER = (final Class<?> clazz) -> value -> clazz.isAssignableFrom(value);
     /**
      * Default identity {@link Matcher}
      */
-    Function<String, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final String identity) -> (value) -> Objects.equals(identity, ObjectUtils.identityToString(value));
+    Function<Object, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final Object identity) -> value -> Objects.equals(identity, identityToString(value));
+
+    /**
+     * Default unique {@link Matcher}
+     */
+    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> value -> set.add(value);
+    /**
+     * Default contains {@link Matcher}
+     */
+    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER = (final Collection<?> collection) -> value -> collection.contains(value);
 
     /**
      * Returns binary flag by initial argument {@code T} match comparison
@@ -130,6 +134,15 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @Override
     default MatcherModeType getMode() {
         return MatcherModeType.STRICT;
+    }
+
+    /**
+     * Appends input {@link MatchDescription} by current description
+     *
+     * @param description - initial input {@link MatchDescription}
+     */
+    default void describeBy(final MatchDescription description) {
+        description.append(wrapInBraces.apply(this.getDescription()));
     }
 
     /**
@@ -286,6 +299,8 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param values - initial input collection of values {@code T}
      * @return true - if all input values {@code T} match, false - otherwise
      */
+    @NonNull
+    @SuppressWarnings("varargs")
     default boolean allMatch(final T... values) {
         return streamOf(values).allMatch(this::matches);
     }
@@ -296,6 +311,8 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param values - initial input collection of values {@code T}
      * @return true - if all input values {@code T} match, false - otherwise
      */
+    @NonNull
+    @SuppressWarnings("varargs")
     default boolean noneMatch(final T... values) {
         return streamOf(values).noneMatch(this::matches);
     }
@@ -306,17 +323,10 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param values - initial input collection of values {@code T}
      * @return true - if all input values {@code T} match, false - otherwise
      */
+    @NonNull
+    @SuppressWarnings("varargs")
     default boolean anyMatch(final T... values) {
         return streamOf(values).anyMatch(this::matches);
-    }
-
-    /**
-     * Appends input {@link MatchDescription} by current description
-     *
-     * @param description - initial input {@link MatchDescription}
-     */
-    default void describeBy(final MatchDescription description) {
-        description.append(wrapInBraces.apply(this.getDescription()));
     }
 
     /**
@@ -327,7 +337,22 @@ public interface Matcher<T> extends BaseMatcher<T> {
      * @param matcher - initial input {@link Matcher}
      * @return {@link Collection} of {@code T}
      */
+    @NonNull
     static <T> Collection<T> matchIf(final Iterable<T> values, final Matcher<T> matcher) {
+        return listOf(values).stream().filter(value -> matcher.matches(value)).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Collection} of {@code T} by input array of {@link Matcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input array of {@link Matcher}
+     * @return {@link Collection} of {@code T}
+     */
+    @NonNull
+    static <T> Collection<T> matchIf(final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
         return listOf(values).stream().filter(value -> matcher.matches(value)).collect(Collectors.toList());
     }
 
@@ -373,7 +398,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", join(matchers, "|")));
     }
 
     /**
@@ -395,7 +420,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", join(matchers, "|")));
     }
 
     /**
@@ -417,7 +442,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", join(matchers, "|")));
     }
 
     /**
@@ -439,7 +464,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> nandAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", join(matchers, "|")));
     }
 
     /**
@@ -461,7 +486,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> norAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", join(matchers, "|")));
     }
 
     /**
@@ -483,7 +508,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xnorAll(final Matcher<T>... matchers) {
         Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (Matcher<T> m) -> m.getMode().isEnable(), Matcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
     }
 
     /**
@@ -497,7 +522,7 @@ public interface Matcher<T> extends BaseMatcher<T> {
      */
     @NonNull
     static <T> Matcher<T> isEqual(final T value) {
-        return Objects.isNull(value) ? Objects::isNull : (final T t) -> Objects.equals(value, t);
+        return isNull(value) ? Objects::isNull : (final T t) -> Objects.equals(value, t);
     }
 
     /**

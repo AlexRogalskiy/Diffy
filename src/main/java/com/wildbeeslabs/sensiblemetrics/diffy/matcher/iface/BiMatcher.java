@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
@@ -33,11 +34,14 @@ import lombok.NonNull;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
+import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
@@ -52,27 +56,67 @@ import static org.apache.commons.lang3.StringUtils.join;
 public interface BiMatcher<T> extends BaseMatcher<T> {
 
     /**
-     * Default true {@link BiMatcher}
+     * Default {@link Matcher} to {@link BiMatcher}
      */
-    BiMatcher<?> DEFAULT_TRUE_MATCHER = (value1, value2) -> true;
-    /**
-     * Default false {@link BiMatcher}
-     */
-    BiMatcher<?> DEFAULT_FALSE_MATCHER = (value1, value2) -> false;
+    Function<Matcher, BiMatcher> DEFAULT_BIMATCHER = (final Matcher matcher) -> (value1, value2) -> matcher.allMatch(value1, value2);
+
     /**
      * Default null {@link BiMatcher}
      */
-    BiMatcher<?> DEFAULT_NULL_MATCHER = (value1, value2) -> Objects.isNull(value1) && Objects.isNull(value2);
+    BiMatcher<?> DEFAULT_NULL_BIMATCHER = DEFAULT_BIMATCHER.apply(Objects::isNull);
     /**
-     * Default identity {@link BiMatcher}
+     * Default non-null {@link BiMatcher}
      */
-    BiMatcher<?> DEFAULT_IDENTITY_MATCHER = (value1, value2) -> Objects.deepEquals(value1, value2);
+    BiMatcher<?> DEFAULT_NON_NULL_BIMATCHER = DEFAULT_BIMATCHER.apply(Objects::nonNull);
+
+    /**
+     * Default true {@link BiMatcher}
+     */
+    BiMatcher<?> DEFAULT_TRUE_BIMATCHER = (value1, value2) -> true;
+    /**
+     * Default false {@link BiMatcher}
+     */
+    BiMatcher<?> DEFAULT_FALSE_BIMATCHER = (value1, value2) -> false;
+    /**
+     * Default equals {@link BiMatcher}
+     */
+    BiMatcher<?> DEFAULT_DEEP_BIMATCHER = Objects::deepEquals;
     /**
      * Default exception {@link BiMatcher}
      */
-    BiMatcher<?> DEFAULT_EXCEPTION_MATCHER = (value1, value2) -> {
+    BiMatcher<?> DEFAULT_EXCEPTION_BIMATCHER = (value1, value2) -> {
         throw new BiMatchOperationException();
     };
+
+    /**
+     * Default class {@link BiMatcher}
+     */
+    Function<Class<?>, BiMatcher<?>> DEFAULT_INSTANCE_BIMATCHER = (final Class<?> clazz) -> DEFAULT_BIMATCHER.apply(value -> clazz.isInstance(value));
+    /**
+     * Default equals {@link BiMatcher}
+     */
+    Function<Object, BiMatcher<?>> DEFAULT_EQUALS_BIMATCHER = (final Object object) -> DEFAULT_BIMATCHER.apply(value -> Objects.equals(object, value));
+    /**
+     * Default class nestmate {@link BiMatcher}
+     */
+    Function<Class<?>, BiMatcher<?>> DEFAULT_NESTMATE_BIMATCHER = (final Class<?> clazz) -> DEFAULT_BIMATCHER.apply(value -> value.getClass().isNestmateOf(clazz));
+    /**
+     * Default assignable {@link BiMatcher}
+     */
+    Function<Class<?>, BiMatcher<Class<?>>> DEFAULT_ASSIGNABLE_BIMATCHER = (final Class<?> clazz) -> DEFAULT_BIMATCHER.apply(value -> clazz.isAssignableFrom(value.getClass()));
+    /**
+     * Default identity {@link BiMatcher}
+     */
+    Function<Object, BiMatcher<?>> DEFAULT_IDENTITY_BIMATCHER = (final Object identity) -> DEFAULT_BIMATCHER.apply(value -> Objects.equals(identity, identityToString(value)));
+
+    /**
+     * Default unique {@link BiMatcher}
+     */
+    Function<Set<Entry<?, ?>>, BiMatcher<?>> DEFAULT_UNIQUE_BIMATCHER = (final Set<Entry<?, ?>> set) -> (value1, value2) -> set.add(DefaultEntry.of(value1, value2));
+    /**
+     * Default contains {@link BiMatcher}
+     */
+    Function<Collection<?>, BiMatcher<?>> DEFAULT_EXIST_BIMATCHER = (final Collection<?> collection) -> (value1, value2) -> collection.contains(DefaultEntry.of(value1, value2));
 
     /**
      * Compares provided objects by equality constraint
@@ -95,15 +139,14 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     }
 
     /**
-     * Returns {@link Collection} of {@link Entry}s by input {@link BiMatcher}
+     * Appends input {@link MatchDescription} by current description
      *
-     * @param <T>     type of input element to be matched by operation {#link filter}
-     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
-     * @param matcher - initial input {@link BiMatcher}
-     * @return {@link Collection} of {@link Entry}s
+     * @param description - initial input {@link MatchDescription}
      */
-    static <T> Collection<Entry<T, T>> matchIf(final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
-        return listOf(values).stream().filter((entry -> matcher.matches(entry.getFirst(), entry.getLast()))).collect(Collectors.toList());
+    default void describeBy(final MatchDescription description) {
+        description.append("(");
+        description.append(this.getDescription());
+        description.append(")");
     }
 
     /**
@@ -260,6 +303,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
      * @return true - if all input values {@link Entry} match, false - otherwise
      */
+    @NonNull
     default boolean allMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().allMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
@@ -270,6 +314,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
      * @return true - if all input values {@link Entry} match, false - otherwise
      */
+    @NonNull
     default boolean noneMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
@@ -280,19 +325,36 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
      * @return true - if all input values {@link Entry} match, false - otherwise
      */
+    @NonNull
     default boolean anyMatch(final Iterable<Entry<T, T>> values) {
         return listOf(values).stream().anyMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**
-     * Appends input {@link MatchDescription} by current description
+     * Returns {@link Collection} of {@link Entry}s by input {@link BiMatcher}
      *
-     * @param description - initial input {@link MatchDescription}
+     * @param <T>     type of input element to be matched by operation {#link filter}
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Collection} of {@link Entry}s
      */
-    default void describeBy(final MatchDescription description) {
-        description.append("(");
-        description.append(this.getDescription());
-        description.append(")");
+    @NonNull
+    static <T> Collection<Entry<T, T>> matchIf(final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        return listOf(values).stream().filter((entry -> matcher.matches(entry.getFirst(), entry.getLast()))).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Collection} of {@link Entry}s by input array of {@link BiMatcher}s
+     *
+     * @param <T>      type of input element to be matched by operation {#link filter}
+     * @param values   - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matchers - initial input array of {@link BiMatcher}s
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> Collection<Entry<T, T>> matchIf(final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+        final BiMatcher<T> matcher = andAll(matchers);
+        return listOf(values).stream().filter((entry -> matcher.matches(entry.getFirst(), entry.getLast()))).collect(Collectors.toList());
     }
 
     /**
@@ -353,7 +415,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> andAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", join(matchers, "|")));
     }
 
     /**
@@ -375,7 +437,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> orAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", join(matchers, "|")));
     }
 
     /**
@@ -397,7 +459,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> xorAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", join(matchers, "|")));
     }
 
     /**
@@ -419,7 +481,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> nandAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", join(matchers, "|")));
     }
 
     /**
@@ -441,7 +503,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> norAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", join(matchers, "|")));
     }
 
     /**
@@ -463,7 +525,7 @@ public interface BiMatcher<T> extends BaseMatcher<T> {
     @SuppressWarnings("varargs")
     static <T> BiMatcher<T> xnorAll(final BiMatcher<T>... matchers) {
         Objects.requireNonNull(matchers, "BiMatchers should not be null!");
-        return reduceOrThrow(matchers, (BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
+        return reduceOrThrow(matchers, (final BiMatcher<T> m) -> m.getMode().isEnable(), BiMatcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
     }
 
     /**
