@@ -23,10 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.ApplicationContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.DispatchEventException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeBiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
@@ -172,6 +175,34 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
             this.getHandler().handleEvent(event);
         } catch (Exception ex) {
             log.error("ERROR: cannot handle event = {%s}", event);
+        }
+    }
+
+    /**
+     * Emits {@link MatcherEvent} by input parameters
+     *
+     * @param first - initial input first matchable value {@code T}
+     * @param last  - initial input last matchable value {@code T}
+     * @param type  - initial input {@link MatcherEventType}
+     */
+    private void dispatch(final T first, final T last, final MatcherEventType type) {
+        final BiMatcherEvent<T, S> event = (BiMatcherEvent<T, S>) BiMatcherEvent.of(DefaultEntry.of(first, last), this, type);
+        this.dispatch(event, new ApplicationContext());
+    }
+
+    /**
+     * Dispatches {@link BiMatcherEvent} by input parameters
+     *
+     * @param event   - initial input {@link BiMatcherEvent}
+     * @param context - initial input {@link ApplicationContext}
+     */
+    @Override
+    public void dispatch(final BiMatcherEvent<T, S> event, ApplicationContext context) {
+        log.info("Dispatching event={%s} with context={%s}", event, context);
+        try {
+            this.getHandler().handleEvent(event);
+        } catch (Exception e) {
+            DispatchEventException.throwDispatchError(String.format("ERROR: cannot dispatch event={%s}", event), e);
         }
     }
 }

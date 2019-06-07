@@ -23,6 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.ApplicationContext;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventDispatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
@@ -41,7 +44,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractBiMatcher<T, S> extends AbstractBaseMatcher<T, S> implements BiMatcher<T> {
+public abstract class AbstractBiMatcher<T, S> extends AbstractBaseMatcher<T, S> implements BiMatcher<T>, EventDispatcher<BiMatcherEvent<T, S>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -62,5 +65,15 @@ public abstract class AbstractBiMatcher<T, S> extends AbstractBaseMatcher<T, S> 
      */
     public AbstractBiMatcher(final MatcherHandler<T, S> handler) {
         super(handler);
+    }
+
+    /**
+     * Dispatches {@link BiMatcherEvent} by {@link ApplicationContext}
+     *
+     * @param event   - initial input {@link BiMatcherEvent}
+     * @param context - initial input {@link ApplicationContext}
+     */
+    @Override
+    public void dispatch(final BiMatcherEvent<T, S> event, final ApplicationContext context) {
     }
 }

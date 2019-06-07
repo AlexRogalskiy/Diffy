@@ -35,12 +35,12 @@ public interface EventStorage<T> {
      *
      * @param event - intial input {@link Event} to publish
      */
-    void publish(final Event<T> event);
+    void publish(final T event);
 
     /**
      * Subscribes to {@link Event} from event storage
      *
      * @param event - initial input {@link Event} to subscribe to
      */
-    void subscribe(final Event<T> event);
+    void subscribe(final T event);
 }

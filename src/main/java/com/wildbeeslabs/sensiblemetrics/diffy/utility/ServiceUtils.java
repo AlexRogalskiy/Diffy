@@ -57,6 +57,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class ServiceUtils {
 
     /**
@@ -74,6 +75,15 @@ public class ServiceUtils {
         }
     };
 
+    /**
+     * Returns {@link Enum} by input parameters
+     *
+     * @param <E>       type of enumeration item
+     * @param propValue - initial input property {@link String}
+     * @param enumType  - initial input enumeration type {@link Class}
+     * @return {@link Enum}
+     * @throws IllegalArgumentException
+     */
     public static <E extends Enum<E>> E toEnum(final String propValue, final Class<E> enumType) throws IllegalArgumentException {
         try {
             return Enum.valueOf(enumType, propValue);

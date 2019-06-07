@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventAdapter;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListenerAdapter;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.*;
 
@@ -47,7 +47,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractBaseMatcher<T, S> implements MatcherEventAdapter<T, S> {
+public abstract class AbstractBaseMatcher<T, S> implements MatcherEventListenerAdapter<T, S> {
 
     /**
      * Default explicit serialVersionUID for interoperability

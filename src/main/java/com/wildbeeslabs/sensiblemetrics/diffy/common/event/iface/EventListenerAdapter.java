@@ -21,16 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
-
-import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventAdapter;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 
 /**
- * Matcher {@link EventAdapter} interface declaration
+ * Event listener adapter interface declaration
  *
- * @param <T> type of input element to be matched by operation
+ * @param <T> type of event item
  */
-public interface MatcherEventAdapter<T, S> extends EventAdapter<T, S, BaseMatcherEvent<T, S>, MatcherEventListener<T, S>> {
+public interface EventListenerAdapter<T, S, E extends Event<S>, L extends EventListener<T, S, E>> {
+
+    /**
+     * Removes {@link EventListener} from current adapter
+     *
+     * @param listener - initial input {@link EventListener} to remove
+     */
+    void removeListener(final L listener);
+
+    /**
+     * Adds {@link EventListener} to current adapter
+     *
+     * @param listener - initial input {@link EventListener} to add
+     */
+    void addListener(final L listener);
+
+    /**
+     * Adds {@link Iterable} collection of {@link EventListener}s to current adapter
+     *
+     * @param listeners - initial input {@link Iterable} collection of {@link EventListener}s to add
+     */
+    void addListeners(final Iterable<L> listeners);
+
+    /**
+     * Removes all {@link EventListener}s from current adapter
+     */
+    void removeAllListeners();
 }

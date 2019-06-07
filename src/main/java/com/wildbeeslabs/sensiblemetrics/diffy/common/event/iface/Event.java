@@ -41,7 +41,7 @@ public interface Event<T> extends Serializable {
      * Used to indicate the <code>EventTarget</code> to which the event was
      * originally dispatched.
      */
-//    EventAdapter<T> getTarget();
+//    EventListenerAdapter<T> getTarget();
 
 //    public long getTimeStamp();
 }

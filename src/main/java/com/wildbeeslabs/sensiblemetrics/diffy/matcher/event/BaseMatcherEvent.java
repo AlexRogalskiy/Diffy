@@ -59,7 +59,7 @@ public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
     /**
      * Default base matcher event constructor by input arguments
      *
-     * @param source  - initial input event source {@code }
+     * @param source  - initial input event source {@code S}
      * @param matcher - initial input {@link BaseMatcher}
      * @param type    - initial input {@link MatcherEventType}
      */

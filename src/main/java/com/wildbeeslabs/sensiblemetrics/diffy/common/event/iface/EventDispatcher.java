@@ -38,5 +38,5 @@ public interface EventDispatcher<T> {
      * @param event   - initial input {@link Event}
      * @param context - initial input {@link ApplicationContext}
      */
-    void dispatch(final Event<T> event, final ApplicationContext context);
+    void dispatch(final T event, final ApplicationContext context);
 }

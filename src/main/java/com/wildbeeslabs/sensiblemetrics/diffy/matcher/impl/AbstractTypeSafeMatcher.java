@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.ApplicationContext;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.DispatchEventException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
@@ -129,18 +131,18 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @Override
     public final boolean matches(final T value) {
-        this.emit(value, MATCH_START);
+        this.dispatch(value, MATCH_START);
         boolean result = false;
         try {
-            this.emit(value, MATCH_BEFORE);
+            this.dispatch(value, MATCH_BEFORE);
             result = this.matchesInstance(value) && this.matchesSafe(value);
-            this.emit(value, fromBoolean(result));
-            this.emit(value, MATCH_AFTER);
+            this.dispatch(value, fromBoolean(result));
+            this.dispatch(value, MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.emit(value, MATCH_ERROR);
+            this.dispatch(value, MATCH_ERROR);
             MatchOperationException.throwIncorrectMatch(value, e);
         } finally {
-            this.emit(value, MATCH_COMPLETE);
+            this.dispatch(value, MATCH_COMPLETE);
         }
         return result;
     }
@@ -156,19 +158,28 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     }
 
     /**
-     * Emits {@link MatcherEvent} by input parameters
+     * Dispatches {@link MatcherEvent} by input parameters
      *
      * @param value - initial input matchable value {@code T}
      * @param type  - initial input {@link MatcherEventType}
      */
-    protected void emit(final T value, final MatcherEventType type) {
-        log.info("Emitting event with type = {%s}, value = {%s}", type, value);
-        MatcherEvent<T> event = null;
+    private void dispatch(final T value, final MatcherEventType type) {
+        this.dispatch(MatcherEvent.of(value, this, type), new ApplicationContext());
+    }
+
+    /**
+     * Dispatches {@link MatcherEvent} by input parameters
+     *
+     * @param event   - initial input {@link MatcherEvent}
+     * @param context - initial input {@link ApplicationContext}
+     */
+    @Override
+    public void dispatch(final MatcherEvent<T> event, ApplicationContext context) {
+        log.info("Dispatching event={%s} with context={%s}", event, context);
         try {
-            event = MatcherEvent.of(value, this, type);
             this.getHandler().handleEvent(event);
         } catch (Exception e) {
-            log.error("ERROR: cannot handle event = {%s}", event);
+            DispatchEventException.throwDispatchError(String.format("ERROR: cannot dispatch event={%s}", event), e);
         }
     }
 }

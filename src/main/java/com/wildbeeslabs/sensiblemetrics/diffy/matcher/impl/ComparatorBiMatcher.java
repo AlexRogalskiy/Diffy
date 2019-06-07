@@ -102,12 +102,13 @@ public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T
     }
 
     /**
-     * Appends input {@link MatchDescription} by current description
+     * Appends input {@link MatchDescription} by input parameters
      *
+     * @param value       - initial input {@link Entry} value
      * @param description - initial input {@link MatchDescription}
      */
     @Override
-    public void describeBy(final MatchDescription description) {
-        description.append(join("matches", wrapInBraces.apply(this.getComparator())));
+    public void describeBy(final Entry<T, T> value, final MatchDescription description) {
+        description.append(value).append(join("matches", wrapInBraces.apply(this.getComparator())));
     }
 }

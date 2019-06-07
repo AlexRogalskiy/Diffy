@@ -23,6 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.ApplicationContext;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventDispatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.Data;
@@ -40,7 +43,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractMatcher<T> extends AbstractBaseMatcher<T, T> implements Matcher<T> {
+public abstract class AbstractMatcher<T> extends AbstractBaseMatcher<T, T> implements Matcher<T>, EventDispatcher<MatcherEvent<T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -61,5 +64,15 @@ public abstract class AbstractMatcher<T> extends AbstractBaseMatcher<T, T> imple
      */
     public AbstractMatcher(final MatcherHandler<T, T> handler) {
         super(handler);
+    }
+
+    /**
+     * Dispatches {@link MatcherEvent} by {@link ApplicationContext}
+     *
+     * @param event   - initial input {@link MatcherEvent}
+     * @param context - initial input {@link ApplicationContext}
+     */
+    @Override
+    public void dispatch(final MatcherEvent<T> event, final ApplicationContext context) {
     }
 }

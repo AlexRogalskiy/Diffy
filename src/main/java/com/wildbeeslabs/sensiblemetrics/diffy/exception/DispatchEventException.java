@@ -29,66 +29,55 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Event {@link RuntimeException} implementation
+ * Dispatch event {@link RuntimeException} implementation
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class EventException extends RuntimeException {
+public class DispatchEventException extends EventException {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 8527860211271422953L;
+    private static final long serialVersionUID = 3972916816581230822L;
 
     /**
-     * Event exception constructor with initial input message
+     * Dispatch event exception constructor with initial input message
      *
      * @param message - initial input message {@link String}
      */
-    public EventException(final String message) {
+    public DispatchEventException(final String message) {
         super(message);
     }
 
     /**
-     * Event exception constructor with initial input {@link Throwable}
+     * Dispatch event exception constructor with initial input {@link Throwable}
      *
      * @param cause - initial input cause target {@link Throwable}
      */
-    public EventException(final Throwable cause) {
+    public DispatchEventException(final Throwable cause) {
         super(cause);
     }
 
     /**
-     * Event constructor with initial input message and {@link Throwable}
+     * Dispatch event constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input message {@link String}
      * @param cause   - initial input cause target {@link Throwable}
      */
-    public EventException(final String message, final Throwable cause) {
+    public DispatchEventException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link EventException} by input parameters
-     *
-     * @param message - initial input raw message {@link String}
-     * @return {@link EventException}
-     */
-    @Factory
-    public static final EventException throwExecutionError(final String message) {
-        throw new EventException(message);
-    }
-
-    /**
-     * Returns {@link EventException} by input parameters
+     * Returns {@link DispatchEventException} by input parameters
      *
      * @param message   - initial input raw message {@link String}
      * @param throwable - initial input cause target {@link Throwable}
-     * @return {@link EventException}
+     * @return {@link DispatchEventException}
      */
     @Factory
-    public static final EventException throwExecutionError(final String message, final Throwable throwable) {
-        throw new EventException(message, throwable);
+    public static final DispatchEventException throwDispatchError(final String message, final Throwable throwable) {
+        throw new DispatchEventException(message, throwable);
     }
 }

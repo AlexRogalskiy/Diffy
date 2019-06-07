@@ -124,10 +124,10 @@ public abstract class AbstractDiffMatcher<T, S> implements DiffMatcher<T> {
         return this;
     }
 
-    public void describeBy(final MatchDescription description) {
+    public void describeBy(final T value, final MatchDescription description) {
         description.append("[");
         for (final Iterator<Matcher<? super T>> it = this.matchers.iterator(); it.hasNext(); ) {
-            it.next().describeBy(description);
+            it.next().describeBy(value, description);
             if (it.hasNext()) {
                 description.append(", ");
             }

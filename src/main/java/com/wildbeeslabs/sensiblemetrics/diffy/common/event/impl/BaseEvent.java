@@ -41,11 +41,11 @@ import java.util.Objects;
 public abstract class BaseEvent<T> implements Event<T> {
 
     /**
-     * Default {@link Object} source
+     * Default event {@link Object} source
      */
     private transient T source;
     /**
-     * Default {@link Throwable} cause
+     * Default event {@link Throwable} cause
      */
     private final Throwable cause;
     /**
@@ -70,7 +70,7 @@ public abstract class BaseEvent<T> implements Event<T> {
      */
     public BaseEvent(final T source, final Throwable cause) {
         if (Objects.isNull(source)) {
-            throw new IllegalArgumentException(String.format("ERROR: event source is null"));
+            throw new IllegalArgumentException("ERROR: event source is null");
         }
         this.source = source;
         this.cause = cause;

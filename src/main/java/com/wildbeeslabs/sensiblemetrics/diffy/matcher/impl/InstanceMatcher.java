@@ -77,13 +77,14 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
     }
 
     /**
-     * Appends input {@link MatchDescription} by current description
+     * Appends input {@link MatchDescription} by input parameters
      *
+     * @param value       - initial input {@link Object}
      * @param description - initial input {@link MatchDescription}
      */
     @Override
-    public void describeBy(final MatchDescription description) {
-        description.append(join("matches", wrapInQuotes.apply(this.matchableClazz.getName())));
+    public void describeBy(final Object value, final MatchDescription description) {
+        description.append(value).append(join("matches", wrapInQuotes.apply(this.matchableClazz.getName())));
     }
 
     /**
