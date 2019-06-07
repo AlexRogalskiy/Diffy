@@ -74,7 +74,7 @@ public class BaseMatchDescription implements MatchDescription {
      * @return {@link MatchDescription}
      */
     @Override
-    public MatchDescription append(final String value) {
+    public MatchDescription appendText(final String value) {
         return this.appendBy(value);
     }
 
@@ -87,6 +87,17 @@ public class BaseMatchDescription implements MatchDescription {
     @Override
     public MatchDescription append(final Object value) {
         return this.appendBy(value);
+    }
+
+    /**
+     * Appends input {@link MatchDescription} to current description {@link MatchDescription}
+     *
+     * @param description - initial input {@link MatchDescription} to be appended {@link Object}
+     * @return current description instance {@link MatchDescription}
+     */
+    @Override
+    public MatchDescription appendDescription(final MatchDescription description) {
+        return this.appendBy(description);
     }
 
     /**

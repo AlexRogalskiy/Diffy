@@ -140,16 +140,6 @@ public class ServiceUtils {
         return listOf(list).stream().filter(predicate).findFirst().isPresent();
     }
 
-    public static <T> Stream<T> asStream(final Iterator<T> sourceIterator) {
-        return asStream(sourceIterator, false);
-    }
-
-    public static <T> Stream<T> asStream(final Iterator<T> sourceIterator, final boolean parallel) {
-        Objects.requireNonNull(sourceIterator, "Source iterator should not be null");
-        final Iterable<T> iterable = () -> sourceIterator;
-        return StreamSupport.stream(iterable.spliterator(), parallel);
-    }
-
     /**
      * Returns converted value by converter instance {@link Converter}
      *
@@ -248,6 +238,44 @@ public class ServiceUtils {
     }
 
     /**
+     * Returns non-nullable {@link Stream} of {@code T} by input {@link Iterable} collection of {@code T} values
+     *
+     * @param <T>      type of input element to be converted from by operation
+     * @param iterable - initial input {@link Iterable} collection of {@code T} values
+     * @return non-nullable {@link Stream} of {@code T}
+     */
+    @NonNull
+    public static <T> Stream<T> streamOf(final Iterable<T> iterable) {
+        Objects.requireNonNull(iterable, "Iterable should not be null");
+        return (iterable instanceof Collection) ? ((Collection<T>) iterable).stream() : StreamSupport.stream(iterable.spliterator(), false);
+    }
+
+    /**
+     * Returns non-nullable {@link Stream} of {@code T} by input {@link Iterator}
+     *
+     * @param <T>      type of input element to be converted from by operation
+     * @param iterator - initial input {@link Iterator}
+     * @param parallel - initial input parallel flag
+     * @return non-nullable {@link Stream} of {@code T}
+     */
+    @NonNull
+    public static <T> Stream<T> streamOf(final Iterator<T> iterator, final boolean parallel) {
+        Objects.requireNonNull(iterator, "Source iterator should not be null");
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), parallel);
+    }
+
+    /**
+     * Returns non-nullable {@link Stream} of {@code T} by input {@link Iterator}
+     *
+     * @param <T>      type of input element to be converted from by operation
+     * @param iterator - initial input {@link Iterator}
+     * @return non-nullable {@link Stream} of {@code T}
+     */
+    public static <T> Stream<T> asStream(final Iterator<T> iterator) {
+        return streamOf(iterator, false);
+    }
+
+    /**
      * Returns non-nullable {@link Iterable} collection from input {@link Iterable} collection of values {@code T}
      *
      * @param <T>      type of input element to be converted from by operation
@@ -256,7 +284,7 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> List<T> listOf(final Iterable<T> iterable) {
-        return StreamSupport.stream(Optional.ofNullable(iterable).orElseGet(Collections::emptyList).spliterator(), false).collect(Collectors.toList());
+        return streamOf(iterable).collect(Collectors.toList());
     }
 
     /**

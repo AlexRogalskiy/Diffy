@@ -146,9 +146,9 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @param description - initial input {@link MatchDescription}
      * @throws NullPointerException if description is {@code null}
      */
-    default void describeBy(final MatchDescription description) {
+    default void describeBy(final Entry<T, T> value, final MatchDescription description) {
         Objects.requireNonNull(description, "Description should not be null");
-        description.append(wrapInBraces.apply(this.getDescription()));
+        description.append(value).append(wrapInBraces.apply(this.getDescription()));
     }
 
     /**

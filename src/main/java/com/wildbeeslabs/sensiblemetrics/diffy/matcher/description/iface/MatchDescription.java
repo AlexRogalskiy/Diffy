@@ -49,7 +49,7 @@ public interface MatchDescription extends Serializable {
      * @param value - initial input string value to be appended {@link String}
      * @return current description instance {@link MatchDescription}
      */
-    MatchDescription append(final String value);
+    MatchDescription appendText(final String value);
 
     /**
      * Appends input object value to current description {@link MatchDescription}
@@ -58,6 +58,14 @@ public interface MatchDescription extends Serializable {
      * @return current description instance {@link MatchDescription}
      */
     MatchDescription append(final Object value);
+
+    /**
+     * Appends input {@link MatchDescription} to current description {@link MatchDescription}
+     *
+     * @param description - initial input {@link MatchDescription} to be appended {@link Object}
+     * @return current description instance {@link MatchDescription}
+     */
+    MatchDescription appendDescription(final MatchDescription description);
 
     /**
      * Appends input collection of values to current description {@link MatchDescription} by start/delimiter/end tokens
@@ -103,7 +111,7 @@ public interface MatchDescription extends Serializable {
          * @return current empty description instance {@link MatchDescription}
          */
         @Override
-        public MatchDescription append(final String value) {
+        public MatchDescription appendText(final String value) {
             return this;
         }
 
@@ -115,6 +123,17 @@ public interface MatchDescription extends Serializable {
          */
         @Override
         public MatchDescription append(final Object value) {
+            return this;
+        }
+
+        /**
+         * Appends input {@link MatchDescription} to current description {@link MatchDescription}
+         *
+         * @param description - initial input {@link MatchDescription} to be appended {@link Object}
+         * @return current description instance {@link MatchDescription}
+         */
+        @Override
+        public MatchDescription appendDescription(final MatchDescription description) {
             return this;
         }
 

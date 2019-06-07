@@ -143,9 +143,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param description - initial input {@link MatchDescription}
      * @throws NullPointerException if description is {@code null}
      */
-    default void describeBy(final MatchDescription description) {
+    default void describeBy(final T value, final MatchDescription description) {
         Objects.requireNonNull(description, "Description should not be null");
-        description.append(wrapInBraces.apply(this.getDescription()));
+        description.append(value).append(wrapInBraces.apply(this.getDescription()));
     }
 
     /**
