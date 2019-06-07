@@ -39,7 +39,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BiMatcherEvent<T> extends BaseMatcherEvent<T, Entry<T, T>> {
+public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, Entry<T, T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -66,7 +66,7 @@ public class BiMatcherEvent<T> extends BaseMatcherEvent<T, Entry<T, T>> {
      * @return {@link BiMatcherEvent}
      */
     @Factory
-    public static <T> BiMatcherEvent<T> of(final Entry<T, T> source, final BiMatcher<T> matcher, final boolean status) {
+    public static <T, S> BiMatcherEvent<T, S> of(final Entry<T, T> source, final BiMatcher<T> matcher, final boolean status) {
         return of(source, matcher, MatcherEventType.fromBoolean(status));
     }
 
@@ -79,7 +79,7 @@ public class BiMatcherEvent<T> extends BaseMatcherEvent<T, Entry<T, T>> {
      * @return {@link BiMatcherEvent}
      */
     @Factory
-    public static <T> BiMatcherEvent<T> of(final Entry<T, T> source, final BiMatcher<T> matcher, final MatcherEventType type) {
+    public static <T, S> BiMatcherEvent<T, S> of(final Entry<T, T> source, final BiMatcher<T> matcher, final MatcherEventType type) {
         return new BiMatcherEvent(source, matcher, type);
     }
 }

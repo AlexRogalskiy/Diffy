@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
@@ -35,6 +36,8 @@ import java.util.Comparator;
 import java.util.Optional;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.compare;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
+import static java.lang.String.join;
 
 /**
  * Comparator {@link BiMatcher} implementation
@@ -47,7 +50,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.com
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T> {
+public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T, T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -81,7 +84,7 @@ public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T> {
      * @param handler    - initial input {@link MatcherHandler}
      * @param comparator - initial input {@link Comparator}
      */
-    public ComparatorBiMatcher(final MatcherHandler<T> handler, final Comparator<? super T> comparator) {
+    public ComparatorBiMatcher(final MatcherHandler<T, Entry<T, T>> handler, final Comparator<? super T> comparator) {
         super(handler);
         this.comparator = Optional.ofNullable(comparator).orElseGet(() -> Comparator.comparing(Object::toString));
     }
@@ -105,6 +108,6 @@ public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T> {
      */
     @Override
     public void describeBy(final MatchDescription description) {
-        description.append("matches(\"" + this.getComparator() + "\")");
+        description.append(join("matches", wrapInBraces.apply(this.getComparator())));
     }
 }

@@ -57,6 +57,13 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.stream
 public class ComparatorUtils {
 
     /**
+     * Default {@link Comparator}
+     *
+     * @see ComparableComparator#getInstance
+     */
+    public static final Comparator DEFAULT_COMPARATOR = ComparableComparator.getInstance();
+
+    /**
      * Default comparator with false first order {@link Comparator}
      */
     public static final Comparator<? super Boolean> DEFAULT_FALSE_FIRST_COMPARATOR = (a, b) -> Objects.equals(a, b) ? 0 : b ? -1 : 1;
@@ -799,7 +806,7 @@ public class ComparatorUtils {
          * Default null-safe comparable comparator constructor
          */
         public DefaultComparableComparator() {
-            super(ComparableComparator.getInstance(), false);
+            super(DEFAULT_COMPARATOR, false);
         }
     }
 
@@ -1060,7 +1067,7 @@ public class ComparatorUtils {
                 int lastSize = o2.length;
                 if (firstSize < lastSize) return -1;
                 if (firstSize > lastSize) return 1;
-                final Comparator<? super T> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
+                final Comparator<? super T> comp = Optional.ofNullable(comparator).orElse(DEFAULT_COMPARATOR);
                 for (int i = 0; i < firstSize; i++) {
                     int temp = Objects.compare(o1[i], o2[i], comp);
                     if (0 != temp) return temp;
@@ -1104,7 +1111,7 @@ public class ComparatorUtils {
         public LexicographicalNullSafeArrayComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
             super((o1, o2) -> {
                 int minLength = Math.min(o1.length, o2.length);
-                final Comparator<? super T> comp = Objects.isNull(comparator) ? ComparableComparator.getInstance() : comparator;
+                final Comparator<? super T> comp = Optional.ofNullable(comparator).orElse(DEFAULT_COMPARATOR);
                 for (int i = 0; i < minLength; i++) {
                     int result = Objects.compare(o1[i], o2[i], comp);
                     if (0 != result) return result;

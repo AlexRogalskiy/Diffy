@@ -32,12 +32,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSo
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.comparators.ComparableComparator;
 
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.DEFAULT_COMPARATOR;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingDouble;
 
@@ -63,7 +63,7 @@ public class DeliveryInfoFactory {
     /**
      * {@link DeliveryInfo} comparator by "status" field
      */
-    public static final Comparator<DeliveryInfo> SORT_BY_STATUS = comparing(DeliveryInfo::getStatus, ComparableComparator.getInstance());
+    public static final Comparator<DeliveryInfo> SORT_BY_STATUS = comparing(DeliveryInfo::getStatus, DEFAULT_COMPARATOR);
     /**
      * {@link DeliveryInfo} comparator by "balance" field
      */

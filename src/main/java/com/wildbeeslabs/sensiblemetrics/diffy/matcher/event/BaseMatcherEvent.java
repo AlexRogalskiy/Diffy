@@ -50,7 +50,7 @@ public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
     /**
      * Default {@link BaseMatcher}
      */
-    private final BaseMatcher<T> matcher;
+    private final BaseMatcher<T, S> matcher;
     /**
      * Default {@link MatcherEventType}
      */
@@ -63,7 +63,7 @@ public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
      * @param matcher - initial input {@link BaseMatcher}
      * @param type    - initial input {@link MatcherEventType}
      */
-    public BaseMatcherEvent(final S source, final BaseMatcher<T> matcher, final MatcherEventType type) {
+    public BaseMatcherEvent(final S source, final BaseMatcher<T, S> matcher, final MatcherEventType type) {
         super(source);
         this.matcher = matcher;
         this.type = type;

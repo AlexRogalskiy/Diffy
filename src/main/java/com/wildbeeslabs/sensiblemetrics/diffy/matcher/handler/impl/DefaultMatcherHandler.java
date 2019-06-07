@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.executor.impl.TaskExecutorService.execute;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Default {@link MatcherHandler} implementation
@@ -47,7 +47,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.executor.impl.TaskExecutorS
 @Data
 @EqualsAndHashCode
 @ToString
-public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
+public class DefaultMatcherHandler<T, S> implements MatcherHandler<T, S> {
 
     /**
      * Default {@link Object} mutex
@@ -92,10 +92,9 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @param event - initial input event {@link E} to handle
      */
     @Override
-    public <S, E extends BaseMatcherEvent<T, S>> void handleEvent(final E event) {
+    public <E extends BaseMatcherEvent<T, S>> void handleEvent(final E event) {
         if (this.isEnableMode(event)) {
-            Optional.ofNullable(event.getMatcher().getListeners())
-                .orElseGet(Collections::emptyList)
+            listOf(event.getMatcher().getListeners())
                 .stream()
                 .filter(Objects::nonNull)
                 .forEach(listener -> execute(DEFAULT_TIMEOUT, () -> this.invokeEventListener(event, listener), this.getExecutor()));
@@ -109,7 +108,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @param event - initial input {@link BaseMatcherEvent}
      * @return true - if event handler is enabled, false - otherwise
      */
-    private <S, E extends BaseMatcherEvent<T, S>> boolean isEnableMode(final E event) {
+    private <E extends BaseMatcherEvent<T, S>> boolean isEnableMode(final E event) {
         return Objects.nonNull(event) && event.getMatcher().isEnable();
     }
 
@@ -120,7 +119,7 @@ public class DefaultMatcherHandler<T> implements MatcherHandler<T> {
      * @param event    - initial input {@link BaseMatcherEvent}
      * @param listener - initial input {@link MatcherEventListener}
      */
-    private <S, E extends BaseMatcherEvent<T, S>> void invokeEventListener(final E event, final MatcherEventListener<T, S> listener) {
+    private <E extends BaseMatcherEvent<T, S>> void invokeEventListener(final E event, final MatcherEventListener<T, S> listener) {
         //synchronized (this.mutex) {
         switch (event.getType()) {
             case MATCH_SUCCESS:

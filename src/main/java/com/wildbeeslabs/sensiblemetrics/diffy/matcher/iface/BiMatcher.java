@@ -55,7 +55,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * @since 1.0
  */
 @FunctionalInterface
-public interface BiMatcher<T> extends BaseMatcher<T> {
+public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
 
     /**
      * Default {@link Matcher} to {@link BiMatcher}

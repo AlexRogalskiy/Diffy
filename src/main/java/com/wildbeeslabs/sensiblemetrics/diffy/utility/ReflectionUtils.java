@@ -48,10 +48,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.TypeUtils.*;
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
@@ -184,7 +186,7 @@ public class ReflectionUtils {
      * @return true - if shared type is assigned by input collection of argument types, fales - otherwise
      */
     public static boolean allAssignableFrom(final Class<?> sharedType, final Iterable<? extends Class<?>> types) {
-        final Iterable<? extends Class<?>> traversableType = Optional.ofNullable(types).orElseGet(Collections::emptyList);
+        final Iterable<? extends Class<?>> traversableType = listOf(types);
         return !StreamSupport.stream(traversableType.spliterator(), false).allMatch(sharedType::isAssignableFrom);
     }
 
@@ -319,7 +321,7 @@ public class ReflectionUtils {
      */
     public static Field[] getAllFields(final List<Class<?>> classes) {
         final Set<Field> fields = new HashSet<>();
-        Optional.of(classes).orElseGet(Collections::emptyList).forEach(clazz -> fields.addAll(Arrays.asList(clazz.getDeclaredFields())));
+        listOf(classes).forEach(clazz -> fields.addAll(asList(clazz.getDeclaredFields())));
         return fields.toArray(new Field[fields.size()]);
     }
 
@@ -724,7 +726,7 @@ public class ReflectionUtils {
         final Class<?> returnType = getter.getReturnType();
 
         if (Comparable.class.isAssignableFrom(returnType) || returnType.isPrimitive()) {
-            Collections.sort(Optional.ofNullable(list).orElseGet(Collections::emptyList),
+            Collections.sort(listOf(list),
                 (e1, e2) -> {
                     try {
                         final Comparable<Object> val1 = (Comparable<Object>) getter.invoke(e1);

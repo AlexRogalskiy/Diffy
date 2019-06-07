@@ -137,7 +137,7 @@ public class ServiceUtils {
         Objects.requireNonNull(list, "List should not be null");
         Objects.requireNonNull(predicate, "Predicate should not be null");
 
-        return Optional.ofNullable(list).orElseGet(Collections::emptyList).stream().filter(predicate).findFirst().isPresent();
+        return listOf(list).stream().filter(predicate).findFirst().isPresent();
     }
 
     public static <T> Stream<T> asStream(final Iterator<T> sourceIterator) {

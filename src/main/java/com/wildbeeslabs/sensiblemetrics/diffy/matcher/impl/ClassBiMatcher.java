@@ -23,14 +23,17 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.ClassUtils;
 
 import java.util.Comparator;
-import java.util.Objects;
+
+import static java.util.Objects.nonNull;
 
 /**
  * Class {@link BiMatcher} implementation
@@ -43,7 +46,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ClassBiMatcher<T> extends AbstractTypeSafeBiMatcher<T> {
+public class ClassBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T, T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -62,7 +65,7 @@ public class ClassBiMatcher<T> extends AbstractTypeSafeBiMatcher<T> {
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public ClassBiMatcher(final MatcherHandler<T> handler) {
+    public ClassBiMatcher(final MatcherHandler<T, Entry<T, T>> handler) {
         super(handler);
     }
 
@@ -75,6 +78,6 @@ public class ClassBiMatcher<T> extends AbstractTypeSafeBiMatcher<T> {
      */
     @Override
     public boolean matchesSafe(final T first, final T last) {
-        return Objects.nonNull(first) && Objects.nonNull(last) && first.getClass() == last.getClass();
+        return nonNull(first) && nonNull(last) && ClassUtils.isAssignable(first.getClass(), last.getClass());
     }
 }

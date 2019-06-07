@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getMethodType;
 
 /**
@@ -52,7 +53,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.get
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> implements TypeSafeBiMatcher<T> {
+public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<T, S> implements TypeSafeBiMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -81,7 +82,7 @@ public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> 
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractTypeSafeBiMatcher(final MatcherHandler<T> handler) {
+    public AbstractTypeSafeBiMatcher(final MatcherHandler<T, S> handler) {
         this(handler, DEFAULT_METHOD_TYPE);
     }
 
@@ -102,7 +103,7 @@ public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> 
      * @param methodType - initial input {@link ReflectionUtils.ReflectionMethodType}
      */
     @SuppressWarnings("unchecked")
-    public AbstractTypeSafeBiMatcher(final MatcherHandler<T> handler, final ReflectionUtils.ReflectionMethodType methodType) {
+    public AbstractTypeSafeBiMatcher(final MatcherHandler<T, S> handler, final ReflectionUtils.ReflectionMethodType methodType) {
         super(handler);
         this.clazz = (Class<? extends T>) (Optional.ofNullable(methodType).orElse(DEFAULT_METHOD_TYPE)).getType(this.getClass());
     }
@@ -114,7 +115,7 @@ public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> 
      * @param clazz   - initial input {@link Class}
      */
     @SuppressWarnings("unchecked")
-    public AbstractTypeSafeBiMatcher(final MatcherHandler<T> handler, final Class<? extends T> clazz) {
+    public AbstractTypeSafeBiMatcher(final MatcherHandler<T, S> handler, final Class<? extends T> clazz) {
         super(handler);
         this.clazz = Objects.isNull(clazz)
             ? (Class<? extends T>) DEFAULT_METHOD_TYPE.getType(this.getClass())
@@ -130,18 +131,18 @@ public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> 
      */
     @Override
     public boolean matches(final T first, final T last) {
-        this.emit(first, last, MatcherEventType.MATCH_START);
+        this.emit(first, last, MATCH_START);
         boolean result = false;
         try {
-            this.emit(first, last, MatcherEventType.MATCH_BEFORE);
+            this.emit(first, last, MATCH_BEFORE);
             result = this.matchesInstance(first) && this.matchesInstance(last) && this.matchesSafe(first, last);
-            this.emit(first, last, MatcherEventType.fromBoolean(result));
-            this.emit(first, last, MatcherEventType.MATCH_AFTER);
+            this.emit(first, last, fromBoolean(result));
+            this.emit(first, last, MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.emit(first, last, MatcherEventType.MATCH_ERROR);
+            this.emit(first, last, MATCH_ERROR);
             BiMatchOperationException.throwIncorrectMatch(first, last, e);
         } finally {
-            this.emit(first, last, MatcherEventType.MATCH_COMPLETE);
+            this.emit(first, last, MATCH_COMPLETE);
         }
         return result;
     }
@@ -165,7 +166,7 @@ public abstract class AbstractTypeSafeBiMatcher<T> extends AbstractBiMatcher<T> 
      */
     protected void emit(final T first, final T last, final MatcherEventType type) {
         log.info("Emitting event with type = {%s}, first value = {%s}, last value = {%s}", type, first, last);
-        BiMatcherEvent<T> event = null;
+        BiMatcherEvent<T, S> event = null;
         try {
             event = BiMatcherEvent.of(DefaultEntry.of(first, last), this, type);
             this.getHandler().handleEvent(event);

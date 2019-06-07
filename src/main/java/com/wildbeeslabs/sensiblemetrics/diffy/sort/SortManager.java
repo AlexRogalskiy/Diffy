@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.NullPriority.NATIVE;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -108,9 +109,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
             throw new IllegalArgumentException("ERROR: should be provided at least one property to sort by");
         }
         this.orders = new ArrayList<>(properties.size());
-        Optional.ofNullable(properties)
-            .orElseGet(Collections::emptyList)
-            .forEach(property -> this.orders.add(new SortOrder(direction, property)));
+        listOf(properties).forEach(property -> this.orders.add(new SortOrder(direction, property)));
     }
 
     /**

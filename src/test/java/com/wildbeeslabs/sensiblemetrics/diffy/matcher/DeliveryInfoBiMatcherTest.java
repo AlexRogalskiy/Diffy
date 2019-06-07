@@ -35,7 +35,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.collections.comparators.ComparableComparator;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,6 +47,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.*;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.DEFAULT_COMPARATOR;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtilsTest.*;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertTrue;
@@ -1072,7 +1072,7 @@ public class DeliveryInfoBiMatcherTest extends AbstractDeliveryInfoDiffTest {
         // given
         final Map.Entry<String, Integer> d1 = new AbstractMap.SimpleEntry<>("aa", 56);
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
-        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>(ComparableComparator.getInstance());
+        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator<>(DEFAULT_COMPARATOR);
 
         // then
         thrown.expect(BiMatchOperationException.class);

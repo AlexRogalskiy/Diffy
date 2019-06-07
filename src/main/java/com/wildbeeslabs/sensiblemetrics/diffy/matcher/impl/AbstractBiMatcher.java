@@ -60,7 +60,7 @@ public abstract class AbstractBiMatcher<T, S> extends AbstractBaseMatcher<T, S> 
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractBiMatcher(final MatcherHandler<T> handler) {
+    public AbstractBiMatcher(final MatcherHandler<T, S> handler) {
         super(handler);
     }
 }

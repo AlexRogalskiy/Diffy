@@ -28,10 +28,14 @@ import com.wildbeeslabs.sensiblemetrics.diffy.configuration.iface.Configuration;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Diffy {@link Configuration} implementation
@@ -78,9 +82,7 @@ public final class DiffyConfiguration<T> implements Configuration<T> {
      * @param keys - initial input {@link Iterable} collection of {@link DiffyConfigurationKey}s
      */
     public DiffyConfiguration(final Iterable<DiffyConfigurationKey<T>> keys) {
-        Optional.ofNullable(keys)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::registerKey);
+        listOf(keys).forEach(this::registerKey);
     }
 
     /**

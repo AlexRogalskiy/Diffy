@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 
+import com.google.common.collect.Iterables;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,10 +43,11 @@ public enum CollectionValidatorType {
     IS_EMPTY(CollectionUtils::isEmpty),
     IS_FULL(CollectionUtils::isFull),
     IS_NOT_EMPTY(CollectionUtils::isNotEmpty),
-    IS_SIZE_EMPTY(CollectionUtils::sizeIsEmpty);
+    IS_SIZE_EMPTY(CollectionUtils::sizeIsEmpty),
+    IS_SIZEEMPTY(Iterables::isEmpty);
 
     /**
-     * String {@link Predicate} validator operator
+     * Collection {@link Predicate} validator operator
      */
     private final Predicate<Collection<?>> validator;
 }

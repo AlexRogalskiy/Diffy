@@ -52,7 +52,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * @since 1.0
  */
 @FunctionalInterface
-public interface Matcher<T> extends BaseMatcher<T> {
+public interface Matcher<T> extends BaseMatcher<T, T> {
 
     /**
      * Default null {@link Matcher}

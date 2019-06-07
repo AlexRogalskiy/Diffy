@@ -56,11 +56,11 @@ public class DefaultMatcherEventListener<T, S> implements MatcherEventListener<T
     /**
      * Default {@link Collection} collection of failed {@link BaseMatcher}
      */
-    private final Collection<? super BaseMatcher<T>> failedMatchers;
+    private final Collection<? super BaseMatcher<T, S>> failedMatchers;
     /**
      * Default {@link Collection} collection of success {@link BaseMatcher}
      */
-    private final Collection<? super BaseMatcher<T>> successMatchers;
+    private final Collection<? super BaseMatcher<T, S>> successMatchers;
 
     /**
      * Default matcher event listener constructor

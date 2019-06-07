@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T> {
+public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T, Entry<T, T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -62,7 +63,7 @@ public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T> {
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public DefaultDiffMatcher(final MatcherHandler<T> handler) {
+    public DefaultDiffMatcher(final MatcherHandler<T, Entry<T, T>> handler) {
         super(handler);
     }
 

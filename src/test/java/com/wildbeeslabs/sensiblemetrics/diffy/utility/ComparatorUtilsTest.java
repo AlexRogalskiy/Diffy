@@ -49,6 +49,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.DEFAULT_COMPARATOR;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.lessThan;
@@ -96,7 +97,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Iterator<?> iteratorFirst = o1.iterator();
         final Iterator<?> iteratorLast = o2.iterator();
         while (iteratorFirst.hasNext()) {
-            int temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), ComparableComparator.getInstance());
+            int temp = Objects.compare(iteratorFirst.next(), iteratorLast.next(), DEFAULT_COMPARATOR);
             if (0 != temp) return temp;
         }
         return 0;
@@ -854,7 +855,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         List<Integer> ints = this.generateInts(size, 1000).val();
 
         // when
-        Collections.sort(ints, ComparableComparator.getInstance());
+        Collections.sort(ints, DEFAULT_COMPARATOR);
 
         //then
         assertThat(ints, hasSize(size));
@@ -1097,7 +1098,7 @@ public class ComparatorUtilsTest extends AbstractDiffTest {
         final Map.Entry<String, Integer> d2 = new AbstractMap.SimpleEntry<>("ww", 1);
 
         // when
-        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator(ComparableComparator.getInstance());
+        final Comparator<? super Map.Entry<String, Integer>> comparator = new ComparatorUtils.DefaultMapEntryComparator(DEFAULT_COMPARATOR);
 
         // then
         assertThat(comparator.compare(d1, d2), lessThan(0));

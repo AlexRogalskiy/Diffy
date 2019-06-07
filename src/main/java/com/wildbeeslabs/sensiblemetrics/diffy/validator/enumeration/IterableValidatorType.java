@@ -21,37 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchRejectionException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.google.common.collect.Iterables;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.function.Predicate;
 
 /**
- * Reject {@link MatcherHandler} implementation
- *
- * @param <T> type of input element to be matched by operation
+ * Iterable validator type {@link Enum}
  */
-@Data
-@EqualsAndHashCode
-@ToString
-public class RejectMatcherHandler<T, S> implements MatcherHandler<T, S> {
+@Getter
+@RequiredArgsConstructor
+public enum IterableValidatorType {
+    /**
+     * com.google.common.collect.Iterables
+     */
+    IS_EMPTY(Iterables::isEmpty);
 
     /**
-     * Default {@link MatcherHandler}
+     * Iterable {@link Predicate} validator operator
      */
-    public static final MatcherHandler INSTANCE = new RejectMatcherHandler<>();
-
-    /**
-     * {@link BaseMatcherEvent} handler by input event {@link BaseMatcherEvent}
-     *
-     * @param event - initial input event {@link BaseMatcherEvent} to handle
-     */
-    @Override
-    public <E extends BaseMatcherEvent<T, S>> void handleEvent(final E event) {
-        MatchRejectionException.throwReject(event);
-    }
+    private final Predicate<Iterable<?>> validator;
 }

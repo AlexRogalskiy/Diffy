@@ -46,6 +46,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
+
 /**
  * Mapper utilities implementation
  */
@@ -137,8 +139,7 @@ public class MapperUtils {
      * @return list of mapped objects of <code>outClass</code> type
      */
     public static <T, D> List<? extends D> toList(final Collection<T> source, final Class<? extends D> outClass) {
-        return Optional.ofNullable(source)
-            .orElseGet(Collections::emptyList)
+        return listOf(source)
             .stream()
             .map(entity -> map(entity, outClass))
             .collect(Collectors.toList());

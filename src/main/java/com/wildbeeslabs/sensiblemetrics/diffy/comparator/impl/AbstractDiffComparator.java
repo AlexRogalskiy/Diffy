@@ -31,13 +31,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.comparators.ComparableComparator;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.DEFAULT_COMPARATOR;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
 
 /**
@@ -98,9 +99,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public AbstractDiffComparator(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
         this.clazz = Objects.requireNonNull(clazz, "Class should not be null!");
-        this.comparator = Objects.nonNull(comparator)
-            ? comparator
-            : ComparableComparator.getInstance();
+        this.comparator = Optional.ofNullable(comparator).orElse(DEFAULT_COMPARATOR);
         this.getPropertyMap().putAll(this.getFieldsMap(this.clazz));
         this.getPropertySet().addAll(this.getPropertyMap().keySet());
     }
@@ -111,9 +110,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param properties - initial input {@link Iterable} collection of properties {@link String} to exclude from comparison
      */
     public void excludeProperties(final Iterable<String> properties) {
-        Optional.ofNullable(properties)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::excludeProperty);
+        listOf(properties).forEach(this::excludeProperty);
     }
 
     /**
@@ -134,9 +131,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void includeProperties(final Iterable<String> properties) {
         this.getPropertySet().clear();
-        Optional.ofNullable(properties)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::includeProperty);
+        listOf(properties).forEach(this::includeProperty);
     }
 
     /**
@@ -191,9 +186,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param properties - initial input {@link Iterable} collection of properties {@link String}
      */
     protected void removeComparators(final Iterable<String> properties) {
-        Optional.ofNullable(properties)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::removeComparator);
+        listOf(properties).forEach(this::removeComparator);
     }
 
     /**

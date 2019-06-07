@@ -37,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getMethodType;
 
 /**
@@ -51,7 +52,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.get
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T, T> implements TypeSafeMatcher<T> {
+public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> implements TypeSafeMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -80,7 +81,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T, T> i
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractTypeSafeMatcher(final MatcherHandler<T> handler) {
+    public AbstractTypeSafeMatcher(final MatcherHandler<T, T> handler) {
         this(handler, DEFAULT_METHOD_TYPE);
     }
 
@@ -101,7 +102,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T, T> i
      * @param methodType - initial input {@link ReflectionUtils.ReflectionMethodType}
      */
     @SuppressWarnings("unchecked")
-    public AbstractTypeSafeMatcher(final MatcherHandler<T> handler, final ReflectionUtils.ReflectionMethodType methodType) {
+    public AbstractTypeSafeMatcher(final MatcherHandler<T, T> handler, final ReflectionUtils.ReflectionMethodType methodType) {
         super(handler);
         this.clazz = (Class<? extends T>) (Optional.ofNullable(methodType).orElse(DEFAULT_METHOD_TYPE)).getType(this.getClass());
     }
@@ -113,7 +114,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T, T> i
      * @param clazz   - initial input {@link Class}
      */
     @SuppressWarnings("unchecked")
-    public AbstractTypeSafeMatcher(final MatcherHandler<T> handler, final Class<? extends T> clazz) {
+    public AbstractTypeSafeMatcher(final MatcherHandler<T, T> handler, final Class<? extends T> clazz) {
         super(handler);
         this.clazz = Objects.isNull(clazz)
             ? (Class<? extends T>) DEFAULT_METHOD_TYPE.getType(this.getClass())
@@ -128,18 +129,18 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T, T> i
      */
     @Override
     public final boolean matches(final T value) {
-        this.emit(value, MatcherEventType.MATCH_START);
+        this.emit(value, MATCH_START);
         boolean result = false;
         try {
-            this.emit(value, MatcherEventType.MATCH_BEFORE);
+            this.emit(value, MATCH_BEFORE);
             result = this.matchesInstance(value) && this.matchesSafe(value);
-            this.emit(value, MatcherEventType.fromBoolean(result));
-            this.emit(value, MatcherEventType.MATCH_AFTER);
+            this.emit(value, fromBoolean(result));
+            this.emit(value, MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.emit(value, MatcherEventType.MATCH_ERROR);
+            this.emit(value, MATCH_ERROR);
             MatchOperationException.throwIncorrectMatch(value, e);
         } finally {
-            this.emit(value, MatcherEventType.MATCH_COMPLETE);
+            this.emit(value, MATCH_COMPLETE);
         }
         return result;
     }

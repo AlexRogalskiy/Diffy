@@ -32,5 +32,5 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEven
  *
  * @param <T> type of input element to be matched by operation
  */
-public interface MatcherEventAdapter<T, S> extends EventAdapter<T, BaseMatcherEvent<T, S>, MatcherEventListener<T, S>> {
+public interface MatcherEventAdapter<T, S> extends EventAdapter<T, S, BaseMatcherEvent<T, S>, MatcherEventListener<T, S>> {
 }

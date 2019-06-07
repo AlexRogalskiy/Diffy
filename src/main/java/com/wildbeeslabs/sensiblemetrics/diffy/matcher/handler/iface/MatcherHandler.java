@@ -31,12 +31,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
  * @param <T> type of input element to be handled by operation
  */
 @FunctionalInterface
-public interface MatcherHandler<T> {
+public interface MatcherHandler<T, S> {
 
     /**
      * {@link BaseMatcherEvent} handler by input event {@code E}
      *
      * @param event - initial input event {@link E} to handle
      */
-    <S, E extends BaseMatcherEvent<T, S>> void handleEvent(final E event);
+    <E extends BaseMatcherEvent<T, S>> void handleEvent(final E event);
 }

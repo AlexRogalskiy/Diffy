@@ -29,7 +29,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventAdapter;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Abstract base matcher implementation
@@ -57,7 +62,7 @@ public abstract class AbstractBaseMatcher<T, S> implements MatcherEventAdapter<T
      * Default {@link MatcherHandler} implementation
      */
     @Getter(AccessLevel.PROTECTED)
-    private final MatcherHandler<T> handler;
+    private final MatcherHandler<T, S> handler;
 
     /**
      * Default abstract matcher constructor
@@ -71,7 +76,7 @@ public abstract class AbstractBaseMatcher<T, S> implements MatcherEventAdapter<T
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractBaseMatcher(final MatcherHandler<T> handler) {
+    public AbstractBaseMatcher(final MatcherHandler<T, S> handler) {
         this.handler = Optional.ofNullable(handler).orElse(DefaultMatcherHandler.INSTANCE);
     }
 
@@ -106,7 +111,7 @@ public abstract class AbstractBaseMatcher<T, S> implements MatcherEventAdapter<T
      */
     @Override
     public void addListeners(final Iterable<MatcherEventListener<T, S>> listeners) {
-        Optional.ofNullable(listeners).orElseGet(Collections::emptyList).forEach(this::addListener);
+        listOf(listeners).forEach(this::addListener);
     }
 
     /**

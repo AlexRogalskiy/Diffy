@@ -34,6 +34,8 @@ import lombok.ToString;
 
 import java.util.*;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
+
 /**
  * Abstract matcher implementation
  *
@@ -45,7 +47,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
+public abstract class AbstractDiffMatcher<T, S> implements DiffMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -59,7 +61,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
     /**
      * Default {@link MatcherHandler} implementation
      */
-    private final MatcherHandler<T> handler;
+    private final MatcherHandler<T, S> handler;
 
     /**
      * Default abstract matcher constructor
@@ -73,7 +75,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public AbstractDiffMatcher(final MatcherHandler<T> handler) {
+    public AbstractDiffMatcher(final MatcherHandler<T, S> handler) {
         this.handler = Optional.ofNullable(handler).orElse(DefaultMatcherHandler.INSTANCE);
     }
 
@@ -82,10 +84,8 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
      *
      * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
      */
-    public AbstractDiffMatcher<T> exclude(final Iterable<Matcher<? super T>> matchers) {
-        Optional.ofNullable(matchers)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::exclude);
+    public AbstractDiffMatcher<T, S> exclude(final Iterable<Matcher<? super T>> matchers) {
+        listOf(matchers).forEach(this::exclude);
         return this;
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
      *
      * @param matcher - initial input {@link Matcher} to remove
      */
-    public AbstractDiffMatcher<T> exclude(final Matcher<? super T> matcher) {
+    public AbstractDiffMatcher<T, S> exclude(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
             this.getMatchers().remove(matcher);
         }
@@ -106,11 +106,9 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
      *
      * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
      */
-    public AbstractDiffMatcher<T> include(final Iterable<Matcher<? super T>> matchers) {
+    public AbstractDiffMatcher<T, S> include(final Iterable<Matcher<? super T>> matchers) {
         this.getMatchers().clear();
-        Optional.ofNullable(matchers)
-            .orElseGet(Collections::emptyList)
-            .forEach(this::include);
+        listOf(matchers).forEach(this::include);
         return this;
     }
 
@@ -119,7 +117,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
      *
      * @param matcher - initial input matcher {@link Matcher} to add
      */
-    public AbstractDiffMatcher<T> include(final Matcher<? super T> matcher) {
+    public AbstractDiffMatcher<T, S> include(final Matcher<? super T> matcher) {
         if (Objects.nonNull(matcher)) {
             this.getMatchers().add(matcher);
         }
@@ -128,7 +126,7 @@ public abstract class AbstractDiffMatcher<T> implements DiffMatcher<T> {
 
     public void describeBy(final MatchDescription description) {
         description.append("[");
-        for (Iterator<Matcher<? super T>> it = this.matchers.iterator(); it.hasNext(); ) {
+        for (final Iterator<Matcher<? super T>> it = this.matchers.iterator(); it.hasNext(); ) {
             it.next().describeBy(description);
             if (it.hasNext()) {
                 description.append(", ");
