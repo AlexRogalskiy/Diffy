@@ -24,8 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,7 +39,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, Entry<T, T>> {
+public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -53,7 +53,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, Entry<T, T>> {
      * @param matcher - initial input {@link BiMatcher}
      * @param type    - initial input event type {@link MatcherEventType}
      */
-    public BiMatcherEvent(final Entry<T, T> source, final BiMatcher<T> matcher, final MatcherEventType type) {
+    public BiMatcherEvent(final S source, final BaseMatcher<T, S> matcher, final MatcherEventType type) {
         super(source, matcher, type);
     }
 
@@ -66,7 +66,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, Entry<T, T>> {
      * @return {@link BiMatcherEvent}
      */
     @Factory
-    public static <T, S> BiMatcherEvent<T, S> of(final Entry<T, T> source, final BiMatcher<T> matcher, final boolean status) {
+    public static <T, S> BiMatcherEvent<T, S> of(final S source, final BaseMatcher<T, S> matcher, final boolean status) {
         return of(source, matcher, MatcherEventType.fromBoolean(status));
     }
 
@@ -79,7 +79,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, Entry<T, T>> {
      * @return {@link BiMatcherEvent}
      */
     @Factory
-    public static <T, S> BiMatcherEvent<T, S> of(final Entry<T, T> source, final BiMatcher<T> matcher, final MatcherEventType type) {
+    public static <T, S> BiMatcherEvent<T, S> of(final S source, final BaseMatcher<T, S> matcher, final MatcherEventType type) {
         return new BiMatcherEvent(source, matcher, type);
     }
 }

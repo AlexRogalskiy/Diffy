@@ -168,7 +168,7 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
         log.info("Emitting event with type = {%s}, first value = {%s}, last value = {%s}", type, first, last);
         BiMatcherEvent<T, S> event = null;
         try {
-            event = BiMatcherEvent.of(DefaultEntry.of(first, last), this, type);
+            event = (BiMatcherEvent<T, S>) BiMatcherEvent.of(DefaultEntry.of(first, last), this, type);
             this.getHandler().handleEvent(event);
         } catch (Exception ex) {
             log.error("ERROR: cannot handle event = {%s}", event);
