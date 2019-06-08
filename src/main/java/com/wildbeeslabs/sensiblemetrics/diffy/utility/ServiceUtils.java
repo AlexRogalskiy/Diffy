@@ -308,4 +308,16 @@ public class ServiceUtils {
     public static <T> Iterable<T> iterableOf(final Iterator<T> iterator) {
         return () -> iterator;
     }
+
+    /**
+     * Returns {@link Set} by input array of {@code T} items
+     *
+     * @param <T>   type of input element to be converted from by operation
+     * @param value - initial input array of {@code T}s
+     * @return {@link Set} of {@link T}s
+     */
+    @NonNull
+    private static <T> Set<T> arrayToSet(final T[] value) {
+        return new HashSet<>(Arrays.asList(value));
+    }
 }

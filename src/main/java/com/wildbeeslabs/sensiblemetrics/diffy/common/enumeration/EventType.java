@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Event type {@link Enum}
@@ -47,5 +48,14 @@ public enum EventType {
             .filter(type -> type.name().equalsIgnoreCase(name))
             .findFirst()
             .orElse(null);
+    }
+
+    /**
+     * Returns {@link List} of all {@link EventType}s
+     *
+     * @return {@link List} of all {@link EventType}s
+     */
+    public static List<EventType> valuesList() {
+        return Arrays.asList(EventType.values());
     }
 }
