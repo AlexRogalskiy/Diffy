@@ -132,7 +132,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         this.getDeliveryInfo().setUpdatedAt(toDate("27/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DefaultMatcherEventListener<DeliveryInfo> listener = new DefaultMatcherEventListener<>();
+        final DefaultMatcherEventListener<DeliveryInfo, DeliveryInfo> listener = new DefaultMatcherEventListener<>();
         final AbstractMatcher<DeliveryInfo> deliveryInfoMatcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {
@@ -162,7 +162,7 @@ public class DeliveryInfoMatcherTest extends AbstractDeliveryInfoDiffTest {
         this.getDeliveryInfo().setUpdatedAt(toDate("26/09/2018", DEFAULT_DATE_FORMAT));
 
         // when
-        final DefaultMatcherEventListener<DeliveryInfo> listener = new DefaultMatcherEventListener<>();
+        final DefaultMatcherEventListener<DeliveryInfo, DeliveryInfo> listener = new DefaultMatcherEventListener<>();
         final AbstractMatcher<DeliveryInfo> deliveryInfoMatcher = new AbstractTypeSafeMatcher<>() {
             @Override
             public boolean matchesSafe(final DeliveryInfo value) {

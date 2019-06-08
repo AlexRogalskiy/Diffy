@@ -54,6 +54,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.stream
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class ComparatorUtils {
 
     /**

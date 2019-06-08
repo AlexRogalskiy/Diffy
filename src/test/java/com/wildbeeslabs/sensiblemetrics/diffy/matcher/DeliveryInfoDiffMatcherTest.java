@@ -66,6 +66,7 @@ import static org.mockito.Matchers.startsWith;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class DeliveryInfoDiffMatcherTest extends AbstractDeliveryInfoDiffTest {
 
     /**

@@ -47,6 +47,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public abstract class AbstractBaseMatcher<T, S> implements MatcherEventListenerAdapter<T, S> {
 
     /**
