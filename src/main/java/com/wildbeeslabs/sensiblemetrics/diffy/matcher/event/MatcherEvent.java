@@ -66,7 +66,7 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T, T> {
      */
     @Factory
     public static <T> MatcherEvent<T> of(final T source, final Matcher<T> matcher, final boolean status) {
-        return of(source, matcher, MatcherEventType.fromBoolean(status));
+        return of(source, matcher, MatcherEventType.fromSuccess(status));
     }
 
     /**

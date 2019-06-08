@@ -67,7 +67,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
      */
     @Factory
     public static <T, S> BiMatcherEvent<T, S> of(final S source, final BaseMatcher<T, S> matcher, final boolean status) {
-        return of(source, matcher, MatcherEventType.fromBoolean(status));
+        return of(source, matcher, MatcherEventType.fromSuccess(status));
     }
 
     /**

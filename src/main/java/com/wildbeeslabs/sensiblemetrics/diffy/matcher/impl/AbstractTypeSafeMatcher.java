@@ -136,7 +136,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
         try {
             this.dispatch(value, MATCH_BEFORE);
             result = this.matchesInstance(value) && this.matchesSafe(value);
-            this.dispatch(value, fromBoolean(result));
+            this.dispatch(value, fromSuccess(result));
             this.dispatch(value, MATCH_AFTER);
         } catch (RuntimeException e) {
             this.dispatch(value, MATCH_ERROR);

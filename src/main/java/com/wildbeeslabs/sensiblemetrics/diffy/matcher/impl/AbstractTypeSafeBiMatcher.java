@@ -139,7 +139,7 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
         try {
             this.emit(first, last, MATCH_BEFORE);
             result = this.matchesInstance(first) && this.matchesInstance(last) && this.matchesSafe(first, last);
-            this.emit(first, last, fromBoolean(result));
+            this.emit(first, last, fromSuccess(result));
             this.emit(first, last, MATCH_AFTER);
         } catch (RuntimeException e) {
             this.emit(first, last, MATCH_ERROR);

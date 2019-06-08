@@ -84,7 +84,7 @@ public enum BiMatcherModeType implements BaseMatcherMode {
      * @return {@link BiMatcherModeType}
      */
     @NonNull
-    public BiMatcherModeType byStatusType(final MatcherStatusType statusType) {
+    public BiMatcherModeType fromStatus(final MatcherStatusType statusType) {
         if (statusType.isEnable()) {
             return isExtensible() ? STRICT : SEALED;
         }
@@ -98,7 +98,7 @@ public enum BiMatcherModeType implements BaseMatcherMode {
      * @return {@link BiMatcherModeType}
      */
     @NonNull
-    public BiMatcherModeType byExtensionMode(final boolean extensible) {
+    public BiMatcherModeType fromExtension(final boolean extensible) {
         if (extensible) {
             return isEnable() ? STRICT : LENIENT;
         }

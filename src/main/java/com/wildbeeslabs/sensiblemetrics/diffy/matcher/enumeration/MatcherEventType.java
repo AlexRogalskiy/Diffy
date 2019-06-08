@@ -43,14 +43,36 @@ public enum MatcherEventType {
     MATCH_FAILURE;
 
     /**
-     * Returns {@link MatcherEventType} by input binary value
+     * Returns {@link MatcherEventType} by input binary success flag
      *
-     * @param value - initial input binary value
+     * @param value - initial input binary success flag
      * @return {@link MatcherEventType}
      */
     @NonNull
-    public static MatcherEventType fromBoolean(final boolean value) {
+    public static MatcherEventType fromSuccess(final boolean value) {
         return value ? MATCH_SUCCESS : MATCH_FAILURE;
+    }
+
+    /**
+     * Returns {@link MatcherEventType} by input binary start flag
+     *
+     * @param value - initial input binary start flag
+     * @return {@link MatcherEventType}
+     */
+    @NonNull
+    public static MatcherEventType fromStart(final boolean value) {
+        return value ? MATCH_START : MATCH_COMPLETE;
+    }
+
+    /**
+     * Returns {@link MatcherEventType} by input binary before flag
+     *
+     * @param value - initial input binary before flag
+     * @return {@link MatcherEventType}
+     */
+    @NonNull
+    public static MatcherEventType fromBefore(final boolean value) {
+        return value ? MATCH_BEFORE : MATCH_AFTER;
     }
 
     /**

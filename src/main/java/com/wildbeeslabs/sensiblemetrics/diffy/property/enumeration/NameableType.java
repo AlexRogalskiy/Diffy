@@ -53,7 +53,7 @@ public enum NameableType {
      * @return {@link NameableType}
      */
     @NonNull
-    public static NameableType from(final PropertyType propertyType) {
+    public static NameableType fromProperty(final PropertyType propertyType) {
         if (PropertyType.FIELD.equals(propertyType)) {
             return FIELD;
         } else if (PropertyType.METHOD.equals(propertyType)) {
