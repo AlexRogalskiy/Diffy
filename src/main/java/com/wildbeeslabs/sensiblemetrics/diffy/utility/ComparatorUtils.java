@@ -1849,4 +1849,52 @@ public class ComparatorUtils {
             }
         }
     }
+
+    /**
+     * Double {@link DefaultNullSafeComparator} implementation
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultDoubleComparator extends DefaultNullSafeComparator<Double> {
+
+        /**
+         * Default double precision
+         */
+        private final double precision;
+
+        /**
+         * Default null-safe object comparator constructor
+         */
+        public DefaultDoubleComparator() {
+            this(Comparator.comparing(Object::toString));
+        }
+
+        /**
+         * Default null-safe object comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultDoubleComparator(@Nullable final Comparator<? super Double> comparator) {
+            this(comparator, false, 0.000005);
+        }
+
+        /**
+         * Default null-safe object comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultDoubleComparator(@Nullable final Comparator<? super Double> comparator, boolean nullsInPriority, double precision) {
+            super(Objects.isNull(comparator) ? (o1, o2) -> {
+                if (closeEnough(o1, o2, precision)) return 0;
+                return o1 < o2 ? -1 : 1;
+            } : comparator, nullsInPriority);
+            this.precision = precision;
+        }
+
+        private static boolean closeEnough(final Double x, final Double y, double epsilon) {
+            return Math.abs(x - y) <= epsilon;
+        }
+    }
 }
