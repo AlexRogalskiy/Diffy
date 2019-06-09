@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
 import com.google.common.collect.Iterables;
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import lombok.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.util.*;
@@ -1859,42 +1861,247 @@ public class ComparatorUtils {
     public static class DefaultDoubleComparator extends DefaultNullSafeComparator<Double> {
 
         /**
+         * Default precision
+         */
+        public static final double DEFAULT_PRECISION = 0.000005;
+
+        /**
          * Default double precision
          */
         private final double precision;
 
         /**
-         * Default null-safe object comparator constructor
+         * Default null-safe double comparator constructor
          */
         public DefaultDoubleComparator() {
             this(Comparator.comparing(Object::toString));
         }
 
         /**
-         * Default null-safe object comparator constructor with initial comparator instance {@link Comparator}
+         * Default null-safe double comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
         public DefaultDoubleComparator(@Nullable final Comparator<? super Double> comparator) {
-            this(comparator, false, 0.000005);
+            this(comparator, false, DEFAULT_PRECISION);
         }
 
         /**
-         * Default null-safe object comparator constructor with input "null" priority argument {@link Boolean}
+         * Default null-safe double comparator constructor with input "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
          */
+        public DefaultDoubleComparator(@Nullable final Comparator<? super Double> comparator, boolean nullsInPriority) {
+            this(comparator, nullsInPriority, DEFAULT_PRECISION);
+        }
+
+        /**
+         * Default null-safe double comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         * @param precision       - initial input "null" precision argument {@link Double}
+         */
         public DefaultDoubleComparator(@Nullable final Comparator<? super Double> comparator, boolean nullsInPriority, double precision) {
-            super(Objects.isNull(comparator) ? (o1, o2) -> {
+            super(Objects.isNull(comparator)
+                ? (o1, o2) -> {
                 if (closeEnough(o1, o2, precision)) return 0;
                 return o1 < o2 ? -1 : 1;
-            } : comparator, nullsInPriority);
+            }
+                : comparator, nullsInPriority);
             this.precision = precision;
         }
 
-        private static boolean closeEnough(final Double x, final Double y, double epsilon) {
-            return Math.abs(x - y) <= epsilon;
+        /**
+         * Returns binary flag by input parameters
+         *
+         * @param first   - initial input first argument {@link Double}
+         * @param last    - initial input last argument {@link Double}
+         * @param epsilon - initial input epsilon value
+         * @return true - if input {@link Double}s matches, false - otherwise
+         */
+        private static boolean closeEnough(final Double first, final Double last, double epsilon) {
+            return Math.abs(first - last) <= epsilon;
+        }
+    }
+
+    /**
+     * Float {@link DefaultNullSafeComparator} implementation
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultFloatComparator extends DefaultNullSafeComparator<Float> {
+
+        /**
+         * Default precision
+         */
+        public static final float DEFAULT_PRECISION = 0.000005f;
+
+        /**
+         * Default float precision
+         */
+        private final float precision;
+
+        /**
+         * Default null-safe double comparator constructor
+         */
+        public DefaultFloatComparator() {
+            this(Comparator.comparing(Object::toString));
+        }
+
+        /**
+         * Default null-safe double comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultFloatComparator(@Nullable final Comparator<? super Float> comparator) {
+            this(comparator, false, DEFAULT_PRECISION);
+        }
+
+        /**
+         * Default null-safe double comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultFloatComparator(@Nullable final Comparator<? super Float> comparator, boolean nullsInPriority) {
+            this(comparator, nullsInPriority, DEFAULT_PRECISION);
+        }
+
+        /**
+         * Default null-safe float comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         * @param precision       - initial input "null" precision argument {@link Float}
+         */
+        public DefaultFloatComparator(@Nullable final Comparator<? super Float> comparator, boolean nullsInPriority, float precision) {
+            super(Objects.isNull(comparator)
+                ? (o1, o2) -> {
+                if (closeEnough(o1, o2, precision)) return 0;
+                return o1 < o2 ? -1 : 1;
+            }
+                : comparator, nullsInPriority);
+            this.precision = precision;
+        }
+
+        /**
+         * Returns binary flag by input parameters
+         *
+         * @param first   - initial input first argument {@link Float}
+         * @param last    - initial input last argument {@link Float}
+         * @param epsilon - initial input epsilon value
+         * @return true - if input {@link Float}s matches, false - otherwise
+         */
+        private static boolean closeEnough(final Float first, final Float last, float epsilon) {
+            return Math.abs(first - last) <= epsilon;
+        }
+    }
+
+    /**
+     * Number {@link DefaultNullSafeComparator} implementation
+     */
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static abstract class AbstractComparableNumberComparator<T extends Number & Comparable<T>> extends DefaultNullSafeComparator<T> {
+
+        /**
+         * Default null-safe number comparator constructor
+         */
+        public AbstractComparableNumberComparator() {
+            this(null);
+        }
+
+        /**
+         * Default null-safe number comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public AbstractComparableNumberComparator(@Nullable final Comparator<? super T> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe number comparator constructor with initial comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public AbstractComparableNumberComparator(@Nullable final Comparator<? super T> comparator, boolean nullsInPriority) {
+            super(Objects.isNull(comparator) ? Comparator.naturalOrder() : comparator, nullsInPriority);
+        }
+    }
+
+    /**
+     * Big decimal {@link AbstractComparableNumberComparator} implementation
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class BigDecimalComparator extends AbstractComparableNumberComparator<BigDecimal> {
+
+        /**
+         * an instance of {@link BigDecimalComparator}.
+         */
+        public static final BigDecimalComparator BIG_DECIMAL_COMPARATOR = new BigDecimalComparator();
+    }
+
+    /**
+     * Big integer {@link AbstractComparableNumberComparator} implementation
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class BigIntegerComparator extends AbstractComparableNumberComparator<BigInteger> {
+
+        /**
+         * Default instance of {@link BigIntegerComparator}.
+         */
+        public static final BigIntegerComparator BIG_INTEGER_COMPARATOR = new BigIntegerComparator();
+    }
+
+    public static class DeltaComparator<T> extends DefaultNullSafeComparator<Delta<T>> {
+
+        /**
+         * Default instance of {@link DeltaComparator}.
+         */
+        public static final Comparator<?> INSTANCE = new DeltaComparator<>();
+
+        /**
+         * Default null-safe delta comparator constructor
+         */
+        public DeltaComparator() {
+            this(Comparator.comparing(Object::toString));
+        }
+
+        /**
+         * Default null-safe delta comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DeltaComparator(@Nullable final Comparator<? super Delta<T>> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe delta comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DeltaComparator(@Nullable final Comparator<? super Delta<T>> comparator, boolean nullsInPriority) {
+            super(Objects.isNull(comparator)
+                ? (o1, o2) -> {
+                final int posA = o1.getOriginal().getPosition();
+                final int posB = o2.getOriginal().getPosition();
+                if (posA > posB) {
+                    return 1;
+                } else if (posA < posB) {
+                    return -1;
+                }
+                return 0;
+            } : comparator, nullsInPriority);
         }
     }
 }

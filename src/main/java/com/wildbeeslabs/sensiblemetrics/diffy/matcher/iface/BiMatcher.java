@@ -39,7 +39,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.entry.DefaultEntry.of;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;

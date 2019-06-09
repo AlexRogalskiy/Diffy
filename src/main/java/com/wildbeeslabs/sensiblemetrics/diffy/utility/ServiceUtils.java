@@ -31,6 +31,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -45,6 +46,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -260,6 +262,26 @@ public class ServiceUtils {
         return (iterable instanceof Collection) ? ((Collection<T>) iterable).stream() : StreamSupport.stream(iterable.spliterator(), false);
     }
 
+    public static <T> Collection<T> collectionOf(final Iterable<T> iterable) {
+        return (iterable instanceof Collection) ? (Collection<T>) iterable : newArrayList(iterable);
+    }
+
+    public static <T> T[] toArray(final Iterable<? extends T> iterable, final Class<T> type) {
+        if (Objects.isNull(iterable)) {
+            return null;
+        }
+        final Collection<? extends T> collection = collectionOf(iterable);
+        final T[] array = newArray(type, collection.size());
+        return collection.toArray(array);
+    }
+
+    public static <T> T[] toArray(final Iterable<? extends T> iterable) {
+        if (Objects.isNull(iterable)) {
+            return null;
+        }
+        return (T[]) newArrayList(iterable).toArray();
+    }
+
     /**
      * Returns non-nullable {@link Stream} of {@code T} by input {@link Iterator}
      *
@@ -309,6 +331,21 @@ public class ServiceUtils {
         return () -> iterator;
     }
 
+    @NonNull
+    public static <T> Iterable<T> iterable(final T... elements) {
+        return streamOf(elements).collect(Collectors.toList());
+    }
+
+    @NonNull
+    public static <T> Iterator<T> iterator(final T... elements) {
+        return iterable(elements).iterator();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T[] newArray(final Class<T> type, int length) {
+        return (T[]) Array.newInstance(type, length);
+    }
+
     /**
      * Returns {@link Set} by input array of {@code T} items
      *
@@ -317,7 +354,13 @@ public class ServiceUtils {
      * @return {@link Set} of {@link T}s
      */
     @NonNull
-    private static <T> Set<T> arrayToSet(final T[] value) {
+    private static <T> Set<T> arrayToSet(final T... value) {
         return new HashSet<>(Arrays.asList(value));
+    }
+
+    @NonNull
+    private static <T> List<T> copyOfRange(final List<T> source, final int fromIndex, final int to) {
+        Objects.requireNonNull(source, "Source should not be null");
+        return new ArrayList<>(source.subList(fromIndex, to));
     }
 }

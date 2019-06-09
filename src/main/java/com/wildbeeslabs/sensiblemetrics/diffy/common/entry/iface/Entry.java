@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * Entry declaration
+ * Entry interface declaration
  *
  * @param <K> type of entry first value
  * @param <V> type of entry last value

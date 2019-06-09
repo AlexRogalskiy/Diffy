@@ -32,6 +32,7 @@ import lombok.NonNull;
  * @param <T> type of validated value
  */
 @FunctionalInterface
+@SuppressWarnings("unchecked")
 public interface Validator<T> {
 
     /**

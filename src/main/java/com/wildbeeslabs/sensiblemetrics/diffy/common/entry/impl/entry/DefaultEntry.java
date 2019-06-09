@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.entry;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,8 +37,8 @@ import java.util.Optional;
 /**
  * Default {@link Entry} implementation
  *
- * @param <K> type of node first value
- * @param <V> type of node last value
+ * @param <K> type of entry first value
+ * @param <V> type of entry last value
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -55,7 +55,7 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 5764115349513946799L;
+    private static final long serialVersionUID = -921490395669655850L;
 
     /**
      * Default entry first value {@code K}
