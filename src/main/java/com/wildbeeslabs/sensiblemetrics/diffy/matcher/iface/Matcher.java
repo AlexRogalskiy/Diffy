@@ -30,10 +30,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeTyp
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -389,6 +386,34 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
         return removeIf(values, matcher);
+    }
+
+    /**
+     * Returns {@link Map} of {@code T} by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Map} of {@code T} items
+     */
+    @NonNull
+    static <T> Map<Boolean, List<T>> mapBy(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return streamOf(values).collect(Collectors.partitioningBy(matcher::matches));
+    }
+
+    /**
+     * Returns {@link Map} of {@code T} by input array of {@link Matcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input arrays of {@link Matcher}s
+     * @return {@link Map} of {@code T} items
+     */
+    @NonNull
+    static <T> Map<Boolean, List<T>> mapping(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        return mapBy(values, matcher);
     }
 
     /**

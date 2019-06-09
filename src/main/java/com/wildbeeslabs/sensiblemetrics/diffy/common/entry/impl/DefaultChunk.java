@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -79,7 +80,9 @@ public class DefaultChunk<T> implements Chunk<T> {
     public void verify(final List<T> target) throws IllegalStateException {
         checkState(last() <= target.size(), "Incorrect DefaultChunk: the position of chunk > target size");
         for (int i = 0; i < size(); i++) {
-            checkState(target.get(this.position + i).equals(this.lines.get(i)), "Incorrect DefaultChunk: the chunk content doesn't match the target");
+            if (!Objects.equals(target.get(this.position + i), this.lines.get(i))) {
+                throw new IllegalStateException("Incorrect DefaultChunk: the chunk content doesn't match the target");
+            }
         }
     }
 

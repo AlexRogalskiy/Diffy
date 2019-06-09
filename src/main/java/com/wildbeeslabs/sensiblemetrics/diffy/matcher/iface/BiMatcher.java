@@ -37,8 +37,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
 import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -384,6 +383,34 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T> Collection<Entry<T, T>> removeIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return removeIf(values, matcher);
+    }
+
+    /**
+     * Returns {@link Map} of {@code T} by input {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Map} of {@link Entry}s
+     */
+    @NonNull
+    static <T> Map<Boolean, List<Entry<T, T>>> mapBy(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return streamOf(values).collect(Collectors.partitioningBy(entry -> matcher.matches(entry.getFirst(), entry.getLast())));
+    }
+
+    /**
+     * Returns {@link Map} of {@code T} by input array of {@link BiMatcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matchers - initial input arrays of {@link BiMatcher}s
+     * @return {@link Map} of {@link Entry}s
+     */
+    @NonNull
+    static <T> Map<Boolean, List<Entry<T, T>>> mapping(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+        final BiMatcher<T> matcher = andAll(matchers);
+        return mapBy(values, matcher);
     }
 
     /**

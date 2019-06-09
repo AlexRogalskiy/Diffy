@@ -44,6 +44,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -378,5 +379,32 @@ public class ServiceUtils {
         } catch (Throwable t) {
             log.warn(String.format("Error occurred while closing source = {%s}", closeable), t);
         }
+    }
+
+    /**
+     * Returns concatenated {@link List} of {@code T} items by input array of {@link List}s
+     *
+     * @param <T>         type of list item
+     * @param collections - initial input array of {@link List}s
+     * @return concatenated {@link List} of {@code T} items
+     */
+    @SuppressWarnings("varargs")
+    public static <T> List<T> concat(final List<T>... collections) {
+        return streamOf(collections).flatMap(Collection::stream).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Map} of {@code K,V} items by input arguments
+     *
+     * @param <K>    type of key item
+     * @param <V>    type of value item
+     * @param keys   - initial input {@link List} of {@code K} keys
+     * @param values - initial input {@link List} of {@code V} values
+     * @return {@link Map} of {@code K,V}
+     */
+    public static <K, V> Map<K, V> zipToMap(final List<K> keys, final List<V> values) {
+        Objects.requireNonNull(keys, "Keys should not be null");
+        Objects.requireNonNull(values, "Values should not be null");
+        return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
     }
 }

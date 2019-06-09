@@ -24,6 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
+import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
@@ -35,6 +37,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.zipToMap;
 
 /**
  * Entry interface declaration
@@ -156,10 +160,10 @@ public interface Entry<K, V> extends Serializable {
      * @param first    must not be {@literal null}.
      * @param last     must not be {@literal null}.
      * @param combiner must not be {@literal null}.
+     * @return {@link Stream} of {@code T}
      * @throws NullPointerException if first is {@code null}
      * @throws NullPointerException if last is {@code null}
      * @throws NullPointerException if combiner is {@code null}
-     * @return {@link Stream} of {@code T}
      * @since 2.1
      */
     static <K, V, T> Stream<T> zip(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, T> combiner) {
@@ -180,5 +184,37 @@ public interface Entry<K, V> extends Serializable {
                 return firsts.tryAdvance(f -> lasts.tryAdvance(l -> action.accept(combiner.apply(f, l))));
             }
         }, parallel);
+    }
+
+    /**
+     * Returns array of {@code R} items by input parameters
+     *
+     * @param <K>      type of key item
+     * @param <V>      type of value item
+     * @param <R>      type of result item
+     * @param keys     - initial input array of {@code K} items
+     * @param values   - initial input array of {@code V} values
+     * @param operator - initial input {@link BiFunction} operator
+     * @return array of {@code R} items
+     */
+    @NonNull
+    static <K, V, R extends Entry<K, V>> R[] of(final K[] keys, final V[] values, final BiFunction<K, V, R> operator) {
+        final R[] result = (R[]) new Entry[keys.length];
+        Arrays.setAll(result, i -> operator.apply(keys[i], values[i]));
+        return result;
+    }
+
+    /**
+     * Returns {@link List} of {@link Entry}s by input parameters
+     *
+     * @param <K>    type of key item
+     * @param <V>    type of value item
+     * @param keys   - initial input {@link List} of {@code K} keys
+     * @param values - initial input {@link List} of {@code V} values
+     * @return {@link List} of {@link Entry}s
+     */
+    @NonNull
+    static <K, V> List<Entry<K, V>> of(final List<K> keys, final List<V> values) {
+        return zipToMap(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 }
