@@ -23,31 +23,28 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
 
-import java.io.Serializable;
-import java.util.List;
-
 /**
- * Patch interface declaration
+ * Path interface declaration
  *
- * @param <T> type of patch value
  * @version 1.1
  * @since 1.0
  */
-public interface Patch<T> extends Serializable {
+public interface Path {
 
     /**
-     * Apply this patch to the given target
+     * Is this node a {@code SnakeNode node}?
      *
-     * @param target the list to patch
-     * @return the patched text
-     * @throws IllegalStateException if can't apply patch
+     * @return true if this is a {@code SnakeNode node}
      */
-    Iterable<T> applyTo(final Iterable<T> target);
+    boolean isSnake();
 
     /**
-     * Returns {@link List} of {@link Delta}s
+     * Is this a bootstrap node?
+     * <p>
+     * In bootstrap nodes one of the two coordinates is
+     * less than zero.
      *
-     * @return {@link List} of {@link Delta}s
+     * @return tru if this is a bootstrap node.
      */
-    List<Delta<T>> getDeltas();
+    boolean isBootstrap();
 }

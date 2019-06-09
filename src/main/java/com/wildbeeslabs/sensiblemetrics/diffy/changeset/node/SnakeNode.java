@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.node;
+package com.wildbeeslabs.sensiblemetrics.diffy.changeset.node;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,12 +42,12 @@ public final class SnakeNode extends PathNode {
     /**
      * Constructs a snake node.
      *
-     * @param i    the position in the original sequence
-     * @param j    the position in the revised sequence
-     * @param prev the previous node in the path.
+     * @param origPos the position in the original sequence
+     * @param revPos  the position in the revised sequence
+     * @param prev    the previous node in the path.
      */
-    public SnakeNode(int i, int j, final PathNode prev) {
-        super(i, j, prev);
+    public SnakeNode(int origPos, int revPos, final PathNode prev) {
+        super(origPos, revPos, prev);
     }
 
     /**

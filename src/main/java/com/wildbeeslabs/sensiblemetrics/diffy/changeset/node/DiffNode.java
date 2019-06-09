@@ -21,33 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.changeset.node;
 
-import java.io.Serializable;
-import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.util.Objects;
 
 /**
- * Patch interface declaration
+ * Diff {@link PathNode} implementation
  *
- * @param <T> type of patch value
+ * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public interface Patch<T> extends Serializable {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class DiffNode extends PathNode {
 
     /**
-     * Apply this patch to the given target
+     * Constructs a DiffNode.
+     * <p>
+     * DiffNodes are compressed. That means that
+     * the path pointed to by the <code>prev</code> parameter
+     * will be followed using {@link PathNode#previousSnake}
+     * until a non-diff node is found.
      *
-     * @param target the list to patch
-     * @return the patched text
-     * @throws IllegalStateException if can't apply patch
+     * @param origPos the position in the original sequence
+     * @param revPos  the position in the revised sequence
+     * @param prev    the previous node in the path.
      */
-    Iterable<T> applyTo(final Iterable<T> target);
+    public DiffNode(int origPos, int revPos, final PathNode prev) {
+        super(origPos, revPos, (Objects.isNull(prev) ? null : prev.previousSnake()));
+    }
 
     /**
-     * Returns {@link List} of {@link Delta}s
+     * {@inheritDoc}
      *
-     * @return {@link List} of {@link Delta}s
+     * @return false, always
      */
-    List<Delta<T>> getDeltas();
+    @Override
+    public boolean isSnake() {
+        return false;
+    }
 }

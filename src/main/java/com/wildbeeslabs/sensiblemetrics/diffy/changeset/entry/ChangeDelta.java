@@ -21,17 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.delta;
+package com.wildbeeslabs.sensiblemetrics.diffy.changeset.entry;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Chunk;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultDelta;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Default insert {@link DefaultDelta} implementation
@@ -46,7 +49,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class DeleteDelta<T> extends DefaultDelta<T> {
+public class ChangeDelta<T> extends DefaultDelta<T> {
 
     /**
      * Creates a change delta with the two given chunks.
@@ -54,7 +57,7 @@ public class DeleteDelta<T> extends DefaultDelta<T> {
      * @param original The original chunk. Must not be {@code null}.
      * @param revised  The original chunk. Must not be {@code null}.
      */
-    public DeleteDelta(final Chunk<T> original, final Chunk<T> revised) {
+    public ChangeDelta(final Chunk<T> original, Chunk<T> revised) {
         super(original, revised);
     }
 
@@ -69,16 +72,24 @@ public class DeleteDelta<T> extends DefaultDelta<T> {
         for (int i = 0; i < size; i++) {
             target.remove(position);
         }
+        int i = 0;
+        for (T line : getRevised().getLines()) {
+            target.add(position + i, line);
+            i++;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void verify(final List<T> target) throws IllegalStateException {
+        getOriginal().verify(target);
+        checkState(getOriginal().getPosition() <= target.size(), "Incorrect patch for delta: delta original position > target size");
     }
 
     @Override
     public TYPE getType() {
-        return Delta.TYPE.DELETE;
+        return Delta.TYPE.CHANGE;
     }
-
-    @Override
-    public void verify(List<T> target) throws IllegalStateException {
-        getOriginal().verify(target);
-    }
-
 }

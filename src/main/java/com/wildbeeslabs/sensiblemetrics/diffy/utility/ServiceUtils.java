@@ -31,6 +31,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
+import java.io.Closeable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -342,7 +343,7 @@ public class ServiceUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T[] newArray(final Class<T> type, int length) {
+    public static <T> T[] newArray(final Class<T> type, int length) {
         return (T[]) Array.newInstance(type, length);
     }
 
@@ -354,13 +355,28 @@ public class ServiceUtils {
      * @return {@link Set} of {@link T}s
      */
     @NonNull
-    private static <T> Set<T> arrayToSet(final T... value) {
+    public static <T> Set<T> arrayToSet(final T... value) {
         return new HashSet<>(Arrays.asList(value));
     }
 
     @NonNull
-    private static <T> List<T> copyOfRange(final List<T> source, final int fromIndex, final int to) {
-        Objects.requireNonNull(source, "Source should not be null");
+    public static <T> List<T> copyOf(final List<T> source, final int fromIndex, final int to) {
+        Objects.requireNonNull(source, "Source list should not be null");
         return new ArrayList<>(source.subList(fromIndex, to));
+    }
+
+    public static void closeQuietly(final Closeable... closeables) {
+        streamOf(closeables).forEach(ServiceUtils::closeCloseable);
+    }
+
+    public static void closeCloseable(final Closeable closeable) {
+        if (Objects.isNull(closeable)) {
+            return;
+        }
+        try {
+            closeable.close();
+        } catch (Throwable t) {
+            log.warn(String.format("Error occurred while closing source = {%s}", closeable), t);
+        }
     }
 }

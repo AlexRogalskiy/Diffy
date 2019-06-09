@@ -56,7 +56,7 @@ public class BoolLiteralConverter extends AbstractConverter<String, Boolean> {
     /**
      * Default true strings
      */
-    public static final String[] DEFAULT_TRUE_STRING = {DEFAULT_TRUE_MARKER, "ja", "j", "1", "w"};
+    public static final String[] DEFAULT_TRUE_STRING = {DEFAULT_TRUE_MARKER, "ja", "revPos", "1", "w"};
     /**
      * Default false strings
      */

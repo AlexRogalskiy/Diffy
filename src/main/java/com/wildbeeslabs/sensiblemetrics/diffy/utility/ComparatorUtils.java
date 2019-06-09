@@ -67,6 +67,11 @@ public class ComparatorUtils {
     public static final Comparator DEFAULT_COMPARATOR = ComparableComparator.getInstance();
 
     /**
+     * Default class {@link Comparator}
+     */
+    private static final Comparator<Class<?>> CLASS_COMPARATOR = Comparator.comparing(Class::getSimpleName);
+
+    /**
      * Default comparator with false first order {@link Comparator}
      */
     public static final Comparator<? super Boolean> DEFAULT_FALSE_FIRST_COMPARATOR = (a, b) -> Objects.equals(a, b) ? 0 : b ? -1 : 1;

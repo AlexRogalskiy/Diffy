@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.delta;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,12 +31,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.List;
-
-import static com.google.common.base.Preconditions.checkState;
+import java.util.Objects;
 
 /**
- * Default insert {@link DefaultDelta} implementation
+ * Default {@link Delta} implementation
  *
  * @param <T> type of delta value
  * @author Alexander Rogalskiy
@@ -44,42 +42,36 @@ import static com.google.common.base.Preconditions.checkState;
  * @since 1.0
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode
+@ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class InsertDelta<T> extends DefaultDelta<T> {
+public abstract class DefaultDelta<T> implements Delta<T> {
+
+    public static final String DEFAULT_END = "]";
+    public static final String DEFAULT_START = "[";
 
     /**
-     * Creates an insert delta with the two given chunks.
+     * The original chunk.
+     */
+    private final Chunk<T> original;
+
+    /**
+     * The revised chunk.
+     */
+    private final Chunk<T> revised;
+
+    /**
+     * Construct the delta for original and revised chunks
      *
-     * @param original The original chunk. Must not be {@code null}.
-     * @param revised  The original chunk. Must not be {@code null}.
+     * @param original DefaultChunk describing the original text. Must not be {@code null}.
+     * @param revised  DefaultChunk describing the revised text. Must not be {@code null}.
      */
-    public InsertDelta(final Chunk<T> original, final Chunk<T> revised) {
-        super(original, revised);
-    }
+    public DefaultDelta(final Chunk<T> original, final Chunk<T> revised) {
+        Objects.requireNonNull(original, "Original chunk should not be null");
+        Objects.requireNonNull(revised, "Revised chunk should not be null");
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void applyTo(final List<T> target) {
-        verify(target);
-        int position = this.getOriginal().getPosition();
-        final List<T> lines = this.getRevised().getLines();
-        for (int i = 0; i < lines.size(); i++) {
-            target.add(position + i, lines.get(i));
-        }
-    }
-
-    @Override
-    public void verify(final List<T> target) throws IllegalStateException {
-        checkState(getOriginal().getPosition() <= target.size(), "Incorrect patch for delta: delta original position > target size");
-    }
-
-    @Override
-    public TYPE getType() {
-        return Delta.TYPE.INSERT;
+        this.original = original;
+        this.revised = revised;
     }
 }

@@ -31,15 +31,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeT
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.entry.DefaultEntry.of;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.reduceOrThrow;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
@@ -358,8 +355,78 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
-        return listOf(values).stream().filter((entry -> matcher.matches(entry.getFirst(), entry.getLast()))).collect(Collectors.toList());
+        return matchIf(values, matcher);
     }
+
+    /**
+     * Returns {@link Collection} of {@link Entry}s filtered by input {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> Collection<Entry<T, T>> removeIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Collection} of {@link Entry}s filtered by input array of {@link BiMatcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matchers - initial input arrays of {@link BiMatcher}s
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> Collection<Entry<T, T>> removeIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+        final BiMatcher<T> matcher = andAll(matchers);
+        return removeIf(values, matcher);
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry}s items by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        final Iterator<Entry<T, T>> iterator = listOf(values).iterator();
+        while (iterator.hasNext()) {
+            final Entry<T, T> entry = iterator.next();
+            if (matcher.matches(entry.getFirst(), entry.getLast())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry}s items by input {@link BiMatcher} (only first match)
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void removeFirst(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        final Iterator<Entry<T, T>> iterator = listOf(values).iterator();
+        while (iterator.hasNext()) {
+            final Entry<T, T> entry = iterator.next();
+            if (matcher.matches(entry.getFirst(), entry.getLast())) {
+                iterator.remove();
+                return;
+            }
+        }
+    }
+
 
     /**
      * Tests input {@link Supplier} by {@link Matcher}

@@ -21,49 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.node;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.util.Objects;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.context;
 
 /**
- * Diff {@link PathNode} implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Default application context implementation
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public final class DiffNode extends PathNode {
+public class ApplicationContext {
 
-    /**
-     * Constructs a DiffNode.
-     * <p>
-     * DiffNodes are compressed. That means that
-     * the path pointed to by the <code>prev</code> parameter
-     * will be followed using {@link PathNode#previousSnake}
-     * until a non-diff node is found.
-     *
-     * @param i    the position in the original sequence
-     * @param j    the position in the revised sequence
-     * @param prev the previous node in the path.
-     */
-    public DiffNode(int i, int j, final PathNode prev) {
-        super(i, j, (Objects.isNull(prev) ? null : prev.previousSnake()));
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return false, always
-     */
-    @Override
-    public boolean isSnake() {
-        return false;
-    }
 }

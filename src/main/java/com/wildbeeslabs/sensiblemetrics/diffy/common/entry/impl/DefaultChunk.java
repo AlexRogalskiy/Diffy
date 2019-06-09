@@ -21,20 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.delta;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Chunk;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Objects;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkState;
 
 /**
- * Default {@link Delta} implementation
+ * Default {@link Chunk} implementation
  *
  * @param <T> type of delta value
  * @author Alexander Rogalskiy
@@ -46,32 +47,59 @@ import java.util.Objects;
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public abstract class DefaultDelta<T> implements Delta<T> {
-
-    public static final String DEFAULT_END = "]";
-    public static final String DEFAULT_START = "[";
+public class DefaultChunk<T> implements Chunk<T> {
 
     /**
-     * The original chunk.
+     * Default chunk position
      */
-    private final Chunk<T> original;
-
+    private final int position;
     /**
-     * The revised chunk.
+     * Default {@link List} chunk lines
      */
-    private final Chunk<T> revised;
+    private List<T> lines;
 
     /**
-     * Construct the delta for original and revised chunks
+     * Creates a chunk and saves a copy of affected lines
      *
-     * @param original DefaultChunk describing the original text. Must not be {@code null}.
-     * @param revised  DefaultChunk describing the revised text. Must not be {@code null}.
+     * @param position the start position
+     * @param lines    the affected lines
      */
-    public DefaultDelta(final Chunk<T> original, final Chunk<T> revised) {
-        Objects.requireNonNull(original, "Original chunk should not be null");
-        Objects.requireNonNull(revised, "Revised chunk should not be null");
+    public DefaultChunk(int position, final List<T> lines) {
+        this.position = position;
+        this.lines = lines;
+    }
 
-        this.original = original;
-        this.revised = revised;
+    /**
+     * Verifies that this chunk's saved text matches the corresponding text in
+     * the given sequence.
+     *
+     * @param target the sequence to verify against.
+     */
+    @Override
+    public void verify(final List<T> target) throws IllegalStateException {
+        checkState(last() <= target.size(), "Incorrect DefaultChunk: the position of chunk > target size");
+        for (int i = 0; i < size(); i++) {
+            checkState(target.get(this.position + i).equals(this.lines.get(i)), "Incorrect DefaultChunk: the chunk content doesn't match the target");
+        }
+    }
+
+    /**
+     * Return the chunk size
+     *
+     * @return the chunk size
+     */
+    @Override
+    public int size() {
+        return this.lines.size();
+    }
+
+    /**
+     * Returns the index of the last line of the chunk.
+     *
+     * @return the index of the last line of the chunk.
+     */
+    @Override
+    public int last() {
+        return this.getPosition() + this.size() - 1;
     }
 }

@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.ApplicationContext;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.entry.DefaultEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.DispatchEventException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;

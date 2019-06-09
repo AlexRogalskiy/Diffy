@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.entry.DefaultEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import lombok.NonNull;
 
 import java.util.List;

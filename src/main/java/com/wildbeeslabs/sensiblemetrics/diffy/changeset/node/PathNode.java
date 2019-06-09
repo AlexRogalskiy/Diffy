@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.node;
+package com.wildbeeslabs.sensiblemetrics.diffy.changeset.node;
 
 import com.google.common.base.Joiner;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Path;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,42 +39,36 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInB
  * @version 1.1
  * @since 1.0
  */
+
 @Data
 @EqualsAndHashCode
-public abstract class PathNode {
+public abstract class PathNode implements Path {
 
     /**
-     * Position in the original sequence.
+     * Position in the original sequence
      */
-    public final int i;
+    public final int origPos;
     /**
-     * Position in the revised sequence.
+     * Position in the revised sequence
      */
-    public final int j;
+    public final int revPos;
     /**
-     * The previous node in the path.
+     * The previous node in the path
      */
     public final PathNode prev;
 
     /**
-     * Concatenates a new path node with an existing diffpath.
+     * Concatenates a new path node with an existing difference path
      *
-     * @param i    The position in the original sequence for the new node.
-     * @param j    The position in the revised sequence for the new node.
-     * @param prev The previous node in the path.
+     * @param origPos The position in the original sequence for the new node.
+     * @param revPos  The position in the revised sequence for the new node.
+     * @param prev    The previous node in the path.
      */
-    public PathNode(int i, int j, final PathNode prev) {
-        this.i = i;
-        this.j = j;
+    public PathNode(int origPos, int revPos, final PathNode prev) {
+        this.origPos = origPos;
+        this.revPos = revPos;
         this.prev = prev;
     }
-
-    /**
-     * Is this node a {@link SnakeNode SnakeNode node}?
-     *
-     * @return true if this is a {@link SnakeNode SnakeNode node}
-     */
-    public abstract boolean isSnake();
 
     /**
      * Is this a bootstrap node?
@@ -83,8 +78,9 @@ public abstract class PathNode {
      *
      * @return tru if this is a bootstrap node.
      */
+    @Override
     public boolean isBootstrap() {
-        return i < 0 || j < 0;
+        return origPos < 0 || revPos < 0;
     }
 
     /**
@@ -109,11 +105,12 @@ public abstract class PathNode {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
         final StringBuilder buf = new StringBuilder("[");
         PathNode node = this;
         while (Objects.nonNull(node)) {
-            buf.append(wrapInBraces.apply(Joiner.on(",").join(node.i, node.j)));
+            buf.append(wrapInBraces.apply(Joiner.on(",").join(node.origPos, node.revPos)));
             node = node.prev;
         }
         buf.append("]");

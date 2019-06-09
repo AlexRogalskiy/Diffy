@@ -31,6 +31,7 @@ import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -52,6 +53,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  * @since 1.0
  */
 @FunctionalInterface
+@SuppressWarnings("unchecked")
 public interface Matcher<T> extends BaseMatcher<T, T> {
 
     /**
@@ -333,12 +335,12 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} by input {@link Matcher}
+     * Returns {@link Collection} of {@code T} filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
      * @param matcher - initial input {@link Matcher}
-     * @return {@link Collection} of {@code T}
+     * @return {@link Collection} of {@code T} items
      * @throws NullPointerException if matcher is {@code null}
      */
     @NonNull
@@ -348,17 +350,84 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} by input array of {@link Matcher}s
+     * Returns {@link Collection} of {@code T} filtered by input array of {@link Matcher}s
      *
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
      * @param matchers - initial input array of {@link Matcher}
-     * @return {@link Collection} of {@code T}
+     * @return {@link Collection} of {@code T} items
      */
     @NonNull
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
-        return listOf(values).stream().filter(matcher::matches).collect(Collectors.toList());
+        return matchIf(values, matcher);
+    }
+
+    /**
+     * Returns {@link Collection} of {@code T} filtered by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Collection} of {@code T} items
+     */
+    @NonNull
+    static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return listOf(values).stream().filter(matcher.negate()::matches).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Collection} of {@code T} filtered by input array of {@link Matcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input arrays of {@link Matcher}s
+     * @return {@link Collection} of {@code T} items
+     */
+    @NonNull
+    static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        return removeIf(values, matcher);
+    }
+
+    /**
+     * Filters input {@link Collection} of {@code T} items by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Collection} of {@code T} items
+     */
+    @NonNull
+    static <T> void remove(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        final Iterator<T> iterator = listOf(values).iterator();
+        while (iterator.hasNext()) {
+            if (matcher.matches(iterator.next())) {
+                iterator.remove();
+            }
+        }
+    }
+
+    /**
+     * Filters input {@link Collection} of {@code T} items by input {@link Matcher} (only first match)
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Collection} of {@code T} items
+     */
+    @NonNull
+    static <T> void removeFirst(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        final Iterator<T> iterator = listOf(values).iterator();
+        while (iterator.hasNext()) {
+            if (matcher.matches(iterator.next())) {
+                iterator.remove();
+                return;
+            }
+        }
     }
 
     /**

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.ApplicationContext;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
 
 /**
  * Event dispatcher interface declaration

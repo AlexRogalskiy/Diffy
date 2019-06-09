@@ -21,11 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common;
+package com.wildbeeslabs.sensiblemetrics.diffy.changeset.service.iface;
+
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Patch;
 
 /**
- * Default application context implementation
+ * Copy from https://code.google.com/p/java-diff-utils/.
+ * <p>
+ * The general interface for computing diffs between two lists of elements of type T.
+ *
+ * @param <T> The type of the compared elements in the 'lines'.
+ * @author <a href="dm.naumenko@gmail.com">Dmitry Naumenko</a>
  */
-public class ApplicationContext {
+public interface DiffAlgorithm<T> {
 
+    /**
+     * Computes the difference between the original sequence and the revised
+     * sequence and returns it as a {@link Patch} object.
+     *
+     * @param original The original sequence. Must not be {@code null}.
+     * @param revised  The revised sequence. Must not be {@code null}.
+     * @return The patch representing the diff of the given sequences. Never {@code null}.
+     */
+    Patch<T> diff(final Iterable<T> original, final Iterable<T> revised);
 }

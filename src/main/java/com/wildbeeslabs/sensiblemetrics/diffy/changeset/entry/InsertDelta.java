@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.delta;
+package com.wildbeeslabs.sensiblemetrics.diffy.changeset.entry;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Chunk;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultDelta;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -48,15 +49,15 @@ import static com.google.common.base.Preconditions.checkState;
 @ToString(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ChangeDelta<T> extends DefaultDelta<T> {
+public class InsertDelta<T> extends DefaultDelta<T> {
 
     /**
-     * Creates a change delta with the two given chunks.
+     * Creates an insert delta with the two given chunks.
      *
      * @param original The original chunk. Must not be {@code null}.
      * @param revised  The original chunk. Must not be {@code null}.
      */
-    public ChangeDelta(final Chunk<T> original, Chunk<T> revised) {
+    public InsertDelta(final Chunk<T> original, final Chunk<T> revised) {
         super(original, revised);
     }
 
@@ -64,31 +65,22 @@ public class ChangeDelta<T> extends DefaultDelta<T> {
      * {@inheritDoc}
      */
     @Override
-    public void applyTo(final List<T> target) throws IllegalStateException {
+    public void applyTo(final List<T> target) {
         verify(target);
-        int position = getOriginal().getPosition();
-        int size = getOriginal().size();
-        for (int i = 0; i < size; i++) {
-            target.remove(position);
-        }
-        int i = 0;
-        for (T line : getRevised().getLines()) {
-            target.add(position + i, line);
-            i++;
+        int position = this.getOriginal().getPosition();
+        final List<T> lines = this.getRevised().getLines();
+        for (int i = 0; i < lines.size(); i++) {
+            target.add(position + i, lines.get(i));
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void verify(final List<T> target) throws IllegalStateException {
-        getOriginal().verify(target);
         checkState(getOriginal().getPosition() <= target.size(), "Incorrect patch for delta: delta original position > target size");
     }
 
     @Override
     public TYPE getType() {
-        return Delta.TYPE.CHANGE;
+        return Delta.TYPE.INSERT;
     }
 }
