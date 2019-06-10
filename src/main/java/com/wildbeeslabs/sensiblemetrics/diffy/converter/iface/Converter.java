@@ -30,9 +30,13 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 
 /**
  * Converter interface declaration
@@ -61,7 +65,7 @@ public interface Converter<T, R> {
     /**
      * Default null {@link Converter}
      */
-    Converter<?, String> DEFAULT_STRING_CONVERTER = value -> Objects.toString(value);
+    Converter<?, String> DEFAULT_STRING_CONVERTER = Objects::toString;
 
     /**
      * Default exception {@link Converter}
@@ -196,5 +200,33 @@ public interface Converter<T, R> {
     static <T, R> Function<T, R> convert(final Converter<T, R> converter) {
         Objects.requireNonNull(converter, "Converter should not be null");
         return converter::convert;
+    }
+
+    /**
+     * Returns converted input array of {@code T} items by input parameters
+     *
+     * @param <T>       type of input element to be converted from
+     * @param <R>       type of input element to be converted to
+     * @param values    - initial input array of {@code T} items to be converted from
+     * @param converter - initial input {@link Converter}
+     * @return array of {@code R} items
+     */
+    @NonNull
+    static <T, R> R[] convert(final T[] values, final Converter<? super T, R> converter) {
+        return (R[]) streamOf(values).map(converter::convert).toArray();
+    }
+
+    /**
+     * Returns converted input {@link List} of {@code T} items by input parameters
+     *
+     * @param <T>       type of input element to be converted from
+     * @param <R>       type of input element to be converted to
+     * @param values    - initial input {@link Iterable} of {@code T} items to be converted from
+     * @param converter - initial input {@link Converter}
+     * @return {@link List} of {@code R} items
+     */
+    @NonNull
+    static <T, R> List<R> convert(final Iterable<? extends T> values, final Converter<? super T, R> converter) {
+        return streamOf(values).map(converter::convert).collect(Collectors.toList());
     }
 }
