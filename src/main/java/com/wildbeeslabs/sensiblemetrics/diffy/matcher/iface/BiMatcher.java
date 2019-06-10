@@ -509,7 +509,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     }
 
     /**
-     * Filters input {@link Collection} of {@link Entry}s items by {@link BiMatcher}
+     * Filters input {@link Collection} of {@link Entry} items by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@link Entry}
@@ -519,13 +519,21 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T> void remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        final Iterator<Entry<T, T>> iterator = listOf(values).iterator();
-        while (iterator.hasNext()) {
-            final Entry<T, T> entry = iterator.next();
-            if (matcher.matches(entry.getFirst(), entry.getLast())) {
-                iterator.remove();
-            }
-        }
+        listOf(values).removeIf(entry -> matcher.matches(entry.getFirst(), entry.getLast()));
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry} items by array of {@link BiMatcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@link Entry}
+     * @param matchers - initial input arrays of {@link BiMatcher}s
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+        final BiMatcher<T> matcher = andAll(matchers);
+        remove(values, matcher);
     }
 
     /**

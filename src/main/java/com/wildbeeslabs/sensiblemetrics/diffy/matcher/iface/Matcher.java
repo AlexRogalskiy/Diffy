@@ -526,12 +526,21 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> void remove(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        final Iterator<T> iterator = listOf(values).iterator();
-        while (iterator.hasNext()) {
-            if (matcher.matches(iterator.next())) {
-                iterator.remove();
-            }
-        }
+        listOf(values).removeIf(matcher::matches);
+    }
+
+    /**
+     * Filters input {@link Collection} of {@code T} items by input array of {@link Matcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input array of {@link Matcher}s
+     * @return {@link Collection} of {@code T} items
+     */
+    @NonNull
+    static <T> void remove(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        remove(values, matcher);
     }
 
     /**
