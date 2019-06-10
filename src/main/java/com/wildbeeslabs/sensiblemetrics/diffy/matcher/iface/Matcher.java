@@ -370,6 +370,38 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
+     * Returns {@link Collection} of {@code T} filtered by input {@link Matcher} with skip count
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param skip    - initial input skip count
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Collection} of {@code T} items
+     * @throws NullPointerException if matcher is {@code null}
+     */
+    @NonNull
+    static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final int skip, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        assert skip >= 0 : "Skip count should be positive or zero";
+        return listOf(values).stream().skip(skip).filter(matcher::matches).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Collection} of {@code T} filtered by input array of {@link Matcher}s with skip count
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param skip     - initial input skip count
+     * @param matchers - initial input array of {@link Matcher}
+     * @return {@link Collection} of {@code T} items
+     */
+    @NonNull
+    static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final int skip, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        return matchIf(values, skip, matcher);
+    }
+
+    /**
      * Returns {@link Optional} of first match {@code T} filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
@@ -396,6 +428,35 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Optional<T> matchFirstIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
         return matchFirstIf(values, matcher);
+    }
+
+    /**
+     * Returns {@link Optional} of last match {@code T} filtered by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Optional} of first match {@code T} item
+     * @throws NullPointerException if matcher is {@code null}
+     */
+    @NonNull
+    static <T> Optional<T> matchLastIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return listOf(values).stream().filter(matcher::matches).reduce((first, last) -> last);
+    }
+
+    /**
+     * Returns {@link Optional} of last match {@code T} filtered by input array of {@link Matcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input array of {@link Matcher}
+     * @return {@link Optional} of first match {@code T} item
+     */
+    @NonNull
+    static <T> Optional<T> matchLastIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        return matchLastIf(values, matcher);
     }
 
     /**
