@@ -21,28 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import java.util.Objects;
-import java.util.function.Predicate;
+import java.lang.reflect.Method;
 
 /**
- * Object validator type {@link Enum}
+ * Method return type {@link AbstractMatcher} implementation
+ *
+ * @author Alexander Rogalskiy
+ * @version 1.1
+ * @since 1.0
  */
-@Getter
-@RequiredArgsConstructor
-public enum ObjectValidatorType {
-    /**
-     * java.util.Objects
-     */
-    IS_NULL(Objects::isNull),
-    IS_NON_NULL(Objects::nonNull);
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class MethodReturnTypeMatcher<T extends Method> extends AbstractMatcher<T> {
+    private final Matcher<? super Class<?>> matcher;
 
-    /**
-     * Object {@link Predicate} validator operator
-     */
-    private final Predicate<Object> validator;
+    public MethodReturnTypeMatcher(final Matcher<? super Class<?>> matcher) {
+        this.matcher = matcher;
+    }
+
+    @Override
+    public boolean matches(final T target) {
+        return this.matcher.matches(target.getReturnType());
+    }
 }

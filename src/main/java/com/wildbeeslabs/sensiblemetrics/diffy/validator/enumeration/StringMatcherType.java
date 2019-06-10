@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 
 import com.google.common.base.Strings;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +33,11 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.function.Predicate;
 
 /**
- * String validator type {@link Enum}
+ * String matcher type {@link Enum}
  */
 @Getter
 @RequiredArgsConstructor
-public enum StringValidatorType {
+public enum StringMatcherType {
     /**
      * com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils
      */
@@ -78,7 +79,7 @@ public enum StringValidatorType {
     IS_WHITESPACE(org.apache.commons.lang3.StringUtils::isWhitespace);
 
     /**
-     * String {@link Predicate} validator operator
+     * String {@link Matcher} operator
      */
-    private final Predicate<String> validator;
+    private final Matcher<String> matcher;
 }

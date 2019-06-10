@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.validator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.ObjectValidatorType;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.ObjectMatcherType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link ObjectValidatorType} unit test
+ * {@link ObjectMatcherType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -50,14 +50,14 @@ public class ObjectValidatorTypeTest {
 
     @Test
     public void test_check_ObjectValidatorType_ByEnum() {
-        assertThat(ObjectValidatorType.IS_NULL.toString(), IsEqual.equalTo("IS_NULL"));
-        assertThat(ObjectValidatorType.IS_NON_NULL.toString(), IsEqual.equalTo("IS_NON_NULL"));
+        assertThat(ObjectMatcherType.IS_NULL.toString(), IsEqual.equalTo("IS_NULL"));
+        assertThat(ObjectMatcherType.IS_NON_NULL.toString(), IsEqual.equalTo("IS_NON_NULL"));
     }
 
     @Test
     public void test_check_ObjectValidatorType_ByName() {
-        assertEquals(ObjectValidatorType.IS_NULL, ObjectValidatorType.valueOf("IS_NULL"));
-        assertEquals(ObjectValidatorType.IS_NON_NULL, ObjectValidatorType.valueOf("IS_NON_NULL"));
+        assertEquals(ObjectMatcherType.IS_NULL, ObjectMatcherType.valueOf("IS_NULL"));
+        assertEquals(ObjectMatcherType.IS_NON_NULL, ObjectMatcherType.valueOf("IS_NON_NULL"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ObjectValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ObjectValidatorType.valueOf("UNDEFINED"));
+        assertEquals(null, ObjectMatcherType.valueOf("UNDEFINED"));
     }
 
     @Test
@@ -77,6 +77,6 @@ public class ObjectValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ObjectValidatorType.valueOf(null));
+        assertEquals(null, ObjectMatcherType.valueOf(null));
     }
 }

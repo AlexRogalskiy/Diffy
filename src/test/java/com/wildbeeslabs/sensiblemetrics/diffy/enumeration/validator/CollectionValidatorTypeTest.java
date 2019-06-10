@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.validator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.CollectionValidatorType;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.CollectionMatcherType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link CollectionValidatorType} unit test
+ * {@link CollectionMatcherType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -50,16 +50,16 @@ public class CollectionValidatorTypeTest {
 
     @Test
     public void test_check_CollectionValidatorType_ByEnum() {
-        assertThat(CollectionValidatorType.IS_EMPTY.toString(), IsEqual.equalTo("IS_EMPTY"));
-        assertThat(CollectionValidatorType.IS_FULL.toString(), IsEqual.equalTo("IS_FULL"));
-        assertThat(CollectionValidatorType.IS_NOT_EMPTY.toString(), IsEqual.equalTo("IS_NOT_EMPTY"));
+        assertThat(CollectionMatcherType.IS_EMPTY.toString(), IsEqual.equalTo("IS_EMPTY"));
+        assertThat(CollectionMatcherType.IS_FULL.toString(), IsEqual.equalTo("IS_FULL"));
+        assertThat(CollectionMatcherType.IS_NOT_EMPTY.toString(), IsEqual.equalTo("IS_NOT_EMPTY"));
     }
 
     @Test
     public void test_check_CollectionValidatorType_ByName() {
-        assertEquals(CollectionValidatorType.IS_EMPTY, CollectionValidatorType.valueOf("IS_EMPTY"));
-        assertEquals(CollectionValidatorType.IS_FULL, CollectionValidatorType.valueOf("IS_FULL"));
-        assertEquals(CollectionValidatorType.IS_NOT_EMPTY, CollectionValidatorType.valueOf("IS_NOT_EMPTY"));
+        assertEquals(CollectionMatcherType.IS_EMPTY, CollectionMatcherType.valueOf("IS_EMPTY"));
+        assertEquals(CollectionMatcherType.IS_FULL, CollectionMatcherType.valueOf("IS_FULL"));
+        assertEquals(CollectionMatcherType.IS_NOT_EMPTY, CollectionMatcherType.valueOf("IS_NOT_EMPTY"));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class CollectionValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, CollectionValidatorType.valueOf("UNDEFINED"));
+        assertEquals(null, CollectionMatcherType.valueOf("UNDEFINED"));
     }
 
     @Test
@@ -79,6 +79,6 @@ public class CollectionValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, CollectionValidatorType.valueOf(null));
+        assertEquals(null, CollectionMatcherType.valueOf(null));
     }
 }

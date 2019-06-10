@@ -21,33 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.google.common.collect.Iterables;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections.CollectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import java.util.Collection;
-import java.util.function.Predicate;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 
 /**
- * Collection validator type {@link Enum}
+ * Method parameters {@link AbstractMatcher} implementation
+ *
+ * @author Alexander Rogalskiy
+ * @version 1.1
+ * @since 1.0
  */
-@Getter
-@RequiredArgsConstructor
-public enum CollectionValidatorType {
-    /**
-     * org.apache.commons.collections.CollectionUtils
-     */
-    IS_EMPTY(CollectionUtils::isEmpty),
-    IS_FULL(CollectionUtils::isFull),
-    IS_NOT_EMPTY(CollectionUtils::isNotEmpty),
-    IS_SIZE_EMPTY(CollectionUtils::sizeIsEmpty),
-    IS_SIZEEMPTY(Iterables::isEmpty);
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class MethodParametersMatcher<T extends Method> extends AbstractMatcher<T> {
+    private final Matcher<? super Parameter[]> matcher;
 
-    /**
-     * Collection {@link Predicate} validator operator
-     */
-    private final Predicate<Collection<?>> validator;
+    public MethodParametersMatcher(final Matcher<? super Parameter[]> matcher) {
+        this.matcher = matcher;
+    }
+
+    @Override
+    public boolean matches(final T target) {
+        return this.matcher.matches(target.getParameters());
+    }
 }

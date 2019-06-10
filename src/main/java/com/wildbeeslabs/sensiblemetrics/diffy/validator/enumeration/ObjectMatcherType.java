@@ -23,25 +23,27 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 
-import com.google.common.collect.Iterables;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
- * Iterable validator type {@link Enum}
+ * Object matcher type {@link Enum}
  */
 @Getter
 @RequiredArgsConstructor
-public enum IterableValidatorType {
+public enum ObjectMatcherType {
     /**
-     * com.google.common.collect.Iterables
+     * java.util.Objects
      */
-    IS_EMPTY(Iterables::isEmpty);
+    IS_NULL(Objects::isNull),
+    IS_NON_NULL(Objects::nonNull);
 
     /**
-     * Iterable {@link Predicate} validator operator
+     * Object {@link Matcher} operator
      */
-    private final Predicate<Iterable<?>> validator;
+    private final Matcher<Object> matcher;
 }

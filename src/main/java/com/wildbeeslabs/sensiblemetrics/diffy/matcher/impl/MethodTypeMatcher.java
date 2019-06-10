@@ -25,8 +25,10 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import lombok.*;
 
+import java.lang.reflect.Method;
+
 /**
- * Modifier {@link AbstractMatcher} implementation
+ * Member type {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -35,50 +37,51 @@ import lombok.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ModifierMatcher<T> extends AbstractMatcher<Class<T>> {
-    private final ModifierMatcher.OperatorMode operatorMode;
+public class MethodTypeMatcher<T extends Method> extends AbstractMatcher<T> {
+    private final MethodTypeMatcher.SortType sort;
 
-    public ModifierMatcher(final ModifierMatcher.OperatorMode operatorMode) {
-        this.operatorMode = operatorMode;
+    public MethodTypeMatcher(final MethodTypeMatcher.SortType sort) {
+        this.sort = sort;
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        return (this.getOperatorMode().getModifiers() & target.getModifiers()) != 0;
+    public boolean matches(final T target) {
+        return this.sort.checkType(target);
     }
 
     /**
-     * Modifier operator mode type {@link Enum}
+     * Member sort type {@link Enum}
      */
     @Getter
     @RequiredArgsConstructor
-    public enum OperatorMode {
-        PUBLIC(1, "isPublic()"),
-        PROTECTED(4, "isProtected()"),
-        PRIVATE(2, "isPrivate()"),
-        FINAL(16, "isFinal()"),
-        STATIC(8, "isStatic()"),
-        SYNCHRONIZED(32, "isSynchronized()"),
-        NATIVE(256, "isNative()"),
-        STRICT(2048, "isStrict()"),
-        VAR_ARGS(128, "isVarArgs()"),
-        SYNTHETIC(4096, "isSynthetic()"),
-        BRIDGE(64, "isBridge()"),
-        ABSTRACT(1024, "isAbstract()"),
-        INTERFACE(512, "isInterface()"),
-        ANNOTATION(8192, "isAnnotation()"),
-        VOLATILE(64, "isVolatile()"),
-        TRANSIENT(128, "isTransient()"),
-        MANDATED(32768, "isMandated()"),
-        ENUMERATION(16384, "isEnum()");
+    public enum SortType {
+        SYNTHETIC("isSynthetic()") {
+            @Override
+            protected boolean checkType(final Method target) {
+                return target.isSynthetic();
+            }
+        },
+        BRIDGE("isBridge()") {
+            @Override
+            protected boolean checkType(final Method target) {
+                return target.isBridge();
+            }
+        },
+        DEFAULT("isDefault()") {
+            @Override
+            protected boolean checkType(final Method target) {
+                return target.isDefault();
+            }
+        },
+        VAR_ARGS("isVarArgs()") {
+            @Override
+            protected boolean checkType(final Method target) {
+                return target.isVarArgs();
+            }
+        };
 
-        /**
-         * Default modifier code
-         */
-        private final int modifiers;
-        /**
-         * Default modifier description
-         */
         private final String description;
+
+        protected abstract boolean checkType(final Method target);
     }
 }

@@ -21,29 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
-
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ClassUtils;
-
-import java.util.function.Predicate;
+package com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration;
 
 /**
- * Class validator type {@link Enum}
+ * Parameter type {@link Enum}
  */
-@Getter
-@RequiredArgsConstructor
-public enum ClassValidatorType {
-    /**
-     * org.apache.commons.lang3.ClassUtils
-     */
-    IS_INNER(ClassUtils::isInnerClass),
-    IS_PRIMITIVE_OR_WRAPPER(ClassUtils::isPrimitiveOrWrapper),
-    IS_PRIMITIVE(ClassUtils::isPrimitiveWrapper);
+public enum ParameterType {
+    NON_GENERIC,
+    GENERIC_ARRAY,
+    PARAMETERIZED,
+    WILDCARD,
+    VARIABLE,
+    VARIABLE_SYMBOLIC;
 
-    /**
-     * Class {@link Predicate} validator operator
-     */
-    private final Predicate<Class<?>> validator;
+    public boolean isNonGeneric() {
+        return this.equals(NON_GENERIC);
+    }
+
+    public boolean isParameterized() {
+        return this.equals(PARAMETERIZED);
+    }
+
+    public boolean isGenericArray() {
+        return this.equals(GENERIC_ARRAY);
+    }
+
+    public boolean isWildcard() {
+        return this.equals(WILDCARD);
+    }
+
+    public boolean isTypeVariable() {
+        return this.equals(VARIABLE) || this.equals(VARIABLE_SYMBOLIC);
+    }
 }

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.validator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.IterableValidatorType;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.IterableMatcherType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link IterableValidatorType} unit test
+ * {@link IterableMatcherType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -50,12 +50,12 @@ public class IterableValidatorTypeTest {
 
     @Test
     public void test_check_IterableValidatorType_ByEnum() {
-        assertThat(IterableValidatorType.IS_EMPTY.toString(), IsEqual.equalTo("IS_EMPTY"));
+        assertThat(IterableMatcherType.IS_EMPTY.toString(), IsEqual.equalTo("IS_EMPTY"));
     }
 
     @Test
     public void test_check_IterableValidatorType_ByName() {
-        assertEquals(IterableValidatorType.IS_EMPTY, IterableValidatorType.valueOf("IS_EMPTY"));
+        assertEquals(IterableMatcherType.IS_EMPTY, IterableMatcherType.valueOf("IS_EMPTY"));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class IterableValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, IterableValidatorType.valueOf("UNDEFINED"));
+        assertEquals(null, IterableMatcherType.valueOf("UNDEFINED"));
     }
 
     @Test
@@ -75,6 +75,6 @@ public class IterableValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, IterableValidatorType.valueOf(null));
+        assertEquals(null, IterableMatcherType.valueOf(null));
     }
 }

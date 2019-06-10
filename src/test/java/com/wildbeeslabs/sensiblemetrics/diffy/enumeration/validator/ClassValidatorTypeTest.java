@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.validator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.impl.IntConverter;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.ClassValidatorType;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.ClassMatcherType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link ClassValidatorType} unit test
+ * {@link ClassMatcherType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -51,16 +50,16 @@ public class ClassValidatorTypeTest {
 
     @Test
     public void test_check_ClassValidatorType_ByEnum() {
-        assertThat(ClassValidatorType.IS_INNER.toString(), IsEqual.equalTo("IS_INNER"));
-        assertThat(ClassValidatorType.IS_PRIMITIVE.toString(), IsEqual.equalTo("IS_PRIMITIVE"));
-        assertThat(ClassValidatorType.IS_PRIMITIVE_OR_WRAPPER.toString(), IsEqual.equalTo("IS_PRIMITIVE_OR_WRAPPER"));
+        assertThat(ClassMatcherType.IS_INNER.toString(), IsEqual.equalTo("IS_INNER"));
+        assertThat(ClassMatcherType.IS_PRIMITIVE.toString(), IsEqual.equalTo("IS_PRIMITIVE"));
+        assertThat(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER.toString(), IsEqual.equalTo("IS_PRIMITIVE_OR_WRAPPER"));
     }
 
     @Test
     public void test_check_ClassValidatorType_ByName() {
-        assertEquals(ClassValidatorType.IS_INNER, ClassValidatorType.valueOf("IS_INNER"));
-        assertEquals(ClassValidatorType.IS_PRIMITIVE, ClassValidatorType.valueOf("IS_PRIMITIVE"));
-        assertEquals(ClassValidatorType.IS_PRIMITIVE_OR_WRAPPER, ClassValidatorType.valueOf("IS_PRIMITIVE_OR_WRAPPER"));
+        assertEquals(ClassMatcherType.IS_INNER, ClassMatcherType.valueOf("IS_INNER"));
+        assertEquals(ClassMatcherType.IS_PRIMITIVE, ClassMatcherType.valueOf("IS_PRIMITIVE"));
+        assertEquals(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER, ClassMatcherType.valueOf("IS_PRIMITIVE_OR_WRAPPER"));
     }
 
     @Test
@@ -70,7 +69,7 @@ public class ClassValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassValidatorType.valueOf("UNDEFINED"));
+        assertEquals(null, ClassMatcherType.valueOf("UNDEFINED"));
     }
 
     @Test
@@ -80,6 +79,6 @@ public class ClassValidatorTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassValidatorType.valueOf(null));
+        assertEquals(null, ClassMatcherType.valueOf(null));
     }
 }
