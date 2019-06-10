@@ -131,12 +131,12 @@ public class BaseMatchDescription implements MatchDescription {
     }
 
     /**
-     * Appends input iterable collection of values to current {@link MatchDescription} by start/delimiter/end tokens
+     * Appends input iterableOf collection of values to current {@link MatchDescription} by start/delimiter/end tokens
      *
      * @param start     -  initial input start token {@link String}
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
-     * @param values    - initial input iterable collection of values to be appended {@link Iterable}
+     * @param values    - initial input iterableOf collection of values to be appended {@link Iterable}
      * @param <T>       type of input element to be processed by matchable operation
      * @return current {@link MatchDescription}
      */

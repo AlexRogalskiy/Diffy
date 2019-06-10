@@ -21,29 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
-import lombok.NonNull;
-
-import java.io.Serializable;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Difference matcher interface declaration
+ * Fail-safe {@link AbstractMatcher} implementation
  *
- * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@FunctionalInterface
-public interface DiffMatcher<T> extends Serializable {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class FailSafeMatcher<T> extends AbstractMatcher<T> {
+    private final Matcher<? super T> matcher;
+    private final boolean fallback;
 
-    /**
-     * Returns iterableOf collection of difference match entries {@link Iterable} by initial arguments {@code T} match comparison
-     *
-     * @param value - initial input argument to be matched by {@code T}
-     * @return {@link Iterable} collection of difference match entries
-     */
-    <S extends Iterable<? extends DiffMatchEntry<?>>> @NonNull S diffMatch(final T value);
+    public FailSafeMatcher(final Matcher<? super T> matcher, boolean fallback) {
+        this.matcher = matcher;
+        this.fallback = fallback;
+    }
+
+    @Override
+    public boolean matches(final T target) {
+        try {
+            return this.matcher.matches(target);
+        } catch (Exception e) {
+            return this.fallback;
+        }
+    }
 }

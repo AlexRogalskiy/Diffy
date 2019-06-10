@@ -411,7 +411,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @return {@link Map} of {@code T} items
      */
     @NonNull
-    static <T> Map<Boolean, List<T>> mapping(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+    static <T> Map<Boolean, List<T>> mapBy(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
         return mapBy(values, matcher);
     }

@@ -408,7 +408,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @return {@link Map} of {@link Entry}s
      */
     @NonNull
-    static <T> Map<Boolean, List<Entry<T, T>>> mapping(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T> Map<Boolean, List<Entry<T, T>>> mapBy(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return mapBy(values, matcher);
     }

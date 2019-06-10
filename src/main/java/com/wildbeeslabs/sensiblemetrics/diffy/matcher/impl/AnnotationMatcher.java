@@ -21,29 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
-import lombok.NonNull;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.util.Optional;
 
 /**
- * Difference matcher interface declaration
+ * Annotation {@link AbstractMatcher} implementation
  *
- * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@FunctionalInterface
-public interface DiffMatcher<T> extends Serializable {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class AnnotationMatcher<T> extends AbstractMatcher<Class<T>> {
+    private final Matcher<? super Annotation[]> matcher;
 
-    /**
-     * Returns iterableOf collection of difference match entries {@link Iterable} by initial arguments {@code T} match comparison
-     *
-     * @param value - initial input argument to be matched by {@code T}
-     * @return {@link Iterable} collection of difference match entries
-     */
-    <S extends Iterable<? extends DiffMatchEntry<?>>> @NonNull S diffMatch(final T value);
+    public AnnotationMatcher(final Matcher<? super Annotation[]> matcher) {
+        this.matcher = matcher;
+    }
+
+    @Override
+    public boolean matches(final Class<T> target) {
+        final Annotation[] result = Optional.ofNullable(target).map(Class::getAnnotations).orElse(null);
+        return this.matcher.matches(result);
+    }
 }

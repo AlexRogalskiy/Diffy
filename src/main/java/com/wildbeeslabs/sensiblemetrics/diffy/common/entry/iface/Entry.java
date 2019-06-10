@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.zipToMap;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.zipOf;
 
 /**
  * Entry interface declaration
@@ -215,6 +215,6 @@ public interface Entry<K, V> extends Serializable {
      */
     @NonNull
     static <K, V> List<Entry<K, V>> of(final List<K> keys, final List<V> values) {
-        return zipToMap(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+        return zipOf(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 }

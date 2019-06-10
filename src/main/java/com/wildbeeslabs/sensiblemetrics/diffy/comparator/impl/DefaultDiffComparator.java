@@ -114,7 +114,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
     }
 
     /**
-     * Returns iterable collection of difference entries {@link DiffEntry}
+     * Returns iterableOf collection of difference entries {@link DiffEntry}
      *
      * @param <S>   type of difference entry collection
      * @param first - initial first argument to be compared {@code T}

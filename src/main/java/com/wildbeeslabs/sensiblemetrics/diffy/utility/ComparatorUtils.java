@@ -278,12 +278,12 @@ public class ComparatorUtils {
     }
 
     /**
-     * Returns iterable {@link Iterable} comparator instance {@link Comparator}
+     * Returns iterableOf {@link Iterable} comparator instance {@link Comparator}
      *
      * @param <T>             type of input element to be compared by {@link Iterable}
      * @param comparator      - initial input comparator instance {@link Comparator}
      * @param nullsInPriority - initial input "null" priority {@link Boolean}
-     * @return iterable comparator instance {@link Comparator}
+     * @return iterableOf comparator instance {@link Comparator}
      */
     @SuppressWarnings("unchecked")
     @Factory
@@ -1404,7 +1404,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default null-safe iterable {@link Iterable} comparator implementation {@link DefaultNullSafeObjectComparator}
+     * Default null-safe iterableOf {@link Iterable} comparator implementation {@link DefaultNullSafeObjectComparator}
      *
      * @param <T> type of input element to be compared by operation
      */
@@ -1413,14 +1413,14 @@ public class ComparatorUtils {
     public static class DefaultNullSafeIterableComparator<T> extends DefaultNullSafeObjectComparator<Iterable<T>> {
 
         /**
-         * Default null-safe iterable comparator constructor
+         * Default null-safe iterableOf comparator constructor
          */
         public DefaultNullSafeIterableComparator() {
             this(null);
         }
 
         /**
-         * Default null-safe iterable comparator constructor with initial comparator instance {@link Comparator}
+         * Default null-safe iterableOf comparator constructor with initial comparator instance {@link Comparator}
          *
          * @param comparator - initial input comparator instance {@link Comparator}
          */
@@ -1429,7 +1429,7 @@ public class ComparatorUtils {
         }
 
         /**
-         * Default null-safe iterable comparator constructor with initial comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
+         * Default null-safe iterableOf comparator constructor with initial comparator instance {@link Comparator} and "null" priority argument {@link Boolean}
          *
          * @param comparator      - initial input comparator instance {@link Comparator}
          * @param nullsInPriority - initial input "null" priority argument {@link Boolean}

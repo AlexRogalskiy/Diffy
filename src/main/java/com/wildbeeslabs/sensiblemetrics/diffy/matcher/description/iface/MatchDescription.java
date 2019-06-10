@@ -80,12 +80,12 @@ public interface MatchDescription extends Serializable {
     <T> MatchDescription append(final String start, final String delimiter, final String end, final T... values);
 
     /**
-     * Appends input iterable collection of values to current description {@link MatchDescription} by start/delimiter/end tokens
+     * Appends input iterableOf collection of values to current description {@link MatchDescription} by start/delimiter/end tokens
      *
      * @param start     -  initial input start token {@link String}
      * @param delimiter - initial input delimiter token {@link String}
      * @param end       - initial input end token {@link String}
-     * @param values    - initial input iterable collection of values to be appended {@link Iterable}
+     * @param values    - initial input iterableOf collection of values to be appended {@link Iterable}
      * @param <T>       type of input element to be processed by matchable operation
      * @return current description instance {@link MatchDescription}
      */
@@ -158,7 +158,7 @@ public interface MatchDescription extends Serializable {
          * @param start     -  initial input start token {@link String}
          * @param delimiter - initial input delimiter token {@link String}
          * @param end       - initial input end token {@link String}
-         * @param values    - initial input iterable collection of values to be appended {@link Iterable}
+         * @param values    - initial input iterableOf collection of values to be appended {@link Iterable}
          * @param <T>       type of input element to be processed by matchable operation
          * @return current empty description instance {@link MatchDescription}
          */

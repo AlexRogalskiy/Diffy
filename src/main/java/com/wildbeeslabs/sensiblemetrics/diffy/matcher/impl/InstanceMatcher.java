@@ -35,7 +35,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInQ
 import static java.lang.String.join;
 
 /**
- * Custom {@link AbstractMatcher} implementation
+ * Instance {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1

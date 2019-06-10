@@ -21,29 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffMatchEntry;
-import lombok.NonNull;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Objects;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
- * Difference matcher interface declaration
+ * Collection item {@link AbstractMatcher} implementation
  *
- * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@FunctionalInterface
-public interface DiffMatcher<T> extends Serializable {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class CollectionItemMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
+    private final Matcher<? super T> matcher;
 
-    /**
-     * Returns iterableOf collection of difference match entries {@link Iterable} by initial arguments {@code T} match comparison
-     *
-     * @param value - initial input argument to be matched by {@code T}
-     * @return {@link Iterable} collection of difference match entries
-     */
-    <S extends Iterable<? extends DiffMatchEntry<?>>> @NonNull S diffMatch(final T value);
+    public CollectionItemMatcher(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        this.matcher = matcher;
+    }
+
+    @Override
+    public boolean matches(final Iterable<? extends T> target) {
+        final Iterator var2 = listOf(target).iterator();
+        T value;
+        do {
+            if (!var2.hasNext()) {
+                return false;
+            }
+            value = (T) var2.next();
+        } while (!this.matcher.matches(value));
+        return true;
+    }
 }

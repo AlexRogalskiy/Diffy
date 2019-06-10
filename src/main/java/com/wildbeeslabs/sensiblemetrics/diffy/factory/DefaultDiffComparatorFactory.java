@@ -54,13 +54,13 @@ public class DefaultDiffComparatorFactory {
     }
 
     /**
-     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterable collections of included/excluded properties {@link Iterable}
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterableOf collections of included/excluded properties {@link Iterable}
      *
      * @param <T>               type of input element to create comparator for
      * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
-     * @param includeProperties - initial iterable collection of included properties {@link Iterable}
-     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @param includeProperties - initial iterableOf collection of included properties {@link Iterable}
+     * @param excludeProperties - initial iterableOf collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
     @Factory
@@ -72,12 +72,12 @@ public class DefaultDiffComparatorFactory {
     }
 
     /**
-     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterable collection of excluded properties {@link Iterable}
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class} and iterableOf collection of excluded properties {@link Iterable}
      *
      * @param <T>               type of input element to create comparator for
      * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
-     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @param excludeProperties - initial iterableOf collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
     @Factory
@@ -102,14 +102,14 @@ public class DefaultDiffComparatorFactory {
     }
 
     /**
-     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterable collections of included/excluded properties {@link Iterable}
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterableOf collections of included/excluded properties {@link Iterable}
      *
      * @param <T>               type of input element to create comparator for
      * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @param comparator        - initial comparator instance {@link Comparator}
-     * @param includeProperties - initial iterable collection of included properties {@link Iterable}
-     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @param includeProperties - initial iterableOf collection of included properties {@link Iterable}
+     * @param excludeProperties - initial iterableOf collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
     @Factory
@@ -121,13 +121,13 @@ public class DefaultDiffComparatorFactory {
     }
 
     /**
-     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterable collection of excluded properties {@link Iterable}
+     * Creates difference comparator instance {@link DiffComparator} by class instance {@link Class}, comparator instance {@link Comparator}, iterableOf collection of excluded properties {@link Iterable}
      *
      * @param <T>               type of input element to create comparator for
      * @param <E>               type of difference comparator instance
      * @param clazz             - initial class instance {@link Class} to initialize comparator {@link DiffComparator}
      * @param comparator        - initial comparator instance {@link Comparator}
-     * @param excludeProperties - initial iterable collection of excluded properties {@link Iterable}
+     * @param excludeProperties - initial iterableOf collection of excluded properties {@link Iterable}
      * @return difference comparator {@link DiffComparator}
      */
     @Factory

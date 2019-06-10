@@ -86,11 +86,11 @@ public class DefaultDiffMatcherFactory {
     }
 
     /**
-     * Creates difference matcher instance {@link DiffMatcher} by input iterable collection of matchers {@link Iterable}
+     * Creates difference matcher instance {@link DiffMatcher} by input iterableOf collection of matchers {@link Iterable}
      *
      * @param <T>      type of input element to create matcher for
      * @param <E>      type of difference matcher instance
-     * @param matchers - initial input iterable collection of matchers {@link Iterable}
+     * @param matchers - initial input iterableOf collection of matchers {@link Iterable}
      * @return difference matcher {@link DiffMatcher}
      */
     @Factory

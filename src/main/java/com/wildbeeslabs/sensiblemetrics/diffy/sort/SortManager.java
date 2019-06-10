@@ -245,9 +245,9 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     }
 
     /**
-     * Returns sort order iterator instance {@link Iterator}
+     * Returns sort order iteratorOf instance {@link Iterator}
      *
-     * @return sort order iterator instance {@link Iterator}
+     * @return sort order iteratorOf instance {@link Iterator}
      */
     public Iterator<SortOrder> iterator() {
         return getOrders().iterator();

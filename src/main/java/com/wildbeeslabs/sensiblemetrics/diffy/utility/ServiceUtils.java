@@ -268,7 +268,7 @@ public class ServiceUtils {
         return (iterable instanceof Collection) ? (Collection<T>) iterable : newArrayList(iterable);
     }
 
-    public static <T> T[] toArray(final Iterable<? extends T> iterable, final Class<T> type) {
+    public static <T> T[] arrayOf(final Iterable<? extends T> iterable, final Class<T> type) {
         if (Objects.isNull(iterable)) {
             return null;
         }
@@ -277,7 +277,7 @@ public class ServiceUtils {
         return collection.toArray(array);
     }
 
-    public static <T> T[] toArray(final Iterable<? extends T> iterable) {
+    public static <T> T[] arrayOf(final Iterable<? extends T> iterable) {
         if (Objects.isNull(iterable)) {
             return null;
         }
@@ -294,7 +294,7 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> Stream<T> streamOf(final Iterator<T> iterator, final boolean parallel) {
-        Objects.requireNonNull(iterator, "Source iterator should not be null");
+        Objects.requireNonNull(iterator, "Source iteratorOf should not be null");
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), parallel);
     }
 
@@ -334,13 +334,13 @@ public class ServiceUtils {
     }
 
     @NonNull
-    public static <T> Iterable<T> iterable(final T... elements) {
+    public static <T> Iterable<T> iterableOf(final T... elements) {
         return streamOf(elements).collect(Collectors.toList());
     }
 
     @NonNull
-    public static <T> Iterator<T> iterator(final T... elements) {
-        return iterable(elements).iterator();
+    public static <T> Iterator<T> iteratorOf(final T... elements) {
+        return iterableOf(elements).iterator();
     }
 
     @SuppressWarnings("unchecked")
@@ -356,14 +356,14 @@ public class ServiceUtils {
      * @return {@link Set} of {@link T}s
      */
     @NonNull
-    public static <T> Set<T> arrayToSet(final T... value) {
+    public static <T> Set<T> setOf(final T... value) {
         return new HashSet<>(Arrays.asList(value));
     }
 
     @NonNull
-    public static <T> List<T> copyOf(final List<T> source, final int fromIndex, final int to) {
+    public static <T> List<T> copyOf(final List<T> source, final int fromIndex, final int toIndex) {
         Objects.requireNonNull(source, "Source list should not be null");
-        return new ArrayList<>(source.subList(fromIndex, to));
+        return new ArrayList<>(source.subList(fromIndex, toIndex));
     }
 
     public static void closeQuietly(final Closeable... closeables) {
@@ -389,7 +389,7 @@ public class ServiceUtils {
      * @return concatenated {@link List} of {@code T} items
      */
     @SuppressWarnings("varargs")
-    public static <T> List<T> concat(final List<T>... collections) {
+    public static <T> List<T> concatOf(final List<T>... collections) {
         return streamOf(collections).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
@@ -402,7 +402,7 @@ public class ServiceUtils {
      * @param values - initial input {@link List} of {@code V} values
      * @return {@link Map} of {@code K,V}
      */
-    public static <K, V> Map<K, V> zipToMap(final List<K> keys, final List<V> values) {
+    public static <K, V> Map<K, V> zipOf(final List<K> keys, final List<V> values) {
         Objects.requireNonNull(keys, "Keys should not be null");
         Objects.requireNonNull(values, "Values should not be null");
         return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));

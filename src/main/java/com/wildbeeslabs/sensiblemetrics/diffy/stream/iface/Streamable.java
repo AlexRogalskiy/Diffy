@@ -63,9 +63,9 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     /**
      * Returns a {@link Streamable} for the given {@link Iterable} instance
      *
-     * @param iterable - initial input iterable collection {@link Iterable}
+     * @param iterable - initial input iterableOf collection {@link Iterable}
      * @return {@link Streamable} of values {@code T}
-     * @throws NullPointerException if iterable is {@code null}
+     * @throws NullPointerException if iterableOf is {@code null}
      */
     static <T> Streamable<T> of(final Iterable<T> iterable) {
         Objects.requireNonNull(iterable, "Iterable should not be null!");
@@ -134,7 +134,7 @@ public interface Streamable<T> extends Iterable<T>, Supplier<Stream<T>> {
     /**
      * Returns whether the current {@link Streamable} is empty
      *
-     * @return true - if iterator is exhausted, false - otherwise
+     * @return true - if iteratorOf is exhausted, false - otherwise
      */
     default boolean isEmpty() {
         return !iterator().hasNext();

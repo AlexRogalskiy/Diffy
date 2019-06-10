@@ -660,7 +660,7 @@ public class DeliveryInfoDiffComparatorTest extends AbstractDeliveryInfoDiffTest
     }
 
     @Test
-    @DisplayName("Test comparing delivery info entities by included properties and default iterable comparator")
+    @DisplayName("Test comparing delivery info entities by included properties and default iterableOf comparator")
     public void test_entitiesWithIncludedProperties_by_customIterableComparator() {
         // given
         final List<AddressInfo> addressInfoList = asList(getAddressInfoMock().val(), getAddressInfoMock().val());

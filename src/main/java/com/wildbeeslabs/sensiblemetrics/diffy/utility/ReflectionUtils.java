@@ -179,10 +179,10 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns binary flag based on input iterable collection of argument types {@link Iterable} and shared type instance {@link Class}
+     * Returns binary flag based on input iterableOf collection of argument types {@link Iterable} and shared type instance {@link Class}
      *
      * @param sharedType - input shared type instance {@link Class}
-     * @param types      - input iterable collection of input argument types {@link Iterable}
+     * @param types      - input iterableOf collection of input argument types {@link Iterable}
      * @return true - if shared type is assigned by input collection of argument types, fales - otherwise
      */
     public static boolean allAssignableFrom(final Class<?> sharedType, final Iterable<? extends Class<?>> types) {
@@ -473,7 +473,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns iterable collection of all persistent fields {@link List} by input class instance {@link Class}
+     * Returns iterableOf collection of all persistent fields {@link List} by input class instance {@link Class}
      *
      * @param clazz - input class instance {@link Class}
      * @return collection of persistent fields {@link List}
@@ -483,7 +483,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns iterable collection of type arguments {@link List} by input type instance {@link Type}
+     * Returns iterableOf collection of type arguments {@link List} by input type instance {@link Type}
      *
      * @param type - input type instance {@link Type}
      * @return collection of type arguments {@link List}
@@ -709,7 +709,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Returns sorted iterable collection {@link List} by input collection {@link List}, object field name {@link String} and class instance {@link Class}
+     * Returns sorted iterableOf collection {@link List} by input collection {@link List}, object field name {@link String} and class instance {@link Class}
      *
      * @param list  - initial input collection to be sorted {@link List}
      * @param field - initial input object field name {@link String}
