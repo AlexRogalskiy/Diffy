@@ -54,6 +54,11 @@ import static org.apache.commons.lang3.StringUtils.join;
 public interface Matcher<T> extends BaseMatcher<T, T> {
 
     /**
+     * Default {@link Matcher} to {@link BiMatcher}
+     */
+    Function<Matcher<Object>, Matcher<?>> DEFAULT_MATCHER = (final Matcher<Object> matcher) -> matcher::matches;
+
+    /**
      * Default null {@link Matcher}
      */
     Matcher<?> DEFAULT_NULL_MATCHER = Objects::isNull;
@@ -105,7 +110,11 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     /**
      * Default exist {@link Matcher}
      */
-    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER = (final Collection<?> collection) -> value -> collection.contains(value);
+    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER = (final Collection<?> collection) -> collection::contains;
+    /**
+     * Default boolean {@link Matcher}
+     */
+    Function<Boolean, Matcher<Boolean>> DEFAULT_BOOLEAN_MATCHER = (final Boolean flag) -> flag::equals;
 
     /**
      * Returns binary flag by initial argument {@code T} match comparison
@@ -358,6 +367,35 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
         return matchIf(values, matcher);
+    }
+
+    /**
+     * Returns {@link Optional} of first match {@code T} filtered by input {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@code T}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Optional} of first match {@code T} item
+     * @throws NullPointerException if matcher is {@code null}
+     */
+    @NonNull
+    static <T> Optional<T> matchFirstIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return listOf(values).stream().filter(matcher::matches).findFirst();
+    }
+
+    /**
+     * Returns {@link Optional} of first match {@code T} filtered by input array of {@link Matcher}s
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input array of {@link Matcher}
+     * @return {@link Optional} of first match {@code T} item
+     */
+    @NonNull
+    static <T> Optional<T> matchFirstIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        return matchFirstIf(values, matcher);
     }
 
     /**

@@ -54,9 +54,9 @@ import static org.apache.commons.lang3.StringUtils.join;
 public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
 
     /**
-     * Default {@link Matcher} to {@link BiMatcher}
+     * Default {@link BiMatcher} operator
      */
-    Function<Matcher, BiMatcher> DEFAULT_BIMATCHER = (final Matcher matcher) -> (value1, value2) -> matcher.allMatch(value1, value2);
+    Function<Matcher<Object>, BiMatcher<?>> DEFAULT_BIMATCHER = (final Matcher<Object> matcher) -> (value1, value2) -> matcher.allMatch(value1, value2);
 
     /**
      * Default null {@link BiMatcher}
@@ -115,6 +115,10 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Default exist {@link BiMatcher}
      */
     Function<Collection<?>, BiMatcher<?>> DEFAULT_EXIST_BIMATCHER = (final Collection<?> collection) -> (value1, value2) -> collection.contains(of(value1, value2));
+    /**
+     * Default boolean {@link Matcher}
+     */
+    Function<Boolean, BiMatcher<?>> DEFAULT_BOOLEAN_MATCHER = (final Boolean flag) -> DEFAULT_EQUALS_BIMATCHER.apply(flag);
 
     /**
      * Compares provided objects by equality constraint
@@ -355,6 +359,36 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return matchIf(values, matcher);
+    }
+
+    /**
+     * Returns {@link Optional} of first match {@link Entry} filtered by input {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Optional} of first match {@link Entry} item
+     * @throws NullPointerException if matcher is {@code null}
+     */
+    @NonNull
+    static <T> Optional<Entry<T, T>> matchFirstIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return listOf(values).stream().filter((entry -> matcher.matches(entry.getFirst(), entry.getLast()))).findFirst();
+    }
+
+    /**
+     * Returns {@link Optional} of first match {@code T} filtered by input array of {@link BiMatcher}s
+     * BiMatcher
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input array of {@link BiMatcher}
+     * @return {@link Optional} of first match {@link Entry}
+     */
+    @NonNull
+    static <T> Optional<Entry<T, T>> matchFirstIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+        final BiMatcher<T> matcher = andAll(matchers);
+        return matchFirstIf(values, matcher);
     }
 
     /**
