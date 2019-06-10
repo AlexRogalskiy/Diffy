@@ -36,7 +36,19 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class StringMatcher extends AbstractMatcher<String> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 6863244641427331582L;
+
+    /**
+     * Default string value {@link String}
+     */
     private final String value;
+    /**
+     * Default matcher mode type {@link StringMatcher.MatchModeType}
+     */
     private final StringMatcher.MatchModeType modeType;
 
     public StringMatcher(final String value, final StringMatcher.MatchModeType modeType) {

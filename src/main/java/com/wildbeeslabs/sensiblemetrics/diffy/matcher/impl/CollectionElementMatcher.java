@@ -44,7 +44,19 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class CollectionElementMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -288578317981936198L;
+
+    /**
+     * Default collection index
+     */
     private final int index;
+    /**
+     * Default {@link Matcher}
+     */
     private final Matcher<? super T> matcher;
 
     public CollectionElementMatcher(int index, final Matcher<? super T> matcher) {

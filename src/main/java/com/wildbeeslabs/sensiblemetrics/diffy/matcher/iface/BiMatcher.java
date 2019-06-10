@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
@@ -35,6 +36,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
@@ -509,6 +511,51 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     }
 
     /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<Entry<T, T>> skipUntil(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<Entry<T, T>> skipWhile(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<Entry<T, T>> takeWhile(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+    }
+
+    /**
      * Filters input {@link Collection} of {@link Entry} items by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
@@ -548,14 +595,6 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T> void removeFirst(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         matchFirstIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
-//        final Iterator<Entry<T, T>> iterator = listOf(values).iterator();
-//        while (iterator.hasNext()) {
-//            final Entry<T, T> entry = iterator.next();
-//            if (matcher.matches(entry.getFirst(), entry.getLast())) {
-//                iterator.remove();
-//                return;
-//            }
-//        }
     }
 
     /**

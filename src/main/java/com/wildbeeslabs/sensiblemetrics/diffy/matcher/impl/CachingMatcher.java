@@ -45,7 +45,19 @@ import java.util.concurrent.ConcurrentMap;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class CachingMatcher<T> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -4812424558046288887L;
+
+    /**
+     * Default {@link Matcher}
+     */
     private final Matcher<? super T> matcher;
+    /**
+     * Default {@link ConcurrentMap}
+     */
     protected final ConcurrentMap<? super T, Boolean> map;
 
     public CachingMatcher(final Matcher<? super T> matcher, final ConcurrentMap<? super T, Boolean> map) {

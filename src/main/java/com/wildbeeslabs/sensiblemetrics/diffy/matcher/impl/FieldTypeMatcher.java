@@ -41,6 +41,12 @@ import java.lang.reflect.Field;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class FieldTypeMatcher<T extends Field> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 46110569062922186L;
+
     private final Matcher<? super Class<?>> matcher;
 
     public FieldTypeMatcher(final Matcher<? super Class<?>> matcher) {

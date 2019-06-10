@@ -38,6 +38,12 @@ import java.lang.reflect.Method;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MethodTypeMatcher<T extends Method> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 1204184525772829526L;
+
     private final MethodTypeMatcher.SortType sort;
 
     public MethodTypeMatcher(final MethodTypeMatcher.SortType sort) {

@@ -46,6 +46,12 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.iterab
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class HasSuperTypeMatcher<T extends Iterable<Class<?>>> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 450999386035072521L;
+
     private final Matcher<? super Type> matcher;
 
     public HasSuperTypeMatcher(final Matcher<? super Type> matcher) {

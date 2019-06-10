@@ -38,6 +38,12 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class BooleanMatcher<T> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -4011302030901316299L;
+
     private final boolean matches;
 
     public BooleanMatcher(boolean matches) {

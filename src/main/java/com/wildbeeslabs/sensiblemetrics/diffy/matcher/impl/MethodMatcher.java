@@ -43,6 +43,12 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 6028062634714014542L;
+
     private final Matcher<? super Method[]> matcher;
 
     public MethodMatcher(final Matcher<? super Method[]> matcher) {

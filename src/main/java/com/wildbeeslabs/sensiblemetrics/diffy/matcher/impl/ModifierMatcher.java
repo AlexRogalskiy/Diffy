@@ -36,6 +36,12 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ModifierMatcher<T> extends AbstractMatcher<Class<T>> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 5329516108165643834L;
+
     private final ModifierMatcher.OperatorMode operatorMode;
 
     public ModifierMatcher(final ModifierMatcher.OperatorMode operatorMode) {

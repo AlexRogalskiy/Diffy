@@ -46,6 +46,12 @@ import static java.util.Arrays.asList;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MethodOverrideMatcher<T extends Method> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 8175070304947376468L;
+
     private final Matcher<? super Parameter[]> matcher;
 
     public MethodOverrideMatcher(final Matcher<? super Parameter[]> matcher) {

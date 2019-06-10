@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
@@ -35,6 +36,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
@@ -306,7 +308,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns binary flag based on all-match input collection of values {@code T}
+     * Returns binary flag based on all-matched input collection of values {@code T}
      *
      * @param values - initial input collection of values {@code T}
      * @return true - if all input values {@code T} match, false - otherwise
@@ -318,7 +320,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns binary flag based on non-match input collection of values {@code T}
+     * Returns binary flag based on non-matched input collection of values {@code T}
      *
      * @param values - initial input collection of values {@code T}
      * @return true - if all input values {@code T} match, false - otherwise
@@ -330,7 +332,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns binary flag based on any-match input collection of values {@code T}
+     * Returns binary flag based on any-matched input collection of values {@code T}
      *
      * @param values - initial input collection of values {@code T}
      * @return true - if all input values {@code T} match, false - otherwise
@@ -342,7 +344,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} filtered by input {@link Matcher}
+     * Returns {@link Collection} of {@code T} items filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
@@ -357,7 +359,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} filtered by input array of {@link Matcher}s
+     * Returns {@link Collection} of {@code T} items filtered by input array of {@link Matcher}s
      *
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
@@ -371,7 +373,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} filtered by input {@link Matcher} with skip count
+     * Returns {@link Collection} of {@code T} items filtered by input {@link Matcher} with skip count
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
@@ -388,7 +390,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} filtered by input array of {@link Matcher}s with skip count
+     * Returns {@link Collection} of {@code T} items filtered by input array of {@link Matcher}s with skip count
      *
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
@@ -403,7 +405,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Optional} of first match {@code T} filtered by input {@link Matcher}
+     * Returns {@link Optional} of first matched {@code T} item filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
@@ -418,7 +420,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Optional} of first match {@code T} filtered by input array of {@link Matcher}s
+     * Returns {@link Optional} of first matched {@code T} item filtered by input array of {@link Matcher}s
      *
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
@@ -432,7 +434,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Optional} of last match {@code T} filtered by input {@link Matcher}
+     * Returns {@link Optional} of last matched {@code T} item filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
@@ -447,7 +449,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Optional} of last match {@code T} filtered by input array of {@link Matcher}s
+     * Returns {@link Optional} of last matched {@code T} item filtered by input array of {@link Matcher}s
      *
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
@@ -461,7 +463,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} filtered by input {@link Matcher}
+     * Returns {@link Collection} of {@code T} items filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
@@ -475,7 +477,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Collection} of {@code T} filtered by input array of {@link Matcher}s
+     * Returns {@link Collection} of {@code T} items filtered by input array of {@link Matcher}s
      *
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
@@ -489,7 +491,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Map} of {@code T} by input {@link Matcher}
+     * Returns {@link Map} of {@code T} items filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
@@ -503,7 +505,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
-     * Returns {@link Map} of {@code T} by input array of {@link Matcher}s
+     * Returns {@link Map} of {@code T} items filtered by input array of {@link Matcher}s
      *
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
@@ -514,6 +516,66 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Map<Boolean, List<T>> mapBy(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
         return mapBy(values, matcher);
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<T> skipUntil(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipUntil(stream, matcher::matches).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<T> skipWhile(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipWhile(stream, matcher::matches).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<T> takeWhile(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeWhile(stream, matcher::matches).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<T> takeUntil(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeUntil(stream, matcher::matches).collect(Collectors.toList());
     }
 
     /**
@@ -556,13 +618,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> void removeFirst(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         matchFirstIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
-//        final Iterator<T> iterator = listOf(values).iterator();
-//        while (iterator.hasNext()) {
-//            if (matcher.matches(iterator.next())) {
-//                iterator.remove();
-//                return;
-//            }
-//        }
     }
 
     /**

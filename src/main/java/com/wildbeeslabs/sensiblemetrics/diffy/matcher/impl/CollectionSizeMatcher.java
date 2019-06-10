@@ -42,6 +42,15 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class CollectionSizeMatcher<T extends Iterable<?>> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 192869149014232374L;
+
+    /**
+     * Default collection side
+     */
     private final int size;
 
     public CollectionSizeMatcher(int size) {

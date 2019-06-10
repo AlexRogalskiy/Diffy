@@ -32,11 +32,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.zipOf;
 
@@ -93,7 +91,7 @@ public interface Entry<K, V> extends Serializable {
      * @return true - if first/last values are equal, false - otherwise
      */
     default boolean areEqual() {
-        return Objects.equals(getFirst(), getLast());
+        return Objects.equals(this.getFirst(), this.getLast());
     }
 
     /**
@@ -167,23 +165,7 @@ public interface Entry<K, V> extends Serializable {
      * @since 2.1
      */
     static <K, V, T> Stream<T> zip(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, T> combiner) {
-        Objects.requireNonNull(first, "Key stream should not be null!");
-        Objects.requireNonNull(last, "Value stream should not be null!");
-        Objects.requireNonNull(combiner, "Combiner should not be null!");
-
-        final Spliterator<K> firsts = first.spliterator();
-        final Spliterator<V> lasts = last.spliterator();
-
-        long size = Long.min(firsts.estimateSize(), lasts.estimateSize());
-        int characteristics = firsts.characteristics() & lasts.characteristics();
-        boolean parallel = first.isParallel() || last.isParallel();
-
-        return StreamSupport.stream(new Spliterators.AbstractSpliterator<>(size, characteristics) {
-            @Override
-            public boolean tryAdvance(final Consumer<? super T> action) {
-                return firsts.tryAdvance(f -> lasts.tryAdvance(l -> action.accept(combiner.apply(f, l))));
-            }
-        }, parallel);
+        return zip(first, last, combiner);
     }
 
     /**

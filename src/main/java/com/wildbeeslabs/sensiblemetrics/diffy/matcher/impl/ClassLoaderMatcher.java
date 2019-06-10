@@ -41,6 +41,15 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ClassLoaderMatcher<T extends ClassLoader> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 6863244641427331582L;
+
+    /**
+     * Default {@link Matcher}
+     */
     private final Matcher<? super ClassLoader> matcher;
 
     public ClassLoaderMatcher(final Matcher<? super ClassLoader> matcher) {

@@ -41,6 +41,12 @@ import java.lang.reflect.Parameter;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MethodParameterTypeMatcher<T extends Parameter> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -1247406719356639253L;
+
     private final Matcher<? super Class<?>> matcher;
 
     public MethodParameterTypeMatcher(final Matcher<? super Class<?>> matcher) {

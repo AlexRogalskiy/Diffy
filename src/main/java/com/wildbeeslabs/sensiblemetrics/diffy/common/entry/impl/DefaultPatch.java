@@ -56,7 +56,7 @@ public class DefaultPatch<T> implements Patch<T> {
     @Override
     public Iterable<T> applyTo(final Iterable<T> target) throws IllegalStateException {
         final List<T> result = listOf(target);
-        final ListIterator<Delta<T>> it = getDeltas().listIterator(deltas.size());
+        final ListIterator<Delta<T>> it = getDeltas().listIterator(this.deltas.size());
         while (it.hasPrevious()) {
             it.previous().applyTo(result);
         }
@@ -80,6 +80,6 @@ public class DefaultPatch<T> implements Patch<T> {
     @Override
     public List<Delta<T>> getDeltas() {
         Collections.sort(this.deltas, (Comparator<? super Delta<T>>) ComparatorUtils.DeltaComparator.INSTANCE);
-        return deltas;
+        return this.deltas;
     }
 }

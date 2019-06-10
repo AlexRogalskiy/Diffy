@@ -46,6 +46,15 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class CollectionOneToOneMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -2296393880356376030L;
+
+    /**
+     * Default {@link List} of {@link Matcher}
+     */
     private final List<? extends Matcher<? super T>> matchers;
 
     public CollectionOneToOneMatcher(final List<? extends Matcher<? super T>> matchers) {

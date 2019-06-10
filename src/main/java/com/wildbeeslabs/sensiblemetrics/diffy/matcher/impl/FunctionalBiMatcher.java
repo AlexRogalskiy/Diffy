@@ -23,17 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Function;
 
 /**
- * Field array {@link AbstractMatcher} implementation
+ * Functional {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -42,23 +40,22 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class FieldMatcher<T> extends AbstractMatcher<Class<T>> {
+public class FunctionalBiMatcher<T, R> extends AbstractBiMatcher<T, T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -2787672691781830929L;
+    private static final long serialVersionUID = -1149522422254660058L;
 
-    private final Matcher<? super Field[]> matcher;
+    private final Function<T, ? extends R> function;
 
-    public FieldMatcher(final Matcher<? super Field[]> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    public FunctionalBiMatcher(final Function<T, ? extends R> function) {
+        Objects.requireNonNull(function, "Function should not be null");
+        this.function = function;
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        final Field[] result = Optional.ofNullable(target).map(Class::getDeclaredFields).orElse(null);
-        return this.matcher.matches(result);
+    public boolean matches(final T value1, final T value2) {
+        return Objects.equals(this.getFunction().apply(value1), this.getFunction().apply(value2));
     }
 }

@@ -39,7 +39,19 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class FailSafeMatcher<T> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 3063977367736961439L;
+
+    /**
+     * Default {@link Matcher}
+     */
     private final Matcher<? super T> matcher;
+    /**
+     * Default fallback match result
+     */
     private final boolean fallback;
 
     public FailSafeMatcher(final Matcher<? super T> matcher, boolean fallback) {

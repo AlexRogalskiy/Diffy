@@ -18,6 +18,12 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class PropertyTypeMatcher<T extends AbstractPropertyInfo<?>> extends AbstractMatcher<T> {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -829610124611880546L;
+
     private final Matcher<? super PropertyType> matcher;
 
     public PropertyTypeMatcher(final Matcher<? super PropertyType> matcher) {

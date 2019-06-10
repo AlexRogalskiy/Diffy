@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
+import com.codepoetics.protonpack.Indexed;
+import com.codepoetics.protonpack.StreamUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
@@ -39,17 +41,12 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+import java.util.function.*;
+import java.util.stream.*;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
@@ -357,7 +354,7 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> Set<T> setOf(final T... value) {
-        return new HashSet<>(Arrays.asList(value));
+        return new HashSet<>(asList(value));
     }
 
     @NonNull
@@ -402,9 +399,94 @@ public class ServiceUtils {
      * @param values - initial input {@link List} of {@code V} values
      * @return {@link Map} of {@code K,V}
      */
+    @NonNull
     public static <K, V> Map<K, V> zipOf(final List<K> keys, final List<V> values) {
         Objects.requireNonNull(keys, "Keys should not be null");
         Objects.requireNonNull(values, "Values should not be null");
         return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
+    }
+
+    /**
+     * Returns {@link Stream} of {@code O} items by input arguments
+     *
+     * @param <K>   type of first item
+     * @param <V>   type of last item
+     * @param first - initial input {@link Stream} of {@code K} keys
+     * @param last  - initial input {@link Stream} of {@code V} values
+     * @return {@link Stream} of {@code O}
+     */
+    @NonNull
+    static <K, V, O> Stream<O> zipOf(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, O> combiner) {
+        Objects.requireNonNull(first, "First stream should not be null!");
+        Objects.requireNonNull(last, "Last stream should not be null!");
+        Objects.requireNonNull(combiner, "Combiner should not be null!");
+
+        return StreamUtils.zip(first, last, combiner);
+    }
+
+    /**
+     * Zips the given {@link Stream}s using the given {@link BiFunction}. The resulting {@link Stream} will have the
+     * length of the shorter of the two, abbreviating the zipping when the shorter of the two {@link Stream}s is
+     * exhausted.
+     *
+     * @param first    must not be {@literal null}.
+     * @param last     must not be {@literal null}.
+     * @param combiner must not be {@literal null}.
+     * @return {@link Stream} of {@code T}
+     * @throws NullPointerException if first is {@code null}
+     * @throws NullPointerException if last is {@code null}
+     * @throws NullPointerException if combiner is {@code null}
+     * @since 2.1
+     */
+    @NonNull
+    static <K, V, T> Stream<T> zip2(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, T> combiner) {
+        Objects.requireNonNull(first, "Key stream should not be null!");
+        Objects.requireNonNull(last, "Value stream should not be null!");
+        Objects.requireNonNull(combiner, "Combiner should not be null!");
+
+        final Spliterator<K> firsts = first.spliterator();
+        final Spliterator<V> lasts = last.spliterator();
+
+        long size = Long.min(firsts.estimateSize(), lasts.estimateSize());
+        int characteristics = firsts.characteristics() & lasts.characteristics();
+        boolean parallel = first.isParallel() || last.isParallel();
+
+        return StreamSupport.stream(new Spliterators.AbstractSpliterator<>(size, characteristics) {
+            @Override
+            public boolean tryAdvance(final Consumer<? super T> action) {
+                return firsts.tryAdvance(f -> lasts.tryAdvance(l -> action.accept(combiner.apply(f, l))));
+            }
+        }, parallel);
+    }
+
+    /**
+     * Returns {@link List} of {@link Indexed} items by input {@link Stream}
+     *
+     * @param <T>    type of stream item
+     * @param stream - initial input {@link Stream}
+     * @return {@link List} of {@link Indexed} items
+     */
+    @NonNull
+    public static <T> List<Indexed<T>> zipOf(final Stream<T> stream) {
+        Objects.requireNonNull(stream, "Stream should not be null!");
+        return StreamUtils.zipWithIndex(stream).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns {@link Map} by input {@link Stream} partitioned by {@link Predicate}
+     *
+     * @param <T>       type of stream item
+     * @param <M>       type of collector result
+     * @param stream    - initial input {@link Stream}
+     * @param predicate - initial input {@link Predicate}
+     * @param collector - initial input {@link Collector}
+     * @return {@link Map} by input {@link Stream} partitioned by {@link Predicate}
+     */
+    public static <T, A, M extends Collection<T>> Map<Boolean, M> partitionBy(@NonNull final Stream<T> stream, final Predicate<? super T> predicate, final Collector<T, A, M> collector) {
+        Objects.requireNonNull(stream, "Stream should not be null!");
+        Objects.requireNonNull(predicate, "Predicate should not be null!");
+        Objects.requireNonNull(collector, "Collector should not be null!");
+
+        return stream.collect(Collectors.partitioningBy(predicate, collector));
     }
 }

@@ -42,6 +42,11 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class AnnotationMatcher<T> extends AbstractMatcher<Class<T>> {
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 751699209527012087L;
+
     private final Matcher<? super Annotation[]> matcher;
 
     public AnnotationMatcher(final Matcher<? super Annotation[]> matcher) {
