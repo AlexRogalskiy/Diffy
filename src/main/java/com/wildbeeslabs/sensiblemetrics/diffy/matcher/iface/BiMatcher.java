@@ -517,9 +517,9 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> void remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T> boolean remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        listOf(values).removeIf(entry -> matcher.matches(entry.getFirst(), entry.getLast()));
+        return listOf(values).removeIf(entry -> matcher.matches(entry.getFirst(), entry.getLast()));
     }
 
     /**
@@ -531,9 +531,9 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> void remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T> boolean remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
-        remove(values, matcher);
+        return remove(values, matcher);
     }
 
     /**
@@ -547,36 +547,58 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T> void removeFirst(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        final Iterator<Entry<T, T>> iterator = listOf(values).iterator();
-        while (iterator.hasNext()) {
-            final Entry<T, T> entry = iterator.next();
-            if (matcher.matches(entry.getFirst(), entry.getLast())) {
-                iterator.remove();
-                return;
-            }
-        }
-    }
-
-//    /**
-//     * Filters input {@link Collection} of {@link Entry}s items by input {@link BiMatcher} (only last match)
-//     *
-//     * @param <T>     type of input element to be matched by operation
-//     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
-//     * @param matcher - initial input {@link BiMatcher}
-//     * @return {@link Collection} of {@link Entry}s
-//     */
-//    @NonNull
-//    static <T> void removeLast(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
-//        Objects.requireNonNull(matcher, "Matcher should not be null");
+        matchFirstIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
 //        final Iterator<Entry<T, T>> iterator = listOf(values).iterator();
 //        while (iterator.hasNext()) {
 //            final Entry<T, T> entry = iterator.next();
 //            if (matcher.matches(entry.getFirst(), entry.getLast())) {
-//
+//                iterator.remove();
 //                return;
 //            }
 //        }
-//    }
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry}s items by input array of {@link BiMatcher}s (only first match)
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matchers - initial input array of {@link BiMatcher}s
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void removeFirst(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+        final BiMatcher<T> matcher = andAll(matchers);
+        removeFirst(values, matcher);
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry}s items by input {@link BiMatcher} (only last match)
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void removeLast(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        matchLastIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry}s items by input array of {@link BiMatcher}s (only last match)
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matchers - initial input array of {@link BiMatcher}s
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void removeLast(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+        final BiMatcher<T> matcher = andAll(matchers);
+        removeLast(values, matcher);
+    }
 
     /**
      * Tests input {@link Supplier} by {@link Matcher}

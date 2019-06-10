@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
@@ -524,9 +525,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @return {@link Collection} of {@code T} items
      */
     @NonNull
-    static <T> void remove(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+    static <T> boolean remove(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        listOf(values).removeIf(matcher::matches);
+        return listOf(values).removeIf(matcher::matches);
     }
 
     /**
@@ -538,9 +539,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @return {@link Collection} of {@code T} items
      */
     @NonNull
-    static <T> void remove(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+    static <T> boolean remove(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
-        remove(values, matcher);
+        return remove(values, matcher);
     }
 
     /**
@@ -554,13 +555,56 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> void removeFirst(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        final Iterator<T> iterator = listOf(values).iterator();
-        while (iterator.hasNext()) {
-            if (matcher.matches(iterator.next())) {
-                iterator.remove();
-                return;
-            }
-        }
+        matchFirstIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
+//        final Iterator<T> iterator = listOf(values).iterator();
+//        while (iterator.hasNext()) {
+//            if (matcher.matches(iterator.next())) {
+//                iterator.remove();
+//                return;
+//            }
+//        }
+    }
+
+    /**
+     * Filters input {@link Collection} of {@code T} items by input array of {@link Matcher}s (only first match)
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@code T}
+     * @param matchers - initial input array of {@link Matcher}s
+     * @return {@link Collection} of {@code T} items
+     */
+    @NonNull
+    static <T> void removeFirst(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        removeFirst(values, matcher);
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry}s items by input {@link Matcher} (only last match)
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void removeLast(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        matchLastIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
+    }
+
+    /**
+     * Filters input {@link Collection} of {@link Entry}s items by input array of {@link Matcher}s (only last match)
+     *
+     * @param <T>      type of input element to be matched by operation
+     * @param values   - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matchers - initial input array of {@link Matcher}s
+     * @return {@link Collection} of {@link Entry}s
+     */
+    @NonNull
+    static <T> void removeLast(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
+        final Matcher<T> matcher = andAll(matchers);
+        removeLast(values, matcher);
     }
 
     /**
