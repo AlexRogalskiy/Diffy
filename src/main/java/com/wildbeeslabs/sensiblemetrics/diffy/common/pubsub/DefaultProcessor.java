@@ -42,7 +42,7 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 @Slf4j
 public class DefaultProcessor<T> implements Processor<Event<T>, String> {
 
-    private static final String LOG_MESSAGE_FORMAT = "Processor >> [%s] %s%n";
+    private static final String LOG_MESSAGE_FORMAT = "ThrowingProcessor >> [%s] %s%n";
 
     private Subscription publisherSubscription;
 
@@ -139,7 +139,7 @@ public class DefaultProcessor<T> implements Processor<Event<T>, String> {
                 }
                 this.subscriber.onComplete();
             } else {
-                log("Processor contains no item!");
+                log("ThrowingProcessor contains no item!");
             }
         }
 

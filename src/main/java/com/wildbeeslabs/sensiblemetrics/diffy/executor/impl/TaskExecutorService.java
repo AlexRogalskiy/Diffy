@@ -102,7 +102,7 @@ public class TaskExecutorService {
      * @param consumer - initial input {@link ThrowingConsumer} task
      * @param supplier - initial input {@link ThrowingSupplier} task
      */
-    public static <T> void execute(final Duration timeout, final ThrowingConsumer<T> consumer, final ThrowingSupplier<T> supplier) {
+    public static <T, E extends Throwable> void execute(final Duration timeout, final ThrowingConsumer<T, E> consumer, final ThrowingSupplier<T, E> supplier) {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             execute(timeout, consumer, supplier, executorService);
@@ -152,7 +152,7 @@ public class TaskExecutorService {
      * @param supplier - initial input {@link ThrowingSupplier} task
      * @return {@link ThrowingSupplier} task result {@code T}
      */
-    public static <T> T execute(final Duration timeout, final ThrowingSupplier<T> supplier) {
+    public static <T, E extends Throwable> T execute(final Duration timeout, final ThrowingSupplier<T, E> supplier) {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             return executeSupplier(timeout, supplier, executorService);
@@ -225,7 +225,7 @@ public class TaskExecutorService {
      * @param executor - initial input {@link ExecutorService}
      * @return {@link ThrowingSupplier} task result {@code T}
      */
-    private static <T> T executeSupplier(final Duration timeout, final ThrowingSupplier<T> supplier, final ExecutorService executor) {
+    private static <T, E extends Throwable> T executeSupplier(final Duration timeout, final ThrowingSupplier<T, E> supplier, final ExecutorService executor) {
         final Callable<T> callable = () -> {
             try {
                 return supplier.get();
@@ -246,7 +246,7 @@ public class TaskExecutorService {
      * @param executor - initial input {@link ExecutorService}
      * @return {@link ThrowingConsumer} task result {@code T}
      */
-    private static <T> void execute(final Duration timeout, final ThrowingConsumer<T> consumer, final ThrowingSupplier<T> supplier, final ExecutorService executor) {
+    private static <T, E extends Throwable> void execute(final Duration timeout, final ThrowingConsumer<T, E> consumer, final ThrowingSupplier<T, E> supplier, final ExecutorService executor) {
         final Runnable runnable = () -> {
             try {
                 consumer.accept(supplier.get());

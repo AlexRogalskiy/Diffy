@@ -23,13 +23,30 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
 
+import java.util.function.Supplier;
+
 /**
- * Throwing supplier interface declaration
+ * Throwing {@link Supplier} interface declaration
  *
- * @param <T> type of supplier value
+ * @param <T> type of supplied value
+ * @param <E> type of throwable value
  */
 @FunctionalInterface
-public interface ThrowingSupplier<T> {
+public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
+
+    /**
+     * Returns supplier result {@code T}
+     *
+     * @return supplier result {@code T}
+     */
+    @Override
+    default T get() {
+        try {
+            return this.getOrThrow();
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
 
     /**
      * Returns supplier result {@code T}, potentially throwing an exception
@@ -37,17 +54,17 @@ public interface ThrowingSupplier<T> {
      * @return supplier result {@code T}
      * @throw {@link Throwable}
      */
-    T get() throws Throwable;
+    T getOrThrow() throws E;
 
     /**
      * Returns value {@code T} by input {@link ThrowingSupplier}
      *
      * @param <T>      type of supplier value
-     * @param supplier - initial input {@link ThrowingSupplier} to retrieve value from
+     * @param supplier - initial input {@link ThrowingSupplier} operator
      * @return supplier value {@code T}
      * @throws IllegalArgumentException if supplier produces exception
      */
-    static <T> T getOrThrow(final ThrowingSupplier<T> supplier) {
+    static <T, E extends Throwable> T getOrThrow(final ThrowingSupplier<T, E> supplier) {
         try {
             return supplier.get();
         } catch (Throwable t) {

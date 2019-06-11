@@ -17,6 +17,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class PropertyTypeMatcher<T extends AbstractPropertyInfo<?>> extends AbstractMatcher<T> {
 
     /**

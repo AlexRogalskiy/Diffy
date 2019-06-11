@@ -23,19 +23,56 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
 
+import java.util.function.Consumer;
+
 /**
- * Throwing consumer interface declaration
+ * Throwing {@link Consumer} interface declaration
  *
- * @param <T> type of consumer value
+ * @param <T> type of consumed value
+ * @param <E> type of throwable value
  */
 @FunctionalInterface
-public interface ThrowingConsumer<T> {
+public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
+
+    /**
+     * Consumes the supplied argument {@code T}
+     *
+     * @param <T>   type of consumed value
+     * @param value - initial input argument {@code T} to be consumed
+     */
+    @Override
+    default void accept(final T value) {
+        try {
+            acceptOrThrow(value);
+        } catch (final Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
 
     /**
      * Consumes the supplied argument {@code T}, potentially throwing an exception
      *
-     * @param value - initial input argument {@code T} to consume
-     * @throw {@link Throwable}
+     * @param <T>   type of consumed value
+     * @param <E>   type of throwable value
+     * @param value - initial input argument {@code T} to be consumed
+     * @throw {@link Throwable} if consumer produces exception
      */
-    void accept(final T value) throws Throwable;
+    void acceptOrThrow(final T value) throws E;
+
+    /**
+     * Consumes the supplied argument {@code T} by input {@link ThrowingConsumer}
+     *
+     * @param <T>      type of consumed value
+     * @param <E>      type of throwable value
+     * @param consumer - initial input {@link ThrowingConsumer} operator
+     * @param value    - initial input {@code T} value to be consumed
+     * @throws IllegalArgumentException if consumer produces exception
+     */
+    static <T, E extends Throwable> void acceptOrThrow(final ThrowingConsumer<T, E> consumer, final T value) {
+        try {
+            consumer.accept(value);
+        } catch (Throwable t) {
+            throw new IllegalArgumentException(String.format("ERROR: cannot operate on consumer = {%s}, message = {%s}", consumer, t.getMessage()), t);
+        }
+    }
 }

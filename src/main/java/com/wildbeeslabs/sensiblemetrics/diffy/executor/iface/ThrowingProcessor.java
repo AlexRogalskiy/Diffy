@@ -24,20 +24,61 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
 
 /**
- * Throwing processor interface declaration
+ * Throwing {@link Processor} interface declaration
  *
  * @param <T> type of consumed value
  * @param <R> type of produced value
+ * @param <E> type of throwable value
  */
 @FunctionalInterface
-public interface ThrowingProcessor<T, R> {
+public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<F, T> {
 
     /**
-     * Processes the supplied argument {@code T} to result argument {@code R}, potentially throwing an exception
+     * Processes input value {@code F} to {@code T}
      *
-     * @param value - initial input argument {@code T} to consume
-     * @return processed result {@code R}
-     * @throw {@link Throwable}
+     * @param <T>   type of consumed value
+     * @param <R>   type of produced value
+     * @param <E>   type of throwable value
+     * @param value - initial input {@code F} value to be processed
+     * @return processed value {@code T}
      */
-    R process(final T value) throws Throwable;
+    @Override
+    default T process(final F input) {
+        try {
+            return this.processOrThrow(input);
+        } catch (final Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Processes input value {@code F} to {@code T}, potentially throwing an exception
+     *
+     * @param <T>   type of consumed value
+     * @param <R>   type of produced value
+     * @param <E>   type of throwable value
+     * @param value - initial input {@code F} value to be processed
+     * @return processed value {@code T}
+     * @throws Throwable if processor produces exception
+     */
+    T processOrThrow(final F input) throws E;
+
+    /**
+     * Processes input value {@code F} by input {@link ThrowingProcessor}
+     *
+     * @param <T>       type of consumed value
+     * @param <R>       type of produced value
+     * @param <E>       type of throwable value
+     * @param processor - initial input {@link ThrowingProcessor} operator
+     * @param value     - initial input {@code F} value to be processed
+     * @return processed value {@code T}
+     * @throws IllegalArgumentException if processor produces exception
+     */
+    static <F, T, E extends Throwable> T processOrThrow(final ThrowingProcessor<F, T, E> processor, final F value) {
+        try {
+            return processor.process(value);
+        } catch (Throwable t) {
+            throw new IllegalArgumentException(String.format("ERROR: cannot operate on processor = {%s}, message = {%s}", processor, t.getMessage()), t);
+        }
+    }
 }
