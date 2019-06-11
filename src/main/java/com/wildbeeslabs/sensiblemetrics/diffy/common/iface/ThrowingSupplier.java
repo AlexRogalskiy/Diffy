@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
 import java.util.function.Supplier;
 
@@ -60,6 +60,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * Returns value {@code T} by input {@link ThrowingSupplier}
      *
      * @param <T>      type of supplier value
+     * @param <E>      type of throwable value
      * @param supplier - initial input {@link ThrowingSupplier} operator
      * @return supplier value {@code T}
      * @throws IllegalArgumentException if supplier produces exception

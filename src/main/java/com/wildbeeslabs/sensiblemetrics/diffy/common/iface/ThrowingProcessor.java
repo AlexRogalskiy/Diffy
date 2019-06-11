@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
 /**
  * Throwing {@link Processor} interface declaration
  *
  * @param <T> type of consumed value
- * @param <R> type of produced value
+ * @param <F> type of produced value
  * @param <E> type of throwable value
  */
 @FunctionalInterface
@@ -36,16 +36,13 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
     /**
      * Processes input value {@code F} to {@code T}
      *
-     * @param <T>   type of consumed value
-     * @param <R>   type of produced value
-     * @param <E>   type of throwable value
      * @param value - initial input {@code F} value to be processed
      * @return processed value {@code T}
      */
     @Override
-    default T process(final F input) {
+    default T process(final F value) {
         try {
-            return this.processOrThrow(input);
+            return this.processOrThrow(value);
         } catch (final Throwable e) {
             throw new RuntimeException(e);
         }
@@ -54,20 +51,17 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
     /**
      * Processes input value {@code F} to {@code T}, potentially throwing an exception
      *
-     * @param <T>   type of consumed value
-     * @param <R>   type of produced value
-     * @param <E>   type of throwable value
      * @param value - initial input {@code F} value to be processed
      * @return processed value {@code T}
      * @throws Throwable if processor produces exception
      */
-    T processOrThrow(final F input) throws E;
+    T processOrThrow(final F value) throws E;
 
     /**
      * Processes input value {@code F} by input {@link ThrowingProcessor}
      *
      * @param <T>       type of consumed value
-     * @param <R>       type of produced value
+     * @param <F>       type of produced value
      * @param <E>       type of throwable value
      * @param processor - initial input {@link ThrowingProcessor} operator
      * @param value     - initial input {@code F} value to be processed

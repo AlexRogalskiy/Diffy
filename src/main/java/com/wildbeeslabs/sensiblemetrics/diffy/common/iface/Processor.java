@@ -21,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
+
+import java.util.Objects;
 
 /**
  * Processor interface declaration
@@ -37,7 +39,37 @@ public interface Processor<T, R> {
      *
      * @param value - initial input argument {@code T} to consume
      * @return processed result {@code R}
-     * @throw {@link Throwable}
      */
     R process(final T value);
+
+    /**
+     * Returns composed {@link Processor} that first applies {@code before} {@link Processor} to the input {@code V} and then applies the result to the current {@link Processor}
+     *
+     * @param <V>    type of consumed value
+     * @param before - initial input {@link Processor} to be composed
+     * @return composed {@link Processor}
+     */
+    default <V> Processor<V, R> before(final Processor<? super V, ? extends T> before) {
+        Objects.requireNonNull(before, "Before processor should not be null");
+        return (final V v) -> process(before.process(v));
+    }
+
+    /**
+     * Returns composed {@link Processor} that first applies current {@link Processor} to
+     * its input, and then applies the {@code after} {@link Processor} to the result
+     */
+    default <V> Processor<T, V> after(final Processor<? super R, ? extends V> after) {
+        Objects.requireNonNull(after, "After processor should not be null");
+        return (final T t) -> after.process(process(t));
+    }
+
+    /**
+     * Returns {@link Processor} that always returns its input argument {@code T}
+     *
+     * @param <T> type of the input and output item
+     * @return {@link Processor} that always returns its input argument {@code T}
+     */
+    static <T> Processor<T, T> identity() {
+        return t -> t;
+    }
 }
