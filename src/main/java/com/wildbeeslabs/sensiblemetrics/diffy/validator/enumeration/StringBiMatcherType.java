@@ -3,6 +3,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.text.WordUtils;
 
 /**
  * String binary matcher type {@link Enum}
@@ -29,7 +30,11 @@ public enum StringBiMatcherType {
     IS_ALL_BLANK(org.apache.commons.lang3.StringUtils::isAllBlank),
     IS_ALL_EMPTY(org.apache.commons.lang3.StringUtils::isAllEmpty),
     IS_ANY_BLANK(org.apache.commons.lang3.StringUtils::isAnyBlank),
-    IS_ANY_EMPTY(org.apache.commons.lang3.StringUtils::isAnyEmpty);
+    IS_ANY_EMPTY(org.apache.commons.lang3.StringUtils::isAnyEmpty),
+    /**
+     * org.apache.commons.text.WordUtils
+     */
+    IS_ALL_WORDS(WordUtils::containsAllWords);
 
     /**
      * String {@link BiMatcher} operator
