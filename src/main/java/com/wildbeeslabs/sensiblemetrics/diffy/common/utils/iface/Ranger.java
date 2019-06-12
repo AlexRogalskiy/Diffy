@@ -90,7 +90,7 @@ public interface Ranger<T> extends Serializable {
      *
      * @return {@link Comparator}
      */
-    default Comparator<T> getComparator() {
+    default Comparator<? super T> getComparator() {
         return ComparableComparator.getInstance();
     }
 
