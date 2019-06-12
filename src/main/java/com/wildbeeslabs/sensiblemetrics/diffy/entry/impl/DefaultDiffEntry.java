@@ -74,14 +74,14 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
      * Default property value of first argument {@link Object}
      */
     @JsonView(DiffEntryView.External.class)
-    @JsonProperty("first")
+    @JsonProperty(value = "first", required = true)
     private transient Object first;
 
     /**
      * Default property value of last argument {@link Object}
      */
     @JsonView(DiffEntryView.External.class)
-    @JsonProperty("last")
+    @JsonProperty(value = "last", required = true)
     private transient Object last;
 
     /**

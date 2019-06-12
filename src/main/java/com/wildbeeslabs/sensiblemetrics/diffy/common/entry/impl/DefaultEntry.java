@@ -58,6 +58,11 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     private static final long serialVersionUID = -921490395669655850L;
 
     /**
+     * Default nullable {@link Entry}
+     */
+    private static final Entry<?, ?> DEFAULT_NULL_INSTANCE = DefaultEntry.of(null, null);
+
+    /**
      * Default entry first value {@code K}
      */
     @JsonView(DiffEntryView.External.class)

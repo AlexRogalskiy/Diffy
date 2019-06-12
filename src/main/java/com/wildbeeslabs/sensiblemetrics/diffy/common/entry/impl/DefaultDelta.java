@@ -48,6 +48,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public abstract class DefaultDelta<T> implements Delta<T> {
 
+    /**
+     * Default delta bounds
+     */
     public static final String DEFAULT_END = "]";
     public static final String DEFAULT_START = "[";
 

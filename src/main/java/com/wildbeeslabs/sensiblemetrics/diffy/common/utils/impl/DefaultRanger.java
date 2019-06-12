@@ -110,6 +110,17 @@ public final class DefaultRanger<T> implements Ranger<T> {
     }
 
     /**
+     * Returns {@link Range} by input parameters
+     *
+     * @param <T>   type of range bound element
+     * @param value - initial input range lower/upper bound {@code T}
+     * @return {@link Range}
+     */
+    public static <T> Ranger<T> point(final T value) {
+        return new DefaultRanger<>(value, value);
+    }
+
+    /**
      * Returns {@link Range} if both {@link Optional} instances have values or {@link Optional#empty()} if one or both
      * are missing.
      *
