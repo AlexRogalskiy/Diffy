@@ -34,7 +34,7 @@
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <url>https://mit-license.org/</url>
             <distribution>repo</distribution>
             <comments>
                 The MIT License
@@ -561,6 +561,14 @@
                         <instructions>
                             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                             <Bundle-Version>${project.version}</Bundle-Version>
+                            <Bundle-Name>${project.artifactId}</Bundle-Name>
+                            <Bundle-Vendor>${project.build.finalName}</Bundle-Vendor>
+                            <Bundle-ManifectVersion>${project.version}</Bundle-ManifectVersion>
+                            <Bundle-License>https://mit-license.org/</Bundle-License>
+                            <Bundle-DocURL>io.diffy</Bundle-DocURL>
+                            <Bunlder-Description>Diffy is a simple-easy library to provide the differences between any
+                                Java type objects
+                            </Bunlder-Description>
                             <Import-Package>*</Import-Package>
                             <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.examples.*</Private-Package>
                             <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.*;-noimport:=true
