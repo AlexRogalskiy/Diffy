@@ -218,6 +218,7 @@
     </properties>
 
     <build>
+        <defaultGoal>clean checkstyle:check spotbugs:check javadoc:javadoc</defaultGoal>
         <directory>${project.basedir}/target</directory>
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
         <finalName>${project.artifactId}-${project.version}</finalName>
@@ -329,7 +330,12 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${maven.checkstyle.plugin.version}</version>
                     <configuration>
+                        <enableRulesSummary>false</enableRulesSummary>
                         <configLocation>${project.basedir}/checkstyle/checkstyle.xml</configLocation>
+                        <!--<headerLocation>${basedir}/license-header.txt</headerLocation>-->
+                        <!--<suppressionsLocation>${basedir}/checkstyle-suppressions.xml</suppressionsLocation>-->
+                        <!--<suppressionsFileExpression>${basedir}/checkstyle-suppressions.xml</suppressionsFileExpression>-->
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     </configuration>
                     <executions>
                         <execution>
@@ -458,6 +464,7 @@
                         <descriptorRefs>
                             <descriptorRef>jar-with-dependencies</descriptorRef>
                         </descriptorRefs>
+                        <tarLongFileMode>gnu</tarLongFileMode>
                     </configuration>
                     <executions>
                         <execution>

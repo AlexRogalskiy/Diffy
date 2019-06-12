@@ -38,6 +38,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class MatcherEvent<T> extends BaseMatcherEvent<T, T> {
 
     /**
