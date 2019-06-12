@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffEntryView;
 import lombok.*;
 
 import java.util.Optional;

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffEntry;
 import lombok.NonNull;
 
 import java.io.Serializable;

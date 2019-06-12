@@ -30,5 +30,5 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     // exports matcher interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
     // exports entry interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.entry.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface;
 }

@@ -6,8 +6,17 @@ public class BinaryDiffResult {
      */
     private static final int EOF = -1;
 
+    /**
+     * Default offset
+     */
     public final int offset;
+    /**
+     * Default expected value
+     */
     public final String expected;
+    /**
+     * Default actual value
+     */
     public final String actual;
 
     /**

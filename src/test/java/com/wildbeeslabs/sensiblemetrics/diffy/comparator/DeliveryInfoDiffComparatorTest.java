@@ -28,7 +28,7 @@ import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffComparatorFactory;

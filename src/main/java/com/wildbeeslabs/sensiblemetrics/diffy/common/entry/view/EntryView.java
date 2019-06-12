@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.view;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffEntryView;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

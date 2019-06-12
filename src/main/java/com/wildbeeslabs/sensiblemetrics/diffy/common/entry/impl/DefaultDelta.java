@@ -49,12 +49,6 @@ import java.util.Objects;
 public abstract class DefaultDelta<T> implements Delta<T> {
 
     /**
-     * Default delta bounds
-     */
-    public static final String DEFAULT_END = "]";
-    public static final String DEFAULT_START = "[";
-
-    /**
      * The original chunk.
      */
     private final Chunk<T> original;

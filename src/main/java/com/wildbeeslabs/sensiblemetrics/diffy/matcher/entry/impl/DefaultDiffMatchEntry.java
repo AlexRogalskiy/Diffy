@@ -21,20 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.view.DiffEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffMatchEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.*;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.getRandomString;
 
 /**
- * Default difference entry implementation
+ * Default difference match entry implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -48,58 +50,60 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.getRand
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class DefaultDiffEntry implements DiffEntry<Object> {
+public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -8477472621769483552L;
+    private static final long serialVersionUID = 5902509374305990063L;
 
     /**
      * Default entry id {@link String}
      */
-    @JsonView(DiffEntryView.Internal.class)
+    @JsonView(DiffMatchEntryView.Internal.class)
     @JsonProperty(value = "id", required = true)
     @EqualsAndHashCode.Exclude
     private transient String id;
 
     /**
-     * Default property name {@link String}
+     * Default match description {@link MatchDescription}
      */
-    @JsonView(DiffEntryView.External.class)
-    @JsonProperty(value = "property", required = true)
-    private String propertyName;
+    @JsonView(DiffMatchEntryView.External.class)
+    @JsonProperty("description")
+    private MatchDescription description;
 
     /**
-     * Default property value of first argument {@link Object}
+     * Default property value to be matched {@link Object}
      */
-    @JsonView(DiffEntryView.External.class)
-    @JsonProperty(value = "first", required = true)
-    private transient Object first;
+    @JsonView(DiffMatchEntryView.External.class)
+    @JsonProperty("value")
+    private transient Object value;
 
     /**
-     * Default property value of last argument {@link Object}
-     */
-    @JsonView(DiffEntryView.External.class)
-    @JsonProperty(value = "last", required = true)
-    private transient Object last;
-
-    /**
-     * Creates new {@link DefaultDiffEntry}
+     * Creates new {@link DefaultDiffMatchEntry}
      *
-     * @param propertyName - initial input property name {@link String}
-     * @param first        - initial input first element value {@link Object}
-     * @param last         - initial input last element value {@link Object}
-     * @return {@link DefaultDiffEntry}
+     * @param value - initial input argument value {@link Object}
+     * @return {@link DefaultDiffMatchEntry}
      */
-    @NonNull
-    public static DefaultDiffEntry of(final String propertyName, final Object first, final Object last) {
-        return DefaultDiffEntry
+    @Factory
+    public static DefaultDiffMatchEntry of(final Object value) {
+        return of(value, MatchDescription.EMPTY_MATCH_DESCRIPTION);
+    }
+
+    /**
+     * Creates new {@link DefaultDiffMatchEntry}
+     *
+     * @param value       - initial input argument value {@link Object}
+     * @param description - initial input {@link MatchDescription}
+     * @return {@link DefaultDiffMatchEntry}
+     */
+    @Factory
+    public static DefaultDiffMatchEntry of(final Object value, final MatchDescription description) {
+        return DefaultDiffMatchEntry
             .builder()
             .id(getRandomString())
-            .propertyName(propertyName)
-            .first(first)
-            .last(last)
+            .value(value)
+            .description(description)
             .build();
     }
 }

@@ -36,6 +36,6 @@ public class LongestCommonSubsequenceDistance implements SimilarityDistance<Char
         Objects.requireNonNull(left, "Left sequence should not be null");
         Objects.requireNonNull(right, "Right sequence should not be null");
 
-        return left.length() + right.length() - 2 * longestCommonSubsequence.apply(left, right);
+        return left.length() + right.length() - 2 * this.longestCommonSubsequence.apply(left, right);
     }
 }

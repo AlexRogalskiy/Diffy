@@ -21,20 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.entry.view;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffMatchEntry;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * {@link DiffEntry} view declaration
+ * {@link DiffMatchEntry} view declaration
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public interface DiffEntryView {
+public interface DiffMatchEntryView {
 
     /**
      * {@link DiffEntryView.External} declaration
@@ -47,6 +47,6 @@ public interface DiffEntryView {
      * {@link DiffEntryView.Internal} declaration
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    class Internal extends DiffEntryView.External {
+    class Internal extends DiffMatchEntryView.External {
     }
 }

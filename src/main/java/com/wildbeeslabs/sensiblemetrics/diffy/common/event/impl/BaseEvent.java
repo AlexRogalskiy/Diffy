@@ -69,9 +69,7 @@ public abstract class BaseEvent<T> implements Event<T> {
      * @param cause  - initial input error source {@link Throwable}
      */
     public BaseEvent(final T source, final Throwable cause) {
-        if (Objects.isNull(source)) {
-            throw new IllegalArgumentException("ERROR: event source is null");
-        }
+        Objects.requireNonNull(source, "Event source should not be null");
         this.source = source;
         this.cause = cause;
         this.timestamp = System.currentTimeMillis();

@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.iface.DiffEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;

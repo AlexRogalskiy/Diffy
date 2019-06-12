@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher;
 
 import com.google.common.collect.Lists;
 import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
-import com.wildbeeslabs.sensiblemetrics.diffy.entry.impl.DefaultDiffMatchEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.DeliveryInfoDiffMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
