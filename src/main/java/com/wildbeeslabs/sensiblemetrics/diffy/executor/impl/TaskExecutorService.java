@@ -30,8 +30,8 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.TimeoutOperationExceptio
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.configuration.TaskExecutorConfiguration;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.handler.DefaultRejectedExecutionHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.ThrowingConsumer;
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.ThrowingSupplier;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingConsumer;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingSupplier;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.property.TaskExecutorProperty;
 import lombok.experimental.UtilityClass;
 

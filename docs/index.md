@@ -1,6 +1,6 @@
 ## General Description
 
-`Diffy` is a simpleasy library to provide the differences between two Java objects.
+`Diffy` is a simple-easy library to provide the differences between set of Java objects.
 
 ## Introduction
 

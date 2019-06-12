@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
 import java.util.function.Consumer;
 
@@ -37,7 +37,6 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
     /**
      * Consumes the supplied argument {@code T}
      *
-     * @param <T>   type of consumed value
      * @param value - initial input argument {@code T} to be consumed
      */
     @Override
@@ -52,8 +51,6 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
     /**
      * Consumes the supplied argument {@code T}, potentially throwing an exception
      *
-     * @param <T>   type of consumed value
-     * @param <E>   type of throwable value
      * @param value - initial input argument {@code T} to be consumed
      * @throw {@link Throwable} if consumer produces exception
      */

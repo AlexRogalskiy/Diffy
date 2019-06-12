@@ -820,6 +820,7 @@
                             <keywords>true</keywords>
                             <additionalJOption>-Xdoclint:none</additionalJOption>
                             <useStandardDocletOptions>true</useStandardDocletOptions>
+                            <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
                         </configuration>
                         <executions>
                             <execution>
@@ -919,6 +920,7 @@
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
+                                <phase>verify</phase>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
