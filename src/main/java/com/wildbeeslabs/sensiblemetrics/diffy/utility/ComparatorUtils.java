@@ -2109,4 +2109,23 @@ public class ComparatorUtils {
             } : comparator, nullsInPriority);
         }
     }
+
+    /**
+     * Custom comparable {@link Comparator} implementation
+     */
+    public enum CustomComparableComparator implements Comparator<Object> {
+        INSTANCE;
+
+        /**
+         * Comparable based compare implementation.
+         *
+         * @param obj1 left hand side of comparison
+         * @param obj2 right hand side of comparison
+         * @return negative, 0, positive comparison value
+         */
+        @Override
+        public int compare(final Object obj1, final Object obj2) {
+            return ((Comparable) obj1).compareTo(obj2);
+        }
+    }
 }

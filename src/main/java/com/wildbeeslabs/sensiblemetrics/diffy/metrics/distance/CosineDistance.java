@@ -1,6 +1,6 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.Counter;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl.DefaultCounter;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.common.RegexTokenizer;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.Tokenizer;
@@ -32,8 +32,8 @@ public class CosineDistance implements SimilarityDistance<CharSequence, Double> 
         final CharSequence[] leftTokens = this.tokenizer.tokenize(left);
         final CharSequence[] rightTokens = this.tokenizer.tokenize(right);
 
-        final Map<CharSequence, Integer> leftVector = Counter.of(leftTokens);
-        final Map<CharSequence, Integer> rightVector = Counter.of(rightTokens);
+        final Map<CharSequence, Integer> leftVector = DefaultCounter.of(leftTokens);
+        final Map<CharSequence, Integer> rightVector = DefaultCounter.of(rightTokens);
         final double similarity = this.cosineSimilarity.cosineSimilarity(leftVector, rightVector);
         return 1.0 - similarity;
     }

@@ -26,6 +26,8 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValidationException;
 import lombok.NonNull;
 
+import java.util.Objects;
+
 /**
  * Validator interface declaration
  *
@@ -67,5 +69,23 @@ public interface Validator<T> {
     @NonNull
     default Validator<T> getValidatorFor(final T value) {
         return (Validator<T>) DEFAULT_TRUE_INSTANCE;
+    }
+
+    /**
+     * Returns true if input value {@code T} is valid by {@link Validator}, false - otherwise
+     *
+     * @param <T>       type of validated value
+     * @param value     - initial input value {@code T} to validate
+     * @param validator - initial input {@link Validator}
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
+    @NonNull
+    static <T> boolean validate(final T value, final Validator<T> validator) {
+        Objects.requireNonNull(validator, "Validator should not be null");
+        try {
+            return validator.validate(value);
+        } catch (Throwable throwable) {
+            return false;
+        }
     }
 }
