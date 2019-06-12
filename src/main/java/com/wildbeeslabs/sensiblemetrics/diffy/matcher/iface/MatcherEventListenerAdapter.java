@@ -27,10 +27,21 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventListenerAd
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 
+import java.util.Objects;
+
 /**
  * Matcher {@link EventListenerAdapter} interface declaration
  *
  * @param <T> type of input element to be matched by operation
  */
 public interface MatcherEventListenerAdapter<T, S> extends EventListenerAdapter<T, S, BaseMatcherEvent<T, S>, MatcherEventListener<T, S>> {
+
+    default void addListener(final MatcherEventListener<T, S> listener, final boolean allowDuplicate) {
+        Objects.requireNonNull(listener, "Listener should not be null");
+        if (allowDuplicate) {
+            this.addListener(listener);
+        } else if (!this.containsListener(listener)) {
+            this.addListener(listener);
+        }
+    }
 }

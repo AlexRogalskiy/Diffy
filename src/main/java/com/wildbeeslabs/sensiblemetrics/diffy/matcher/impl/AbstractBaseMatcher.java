@@ -94,6 +94,29 @@ public abstract class AbstractBaseMatcher<T, S> implements MatcherEventListenerA
     }
 
     /**
+     * Checkes {@link MatcherEventListener} in current {@link List} collection of {@link MatcherEventListener}s
+     *
+     * @param listener - initial input {@link MatcherEventListener} to add
+     * @return true - if {@link MatcherEventListener} is registered, false - otherwise
+     */
+    @Override
+    public boolean containsListener(final MatcherEventListener<T, S> listener) {
+        if (Objects.nonNull(listener)) {
+            return this.getListeners().contains(listener);
+        }
+        return false;
+    }
+
+    /**
+     * Returns the number of registered {@link MatcherEventListener}s
+     *
+     * @return the number of registered {@link MatcherEventListener}s
+     */
+    public int getListenerCount() {
+        return this.getListeners().size();
+    }
+
+    /**
      * Adds {@link MatcherEventListener} to current {@link List} collection of {@link MatcherEventListener}s
      *
      * @param listener - initial input {@link MatcherEventListener} to add

@@ -31,28 +31,36 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 public interface EventListenerAdapter<T, S, E extends Event<S>, L extends EventListener<T, S, E>> {
 
     /**
-     * Removes {@link EventListener} from current adapter
+     * Removes {@link EventListener} from current adapter collection of {@code L}
      *
      * @param listener - initial input {@link EventListener} to remove
      */
     void removeListener(final L listener);
 
     /**
-     * Adds {@link EventListener} to current adapter
+     * Adds {@link EventListener} to current adapter collection of {@code L}
      *
      * @param listener - initial input {@link EventListener} to add
      */
     void addListener(final L listener);
 
     /**
-     * Adds {@link Iterable} collection of {@link EventListener}s to current adapter
+     * Checks {@link EventListener} in current adapter collection of {@code L}
+     *
+     * @param listener - initial input {@link EventListener} to add
+     * @return true - if listener is registered, false - otherwise
+     */
+    boolean containsListener(final L listener);
+
+    /**
+     * Adds {@link Iterable} collection of {@link EventListener}s to current adapter collection of {@code L}
      *
      * @param listeners - initial input {@link Iterable} collection of {@link EventListener}s to add
      */
     void addListeners(final Iterable<L> listeners);
 
     /**
-     * Removes all {@link EventListener}s from current adapter
+     * Removes all {@link EventListener}s from current adapter collection of {@code L}
      */
     void removeAllListeners();
 }
