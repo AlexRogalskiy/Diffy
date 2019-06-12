@@ -14,7 +14,7 @@ branches:
 jdk:
   - oraclejdk11
   - openjdk11
-  - openjdk12
+  #- openjdk12
 addons:
   sonarcloud:
     organization: "alexrogalskiy-github"
