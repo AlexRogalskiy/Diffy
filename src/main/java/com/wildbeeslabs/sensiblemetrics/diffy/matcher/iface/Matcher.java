@@ -510,6 +510,18 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     }
 
     /**
+     * Aggregates {@link Iterable} collection of {@code T} items by input parameters
+     *
+     * @param <T>        type of stream item
+     * @param iterable   - initial input {@link Iterable} collection of {@code T} items
+     * @param comparator - initial input {@link Comparator}
+     */
+    static <T> Stream<List<T>> groupBy(final Iterable<T> iterable, final Comparator<T> comparator) {
+        Objects.requireNonNull(comparator, "Matcher should not be null");
+        return StreamUtils.groupRuns(streamOf(iterable), comparator);
+    }
+
+    /**
      * Returns {@link Map} of {@code T} items filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
@@ -561,10 +573,40 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @return {@link List} of {@code T} items
      */
     @NonNull
+    static <T> List<T> skipUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipUntilInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
     static <T> List<T> skipWhile(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return StreamUtils.skipWhile(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<T> skipWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipWhileInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -591,10 +633,40 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @return {@link List} of {@code T} items
      */
     @NonNull
+    static <T> List<T> takeWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeWhileInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
     static <T> List<T> takeUntil(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return StreamUtils.takeUntil(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link Matcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link Matcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T> List<T> takeUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
+        Objects.requireNonNull(stream, "Stream should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeUntilInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**

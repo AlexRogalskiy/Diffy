@@ -530,6 +530,18 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     }
 
     /**
+     * Aggregates {@link Iterable} collection of {@code T} items by input parameters
+     *
+     * @param <T>      type of stream item
+     * @param iterable - initial input {@link Iterable} collection of {@code T} items
+     * @param matcher  - initial input {@link BiMatcher}
+     */
+    static <T> Stream<List<T>> aggregate(final Iterable<T> iterable, final BiMatcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        return StreamUtils.aggregate(streamOf(iterable), matcher::matches);
+    }
+
+    /**
      * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation

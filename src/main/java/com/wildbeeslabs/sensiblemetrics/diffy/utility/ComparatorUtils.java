@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Iterables;
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
@@ -664,6 +665,20 @@ public class ComparatorUtils {
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
         int safeCompare(final T first, final T last);
+    }
+
+    /**
+     * Returns {@link List} {@link Comparator} by input {@link Comparator} of {@code T} items
+     *
+     * @param <T>            type of comparable value
+     * @param itemComparator - initial input {@link Comparator} of {@code T} items
+     * @return {@link List} {@link Comparator}
+     */
+    public static <T> Comparator<? super List<T>> getListComparator(final Comparator<? super T> itemComparator) {
+        return (o1, o2) -> StreamUtils.zip(o1.stream(), o2.stream(), itemComparator::compare)
+            .filter(c -> c != 0)
+            .findFirst()
+            .orElseGet(() -> Integer.compare(o1.size(), o2.size()));
     }
 
     /**
