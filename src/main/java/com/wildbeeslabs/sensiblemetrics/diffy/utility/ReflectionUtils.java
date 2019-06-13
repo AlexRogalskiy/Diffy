@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
@@ -826,5 +827,16 @@ public class ReflectionUtils {
             throw new IllegalArgumentException(errorMessage);
         }
         return (T) value;
+    }
+
+    public static <T> Function<String, T> newInstanceOf(final Class<T> clazz) {
+        Objects.requireNonNull(clazz, "Class should not be null");
+        return input -> {
+            try {
+                return clazz.getConstructor().newInstance();
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        };
     }
 }

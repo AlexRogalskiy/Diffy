@@ -23,9 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.utils;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.beanutils.ConversionException;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 
 /**
@@ -389,5 +393,73 @@ public class ConverterUtils {
         if (obj instanceof String)
             return Boolean.parseBoolean((String) obj);
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to Boolean");
+    }
+
+    public static BigDecimal safeBigDecimal(final String value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public static BigInteger safeBigInteger(final String value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        try {
+            return new BigInteger(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    public static int safeIntValue(final String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            try {
+                return (int) Long.parseLong(value);
+            } catch (NumberFormatException nfe) {
+                return new BigDecimal(value).intValue();
+            }
+        }
+    }
+
+    public static long safeLongValue(final String value) {
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return new BigDecimal(value).longValue();
+        }
+    }
+
+    public static <T extends Number> Function<? super String, Optional<T>> converterOfType(final Class<T> toType) {
+        return (Function<String, Optional<T>>) input -> {
+            try {
+                if (Integer.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(Integer.valueOf(input));
+                } else if (Long.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(Long.valueOf(input));
+                } else if (Double.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(Double.valueOf(input));
+                } else if (Float.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(Float.valueOf(input));
+                } else if (Byte.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(Byte.valueOf(input));
+                } else if (Short.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(Short.valueOf(input));
+                } else if (BigDecimal.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(safeBigDecimal(input));
+                } else if (BigInteger.class.equals(toType)) {
+                    return (Optional<T>) Optional.of(safeBigInteger(input));
+                }
+            } catch (NumberFormatException ignored) {
+            }
+            return Optional.absent();
+        };
     }
 }
