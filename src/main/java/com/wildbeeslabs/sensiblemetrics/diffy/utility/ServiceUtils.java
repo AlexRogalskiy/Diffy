@@ -77,6 +77,19 @@ public class ServiceUtils {
     };
 
     /**
+     * Returns {@link LinkedList} representation of {@link Collector}
+     *
+     * @param <T> type of collecting item
+     * @return {@link LinkedList} representation of {@link Collector}
+     */
+    public static <T> Collector<T, ?, LinkedList<T>> toLinkedList() {
+        return Collector.of(LinkedList::new, LinkedList::add, (first, second) -> {
+            first.addAll(second);
+            return first;
+        });
+    }
+
+    /**
      * Returns {@link Enum} by input parameters
      *
      * @param <E>       type of enumeration item

@@ -27,9 +27,11 @@ import com.google.common.base.Function;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
@@ -125,6 +127,38 @@ public interface Converter<T, R> {
     }
 
     /**
+     * Returns {@link Validator} by input {@link Predicate}
+     *
+     * @param <T>       type of input element to be converted from
+     * @param predicate - initial input {@link Predicate}
+     * @return {@link Validator}
+     */
+    @NonNull
+    static <T> Validator<T> toValidator(final Predicate<T> predicate) {
+        Objects.requireNonNull(predicate, "Predicate should not be null");
+        return predicate::test;
+    }
+
+    /**
+     * Returns {@link Predicate} by input {@link Validator}
+     *
+     * @param <T>     type of input element to be converted from
+     * @param validator - initial input {@link Validator}
+     * @return {@link Matcher}
+     */
+    @NonNull
+    static <T> Predicate<T> toPredicate(final Validator<T> validator) {
+        Objects.requireNonNull(validator, "Validator should not be null");
+        return (value) -> {
+            try {
+                return validator.validate(value);
+            } catch (Throwable throwable) {
+                return false;
+            }
+        };
+    }
+
+    /**
      * Returns {@link Matcher} by input {@link Predicate}
      *
      * @param <T>       type of input element to be converted from
@@ -132,7 +166,7 @@ public interface Converter<T, R> {
      * @return {@link Matcher}
      */
     @NonNull
-    static <T> Matcher<T> convert(final Predicate<T> predicate) {
+    static <T> Matcher<T> toMatcher(final Predicate<T> predicate) {
         Objects.requireNonNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
@@ -158,7 +192,7 @@ public interface Converter<T, R> {
      * @return {@link BiMatcher}
      */
     @NonNull
-    static <T> BiMatcher<T> convert(final BiPredicate<T, T> predicate) {
+    static <T> BiMatcher<T> toBiMatcher(final BiPredicate<T, T> predicate) {
         Objects.requireNonNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
@@ -171,7 +205,7 @@ public interface Converter<T, R> {
      * @return {@link BiPredicate}
      */
     @NonNull
-    static <T> BiPredicate<T, T> convert(final BiMatcher<T> matcher) {
+    static <T> BiPredicate<T, T> toBiPredicate(final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return matcher::matches;
     }
@@ -184,7 +218,7 @@ public interface Converter<T, R> {
      * @return {@link Converter}
      */
     @NonNull
-    static <T, R> Converter<T, R> convert(final Function<T, R> function) {
+    static <T, R> Converter<T, R> toConverter(final Function<T, R> function) {
         Objects.requireNonNull(function, "Function should not be null");
         return function::apply;
     }
@@ -197,7 +231,7 @@ public interface Converter<T, R> {
      * @return {@link Function}
      */
     @NonNull
-    static <T, R> Function<T, R> convert(final Converter<T, R> converter) {
+    static <T, R> Function<T, R> toFunction(final Converter<T, R> converter) {
         Objects.requireNonNull(converter, "Converter should not be null");
         return converter::convert;
     }
@@ -212,7 +246,7 @@ public interface Converter<T, R> {
      * @return array of {@code R} items
      */
     @NonNull
-    static <T, R> R[] convert(final T[] values, final Converter<? super T, R> converter) {
+    static <T, R> R[] toArray(final T[] values, final Converter<? super T, R> converter) {
         return (R[]) streamOf(values).map(converter::convert).toArray();
     }
 
@@ -226,7 +260,7 @@ public interface Converter<T, R> {
      * @return {@link List} of {@code R} items
      */
     @NonNull
-    static <T, R> List<R> convert(final Iterable<? extends T> values, final Converter<? super T, R> converter) {
-        return streamOf(values).map(converter::convert).collect(Collectors.toList());
+    static <T, R> List<R> toList(final Iterable<? extends T> values, final Converter<? super T, R> converter) {
+        return streamOf(values).map(converter::convert).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 }

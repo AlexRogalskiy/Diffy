@@ -33,6 +33,7 @@ import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -355,7 +356,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher::matches).collect(Collectors.toList());
+        return listOf(values).stream().filter(matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -386,7 +387,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final int skip, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         assert skip >= 0 : "Skip count should be positive or zero";
-        return listOf(values).stream().skip(skip).filter(matcher::matches).collect(Collectors.toList());
+        return listOf(values).stream().skip(skip).filter(matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -473,7 +474,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher.negate()::matches).collect(Collectors.toList());
+        return listOf(values).stream().filter(matcher.negate()::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -488,6 +489,24 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
         final Matcher<T> matcher = andAll(matchers);
         return removeIf(values, matcher);
+    }
+
+    /**
+     * Generates collection of {@code T} items by input parameters
+     *
+     * @param <T>      type of stream item
+     * @param supplier - initial input {@link Supplier}
+     * @param limit    - initial input stream limit
+     * @param matcher  - initial input {@link Matcher}
+     * @param consumer - initial input {@link Consumer}
+     */
+    static <T> void generate(final Supplier<T> supplier, final int limit, final Matcher<T> matcher, final Consumer<T> consumer) {
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+
+        assert limit >= 0 : "Limit count should be positive or zero";
+        Stream.generate(() -> supplier.get()).limit(limit).filter(matcher::matches).forEach(consumer::accept);
     }
 
     /**
@@ -530,7 +549,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipUntil(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntil(stream, matcher::matches).collect(Collectors.toList());
+        return StreamUtils.skipUntil(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -545,7 +564,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipWhile(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhile(stream, matcher::matches).collect(Collectors.toList());
+        return StreamUtils.skipWhile(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -560,7 +579,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeWhile(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhile(stream, matcher::matches).collect(Collectors.toList());
+        return StreamUtils.takeWhile(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -575,7 +594,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeUntil(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeUntil(stream, matcher::matches).collect(Collectors.toList());
+        return StreamUtils.takeUntil(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**

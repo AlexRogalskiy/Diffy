@@ -33,6 +33,7 @@ import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -346,7 +347,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+        return listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -377,7 +378,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final int skip, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         assert skip >= 0 : "Skip count should be positive or zero";
-        return listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+        return listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -465,7 +466,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T> Collection<Entry<T, T>> removeIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+        return listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -511,6 +512,24 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     }
 
     /**
+     * Generates collection of {@link Entry} items by input parameters
+     *
+     * @param <T>      type of stream item
+     * @param supplier - initial input {@link Supplier}
+     * @param limit    - initial input stream limit
+     * @param matcher  - initial input {@link BiMatcher}
+     * @param consumer - initial input {@link Consumer}
+     */
+    static <T> void generate(final Supplier<Entry<T, T>> supplier, final int limit, final BiMatcher<T> matcher, final Consumer<Entry<T, T>> consumer) {
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+
+        assert limit >= 0 : "Limit count should be positive or zero";
+        Stream.generate(() -> supplier.get()).limit(limit).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).forEach(consumer::accept);
+    }
+
+    /**
      * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
@@ -522,7 +541,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T> List<Entry<T, T>> skipUntil(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+        return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -537,7 +556,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T> List<Entry<T, T>> skipWhile(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+        return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -552,7 +571,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T> List<Entry<T, T>> takeWhile(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.toList());
+        return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
