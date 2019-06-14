@@ -27,6 +27,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 
 import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import static java.util.stream.Stream.generate;
 
 /**
  * Throwing {@link Supplier} interface declaration
@@ -89,6 +92,66 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
     }
 
     /**
+     * Accepts current {@link ThrowingSupplier} by input {@link ThrowingConsumer}
+     *
+     * @param consumer - initial input {@link ThrowingConsumer}
+     */
+    default void accept(final ThrowingConsumer<T, E> consumer) {
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+        consumer.accept(this.get());
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input parameters
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R, E extends Throwable> ThrowingSupplier<R, E> accept(final ThrowingProcessor<T, R, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return () -> processor.process(this.get());
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} operator
+     *
+     * @return {@link ThrowingSupplier}
+     */
+    default ThrowingSupplier<Stream<T>, E> stream() {
+        return () -> generate(this::get);
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingSupplier<Stream<R>, E> stream(final ThrowingProcessor<T, R, E> processor) {
+        return () -> generate(this::get).map(processor::process);
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingSupplier<Stream<R>, E> streamBefore(final ThrowingProcessor<T, R, E> processor) {
+        return () -> generate(() -> processor.process(this.get()));
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingSupplier<Stream<R>, E> streamAfter(final ThrowingProcessor<Stream<T>, Stream<R>, E> processor) {
+        return () -> processor.process(generate(this::get));
+    }
+
+    /**
      * Returns {@link ThrowingSupplier} by input parameters
      *
      * @param <T>      type of supplied value
@@ -98,6 +161,6 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     static <T, E extends Throwable> ThrowingSupplier<T, E> get(final ThrowingSupplier<T, E> supplier) {
         Objects.requireNonNull(supplier, "Supplier should not be null");
-        return () -> supplier.get();
+        return supplier::get;
     }
 }

@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Throwing {@link Consumer} interface declaration
@@ -89,6 +90,102 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
     }
 
     /**
+     * Consumes by current {@link ThrowingConsumer} input {@link ThrowingSupplier}
+     *
+     * @param supplier - initial input {@link ThrowingSupplier}
+     */
+    default void accept(final ThrowingSupplier<T, E> supplier) {
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+        this.accept(supplier.get());
+    }
+
+    /**
+     * Returns {@link ThrowingConsumer} by input parameters
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingConsumer}
+     */
+    default <R, E extends Throwable> ThrowingConsumer<R, E> accept(final ThrowingProcessor<R, T, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return (value) -> this.accept(processor.process(value));
+    }
+
+    /**
+     * Returns {@link ThrowingConsumer} by input {@code T} item
+     *
+     * @param t - initial input {@code T} item
+     * @return {@link ThrowingConsumer}
+     */
+    default ThrowingConsumer<T, E> add(final T t) {
+        this.accept(t);
+        return this;
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} operator
+     *
+     * @return {@link ThrowingSupplier}
+     */
+    default ThrowingConsumer<Stream<T>, E> collect() {
+        return (value) -> value.forEach(this::accept);
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingConsumer<Stream<R>, E> collectFromStream(final ThrowingProcessor<Stream<R>, Stream<T>, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return (value) -> processor.process(value).forEach(this::accept);
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingConsumer<R, E> collect(final ThrowingProcessor<R, Stream<T>, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return (value) -> processor.process(value).forEach(this::accept);
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingProcessor<Stream<T>, Stream<R>, E> collectAfter(final ThrowingProcessor<T, R, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return (value) -> value.peek(this::accept).map(processor::process);
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingProcessor<R, Stream<T>, E> collectAfter2(final ThrowingProcessor<R, Stream<T>, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return (value) -> processor.process(value).peek(this::accept);
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
+     *
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @return {@link ThrowingSupplier}
+     */
+    default <R> ThrowingConsumer<Stream<R>, E> collectBefore(final ThrowingProcessor<R, T, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return (value) -> value.map(processor::process).forEach(this::accept);
+    }
+
+    /**
      * Returns {@link ThrowingConsumer} by input parameters
      *
      * @param <T>      type of consumed value
@@ -98,6 +195,6 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     static <T, E extends Throwable> ThrowingConsumer<T, E> accept(final ThrowingConsumer<T, E> consumer) {
         Objects.requireNonNull(consumer, "Consumer should not be null");
-        return (value) -> consumer.accept(value);
+        return consumer::accept;
     }
 }

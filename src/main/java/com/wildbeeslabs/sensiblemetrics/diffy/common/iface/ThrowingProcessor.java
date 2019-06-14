@@ -115,6 +115,6 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
      */
     static <F, T, E extends Throwable> ThrowingProcessor<F, T, E> get(final ThrowingProcessor<F, T, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
-        return (value) -> processor.process(value);
+        return processor::process;
     }
 }

@@ -500,6 +500,25 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param matcher  - initial input {@link Matcher}
      * @param consumer - initial input {@link Consumer}
      */
+    @NonNull
+    static <T> void process(final Supplier<Iterable<T>> supplier, final Matcher<T> matcher, final Consumer<T> consumer) {
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+
+        streamOf(supplier.get()).filter(matcher::matches).forEach(consumer::accept);
+    }
+
+    /**
+     * Generates collection of {@code T} items by input parameters
+     *
+     * @param <T>      type of stream item
+     * @param supplier - initial input {@link Supplier}
+     * @param limit    - initial input stream limit
+     * @param matcher  - initial input {@link Matcher}
+     * @param consumer - initial input {@link Consumer}
+     */
+    @NonNull
     static <T> void generate(final Supplier<T> supplier, final int limit, final Matcher<T> matcher, final Consumer<T> consumer) {
         Objects.requireNonNull(supplier, "Supplier should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
