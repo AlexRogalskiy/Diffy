@@ -28,6 +28,13 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.lang.model.SourceVersion;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -437,5 +444,63 @@ public class StringUtils {
      */
     public static boolean doesNotContainIsoControlCharacter(final String value) {
         return !containsIsoControlCharacter(value);
+    }
+
+    public static String toBase64(final String value) {
+        return Base64.getEncoder().encodeToString(value.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static String fromBase64(final String value) {
+        return new String(Base64.getDecoder().decode(value), StandardCharsets.UTF_8);
+    }
+
+    public static String readFile(final String filename) {
+        Objects.requireNonNull(filename);
+        final StringBuilder sb = new StringBuilder();
+        try (final BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while (Objects.nonNull(line = br.readLine())) {
+                sb.append(line);
+                if (Objects.nonNull(line)) {
+                    sb.append(System.lineSeparator());
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            log.error(String.format("ERROR: cannot found file=%s, message=%s", filename, ex.getMessage()));
+        } catch (IOException ex) {
+            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, ex.getMessage()));
+        }
+        return sb.toString();
+    }
+
+    public static String readFile2(final String filename) {
+        Objects.requireNonNull(filename);
+        final StringBuilder sb = new StringBuilder();
+        try {
+            final List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
+            lines.stream().map((line) -> {
+                sb.append(line);
+                return line;
+            }).forEach((_item) -> {
+                sb.append(System.lineSeparator());
+            });
+        } catch (IOException ex) {
+            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, ex.getMessage()));
+        }
+        return sb.toString();
+    }
+
+    public static String readFile3(final String filename) {
+        Objects.requireNonNull(filename);
+        final StringBuilder sb = new StringBuilder();
+        try {
+            Files.lines(Paths.get(filename)).forEachOrdered(s -> {
+                sb.append(s);
+                sb.append(System.lineSeparator());
+            });
+        } catch (IOException ex) {
+            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, ex.getMessage()));
+        }
+        return sb.toString();
     }
 }

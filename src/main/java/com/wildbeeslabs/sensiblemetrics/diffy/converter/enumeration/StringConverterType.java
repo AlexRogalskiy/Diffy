@@ -72,6 +72,11 @@ public enum StringConverterType {
     NATIVE_TO_ASCII(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::native2Ascii),
     CAPITALIZE_WORD_FULLY(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWordFull),
     CAPITALIZE_TITLE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWord),
+    BASE64_ENCODE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::toBase64),
+    BASE64_DECODE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::fromBase64),
+    FROM_FILE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile),
+    FROM_FILE2(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile2),
+    FROM_FILE3(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile3),
     /**
      * org.apache.commons.text.StringEscapeUtils
      */
