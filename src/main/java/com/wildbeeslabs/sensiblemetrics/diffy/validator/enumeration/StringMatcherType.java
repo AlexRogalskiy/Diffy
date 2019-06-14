@@ -44,6 +44,7 @@ public enum StringMatcherType {
     IS_PALINDROME(StringUtils::isPalindrome),
     IS_PERMUTATION_PALINDROME(StringUtils::isPermutationOfPalindrome),
     IS_UNIQUE(StringUtils::isUnique),
+    IS_VALID_PACKAGE(StringUtils::isValidPackage),
     /**
      * com.google.common.base.Strings
      */
@@ -71,7 +72,13 @@ public enum StringMatcherType {
     IS_MIXED_CASE(org.apache.commons.lang3.StringUtils::isMixedCase),
     IS_NUMERIC(org.apache.commons.lang3.StringUtils::isNumeric),
     IS_NUMERIC_SPACE(org.apache.commons.lang3.StringUtils::isNumericSpace),
-    IS_WHITESPACE(org.apache.commons.lang3.StringUtils::isWhitespace);
+    IS_WHITESPACE(org.apache.commons.lang3.StringUtils::isWhitespace),
+    /**
+     * javax.lang.model.SourceVersion
+     */
+    IS_IDENTIFIER(javax.lang.model.SourceVersion::isIdentifier),
+    IS_KEYWORD(javax.lang.model.SourceVersion::isKeyword),
+    IS_NAME(javax.lang.model.SourceVersion::isName);
 
     /**
      * String {@link Matcher} operator

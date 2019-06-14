@@ -27,11 +27,13 @@ import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.lang.model.SourceVersion;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -121,6 +123,39 @@ public class StringUtils {
      * Default numeric pattern format
      */
     public static final String DEFAULT_FORMAT_PATTERN = "#.##";
+
+    /**
+     * Default package name
+     */
+    public static final String DEFAULT_PACKAGE_NAME = "";
+
+    /**
+     * Compiled {@code "\."} pattern used to split canonical package (and type) names.
+     */
+    private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
+
+    /**
+     * Assert that the supplied package name is valid in terms of Java syntax.
+     *
+     * <p>Note: this method does not actually verify if the named package exists in the classpath.
+     *
+     * <p>The default package is represented by an empty string ({@code ""}).
+     *
+     * @param packageName the package name to validate
+     * @throws NullPointerException if the supplied package name is
+     *                              {@code null}, contains only whitespace, or contains parts that are not
+     *                              valid in terms of Java syntax (e.g., containing keywords such as
+     *                              {@code void}, {@code import}, etc.)
+     * @see SourceVersion#isName(CharSequence)
+     */
+    public static boolean isValidPackage(final String packageName) {
+        Objects.requireNonNull(packageName, "package name must not be null");
+        if (packageName.equals(DEFAULT_PACKAGE_NAME)) {
+            return true;
+        }
+        assert org.apache.commons.lang3.StringUtils.isNotBlank(packageName) : "package name must not contain only whitespace";
+        return Arrays.stream(DOT_PATTERN.split(packageName, -1)).allMatch(SourceVersion::isName);
+    }
 
     /**
      * Default decimal format instance {@link DecimalFormat}

@@ -24,7 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+import lombok.NonNull;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
@@ -49,6 +51,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @return supplier result {@code T}
      */
     @Override
+    @Nullable
     default T get() {
         try {
             return this.getOrThrow();
@@ -63,24 +66,8 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @return supplier result {@code T}
      * @throw {@link Throwable}
      */
+    @Nullable
     T getOrThrow() throws E;
-
-    /**
-     * Returns value {@code T} by input {@link ThrowingSupplier}
-     *
-     * @param <T>      type of supplier value
-     * @param <E>      type of throwable value
-     * @param supplier - initial input {@link ThrowingSupplier} operator
-     * @return supplier value {@code T}
-     * @throws IllegalArgumentException if supplier produces exception
-     */
-    static <T, E extends Throwable> T getOrThrow(final ThrowingSupplier<T, E> supplier) {
-        try {
-            return supplier.get();
-        } catch (Throwable t) {
-            throw new IllegalArgumentException(String.format("ERROR: cannot operate on supplier = {%s}, message = {%s}", supplier, t.getMessage()), t);
-        }
-    }
 
     /**
      * Returns {@link ThrowingSupplier} by input parameters
@@ -89,6 +76,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param converter - initial input {@link Converter} operator
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R, E extends Throwable> ThrowingSupplier<R, E> map(final Converter<T, R> converter) {
         Objects.requireNonNull(converter, "Converter should not be null");
         return () -> converter.convert(this.get());
@@ -110,6 +98,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R, E extends Throwable> ThrowingSupplier<R, E> accept(final ThrowingProcessor<T, R, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return () -> processor.process(this.get());
@@ -120,6 +109,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default ThrowingSupplier<Stream<T>, E> stream() {
         return () -> generate(this::get);
     }
@@ -130,7 +120,9 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> stream(final ThrowingProcessor<T, R, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
         return () -> generate(this::get).map(processor::process);
     }
 
@@ -140,7 +132,9 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> streamBefore(final ThrowingProcessor<T, R, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
         return () -> generate(() -> processor.process(this.get()));
     }
 
@@ -150,7 +144,9 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> streamAfter(final ThrowingProcessor<Stream<T>, Stream<R>, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
         return () -> processor.process(generate(this::get));
     }
 
@@ -159,7 +155,8 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @return long {@link ThrowingSupplier}
      */
-    default ThrowingSupplier<LongStream, E> longStream(final long maxSize) {
+    @NonNull
+    default ThrowingSupplier<LongStream, E> longStream() {
         return () -> LongStream.generate(() -> (Long) this.get());
     }
 
@@ -168,6 +165,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @return integer {@link ThrowingSupplier}
      */
+    @NonNull
     default ThrowingSupplier<IntStream, E> intStream() {
         return () -> IntStream.generate(() -> (Integer) this.get());
     }
@@ -177,6 +175,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @return double {@link ThrowingSupplier}
      */
+    @NonNull
     default ThrowingSupplier<DoubleStream, E> doubleStream() {
         return () -> DoubleStream.generate(() -> (Double) this.get());
     }
@@ -189,8 +188,28 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param supplier - initial input {@link ThrowingSupplier} operator
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     static <T, E extends Throwable> ThrowingSupplier<T, E> get(final ThrowingSupplier<T, E> supplier) {
         Objects.requireNonNull(supplier, "Supplier should not be null");
         return supplier::get;
+    }
+
+    /**
+     * Returns value {@code T} by input {@link ThrowingSupplier}
+     *
+     * @param <T>      type of supplier value
+     * @param <E>      type of throwable value
+     * @param supplier - initial input {@link ThrowingSupplier} operator
+     * @return supplier value {@code T}
+     * @throws IllegalArgumentException if supplier produces exception
+     */
+    @Nullable
+    static <T, E extends Throwable> T getOrThrow(final ThrowingSupplier<T, E> supplier) {
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+        try {
+            return supplier.get();
+        } catch (Throwable t) {
+            throw new IllegalArgumentException(String.format("ERROR: cannot operate on supplier = {%s}, message = {%s}", supplier, t.getMessage()), t);
+        }
     }
 }

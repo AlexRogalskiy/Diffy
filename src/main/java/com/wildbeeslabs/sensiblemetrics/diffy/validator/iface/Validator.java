@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValidationException;
 import lombok.NonNull;
 
@@ -87,5 +88,19 @@ public interface Validator<T> {
         } catch (Throwable throwable) {
             return false;
         }
+    }
+
+    /**
+     * Returns {@link Validator} that first applies the specified {@link Converter} and then
+     * validates the specified {@link Validator} against the result of the {@link Converter}.
+     *
+     * @param converter - initial input {@link Converter}
+     * @param validator - initial input {@link Validator}
+     */
+    @NonNull
+    static <T, V> Validator<T> where(final Converter<T, V> converter, final Validator<? super V> validator) {
+        Objects.requireNonNull(converter, "Converter should not be null");
+        Objects.requireNonNull(validator, "Validator should not be null");
+        return input -> validator.validate(converter.convert(input));
     }
 }

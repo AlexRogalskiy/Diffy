@@ -24,7 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+import lombok.NonNull;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -44,9 +46,9 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param value - initial input argument {@code T} to be consumed
      */
     @Override
-    default void accept(final T value) {
+    default void accept(@Nullable final T value) {
         try {
-            acceptOrThrow(value);
+            this.acceptOrThrow(value);
         } catch (final Throwable t) {
             throw new RuntimeException(t);
         }
@@ -58,24 +60,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param value - initial input argument {@code T} to be consumed
      * @throw {@link Throwable} if consumer produces exception
      */
-    void acceptOrThrow(final T value) throws E;
-
-    /**
-     * Consumes the supplied argument {@code T} by input {@link ThrowingConsumer}
-     *
-     * @param <T>      type of consumed value
-     * @param <E>      type of throwable value
-     * @param consumer - initial input {@link ThrowingConsumer} operator
-     * @param value    - initial input {@code T} value to be consumed
-     * @throws IllegalArgumentException if consumer produces exception
-     */
-    static <T, E extends Throwable> void acceptOrThrow(final ThrowingConsumer<T, E> consumer, final T value) {
-        try {
-            consumer.accept(value);
-        } catch (Throwable t) {
-            throw new IllegalArgumentException(String.format("ERROR: cannot operate on consumer = {%s}, message = {%s}", consumer, t.getMessage()), t);
-        }
-    }
+    void acceptOrThrow(@Nullable final T value) throws E;
 
     /**
      * Returns {@link ThrowingConsumer} by input parameters
@@ -84,6 +69,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param converter - initial input {@link Converter} operator
      * @return {@link ThrowingConsumer}
      */
+    @NonNull
     default <R, E extends Throwable> ThrowingConsumer<R, E> map(final Converter<R, T> converter) {
         Objects.requireNonNull(converter, "Converter should not be null");
         return (value) -> this.accept(converter.convert(value));
@@ -105,6 +91,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingConsumer}
      */
+    @NonNull
     default <R, E extends Throwable> ThrowingConsumer<R, E> accept(final ThrowingProcessor<R, T, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return (value) -> this.accept(processor.process(value));
@@ -116,6 +103,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param t - initial input {@code T} item
      * @return {@link ThrowingConsumer}
      */
+    @NonNull
     default ThrowingConsumer<T, E> add(final T t) {
         this.accept(t);
         return this;
@@ -126,6 +114,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      *
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default ThrowingConsumer<Stream<T>, E> collect() {
         return (value) -> value.forEach(this::accept);
     }
@@ -136,6 +125,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R> ThrowingConsumer<R, E> collect(final ThrowingProcessor<R, Stream<T>, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return (value) -> processor.process(value).forEach(this::accept);
@@ -147,6 +137,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R> ThrowingProcessor<Stream<T>, Stream<R>, E> collectAfter(final ThrowingProcessor<T, R, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return (value) -> value.peek(this::accept).map(processor::process);
@@ -158,6 +149,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     default <R> ThrowingConsumer<Stream<R>, E> collectBefore(final ThrowingProcessor<R, T, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return (value) -> value.map(processor::process).forEach(this::accept);
@@ -171,8 +163,27 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param consumer - initial input {@link ThrowingConsumer} operator
      * @return {@link ThrowingConsumer}
      */
+    @NonNull
     static <T, E extends Throwable> ThrowingConsumer<T, E> accept(final ThrowingConsumer<T, E> consumer) {
         Objects.requireNonNull(consumer, "Consumer should not be null");
         return consumer::accept;
+    }
+
+    /**
+     * Consumes the supplied argument {@code T} by input {@link ThrowingConsumer}
+     *
+     * @param <T>      type of consumed value
+     * @param <E>      type of throwable value
+     * @param consumer - initial input {@link ThrowingConsumer} operator
+     * @param value    - initial input {@code T} value to be consumed
+     * @throws IllegalArgumentException if consumer produces exception
+     */
+    static <T, E extends Throwable> void acceptOrThrow(final ThrowingConsumer<T, E> consumer, final T value) {
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+        try {
+            consumer.accept(value);
+        } catch (Throwable t) {
+            throw new IllegalArgumentException(String.format("ERROR: cannot operate on consumer = {%s}, message = {%s}", consumer, t.getMessage()), t);
+        }
     }
 }

@@ -24,7 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+import lombok.NonNull;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -44,7 +46,8 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
      * @return processed value {@code T}
      */
     @Override
-    default T process(final F value) {
+    @Nullable
+    default T process(@Nullable final F value) {
         try {
             return this.processOrThrow(value);
         } catch (final Throwable e) {
@@ -59,26 +62,8 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
      * @return processed value {@code T}
      * @throws Throwable if processor produces exception
      */
-    T processOrThrow(final F value) throws E;
-
-    /**
-     * Processes input value {@code F} by input {@link ThrowingProcessor}
-     *
-     * @param <T>       type of consumed value
-     * @param <F>       type of produced value
-     * @param <E>       type of throwable value
-     * @param processor - initial input {@link ThrowingProcessor} operator
-     * @param value     - initial input {@code F} value to be processed
-     * @return processed value {@code T}
-     * @throws IllegalArgumentException if processor produces exception
-     */
-    static <F, T, E extends Throwable> T processOrThrow(final ThrowingProcessor<F, T, E> processor, final F value) {
-        try {
-            return processor.process(value);
-        } catch (Throwable t) {
-            throw new IllegalArgumentException(String.format("ERROR: cannot operate on processor = {%s}, message = {%s}", processor, t.getMessage()), t);
-        }
-    }
+    @Nullable
+    T processOrThrow(@Nullable final F value) throws E;
 
     /**
      * Returns {@link ThrowingProcessor} by input parameters
@@ -87,6 +72,7 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
      * @param converter - initial input {@link Converter} operator
      * @return {@link ThrowingProcessor}
      */
+    @NonNull
     default <V, E extends Throwable> ThrowingProcessor<V, T, E> mapBefore(final Converter<V, F> converter) {
         Objects.requireNonNull(converter, "Converter should not be null");
         return (value) -> this.process(converter.convert(value));
@@ -99,6 +85,7 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
      * @param converter - initial input {@link Converter} operator
      * @return {@link ThrowingProcessor}
      */
+    @NonNull
     default <V, E extends Throwable> ThrowingProcessor<F, V, E> mapAfter(final Converter<T, V> converter) {
         Objects.requireNonNull(converter, "Converter should not be null");
         return (value) -> converter.convert(this.process(value));
@@ -113,8 +100,30 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
      * @param processor - initial input {@link ThrowingProcessor} operator
      * @return {@link ThrowingSupplier}
      */
+    @NonNull
     static <F, T, E extends Throwable> ThrowingProcessor<F, T, E> get(final ThrowingProcessor<F, T, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return processor::process;
+    }
+
+    /**
+     * Processes input value {@code F} by input {@link ThrowingProcessor}
+     *
+     * @param <T>       type of consumed value
+     * @param <F>       type of produced value
+     * @param <E>       type of throwable value
+     * @param processor - initial input {@link ThrowingProcessor} operator
+     * @param value     - initial input {@code F} value to be processed
+     * @return processed value {@code T}
+     * @throws IllegalArgumentException if processor produces exception
+     */
+    @Nullable
+    static <F, T, E extends Throwable> T processOrThrow(final ThrowingProcessor<F, T, E> processor, final F value) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        try {
+            return processor.process(value);
+        } catch (Throwable t) {
+            throw new IllegalArgumentException(String.format("ERROR: cannot operate on processor = {%s}, message = {%s}", processor, t.getMessage()), t);
+        }
     }
 }

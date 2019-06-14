@@ -23,6 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
+import lombok.NonNull;
+
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 /**
@@ -40,7 +43,8 @@ public interface Processor<T, R> {
      * @param value - initial input argument {@code T} to consume
      * @return processed result {@code R}
      */
-    R process(final T value);
+    @Nullable
+    R process(@Nullable final T value);
 
     /**
      * Returns composed {@link Processor} that first applies {@code before} {@link Processor} to the input {@code V} and then applies the result to the current {@link Processor}
@@ -49,18 +53,20 @@ public interface Processor<T, R> {
      * @param before - initial input {@link Processor} to be composed
      * @return composed {@link Processor}
      */
+    @NonNull
     default <V> Processor<V, R> before(final Processor<? super V, ? extends T> before) {
         Objects.requireNonNull(before, "Before processor should not be null");
-        return (final V v) -> process(before.process(v));
+        return (value) -> this.process(before.process(value));
     }
 
     /**
      * Returns composed {@link Processor} that first applies current {@link Processor} to
      * its input, and then applies the {@code after} {@link Processor} to the result
      */
+    @NonNull
     default <V> Processor<T, V> after(final Processor<? super R, ? extends V> after) {
         Objects.requireNonNull(after, "After processor should not be null");
-        return (final T t) -> after.process(process(t));
+        return (value) -> after.process(this.process(value));
     }
 
     /**
@@ -69,7 +75,8 @@ public interface Processor<T, R> {
      * @param <T> type of the input and output item
      * @return {@link Processor} that always returns its input argument {@code T}
      */
+    @Nullable
     static <T> Processor<T, T> identity() {
-        return t -> t;
+        return value -> value;
     }
 }
