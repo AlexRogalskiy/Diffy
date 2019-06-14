@@ -136,17 +136,6 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param processor - initial input {@link ThrowingProcessor}
      * @return {@link ThrowingSupplier}
      */
-    default <R> ThrowingConsumer<Stream<R>, E> collectFromStream(final ThrowingProcessor<Stream<R>, Stream<T>, E> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
-        return (value) -> processor.process(value).forEach(this::accept);
-    }
-
-    /**
-     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
-     *
-     * @param processor - initial input {@link ThrowingProcessor}
-     * @return {@link ThrowingSupplier}
-     */
     default <R> ThrowingConsumer<R, E> collect(final ThrowingProcessor<R, Stream<T>, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return (value) -> processor.process(value).forEach(this::accept);
@@ -161,17 +150,6 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
     default <R> ThrowingProcessor<Stream<T>, Stream<R>, E> collectAfter(final ThrowingProcessor<T, R, E> processor) {
         Objects.requireNonNull(processor, "Processor should not be null");
         return (value) -> value.peek(this::accept).map(processor::process);
-    }
-
-    /**
-     * Returns {@link ThrowingSupplier} by input {@link ThrowingProcessor}
-     *
-     * @param processor - initial input {@link ThrowingProcessor}
-     * @return {@link ThrowingSupplier}
-     */
-    default <R> ThrowingProcessor<R, Stream<T>, E> collectAfter2(final ThrowingProcessor<R, Stream<T>, E> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
-        return (value) -> processor.process(value).peek(this::accept);
     }
 
     /**
