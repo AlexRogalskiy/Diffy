@@ -30,6 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils.isTrue;
+
 /**
  * Validator utilities implementation
  */
@@ -89,7 +91,7 @@ public class ValidatorUtils {
     }
 
     public static Matcher matcher(@NonNull final String regex, @NonNull final String text, int flags) {
-        assert (flags >= 0);
+        isTrue(flags >= 0, "Flags should be positive or equal zero");
         final Pattern pattern = Pattern.compile(regex, flags);
         return pattern.matcher(text);
     }

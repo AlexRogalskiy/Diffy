@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import static com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager.NullPriority.NATIVE;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils.isTrue;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -160,7 +161,8 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
     public static SortManager by(final SortDirection direction, final String... properties) {
         Objects.requireNonNull(direction, "Sort direction should not be null!");
         Objects.requireNonNull(properties, "Properties should not be null!");
-        assert properties.length > 0 : "At least one property must be given!";
+
+        isTrue(properties.length > 0, "At least one property must be given");
         return SortManager.by(Arrays.stream(properties)
             .map(it -> new SortOrder(direction, it))
             .collect(Collectors.toList()));

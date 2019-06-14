@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter.enumeration;
 import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.text.WordUtils;
@@ -57,13 +58,11 @@ public enum StringConverterType {
     TRIM_TO_NULL(StringUtils::trimToNull),
     TRIM(StringUtils::trim),
     CHOP(StringUtils::chop),
-
     /**
      * com.google.common.base.Strings
      */
     EMPTY_TO_NULL(Strings::emptyToNull),
     NULL_TO_EMPTY(Strings::nullToEmpty),
-
     /**
      * com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils
      */
@@ -73,7 +72,6 @@ public enum StringConverterType {
     NATIVE_TO_ASCII(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::native2Ascii),
     CAPITALIZE_WORD_FULLY(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWordFull),
     CAPITALIZE_TITLE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWord),
-
     /**
      * org.apache.commons.text.StringEscapeUtils
      */
@@ -90,7 +88,16 @@ public enum StringConverterType {
     ESCAPE_CSV(StringEscapeUtils::escapeCsv),
     UNESCAPE_CSV(StringEscapeUtils::unescapeCsv),
     UNESCAPE_XSI(StringEscapeUtils::unescapeXSI),
-    ESCAPE_XSI(StringEscapeUtils::escapeXSI);
+    ESCAPE_XSI(StringEscapeUtils::escapeXSI),
+    /**
+     * org.apache.commons.codec.digest.DigestUtils
+     */
+    SHA_384_HEX(DigestUtils::sha384Hex),
+    SHA_512_HEX(DigestUtils::sha512Hex),
+    SHA_256_HEX(DigestUtils::sha256Hex),
+    SHA_1_HEX(DigestUtils::sha1Hex),
+    MD5_HEX(DigestUtils::md5Hex),
+    MD2_HEX(DigestUtils::md2Hex);
 
     /**
      * String {@link Function} converter operator

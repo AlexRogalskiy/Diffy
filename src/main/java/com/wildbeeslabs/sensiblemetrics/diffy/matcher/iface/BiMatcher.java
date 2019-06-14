@@ -42,6 +42,7 @@ import java.util.stream.Stream;
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils.isTrue;
 import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -377,7 +378,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final int skip, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        assert skip >= 0 : "Skip count should be positive or zero";
+        isTrue(skip >= 0, "Skip count should be positive or zero");
         return listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
@@ -525,7 +526,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         Objects.requireNonNull(consumer, "Consumer should not be null");
 
-        assert limit >= 0 : "Limit count should be positive or zero";
+        isTrue(limit >= 0, "Limit count should be positive or zero");
         Stream.generate(() -> supplier.get()).limit(limit).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).forEach(consumer::accept);
     }
 

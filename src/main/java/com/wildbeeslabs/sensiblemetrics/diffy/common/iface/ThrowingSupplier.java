@@ -27,6 +27,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
 
 import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Stream.generate;
@@ -149,6 +152,33 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     default <R> ThrowingSupplier<Stream<R>, E> streamAfter(final ThrowingProcessor<Stream<T>, Stream<R>, E> processor) {
         return () -> processor.process(generate(this::get));
+    }
+
+    /**
+     * Returns long {@link ThrowingSupplier}
+     *
+     * @return long {@link ThrowingSupplier}
+     */
+    default ThrowingSupplier<LongStream, E> longStream(final long maxSize) {
+        return () -> LongStream.generate(() -> (Long) this.get());
+    }
+
+    /**
+     * Returns integer {@link ThrowingSupplier}
+     *
+     * @return integer {@link ThrowingSupplier}
+     */
+    default ThrowingSupplier<IntStream, E> intStream() {
+        return () -> IntStream.generate(() -> (Integer) this.get());
+    }
+
+    /**
+     * Returns double {@link ThrowingSupplier}
+     *
+     * @return double {@link ThrowingSupplier}
+     */
+    default ThrowingSupplier<DoubleStream, E> doubleStream() {
+        return () -> DoubleStream.generate(() -> (Double) this.get());
     }
 
     /**

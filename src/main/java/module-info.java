@@ -22,6 +22,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires org.apache.commons.text;
     requires com.fasterxml.jackson.dataformat.yaml;
     requires protonpack;
+    requires org.apache.commons.codec;
 
     // exports comparator interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;

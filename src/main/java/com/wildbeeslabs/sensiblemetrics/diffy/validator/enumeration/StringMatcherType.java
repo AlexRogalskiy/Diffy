@@ -44,12 +44,10 @@ public enum StringMatcherType {
     IS_PALINDROME(StringUtils::isPalindrome),
     IS_PERMUTATION_PALINDROME(StringUtils::isPermutationOfPalindrome),
     IS_UNIQUE(StringUtils::isUnique),
-
     /**
      * com.google.common.base.Strings
      */
     IS_NULL_OR_EMPTY(Strings::isNullOrEmpty),
-
     /**
      * org.apache.commons.lang3.math.NumberUtils
      */
@@ -57,7 +55,6 @@ public enum StringMatcherType {
     IS_DIGITS(NumberUtils::isDigits),
     IS_PARSABLE(NumberUtils::isParsable),
     IS_NUMBER(org.apache.commons.lang.math.NumberUtils::isNumber),
-
     /**
      * org.apache.commons.lang3.StringUtils
      */
