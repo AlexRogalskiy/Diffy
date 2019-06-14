@@ -502,4 +502,23 @@ public class ServiceUtils {
 
         return stream.collect(Collectors.partitioningBy(predicate, collector));
     }
+
+    /**
+     * Returns {@link Supplier} by input parameters
+     *
+     * @param <T>       type of value to convert from
+     * @param <R>       type of value to convert to
+     * @param supplier  - initial input {@link Supplier}
+     * @param converter - initial input {@link Converter}
+     * @return {@link Supplier}
+     */
+    public static <T, R> Supplier<R> ifSupplierNotNullDo(final Supplier<T> supplier, final Converter<T, R> converter) {
+        return () -> {
+            final T val = supplier.get();
+            if (Objects.isNull(val)) {
+                return null;
+            }
+            return converter.convert(val);
+        };
+    }
 }
