@@ -23,6 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -71,5 +74,30 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on consumer = {%s}, message = {%s}", consumer, t.getMessage()), t);
         }
+    }
+
+    /**
+     * Returns {@link ThrowingConsumer} by input parameters
+     *
+     * @param <R>       type of consumed value
+     * @param converter - initial input {@link Converter} operator
+     * @return {@link ThrowingConsumer}
+     */
+    default <R, E extends Throwable> ThrowingConsumer<R, E> map(final Converter<R, T> converter) {
+        Objects.requireNonNull(converter, "Converter should not be null");
+        return (value) -> this.accept(converter.convert(value));
+    }
+
+    /**
+     * Returns {@link ThrowingConsumer} by input parameters
+     *
+     * @param <T>      type of consumed value
+     * @param <E>      type of throwable value
+     * @param consumer - initial input {@link ThrowingConsumer} operator
+     * @return {@link ThrowingConsumer}
+     */
+    static <T, E extends Throwable> ThrowingConsumer<T, E> accept(final ThrowingConsumer<T, E> consumer) {
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+        return (value) -> consumer.accept(value);
     }
 }

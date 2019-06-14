@@ -23,6 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -71,5 +74,30 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on supplier = {%s}, message = {%s}", supplier, t.getMessage()), t);
         }
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input parameters
+     *
+     * @param <R>       type of supplied value
+     * @param converter - initial input {@link Converter} operator
+     * @return {@link ThrowingSupplier}
+     */
+    default <R, E extends Throwable> ThrowingSupplier<R, E> map(final Converter<T, R> converter) {
+        Objects.requireNonNull(converter, "Converter should not be null");
+        return () -> converter.convert(this.get());
+    }
+
+    /**
+     * Returns {@link ThrowingSupplier} by input parameters
+     *
+     * @param <T>      type of supplied value
+     * @param <E>      type of throwable value
+     * @param supplier - initial input {@link ThrowingSupplier} operator
+     * @return {@link ThrowingSupplier}
+     */
+    static <T, E extends Throwable> ThrowingSupplier<T, E> get(final ThrowingSupplier<T, E> supplier) {
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+        return () -> supplier.get();
     }
 }

@@ -23,6 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
+
+import java.util.Objects;
+
 /**
  * Throwing {@link Processor} interface declaration
  *
@@ -74,5 +78,43 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on processor = {%s}, message = {%s}", processor, t.getMessage()), t);
         }
+    }
+
+    /**
+     * Returns {@link ThrowingProcessor} by input parameters
+     *
+     * @param <V>       type of converted value
+     * @param converter - initial input {@link Converter} operator
+     * @return {@link ThrowingProcessor}
+     */
+    default <V, E extends Throwable> ThrowingProcessor<V, T, E> mapBefore(final Converter<V, F> converter) {
+        Objects.requireNonNull(converter, "Converter should not be null");
+        return (value) -> this.process(converter.convert(value));
+    }
+
+    /**
+     * Returns {@link ThrowingProcessor} by input parameters
+     *
+     * @param <V>       type of converted value
+     * @param converter - initial input {@link Converter} operator
+     * @return {@link ThrowingProcessor}
+     */
+    default <V, E extends Throwable> ThrowingProcessor<F, V, E> mapAfter(final Converter<T, V> converter) {
+        Objects.requireNonNull(converter, "Converter should not be null");
+        return (value) -> converter.convert(this.process(value));
+    }
+
+    /**
+     * Returns {@link ThrowingProcessor} by input parameters
+     *
+     * @param <F>       type of consumed value
+     * @param <T>       type of supplied value
+     * @param <E>       type of throwable value
+     * @param processor - initial input {@link ThrowingProcessor} operator
+     * @return {@link ThrowingSupplier}
+     */
+    static <F, T, E extends Throwable> ThrowingProcessor<F, T, E> get(final ThrowingProcessor<F, T, E> processor) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        return (value) -> processor.process(value);
     }
 }
