@@ -77,6 +77,7 @@ public enum StringConverterType {
     FROM_FILE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile),
     FROM_FILE2(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile2),
     FROM_FILE3(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile3),
+    RANDOM_PASSWORD(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::generatePassword),
     /**
      * org.apache.commons.text.StringEscapeUtils
      */

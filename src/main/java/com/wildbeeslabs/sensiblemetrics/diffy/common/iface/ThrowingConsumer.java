@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.throwAsUnchecked;
 
 /**
  * Throwing {@link Consumer} interface declaration
@@ -187,5 +188,32 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on consumer = {%s}, message = {%s}", consumer, t.getMessage()), t);
         }
+    }
+
+    /**
+     * Wraps input {@link ThrowingConsumer} by input exception {@link Class}
+     *
+     * @param <T>      type of consumed value
+     * @param <E>      type of throwable value
+     * @param consumer - initial input {@link ThrowingConsumer}
+     * @param clazz    - initial input {@link Class}
+     * @return {@link ThrowingConsumer}
+     */
+    @NonNull
+    static <T, E extends Exception> ThrowingConsumer<T, E> wrapConsumer(final ThrowingConsumer<T, E> consumer, final Class<E> clazz) {
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+        Objects.requireNonNull(clazz, "Class should not be null");
+
+        return (value) -> {
+            try {
+                consumer.acceptOrThrow(value);
+            } catch (Throwable ex) {
+                try {
+                    throwAsUnchecked(clazz.cast(ex));
+                } catch (ClassCastException eex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        };
     }
 }

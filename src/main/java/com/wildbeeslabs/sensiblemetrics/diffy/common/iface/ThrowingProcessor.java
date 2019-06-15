@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.throwAsUnchecked;
 
 /**
  * Throwing {@link Processor} interface declaration
@@ -128,5 +129,34 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on processor = {%s}, message = {%s}", processor, t.getMessage()), t);
         }
+    }
+
+    /**
+     * Wraps input {@link ThrowingProcessor} by input exception {@link Class}
+     *
+     * @param <F>       type of consumed value
+     * @param <F>       type of supplied value
+     * @param <E>       type of exception value
+     * @param processor - initial input {@link ThrowingProcessor}
+     * @param clazz     - initial input {@link Class}
+     * @return {@link ThrowingProcessor}
+     */
+    @NonNull
+    static <F, T, E extends Exception> ThrowingProcessor<F, T, E> wrapConsumer(final ThrowingProcessor<F, T, E> processor, final Class<E> clazz) {
+        Objects.requireNonNull(processor, "Processor should not be null");
+        Objects.requireNonNull(clazz, "Class should not be null");
+
+        return (value) -> {
+            try {
+                return processor.processOrThrow(value);
+            } catch (Throwable ex) {
+                try {
+                    throwAsUnchecked(clazz.cast(ex));
+                } catch (ClassCastException eex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            return null;
+        };
     }
 }

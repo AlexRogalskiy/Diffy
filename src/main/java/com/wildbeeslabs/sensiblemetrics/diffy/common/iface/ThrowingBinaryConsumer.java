@@ -23,11 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
 
+import lombok.NonNull;
+
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.throwAsUnchecked;
 
 /**
  * Throwing {@link BiConsumer} interface declaration
@@ -79,5 +82,33 @@ public interface ThrowingBinaryConsumer<T, U, E extends Throwable> extends BiCon
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on binary consumer = {%s}, message = {%s}", consumer, t.getMessage()), t);
         }
+    }
+
+    /**
+     * Wraps input {@link ThrowingBinaryConsumer} by input exception {@link Class}
+     *
+     * @param <T>      type of first consumed value
+     * @param <U>      type of last consumed value
+     * @param <E>      type of exception value
+     * @param consumer - initial input {@link ThrowingBinaryConsumer}
+     * @param clazz    - initial input {@link Class}
+     * @return {@link ThrowingBinaryConsumer}
+     */
+    @NonNull
+    static <T, U, E extends Exception> ThrowingBinaryConsumer<T, U, E> wrapConsumer(final ThrowingBinaryConsumer<T, U, E> consumer, final Class<E> clazz) {
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+        Objects.requireNonNull(clazz, "Class should not be null");
+
+        return (first, last) -> {
+            try {
+                consumer.acceptOrThrow(first, last);
+            } catch (Throwable ex) {
+                try {
+                    throwAsUnchecked(clazz.cast(ex));
+                } catch (ClassCastException eex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        };
     }
 }

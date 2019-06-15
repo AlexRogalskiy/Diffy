@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -502,5 +504,17 @@ public class StringUtils {
             log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, ex.getMessage()));
         }
         return sb.toString();
+    }
+
+    public static String generatePassword(final String algorithm) {
+        Objects.requireNonNull(algorithm, "Algorithm should be null");
+        try {
+            final SecureRandom random = SecureRandom.getInstance(algorithm);
+            byte[] passwordBytes = new byte[16];
+            random.nextBytes(passwordBytes);
+            return new String(org.apache.commons.codec.binary.Base64.encodeBase64(passwordBytes), StandardCharsets.UTF_8).replace("=", "");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Unable to load SHA1PRNG", e);
+        }
     }
 }

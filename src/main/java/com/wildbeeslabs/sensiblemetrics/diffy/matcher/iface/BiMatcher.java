@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -147,10 +148,11 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     /**
      * Wraps input {@link MatchDescription} by current description
      *
+     * @param <R>         type of entry item
      * @param description - initial input {@link MatchDescription}
      * @throws NullPointerException if description is {@code null}
      */
-    default void describeBy(final Entry<T, T> value, final MatchDescription description) {
+    default <R extends Entry<T, T>> void describeBy(final R value, final MatchDescription description) {
         Objects.requireNonNull(description, "Description should not be null");
         description.append(value).append(wrapInBraces.apply(this.getDescription()));
     }
@@ -306,33 +308,36 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     /**
      * Returns binary flag based on all-match input collection of {@link Iterable} collection of {@link Entry} values
      *
+     * @param <R>    type of entry item
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
      * @return true - if all input values {@link Entry} match, false - otherwise
      */
     @NonNull
-    default boolean allMatch(@Nullable final Iterable<Entry<T, T>> values) {
+    default <R extends Entry<T, T>> boolean allMatch(@Nullable final Iterable<R> values) {
         return listOf(values).stream().allMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**
      * Returns binary flag based on non-match input collection of {@link Iterable} collection of {@link Entry} values
      *
+     * @param <R>    type of entry item
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
      * @return true - if all input values {@link Entry} match, false - otherwise
      */
     @NonNull
-    default boolean noneMatch(@Nullable final Iterable<Entry<T, T>> values) {
+    default <R extends Entry<T, T>> boolean noneMatch(@Nullable final Iterable<R> values) {
         return listOf(values).stream().noneMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
     /**
      * Returns binary flag based on any-match input collection of {@link Iterable} collection of {@link Entry} values
      *
+     * @param <R>    type of entry item
      * @param values - initial input {@link Iterable} collection of {@link Entry} values
      * @return true - if all input values {@link Entry} match, false - otherwise
      */
     @NonNull
-    default boolean anyMatch(@Nullable final Iterable<Entry<T, T>> values) {
+    default <R extends Entry<T, T>> boolean anyMatch(@Nullable final Iterable<R> values) {
         return listOf(values).stream().anyMatch(v -> this.matches(v.getFirst(), v.getLast()));
     }
 
@@ -340,13 +345,14 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Collection} of {@link Entry}s by input {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation {#link filter}
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link Collection} of {@link Entry}s
      * @throws NullPointerException if matcher is {@code null}
      */
     @NonNull
-    static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
@@ -355,12 +361,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Collection} of {@link Entry}s by input array of {@link BiMatcher}s
      *
      * @param <T>      type of input element to be matched by operation {#link filter}
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input array of {@link BiMatcher}s
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return matchIf(values, matcher);
     }
@@ -369,6 +376,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Collection} of {@code T} filtered by input {@link BiMatcher} with skip count
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@code T}
      * @param skip    - initial input skip count
      * @param matcher - initial input {@link BiMatcher}
@@ -376,7 +384,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @throws NullPointerException if matcher is {@code null}
      */
     @NonNull
-    static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final int skip, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final int skip, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         isTrue(skip >= 0, "Skip count should be positive or zero");
         return listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
@@ -386,13 +394,14 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Collection} of {@code T} filtered by input array of {@link BiMatcher}s with skip count
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@code T}
      * @param skip     - initial input skip count
      * @param matchers - initial input array of {@link BiMatcher}
      * @return {@link Collection} of {@code T} items
      */
     @NonNull
-    static <T> Collection<Entry<T, T>> matchIf(@Nullable final Iterable<Entry<T, T>> values, final int skip, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final int skip, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return matchIf(values, skip, matcher);
     }
@@ -401,13 +410,14 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Optional} of first match {@link Entry} filtered by input {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link Optional} of first match {@link Entry} item
      * @throws NullPointerException if matcher is {@code null}
      */
     @NonNull
-    static <T> Optional<Entry<T, T>> matchFirstIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> Optional<R> matchFirstIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).findFirst();
     }
@@ -417,12 +427,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * BiMatcher
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@code T}
      * @param matchers - initial input array of {@link BiMatcher}
      * @return {@link Optional} of first match {@link Entry}
      */
     @NonNull
-    static <T> Optional<Entry<T, T>> matchFirstIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> Optional<R> matchFirstIf(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return matchFirstIf(values, matcher);
     }
@@ -431,13 +442,14 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Optional} of last match {@code T} filtered by input {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@code T}
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link Optional} of first match {@code T} item
      * @throws NullPointerException if matcher is {@code null}
      */
     @NonNull
-    static <T> Optional<Entry<T, T>> matchLastIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> Optional<R> matchLastIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).reduce((first, last) -> last);
     }
@@ -446,12 +458,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Optional} of last match {@code T} filtered by input array of {@link BiMatcher}s
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@code T}
      * @param matchers - initial input array of {@link BiMatcher}
      * @return {@link Optional} of first match {@code T} item
      */
     @NonNull
-    static <T> Optional<Entry<T, T>> matchLastIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> Optional<R> matchLastIf(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return matchLastIf(values, matcher);
     }
@@ -460,12 +473,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Collection} of {@link Entry}s filtered by input {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> Collection<Entry<T, T>> removeIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> Collection<R> removeIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
@@ -474,12 +488,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link Collection} of {@link Entry}s filtered by input array of {@link BiMatcher}s
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input arrays of {@link BiMatcher}s
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> Collection<Entry<T, T>> removeIf(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> Collection<R> removeIf(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return removeIf(values, matcher);
     }
@@ -487,27 +502,31 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     /**
      * Returns {@link Map} of {@code T} by input {@link BiMatcher}
      *
-     * @param <T>     type of input element to be matched by operation
-     * @param values  - initial input {@link Iterable} collection of {@link Entry}s
-     * @param matcher - initial input {@link BiMatcher}
+     * @param <T>       type of input element to be matched by operation
+     * @param <R>       type of entry item
+     * @param values    - initial input {@link Iterable} collection of {@link Entry}s
+     * @param matcher   - initial input {@link BiMatcher}
+     * @param collector - initial input {@link Collector}
      * @return {@link Map} of {@link Entry}s
      */
     @NonNull
-    static <T> Map<Boolean, List<Entry<T, T>>> mapBy(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>, A, M extends Collection<R>> Map<Boolean, M> mapBy(@Nullable final Iterable<R> values, final BiMatcher<T> matcher, final Collector<R, A, M> collector) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return streamOf(values).collect(Collectors.partitioningBy(entry -> matcher.matches(entry.getFirst(), entry.getLast())));
+        Objects.requireNonNull(collector, "Collector should not be null");
+        return streamOf(values).collect(Collectors.partitioningBy(entry -> matcher.matches(entry.getFirst(), entry.getLast()), collector));
     }
 
     /**
      * Returns {@link Map} of {@code T} by input array of {@link BiMatcher}s
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input arrays of {@link BiMatcher}s
      * @return {@link Map} of {@link Entry}s
      */
     @NonNull
-    static <T> Map<Boolean, List<Entry<T, T>>> mapBy(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> Map<Boolean, List<R>> mapBy(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return mapBy(values, matcher);
     }
@@ -516,12 +535,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Generates collection of {@link Entry} items by input parameters
      *
      * @param <T>      type of stream item
+     * @param <R>      type of entry item
      * @param supplier - initial input {@link Supplier}
      * @param limit    - initial input stream limit
      * @param matcher  - initial input {@link BiMatcher}
      * @param consumer - initial input {@link Consumer}
      */
-    static <T> void generate(final Supplier<Entry<T, T>> supplier, final int limit, final BiMatcher<T> matcher, final Consumer<Entry<T, T>> consumer) {
+    static <T, R extends Entry<T, T>> void generate(final Supplier<R> supplier, final int limit, final BiMatcher<T> matcher, final Consumer<R> consumer) {
         Objects.requireNonNull(supplier, "Supplier should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
         Objects.requireNonNull(consumer, "Consumer should not be null");
@@ -546,12 +566,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param stream  - initial input {@link Stream}
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link List} of {@code T} items
      */
     @NonNull
-    static <T> List<Entry<T, T>> skipUntil(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> List<R> skipUntil(final Stream<R> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
@@ -561,12 +582,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param stream  - initial input {@link Stream}
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link List} of {@code T} items
      */
     @NonNull
-    static <T> List<Entry<T, T>> skipWhile(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> List<R> skipWhile(final Stream<R> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
@@ -576,12 +598,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param stream  - initial input {@link Stream}
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link List} of {@code T} items
      */
     @NonNull
-    static <T> List<Entry<T, T>> takeWhile(final Stream<Entry<T, T>> stream, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> List<R> takeWhile(final Stream<R> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
@@ -591,12 +614,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Filters input {@link Collection} of {@link Entry} items by {@link BiMatcher}
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> boolean remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> boolean remove(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return listOf(values).removeIf(entry -> matcher.matches(entry.getFirst(), entry.getLast()));
     }
@@ -605,12 +629,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Filters input {@link Collection} of {@link Entry} items by array of {@link BiMatcher}s
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}
      * @param matchers - initial input arrays of {@link BiMatcher}s
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> boolean remove(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> boolean remove(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         return remove(values, matcher);
     }
@@ -619,12 +644,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Filters input {@link Collection} of {@link Entry}s items by input {@link BiMatcher} (only first match)
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> void removeFirst(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> void removeFirst(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         matchFirstIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
     }
@@ -633,12 +659,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Filters input {@link Collection} of {@link Entry}s items by input array of {@link BiMatcher}s (only first match)
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input array of {@link BiMatcher}s
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> void removeFirst(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> void removeFirst(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         removeFirst(values, matcher);
     }
@@ -647,12 +674,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Filters input {@link Collection} of {@link Entry}s items by input {@link BiMatcher} (only last match)
      *
      * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link BiMatcher}
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> void removeLast(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T> matcher) {
+    static <T, R extends Entry<T, T>> void removeLast(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         matchLastIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
     }
@@ -661,12 +689,13 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * Filters input {@link Collection} of {@link Entry}s items by input array of {@link BiMatcher}s (only last match)
      *
      * @param <T>      type of input element to be matched by operation
+     * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input array of {@link BiMatcher}s
      * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
-    static <T> void removeLast(@Nullable final Iterable<Entry<T, T>> values, final BiMatcher<T>... matchers) {
+    static <T, R extends Entry<T, T>> void removeLast(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
         final BiMatcher<T> matcher = andAll(matchers);
         removeLast(values, matcher);
     }

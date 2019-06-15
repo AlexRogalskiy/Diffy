@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -496,7 +497,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      *
      * @param <T>      type of stream item
      * @param supplier - initial input {@link Supplier}
-     * @param limit    - initial input stream limit
      * @param matcher  - initial input {@link Matcher}
      * @param consumer - initial input {@link Consumer}
      */
@@ -546,12 +546,15 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
      * @param matcher - initial input {@link Matcher}
+     * @param matcher - initial input {@link Collector}
      * @return {@link Map} of {@code T} items
      */
     @NonNull
-    static <T> Map<Boolean, List<T>> mapBy(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
+    static <T, A, M extends Collection<T>> Map<Boolean, M> mapBy(@Nullable final Iterable<T> values, final Matcher<T> matcher, final Collector<T, A, M> collector) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return streamOf(values).collect(Collectors.partitioningBy(matcher::matches));
+        Objects.requireNonNull(collector, "Collector should not be null");
+
+        return streamOf(values).collect(Collectors.partitioningBy(matcher::matches, collector));
     }
 
     /**

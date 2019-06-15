@@ -35,6 +35,7 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.throwAsUnchecked;
 import static java.util.stream.Stream.generate;
 
 /**
@@ -213,5 +214,33 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on supplier = {%s}, message = {%s}", supplier, t.getMessage()), t);
         }
+    }
+
+    /**
+     * Wraps input {@link ThrowingSupplier} by input exception {@link Class}
+     *
+     * @param <T>      type of supplied value
+     * @param <E>      type of exception value
+     * @param supplier - initial input {@link ThrowingSupplier}
+     * @param clazz    - initial input {@link Class}
+     * @return {@link ThrowingSupplier}
+     */
+    @NonNull
+    static <T, E extends Exception> ThrowingSupplier<T, E> wrapConsumer(final ThrowingSupplier<T, E> supplier, final Class<E> clazz) {
+        Objects.requireNonNull(supplier, "Supplier should not be null");
+        Objects.requireNonNull(clazz, "Class should not be null");
+
+        return () -> {
+            try {
+                return supplier.getOrThrow();
+            } catch (Throwable ex) {
+                try {
+                    throwAsUnchecked(clazz.cast(ex));
+                } catch (ClassCastException eex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            return null;
+        };
     }
 }

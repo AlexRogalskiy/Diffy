@@ -574,14 +574,28 @@ public class ServiceUtils {
     }
 
     /**
-     * Rethrow input {@link Exception}
+     * Rethrow input {@link Throwable}
      *
-     * @param <E>       type of exception item
+     * @param <E>       type of throwable item
      * @param throwable - initial input {@link Throwable}
      * @throws E
      */
     @SuppressWarnings("unchecked")
     public static <E extends Throwable> void doThrow(final Throwable throwable) throws E {
+        Objects.requireNonNull(throwable, "Throwable should not be null");
         throw (E) throwable;
+    }
+
+    /**
+     * Rethrow {@link Exception} as unchecked
+     *
+     * @param <E>       type of exception item
+     * @param exception - initial input {@link Exception}
+     * @throws E
+     */
+    @SuppressWarnings("unchecked")
+    public static <E extends Throwable> void throwAsUnchecked(final Exception exception) throws E {
+        Objects.requireNonNull(exception, "Exception should not be null");
+        throw (E) exception;
     }
 }
