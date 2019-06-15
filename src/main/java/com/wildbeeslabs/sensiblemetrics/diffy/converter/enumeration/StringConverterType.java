@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.enumeration;
 
 import com.google.common.base.Strings;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.RegexUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -78,6 +79,18 @@ public enum StringConverterType {
     FROM_FILE2(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile2),
     FROM_FILE3(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile3),
     RANDOM_PASSWORD(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::generatePassword),
+    WRAP_STRING(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapStr),
+    STRIP_SLASHES(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::stripSlashes),
+    CHOMP_LEADING_SLASH(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::chompLeadingSlash),
+    CHOMP_TRAILING_SLASH(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::chompTrailingSlash),
+    FIRST_PATH_SEGMENT(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::firstPathSegment),
+    SANITIZE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::sanitizeRequest),
+    REMOVE_FORWARD_SLASHES(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::removeAdjacentForwardSlashes),
+    HTML_TO_TEXT(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::html2Text),
+    HOST(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::getHost),
+    ENCODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::encodeUtf8),
+    DECODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::decodeUtf8),
+    FETCH_URL(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readUrl),
     /**
      * org.apache.commons.text.StringEscapeUtils
      */
@@ -103,7 +116,20 @@ public enum StringConverterType {
     SHA_256_HEX(DigestUtils::sha256Hex),
     SHA_1_HEX(DigestUtils::sha1Hex),
     MD5_HEX(DigestUtils::md5Hex),
-    MD2_HEX(DigestUtils::md2Hex);
+    MD2_HEX(DigestUtils::md2Hex),
+    /**
+     * java.util.regex.Matcher
+     */
+    REGEX_QUOTE_REPLACE(java.util.regex.Matcher::quoteReplacement),
+    /**
+     * java.util.regex.Pattern
+     */
+    REGEX_QUOTE(java.util.regex.Pattern::quote),
+    /**
+     * com.wildbeeslabs.sensiblemetrics.diffy.utility.RegexUtils
+     */
+    TO_REGEX(RegexUtils::asRegex),
+    REGEX_ERROR(RegexUtils::regexError);
 
     /**
      * String {@link Function} converter operator

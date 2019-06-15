@@ -31,14 +31,13 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.toUnmodifiableList;
 
 /**
  * Converter interface declaration
@@ -142,7 +141,7 @@ public interface Converter<T, R> {
     /**
      * Returns {@link Predicate} by input {@link Validator}
      *
-     * @param <T>     type of input element to be converted from
+     * @param <T>       type of input element to be converted from
      * @param validator - initial input {@link Validator}
      * @return {@link Matcher}
      */
@@ -261,6 +260,6 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T, R> List<R> toList(final Iterable<? extends T> values, final Converter<? super T, R> converter) {
-        return streamOf(values).map(converter::convert).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return streamOf(values).map(converter::convert).collect(toUnmodifiableList());
     }
 }

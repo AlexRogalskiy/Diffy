@@ -108,7 +108,7 @@ public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T
      * @param description - initial input {@link MatchDescription}
      */
     @Override
-    public void describeBy(final Entry<T, T> value, final MatchDescription description) {
+    public <R extends Entry<T, T>> void describeBy(final R value, final MatchDescription description) {
         description.append(value).append(join("matches", wrapInBraces.apply(this.getComparator())));
     }
 }

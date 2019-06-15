@@ -25,6 +25,8 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingConsumer;
+import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -36,6 +38,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.zipOf;
 
 /**
@@ -198,5 +201,28 @@ public interface Entry<K, V> extends Serializable {
     @NonNull
     static <K, V> List<Entry<K, V>> of(final List<K> keys, final List<V> values) {
         return zipOf(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+    }
+
+    /**
+     * Invokes the given {@link ThrowingConsumer} if the {@link Optional} is present or the {@link Executable} if not
+     *
+     * @param optional   - initial input {@link Optional} value
+     * @param consumer   - initial input {@link ThrowingConsumer} operator
+     * @param executable - initial input {@link Executable} operator
+     */
+    static <T, E extends Throwable> void ifPresentOrElse(final Optional<T> optional, final ThrowingConsumer<T, E> consumer, final Executable executable) {
+        Objects.requireNonNull(optional, "Optional should not be null");
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+        Objects.requireNonNull(executable, "Executable should not be null");
+
+        if (optional.isPresent()) {
+            optional.ifPresent(consumer);
+        } else {
+            try {
+                executable.execute();
+            } catch (Throwable t) {
+                doThrow(t);
+            }
+        }
     }
 }

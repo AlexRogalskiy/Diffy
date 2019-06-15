@@ -49,6 +49,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatM
 import static java.util.Arrays.asList;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.StreamSupport.stream;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -90,6 +91,24 @@ public class ServiceUtils {
             first.addAll(second);
             return first;
         });
+    }
+
+    /**
+     * Returns a {@link Collector} to create an unmodifiable {@link List}.
+     *
+     * @return will never be {@literal null}.
+     */
+    public static <T> Collector<T, ?, List<T>> toUnmodifiableList() {
+        return collectingAndThen(toList(), Collections::unmodifiableList);
+    }
+
+    /**
+     * Returns a {@link Collector} to create an unmodifiable {@link Set}.
+     *
+     * @return will never be {@literal null}.
+     */
+    public static <T> Collector<T, ?, Set<T>> toUnmodifiableSet() {
+        return collectingAndThen(toSet(), Collections::unmodifiableSet);
     }
 
     /**
@@ -597,5 +616,23 @@ public class ServiceUtils {
     public static <E extends Throwable> void throwAsUnchecked(final Exception exception) throws E {
         Objects.requireNonNull(exception, "Exception should not be null");
         throw (E) exception;
+    }
+
+    public static <T> Stream<T> enumerationAsStream3(final Enumeration<T> enumeration) {
+        Objects.requireNonNull(enumeration, "Enumeration should not be null");
+        return StreamSupport.stream(
+            new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
+                public boolean tryAdvance(final Consumer<? super T> action) {
+                    if (enumeration.hasMoreElements()) {
+                        action.accept(enumeration.nextElement());
+                        return true;
+                    }
+                    return false;
+                }
+
+                public void forEachRemaining(final Consumer<? super T> action) {
+                    while (enumeration.hasMoreElements()) action.accept(enumeration.nextElement());
+                }
+            }, false);
     }
 }

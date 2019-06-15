@@ -354,7 +354,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -387,7 +387,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final int skip, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         isTrue(skip >= 0, "Skip count should be positive or zero");
-        return listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -481,7 +481,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T, R extends Entry<T, T>> Collection<R> removeIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -575,7 +575,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> List<R> skipUntil(final Stream<R> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -591,7 +591,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> List<R> skipWhile(final Stream<R> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -607,7 +607,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> List<R> takeWhile(final Stream<R> stream, final BiMatcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**

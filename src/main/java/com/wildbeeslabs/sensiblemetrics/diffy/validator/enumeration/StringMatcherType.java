@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 
 import com.google.common.base.Strings;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.RegexUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,10 @@ public enum StringMatcherType {
     IS_PERMUTATION_PALINDROME(StringUtils::isPermutationOfPalindrome),
     IS_UNIQUE(StringUtils::isUnique),
     IS_VALID_PACKAGE(StringUtils::isValidPackage),
+    /**
+     * com.wildbeeslabs.sensiblemetrics.diffy.utility.RegexUtils
+     */
+    IS_REGEX(RegexUtils::isRegex),
     /**
      * com.google.common.base.Strings
      */

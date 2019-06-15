@@ -32,6 +32,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeTyp
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -86,6 +89,18 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     Matcher<?> DEFAULT_EXCEPTION_MATCHER = value -> {
         throw new MatchOperationException();
     };
+    /**
+     * Default non-bridge method {@link Matcher}
+     */
+    Matcher<Method> DEFAULT_NON_BRIDGED_METHOD_MATCHER = value -> !value.isBridge();
+    /**
+     * Default user-declared method {@link Matcher}
+     */
+    Matcher<Method> DEFAULT_USER_DECLARED_METHOD_MATCHER = value -> !value.isBridge() && !value.isSynthetic() && value.getDeclaringClass() != Object.class;
+    /**
+     * Default copyable field {@link Matcher}
+     */
+    Matcher<Field> DEFAULT_COPYABLE_FIELD_MATCHER = value -> !(Modifier.isStatic(value.getModifiers()) || Modifier.isFinal(value.getModifiers()));
 
     /**
      * Default class {@link Matcher}
@@ -122,230 +137,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     Function<Boolean, Matcher<Boolean>> DEFAULT_BOOLEAN_MATCHER = (final Boolean flag) -> flag::equals;
 
     /**
-     * Returns binary flag by initial argument {@code T} match comparison
-     *
-     * @param value - initial input argument value to be matched {@code T}
-     * @return true - if initial value matches input argument, false - otherwise
-     */
-    boolean matches(final T value);
-
-    /**
-     * Returns {@link MatchDescription}
-     *
-     * @return {@link MatchDescription}
-     */
-    @NonNull
-    default MatchDescription getDescription() {
-        return MatchDescription.EMPTY_MATCH_DESCRIPTION;
-    }
-
-    /**
-     * Returns {@link MatcherModeType}
-     *
-     * @return {@link MatcherModeType}
-     */
-    @NonNull
-    @Override
-    default MatcherModeType getMode() {
-        return MatcherModeType.STRICT;
-    }
-
-    /**
-     * Wraps input {@link MatchDescription} by current description
-     *
-     * @param description - initial input {@link MatchDescription}
-     * @throws NullPointerException if description is {@code null}
-     */
-    default void describeBy(final T value, final MatchDescription description) {
-        Objects.requireNonNull(description, "Description should not be null");
-        description.append(value).append(wrapInBraces.apply(this.getDescription()));
-    }
-
-    /**
-     * Returns negated {@link Matcher} operator
-     *
-     * @return negated {@link Matcher} operator
-     */
-    @NonNull
-    default Matcher<T> negate() {
-        return (final T t) -> !this.matches(t);
-    }
-
-    /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of current predicate and another
-     *
-     * @param matcher - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if {@code other} is {@code null}
-     *                              <p>
-     *                              Input 1	Input 2	Output
-     *                              0		0		0
-     *                              0		1		0
-     *                              1	 	0		0
-     *                              1		1		1
-     *                              </p>
-     */
-    @NonNull
-    default Matcher<T> and(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
-        return (final T t) -> this.matches(t) && matcher.matches(t);
-    }
-
-    /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOT" of this predicate and another
-     *
-     * @param matcher - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is {@code null}
-     *                              <p>
-     *                              Input 1	Output
-     *                              0		1
-     *                              1 		0
-     *                              </p>
-     */
-    @NonNull
-    default Matcher<T> not(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
-        return (Matcher<T>) matcher.negate();
-    }
-
-    /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of this predicate and another
-     *
-     * @param matcher - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is {@code null}
-     *                              <p>
-     *                              Input 1	Input 2	Output
-     *                              0		0		0
-     *                              0 		1		1
-     *                              1		0 		1
-     *                              1		1		1
-     *                              </p>
-     */
-    @NonNull
-    default Matcher<T> or(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
-        return (final T t) -> this.matches(t) || matcher.matches(t);
-    }
-
-    /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of this predicate and another
-     *
-     * @param matcher - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is {@code null}
-     *                              <p>
-     *                              Input 1	Input 2	Output
-     *                              0		0		0
-     *                              0		1		1
-     *                              1		0 		1
-     *                              1		1		0
-     *                              </p>
-     */
-    @NonNull
-    default Matcher<T> xor(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
-        return (final T t) -> this.matches(t) ^ matcher.matches(t);
-    }
-
-    /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of this predicate and another
-     *
-     * @param matcher - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is {@code null}
-     *                              <p>
-     *                              Input 1	Input 2	Output
-     *                              0 		0 		1
-     *                              0 		1		1
-     *                              1		0 		1
-     *                              1		1	 	0
-     *                              </p>
-     */
-    @NonNull
-    default Matcher<T> nand(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
-        return (final T t) -> not(and(matcher)).matches(t);
-    }
-
-    /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of this predicate and another
-     *
-     * @param matcher - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is {@code null}
-     *                              <p>
-     *                              Input 1	Input 2	Output
-     *                              0		0 	 	1
-     *                              0 		1		0
-     *                              1		0		0
-     *                              1		1		0
-     *                              </p>
-     */
-    @NonNull
-    default Matcher<T> nor(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
-        return (final T t) -> not(or(matcher)).matches(t);
-    }
-
-    /**
-     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XNOR" of this predicate and another
-     *
-     * @param matcher - initial input {@link Matcher} operator to perform operation by
-     * @return composed {@link Matcher} operator
-     * @throws NullPointerException if other is {@code null}
-     *                              <p>
-     *                              Input 1	Input 2	Output
-     *                              0		0 	 	1
-     *                              0 		1	 	0
-     *                              1		0		0
-     *                              1		1		1
-     *                              </p>
-     */
-    @NonNull
-    default Matcher<T> xnor(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
-        return (final T t) -> not(xor(matcher)).matches(t);
-    }
-
-    /**
-     * Returns binary flag based on all-matched input collection of values {@code T}
-     *
-     * @param values - initial input collection of values {@code T}
-     * @return true - if all input values {@code T} match, false - otherwise
-     */
-    @NonNull
-    @SuppressWarnings("varargs")
-    default boolean allMatch(@Nullable final T... values) {
-        return streamOf(values).allMatch(this::matches);
-    }
-
-    /**
-     * Returns binary flag based on non-matched input collection of values {@code T}
-     *
-     * @param values - initial input collection of values {@code T}
-     * @return true - if all input values {@code T} match, false - otherwise
-     */
-    @NonNull
-    @SuppressWarnings("varargs")
-    default boolean noneMatch(@Nullable final T... values) {
-        return streamOf(values).noneMatch(this::matches);
-    }
-
-    /**
-     * Returns binary flag based on any-matched input collection of values {@code T}
-     *
-     * @param values - initial input collection of values {@code T}
-     * @return true - if all input values {@code T} match, false - otherwise
-     */
-    @NonNull
-    @SuppressWarnings("varargs")
-    default boolean anyMatch(@Nullable final T... values) {
-        return streamOf(values).anyMatch(this::matches);
-    }
-
-    /**
      * Returns {@link Collection} of {@code T} items filtered by input {@link Matcher}
      *
      * @param <T>     type of input element to be matched by operation
@@ -357,7 +148,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return listOf(values).stream().filter(matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -388,7 +179,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final int skip, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         assert skip >= 0 : "Skip count should be positive or zero";
-        return listOf(values).stream().skip(skip).filter(matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return listOf(values).stream().skip(skip).filter(matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -475,7 +266,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher.negate()::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return listOf(values).stream().filter(matcher.negate()::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -583,7 +374,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipUntil(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntil(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.skipUntil(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -598,7 +389,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntilInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.skipUntilInclusive(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -613,7 +404,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipWhile(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhile(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.skipWhile(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -628,7 +419,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhileInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.skipWhileInclusive(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -643,7 +434,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeWhile(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhile(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.takeWhile(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -658,7 +449,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhileInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.takeWhileInclusive(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -673,7 +464,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeUntil(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeUntil(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.takeUntil(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -688,7 +479,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         Objects.requireNonNull(stream, "Stream should not be null");
         Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeUntilInclusive(stream, matcher::matches).collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
+        return StreamUtils.takeUntilInclusive(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -956,5 +747,229 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Matcher<T> identity(final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         return matcher::matches;
+    }
+
+    /**
+     * Returns binary flag by initial argument {@code T} match comparison
+     *
+     * @param value - initial input argument value to be matched {@code T}
+     * @return true - if initial value matches input argument, false - otherwise
+     */
+    boolean matches(final T value);
+
+    /**
+     * Returns {@link MatchDescription}
+     *
+     * @return {@link MatchDescription}
+     */
+    @NonNull
+    default MatchDescription getDescription() {
+        return MatchDescription.EMPTY_MATCH_DESCRIPTION;
+    }
+
+    /**
+     * Returns {@link MatcherModeType}
+     *
+     * @return {@link MatcherModeType}
+     */
+    @NonNull
+    @Override
+    default MatcherModeType getMode() {
+        return MatcherModeType.STRICT;
+    }
+
+    /**
+     * Wraps input {@link MatchDescription} by current description
+     *
+     * @param description - initial input {@link MatchDescription}
+     * @throws NullPointerException if description is {@code null}
+     */
+    default void describeBy(final T value, final MatchDescription description) {
+        Objects.requireNonNull(description, "Description should not be null");
+        description.append(value).append(wrapInBraces.apply(this.getDescription()));
+    }
+
+    /**
+     * Returns negated {@link Matcher} operator
+     *
+     * @return negated {@link Matcher} operator
+     */
+    @NonNull
+    default Matcher<T> negate() {
+        return (final T t) -> !this.matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "AND" of current predicate and another
+     *
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if {@code other} is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0		1		0
+     *                              1	 	0		0
+     *                              1		1		1
+     *                              </p>
+     */
+    @NonNull
+    default Matcher<T> and(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> this.matches(t) && matcher.matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOT" of this predicate and another
+     *
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is {@code null}
+     *                              <p>
+     *                              Input 1	Output
+     *                              0		1
+     *                              1 		0
+     *                              </p>
+     */
+    @NonNull
+    default Matcher<T> not(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (Matcher<T>) matcher.negate();
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "OR" of this predicate and another
+     *
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0 		1		1
+     *                              1		0 		1
+     *                              1		1		1
+     *                              </p>
+     */
+    @NonNull
+    default Matcher<T> or(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> this.matches(t) || matcher.matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XOR" of this predicate and another
+     *
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0		0
+     *                              0		1		1
+     *                              1		0 		1
+     *                              1		1		0
+     *                              </p>
+     */
+    @NonNull
+    default Matcher<T> xor(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> this.matches(t) ^ matcher.matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NAND" of this predicate and another
+     *
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0 		0 		1
+     *                              0 		1		1
+     *                              1		0 		1
+     *                              1		1	 	0
+     *                              </p>
+     */
+    @NonNull
+    default Matcher<T> nand(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> not(and(matcher)).matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "NOR" of this predicate and another
+     *
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0 	 	1
+     *                              0 		1		0
+     *                              1		0		0
+     *                              1		1		0
+     *                              </p>
+     */
+    @NonNull
+    default Matcher<T> nor(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> not(or(matcher)).matches(t);
+    }
+
+    /**
+     * Returns composed {@link Matcher} operator that represents a short-circuiting logical "XNOR" of this predicate and another
+     *
+     * @param matcher - initial input {@link Matcher} operator to perform operation by
+     * @return composed {@link Matcher} operator
+     * @throws NullPointerException if other is {@code null}
+     *                              <p>
+     *                              Input 1	Input 2	Output
+     *                              0		0 	 	1
+     *                              0 		1	 	0
+     *                              1		0		0
+     *                              1		1		1
+     *                              </p>
+     */
+    @NonNull
+    default Matcher<T> xnor(final Matcher<? super T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        return (final T t) -> not(xor(matcher)).matches(t);
+    }
+
+    /**
+     * Returns binary flag based on all-matched input collection of values {@code T}
+     *
+     * @param values - initial input collection of values {@code T}
+     * @return true - if all input values {@code T} match, false - otherwise
+     */
+    @NonNull
+    @SuppressWarnings("varargs")
+    default boolean allMatch(@Nullable final T... values) {
+        return streamOf(values).allMatch(this::matches);
+    }
+
+    /**
+     * Returns binary flag based on non-matched input collection of values {@code T}
+     *
+     * @param values - initial input collection of values {@code T}
+     * @return true - if all input values {@code T} match, false - otherwise
+     */
+    @NonNull
+    @SuppressWarnings("varargs")
+    default boolean noneMatch(@Nullable final T... values) {
+        return streamOf(values).noneMatch(this::matches);
+    }
+
+    /**
+     * Returns binary flag based on any-matched input collection of values {@code T}
+     *
+     * @param values - initial input collection of values {@code T}
+     * @return true - if all input values {@code T} match, false - otherwise
+     */
+    @NonNull
+    @SuppressWarnings("varargs")
+    default boolean anyMatch(@Nullable final T... values) {
+        return streamOf(values).anyMatch(this::matches);
     }
 }

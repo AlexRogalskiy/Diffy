@@ -24,6 +24,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires protonpack;
     requires org.apache.commons.codec;
     requires java.compiler;
+    requires org.jsoup;
 
     // exports comparator interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;

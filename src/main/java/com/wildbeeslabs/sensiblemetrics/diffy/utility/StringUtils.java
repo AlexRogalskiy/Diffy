@@ -26,12 +26,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import javax.lang.model.SourceVersion;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -42,10 +43,12 @@ import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 import static org.apache.commons.lang3.StringUtils.*;
@@ -64,10 +67,17 @@ import static org.apache.commons.text.WordUtils.capitalizeFully;
 public class StringUtils {
 
     /**
-     * Default regular expression (only alpha-numeric characters)
+     * Default alpha-numeric regex
      */
-    public static final String DEFAULT_ALPHANUMERIC_PATTERN = "[^a-zA-Z0-9]";
-
+    public static final String DEFAULT_ALPHANUMERIC_REGEX = "[^a-zA-Z0-9]";
+    /**
+     * Defautl first path segment {@link Pattern}
+     */
+    public static final Pattern FIRST_PATH_FRAGMENT_PATTERN = Pattern.compile("^([/]?[\\w\\-\\.]+[/]?)");
+    /**
+     * Default host:port and protocol:\\host:port
+     */
+    private static final Pattern HOST_PORT_PATTERN = Pattern.compile(".*?\\[?([0-9a-zA-Z\\-%._:]*)\\]?:([0-9]+)");
     /**
      * Default braces wrapper {@link Function}
      */
@@ -270,7 +280,7 @@ public class StringUtils {
      * @return formatted string value stripped by default regex pattern {@link String}
      */
     public static String sanitize(final String initialValue) {
-        return sanitize(initialValue, DEFAULT_ALPHANUMERIC_PATTERN);
+        return sanitize(initialValue, DEFAULT_ALPHANUMERIC_REGEX);
     }
 
     /**
@@ -516,5 +526,96 @@ public class StringUtils {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Unable to load SHA1PRNG", e);
         }
+    }
+
+    public static String stripSlashes(final String stringWithSlashes) {
+        return stringWithSlashes.replace("/", "").replace("\\", "");
+    }
+
+    public static String chompLeadingSlash(final String path) {
+        if (isNullOrEmpty(path) || !path.startsWith("/")) {
+            return path;
+        }
+        return path.replaceFirst("^/", "");
+    }
+
+    public static String chompTrailingSlash(final String path) {
+        if (isNullOrEmpty(path) || !path.endsWith("/")) {
+            return path;
+        }
+        return path.replaceFirst("/$", "");
+    }
+
+    public static String firstPathSegment(final String path) {
+        if (isNullOrEmpty(path)) {
+            return path;
+        }
+        final Matcher matcher = FIRST_PATH_FRAGMENT_PATTERN.matcher(path);
+        if (matcher.find()) {
+            return chompTrailingSlash(matcher.group());
+        }
+        return path;
+    }
+
+    /**
+     * Gets a uri friendly path from a request mapping pattern.
+     * Typically involves removing any regex patterns or || conditions from a spring request mapping
+     * This method will be called to resolve every request mapping endpoint.
+     * A good extension point if you need to alter endpoints by adding or removing path segments.
+     * Note: this should not be an absolute  uri
+     *
+     * @param requestMappingPattern request mapping pattern
+     * @return the request mapping endpoint
+     */
+    public static String sanitizeRequest(final String requestMappingPattern) {
+        String result = requestMappingPattern;
+        //remove regex portion '/{businessId:\\w+}'
+        result = result.replaceAll("\\{([^}]+?):([^/{}]|\\{[\\d,]+})+}", "{$1}");
+        return result.isEmpty() ? "/" : result;
+    }
+
+    public static String removeAdjacentForwardSlashes(final String candidate) {
+        return candidate.replaceAll("(?<!(http:|https:))//", "/");
+    }
+
+    public static String html2Text(final String content) {
+        return Jsoup.clean(content, Whitelist.none());
+    }
+
+    /**
+     * Extracts the hostname from a "host:port" address string.
+     *
+     * @param address address string to parse
+     * @return hostname or null if the given address is incorrect
+     */
+    public static String getHost(final String address) {
+        final Matcher matcher = HOST_PORT_PATTERN.matcher(address);
+        return matcher.matches() ? matcher.group(1) : null;
+    }
+
+    public static String encodeUtf8(final String url) {
+        try {
+            return URLEncoder.encode(url, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Unable to encode using charset");
+        }
+    }
+
+    public static String decodeUtf8(final String url) {
+        try {
+            return URLDecoder.decode(url, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Unable to encode using charset");
+        }
+    }
+
+    public static String readUrl(final String url) {
+        Objects.requireNonNull(url, "Url should not be null");
+        try {
+            return Jsoup.connect(url).get().html();
+        } catch (IOException ex) {
+            log.error(String.format("ERROR: cannot process read operations on url=%s, message=%s", url, ex.getMessage()));
+        }
+        return null;
     }
 }

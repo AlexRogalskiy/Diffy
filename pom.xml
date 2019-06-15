@@ -166,6 +166,7 @@
         <guava.version>27.0.1-jre</guava.version>
         <jetbrains.version>17.0.0</jetbrains.version>
         <classmate.version>1.5.0</classmate.version>
+        <org.jsoup.version>1.12.1</org.jsoup.version>
 
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -1141,6 +1142,13 @@
             <groupId>org.mongodb</groupId>
             <artifactId>bson</artifactId>
             <version>${bson.version}</version>
+        </dependency>
+
+        <!-- JSoup library dependencies -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${org.jsoup.version}</version>
         </dependency>
 
         <!-- Lombok library dependencies -->

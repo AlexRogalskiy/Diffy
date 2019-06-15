@@ -839,4 +839,25 @@ public class ReflectionUtils {
             }
         };
     }
+
+    /**
+     * Determine if the supplied object is an array.
+     *
+     * @param obj the object to test; potentially {@code null}
+     * @return {@code true} if the object is an array
+     */
+    public static boolean isArray(final Object obj) {
+        return (Objects.nonNull(obj) && obj.getClass().isArray());
+    }
+
+    /**
+     * Determine if the supplied object is a multidimensional array.
+     *
+     * @param obj the object to test; potentially {@code null}
+     * @return {@code true} if the object is a multidimensional array
+     * @since 1.3.2
+     */
+    public static boolean isMultidimensionalArray(final Object obj) {
+        return (Objects.nonNull(obj) && obj.getClass().isArray() && obj.getClass().getComponentType().isArray());
+    }
 }

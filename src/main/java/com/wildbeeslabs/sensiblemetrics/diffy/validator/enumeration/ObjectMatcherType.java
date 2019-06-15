@@ -24,11 +24,11 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
-import java.util.function.Predicate;
 
 /**
  * Object matcher type {@link Enum}
@@ -40,7 +40,12 @@ public enum ObjectMatcherType {
      * java.util.Objects
      */
     IS_NULL(Objects::isNull),
-    IS_NON_NULL(Objects::nonNull);
+    IS_NON_NULL(Objects::nonNull),
+    /**
+     * com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils
+     */
+    IS_ARRAY(ReflectionUtils::isArray),
+    IS_MULTI_ARRAY(ReflectionUtils::isMultidimensionalArray);
 
     /**
      * Object {@link Matcher} operator
