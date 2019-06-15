@@ -34,6 +34,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
 import static java.util.stream.Stream.generate;
 
 /**
@@ -56,8 +57,9 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
         try {
             return this.getOrThrow();
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            doThrow(t);
         }
+        return null;
     }
 
     /**
@@ -207,7 +209,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
     static <T, E extends Throwable> T getOrThrow(final ThrowingSupplier<T, E> supplier) {
         Objects.requireNonNull(supplier, "Supplier should not be null");
         try {
-            return supplier.get();
+            return supplier.getOrThrow();
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on supplier = {%s}, message = {%s}", supplier, t.getMessage()), t);
         }

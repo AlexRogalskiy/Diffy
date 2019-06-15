@@ -29,6 +29,8 @@ import lombok.NonNull;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
+
 /**
  * Throwing {@link Processor} interface declaration
  *
@@ -50,9 +52,10 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
     default T process(@Nullable final F value) {
         try {
             return this.processOrThrow(value);
-        } catch (final Throwable e) {
-            throw new RuntimeException(e);
+        } catch (final Throwable t) {
+            doThrow(t);
         }
+        return null;
     }
 
     /**
@@ -121,7 +124,7 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
     static <F, T, E extends Throwable> T processOrThrow(final ThrowingProcessor<F, T, E> processor, final F value) {
         Objects.requireNonNull(processor, "Processor should not be null");
         try {
-            return processor.process(value);
+            return processor.processOrThrow(value);
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on processor = {%s}, message = {%s}", processor, t.getMessage()), t);
         }

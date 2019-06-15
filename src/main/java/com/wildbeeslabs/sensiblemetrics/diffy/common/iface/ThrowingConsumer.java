@@ -31,6 +31,8 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
+
 /**
  * Throwing {@link Consumer} interface declaration
  *
@@ -50,7 +52,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
         try {
             this.acceptOrThrow(value);
         } catch (final Throwable t) {
-            throw new RuntimeException(t);
+            doThrow(t);
         }
     }
 
@@ -100,12 +102,12 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
     /**
      * Returns {@link ThrowingConsumer} by input {@code T} item
      *
-     * @param t - initial input {@code T} item
+     * @param value - initial input argument {@code T} to be consumed
      * @return {@link ThrowingConsumer}
      */
     @NonNull
-    default ThrowingConsumer<T, E> add(final T t) {
-        this.accept(t);
+    default ThrowingConsumer<T, E> add(final T value) {
+        this.accept(value);
         return this;
     }
 
@@ -181,7 +183,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
     static <T, E extends Throwable> void acceptOrThrow(final ThrowingConsumer<T, E> consumer, final T value) {
         Objects.requireNonNull(consumer, "Consumer should not be null");
         try {
-            consumer.accept(value);
+            consumer.acceptOrThrow(value);
         } catch (Throwable t) {
             throw new IllegalArgumentException(String.format("ERROR: cannot operate on consumer = {%s}, message = {%s}", consumer, t.getMessage()), t);
         }

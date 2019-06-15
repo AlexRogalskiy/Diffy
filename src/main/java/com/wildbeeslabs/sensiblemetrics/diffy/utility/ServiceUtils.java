@@ -572,4 +572,16 @@ public class ServiceUtils {
         }
         throw new IllegalArgumentException("Cannot convert instance of " + object.getClass().getName() + " into a Stream: " + object);
     }
+
+    /**
+     * Rethrow input {@link Exception}
+     *
+     * @param <E>       type of exception item
+     * @param throwable - initial input {@link Throwable}
+     * @throws E
+     */
+    @SuppressWarnings("unchecked")
+    public static <E extends Throwable> void doThrow(final Throwable throwable) throws E {
+        throw (E) throwable;
+    }
 }
