@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.arrayMemberEquals;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils.isTrue;
@@ -91,6 +92,10 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
         throw new BiMatchOperationException();
     };
 
+    /**
+     * Default array {@link BiMatcher}
+     */
+    Function<Class<?>, BiMatcher<?>> DEFAULT_ARRAY_BIMATCHER = (final Class<?> clazz) -> (first, last) -> arrayMemberEquals(clazz, first, last);
     /**
      * Default class {@link BiMatcher}
      */

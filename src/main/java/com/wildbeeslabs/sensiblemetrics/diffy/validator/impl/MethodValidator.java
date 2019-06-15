@@ -26,8 +26,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.Objects;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.arrayMemberEquals;
 
 /**
  * Method name {@link Validator} implementation
@@ -73,7 +74,7 @@ public class MethodValidator<T> implements Validator<Method> {
         if (!methodNameEquals) {
             return false;
         }
-        final boolean overloadedButSameArgs = !methodEquals && this.argumentsMatch(value.getParameters());
+        final boolean overloadedButSameArgs = !methodEquals && arrayMemberEquals(value.getParameters(), this.method.getParameters());
         return !overloadedButSameArgs;
     }
 
@@ -93,19 +94,6 @@ public class MethodValidator<T> implements Validator<Method> {
             }
         }
         return false;
-    }
-
-    public boolean argumentsMatch(final Parameter[] actualArgs) {
-        final Parameter[] currentArgs = this.method.getParameters();
-        if (actualArgs.length != currentArgs.length) {
-            return false;
-        }
-        for (int i = 0; i < actualArgs.length; i++) {
-            if (!Objects.equals(currentArgs[i], actualArgs[i])) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

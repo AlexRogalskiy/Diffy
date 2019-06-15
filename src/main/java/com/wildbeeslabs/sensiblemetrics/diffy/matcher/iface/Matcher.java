@@ -32,6 +32,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeTyp
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -43,6 +44,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getAnnotation;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
 import static java.lang.reflect.Modifier.isStatic;
@@ -111,6 +113,10 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     Matcher<Class<?>> DEFAULT_NON_STATIC_CLASS_MATCHER = value -> value.isMemberClass() && !isStatic(value.getModifiers());
 
+    /**
+     * Default annotation class {@link Matcher}
+     */
+    Function<Set<Annotation>, Matcher<Class<Annotation>>> DEFAULT_ANNOTATION_MATCHER = (final Set<Annotation> annotations) -> value -> Objects.nonNull(getAnnotation(annotations, value));
     /**
      * Default class {@link Matcher}
      */
