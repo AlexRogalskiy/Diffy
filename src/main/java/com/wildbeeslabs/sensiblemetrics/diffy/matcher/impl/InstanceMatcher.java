@@ -73,7 +73,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
      */
     @Override
     public boolean matches(final Object value) {
-        return getMatchableClazz().isInstance(value);
+        return this.getMatchableClazz().isInstance(value);
     }
 
     /**

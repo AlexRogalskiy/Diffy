@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 /**
  * Field {@link AbstractMatcher} implementation
@@ -50,6 +51,7 @@ public class FieldTypeMatcher<T extends Field> extends AbstractMatcher<T> {
     private final Matcher<? super Class<?>> matcher;
 
     public FieldTypeMatcher(final Matcher<? super Class<?>> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

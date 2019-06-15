@@ -35,6 +35,7 @@ import java.util.Objects;
  *
  * @param <T> type of event item
  */
+@SuppressWarnings("unchecked")
 public interface EventListener<T, S, E extends Event<S>> {
 
     /**

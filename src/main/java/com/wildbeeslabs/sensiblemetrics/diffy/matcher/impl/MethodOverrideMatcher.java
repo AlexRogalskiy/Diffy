@@ -55,6 +55,7 @@ public class MethodOverrideMatcher<T extends Method> extends AbstractMatcher<T> 
     private final Matcher<? super Parameter[]> matcher;
 
     public MethodOverrideMatcher(final Matcher<? super Parameter[]> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

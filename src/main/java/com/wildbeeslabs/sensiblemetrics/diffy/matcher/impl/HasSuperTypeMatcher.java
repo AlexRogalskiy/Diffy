@@ -31,6 +31,7 @@ import lombok.ToString;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.iterableOf;
@@ -55,6 +56,7 @@ public class HasSuperTypeMatcher<T extends Iterable<Class<?>>> extends AbstractM
     private final Matcher<? super Type> matcher;
 
     public HasSuperTypeMatcher(final Matcher<? super Type> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

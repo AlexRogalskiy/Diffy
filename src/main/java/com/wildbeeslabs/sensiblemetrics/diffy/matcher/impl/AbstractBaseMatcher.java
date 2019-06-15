@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListenerAdapter;
@@ -144,5 +145,24 @@ public abstract class AbstractBaseMatcher<T, S> implements MatcherEventListenerA
     @Override
     public void removeAllListeners() {
         this.getListeners().clear();
+    }
+
+    /**
+     * Describes current {@link AbstractBaseMatcher} by input parameters
+     *
+     * @param item        - initial input {@code T} matched value
+     * @param description - initial input {@link MatchDescription}
+     */
+    public void describe(final T item, final MatchDescription description) {
+        description.appendText("cause");
+    }
+
+    /**
+     * Describes current {@link AbstractBaseMatcher} by input parameters
+     *
+     * @param description - initial input {@link MatchDescription}
+     */
+    public void describeTo(final MatchDescription description) {
+        description.appendText("exception with cause");
     }
 }

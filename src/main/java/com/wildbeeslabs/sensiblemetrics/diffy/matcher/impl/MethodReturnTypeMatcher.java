@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * Method return type {@link AbstractMatcher} implementation
@@ -50,6 +51,7 @@ public class MethodReturnTypeMatcher<T extends Method> extends AbstractMatcher<T
     private final Matcher<? super Class<?>> matcher;
 
     public MethodReturnTypeMatcher(final Matcher<? super Class<?>> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

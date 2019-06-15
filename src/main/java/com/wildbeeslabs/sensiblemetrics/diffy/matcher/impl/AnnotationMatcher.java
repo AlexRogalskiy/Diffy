@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.lang.annotation.Annotation;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -50,6 +51,7 @@ public class AnnotationMatcher<T> extends AbstractMatcher<Class<T>> {
     private final Matcher<? super Annotation[]> matcher;
 
     public AnnotationMatcher(final Matcher<? super Annotation[]> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

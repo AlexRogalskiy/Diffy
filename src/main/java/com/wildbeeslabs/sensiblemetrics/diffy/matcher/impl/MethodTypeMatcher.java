@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 import lombok.*;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /**
  * Member type {@link AbstractMatcher} implementation
@@ -47,6 +48,7 @@ public class MethodTypeMatcher<T extends Method> extends AbstractMatcher<T> {
     private final MethodTypeMatcher.SortType sort;
 
     public MethodTypeMatcher(final MethodTypeMatcher.SortType sort) {
+        Objects.requireNonNull(sort, "Sort type should not be null");
         this.sort = sort;
     }
 

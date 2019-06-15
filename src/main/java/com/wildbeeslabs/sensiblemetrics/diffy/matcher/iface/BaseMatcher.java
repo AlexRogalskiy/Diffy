@@ -37,6 +37,7 @@ import java.util.List;
  * Base matcher interface declaration
  *
  * @param <T> type of input element to be matched by operation
+ * @param <S> type of input element to be collected by match by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0

@@ -75,5 +75,6 @@ public abstract class AbstractMatcher<T> extends AbstractBaseMatcher<T, T> imple
      */
     @Override
     public void dispatch(final MatcherEvent<T> event, final ApplicationContext context) {
+        throw new UnsupportedOperationException();
     }
 }

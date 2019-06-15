@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,8 +33,9 @@ import lombok.ToString;
 import java.util.Objects;
 
 /**
- * Fail-safe {@link AbstractMatcher} implementation
+ * Throwable cause {@link AbstractMatcher} implementation
  *
+ * @param <T> the type of the throwable being matched
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -40,34 +43,46 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class FailSafeMatcher<T> extends AbstractMatcher<T> {
+public class ThrowableCauseMatcher<T extends Throwable> extends AbstractMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 3063977367736961439L;
+    private static final long serialVersionUID = -7894738824768468436L;
 
-    /**
-     * Default {@link Matcher}
-     */
-    private final Matcher<? super T> matcher;
-    /**
-     * Default fallback match result
-     */
-    private final boolean fallback;
+    private final Matcher<T> matcher;
 
-    public FailSafeMatcher(final Matcher<? super T> matcher, boolean fallback) {
+    public ThrowableCauseMatcher(final Matcher<T> matcher) {
         Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
-        this.fallback = fallback;
     }
 
     @Override
-    public boolean matches(final T target) {
-        try {
-            return this.matcher.matches(target);
-        } catch (Exception e) {
-            return this.fallback;
-        }
+    public boolean matches(final T item) {
+        return this.matcher.matches((T) item.getCause());
+    }
+
+    @Override
+    public void describe(final T item, final MatchDescription description) {
+        super.describe(item, description);
+        this.matcher.describeBy(item, description);
+    }
+
+    @Override
+    public void describeTo(final MatchDescription description) {
+        super.describeTo(description);
+        description.appendDescriptionOf(this.matcher);
+    }
+
+    /**
+     * Returns a matcher that verifies that the outer exception has a cause for which the supplied matcher
+     * evaluates to true.
+     *
+     * @param matcher to apply to the cause of the outer exception
+     * @param <T>     type of the outer exception
+     */
+    @Factory
+    public static <T extends Throwable> Matcher<T> of(final Matcher<T> matcher) {
+        return new ThrowableCauseMatcher<T>(matcher);
     }
 }

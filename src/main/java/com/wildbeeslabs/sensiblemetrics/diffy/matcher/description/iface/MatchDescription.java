@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
@@ -90,6 +91,17 @@ public interface MatchDescription extends Serializable {
      * @return current description instance {@link MatchDescription}
      */
     <T> MatchDescription append(final String start, final String delimiter, final String end, final Iterable<? extends T> values);
+
+    /**
+     * Appends description of input {@link BaseMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param <S>     type of input element to be collected by match by operation
+     * @param matcher - initial input {@link BaseMatcher} to append description of
+     */
+    default <T, S> void appendDescriptionOf(final BaseMatcher<T, S> matcher) {
+        this.appendDescription(matcher.getDescription());
+    }
 
     /**
      * Default empty match description implementation {@link MatchDescription}
