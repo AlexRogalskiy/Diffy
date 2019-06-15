@@ -45,6 +45,7 @@ import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
+import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -101,6 +102,14 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * Default copyable field {@link Matcher}
      */
     Matcher<Field> DEFAULT_COPYABLE_FIELD_MATCHER = value -> !(Modifier.isStatic(value.getModifiers()) || Modifier.isFinal(value.getModifiers()));
+    /**
+     * Default public class {@link Matcher}
+     */
+    Matcher<Class<?>> DEFAULT_PUBLIC_CLASS_MATCHER = value -> Modifier.isPublic(value.getModifiers());
+    /**
+     * Default non-static class {@link Matcher}
+     */
+    Matcher<Class<?>> DEFAULT_NON_STATIC_CLASS_MATCHER = value -> value.isMemberClass() && !isStatic(value.getModifiers());
 
     /**
      * Default class {@link Matcher}

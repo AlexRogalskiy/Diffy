@@ -37,6 +37,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -114,6 +115,29 @@ public class ComparatorUtils {
             return pa == pb ? 0 : pb ? -1 : 1;
         };
     }
+
+    /**
+     * Default method name {@link Comparator} in ascending lexicographic sort order
+     */
+    public static final Comparator<Method> NAME_ASCENDING = (m1, m2) -> {
+        final int comparison = m1.getName().compareTo(m2.getName());
+        if (comparison != 0) {
+            return comparison;
+        }
+        return m1.toString().compareTo(m2.toString());
+    };
+
+    /**
+     * Default method name {@link Comparator}
+     */
+    public static final Comparator<Method> DEFAULT = (m1, m2) -> {
+        int i1 = m1.getName().hashCode();
+        int i2 = m2.getName().hashCode();
+        if (i1 != i2) {
+            return i1 < i2 ? -1 : 1;
+        }
+        return NAME_ASCENDING.compare(m1, m2);
+    };
 
     /**
      * Returns comparator with true first order {@link Comparator} by initial predicate value {@link Predicate}
