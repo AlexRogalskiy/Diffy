@@ -36,6 +36,7 @@ public enum MatcherEventType {
     MATCH_START,
     MATCH_COMPLETE,
     MATCH_SKIP,
+    MATCH_IGNORE,
     MATCH_ERROR,
     MATCH_BEFORE,
     MATCH_AFTER,
