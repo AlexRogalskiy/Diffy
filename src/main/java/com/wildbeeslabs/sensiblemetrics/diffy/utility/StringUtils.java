@@ -618,4 +618,75 @@ public class StringUtils {
         }
         return null;
     }
+
+    /**
+     * Turn JavaScript special characters into escaped characters.
+     *
+     * @param input the input string
+     * @return the string with escaped characters
+     */
+    public static String javaScriptEscape(final String input) {
+        StringBuilder filtered = new StringBuilder(input.length());
+        char prevChar = '\u0000';
+        char c;
+        for (int i = 0; i < input.length(); i++) {
+            c = input.charAt(i);
+            if (c == '"') {
+                filtered.append("\\\"");
+            } else if (c == '\'') {
+                filtered.append("\\'");
+            } else if (c == '\\') {
+                filtered.append("\\\\");
+            } else if (c == '/') {
+                filtered.append("\\/");
+            } else if (c == '\t') {
+                filtered.append("\\t");
+            } else if (c == '\n') {
+                if (prevChar != '\r') {
+                    filtered.append("\\n");
+                }
+            } else if (c == '\r') {
+                filtered.append("\\n");
+            } else if (c == '\f') {
+                filtered.append("\\f");
+            } else if (c == '\b') {
+                filtered.append("\\b");
+            }
+            // No '\v' in Java, use octal value for VT ascii char
+            else if (c == '\013') {
+                filtered.append("\\v");
+            } else if (c == '<') {
+                filtered.append("\\u003C");
+            } else if (c == '>') {
+                filtered.append("\\u003E");
+            }
+            // Unicode for PS (line terminator in ECMA-262)
+            else if (c == '\u2028') {
+                filtered.append("\\u2028");
+            }
+            // Unicode for LS (line terminator in ECMA-262)
+            else if (c == '\u2029') {
+                filtered.append("\\u2029");
+            } else {
+                filtered.append(c);
+            }
+            prevChar = c;
+
+        }
+        return filtered.toString();
+    }
+
+    public static String splitCamelCase(final String s, final String separator) {
+        if (isNullOrEmpty(s)) {
+            return "";
+        }
+        return s.replaceAll(
+            String.format("%s|%s|%s",
+                "(?<=[A-Z])(?=[A-Z][a-z])",
+                "(?<=[^A-Z])(?=[A-Z])",
+                "(?<=[A-Za-z])(?=[^A-Za-z])"
+            ),
+            separator
+        );
+    }
 }
