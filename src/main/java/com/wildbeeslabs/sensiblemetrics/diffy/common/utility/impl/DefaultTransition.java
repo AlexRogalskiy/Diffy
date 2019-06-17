@@ -43,7 +43,6 @@ import java.util.Optional;
  */
 @Data
 @EqualsAndHashCode
-@ToString
 public class DefaultTransition<T> implements Transition<T, DefaultState<T>>, Serializable, Cloneable {
 
     /**

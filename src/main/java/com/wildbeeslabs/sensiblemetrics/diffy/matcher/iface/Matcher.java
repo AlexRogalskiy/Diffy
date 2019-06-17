@@ -349,10 +349,10 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     /**
      * Returns {@link Map} of {@code T} items filtered by input {@link Matcher}
      *
-     * @param <T>     type of input element to be matched by operation
-     * @param values  - initial input {@link Iterable} collection of {@code T}
-     * @param matcher - initial input {@link Matcher}
-     * @param matcher - initial input {@link Collector}
+     * @param <T>       type of input element to be matched by operation
+     * @param values    - initial input {@link Iterable} collection of {@code T}
+     * @param matcher   - initial input {@link Matcher}
+     * @param collector - initial input {@link Collector}
      * @return {@link Map} of {@code T} items
      */
     @NonNull
@@ -531,7 +531,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@code T}
      * @param matcher - initial input {@link Matcher}
-     * @return {@link Collection} of {@code T} items
      */
     @NonNull
     static <T> void removeFirst(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
@@ -545,7 +544,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@code T}
      * @param matchers - initial input array of {@link Matcher}s
-     * @return {@link Collection} of {@code T} items
      */
     @NonNull
     static <T> void removeFirst(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {
@@ -559,7 +557,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param <T>     type of input element to be matched by operation
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link Matcher}
-     * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
     static <T> void removeLast(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
@@ -573,7 +570,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param <T>      type of input element to be matched by operation
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input array of {@link Matcher}s
-     * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
     static <T> void removeLast(@Nullable final Iterable<T> values, final Matcher<T>... matchers) {

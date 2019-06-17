@@ -652,7 +652,6 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link BiMatcher}
-     * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
     static <T, R extends Entry<T, T>> void removeFirst(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
@@ -667,7 +666,6 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input array of {@link BiMatcher}s
-     * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
     static <T, R extends Entry<T, T>> void removeFirst(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {
@@ -682,7 +680,6 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @param <R>     type of entry item
      * @param values  - initial input {@link Iterable} collection of {@link Entry}s
      * @param matcher - initial input {@link BiMatcher}
-     * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
     static <T, R extends Entry<T, T>> void removeLast(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
@@ -697,7 +694,6 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      * @param <R>      type of entry item
      * @param values   - initial input {@link Iterable} collection of {@link Entry}s
      * @param matchers - initial input array of {@link BiMatcher}s
-     * @return {@link Collection} of {@link Entry}s
      */
     @NonNull
     static <T, R extends Entry<T, T>> void removeLast(@Nullable final Iterable<R> values, final BiMatcher<T>... matchers) {

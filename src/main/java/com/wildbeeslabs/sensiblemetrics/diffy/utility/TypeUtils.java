@@ -30,6 +30,7 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class TypeUtils {
 
     /**
