@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
- * String matcher type {@link Enum}
+ * String validator type {@link Enum}
  */
 @Getter
 @RequiredArgsConstructor

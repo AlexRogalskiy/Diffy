@@ -23,10 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.DateValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.EmailValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.UrlValidator;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * Validation utilities implementation
@@ -37,6 +43,391 @@ import java.util.Objects;
  */
 @UtilityClass
 public final class ValidationUtils {
+
+    private static final long serialVersionUID = -7212095066891517618L;
+
+    /**
+     * UrlValidator used in wrapper method.
+     */
+    private static final UrlValidator URL_VALIDATOR = new UrlValidator();
+
+    /**
+     * CreditCardValidator used in wrapper method.
+     */
+    private static final CreditCardValidator CREDIT_CARD_VALIDATOR = new CreditCardValidator();
+
+    /**
+     * <p>Checks if the value matches the regular expression.</p>
+     *
+     * @param value  The value validation is being performed on.
+     * @param regexp The regular expression.
+     * @return true if matches the regular expression.
+     */
+    public static boolean matchRegexp(final String value, final String regexp) {
+        if (Objects.isNull(regexp) || regexp.length() <= 0) {
+            return false;
+        }
+        return Pattern.matches(regexp, value);
+    }
+
+    /**
+     * <p>Checks if the value can safely be converted to a byte primitive.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value can be converted to a Byte.
+     */
+    public static boolean isByte(final String value) {
+        return Objects.nonNull(FormatUtils.formatByte(value));
+    }
+
+    /**
+     * <p>Checks if the value can safely be converted to a short primitive.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value can be converted to a Short.
+     */
+    public static boolean isShort(final String value) {
+        return Objects.nonNull(FormatUtils.formatShort(value));
+    }
+
+    /**
+     * <p>Checks if the value can safely be converted to a int primitive.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value can be converted to an Integer.
+     */
+    public static boolean isInt(final String value) {
+        return Objects.nonNull(FormatUtils.formatInt(value));
+    }
+
+    /**
+     * <p>Checks if the value can safely be converted to a long primitive.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value can be converted to a Long.
+     */
+    public static boolean isLong(final String value) {
+        return Objects.nonNull(FormatUtils.formatLong(value));
+    }
+
+    /**
+     * <p>Checks if the value can safely be converted to a float primitive.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value can be converted to a Float.
+     */
+    public static boolean isFloat(final String value) {
+        return Objects.nonNull(FormatUtils.formatFloat(value));
+    }
+
+    /**
+     * <p>Checks if the value can safely be converted to a double primitive.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value can be converted to a Double.
+     */
+    public static boolean isDouble(final String value) {
+        return Objects.nonNull(FormatUtils.formatDouble(value));
+    }
+
+    /**
+     * <p>Checks if the field is a valid date.  The <code>Locale</code> is
+     * used with <code>java.text.DateFormat</code>.  The setLenient method
+     * is set to <code>false</code> for all.</p>
+     *
+     * @param value  The value validation is being performed on.
+     * @param locale The locale to use for the date format, defaults to the
+     *               system default if null.
+     * @return true if the value can be converted to a Date.
+     */
+    public static boolean isDate(final String value, final Locale locale) {
+        return DateValidator.validate(value, locale);
+    }
+
+    /**
+     * <p>Checks if the field is a valid date.  The pattern is used with
+     * <code>java.text.SimpleDateFormat</code>.  If strict is true, then the
+     * length will be checked so '2/12/1999' will not pass validation with
+     * the format 'MM/dd/yyyy' because the month isn't two digits.
+     * The setLenient method is set to <code>false</code> for all.</p>
+     *
+     * @param value       The value validation is being performed on.
+     * @param datePattern The pattern passed to <code>SimpleDateFormat</code>.
+     * @param strict      Whether or not to have an exact match of the datePattern.
+     * @return true if the value can be converted to a Date.
+     */
+    public static boolean isDate(final String value, final String datePattern, boolean strict) {
+        return DateValidator.of(datePattern, strict).validate(value);
+    }
+
+    /**
+     * <p>Checks if a value is within a range (min &amp; max specified
+     * in the vars attribute).</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum value of the range.
+     * @param max   The maximum value of the range.
+     * @return true if the value is in the specified range.
+     */
+    public static boolean isInRange(byte value, byte min, byte max) {
+        return ((value >= min) && (value <= max));
+    }
+
+    /**
+     * <p>Checks if a value is within a range (min &amp; max specified
+     * in the vars attribute).</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum value of the range.
+     * @param max   The maximum value of the range.
+     * @return true if the value is in the specified range.
+     */
+    public static boolean isInRange(int value, int min, int max) {
+        return ((value >= min) && (value <= max));
+    }
+
+    /**
+     * <p>Checks if a value is within a range (min &amp; max specified
+     * in the vars attribute).</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum value of the range.
+     * @param max   The maximum value of the range.
+     * @return true if the value is in the specified range.
+     */
+    public static boolean isInRange(float value, float min, float max) {
+        return ((value >= min) && (value <= max));
+    }
+
+    /**
+     * <p>Checks if a value is within a range (min &amp; max specified
+     * in the vars attribute).</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum value of the range.
+     * @param max   The maximum value of the range.
+     * @return true if the value is in the specified range.
+     */
+    public static boolean isInRange(short value, short min, short max) {
+        return ((value >= min) && (value <= max));
+    }
+
+    /**
+     * <p>Checks if a value is within a range (min &amp; max specified
+     * in the vars attribute).</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum value of the range.
+     * @param max   The maximum value of the range.
+     * @return true if the value is in the specified range.
+     */
+    public static boolean isInRange(long value, long min, long max) {
+        return ((value >= min) && (value <= max));
+    }
+
+    /**
+     * <p>Checks if a value is within a range (min &amp; max specified
+     * in the vars attribute).</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum value of the range.
+     * @param max   The maximum value of the range.
+     * @return true if the value is in the specified range.
+     */
+    public static boolean isInRange(double value, double min, double max) {
+        return ((value >= min) && (value <= max));
+    }
+
+    /**
+     * Checks if the field is a valid credit card number.
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value is valid Credit Card Number.
+     */
+    public static boolean isCreditCard(String value) {
+        return CREDIT_CARD_VALIDATOR.validate(value);
+    }
+
+    /**
+     * <p>Checks if a field has a valid e-mail address.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value is valid Email Address.
+     */
+    public static boolean isEmail(final String value) {
+        return EmailValidator.getInstance().validate(value);
+    }
+
+    /**
+     * <p>Checks if a field is a valid url address.</p>
+     * If you need to modify what is considered valid then
+     * consider using the UrlValidator directly.
+     *
+     * @param value The value validation is being performed on.
+     * @return true if the value is valid Url.
+     */
+    public static boolean isUrl(final String value) {
+        return URL_VALIDATOR.validate(value);
+    }
+
+    /**
+     * <p>Checks if the value's length is less than or equal to the max.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param max   The maximum length.
+     * @return true if the value's length is less than the specified maximum.
+     */
+    public static boolean maxLength(final String value, int max) {
+        return (value.length() <= max);
+    }
+
+    /**
+     * <p>Checks if the value's adjusted length is less than or equal to the max.</p>
+     *
+     * @param value         The value validation is being performed on.
+     * @param max           The maximum length.
+     * @param lineEndLength The length to use for line endings.
+     * @return true if the value's length is less than the specified maximum.
+     */
+    public static boolean maxLength(final String value, int max, int lineEndLength) {
+        int adjustAmount = adjustForLineEnding(value, lineEndLength);
+        return ((value.length() + adjustAmount) <= max);
+    }
+
+    /**
+     * <p>Checks if the value's length is greater than or equal to the min.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum length.
+     * @return true if the value's length is more than the specified minimum.
+     */
+    public static boolean minLength(final String value, int min) {
+        return (value.length() >= min);
+    }
+
+    /**
+     * <p>Checks if the value's adjusted length is greater than or equal to the min.</p>
+     *
+     * @param value         The value validation is being performed on.
+     * @param min           The minimum length.
+     * @param lineEndLength The length to use for line endings.
+     * @return true if the value's length is more than the specified minimum.
+     */
+    public static boolean minLength(final String value, int min, int lineEndLength) {
+        int adjustAmount = adjustForLineEnding(value, lineEndLength);
+        return ((value.length() + adjustAmount) >= min);
+    }
+
+    /**
+     * Calculate an adjustment amount for line endings.
+     * <p>
+     * See Bug 37962 for the rational behind this.
+     *
+     * @param value         The value validation is being performed on.
+     * @param lineEndLength The length to use for line endings.
+     * @return the adjustment amount.
+     */
+    private static int adjustForLineEnding(final String value, int lineEndLength) {
+        int nCount = 0;
+        int rCount = 0;
+        for (int i = 0; i < value.length(); i++) {
+            if (value.charAt(i) == '\n') {
+                nCount++;
+            }
+            if (value.charAt(i) == '\r') {
+                rCount++;
+            }
+        }
+        return ((nCount * lineEndLength) - (rCount + nCount));
+    }
+
+    /**
+     * <p>Checks if the value is greater than or equal to the min.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum numeric value.
+     * @return true if the value is &gt;= the specified minimum.
+     */
+    public static boolean minValue(int value, int min) {
+        return (value >= min);
+    }
+
+    /**
+     * <p>Checks if the value is greater than or equal to the min.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum numeric value.
+     * @return true if the value is &gt;= the specified minimum.
+     */
+    public static boolean minValue(long value, long min) {
+        return (value >= min);
+    }
+
+    /**
+     * <p>Checks if the value is greater than or equal to the min.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum numeric value.
+     * @return true if the value is &gt;= the specified minimum.
+     */
+    public static boolean minValue(double value, double min) {
+        return (value >= min);
+    }
+
+    /**
+     * <p>Checks if the value is greater than or equal to the min.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param min   The minimum numeric value.
+     * @return true if the value is &gt;= the specified minimum.
+     */
+    public static boolean minValue(float value, float min) {
+        return (value >= min);
+    }
+
+    /**
+     * <p>Checks if the value is less than or equal to the max.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param max   The maximum numeric value.
+     * @return true if the value is &lt;= the specified maximum.
+     */
+    public static boolean maxValue(int value, int max) {
+        return (value <= max);
+    }
+
+    /**
+     * <p>Checks if the value is less than or equal to the max.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param max   The maximum numeric value.
+     * @return true if the value is &lt;= the specified maximum.
+     */
+    public static boolean maxValue(long value, long max) {
+        return (value <= max);
+    }
+
+    /**
+     * <p>Checks if the value is less than or equal to the max.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param max   The maximum numeric value.
+     * @return true if the value is &lt;= the specified maximum.
+     */
+    public static boolean maxValue(double value, double max) {
+        return (value <= max);
+    }
+
+    /**
+     * <p>Checks if the value is less than or equal to the max.</p>
+     *
+     * @param value The value validation is being performed on.
+     * @param max   The maximum numeric value.
+     * @return true if the value is &lt;= the specified maximum.
+     */
+    public static boolean maxValue(float value, float max) {
+        return (value <= max);
+    }
 
     /**
      * Validates that the object is not null

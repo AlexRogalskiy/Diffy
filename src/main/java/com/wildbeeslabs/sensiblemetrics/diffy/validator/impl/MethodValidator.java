@@ -32,10 +32,8 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.arr
 
 /**
  * Method name {@link Validator} implementation
- *
- * @param <T> type of validated value
  */
-public class MethodValidator<T> implements Validator<Method> {
+public class MethodValidator implements Validator<Method> {
 
     /**
      * Default {@code T} value
@@ -99,11 +97,10 @@ public class MethodValidator<T> implements Validator<Method> {
     /**
      * Returns {@link MethodValidator} by input value {@code T}
      *
-     * @param <T>   type of validated value
      * @param value - initial input value {@code T}
      * @return {@link MethodValidator}
      */
-    public static <T extends Method> MethodValidator<T> of(final T value) {
-        return new MethodValidator<>(value);
+    public static Validator<Method> of(final Method value) {
+        return new MethodValidator(value);
     }
 }
