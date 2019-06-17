@@ -161,5 +161,30 @@ public final class ValidationUtils {
     public static void fail(final String msg) {
         throw new IllegalArgumentException(msg);
     }
+
+    /**
+     * Helper method that requires the value argument to be 0.
+     *
+     * @param value - initial input value to check
+     * @throws IndexOutOfBoundsException
+     */
+    public static void checkZero(final int value) throws IndexOutOfBoundsException {
+        if (value != 0) {
+            throw new IllegalArgumentException("ERROR: invalid value={%s}, supported only 0");
+        }
+    }
+
+    /**
+     * Helper method that checks lower/upper bounds
+     *
+     * @param lowerBound - initial input lower bound
+     * @param upperBound - initial input upper bound
+     * @throws IllegalStateException if bounds are invalid
+     */
+    public void checkBounds(int lowerBound, int upperBound) throws IllegalStateException {
+        if ((lowerBound < 0) || (upperBound < 0 || lowerBound > upperBound)) {
+            throw new IllegalArgumentException("ERROR: invalid lower={%s}, upper={%s} bounds");
+        }
+    }
 }
 
