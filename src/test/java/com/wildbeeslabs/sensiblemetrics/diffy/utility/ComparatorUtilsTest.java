@@ -34,7 +34,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.commons.collections.comparators.ComparableComparator;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

@@ -1,6 +1,6 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl.DefaultCounter;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utility.impl.DefaultCounter;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.common.RegexTokenizer;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.Tokenizer;

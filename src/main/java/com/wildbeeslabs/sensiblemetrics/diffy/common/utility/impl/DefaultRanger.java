@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utility.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface.Ranger;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utility.iface.Ranger;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * {@link RangeIF} implementation
+ * {@link Ranger} implementation
  *
  * @param <T> type of range bound element
  * @author Alex
@@ -98,36 +98,36 @@ public final class DefaultRanger<T> implements Ranger<T> {
     }
 
     /**
-     * Returns {@link Range} by input parameters
+     * Returns {@link Ranger} by input parameters
      *
      * @param <T>        type of range bound element
      * @param lowerBound - initial input range lower bound {@code T}
      * @param upperBound - initial input range upper bound {@code T}
-     * @return {@link Range}
+     * @return {@link Ranger}
      */
     public static <T> Ranger<T> of(final T lowerBound, final T upperBound) {
         return new DefaultRanger<>(lowerBound, upperBound);
     }
 
     /**
-     * Returns {@link Range} by input parameters
+     * Returns {@link Ranger} by input parameters
      *
      * @param <T>   type of range bound element
      * @param value - initial input range lower/upper bound {@code T}
-     * @return {@link Range}
+     * @return {@link Ranger}
      */
     public static <T> Ranger<T> point(final T value) {
         return new DefaultRanger<>(value, value);
     }
 
     /**
-     * Returns {@link Range} if both {@link Optional} instances have values or {@link Optional#empty()} if one or both
+     * Returns {@link Ranger} if both {@link Optional} instances have values or {@link Optional#empty()} if one or both
      * are missing.
      *
      * @param <T>        type of range bound element
      * @param lowerBound - initial input range lower bound {@link Optional}
      * @param upperBound - initial input range upper bound {@link Optional}
-     * @return {@link Optional} of {@link Range}
+     * @return {@link Optional} of {@link Ranger}
      */
     public static <T> Optional<Ranger<T>> with(final Optional<T> lowerBound, final Optional<T> upperBound) {
         return lowerBound.flatMap(l -> upperBound.map(u -> DefaultRanger.of(l, u)));
@@ -283,7 +283,7 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * @param element the element to check for, not null
      * @return -1, 0 or +1 depending on the element's location relative to the range
      */
-    public int elementCompareTo(final T element) {
+    public int compareTo(final T element) {
         Objects.requireNonNull(element, "Element should not be null");
         if (this.isAfter(element)) {
             return -1;
@@ -318,7 +318,7 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * @return true if this range is completely after the specified range
      * @throws RuntimeException if ranges cannot be compared
      */
-    public boolean isAfterRange(final Ranger<T> otherRange) {
+    public boolean isAfter(final Ranger<T> otherRange) {
         if (Objects.isNull(otherRange)) {
             return false;
         }
@@ -337,7 +337,7 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * range; otherwise, {@code false}
      * @throws RuntimeException if ranges cannot be compared
      */
-    public boolean isOverlappedBy(final Ranger<T> otherRange) {
+    public boolean isOverlap(final Ranger<T> otherRange) {
         if (Objects.isNull(otherRange)) {
             return false;
         }
@@ -353,11 +353,22 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * @return true if this range is completely before the specified range
      * @throws RuntimeException if ranges cannot be compared
      */
-    public boolean isBeforeRange(final Ranger<T> otherRange) {
+    public boolean isBefore(final Ranger<T> otherRange) {
         if (Objects.isNull(otherRange)) {
             return false;
         }
         return this.isBefore(otherRange.getLowerBound());
+    }
+
+    /**
+     * Returns binary flag by input parameters
+     *
+     * @param otherRange - initial input {@link Ranger}
+     * @return true - if current {@link Ranger} equals to input {@link Ranger}, false - otherwise
+     */
+    public boolean isEqual(final Ranger<T> otherRange) {
+        Objects.requireNonNull(otherRange, "Range should not be null");
+        return Objects.equals(this.getLowerBound(), otherRange.getLowerBound()) && Objects.equals(this.getUpperBound(), otherRange.getUpperBound());
     }
 
     /**
@@ -369,7 +380,7 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * @since 3.0.1
      */
     public Ranger<T> intersectionWith(final Ranger<T> other) {
-        if (!this.isOverlappedBy(other)) {
+        if (!this.isOverlap(other)) {
             throw new IllegalArgumentException(String.format("Cannot calculate intersection with non-overlapping range %s", other));
         }
         if (this.equals(other)) {

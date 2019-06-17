@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utility.iface;
 
 import lombok.NonNull;
 import org.apache.commons.collections.comparators.ComparableComparator;

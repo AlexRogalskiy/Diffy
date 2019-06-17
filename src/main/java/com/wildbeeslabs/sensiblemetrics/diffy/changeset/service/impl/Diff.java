@@ -2,7 +2,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.changeset.service.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Patch;
-import com.wildbeeslabs.sensiblemetrics.diffy.changeset.utils.DiffUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.changeset.utillity.DiffUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;

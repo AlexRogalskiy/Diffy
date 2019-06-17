@@ -27,6 +27,7 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Iterables;
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utility.impl.DefaultTransition;
 import lombok.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +68,26 @@ public class ComparatorUtils {
      * @see ComparableComparator#getInstance
      */
     public static final Comparator DEFAULT_COMPARATOR = ComparableComparator.getInstance();
+
+    /**
+     * Lexicographic order {@link CharSequence} comparator
+     */
+    public final static Comparator<CharSequence> LEXICOGRAPHIC_ORDER = (s1, s2) -> {
+        Objects.requireNonNull(s1, "First string should not be null");
+        Objects.requireNonNull(s2, "Last string should not be null");
+
+        final int lens1 = s1.length();
+        final int lens2 = s2.length();
+        final int max = Math.min(lens1, lens2);
+
+        for (int i = 0; i < max; i++) {
+            final char c1 = s1.charAt(i);
+            final char c2 = s2.charAt(i);
+            if (c1 != c2)
+                return c1 - c2;
+        }
+        return lens1 - lens2;
+    };
 
     /**
      * Default class {@link Comparator}
@@ -2105,6 +2126,13 @@ public class ComparatorUtils {
         public static final BigIntegerComparator BIG_INTEGER_COMPARATOR = new BigIntegerComparator();
     }
 
+    /**
+     * Delta {@link DefaultNullSafeComparator} implementation
+     *
+     * @param <T> type of delta item
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
     public static class DeltaComparator<T> extends DefaultNullSafeComparator<Delta<T>> {
 
         /**
@@ -2165,6 +2193,77 @@ public class ComparatorUtils {
         @Override
         public int compare(final Object obj1, final Object obj2) {
             return ((Comparable) obj1).compareTo(obj2);
+        }
+    }
+
+    /**
+     * Transition {@link Comparator} implementation
+     *
+     * @param T type of transition item
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class TransitionComparator<T> implements Comparator<DefaultTransition<T>> {
+
+        /**
+         * Default transition end point marker
+         */
+        private final boolean toFirst;
+
+        /**
+         * Default transition {@link Comparator}
+         */
+        public final Comparator<? super T> comparator;
+
+        /**
+         * Default transition comparator constructor by input parameters
+         *
+         * @param toFirst - initial input transition end point marker
+         */
+        public TransitionComparator(final boolean toFirst) {
+            this(toFirst, Comparator.comparing(Object::toString));
+        }
+
+        /**
+         * Default transition comparator constructor by input parameters
+         *
+         * @param toFirst    - initial input transition end point marker
+         * @param comparator - initial input {@link Comparator}
+         */
+        public TransitionComparator(final boolean toFirst, @Nullable final Comparator<? super T> comparator) {
+            this.toFirst = toFirst;
+            this.comparator = Optional.ofNullable(comparator).orElseGet(ComparableComparator::getInstance);
+        }
+
+        /**
+         * Compares by (min, reverse max, to) or (to, min, reverse max).
+         */
+        @Override
+        public int compare(final DefaultTransition<T> t1, final DefaultTransition<T> t2) {
+            if (this.toFirst) {
+                if (t1.getTo() != t2.getTo()) {
+                    if (Objects.isNull(t1.getTo())) return -1;
+                    else if (Objects.isNull(t2.getTo())) return 1;
+                    else if (t1.getTo().getNumber() < t2.getTo().getNumber()) return -1;
+                    else if (t1.getTo().getNumber() > t2.getTo().getNumber()) return 1;
+                }
+            }
+
+            if (Objects.compare(t1.getMin(), t2.getMin(), this.getComparator()) < 0) return -1;
+            if (Objects.compare(t1.getMin(), t2.getMin(), this.getComparator()) > 0) return 1;
+            if (Objects.compare(t1.getMax(), t2.getMax(), this.getComparator()) > 0) return -1;
+            if (Objects.compare(t1.getMax(), t2.getMax(), this.getComparator()) > 0) return 1;
+
+            if (!this.toFirst) {
+                if (t1.getTo() != t2.getTo()) {
+                    if (Objects.isNull(t1.getTo())) return -1;
+                    else if (Objects.isNull(t2.getTo())) return 1;
+                    else if (t1.getTo().getNumber() < t2.getTo().getNumber()) return -1;
+                    else if (t1.getTo().getNumber() > t2.getTo().getNumber()) return 1;
+                }
+            }
+            return 0;
         }
     }
 }

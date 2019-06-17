@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.changeset.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.changeset.utillity;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.changeset.entry.ChangeDelta;
 import com.wildbeeslabs.sensiblemetrics.diffy.changeset.service.iface.DiffAlgorithm;
