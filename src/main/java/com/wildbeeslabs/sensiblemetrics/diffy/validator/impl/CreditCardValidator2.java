@@ -47,7 +47,7 @@ import static java.util.Arrays.asList;
  * </p>
  *
  * <pre>
- * <code>CreditCardValidator ccv = new CreditCardValidator(CreditCardValidator.AMEX + CreditCardValidator.VISA);</code>
+ * <code>CreditCardProcessor ccv = new CreditCardProcessor(CreditCardProcessor.AMEX + CreditCardProcessor.VISA);</code>
  * </pre>
  *
  * <p>

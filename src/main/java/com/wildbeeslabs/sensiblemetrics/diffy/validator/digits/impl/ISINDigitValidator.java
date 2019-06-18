@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Modulus 10 <b>ISIN</b> (International Securities Identifying Number) Check Digit calculation/validation.
@@ -26,14 +29,21 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
-public final class ISINCheckDigit extends BaseDigitValidator {
+
+/**
+ * Isin {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class ISINDigitValidator extends BaseDigitValidator {
 
     private static final int MAX_ALPHANUMERIC_VALUE = 35; // Character.getNumericValue('Z')
 
     /**
      * Singleton ISIN Check Digit instance
      */
-    public static final DigitValidator ISIN_CHECK_DIGIT = new ISINCheckDigit();
+    public static final DigitProcessorValidator ISIN_CHECK_DIGIT = new ISINDigitValidator();
 
     /**
      * weighting given to digits depending on their right position
@@ -43,7 +53,7 @@ public final class ISINCheckDigit extends BaseDigitValidator {
     /**
      * Construct an ISIN Indetifier Check Digit routine.
      */
-    public ISINCheckDigit() {
+    public ISINDigitValidator() {
         super(10); // CHECKSTYLE IGNORE MagicNumber
     }
 

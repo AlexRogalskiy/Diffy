@@ -1,4 +1,27 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.processor;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +32,6 @@ import java.math.RoundingMode;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * <p><b>BigDecimal Validation</b> and Conversion routines (<code>java.math.BigDecimal</code>).</p>
@@ -59,7 +81,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BigDecimalValidator2 extends AbstractNumberValidator {
+public class BigDecimalProcessor extends AbstractNumberProcessor {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -67,23 +89,23 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
     private static final long serialVersionUID = -7431349769514442847L;
 
     /**
-     * Default {@link BigDecimalValidator2} instance
+     * Default {@link BigDecimalProcessor} instance
      */
-    private static final BigDecimalValidator2 VALIDATOR = new BigDecimalValidator2();
+    private static final BigDecimalProcessor VALIDATOR = new BigDecimalProcessor();
 
     /**
      * Return a singleton instance of this validator.
      *
      * @return A singleton instance of the BigDecimalValidator2.
      */
-    public static BigDecimalValidator2 getInstance() {
+    public static BigDecimalProcessor getInstance() {
         return VALIDATOR;
     }
 
     /**
      * Construct a <i>strict</i> instance.
      */
-    public BigDecimalValidator2() {
+    public BigDecimalProcessor() {
         this(true);
     }
 
@@ -93,7 +115,7 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
      * @param strict <code>true</code> if strict
      *               <code>Format</code> parsing should be used.
      */
-    public BigDecimalValidator2(boolean strict) {
+    public BigDecimalProcessor(boolean strict) {
         this(strict, STANDARD_FORMAT, true);
     }
 
@@ -120,7 +142,7 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
      * @param allowFractions <code>true</code> if fractions are
      *                       allowed or <code>false</code> if integers only.
      */
-    protected BigDecimalValidator2(boolean strict, int formatType, boolean allowFractions) {
+    protected BigDecimalProcessor(boolean strict, int formatType, boolean allowFractions) {
         super(strict, formatType, allowFractions);
     }
 
@@ -133,8 +155,8 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
      * if invalid.
      */
     @Override
-    public boolean validate(final String value) {
-        return Objects.nonNull(parse(value, null, null));
+    public Number processOrThrow(final String value) {
+        return this.parse(value, null, null);
     }
 
     /**
@@ -147,8 +169,8 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
      * @return The parsed <code>BigDecimal</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final String pattern) {
-        return Objects.nonNull(this.parse(value, pattern, null));
+    public Number process(final String value, final String pattern) {
+        return this.parse(value, pattern, null);
     }
 
     /**
@@ -160,8 +182,8 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
      * @return The parsed <code>BigDecimal</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final Locale locale) {
-        return Objects.nonNull(this.parse(value, null, locale));
+    public Number process(final String value, final Locale locale) {
+        return this.parse(value, null, locale);
     }
 
     /**
@@ -175,8 +197,8 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
      * @return The parsed <code>BigDecimal</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final String pattern, final Locale locale) {
-        return Objects.nonNull(this.parse(value, pattern, locale));
+    public Number process(final String value, final String pattern, final Locale locale) {
+        return this.parse(value, pattern, locale);
     }
 
     /**
@@ -225,7 +247,7 @@ public class BigDecimalValidator2 extends AbstractNumberValidator {
      * <code>BigDecimal</code>.
      */
     @Override
-    protected Object processParsedValue(final Object value, final Format formatter) {
+    protected Number processParsedValue(final Object value, final Format formatter) {
         BigDecimal decimal = null;
         if (value instanceof Long) {
             decimal = BigDecimal.valueOf(((Long) value).longValue());

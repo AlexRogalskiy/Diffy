@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -9,8 +12,8 @@ import org.apache.commons.lang.StringUtils;
  * <p>
  * This implementation validates/calculates ISBN check digits
  * based on the length of the code passed to it - delegating
- * either to the {@link ISBNCheckDigit#ISBN10_CHECK_DIGIT} or the
- * {@link ISBNCheckDigit#ISBN13_CHECK_DIGIT} routines to perform the actual
+ * either to the {@link ISBNDigitValidator#ISBN10_CHECK_DIGIT} or the
+ * {@link ISBNDigitValidator#ISBN13_CHECK_DIGIT} routines to perform the actual
  * validation/calculation.
  * <p>
  * <b>N.B.</b> From 1st January 2007 the book industry will start to use a new 13 digit
@@ -20,22 +23,29 @@ import org.apache.commons.lang.StringUtils;
  * @version $Revision: 1739357 $
  * @since Validator 1.4
  */
-public final class ISBNCheckDigit implements DigitValidator {
+
+/**
+ * Isbn {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode
+@ToString
+public final class ISBNDigitValidator implements DigitProcessorValidator {
 
     /**
      * Singleton ISBN-10 Check Digit instance
      */
-    public static final DigitValidator ISBN10_CHECK_DIGIT = ISBN10CheckDigit.ISBN10_CHECK_DIGIT;
+    public static final DigitProcessorValidator ISBN10_CHECK_DIGIT = ISBN10DigitValidator.ISBN10_CHECK_DIGIT;
 
     /**
      * Singleton ISBN-13 Check Digit instance
      */
-    public static final DigitValidator ISBN13_CHECK_DIGIT = EAN13CheckDigit.EAN13_CHECK_DIGIT;
+    public static final DigitProcessorValidator ISBN13_CHECK_DIGIT = EAN13DigitValidator.EAN13_CHECK_DIGIT;
 
     /**
      * Singleton combined ISBN-10 / ISBN-13 Check Digit instance
      */
-    public static final DigitValidator ISBN_CHECK_DIGIT = new ISBNCheckDigit();
+    public static final DigitProcessorValidator ISBN_CHECK_DIGIT = new ISBNDigitValidator();
 
     /**
      * Calculate an ISBN-10 or ISBN-13 check digit, depending

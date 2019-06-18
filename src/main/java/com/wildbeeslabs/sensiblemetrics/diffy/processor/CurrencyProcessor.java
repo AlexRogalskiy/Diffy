@@ -1,4 +1,31 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.processor;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -26,7 +53,10 @@ import java.text.Format;
  * @version $Revision: 1739356 $
  * @since Validator 1.3.0
  */
-public class CurrencyValidator extends BigDecimalValidator2 {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class CurrencyProcessor extends BigDecimalProcessor {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -34,9 +64,9 @@ public class CurrencyValidator extends BigDecimalValidator2 {
     private static final long serialVersionUID = -1300716919863020893L;
 
     /**
-     * Default {@link CurrencyValidator} instance
+     * Default {@link CurrencyProcessor} instance
      */
-    private static final CurrencyValidator VALIDATOR = new CurrencyValidator();
+    private static final CurrencyProcessor VALIDATOR = new CurrencyProcessor();
 
     /**
      * DecimalFormat's currency symbol
@@ -48,14 +78,14 @@ public class CurrencyValidator extends BigDecimalValidator2 {
      *
      * @return A singleton instance of the CurrencyProcessor.
      */
-    public static CurrencyValidator getInstance() {
+    public static CurrencyProcessor getInstance() {
         return VALIDATOR;
     }
 
     /**
      * Construct a <i>strict</i> instance.
      */
-    public CurrencyValidator() {
+    public CurrencyProcessor() {
         this(true, true);
     }
 
@@ -67,7 +97,7 @@ public class CurrencyValidator extends BigDecimalValidator2 {
      * @param allowFractions <code>true</code> if fractions are
      *                       allowed or <code>false</code> if integers only.
      */
-    public CurrencyValidator(boolean strict, boolean allowFractions) {
+    public CurrencyProcessor(boolean strict, boolean allowFractions) {
         super(strict, CURRENCY_FORMAT, allowFractions);
     }
 

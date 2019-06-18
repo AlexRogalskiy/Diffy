@@ -39,6 +39,10 @@ public class MethodValidator implements Validator<Method> {
      * Default {@code T} value
      */
     private final Method method;
+    /**
+     * Default strict binary flag
+     */
+    private final boolean strict;
 
     /**
      * Default method validator constructor by input parameters
@@ -47,8 +51,19 @@ public class MethodValidator implements Validator<Method> {
      * @throws NullPointerException if method is {@code null}
      */
     public MethodValidator(final Method method) {
+        this(method, true);
+    }
+
+    /**
+     * Default method validator constructor by input parameters
+     *
+     * @param method - initial method {@link Method}
+     * @throws NullPointerException if method is {@code null}
+     */
+    public MethodValidator(final Method method, boolean strict) {
         Objects.requireNonNull(method, "Method should not be null");
         this.method = method;
+        this.strict = strict;
     }
 
     /**
@@ -59,7 +74,12 @@ public class MethodValidator implements Validator<Method> {
      */
     @Override
     public boolean validate(final Method value) {
-        return false;
+        final boolean f1 = this.hasSameMethod(value);
+        final boolean f2 = this.hasSameMethod(value);
+        if (this.strict) {
+            return f1 && f2;
+        }
+        return f1 || f2;
     }
 
     private boolean hasSimilarMethod(final Method value) {

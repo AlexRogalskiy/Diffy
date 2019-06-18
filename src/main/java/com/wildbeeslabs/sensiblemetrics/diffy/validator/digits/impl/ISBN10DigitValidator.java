@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Modulus 11 <b>ISBN-10</b> Check Digit calculation/validation.
@@ -16,7 +19,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  * <p>
  * <b>N.B.</b> From 1st January 2007 the book industry will start to use a new 13 digit
  * ISBN number (rather than this 10 digit ISBN number) which uses the EAN-13 / UPC
- * (see {@link EAN13CheckDigit}) standard.
+ * (see {@link EAN13DigitValidator}) standard.
  * <p>
  * For further information see:
  * <ul>
@@ -29,17 +32,24 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
-public final class ISBN10CheckDigit extends BaseDigitValidator {
+
+/**
+ * Isbn10 {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class ISBN10DigitValidator extends BaseDigitValidator {
 
     /**
      * Singleton ISBN-10 Check Digit instance
      */
-    public static final DigitValidator ISBN10_CHECK_DIGIT = new ISBN10CheckDigit();
+    public static final DigitProcessorValidator ISBN10_CHECK_DIGIT = new ISBN10DigitValidator();
 
     /**
      * Construct a modulus 11 Check Digit routine for ISBN-10.
      */
-    public ISBN10CheckDigit() {
+    public ISBN10DigitValidator() {
         super(11);  // CHECKSTYLE IGNORE MagicNumber
     }
 

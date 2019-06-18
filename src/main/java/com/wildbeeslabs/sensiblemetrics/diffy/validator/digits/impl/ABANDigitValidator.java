@@ -1,6 +1,9 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Modulus 10 <b>ABA Number</b> (or <b>Routing Transit Number</b> (RTN)) Check Digit
@@ -30,12 +33,19 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
-public final class ABANumberCheckDigit extends BaseDigitValidator {
+
+/**
+ * Aban {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class ABANDigitValidator extends BaseDigitValidator {
 
     /**
      * Singleton Routing Transit Number Check Digit instance
      */
-    public static final DigitValidator ABAN_CHECK_DIGIT = new ABANumberCheckDigit();
+    public static final DigitProcessorValidator ABAN_CHECK_DIGIT = new ABANDigitValidator();
 
     /**
      * weighting given to digits depending on their right position
@@ -45,8 +55,8 @@ public final class ABANumberCheckDigit extends BaseDigitValidator {
     /**
      * Construct a modulus 10 Check Digit routine for ABA Numbers.
      */
-    public ABANumberCheckDigit() {
-        super(10); // CHECKSTYLE IGNORE MagicNumber
+    public ABANDigitValidator() {
+        super(10);
     }
 
     /**

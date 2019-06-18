@@ -1,4 +1,27 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.processor;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -6,10 +29,9 @@ import lombok.ToString;
 
 import java.text.Format;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
- * <p><b>Short Validation</b> and Conversion routines (<code>java.lang.Short</code>).</p>
+ * <p><b>Short Processor</b> and Conversion routines (<code>java.lang.Short</code>).</p>
  *
  * <p>This validator provides a number of methods for
  * validating/converting a <code>String</code> value to
@@ -54,7 +76,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ShortValidator extends AbstractNumberValidator {
+public class ShortProcessor extends AbstractNumberProcessor {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -62,23 +84,23 @@ public class ShortValidator extends AbstractNumberValidator {
     private static final long serialVersionUID = -7462791531275054060L;
 
     /**
-     * Default {@link ShortValidator} instance
+     * Default {@link ShortProcessor} instance
      */
-    private static final ShortValidator VALIDATOR = new ShortValidator();
+    private static final ShortProcessor VALIDATOR = new ShortProcessor();
 
     /**
      * Return a singleton instance of this validator.
      *
      * @return A singleton instance of the ShortValidator.
      */
-    public static ShortValidator getInstance() {
+    public static ShortProcessor getInstance() {
         return VALIDATOR;
     }
 
     /**
      * Construct a <i>strict</i> instance.
      */
-    public ShortValidator() {
+    public ShortProcessor() {
         this(true, STANDARD_FORMAT);
     }
 
@@ -103,7 +125,7 @@ public class ShortValidator extends AbstractNumberValidator {
      * @param formatType The <code>NumberFormat</code> type to
      *                   create for validation, default is STANDARD_FORMAT.
      */
-    public ShortValidator(boolean strict, int formatType) {
+    public ShortProcessor(boolean strict, int formatType) {
         super(strict, formatType, false);
     }
 
@@ -116,8 +138,8 @@ public class ShortValidator extends AbstractNumberValidator {
      * if invalid.
      */
     @Override
-    public boolean validate(final String value) {
-        return Objects.nonNull(this.parse(value, null, null));
+    public Number processOrThrow(final String value) {
+        return this.parse(value, null, null);
     }
 
     /**
@@ -129,8 +151,8 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return The parsed <code>Short</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final String pattern) {
-        return Objects.nonNull(this.parse(value, pattern, null));
+    public Number process(final String value, final String pattern) {
+        return this.parse(value, pattern, null);
     }
 
     /**
@@ -142,8 +164,8 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return The parsed <code>Short</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final Locale locale) {
-        return Objects.isNull(this.parse(value, null, locale));
+    public Number process(final String value, final Locale locale) {
+        return this.parse(value, null, locale);
     }
 
     /**
@@ -156,8 +178,9 @@ public class ShortValidator extends AbstractNumberValidator {
      * @param locale  The locale to use for the date format, system default if null.
      * @return The parsed <code>Short</code> if valid or <code>null</code> if invalid.
      */
-    public boolean validate(final String value, final String pattern, final Locale locale) {
-        return Objects.nonNull(this.parse(value, pattern, locale));
+    @Override
+    public Number process(final String value, final String pattern, final Locale locale) {
+        return this.parse(value, pattern, locale);
     }
 
     /**
@@ -244,7 +267,7 @@ public class ShortValidator extends AbstractNumberValidator {
      * <code>Short</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    protected Object processParsedValue(final Object value, final Format formatter) {
+    protected Number processParsedValue(final Object value, final Format formatter) {
         long longValue = ((Number) value).longValue();
         if (longValue < Short.MIN_VALUE || longValue > Short.MAX_VALUE) {
             return null;

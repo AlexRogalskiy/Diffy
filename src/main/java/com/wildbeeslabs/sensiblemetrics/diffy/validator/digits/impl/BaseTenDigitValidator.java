@@ -1,7 +1,9 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -51,7 +53,7 @@ import java.util.Arrays;
  *
  * <p>
  * <b>ABA Number</b> Check Digit Routine (equivalent of
- * {@link ABANumberCheckDigit}). Weighting factors are <code>[1, 7, 3]</code>
+ * {@link ABANDigitValidator}). Weighting factors are <code>[1, 7, 3]</code>
  * applied from right to left.
  *
  * <pre>
@@ -59,7 +61,7 @@ import java.util.Arrays;
  * </pre>
  *
  * <p>
- * <b>CUSIP</b> Check Digit Routine (equivalent of {@link CUSIPCheckDigit}).
+ * <b>CUSIP</b> Check Digit Routine (equivalent of {@link CUSIPDigitValidator}).
  * Weighting factors are <code>[1, 2]</code> applied from right to left and the
  * digits of the <i>weighted value</i> are summed.
  *
@@ -69,7 +71,7 @@ import java.util.Arrays;
  *
  * <p>
  * <b>EAN-13 / UPC</b> Check Digit Routine (equivalent of
- * {@link EAN13CheckDigit}). Weighting factors are <code>[1, 3]</code> applied
+ * {@link EAN13DigitValidator}). Weighting factors are <code>[1, 3]</code> applied
  * from right to left.
  *
  * <pre>
@@ -77,7 +79,7 @@ import java.util.Arrays;
  * </pre>
  *
  * <p>
- * <b>Luhn</b> Check Digit Routine (equivalent of {@link LuhnCheckDigit}).
+ * <b>Luhn</b> Check Digit Routine (equivalent of {@link LuhnDigitValidator}).
  * Weighting factors are <code>[1, 2]</code> applied from right to left and the
  * digits of the <i>weighted value</i> are summed.
  *
@@ -86,7 +88,7 @@ import java.util.Arrays;
  * </pre>
  *
  * <p>
- * <b>SEDOL</b> Check Digit Routine (equivalent of {@link SedolCheckDigit}).
+ * <b>SEDOL</b> Check Digit Routine (equivalent of {@link SedolDigitValidator}).
  * Weighting factors are <code>[1, 3, 1, 7, 3, 9, 1]</code> applied from left to
  * right.
  *
@@ -97,6 +99,12 @@ import java.util.Arrays;
  * @version $Revision: 1739356 $
  * @since Validator 1.6
  */
+/**
+ * Ten {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public final class BaseTenDigitValidator extends BaseDigitValidator {
 
     private final int[] postitionWeight;

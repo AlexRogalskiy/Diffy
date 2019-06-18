@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Modulus 10 <b>SEDOL</b> (UK Securities) Check Digit calculation/validation.
@@ -26,14 +29,21 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
-public final class SedolCheckDigit extends BaseDigitValidator {
+
+/**
+ * Sedol {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class SedolDigitValidator extends BaseDigitValidator {
 
     private static final int MAX_ALPHANUMERIC_VALUE = 35; // Character.getNumericValue('Z')
 
     /**
      * Singleton SEDOL check digit instance
      */
-    public static final DigitValidator SEDOL_CHECK_DIGIT = new SedolCheckDigit();
+    public static final DigitProcessorValidator SEDOL_CHECK_DIGIT = new SedolDigitValidator();
 
     /**
      * weighting given to digits depending on their right position
@@ -43,7 +53,7 @@ public final class SedolCheckDigit extends BaseDigitValidator {
     /**
      * Construct a modulus 11 Check Digit routine for ISBN-10.
      */
-    public SedolCheckDigit() {
+    public SedolDigitValidator() {
         super(10);
     }
 

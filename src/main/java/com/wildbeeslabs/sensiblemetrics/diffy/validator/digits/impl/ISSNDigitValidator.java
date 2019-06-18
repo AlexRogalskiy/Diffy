@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * International Standard Serial Number (ISSN)
@@ -34,17 +37,24 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  *
  * @since 1.5.0
  */
-public final class ISSNCheckDigit extends BaseDigitValidator {
+
+/**
+ * Issn {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class ISSNDigitValidator extends BaseDigitValidator {
 
     /**
      * Singleton ISSN Check Digit instance
      */
-    public static final DigitValidator ISSN_CHECK_DIGIT = new ISSNCheckDigit();
+    public static final DigitProcessorValidator ISSN_CHECK_DIGIT = new ISSNDigitValidator();
 
     /**
      * Creates the instance using a checkdigit modulus of 11
      */
-    public ISSNCheckDigit() {
+    public ISSNDigitValidator() {
         super(11); // CHECKSTYLE IGNORE MagicNumber
     }
 

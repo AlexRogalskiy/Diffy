@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -17,12 +20,19 @@ import org.apache.commons.lang.StringUtils;
  * @version $Revision: 1739357 $
  * @since Validator 1.4
  */
-public final class VerhoeffCheckDigit implements DigitValidator {
+
+/**
+ * Verhoeff {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode
+@ToString
+public final class VerhoeffDifitValidator implements DigitProcessorValidator {
 
     /**
      * Singleton Verhoeff Check Digit instance
      */
-    public static final DigitValidator VERHOEFF_CHECK_DIGIT = new VerhoeffCheckDigit();
+    public static final DigitProcessorValidator VERHOEFF_CHECK_DIGIT = new VerhoeffDifitValidator();
 
     /**
      * D - multiplication table

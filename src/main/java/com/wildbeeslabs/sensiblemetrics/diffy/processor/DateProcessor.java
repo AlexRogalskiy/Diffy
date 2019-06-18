@@ -1,4 +1,31 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.processor;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.text.DateFormat;
 import java.text.Format;
@@ -63,7 +90,10 @@ import java.util.*;
  * @version $Revision: 1739356 $
  * @since Validator 1.3.0
  */
-public class DateValidator extends AbstractCalendarValidator {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class DateProcessor extends AbstractCalendarProcessor {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -71,16 +101,16 @@ public class DateValidator extends AbstractCalendarValidator {
     private static final long serialVersionUID = 5599395962256741648L;
 
     /**
-     * Default {@link DateValidator} instance
+     * Default {@link DateProcessor} instance
      */
-    private static final DateValidator VALIDATOR = new DateValidator();
+    private static final DateProcessor VALIDATOR = new DateProcessor();
 
     /**
      * Return a singleton instance of this validator.
      *
      * @return A singleton instance of the DateValidator2.
      */
-    public static DateValidator getInstance() {
+    public static DateProcessor getInstance() {
         return VALIDATOR;
     }
 
@@ -88,7 +118,7 @@ public class DateValidator extends AbstractCalendarValidator {
      * Construct a <i>strict</i> instance with <i>short</i>
      * date style.
      */
-    public DateValidator() {
+    public DateProcessor() {
         this(true, DateFormat.SHORT);
     }
 
@@ -100,7 +130,7 @@ public class DateValidator extends AbstractCalendarValidator {
      *                  <code>Format</code> parsing should be used.
      * @param dateStyle the date style to use for Locale validation.
      */
-    public DateValidator(boolean strict, int dateStyle) {
+    public DateProcessor(boolean strict, int dateStyle) {
         super(strict, dateStyle, -1);
     }
 
@@ -113,8 +143,8 @@ public class DateValidator extends AbstractCalendarValidator {
      * if invalid.
      */
     @Override
-    public boolean validate(final String value) {
-        return Objects.nonNull(this.parse(value, null, null, null));
+    public Object processOrThrow(final String value) {
+        return this.parse(value, null, null, null);
     }
 
     /**
@@ -125,8 +155,8 @@ public class DateValidator extends AbstractCalendarValidator {
      * @param timeZone The Time Zone used to parse the date, system default if null.
      * @return The parsed <code>Date</code> if valid or <code>null</code> if invalid.
      */
-    public boolean validate(final String value, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, null, null, timeZone));
+    public Object process(final String value, final TimeZone timeZone) {
+        return this.parse(value, null, null, timeZone);
     }
 
     /**
@@ -139,8 +169,8 @@ public class DateValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Date</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final String pattern) {
-        return Objects.nonNull(this.parse(value, pattern, null, null));
+    public Object process(final String value, final String pattern) {
+        return this.parse(value, pattern, null, null);
     }
 
     /**
@@ -153,8 +183,8 @@ public class DateValidator extends AbstractCalendarValidator {
      * @param timeZone The Time Zone used to parse the date, system default if null.
      * @return The parsed <code>Date</code> if valid or <code>null</code> if invalid.
      */
-    public boolean validate(final String value, final String pattern, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, pattern, null, timeZone));
+    public Object process(final String value, final String pattern, final TimeZone timeZone) {
+        return this.parse(value, pattern, null, timeZone);
     }
 
     /**
@@ -166,8 +196,8 @@ public class DateValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Date</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final Locale locale) {
-        return Objects.nonNull(this.parse(value, null, locale, null));
+    public Object process(final String value, final Locale locale) {
+        return this.parse(value, null, locale, null);
     }
 
     /**
@@ -179,8 +209,9 @@ public class DateValidator extends AbstractCalendarValidator {
      * @param timeZone The Time Zone used to parse the date, system default if null.
      * @return The parsed <code>Date</code> if valid or <code>null</code> if invalid.
      */
-    public boolean validate(String value, Locale locale, TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, null, locale, timeZone));
+    @Override
+    public Object process(String value, Locale locale, TimeZone timeZone) {
+        return this.parse(value, null, locale, timeZone);
     }
 
     /**
@@ -194,8 +225,8 @@ public class DateValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Date</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final String pattern, final Locale locale) {
-        return Objects.nonNull(this.parse(value, pattern, locale, null));
+    public Object process(final String value, final String pattern, final Locale locale) {
+        return this.parse(value, pattern, locale, null);
     }
 
     /**
@@ -209,8 +240,9 @@ public class DateValidator extends AbstractCalendarValidator {
      * @param timeZone The Time Zone used to parse the date, system default if null.
      * @return The parsed <code>Date</code> if valid or <code>null</code> if invalid.
      */
-    public boolean validate(final String value, final String pattern, final Locale locale, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, pattern, locale, timeZone));
+    @Override
+    public Object process(final String value, final String pattern, final Locale locale, final TimeZone timeZone) {
+        return this.parse(value, pattern, locale, timeZone);
     }
 
     /**
@@ -337,7 +369,7 @@ public class DateValidator extends AbstractCalendarValidator {
         return calendar;
     }
 
-    public static DateValidator of(boolean strict, int dateStyle) {
-        return new DateValidator(strict, dateStyle);
+    public static DateProcessor of(boolean strict, int dateStyle) {
+        return new DateProcessor(strict, dateStyle);
     }
 }

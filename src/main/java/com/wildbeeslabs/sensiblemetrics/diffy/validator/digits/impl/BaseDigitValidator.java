@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -19,10 +22,17 @@ import org.apache.commons.lang3.StringUtils;
  * @version $Revision: 1739357 $
  * @since Validator 1.4
  */
-public abstract class BaseDigitValidator implements DigitValidator {
+
+/**
+ * Base {@link DigitProcessorValidator} implementation
+ */
+@Data
+@EqualsAndHashCode
+@ToString
+public abstract class BaseDigitValidator implements DigitProcessorValidator {
 
     // N.B. The modulus can be > 10 provided that the implementing class overrides toCheckDigit and toInt
-    // (for example as in ISBN10CheckDigit)
+    // (for example as in ISBN10DigitValidator)
     private final int modulus;
 
     /**
@@ -32,15 +42,6 @@ public abstract class BaseDigitValidator implements DigitValidator {
      */
     public BaseDigitValidator(int modulus) {
         this.modulus = modulus;
-    }
-
-    /**
-     * Return the modulus value this check digit routine is based on.
-     *
-     * @return The modulus value this check digit routine is based on
-     */
-    public int getModulus() {
-        return modulus;
     }
 
     /**
@@ -77,7 +78,7 @@ public abstract class BaseDigitValidator implements DigitValidator {
             throw new InvalidParameterException("Code is missing");
         }
         int modulusResult = calculateModulus(code, false);
-        int charValue = (modulus - modulusResult) % modulus;
+        int charValue = (this.modulus - modulusResult) % this.modulus;
         return this.toCheckDigit(charValue);
     }
 
@@ -102,7 +103,7 @@ public abstract class BaseDigitValidator implements DigitValidator {
         if (total == 0) {
             throw new InvalidParameterException("Invalid code, sum is zero");
         }
-        return total % modulus;
+        return total % this.modulus;
     }
 
     /**
@@ -157,7 +158,7 @@ public abstract class BaseDigitValidator implements DigitValidator {
      *                                   doesn't represent a numeric character
      */
     protected String toCheckDigit(int charValue) throws InvalidParameterException {
-        if (charValue >= 0 && charValue <= 9) { // CHECKSTYLE IGNORE MagicNumber
+        if (charValue >= 0 && charValue <= 9) {
             return Integer.toString(charValue);
         }
         throw new InvalidParameterException("Invalid Check Digit Value =" + charValue);
@@ -173,8 +174,8 @@ public abstract class BaseDigitValidator implements DigitValidator {
         int total = 0;
         int todo = number;
         while (todo > 0) {
-            total += todo % 10; // CHECKSTYLE IGNORE MagicNumber
-            todo = todo / 10; // CHECKSTYLE IGNORE MagicNumber
+            total += todo % 10;
+            todo = todo / 10;
         }
         return total;
     }

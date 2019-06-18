@@ -122,7 +122,7 @@ public class DateValidator2 implements Validator<String> {
         return true;
     }
 
-    public static DateValidator of(final String datePattern, final boolean strict) {
-        return new DateValidator(datePattern, strict);
+    public static DateValidator2 of(final String datePattern, final boolean strict) {
+        return new DateValidator2(datePattern, strict);
     }
 }

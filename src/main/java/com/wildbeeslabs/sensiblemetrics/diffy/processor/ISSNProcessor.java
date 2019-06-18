@@ -1,10 +1,37 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.processor;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValidationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.EAN13DigitValidator;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.GenericProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CodeValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.ISSNDigitValidator.ISSN_CHECK_DIGIT;
@@ -49,7 +76,10 @@ import static org.apache.commons.lang3.StringUtils.join;
  *
  * @since 1.5.0
  */
-public class ISSNValidator implements GenericProcessorValidator<String, Object, ValidationException> {
+@Data
+@EqualsAndHashCode
+@ToString
+public class ISSNProcessor implements ThrowingProcessor<String, Object, InvalidParameterException>, Serializable {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -59,38 +89,25 @@ public class ISSNValidator implements GenericProcessorValidator<String, Object, 
     /**
      * Default issn regex
      */
-    private static final String ISSN_REGEX = "(?:ISSN )?(\\d{4})-(\\d{3}[0-9X])$"; // We don't include the '-' in the code, so it is 8 chars
+    private static final String ISSN_REGEX = "(?:ISSN )?(\\d{4})-(\\d{3}[0-9X])$";
 
     /**
      * Default {@link CodeValidator} instance
      */
-    private static final CodeValidator VALIDATOR = new CodeValidator(ISSN_REGEX, 8, ISSN_CHECK_DIGIT);
+    private static final CodeProcessor VALIDATOR = new CodeProcessor(ISSN_REGEX, 8, ISSN_CHECK_DIGIT);
 
     /**
-     * Default {@link ISSNValidator} instance
+     * Default {@link ISSNProcessor} instance
      */
-    private static final ISSNValidator ISSN_VALIDATOR = new ISSNValidator();
+    private static final ISSNProcessor ISSN_VALIDATOR = new ISSNProcessor();
 
     /**
      * Return a singleton instance of the ISSN validator
      *
      * @return A singleton instance of the ISSN validator.
      */
-    public static ISSNValidator getInstance() {
+    public static ISSNProcessor getInstance() {
         return ISSN_VALIDATOR;
-    }
-
-    /**
-     * Check the code is a valid ISSN code after any transformation
-     * by the validate routine.
-     *
-     * @param code The code to validate.
-     * @return <code>true</code> if a valid ISSN
-     * code, otherwise <code>false</code>.
-     */
-    @Override
-    public boolean validate(final String code) {
-        return VALIDATOR.validate(code);
     }
 
     /**
@@ -100,7 +117,7 @@ public class ISSNValidator implements GenericProcessorValidator<String, Object, 
      * @return validation result {@link Object}
      */
     @Override
-    public Object processOrThrow(final String code) throws ValidationException {
+    public Object processOrThrow(final String code) throws InvalidParameterException {
         return VALIDATOR.processOrThrow(code);
     }
 
@@ -117,20 +134,16 @@ public class ISSNValidator implements GenericProcessorValidator<String, Object, 
      * @return A converted EAN-13 code or <code>null</code>
      * if the input ISSN code is not valid
      */
-    public String convertToEAN13(final String issn, final String suffix) throws ValidationException {
+    public String convertToEAN13(final String issn, final String suffix) {
         if (Objects.isNull(suffix) || !suffix.matches("\\d\\d")) {
             throw new IllegalArgumentException("Suffix must be two digits: '" + suffix + "'");
         }
-        final Object result = this.validate(issn);
+        final Object result = VALIDATOR.processOrThrow(issn);
         if (Objects.isNull(result)) {
             return null;
         }
         final String input = result.toString();
         String ean13 = "977" + input.substring(0, input.length() - 1) + suffix;
-        try {
-            return join(ean13, EAN13DigitValidator.EAN13_CHECK_DIGIT.processOrThrow(ean13));
-        } catch (InvalidParameterException e) {
-            throw new ValidationException("Check digit error for '" + ean13 + "' - " + e.getMessage());
-        }
+        return join(ean13, EAN13DigitValidator.EAN13_CHECK_DIGIT.processOrThrow(ean13));
     }
 }

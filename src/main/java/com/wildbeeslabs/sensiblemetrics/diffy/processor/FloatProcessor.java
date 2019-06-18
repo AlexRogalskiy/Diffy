@@ -1,4 +1,27 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.processor;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -6,14 +29,13 @@ import lombok.ToString;
 
 import java.text.Format;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
- * <p><b>Short Validation</b> and Conversion routines (<code>java.lang.Short</code>).</p>
+ * <p><b>Float Validation</b> and Conversion routines (<code>java.lang.Float</code>).</p>
  *
  * <p>This validator provides a number of methods for
  * validating/converting a <code>String</code> value to
- * a <code>Short</code> using <code>java.text.NumberFormat</code>
+ * a <code>Float</code> using <code>java.text.NumberFormat</code>
  * to parse either:</p>
  * <ul>
  * <li>using the default format for the default <code>Locale</code></li>
@@ -24,7 +46,7 @@ import java.util.Objects;
  *
  * <p>Use one of the <code>isValid()</code> methods to just validate or
  * one of the <code>validate()</code> methods to validate and receive a
- * <i>converted</i> <code>Short</code> value.</p>
+ * <i>converted</i> <code>Float</code> value.</p>
  *
  * <p>Once a value has been successfully converted the following
  * methods can be used to perform minimum, maximum and range checks:</p>
@@ -54,31 +76,31 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ShortValidator extends AbstractNumberValidator {
+public class FloatProcessor extends AbstractNumberProcessor {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -7462791531275054060L;
+    private static final long serialVersionUID = 3024295806376979079L;
 
     /**
-     * Default {@link ShortValidator} instance
+     * Default {@link FloatProcessor} instance
      */
-    private static final ShortValidator VALIDATOR = new ShortValidator();
+    private static final FloatProcessor VALIDATOR = new FloatProcessor();
 
     /**
      * Return a singleton instance of this validator.
      *
-     * @return A singleton instance of the ShortValidator.
+     * @return A singleton instance of the FloatValidator.
      */
-    public static ShortValidator getInstance() {
+    public static FloatProcessor getInstance() {
         return VALIDATOR;
     }
 
     /**
      * Construct a <i>strict</i> instance.
      */
-    public ShortValidator() {
+    public FloatProcessor() {
         this(true, STANDARD_FORMAT);
     }
 
@@ -103,61 +125,62 @@ public class ShortValidator extends AbstractNumberValidator {
      * @param formatType The <code>NumberFormat</code> type to
      *                   create for validation, default is STANDARD_FORMAT.
      */
-    public ShortValidator(boolean strict, int formatType) {
-        super(strict, formatType, false);
+    public FloatProcessor(boolean strict, int formatType) {
+        super(strict, formatType, true);
     }
 
     /**
-     * <p>Validate/convert a <code>Short</code> using the default
+     * <p>Validate/convert a <code>Float</code> using the default
      * <code>Locale</code>.
      *
      * @param value The value validation is being performed on.
-     * @return The parsed <code>Short</code> if valid or <code>null</code>
+     * @return The parsed <code>Float</code> if valid or <code>null</code>
      * if invalid.
      */
     @Override
-    public boolean validate(final String value) {
-        return Objects.nonNull(this.parse(value, null, null));
+    public Number processOrThrow(final String value) {
+        return this.parse(value, null, null);
     }
 
     /**
-     * <p>Validate/convert a <code>Short</code> using the
+     * <p>Validate/convert a <code>Float</code> using the
      * specified <i>pattern</i>.
      *
      * @param value   The value validation is being performed on.
      * @param pattern The pattern used to validate the value against.
-     * @return The parsed <code>Short</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>Float</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final String pattern) {
-        return Objects.nonNull(this.parse(value, pattern, null));
+    public Number process(final String value, final String pattern) {
+        return this.parse(value, pattern, null);
     }
 
     /**
-     * <p>Validate/convert a <code>Short</code> using the
+     * <p>Validate/convert a <code>Float</code> using the
      * specified <code>Locale</code>.
      *
      * @param value  The value validation is being performed on.
      * @param locale The locale to use for the number format, system default if null.
-     * @return The parsed <code>Short</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>Float</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    public boolean validate(final String value, final Locale locale) {
-        return Objects.isNull(this.parse(value, null, locale));
+    public Number process(final String value, final Locale locale) {
+        return this.parse(value, null, locale);
     }
 
     /**
-     * <p>Validate/convert a <code>Short</code> using the
+     * <p>Validate/convert a <code>Float</code> using the
      * specified pattern and/ or <code>Locale</code>.
      *
      * @param value   The value validation is being performed on.
      * @param pattern The pattern used to validate the value against, or the
      *                default for the <code>Locale</code> if <code>null</code>.
      * @param locale  The locale to use for the date format, system default if null.
-     * @return The parsed <code>Short</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>Float</code> if valid or <code>null</code> if invalid.
      */
-    public boolean validate(final String value, final String pattern, final Locale locale) {
-        return Objects.nonNull(this.parse(value, pattern, locale));
+    @Override
+    public Number process(final String value, final String pattern, final Locale locale) {
+        return this.parse(value, pattern, locale);
     }
 
     /**
@@ -169,7 +192,7 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is within the
      * specified range.
      */
-    public boolean isInRange(short value, short min, short max) {
+    public boolean isInRange(float value, float min, float max) {
         return (value >= min && value <= max);
     }
 
@@ -182,8 +205,8 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is within the
      * specified range.
      */
-    public boolean isInRange(final Short value, short min, short max) {
-        return this.isInRange(value.shortValue(), min, max);
+    public boolean isInRange(final Float value, float min, float max) {
+        return this.isInRange(value.floatValue(), min, max);
     }
 
     /**
@@ -194,7 +217,7 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is greater than
      * or equal to the minimum.
      */
-    public boolean minValue(short value, short min) {
+    public boolean minValue(float value, float min) {
         return (value >= min);
     }
 
@@ -206,8 +229,8 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is greater than
      * or equal to the minimum.
      */
-    public boolean minValue(final Short value, short min) {
-        return minValue(value.shortValue(), min);
+    public boolean minValue(final Float value, float min) {
+        return this.minValue(value.floatValue(), min);
     }
 
     /**
@@ -218,7 +241,7 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is less than
      * or equal to the maximum.
      */
-    public boolean maxValue(short value, short max) {
+    public boolean maxValue(float value, float max) {
         return (value <= max);
     }
 
@@ -230,25 +253,38 @@ public class ShortValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is less than
      * or equal to the maximum.
      */
-    public boolean maxValue(final Short value, short max) {
-        return maxValue(value.shortValue(), max);
+    public boolean maxValue(final Float value, float max) {
+        return this.maxValue(value.floatValue(), max);
     }
 
     /**
      * <p>Perform further validation and convert the <code>Number</code> to
-     * a <code>Short</code>.</p>
+     * a <code>Float</code>.</p>
      *
      * @param value     The parsed <code>Number</code> object created.
      * @param formatter The Format used to parse the value with.
      * @return The parsed <code>Number</code> converted to a
-     * <code>Short</code> if valid or <code>null</code> if invalid.
+     * <code>Float</code> if valid or <code>null</code> if invalid.
      */
     @Override
-    protected Object processParsedValue(final Object value, final Format formatter) {
-        long longValue = ((Number) value).longValue();
-        if (longValue < Short.MIN_VALUE || longValue > Short.MAX_VALUE) {
-            return null;
+    protected Number processParsedValue(final Object value, final Format formatter) {
+        double doubleValue = ((Number) value).doubleValue();
+        if (doubleValue > 0) {
+            if (doubleValue < Float.MIN_VALUE) {
+                return null;
+            }
+            if (doubleValue > Float.MAX_VALUE) {
+                return null;
+            }
+        } else if (doubleValue < 0) {
+            double posDouble = doubleValue * -1;
+            if (posDouble < Float.MIN_VALUE) {
+                return null;
+            }
+            if (posDouble > Float.MAX_VALUE) {
+                return null;
+            }
         }
-        return Short.valueOf((short) longValue);
+        return Float.valueOf((float) doubleValue);
     }
 }

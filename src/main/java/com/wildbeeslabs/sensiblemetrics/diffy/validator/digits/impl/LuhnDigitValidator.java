@@ -1,6 +1,9 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Modulus 10 <b>Luhn</b> Check Digit calculation/validation.
@@ -23,12 +26,19 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
-public final class LuhnCheckDigit extends BaseDigitValidator {
+
+/**
+ * Luhn {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class LuhnDigitValidator extends BaseDigitValidator {
 
     /**
      * Singleton Luhn Check Digit instance
      */
-    public static final DigitValidator LUHN_CHECK_DIGIT = new LuhnCheckDigit();
+    public static final DigitProcessorValidator LUHN_CHECK_DIGIT = new LuhnDigitValidator();
 
     /**
      * weighting given to digits depending on their right position
@@ -38,7 +48,7 @@ public final class LuhnCheckDigit extends BaseDigitValidator {
     /**
      * Construct a modulus 10 Luhn Check Digit routine.
      */
-    public LuhnCheckDigit() {
+    public LuhnDigitValidator() {
         super(10);
     }
 

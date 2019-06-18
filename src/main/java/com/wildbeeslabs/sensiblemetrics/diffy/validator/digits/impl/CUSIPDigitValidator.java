@@ -1,14 +1,23 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-public final class CUSIPCheckDigit extends BaseDigitValidator {
+/**
+ * Cusip {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class CUSIPDigitValidator extends BaseDigitValidator {
 
     /**
      * Singleton CUSIP Check Digit instance
      */
-    public static final DigitValidator CUSIP_CHECK_DIGIT = new CUSIPCheckDigit();
+    public static final DigitProcessorValidator CUSIP_CHECK_DIGIT = new CUSIPDigitValidator();
 
     /**
      * weighting given to digits depending on their right position
@@ -18,8 +27,8 @@ public final class CUSIPCheckDigit extends BaseDigitValidator {
     /**
      * Construct an CUSIP Indetifier Check Digit routine.
      */
-    public CUSIPCheckDigit() {
-        super(10); // CHECKSTYLE IGNORE MagicNumber
+    public CUSIPDigitValidator() {
+        super(10);
     }
 
     /**

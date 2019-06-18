@@ -30,6 +30,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.UrlValidator;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.DateFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -52,7 +53,7 @@ public final class ValidationUtils {
     private static final UrlValidator URL_VALIDATOR = new UrlValidator();
 
     /**
-     * CreditCardValidator used in wrapper method.
+     * CreditCardProcessor used in wrapper method.
      */
     private static final CreditCardValidator CREDIT_CARD_VALIDATOR = new CreditCardValidator();
 
@@ -141,7 +142,7 @@ public final class ValidationUtils {
      * @return true if the value can be converted to a Date.
      */
     public static boolean isDate(final String value, final Locale locale) {
-        return DateValidator.validate(value, locale);
+        return DateValidator.getInstance().validate(value, locale);
     }
 
     /**
@@ -157,7 +158,7 @@ public final class ValidationUtils {
      * @return true if the value can be converted to a Date.
      */
     public static boolean isDate(final String value, final String datePattern, boolean strict) {
-        return DateValidator.of(datePattern, strict).validate(value);
+        return DateValidator.of(strict, DateFormat.SHORT).validate(value, datePattern);
     }
 
     /**

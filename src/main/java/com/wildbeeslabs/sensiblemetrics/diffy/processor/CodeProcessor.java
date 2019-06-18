@@ -1,16 +1,44 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.processor;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValidationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidFormatException;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.GenericProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.RegexValidator;
 import lombok.Data;
-import org.apache.commons.validator.routines.checkdigit.CheckDigit;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.apache.commons.lang.StringUtils;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Generic <b>Code Validation</b> providing format, minimum/maximum
- * length and {@link CheckDigit} validations.
+ * length and {@link GenericProcessorValidator} validations.
  * <p>
  * Performs the following validations on a code:
  * <ul>
@@ -19,17 +47,17 @@ import java.util.Objects;
  * <li>Check the <i>format</i> of the code using a <i>regular expression.</i> (if specified)</li>
  * <li>Check the <i>minimum</i> and <i>maximum</i> length  (if specified) of the <i>parsed</i> code
  * (i.e. parsed by the <i>regular expression</i>).</li>
- * <li>Performs {@link CheckDigit} validation on the parsed code (if specified).</li>
- * <li>The {@link #validate(String)} method returns the trimmed, parsed input (or null if validation failed)</li>
+ * <li>Performs {@link GenericProcessorValidator} validation on the parsed code (if specified).</li>
+ * <li>The {@link #processOrThrow(String)} method returns the trimmed, parsed input (or null if validation failed)</li>
  * </ul>
  * <p>
  * <b>Note</b>
- * The {@link #validate(String)} method will return true if the input passes validation.
+ * The {@link #processOrThrow(String)} method will return true if the input passes validation.
  * Since this includes trimming as well as potentially dropping parts of the input,
  * it is possible for a String to pass validation
  * but fail the checkdigit test if passed directly to it (the check digit routines generally don't trim input
  * nor do they generally check the format/length).
- * To be sure that you are passing valid input to a method use {@link #validate(String)} as follows:
+ * To be sure that you are passing valid input to a method use {@link #processOrThrow(String)} as follows:
  * <pre>
  * Object valid = validator.validate(input);
  * if (valid != null) {
@@ -38,7 +66,7 @@ import java.util.Objects;
  * </pre>
  * <p>
  * Configure the validator with the appropriate regular expression, minimum/maximum length
- * and {@link CheckDigit} validator and then call one of the two validation
+ * and {@link GenericProcessorValidator} validator and then call one of the two validation
  * methods provided:</p>
  * <ul>
  * <li><code>boolean isValid(code)</code></li>
@@ -56,28 +84,41 @@ import java.util.Objects;
  * @since Validator 1.4
  */
 @Data
-public final class CodeValidator implements GenericProcessorValidator<String, Object, ValidationException> {
+@EqualsAndHashCode
+@ToString
+public final class CodeProcessor implements ThrowingProcessor<String, Object, InvalidFormatException>, Serializable {
 
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -4508144749847080016L;
+
+    /**
+     * Default min length
+     */
     private final int minLength;
+    /**
+     * Default max length
+     */
     private final int maxLength;
     private final DigitProcessorValidator validator;
     private final RegexValidator regexValidator;
 
     /**
      * Construct a code validator with a specified regular
-     * expression and {@link CheckDigit}.
+     * expression and {@link GenericProcessorValidator}.
      * The RegexValidator validator is created to be case-sensitive
      *
      * @param regex     The format regular expression
      * @param validator The check digit validation routine
      */
-    public CodeValidator(final String regex, final DigitProcessorValidator validator) {
+    public CodeProcessor(final String regex, final DigitProcessorValidator validator) {
         this(regex, -1, -1, validator);
     }
 
     /**
      * Construct a code validator with a specified regular
-     * expression, length and {@link CheckDigit}.
+     * expression, length and {@link GenericProcessorValidator}.
      * The RegexValidator validator is created to be case-sensitive
      *
      * @param regex     The format regular expression.
@@ -85,13 +126,13 @@ public final class CodeValidator implements GenericProcessorValidator<String, Ob
      *                  (sets the mimimum/maximum to the same)
      * @param validator The check digit validation routine
      */
-    public CodeValidator(final String regex, int length, final DigitProcessorValidator validator) {
+    public CodeProcessor(final String regex, int length, final DigitProcessorValidator validator) {
         this(regex, length, length, validator);
     }
 
     /**
      * Construct a code validator with a specified regular
-     * expression, minimum/maximum length and {@link CheckDigit} validation.
+     * expression, minimum/maximum length and {@link GenericProcessorValidator} validation.
      * The RegexValidator validator is created to be case-sensitive
      *
      * @param regex     The regular expression
@@ -99,8 +140,8 @@ public final class CodeValidator implements GenericProcessorValidator<String, Ob
      * @param maxLength The maximum length of the code
      * @param validator The check digit validation routine
      */
-    public CodeValidator(final String regex, int minLength, int maxLength, final DigitProcessorValidator validator) {
-        if (Objects.nonNull(regex) && regex.length() > 0) {
+    public CodeProcessor(final String regex, int minLength, int maxLength, final DigitProcessorValidator validator) {
+        if (StringUtils.isNotBlank(regex)) {
             this.regexValidator = new RegexValidator(regex);
         } else {
             this.regexValidator = null;
@@ -112,62 +153,42 @@ public final class CodeValidator implements GenericProcessorValidator<String, Ob
 
     /**
      * Construct a code validator with a specified regular expression,
-     * validator and {@link CheckDigit} validation.
+     * validator and {@link GenericProcessorValidator} validation.
      *
      * @param regexValidator The format regular expression validator
      * @param validator      The check digit validation routine.
      */
-    public CodeValidator(final RegexValidator regexValidator, final DigitProcessorValidator validator) {
+    public CodeProcessor(final RegexValidator regexValidator, final DigitProcessorValidator validator) {
         this(regexValidator, -1, -1, validator);
     }
 
     /**
      * Construct a code validator with a specified regular expression,
-     * validator, length and {@link CheckDigit} validation.
+     * validator, length and {@link GenericProcessorValidator} validation.
      *
      * @param regexValidator The format regular expression validator
      * @param length         The length of the code
      *                       (sets the mimimum/maximum to the same value)
      * @param validator      The check digit validation routine
      */
-    public CodeValidator(final RegexValidator regexValidator, int length, final DigitProcessorValidator validator) {
+    public CodeProcessor(final RegexValidator regexValidator, int length, final DigitProcessorValidator validator) {
         this(regexValidator, length, length, validator);
     }
 
     /**
      * Construct a code validator with a specified regular expression
-     * validator, minimum/maximum length and {@link CheckDigit} validation.
+     * validator, minimum/maximum length and {@link GenericProcessorValidator} validation.
      *
      * @param regexValidator The format regular expression validator
      * @param minLength      The minimum length of the code
      * @param maxLength      The maximum length of the code
      * @param validator      The check digit validation routine
      */
-    public CodeValidator(final RegexValidator regexValidator, int minLength, int maxLength, final DigitProcessorValidator validator) {
+    public CodeProcessor(final RegexValidator regexValidator, int minLength, int maxLength, final DigitProcessorValidator validator) {
         this.regexValidator = regexValidator;
         this.minLength = minLength;
         this.maxLength = maxLength;
         this.validator = validator;
-    }
-
-    /**
-     * Validate the code returning either <code>true</code>
-     * or <code>false</code>.
-     * <p>
-     * This calls {@link #validate(String)} and returns false
-     * if the return value is null, true otherwise.
-     * <p>
-     * Note that {@link #validate(String)} trims the input
-     * and if there is a {@link RegexValidator} it may also
-     * change the input as part of the validation.
-     *
-     * @param input The code to validate
-     * @return <code>true</code> if valid, otherwise
-     * <code>false</code>
-     */
-    @Override
-    public boolean validate(final String input) {
-        return Objects.nonNull(this.process(input));
     }
 
     /**
@@ -183,7 +204,7 @@ public final class CodeValidator implements GenericProcessorValidator<String, Ob
      * if invalid
      */
     @Override
-    public Object processOrThrow(final String input) throws ValidationException {
+    public Object processOrThrow(final String input) {
         if (Objects.isNull(input)) {
             return null;
         }
@@ -199,7 +220,6 @@ public final class CodeValidator implements GenericProcessorValidator<String, Ob
                 return null;
             }
         }
-
         // check the length (must be done after validate as that can change the code)
         if ((this.minLength >= 0 && code.length() < this.minLength) || (this.maxLength >= 0 && code.length() > this.maxLength)) {
             return null;
@@ -209,7 +229,7 @@ public final class CodeValidator implements GenericProcessorValidator<String, Ob
                 return null;
             }
         } catch (Throwable t) {
-            throw new ValidationException(String.format("ERROR: cannot validate input argument = {%s}", input), t);
+            throw new InvalidFormatException(String.format("ERROR: invalid input parameter = {%s}", input), t);
         }
         return code;
     }

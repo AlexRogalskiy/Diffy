@@ -83,11 +83,11 @@ public class FloatValidator extends AbstractNumberValidator {
      * <code>NumberFormat</code> is created - valid types
      * are:</p>
      * <ul>
-     * <li>AbstractNumberValidator.STANDARD_FORMAT -to create
+     * <li>AbstractNumberProcessor.STANDARD_FORMAT -to create
      * <i>standard</i> number formats (the default).</li>
-     * <li>AbstractNumberValidator.CURRENCY_FORMAT -to create
+     * <li>AbstractNumberProcessor.CURRENCY_FORMAT -to create
      * <i>currency</i> number formats.</li>
-     * <li>AbstractNumberValidator.PERCENT_FORMAT -to create
+     * <li>AbstractNumberProcessor.PERCENT_FORMAT -to create
      * <i>percent</i> number formats (the default).</li>
      * </ul>
      *

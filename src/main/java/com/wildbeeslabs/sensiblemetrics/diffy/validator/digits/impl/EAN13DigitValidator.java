@@ -1,6 +1,9 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Modulus 10 <b>EAN-13</b> / <b>UPC</b> / <b>ISBN-13</b> Check Digit
@@ -26,12 +29,19 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
-public final class EAN13CheckDigit extends BaseDigitValidator {
+
+/**
+ * Ean13 {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class EAN13DigitValidator extends BaseDigitValidator {
 
     /**
      * Singleton EAN-13 Check Digit instance
      */
-    public static final DigitValidator EAN13_CHECK_DIGIT = new EAN13CheckDigit();
+    public static final DigitProcessorValidator EAN13_CHECK_DIGIT = new EAN13DigitValidator();
 
     /**
      * weighting given to digits depending on their right position
@@ -41,8 +51,8 @@ public final class EAN13CheckDigit extends BaseDigitValidator {
     /**
      * Construct a modulus 10 Check Digit routine for EAN/UPC.
      */
-    public EAN13CheckDigit() {
-        super(10);  // CHECKSTYLE IGNORE MagicNumber
+    public EAN13DigitValidator() {
+        super(10);
     }
 
     /**

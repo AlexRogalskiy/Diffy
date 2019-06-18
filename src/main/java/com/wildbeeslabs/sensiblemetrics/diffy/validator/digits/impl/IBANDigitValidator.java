@@ -1,7 +1,10 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.digits;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 
@@ -27,7 +30,14 @@ import java.util.Objects;
  * @version $Revision: 1739357 $
  * @since Validator 1.4
  */
-public final class IBANCheckDigit implements DigitValidator {
+
+/**
+ * Iban {@link BaseDigitValidator} implementation
+ */
+@Data
+@EqualsAndHashCode
+@ToString
+public final class IBANDigitValidator implements DigitProcessorValidator {
 
     private static final int MIN_CODE_LEN = 5;
 
@@ -36,7 +46,7 @@ public final class IBANCheckDigit implements DigitValidator {
     /**
      * Singleton IBAN Number Check Digit instance
      */
-    public static final DigitValidator IBAN_CHECK_DIGIT = new IBANCheckDigit();
+    public static final DigitProcessorValidator IBAN_CHECK_DIGIT = new IBANDigitValidator();
 
     private static final long MAX = 999999999;
 

@@ -65,7 +65,7 @@ public class IBANValidator implements Validator<String> {
      * The SWIFT PDF file [2] implies that lower case is allowed.
      * However there are no examples using lower-case.
      * Unfortunately the relevant ISO documents (ISO 13616-1) are not available for free.
-     * The IBANCheckDigit code treats upper and lower case the same,
+     * The IBANDigitValidator code treats upper and lower case the same,
      * so any case validation has to be done in this class.
      *
      * Note: the European Payments council has a document [3] which includes a description
