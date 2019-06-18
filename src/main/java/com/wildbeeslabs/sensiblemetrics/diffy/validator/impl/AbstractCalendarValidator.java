@@ -43,7 +43,7 @@ import java.util.TimeZone;
  * Validators using format parsing.</p>
  *
  * @version $Revision: 1739356 $
- * @since Validator 1.3.0
+ * @since IBANEntry 1.3.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -88,7 +88,7 @@ public abstract class AbstractCalendarValidator extends AbstractFormatValidator<
      * @return <code>true</code> if the value is valid.
      */
     @Override
-    public boolean isValid(final String value, final String pattern, final Locale locale) {
+    public boolean validate(final String value, final String pattern, final Locale locale) {
         final Object parsedValue = this.parse(value, pattern, locale, null);
         return (Objects.isNull(parsedValue) ? false : true);
     }

@@ -1,15 +1,22 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.Format;
+import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
 
 /**
- * <p><b>Double Validation</b> and Conversion routines (<code>java.lang.Double</code>).</p>
+ * <p><b>BigDecimal Validation</b> and Conversion routines (<code>java.math.BigDecimal</code>).</p>
  *
  * <p>This validator provides a number of methods for
  * validating/converting a <code>String</code> value to
- * a <code>Double</code> using <code>java.text.NumberFormat</code>
+ * a <code>BigDecimal</code> using <code>java.text.NumberFormat</code>
  * to parse either:</p>
  * <ul>
  * <li>using the default format for the default <code>Locale</code></li>
@@ -20,7 +27,9 @@ import java.util.Objects;
  *
  * <p>Use one of the <code>isValid()</code> methods to just validate or
  * one of the <code>validate()</code> methods to validate and receive a
- * <i>converted</i> <code>Double</code> value.</p>
+ * <i>converted</i> <code>BigDecimal</code> value.</p>
+ *
+ * <p>Fraction/decimal values are automatically trimmed to the appropriate length.</p>
  *
  * <p>Once a value has been successfully converted the following
  * methods can be used to perform minimum, maximum and range checks:</p>
@@ -45,34 +54,47 @@ import java.util.Objects;
  * </ul>
  *
  * @version $Revision: 1739356 $
- * @since Validator 1.3.0
+ * @since IBANEntry 1.3.0
  */
-public class DoubleValidator extends AbstractNumberValidator {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class BigDecimalValidator2 extends AbstractNumberValidator {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 2673902050356612852L;
+    private static final long serialVersionUID = -7431349769514442847L;
 
     /**
-     * Default {@link DoubleValidator} instance
+     * Default {@link BigDecimalValidator2} instance
      */
-    private static final DoubleValidator VALIDATOR = new DoubleValidator();
+    private static final BigDecimalValidator2 VALIDATOR = new BigDecimalValidator2();
 
     /**
      * Return a singleton instance of this validator.
      *
-     * @return A singleton instance of the DoubleValidator.
+     * @return A singleton instance of the BigDecimalValidator2.
      */
-    public static DoubleValidator getInstance() {
+    public static BigDecimalValidator2 getInstance() {
         return VALIDATOR;
     }
 
     /**
      * Construct a <i>strict</i> instance.
      */
-    public DoubleValidator() {
-        this(true, STANDARD_FORMAT);
+    public BigDecimalValidator2() {
+        this(true);
+    }
+
+    /**
+     * <p>Construct an instance with the specified strict setting.</p>
+     *
+     * @param strict <code>true</code> if strict
+     *               <code>Format</code> parsing should be used.
+     */
+    public BigDecimalValidator2(boolean strict) {
+        this(strict, STANDARD_FORMAT, true);
     }
 
     /**
@@ -91,61 +113,66 @@ public class DoubleValidator extends AbstractNumberValidator {
      * <i>percent</i> number formats (the default).</li>
      * </ul>
      *
-     * @param strict     <code>true</code> if strict
-     *                   <code>Format</code> parsing should be used.
-     * @param formatType The <code>NumberFormat</code> type to
-     *                   create for validation, default is STANDARD_FORMAT.
+     * @param strict         <code>true</code> if strict
+     *                       <code>Format</code> parsing should be used.
+     * @param formatType     The <code>NumberFormat</code> type to
+     *                       create for validation, default is STANDARD_FORMAT.
+     * @param allowFractions <code>true</code> if fractions are
+     *                       allowed or <code>false</code> if integers only.
      */
-    public DoubleValidator(boolean strict, int formatType) {
-        super(strict, formatType, true);
+    protected BigDecimalValidator2(boolean strict, int formatType, boolean allowFractions) {
+        super(strict, formatType, allowFractions);
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the default
+     * <p>Validate/convert a <code>BigDecimal</code> using the default
      * <code>Locale</code>.
      *
      * @param value The value validation is being performed on.
-     * @return The parsed <code>Double</code> if valid or <code>null</code>
-     * if inva
+     * @return The parsed <code>BigDecimal</code> if valid or <code>null</code>
+     * if invalid.
      */
     @Override
     public boolean validate(final String value) {
-        return Objects.nonNull(this.parse(value, null, null));
+        return Objects.nonNull(parse(value, null, null));
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the
+     * <p>Validate/convert a <code>BigDecimal</code> using the
      * specified <i>pattern</i>.
      *
      * @param value   The value validation is being performed on.
-     * @param pattern The pattern used to validate the value against.
+     * @param pattern The pattern used to validate the value against, or the
+     *                default for the <code>Locale</code> if <code>null</code>.
      * @return The parsed <code>BigDecimal</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final String pattern) {
         return Objects.nonNull(this.parse(value, pattern, null));
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the
+     * <p>Validate/convert a <code>BigDecimal</code> using the
      * specified <code>Locale</code>.
      *
      * @param value  The value validation is being performed on.
      * @param locale The locale to use for the number format, system default if null.
-     * @return The parsed <code>Double</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>BigDecimal</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final Locale locale) {
         return Objects.nonNull(this.parse(value, null, locale));
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the
+     * <p>Validate/convert a <code>BigDecimal</code> using the
      * specified pattern and/ or <code>Locale</code>.
      *
      * @param value   The value validation is being performed on.
      * @param pattern The pattern used to validate the value against, or the
      *                default for the <code>Locale</code> if <code>null</code>.
      * @param locale  The locale to use for the date format, system default if null.
-     * @return The parsed <code>Double</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>BigDecimal</code> if valid or <code>null</code> if invalid.
      */
     @Override
     public boolean validate(final String value, final String pattern, final Locale locale) {
@@ -161,21 +188,8 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is within the
      * specified range.
      */
-    public boolean isInRange(double value, double min, double max) {
-        return (value >= min && value <= max);
-    }
-
-    /**
-     * Check if the value is within a specified range.
-     *
-     * @param value The <code>Number</code> value to check.
-     * @param min   The minimum value of the range.
-     * @param max   The maximum value of the range.
-     * @return <code>true</code> if the value is within the
-     * specified range.
-     */
-    public boolean isInRange(final Double value, double min, double max) {
-        return this.isInRange(value.doubleValue(), min, max);
+    public boolean isInRange(final BigDecimal value, double min, double max) {
+        return (value.doubleValue() >= min && value.doubleValue() <= max);
     }
 
     /**
@@ -186,20 +200,8 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is greater than
      * or equal to the minimum.
      */
-    public boolean minValue(double value, double min) {
-        return (value >= min);
-    }
-
-    /**
-     * Check if the value is greater than or equal to a minimum.
-     *
-     * @param value The value validation is being performed on.
-     * @param min   The minimum value.
-     * @return <code>true</code> if the value is greater than
-     * or equal to the minimum.
-     */
-    public boolean minValue(final Double value, double min) {
-        return this.minValue(value.doubleValue(), min);
+    public boolean minValue(final BigDecimal value, double min) {
+        return (value.doubleValue() >= min);
     }
 
     /**
@@ -210,35 +212,31 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is less than
      * or equal to the maximum.
      */
-    public boolean maxValue(double value, double max) {
-        return (value <= max);
+    public boolean maxValue(final BigDecimal value, double max) {
+        return (value.doubleValue() <= max);
     }
 
     /**
-     * Check if the value is less than or equal to a maximum.
-     *
-     * @param value The value validation is being performed on.
-     * @param max   The maximum value.
-     * @return <code>true</code> if the value is less than
-     * or equal to the maximum.
-     */
-    public boolean maxValue(final Double value, double max) {
-        return this.maxValue(value.doubleValue(), max);
-    }
-
-    /**
-     * Convert the parsed value to a <code>Double</code>.
+     * Convert the parsed value to a <code>BigDecimal</code>.
      *
      * @param value     The parsed <code>Number</code> object created.
      * @param formatter The Format used to parse the value with.
-     * @return The validated/converted <code>Double</code> value if valid
-     * or <code>null</code> if invalid.
+     * @return The parsed <code>Number</code> converted to a
+     * <code>BigDecimal</code>.
      */
     @Override
     protected Object processParsedValue(final Object value, final Format formatter) {
-        if (value instanceof Double) {
-            return value;
+        BigDecimal decimal = null;
+        if (value instanceof Long) {
+            decimal = BigDecimal.valueOf(((Long) value).longValue());
+        } else {
+            decimal = new BigDecimal(value.toString());
         }
-        return Double.valueOf(((Number) value).doubleValue());
+
+        int scale = this.determineScale((NumberFormat) formatter);
+        if (scale >= 0) {
+            decimal = decimal.setScale(scale, RoundingMode.DOWN);
+        }
+        return decimal;
     }
 }

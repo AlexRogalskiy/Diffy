@@ -72,7 +72,7 @@ public abstract class AbstractFormatValidator<T> implements Validator<T>, Serial
      */
     @Override
     public boolean validate(final T value) {
-        return this.isValid(value, null, null);
+        return this.validate(value, null, null);
     }
 
     /**
@@ -83,7 +83,7 @@ public abstract class AbstractFormatValidator<T> implements Validator<T>, Serial
      * @return <code>true</code> if the value is valid.
      */
     public boolean validate(final T value, final String pattern) {
-        return this.isValid(value, pattern, null);
+        return this.validate(value, pattern, null);
     }
 
     /**
@@ -94,7 +94,7 @@ public abstract class AbstractFormatValidator<T> implements Validator<T>, Serial
      * @return <code>true</code> if the value is valid.
      */
     public boolean validate(final T value, final Locale locale) {
-        return this.isValid(value, null, locale);
+        return this.validate(value, null, locale);
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class AbstractFormatValidator<T> implements Validator<T>, Serial
      * @param locale  The locale to use for the Format, defaults to the default
      * @return <code>true</code> if the value is valid.
      */
-    public abstract boolean isValid(final T value, final String pattern, final Locale locale);
+    public abstract boolean validate(final T value, final String pattern, final Locale locale);
 
     /**
      * <p>Format an object into a <code>String</code> using

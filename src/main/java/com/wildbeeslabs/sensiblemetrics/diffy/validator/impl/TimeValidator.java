@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.text.DateFormat;
 import java.text.Format;
@@ -35,6 +38,9 @@ import java.util.TimeZone;
 /**
  * Time {@link Validator} implementation
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class TimeValidator extends AbstractCalendarValidator {
 
     /**

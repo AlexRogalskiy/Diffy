@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -47,6 +48,6 @@ public class CreditCardConverter extends AbstractConverter<String, Long> {
      */
     @Override
     protected Long valueOf(String value) {
-        return ValidateUtlis.isCreditCard(value) ? Long.valueOf(value) : null;
+        return ValidationUtils.isCreditCard(value) ? Long.valueOf(value) : null;
     }
 }

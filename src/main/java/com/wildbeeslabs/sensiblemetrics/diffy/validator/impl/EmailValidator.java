@@ -24,6 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import org.apache.commons.validator.routines.DomainValidator;
+import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.util.Objects;
 import java.util.regex.Matcher;

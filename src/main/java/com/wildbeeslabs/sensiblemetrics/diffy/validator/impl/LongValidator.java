@@ -1,15 +1,19 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.text.Format;
 import java.util.Locale;
 import java.util.Objects;
 
 /**
- * <p><b>Double Validation</b> and Conversion routines (<code>java.lang.Double</code>).</p>
+ * <p><b>Long Validation</b> and Conversion routines (<code>java.lang.Long</code>).</p>
  *
  * <p>This validator provides a number of methods for
  * validating/converting a <code>String</code> value to
- * a <code>Double</code> using <code>java.text.NumberFormat</code>
+ * a <code>Long</code> using <code>java.text.NumberFormat</code>
  * to parse either:</p>
  * <ul>
  * <li>using the default format for the default <code>Locale</code></li>
@@ -20,7 +24,7 @@ import java.util.Objects;
  *
  * <p>Use one of the <code>isValid()</code> methods to just validate or
  * one of the <code>validate()</code> methods to validate and receive a
- * <i>converted</i> <code>Double</code> value.</p>
+ * <i>converted</i> <code>Long</code> value.</p>
  *
  * <p>Once a value has been successfully converted the following
  * methods can be used to perform minimum, maximum and range checks:</p>
@@ -38,40 +42,42 @@ import java.util.Objects;
  * <code>format()</code> methods are also provided. That is you can
  * format either:</p>
  * <ul>
- * <li>using the default format for the default <code>Locale</code></li>
- * <li>using a specified pattern with the default <code>Locale</code></li>
- * <li>using the default format for a specified <code>Locale</code></li>
- * <li>using a specified pattern with a specified <code>Locale</code></li>
+ * <li>using a specified pattern</li>
+ * <li>using the format for a specified <code>Locale</code></li>
+ * <li>using the format for the <i>default</i> <code>Locale</code></li>
  * </ul>
  *
  * @version $Revision: 1739356 $
- * @since Validator 1.3.0
+ * @since IBANEntry 1.3.0
  */
-public class DoubleValidator extends AbstractNumberValidator {
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class LongValidator extends AbstractNumberValidator {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 2673902050356612852L;
+    private static final long serialVersionUID = -8279413937566434695L;
 
     /**
-     * Default {@link DoubleValidator} instance
+     * Default {@link LongValidator} instance
      */
-    private static final DoubleValidator VALIDATOR = new DoubleValidator();
+    private static final LongValidator VALIDATOR = new LongValidator();
 
     /**
      * Return a singleton instance of this validator.
      *
-     * @return A singleton instance of the DoubleValidator.
+     * @return A singleton instance of the LongValidator.
      */
-    public static DoubleValidator getInstance() {
+    public static LongValidator getInstance() {
         return VALIDATOR;
     }
 
     /**
      * Construct a <i>strict</i> instance.
      */
-    public DoubleValidator() {
+    public LongValidator() {
         this(true, STANDARD_FORMAT);
     }
 
@@ -96,17 +102,17 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @param formatType The <code>NumberFormat</code> type to
      *                   create for validation, default is STANDARD_FORMAT.
      */
-    public DoubleValidator(boolean strict, int formatType) {
-        super(strict, formatType, true);
+    public LongValidator(boolean strict, int formatType) {
+        super(strict, formatType, false);
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the default
+     * <p>Validate/convert a <code>Long</code> using the default
      * <code>Locale</code>.
      *
      * @param value The value validation is being performed on.
-     * @return The parsed <code>Double</code> if valid or <code>null</code>
-     * if inva
+     * @return The parsed <code>Long</code> if valid or <code>null</code>
+     * if invalid.
      */
     @Override
     public boolean validate(final String value) {
@@ -114,38 +120,40 @@ public class DoubleValidator extends AbstractNumberValidator {
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the
+     * <p>Validate/convert a <code>Long</code> using the
      * specified <i>pattern</i>.
      *
      * @param value   The value validation is being performed on.
      * @param pattern The pattern used to validate the value against.
-     * @return The parsed <code>BigDecimal</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>Long</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final String pattern) {
         return Objects.nonNull(this.parse(value, pattern, null));
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the
+     * <p>Validate/convert a <code>Long</code> using the
      * specified <code>Locale</code>.
      *
      * @param value  The value validation is being performed on.
      * @param locale The locale to use for the number format, system default if null.
-     * @return The parsed <code>Double</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>Long</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final Locale locale) {
         return Objects.nonNull(this.parse(value, null, locale));
     }
 
     /**
-     * <p>Validate/convert a <code>Double</code> using the
+     * <p>Validate/convert a <code>Long</code> using the
      * specified pattern and/ or <code>Locale</code>.
      *
      * @param value   The value validation is being performed on.
      * @param pattern The pattern used to validate the value against, or the
      *                default for the <code>Locale</code> if <code>null</code>.
      * @param locale  The locale to use for the date format, system default if null.
-     * @return The parsed <code>Double</code> if valid or <code>null</code> if invalid.
+     * @return The parsed <code>Long</code> if valid or <code>null</code> if invalid.
      */
     @Override
     public boolean validate(final String value, final String pattern, final Locale locale) {
@@ -161,7 +169,7 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is within the
      * specified range.
      */
-    public boolean isInRange(double value, double min, double max) {
+    public boolean isInRange(long value, long min, long max) {
         return (value >= min && value <= max);
     }
 
@@ -174,8 +182,8 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is within the
      * specified range.
      */
-    public boolean isInRange(final Double value, double min, double max) {
-        return this.isInRange(value.doubleValue(), min, max);
+    public boolean isInRange(final Long value, long min, long max) {
+        return this.isInRange(value.longValue(), min, max);
     }
 
     /**
@@ -186,7 +194,7 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is greater than
      * or equal to the minimum.
      */
-    public boolean minValue(double value, double min) {
+    public boolean minValue(long value, long min) {
         return (value >= min);
     }
 
@@ -198,8 +206,8 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is greater than
      * or equal to the minimum.
      */
-    public boolean minValue(final Double value, double min) {
-        return this.minValue(value.doubleValue(), min);
+    public boolean minValue(final Long value, long min) {
+        return this.minValue(value.longValue(), min);
     }
 
     /**
@@ -210,7 +218,7 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is less than
      * or equal to the maximum.
      */
-    public boolean maxValue(double value, double max) {
+    public boolean maxValue(long value, long max) {
         return (value <= max);
     }
 
@@ -222,23 +230,23 @@ public class DoubleValidator extends AbstractNumberValidator {
      * @return <code>true</code> if the value is less than
      * or equal to the maximum.
      */
-    public boolean maxValue(final Double value, double max) {
-        return this.maxValue(value.doubleValue(), max);
+    public boolean maxValue(final Long value, long max) {
+        return this.maxValue(value.longValue(), max);
     }
 
     /**
-     * Convert the parsed value to a <code>Double</code>.
+     * Convert the parsed value to a <code>Long</code>.
      *
      * @param value     The parsed <code>Number</code> object created.
      * @param formatter The Format used to parse the value with.
-     * @return The validated/converted <code>Double</code> value if valid
-     * or <code>null</code> if invalid.
+     * @return The parsed <code>Number</code> converted to a
+     * <code>Long</code>.
      */
     @Override
     protected Object processParsedValue(final Object value, final Format formatter) {
-        if (value instanceof Double) {
+        if (value instanceof Long) {
             return value;
         }
-        return Double.valueOf(((Number) value).doubleValue());
+        return Long.valueOf(((Number) value).longValue());
     }
 }
