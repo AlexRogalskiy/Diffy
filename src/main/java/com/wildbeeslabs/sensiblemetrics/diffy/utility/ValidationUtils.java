@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.utility;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator2;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.DateValidator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.EmailValidator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.UrlValidator;
@@ -55,7 +55,7 @@ public final class ValidationUtils {
     /**
      * CreditCardProcessor used in wrapper method.
      */
-    private static final CreditCardValidator CREDIT_CARD_VALIDATOR = new CreditCardValidator();
+//    private static final CreditCardValidator CREDIT_CARD_VALIDATOR = new CreditCardValidator();
 
     /**
      * <p>Checks if the value matches the regular expression.</p>
@@ -245,8 +245,8 @@ public final class ValidationUtils {
      * @param value The value validation is being performed on.
      * @return true if the value is valid Credit Card Number.
      */
-    public static boolean isCreditCard(String value) {
-        return CREDIT_CARD_VALIDATOR.validate(value);
+    public static boolean isCreditCard(final String value) {
+        return CreditCardValidator2.getInstance().validate(value);
     }
 
     /**

@@ -25,7 +25,10 @@ package com.wildbeeslabs.sensiblemetrics.diffy.processor.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidFormatException;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.iface.GenericProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.utility.CreditCardRange;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.LuhnDigitValidator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CodeValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,7 +39,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator.createRangeValidator;
 
 /**
  * Perform credit card validations.
@@ -106,67 +109,147 @@ public class CreditCardProcessor implements GenericProcessor<String, Object, Inv
     private static final long serialVersionUID = 4040573184175518080L;
 
     /**
-     * Class that represents a credit card range.
-     *
-     * @since 1.6
+     * Default min credit card length
      */
-    @Data
-    public static class CreditCardRange {
-        private final String low; // e.g. 34 or 644
-        private final String high; // e.g. 34 or 65
-        private final int minLen; // e.g. 16 or -1
-        private final int maxLen; // e.g. 19 or -1
-        private final int lengths[]; // e.g. 16,18,19
+    public static final int MIN_CC_LENGTH = 12; // minimum allowed length
 
-        /**
-         * Create a credit card range specifier for use in validation
-         * of the number syntax including the IIN range.
-         * <p>
-         * The low and high parameters may be shorter than the length
-         * of an IIN (currently 6 digits) in which case subsequent digits
-         * are ignored and may range from 0-9.
-         * <br>
-         * The low and high parameters may be different lengths.
-         * e.g. Discover "644" and "65".
-         * </p>
-         *
-         * @param low    the low digits of the IIN range
-         * @param high   the high digits of the IIN range
-         * @param minLen the minimum length of the entire number
-         * @param maxLen the maximum length of the entire number
-         */
-        public CreditCardRange(final String low, final String high, int minLen, int maxLen) {
-            this.low = low;
-            this.high = high;
-            this.minLen = minLen;
-            this.maxLen = maxLen;
-            this.lengths = null;
-        }
+    /**
+     * Default max credit card length
+     */
+    public static final int MAX_CC_LENGTH = 19; // maximum allowed length
 
-        /**
-         * Create a credit card range specifier for use in validation
-         * of the number syntax including the IIN range.
-         * <p>
-         * The low and high parameters may be shorter than the length
-         * of an IIN (currently 6 digits) in which case subsequent digits
-         * are ignored and may range from 0-9.
-         * <br>
-         * The low and high parameters may be different lengths.
-         * e.g. Discover "644" and "65".
-         * </p>
-         *
-         * @param low     the low digits of the IIN range
-         * @param high    the high digits of the IIN range
-         * @param lengths array of valid lengths
-         */
-        public CreditCardRange(final String low, final String high, final int[] lengths) {
-            this.low = low;
-            this.high = high;
-            this.minLen = -1;
-            this.maxLen = -1;
-            this.lengths = lengths.clone();
-        }
-    }
+    /**
+     * Option specifying that no cards are allowed.  This is useful if
+     * you want only custom card types to validate so you turn off the
+     * default cards with this option.
+     *
+     * <pre>
+     * <code>
+     * CreditCardProcessor v = new CreditCardProcessor(CreditCardProcessor.NONE);
+     * v.addAllowedCardType(customType);
+     * v.isValid(aCardNumber);
+     * </code>
+     * </pre>
+     */
+    public static final long NONE = 0;
+
+    /**
+     * Option specifying that American Express cards are allowed.
+     */
+    public static final long AMEX = 1 << 0;
+
+    /**
+     * Option specifying that Visa cards are allowed.
+     */
+    public static final long VISA = 1 << 1;
+
+    /**
+     * Option specifying that Mastercard cards are allowed.
+     */
+    public static final long MASTERCARD = 1 << 2;
+
+    /**
+     * Option specifying that Discover cards are allowed.
+     */
+    public static final long DISCOVER = 1 << 3;
+
+    /**
+     * Option specifying that Diners cards are allowed.
+     */
+    public static final long DINERS = 1 << 4;
+
+    /**
+     * Option specifying that VPay (Visa) cards are allowed.
+     *
+     * @since 1.5.0
+     */
+    public static final long VPAY = 1 << 5;
+
+    /**
+     * Option specifying that Mastercard cards (pre Oct 2016 only) are allowed.
+     */
+    public static final long MASTERCARD_PRE_OCT2016 = 1 << 6;
+
+    /**
+     * Luhn checkdigit validator for the card numbers.
+     */
+    public static final DigitValidator LUHN_VALIDATOR = LuhnDigitValidator.getInstance();
+
+    /**
+     * American Express (Amex) Card Validator
+     * <p>
+     * 34xxxx (15) <br>
+     * 37xxxx (15) <br>
+     */
+    public static final CodeValidator AMEX_VALIDATOR = new CodeValidator("^(3[47]\\d{13})$", LUHN_VALIDATOR);
+
+    /**
+     * Diners Card Validator
+     * <p>
+     * 300xxx - 305xxx (14) <br>
+     * 3095xx (14) <br>
+     * 36xxxx (14) <br>
+     * 38xxxx (14) <br>
+     * 39xxxx (14) <br>
+     */
+    public static final CodeValidator DINERS_VALIDATOR = new CodeValidator("^(30[0-5]\\d{11}|3095\\d{10}|36\\d{12}|3[8-9]\\d{12})$", LUHN_VALIDATOR);
+
+    /**
+     * Discover Card regular expressions
+     * <p>
+     * 6011xx (16) <br>
+     * 644xxx - 65xxxx (16) <br>
+     */
+    private static final RegexProcessor DISCOVER_REGEX = new RegexProcessor(new String[]{"^(6011\\d{12})$", "^(64[4-9]\\d{13})$", "^(65\\d{14})$"});
+
+    /**
+     * Discover Card Validator
+     */
+    public static final CodeValidator DISCOVER_VALIDATOR = new CodeValidator(DISCOVER_REGEX, LUHN_VALIDATOR);
+
+    /**
+     * Mastercard regular expressions
+     * <p>
+     * 2221xx - 2720xx (16) <br>
+     * 51xxx - 55xxx (16) <br>
+     */
+    private static final RegexProcessor MASTERCARD_PROCESSOR = new RegexProcessor(
+        new String[]{
+            "^(5[1-5]\\d{14})$",  // 51 - 55 (pre Oct 2016)
+            // valid from October 2016
+            "^(2221\\d{12})$",    // 222100 - 222199
+            "^(222[2-9]\\d{12})$",// 222200 - 222999
+            "^(22[3-9]\\d{13})$", // 223000 - 229999
+            "^(2[3-6]\\d{14})$",  // 230000 - 269999
+            "^(27[01]\\d{13})$",  // 270000 - 271999
+            "^(2720\\d{12})$",    // 272000 - 272099
+        });
+
+    /**
+     * Mastercard Card Validator
+     */
+    public static final CodeValidator MASTERCARD_VALIDATOR = new CodeValidator(MASTERCARD_PROCESSOR, LUHN_VALIDATOR);
+
+    /**
+     * Mastercard Card Validator (pre Oct 2016)
+     */
+    public static final CodeValidator MASTERCARD_VALIDATOR_PRE_OCT2016 = new CodeValidator("^(5[1-5]\\d{14})$", LUHN_VALIDATOR);
+
+    /**
+     * Visa Card Validator
+     * <p>
+     * 4xxxxx (13 or 16)
+     */
+    public static final CodeValidator VISA_VALIDATOR = new CodeValidator("^(4)(\\d{12}|\\d{15})$", LUHN_VALIDATOR);
+
+    /**
+     * VPay (Visa) Card Validator
+     * <p>
+     * 4xxxxx (13-19)
+     *
+     * @since 1.5.0
+     */
+    public static final CodeValidator VPAY_VALIDATOR = new CodeValidator("^(4)(\\d{12,18})$", LUHN_VALIDATOR);
 
     /**
      * The CreditCardTypes that are allowed to pass validation.

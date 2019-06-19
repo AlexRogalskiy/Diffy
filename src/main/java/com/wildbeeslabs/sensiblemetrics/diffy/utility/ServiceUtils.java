@@ -635,4 +635,10 @@ public class ServiceUtils {
                 }
             }, false);
     }
+
+    public static <T> Iterable<T> concat(final Iterable<? extends Iterable<T>> foo) {
+        return () -> StreamSupport.stream(foo.spliterator(), false)
+            .flatMap(i -> StreamSupport.stream(i.spliterator(), false))
+            .iterator();
+    }
 }

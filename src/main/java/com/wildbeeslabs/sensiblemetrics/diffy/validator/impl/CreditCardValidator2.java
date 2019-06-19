@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.CreditCardProcessor.*;
 import static java.util.Arrays.asList;
 
 /**

@@ -27,11 +27,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.google.common.collect.ImmutableMap;
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffEntryView;
 import lombok.*;
 
+import java.util.AbstractMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -87,6 +90,26 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     @Factory
     public static <K, V> Entry<K, V> of(final K first, final V last) {
         return new DefaultEntry<>(first, last);
+    }
+
+    /**
+     * Returns {@link Map} of current {@link NameValueEntry}
+     *
+     * @return {@link Map} of current {@link NameValueEntry}
+     */
+    @NonNull
+    public Map<K, V> map() {
+        return ImmutableMap.<K, V>builder().put(this.getFirst(), this.getLast()).build();
+    }
+
+    /**
+     * Returns {@link Map.Entry} instance
+     *
+     * @return {@link Map.Entry} instance
+     */
+    @NonNull
+    public Map.Entry<K, V> entry() {
+        return new AbstractMap.SimpleImmutableEntry<>(this.getFirst(), this.getLast());
     }
 
     /**
