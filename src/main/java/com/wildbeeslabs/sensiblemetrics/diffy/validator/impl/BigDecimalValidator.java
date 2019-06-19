@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -74,6 +75,7 @@ public class BigDecimalValidator implements Validator<BigDecimal> {
      * @return {@link BigDecimal} delta
      */
     private BigDecimal actualDelta(@NotNull final BigDecimal item) {
+        ValidationUtils.notNull(item, "Value should not be null");
         return item.subtract(this.value, MathContext.DECIMAL128).abs().subtract(this.delta, MathContext.DECIMAL128).stripTrailingZeros();
     }
 

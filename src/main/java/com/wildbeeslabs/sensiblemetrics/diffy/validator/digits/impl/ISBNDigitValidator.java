@@ -1,7 +1,29 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,51 +52,27 @@ import org.apache.commons.lang.StringUtils;
 @Data
 @EqualsAndHashCode
 @ToString
-public final class ISBNDigitValidator implements DigitProcessorValidator {
+public final class ISBNDigitValidator implements DigitValidator {
+
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 4948622299764254013L;
 
     /**
      * Singleton ISBN-10 Check Digit instance
      */
-    public static final DigitProcessorValidator ISBN10_CHECK_DIGIT = ISBN10DigitValidator.ISBN10_CHECK_DIGIT;
+    public static final DigitValidator ISBN10_CHECK_DIGIT = ISBN10DigitValidator.getInstance();
 
     /**
      * Singleton ISBN-13 Check Digit instance
      */
-    public static final DigitProcessorValidator ISBN13_CHECK_DIGIT = EAN13DigitValidator.EAN13_CHECK_DIGIT;
+    public static final DigitValidator ISBN13_CHECK_DIGIT = EAN13DigitValidator.getInstance();
 
     /**
      * Singleton combined ISBN-10 / ISBN-13 Check Digit instance
      */
-    public static final DigitProcessorValidator ISBN_CHECK_DIGIT = new ISBNDigitValidator();
-
-    /**
-     * Calculate an ISBN-10 or ISBN-13 check digit, depending
-     * on the length of the code.
-     * <p>
-     * If the length of the code is 9, it is treated as an ISBN-10
-     * code or if the length of the code is 12, it is treated as an ISBN-13
-     * code.
-     *
-     * @param code The ISBN code to validate (should have a length of
-     *             9 or 12)
-     * @return The ISBN-10 check digit if the length is 9 or an ISBN-13
-     * check digit if the length is 12.
-     * @throws InvalidParameterException if the code is missing, or an invalid
-     *                                   length (i.e. not 9 or 12) or if there is an error calculating the
-     *                                   check digit.
-     */
-    @Override
-    public String processOrThrow(final String code) throws InvalidParameterException {
-        if (StringUtils.isBlank(code)) {
-            throw new InvalidParameterException("ISBN Code is missing");
-        } else if (code.length() == 9) { // CHECKSTYLE IGNORE MagicNumber
-            return ISBN10_CHECK_DIGIT.processOrThrow(code);
-        } else if (code.length() == 12) { // CHECKSTYLE IGNORE MagicNumber
-            return ISBN13_CHECK_DIGIT.processOrThrow(code);
-        } else {
-            throw new InvalidParameterException("Invalid ISBN Length = " + code.length());
-        }
-    }
+    private static final DigitValidator ISBN_CHECK_DIGIT = new ISBNDigitValidator();
 
     /**
      * <p>Validate an ISBN-10 or ISBN-13 check digit, depending
@@ -94,12 +92,21 @@ public final class ISBNDigitValidator implements DigitProcessorValidator {
     public boolean validate(final String code) throws Throwable {
         if (StringUtils.isBlank(code)) {
             return false;
-        } else if (code.length() == 10) { // CHECKSTYLE IGNORE MagicNumber
+        } else if (code.length() == 10) {
             return ISBN10_CHECK_DIGIT.validate(code);
-        } else if (code.length() == 13) { // CHECKSTYLE IGNORE MagicNumber
+        } else if (code.length() == 13) {
             return ISBN13_CHECK_DIGIT.validate(code);
         } else {
             return false;
         }
+    }
+
+    /**
+     * Returns {@link DigitValidator} instance
+     *
+     * @return {@link DigitValidator} instance
+     */
+    public static DigitValidator getInstance() {
+        return ISBN_CHECK_DIGIT;
     }
 }

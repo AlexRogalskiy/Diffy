@@ -23,10 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.arrayMemberEquals;
 
@@ -61,7 +61,7 @@ public class MethodValidator implements Validator<Method> {
      * @throws NullPointerException if method is {@code null}
      */
     public MethodValidator(final Method method, boolean strict) {
-        Objects.requireNonNull(method, "Method should not be null");
+        ValidationUtils.notNull(method, "Method should not be null");
         this.method = method;
         this.strict = strict;
     }
@@ -77,9 +77,9 @@ public class MethodValidator implements Validator<Method> {
         final boolean f1 = this.hasSameMethod(value);
         final boolean f2 = this.hasSameMethod(value);
         if (this.strict) {
-            return f1 && f2;
+            return (f1 && f2);
         }
-        return f1 || f2;
+        return (f1 || f2);
     }
 
     private boolean hasSimilarMethod(final Method value) {

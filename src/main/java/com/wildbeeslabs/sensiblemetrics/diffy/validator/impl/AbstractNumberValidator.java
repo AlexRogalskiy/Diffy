@@ -23,15 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.apache.commons.lang.StringUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.AbstractNumberProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import lombok.*;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.Format;
-import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -69,8 +64,11 @@ public abstract class AbstractNumberValidator extends AbstractFormatValidator<St
      */
     public static final int PERCENT_FORMAT = 2;
 
-    private final boolean allowFractions;
-    private final int formatType;
+    /**
+     * Default {@link AbstractNumberProcessor} instance
+     */
+    @Getter(AccessLevel.PROTECTED)
+    private final AbstractNumberProcessor processor;
 
     /**
      * Construct an instance with specified <i>strict</i>
@@ -83,10 +81,9 @@ public abstract class AbstractNumberValidator extends AbstractFormatValidator<St
      * @param allowFractions <code>true</code> if fractions are
      *                       allowed or <code>false</code> if integers only.
      */
-    public AbstractNumberValidator(boolean strict, int formatType, boolean allowFractions) {
-        super(strict);
-        this.allowFractions = allowFractions;
-        this.formatType = formatType;
+    public AbstractNumberValidator(final AbstractNumberProcessor processor) {
+        ValidationUtils.notNull(processor, "Processor should not be null");
+        this.processor = processor;
     }
 
     /**
@@ -100,8 +97,7 @@ public abstract class AbstractNumberValidator extends AbstractFormatValidator<St
      */
     @Override
     public boolean validate(final String value, final String pattern, final Locale locale) {
-        final Object parsedValue = this.parse(value, pattern, locale);
-        return (Objects.isNull(parsedValue) ? false : true);
+        return Objects.nonNull(this.getProcessor().process(value, pattern, locale));
     }
 
     /**
@@ -114,7 +110,7 @@ public abstract class AbstractNumberValidator extends AbstractFormatValidator<St
      * specified range.
      */
     public boolean isInRange(final Number value, final Number min, final Number max) {
-        return (minValue(value, min) && maxValue(value, max));
+        return (this.minValue(value, min) && this.maxValue(value, max));
     }
 
     /**
@@ -126,7 +122,10 @@ public abstract class AbstractNumberValidator extends AbstractFormatValidator<St
      * or equal to the minimum.
      */
     public boolean minValue(final Number value, final Number min) {
-        if (isAllowFractions()) {
+        ValidationUtils.notNull(value, "Value should not be null");
+        ValidationUtils.notNull(min, "Min value should not be null");
+
+        if (this.getProcessor().isAllowFractions()) {
             return (value.doubleValue() >= min.doubleValue());
         }
         return (value.longValue() >= min.longValue());
@@ -141,127 +140,12 @@ public abstract class AbstractNumberValidator extends AbstractFormatValidator<St
      * or equal to the maximum.
      */
     public boolean maxValue(final Number value, final Number max) {
-        if (isAllowFractions()) {
+        ValidationUtils.notNull(value, "Value should not be null");
+        ValidationUtils.notNull(max, "Max value should not be null");
+
+        if (this.getProcessor().isAllowFractions()) {
             return (value.doubleValue() <= max.doubleValue());
         }
         return (value.longValue() <= max.longValue());
-    }
-
-    /**
-     * <p>Parse the value using the specified pattern.</p>
-     *
-     * @param value   The value validation is being performed on.
-     * @param pattern The pattern used to validate the value against, or the
-     *                default for the <code>Locale</code> if <code>null</code>.
-     * @param locale  The locale to use for the date format, system default if null.
-     * @return The parsed value if valid or <code>null</code> if invalid.
-     */
-    protected Object parse(final String value, final String pattern, final Locale locale) {
-        String newValue = (Objects.isNull(value) ? null : value.trim());
-        if (StringUtils.isBlank(newValue)) {
-            return null;
-        }
-        final Format formatter = getFormat(pattern, locale);
-        return parse(value, formatter);
-    }
-
-    /**
-     * <p>Process the parsed value, performing any further validation
-     * and type conversion required.</p>
-     *
-     * @param value     The parsed object created.
-     * @param formatter The Format used to parse the value with.
-     * @return The parsed value converted to the appropriate type
-     * if valid or <code>null</code> if invalid.
-     */
-    @Override
-    protected abstract Object processParsedValue(final Object value, Format formatter);
-
-    /**
-     * <p>Returns a <code>NumberFormat</code> for the specified <i>pattern</i>
-     * and/or <code>Locale</code>.</p>
-     *
-     * @param pattern The pattern used to validate the value against or
-     *                <code>null</code> to use the default for the <code>Locale</code>.
-     * @param locale  The locale to use for the currency format, system default if null.
-     * @return The <code>NumberFormat</code> to created.
-     */
-    @Override
-    protected Format getFormat(final String pattern, final Locale locale) {
-        NumberFormat formatter = null;
-        boolean usePattern = (pattern != null && pattern.length() > 0);
-        if (!usePattern) {
-            formatter = (NumberFormat) getFormat(locale);
-        } else if (locale == null) {
-            formatter = new DecimalFormat(pattern);
-        } else {
-            final DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
-            formatter = new DecimalFormat(pattern, symbols);
-        }
-
-        if (determineScale(formatter) == 0) {
-            formatter.setParseIntegerOnly(true);
-        }
-        return formatter;
-    }
-
-    /**
-     * <p>Returns the <i>multiplier</i> of the <code>NumberFormat</code>.</p>
-     *
-     * @param format The <code>NumberFormat</code> to determine the
-     *               multiplier of.
-     * @return The multiplying factor for the format..
-     */
-    protected int determineScale(final NumberFormat format) {
-        if (!isStrict()) {
-            return -1;
-        }
-        if (!isAllowFractions() || format.isParseIntegerOnly()) {
-            return 0;
-        }
-        int minimumFraction = format.getMinimumFractionDigits();
-        int maximumFraction = format.getMaximumFractionDigits();
-        if (minimumFraction != maximumFraction) {
-            return -1;
-        }
-        int scale = minimumFraction;
-        if (format instanceof DecimalFormat) {
-            int multiplier = ((DecimalFormat) format).getMultiplier();
-            if (multiplier == 100) {
-                scale += 2;
-            } else if (multiplier == 1000) {
-                scale += 3;
-            }
-        } else if (formatType == PERCENT_FORMAT) {
-            scale += 2;
-        }
-        return scale;
-    }
-
-    /**
-     * <p>Returns a <code>NumberFormat</code> for the specified Locale.</p>
-     *
-     * @param locale The locale a <code>NumberFormat</code> is required for,
-     *               system default if null.
-     * @return The <code>NumberFormat</code> to created.
-     */
-    protected Format getFormat(final Locale locale) {
-        switch (this.formatType) {
-            case CURRENCY_FORMAT:
-                if (Objects.isNull(locale)) {
-                    return NumberFormat.getCurrencyInstance();
-                }
-                return NumberFormat.getCurrencyInstance(locale);
-            case PERCENT_FORMAT:
-                if (Objects.isNull(locale)) {
-                    return NumberFormat.getPercentInstance();
-                }
-                return NumberFormat.getPercentInstance(locale);
-            default:
-                if (Objects.isNull(locale)) {
-                    return NumberFormat.getInstance();
-                }
-                return NumberFormat.getInstance(locale);
-        }
     }
 }

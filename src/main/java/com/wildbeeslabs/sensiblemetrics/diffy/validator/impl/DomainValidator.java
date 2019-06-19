@@ -1,3 +1,26 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
@@ -141,10 +164,6 @@ public class DomainValidator implements Validator<String> {
             return false;
         }
         final String newDomain = unicodeToASCII(domain);
-        // hosts must be equally reachable via punycode and Unicode;
-        // Unicode is never shorter than punycode, so check punycode
-        // if domain did not convert, then it will be caught by ASCII
-        // checks in the regexes below
         if (newDomain.length() > MAX_DOMAIN_LENGTH) {
             return false;
         }
@@ -162,10 +181,6 @@ public class DomainValidator implements Validator<String> {
             return false;
         }
         final String newDomain = unicodeToASCII(domain);
-        // hosts must be equally reachable via punycode and Unicode;
-        // Unicode is never shorter than punycode, so check punycode
-        // if domain did not convert, then it will be caught by ASCII
-        // checks in the regexes below
         if (newDomain.length() > MAX_DOMAIN_LENGTH) {
             return false;
         }
@@ -186,7 +201,7 @@ public class DomainValidator implements Validator<String> {
         if (this.allowLocal && isValidLocalTld(newTld)) {
             return true;
         }
-        return isValidInfrastructureTld(newTld) || isValidGenericTld(newTld) || isValidCountryCodeTld(newTld);
+        return this.isValidInfrastructureTld(newTld) || this.isValidGenericTld(newTld) || this.isValidCountryCodeTld(newTld);
     }
 
     /**
@@ -198,7 +213,7 @@ public class DomainValidator implements Validator<String> {
      * @return true if the parameter is an infrastructure TLD
      */
     public boolean isValidInfrastructureTld(final String iTld) {
-        final String key = chompLeadingDot(unicodeToASCII(iTld).toLowerCase(Locale.ENGLISH));
+        final String key = this.chompLeadingDot(unicodeToASCII(iTld).toLowerCase(Locale.ENGLISH));
         return arrayContains(INFRASTRUCTURE_TLDS, key);
     }
 
@@ -211,7 +226,7 @@ public class DomainValidator implements Validator<String> {
      * @return true if the parameter is a generic TLD
      */
     public boolean isValidGenericTld(final String gTld) {
-        final String key = chompLeadingDot(unicodeToASCII(gTld).toLowerCase(Locale.ENGLISH));
+        final String key = this.chompLeadingDot(unicodeToASCII(gTld).toLowerCase(Locale.ENGLISH));
         return (arrayContains(GENERIC_TLDS, key) || arrayContains(genericTLDsPlus, key)) && !arrayContains(genericTLDsMinus, key);
     }
 
@@ -224,7 +239,7 @@ public class DomainValidator implements Validator<String> {
      * @return true if the parameter is a country code TLD
      */
     public boolean isValidCountryCodeTld(final String ccTld) {
-        final String key = chompLeadingDot(unicodeToASCII(ccTld).toLowerCase(Locale.ENGLISH));
+        final String key = this.chompLeadingDot(unicodeToASCII(ccTld).toLowerCase(Locale.ENGLISH));
         return (arrayContains(COUNTRY_CODE_TLDS, key) || arrayContains(countryCodeTLDsPlus, key)) && !arrayContains(countryCodeTLDsMinus, key);
     }
 
@@ -237,7 +252,7 @@ public class DomainValidator implements Validator<String> {
      * @return true if the parameter is an local TLD
      */
     public boolean isValidLocalTld(final String lTld) {
-        final String key = chompLeadingDot(unicodeToASCII(lTld).toLowerCase(Locale.ENGLISH));
+        final String key = this.chompLeadingDot(unicodeToASCII(lTld).toLowerCase(Locale.ENGLISH));
         return arrayContains(LOCAL_TLDS, key);
     }
 
@@ -2003,7 +2018,7 @@ public class DomainValidator implements Validator<String> {
      */
     // Needed by UrlValidator
     public static String unicodeToASCII(final String input) {
-        if (isOnlyASCII(input)) { // skip possibly expensive processing
+        if (isOnlyASCII(input)) {
             return input;
         }
         try {
@@ -2012,7 +2027,7 @@ public class DomainValidator implements Validator<String> {
                 return ascii;
             }
             final int length = input.length();
-            if (length == 0) {// check there is a last character
+            if (length == 0) {
                 return input;
             }
             // RFC3490 3.1. 1)
@@ -2037,7 +2052,7 @@ public class DomainValidator implements Validator<String> {
 
     private static class IDNBUGHOLDER {
         private static boolean keepsTrailingDot() {
-            final String input = "a."; // must be a valid name
+            final String input = "a.";
             return input.equals(IDN.toASCII(input));
         }
 

@@ -1,8 +1,31 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.CalendarProcessor;
+
 import java.text.DateFormat;
-import java.text.Format;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -108,7 +131,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      * @param dateStyle the date style to use for Locale validation.
      */
     public CalendarValidator(boolean strict, int dateStyle) {
-        super(strict, dateStyle, -1);
+        super(new CalendarProcessor(strict, dateStyle));
     }
 
     /**
@@ -121,7 +144,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      */
     @Override
     public boolean validate(final String value) {
-        return Objects.nonNull(this.parse(value, null, null, null));
+        return Objects.nonNull(this.getProcessor().processOrThrow(value));
     }
 
     /**
@@ -134,7 +157,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      * if invalid.
      */
     public boolean validate(final String value, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, null, null, timeZone));
+        return Objects.nonNull(this.getProcessor().process(value, timeZone));
     }
 
     /**
@@ -147,7 +170,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      */
     @Override
     public boolean validate(final String value, final String pattern) {
-        return Objects.nonNull(this.parse(value, pattern, null, null));
+        return Objects.nonNull(this.getProcessor().process(value, pattern));
     }
 
     /**
@@ -160,7 +183,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
     public boolean validate(final String value, final String pattern, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, pattern, null, timeZone));
+        return Objects.nonNull(this.getProcessor().process(value, pattern, timeZone));
     }
 
     /**
@@ -173,7 +196,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      */
     @Override
     public boolean validate(final String value, final Locale locale) {
-        return Objects.nonNull(this.parse(value, null, locale, null));
+        return Objects.nonNull(this.getProcessor().process(value, locale));
     }
 
     /**
@@ -186,7 +209,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
     public boolean validate(final String value, final Locale locale, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, null, locale, timeZone));
+        return Objects.nonNull(this.getProcessor().process(value, locale, timeZone));
     }
 
     /**
@@ -201,7 +224,7 @@ public class CalendarValidator extends AbstractCalendarValidator {
      */
     @Override
     public boolean validate(final String value, final String pattern, final Locale locale) {
-        return Objects.nonNull(this.parse(value, pattern, locale, null));
+        return Objects.nonNull(this.getProcessor().process(value, pattern, locale));
     }
 
     /**
@@ -216,118 +239,6 @@ public class CalendarValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
     public boolean validate(final String value, final String pattern, final Locale locale, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, pattern, locale, timeZone));
-    }
-
-    /**
-     * <p>Adjusts a Calendar's value to a different TimeZone.</p>
-     *
-     * @param value    The value to adjust.
-     * @param timeZone The new time zone to use to adjust the Calendar to.
-     */
-    public static void adjustToTimeZone(final Calendar value, final TimeZone timeZone) {
-        if (value.getTimeZone().hasSameRules(timeZone)) {
-            value.setTimeZone(timeZone);
-        } else {
-            int year = value.get(Calendar.YEAR);
-            int month = value.get(Calendar.MONTH);
-            int date = value.get(Calendar.DATE);
-            int hour = value.get(Calendar.HOUR_OF_DAY);
-            int minute = value.get(Calendar.MINUTE);
-            value.setTimeZone(timeZone);
-            value.set(year, month, date, hour, minute);
-        }
-    }
-
-    /**
-     * <p>Compare Dates (day, month and year - not time).</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the dates are equal, -1 if first
-     * date is less than the seconds and +1 if the first
-     * date is greater than.
-     */
-    public int compareDates(final Calendar value, final Calendar compare) {
-        return this.compare(value, compare, Calendar.DATE);
-    }
-
-    /**
-     * <p>Compare Weeks (week and year).</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the weeks are equal, -1 if first
-     * parameter's week is less than the seconds and +1 if the first
-     * parameter's week is greater than.
-     */
-    public int compareWeeks(final Calendar value, final Calendar compare) {
-        return this.compare(value, compare, Calendar.WEEK_OF_YEAR);
-    }
-
-    /**
-     * <p>Compare Months (month and year).</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the months are equal, -1 if first
-     * parameter's month is less than the seconds and +1 if the first
-     * parameter's month is greater than.
-     */
-    public int compareMonths(final Calendar value, final Calendar compare) {
-        return this.compare(value, compare, Calendar.MONTH);
-    }
-
-    /**
-     * <p>Compare Quarters (quarter and year).</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to check the value against.
-     * @return Zero if the quarters are equal, -1 if first
-     * parameter's quarter is less than the seconds and +1 if the first
-     * parameter's quarter is greater than.
-     */
-    public int compareQuarters(final Calendar value, final Calendar compare) {
-        return this.compareQuarters(value, compare, 1);
-    }
-
-    /**
-     * <p>Compare Quarters (quarter and year).</p>
-     *
-     * @param value               The <code>Calendar</code> value to check.
-     * @param compare             The <code>Calendar</code> to compare the value to.
-     * @param monthOfFirstQuarter The  month that the first quarter starts.
-     * @return Zero if the quarters are equal, -1 if first
-     * parameter's quarter is less than the seconds and +1 if the first
-     * parameter's quarter is greater than.
-     */
-    @Override
-    public int compareQuarters(final Calendar value, final Calendar compare, int monthOfFirstQuarter) {
-        return super.compareQuarters(value, compare, monthOfFirstQuarter);
-    }
-
-    /**
-     * <p>Compare Years.</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the years are equal, -1 if first
-     * parameter's year is less than the seconds and +1 if the first
-     * parameter's year is greater than.
-     */
-    public int compareYears(final Calendar value, final Calendar compare) {
-        return this.compare(value, compare, Calendar.YEAR);
-    }
-
-    /**
-     * <p>Convert the parsed <code>Date</code> to a <code>Calendar</code>.</p>
-     *
-     * @param value     The parsed <code>Date</code> object created.
-     * @param formatter The Format used to parse the value with.
-     * @return The parsed value converted to a <code>Calendar</code>.
-     */
-    @Override
-    protected Object processParsedValue(final Object value, final Format formatter) {
-        return ((DateFormat) formatter).getCalendar();
+        return Objects.nonNull(this.getProcessor().process(value, pattern, locale, timeZone));
     }
 }

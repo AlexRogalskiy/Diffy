@@ -23,14 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.TimeProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.text.DateFormat;
-import java.text.Format;
-import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -79,7 +78,7 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @param timeStyle the time style to use for Locale validation.
      */
     public TimeValidator(boolean strict, int timeStyle) {
-        super(strict, -1, timeStyle);
+        super(new TimeProcessor(strict, timeStyle));
     }
 
     /**
@@ -92,7 +91,7 @@ public class TimeValidator extends AbstractCalendarValidator {
      */
     @Override
     public boolean validate(final String value) {
-        return Objects.nonNull(this.parse(value, null, null, null));
+        return Objects.nonNull(this.getProcessor().processOrThrow(value));
     }
 
     /**
@@ -104,7 +103,7 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
     public boolean validate(final String value, TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, null, null, timeZone));
+        return Objects.nonNull(this.getProcessor().process(value, timeZone));
     }
 
     /**
@@ -115,8 +114,9 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @param pattern The pattern used to validate the value against.
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final String pattern) {
-        return Objects.nonNull(this.parse(value, pattern, null, null));
+        return Objects.nonNull(this.getProcessor().process(value, pattern));
     }
 
     /**
@@ -129,7 +129,7 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
     public boolean validate(final String value, final String pattern, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, pattern, null, timeZone));
+        return Objects.nonNull(this.getProcessor().process(value, pattern, timeZone));
     }
 
     /**
@@ -140,8 +140,9 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @param locale The locale to use for the time format, system default if null.
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final Locale locale) {
-        return Objects.nonNull(this.parse(value, null, locale, null));
+        return Objects.nonNull(this.getProcessor().process(value, locale));
     }
 
     /**
@@ -154,7 +155,7 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
     public boolean validate(final String value, final Locale locale, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, null, locale, timeZone));
+        return Objects.nonNull(this.getProcessor().process(value, locale, timeZone));
     }
 
     /**
@@ -167,8 +168,9 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @param locale  The locale to use for the date format, system default if null.
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final String pattern, final Locale locale) {
-        return Objects.nonNull(this.parse(value, pattern, locale, null));
+        return Objects.nonNull(this.getProcessor().process(value, pattern, locale));
     }
 
     /**
@@ -183,70 +185,6 @@ public class TimeValidator extends AbstractCalendarValidator {
      * @return The parsed <code>Calendar</code> if valid or <code>null</code> if invalid.
      */
     public boolean validate(final String value, final String pattern, final Locale locale, final TimeZone timeZone) {
-        return Objects.nonNull(this.parse(value, pattern, locale, timeZone));
-    }
-
-    /**
-     * <p>Compare Times (hour, minute, second and millisecond - not date).</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the hours are equal, -1 if first
-     * time is less than the seconds and +1 if the first
-     * time is greater than.
-     */
-    public int compareTime(final Calendar value, final Calendar compare) {
-        return this.compareTime(value, compare, Calendar.MILLISECOND);
-    }
-
-    /**
-     * <p>Compare Seconds (hours, minutes and seconds).</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the hours are equal, -1 if first
-     * parameter's seconds are less than the seconds and +1 if the first
-     * parameter's seconds are greater than.
-     */
-    public int compareSeconds(final Calendar value, final Calendar compare) {
-        return this.compareTime(value, compare, Calendar.SECOND);
-    }
-
-    /**
-     * <p>Compare Minutes (hours and minutes).</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the hours are equal, -1 if first
-     * parameter's minutes are less than the seconds and +1 if the first
-     * parameter's minutes are greater than.
-     */
-    public int compareMinutes(final Calendar value, final Calendar compare) {
-        return this.compareTime(value, compare, Calendar.MINUTE);
-    }
-
-    /**
-     * <p>Compare Hours.</p>
-     *
-     * @param value   The <code>Calendar</code> value to check.
-     * @param compare The <code>Calendar</code> to compare the value to.
-     * @return Zero if the hours are equal, -1 if first
-     * parameter's hour is less than the seconds and +1 if the first
-     * parameter's hour is greater than.
-     */
-    public int compareHours(final Calendar value, final Calendar compare) {
-        return this.compareTime(value, compare, Calendar.HOUR_OF_DAY);
-    }
-
-    /**
-     * <p>Convert the parsed <code>Date</code> to a <code>Calendar</code>.</p>
-     *
-     * @param value     The parsed <code>Date</code> object created.
-     * @param formatter The Format used to parse the value with.
-     * @return The parsed value converted to a <code>Calendar</code>.
-     */
-    @Override
-    protected Object processParsedValue(final Object value, final Format formatter) {
-        return ((DateFormat) formatter).getCalendar();
+        return Objects.nonNull(this.getProcessor().process(value, pattern, locale, timeZone));
     }
 }

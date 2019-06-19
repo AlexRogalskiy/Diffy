@@ -24,8 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
-import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -76,8 +76,9 @@ public class DoubleValidator2 implements Validator<Double> {
      * @return double delta
      */
     @Contract(pure = true)
-    private double actualDelta(@NonNull final Double item) {
-        return (Math.abs((item - value)) - delta);
+    private double actualDelta(final Double item) {
+        ValidationUtils.notNull(item, "Item should not be null");
+        return (Math.abs((item - this.value)) - this.delta);
     }
 
     /**

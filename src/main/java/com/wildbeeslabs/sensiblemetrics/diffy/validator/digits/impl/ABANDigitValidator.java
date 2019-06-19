@@ -1,6 +1,30 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.ABANDigitProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -43,40 +67,28 @@ import lombok.ToString;
 public final class ABANDigitValidator extends BaseDigitValidator {
 
     /**
-     * Singleton Routing Transit Number Check Digit instance
+     * Default explicit serialVersionUID for interoperability
      */
-    public static final DigitProcessorValidator ABAN_CHECK_DIGIT = new ABANDigitValidator();
+    private static final long serialVersionUID = -3953211137849942756L;
 
     /**
-     * weighting given to digits depending on their right position
+     * Singleton ABAN Check Digit instance
      */
-    private static final int[] POSITION_WEIGHT = new int[]{3, 1, 7};
+    private static final DigitValidator ABAN_CHECK_DIGIT = new ABANDigitValidator();
 
     /**
      * Construct a modulus 10 Check Digit routine for ABA Numbers.
      */
     public ABANDigitValidator() {
-        super(10);
+        super(new ABANDigitProcessor());
     }
 
     /**
-     * Calculates the <i>weighted</i> value of a character in the
-     * code at a specified position.
-     * <p>
-     * ABA Routing numbers are weighted in the following manner:
-     * <pre><code>
-     *     left position: 1  2  3  4  5  6  7  8  9
-     *            weight: 3  7  1  3  7  1  3  7  1
-     * </code></pre>
+     * Returns {@link DigitValidator} instance
      *
-     * @param charValue The numeric value of the character.
-     * @param leftPos   The position of the character in the code, counting from left to right
-     * @param rightPos  The positionof the character in the code, counting from right to left
-     * @return The weighted value of the character.
+     * @return {@link DigitValidator} instance
      */
-    @Override
-    protected int weightedValue(int charValue, int leftPos, int rightPos) {
-        int weight = POSITION_WEIGHT[rightPos % 3];
-        return charValue * weight;
+    public static DigitValidator getInstance() {
+        return ABAN_CHECK_DIGIT;
     }
 }

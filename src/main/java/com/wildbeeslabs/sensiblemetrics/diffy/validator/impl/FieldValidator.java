@@ -26,6 +26,8 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
+import java.util.Objects;
+
 /**
  * Field name {@link Validator} implementation
  *
@@ -50,7 +52,7 @@ public class FieldValidator<T> implements Validator<T> {
      */
     @Override
     public boolean validate(final T value) {
-        return true;
+        return Objects.equals(value, this.value);
     }
 
     /**

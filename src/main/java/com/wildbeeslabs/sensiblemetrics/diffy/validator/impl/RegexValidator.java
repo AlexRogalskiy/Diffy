@@ -1,10 +1,32 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.GenericProcessorValidator;
-import org.apache.commons.validator.ValidatorException;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.RegexProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -54,9 +76,12 @@ import java.util.regex.Pattern;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
-public class RegexValidator implements GenericProcessorValidator<String, String, ValidatorException> {
+public class RegexValidator implements Validator<String> {
 
-    private final Pattern[] patterns;
+    /**
+     * Default {@link RegexProcessor} instance
+     */
+    private final RegexProcessor processor;
 
     /**
      * Construct a <i>case sensitive</i> validator for a single
@@ -86,34 +111,24 @@ public class RegexValidator implements GenericProcessorValidator<String, String,
      * Construct a <i>case sensitive</i> validator that matches any one
      * of the set of regular expressions.
      *
-     * @param regexs The set of regular expressions this validator will
-     *               validate against
+     * @param regexes The set of regular expressions this validator will
+     *                validate against
      */
-    public RegexValidator(final String[] regexs) {
-        this(regexs, true);
+    public RegexValidator(final String[] regexes) {
+        this(regexes, true);
     }
 
     /**
      * Construct a validator that matches any one of the set of regular
      * expressions with the specified case sensitivity.
      *
-     * @param regexs        The set of regular expressions this validator will
+     * @param regexes       The set of regular expressions this validator will
      *                      validate against
      * @param caseSensitive when <code>true</code> matching is <i>case
      *                      sensitive</i>, otherwise matching is <i>case in-sensitive</i>
      */
-    public RegexValidator(final String[] regexs, boolean caseSensitive) {
-        if (Objects.isNull(regexs) || regexs.length == 0) {
-            throw new IllegalArgumentException("Regular expressions are missing");
-        }
-        this.patterns = new Pattern[regexs.length];
-        int flags = (caseSensitive ? 0 : Pattern.CASE_INSENSITIVE);
-        for (int i = 0; i < regexs.length; i++) {
-            if (Objects.isNull(regexs[i]) || regexs[i].length() == 0) {
-                throw new IllegalArgumentException("Regular expression[" + i + "] is missing");
-            }
-            this.patterns[i] = Pattern.compile(regexs[i], flags);
-        }
+    public RegexValidator(final String[] regexes, boolean caseSensitive) {
+        this.processor = new RegexProcessor(regexes, caseSensitive);
     }
 
     /**
@@ -125,15 +140,7 @@ public class RegexValidator implements GenericProcessorValidator<String, String,
      */
     @Override
     public boolean validate(final String value) {
-        if (Objects.isNull(value)) {
-            return false;
-        }
-        for (int i = 0; i < this.patterns.length; i++) {
-            if (this.patterns[i].matcher(value).matches()) {
-                return true;
-            }
-        }
-        return false;
+        return Objects.nonNull(this.processor.processOrThrow(value));
     }
 
     /**
@@ -145,72 +152,6 @@ public class RegexValidator implements GenericProcessorValidator<String, String,
      * valid or <code>null</code> if invalid
      */
     public String[] match(final String value) {
-        if (Objects.isNull(value)) {
-            return null;
-        }
-        for (int i = 0; i < this.patterns.length; i++) {
-            final Matcher matcher = this.patterns[i].matcher(value);
-            if (matcher.matches()) {
-                int count = matcher.groupCount();
-                String[] groups = new String[count];
-                for (int j = 0; j < count; j++) {
-                    groups[j] = matcher.group(j + 1);
-                }
-                return groups;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Validate a value against the set of regular expressions
-     * returning a String value of the aggregated groups.
-     *
-     * @param value The value to validate.
-     * @return Aggregated String value comprised of the
-     * <i>groups</i> matched if valid or <code>null</code> if invalid
-     */
-    @Override
-    public String processOrThrow(final String value) {
-        if (Objects.isNull(value)) {
-            return null;
-        }
-        for (int i = 0; i < this.patterns.length; i++) {
-            final Matcher matcher = this.patterns[i].matcher(value);
-            if (matcher.matches()) {
-                int count = matcher.groupCount();
-                if (count == 1) {
-                    return matcher.group(1);
-                }
-                final StringBuilder buffer = new StringBuilder();
-                for (int j = 0; j < count; j++) {
-                    final String component = matcher.group(j + 1);
-                    if (Objects.nonNull(component)) {
-                        buffer.append(component);
-                    }
-                }
-                return buffer.toString();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Provide a String representation of this validator.
-     *
-     * @return A String representation of this validator
-     */
-    @Override
-    public String toString() {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("RegexValidator{");
-        for (int i = 0; i < this.patterns.length; i++) {
-            if (i > 0) {
-                buffer.append(",");
-            }
-            buffer.append(patterns[i].pattern());
-        }
-        buffer.append("}");
-        return buffer.toString();
+        return this.processor.match(value);
     }
 }

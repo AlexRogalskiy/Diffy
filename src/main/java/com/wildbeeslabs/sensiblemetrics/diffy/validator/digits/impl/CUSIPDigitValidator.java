@@ -1,7 +1,30 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.CUSIPDigitProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -15,59 +38,28 @@ import lombok.ToString;
 public final class CUSIPDigitValidator extends BaseDigitValidator {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 6103703717416546551L;
+
+    /**
      * Singleton CUSIP Check Digit instance
      */
-    public static final DigitProcessorValidator CUSIP_CHECK_DIGIT = new CUSIPDigitValidator();
+    private static final DigitValidator CUSIP_CHECK_DIGIT = new CUSIPDigitValidator();
 
     /**
-     * weighting given to digits depending on their right position
-     */
-    private static final int[] POSITION_WEIGHT = new int[]{2, 1};
-
-    /**
-     * Construct an CUSIP Indetifier Check Digit routine.
+     * Construct an CUSIP identifier Check Digit routine.
      */
     public CUSIPDigitValidator() {
-        super(10);
+        super(new CUSIPDigitProcessor());
     }
 
     /**
-     * Convert a character at a specified position to an integer value.
+     * Returns {@link DigitValidator} instance
      *
-     * @param character The character to convert
-     * @param leftPos   The position of the character in the code, counting from left to right
-     * @param rightPos  The position of the character in the code, counting from right to left
-     * @return The integer value of the character
-     * @throws InvalidParameterException if character is not alphanumeric
+     * @return {@link DigitValidator} instance
      */
-    @Override
-    protected int toInt(char character, int leftPos, int rightPos) throws InvalidParameterException {
-        int charValue = Character.getNumericValue(character);
-        // the final character is only allowed to reach 9
-        final int charMax = rightPos == 1 ? 9 : 35;  // CHECKSTYLE IGNORE MagicNumber
-        if (charValue < 0 || charValue > charMax) {
-            throw new InvalidParameterException("Invalid Character[" + leftPos + "," + rightPos + "] = '" + charValue + "' out of range 0 to " + charMax);
-        }
-        return charValue;
-    }
-
-    /**
-     * <p>Calculates the <i>weighted</i> value of a charcter in the
-     * code at a specified position.</p>
-     *
-     * <p>For CUSIP (from right to left) <b>odd</b> digits are weighted
-     * with a factor of <b>one</b> and <b>even</b> digits with a factor
-     * of <b>two</b>. Weighted values &gt; 9, have 9 subtracted</p>
-     *
-     * @param charValue The numeric value of the character.
-     * @param leftPos   The position of the character in the code, counting from left to right
-     * @param rightPos  The positionof the character in the code, counting from right to left
-     * @return The weighted value of the character.
-     */
-    @Override
-    protected int weightedValue(int charValue, int leftPos, int rightPos) {
-        int weight = POSITION_WEIGHT[rightPos % 2];
-        int weightedValue = (charValue * weight);
-        return sumDigits(weightedValue);
+    public static DigitValidator getInstance() {
+        return CUSIP_CHECK_DIGIT;
     }
 }

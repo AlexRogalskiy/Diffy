@@ -1,13 +1,35 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.CreditCardProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.RegexProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.LuhnDigitValidator;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.GenericProcessorValidator;
-import org.apache.commons.validator.ValidatorException;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -67,7 +89,7 @@ import java.util.Objects;
  * @version $Revision: 1782740 $
  * @since Validator 1.4
  */
-public class CreditCardValidator implements GenericProcessorValidator<String, Object, ValidatorException> {
+public class CreditCardValidator implements Validator<String> {
 
     /**
      * Default min credit card length
@@ -78,68 +100,6 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      * Default max credit card length
      */
     private static final int MAX_CC_LENGTH = 19; // maximum allowed length
-
-    /**
-     * Class that represents a credit card range.
-     *
-     * @since 1.6
-     */
-    public static class CreditCardRange {
-        final String low; // e.g. 34 or 644
-        final String high; // e.g. 34 or 65
-        final int minLen; // e.g. 16 or -1
-        final int maxLen; // e.g. 19 or -1
-        final int lengths[]; // e.g. 16,18,19
-
-        /**
-         * Create a credit card range specifier for use in validation
-         * of the number syntax including the IIN range.
-         * <p>
-         * The low and high parameters may be shorter than the length
-         * of an IIN (currently 6 digits) in which case subsequent digits
-         * are ignored and may range from 0-9.
-         * <br>
-         * The low and high parameters may be different lengths.
-         * e.g. Discover "644" and "65".
-         * </p>
-         *
-         * @param low    the low digits of the IIN range
-         * @param high   the high digits of the IIN range
-         * @param minLen the minimum length of the entire number
-         * @param maxLen the maximum length of the entire number
-         */
-        public CreditCardRange(final String low, final String high, int minLen, int maxLen) {
-            this.low = low;
-            this.high = high;
-            this.minLen = minLen;
-            this.maxLen = maxLen;
-            this.lengths = null;
-        }
-
-        /**
-         * Create a credit card range specifier for use in validation
-         * of the number syntax including the IIN range.
-         * <p>
-         * The low and high parameters may be shorter than the length
-         * of an IIN (currently 6 digits) in which case subsequent digits
-         * are ignored and may range from 0-9.
-         * <br>
-         * The low and high parameters may be different lengths.
-         * e.g. Discover "644" and "65".
-         * </p>
-         *
-         * @param low     the low digits of the IIN range
-         * @param high    the high digits of the IIN range
-         * @param lengths array of valid lengths
-         */
-        public CreditCardRange(final String low, final String high, final int[] lengths) {
-            this.low = low;
-            this.high = high;
-            this.minLen = -1;
-            this.maxLen = -1;
-            this.lengths = lengths.clone();
-        }
-    }
 
     /**
      * Option specifying that no cards are allowed.  This is useful if
@@ -174,34 +134,29 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
     /**
      * Option specifying that Discover cards are allowed.
      */
-    public static final long DISCOVER = 1 << 3; // CHECKSTYLE IGNORE MagicNumber
+    public static final long DISCOVER = 1 << 3;
 
     /**
      * Option specifying that Diners cards are allowed.
      */
-    public static final long DINERS = 1 << 4; // CHECKSTYLE IGNORE MagicNumber
+    public static final long DINERS = 1 << 4;
 
     /**
      * Option specifying that VPay (Visa) cards are allowed.
      *
      * @since 1.5.0
      */
-    public static final long VPAY = 1 << 5; // CHECKSTYLE IGNORE MagicNumber
+    public static final long VPAY = 1 << 5;
 
     /**
      * Option specifying that Mastercard cards (pre Oct 2016 only) are allowed.
      */
-    public static final long MASTERCARD_PRE_OCT2016 = 1 << 6; // CHECKSTYLE IGNORE MagicNumber
-
-    /**
-     * The CreditCardTypes that are allowed to pass validation.
-     */
-    private final List<CodeValidator> cardTypes = new ArrayList<CodeValidator>();
+    public static final long MASTERCARD_PRE_OCT2016 = 1 << 6;
 
     /**
      * Luhn checkdigit validator for the card numbers.
      */
-    private static final DigitProcessorValidator LUHN_VALIDATOR = LuhnDigitValidator.LUHN_CHECK_DIGIT;
+    public static final DigitValidator LUHN_VALIDATOR = LuhnDigitValidator.getInstance();
 
     /**
      * American Express (Amex) Card Validator
@@ -228,7 +183,7 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      * 6011xx (16) <br>
      * 644xxx - 65xxxx (16) <br>
      */
-    private static final RegexValidator DISCOVER_REGEX = new RegexValidator(new String[]{"^(6011\\d{12})$", "^(64[4-9]\\d{13})$", "^(65\\d{14})$"});
+    private static final RegexProcessor DISCOVER_REGEX = new RegexProcessor(new String[]{"^(6011\\d{12})$", "^(64[4-9]\\d{13})$", "^(65\\d{14})$"});
 
     /**
      * Discover Card Validator
@@ -241,7 +196,7 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      * 2221xx - 2720xx (16) <br>
      * 51xxx - 55xxx (16) <br>
      */
-    private static final RegexValidator MASTERCARD_REGEX = new RegexValidator(
+    private static final RegexProcessor MASTERCARD_PROCESSOR = new RegexProcessor(
         new String[]{
             "^(5[1-5]\\d{14})$",  // 51 - 55 (pre Oct 2016)
             // valid from October 2016
@@ -256,14 +211,11 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
     /**
      * Mastercard Card Validator
      */
-    public static final CodeValidator MASTERCARD_VALIDATOR = new CodeValidator(MASTERCARD_REGEX, LUHN_VALIDATOR);
+    public static final CodeValidator MASTERCARD_VALIDATOR = new CodeValidator(MASTERCARD_PROCESSOR, LUHN_VALIDATOR);
 
     /**
      * Mastercard Card Validator (pre Oct 2016)
-     *
-     * @deprecated for use until Oct 2016 only
      */
-    @Deprecated
     public static final CodeValidator MASTERCARD_VALIDATOR_PRE_OCT2016 = new CodeValidator("^(5[1-5]\\d{14})$", LUHN_VALIDATOR);
 
     /**
@@ -283,12 +235,17 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
     public static final CodeValidator VPAY_VALIDATOR = new CodeValidator("^(4)(\\d{12,18})$", LUHN_VALIDATOR);
 
     /**
+     * Default {@link CreditCardProcessor} instance
+     */
+    private final CreditCardProcessor processor;
+
+    /**
      * Create a new CreditCardProcessor with default options.
      * The default options are:
      * AMEX, VISA, MASTERCARD and DISCOVER
      */
     public CreditCardValidator() {
-        this(AMEX + VISA + MASTERCARD + DISCOVER);
+        this.processor = new CreditCardProcessor();
     }
 
     /**
@@ -299,33 +256,7 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      *                those are the only valid card types.
      */
     public CreditCardValidator(long options) {
-        if (isOn(options, VISA)) {
-            this.cardTypes.add(VISA_VALIDATOR);
-        }
-
-        if (isOn(options, VPAY)) {
-            this.cardTypes.add(VPAY_VALIDATOR);
-        }
-
-        if (isOn(options, AMEX)) {
-            this.cardTypes.add(AMEX_VALIDATOR);
-        }
-
-        if (isOn(options, MASTERCARD)) {
-            this.cardTypes.add(MASTERCARD_VALIDATOR);
-        }
-
-        if (isOn(options, MASTERCARD_PRE_OCT2016)) {
-            this.cardTypes.add(MASTERCARD_VALIDATOR_PRE_OCT2016);
-        }
-
-        if (isOn(options, DISCOVER)) {
-            this.cardTypes.add(DISCOVER_VALIDATOR);
-        }
-
-        if (isOn(options, DINERS)) {
-            this.cardTypes.add(DINERS_VALIDATOR);
-        }
+        this.processor = new CreditCardProcessor(options);
     }
 
     /**
@@ -334,19 +265,16 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      * @param creditCardValidators Set of valid code validators
      */
     public CreditCardValidator(final CodeValidator[] creditCardValidators) {
-        Objects.requireNonNull(creditCardValidators, "Credit card validators should not be null");
-        Collections.addAll(cardTypes, creditCardValidators);
+        this.processor = new CreditCardProcessor(creditCardValidators);
     }
 
     /**
      * Create a new CreditCardProcessor with the specified {@link CreditCardRange}s.
      *
      * @param creditCardRanges Set of valid code validators
-     * @since 1.6
      */
-    public CreditCardValidator(final CreditCardRange[] creditCardRanges) {
-        Objects.requireNonNull(creditCardRanges, "Credit card ranges should not be null");
-        Collections.addAll(cardTypes, createRangeValidator(creditCardRanges, LUHN_VALIDATOR));
+    public CreditCardValidator(final CreditCardProcessor.CreditCardRange[] creditCardRanges) {
+        this.processor = new CreditCardProcessor(creditCardRanges);
     }
 
     /**
@@ -358,14 +286,9 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      *
      * @param creditCardValidators Set of valid code validators
      * @param creditCardRanges     Set of valid code validators
-     * @since 1.6
      */
-    public CreditCardValidator(CodeValidator[] creditCardValidators, CreditCardRange[] creditCardRanges) {
-        Objects.requireNonNull(creditCardValidators, "Credit card validator should not be null");
-        Objects.requireNonNull(creditCardRanges, "Credit card ranges should not be null");
-
-        Collections.addAll(this.cardTypes, creditCardValidators);
-        Collections.addAll(this.cardTypes, createRangeValidator(creditCardRanges, LUHN_VALIDATOR));
+    public CreditCardValidator(final CodeValidator[] creditCardValidators, final CreditCardProcessor.CreditCardRange[] creditCardRanges) {
+        this.processor = new CreditCardProcessor(creditCardValidators, creditCardRanges);
     }
 
     /**
@@ -375,8 +298,8 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      * @param minLen minimum allowed length
      * @param maxLen maximum allowed length
      * @return the validator
-     * @since 1.6
      */
+    @NonNull
     public static CreditCardValidator genericCreditCardValidator(int minLen, int maxLen) {
         return new CreditCardValidator(new CodeValidator[]{new CodeValidator("(\\d+)", minLen, maxLen, LUHN_VALIDATOR)});
     }
@@ -387,8 +310,8 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      *
      * @param length exact length
      * @return the validator
-     * @since 1.6
      */
+    @NonNull
     public static CreditCardValidator genericCreditCardValidator(int length) {
         return genericCreditCardValidator(length, length);
     }
@@ -398,8 +321,8 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      * Does not check the Issuer Identification Number (IIN)
      *
      * @return the validator
-     * @since 1.6
      */
+    @NonNull
     public static CreditCardValidator genericCreditCardValidator() {
         return genericCreditCardValidator(MIN_CC_LENGTH, MAX_CC_LENGTH);
     }
@@ -412,99 +335,51 @@ public class CreditCardValidator implements GenericProcessorValidator<String, Ob
      */
     @Override
     public boolean validate(final String card) {
-        if (Objects.isNull(card) || card.length() == 0) {
-            return false;
-        }
-        for (final CodeValidator cardType : this.cardTypes) {
-            if (cardType.validate(card)) {
-                return true;
-            }
-        }
-        return false;
+        return Objects.nonNull(this.processor.processOrThrow(card));
     }
 
-    /**
-     * Checks if the field is a valid credit card number.
-     *
-     * @param card The card number to validate.
-     * @return The card number if valid or <code>null</code>
-     * if invalid.
-     */
-    @Override
-    public Object processOrThrow(final String card) {
-        if (Objects.isNull(card) || card.length() == 0) {
-            return null;
-        }
-        Object result = null;
-        for (final CodeValidator cardType : this.cardTypes) {
-            result = cardType.validate(card);
-            if (result != null) {
-                return result;
-            }
-        }
-        return null;
-    }
-
-    // package protected for unit test access
-    public static boolean validLength(int valueLength, final CreditCardRange range) {
-        if (Objects.nonNull(range.lengths)) {
-            for (int length : range.lengths) {
+    public static boolean validLength(int valueLength, final CreditCardProcessor.CreditCardRange range) {
+        if (Objects.nonNull(range.getLengths())) {
+            for (final int length : range.getLengths()) {
                 if (valueLength == length) {
                     return true;
                 }
             }
             return false;
         }
-        return valueLength >= range.minLen && valueLength <= range.maxLen;
+        return valueLength >= range.getMinLen() && valueLength <= range.getMaxLen();
     }
 
-    // package protected for unit test access
-    static CodeValidator createRangeValidator(final CreditCardRange[] creditCardRanges, final DigitProcessorValidator validator) {
-        return new CodeValidator(
-            new RegexValidator("(\\d+)") {
-                private static final long serialVersionUID = 1L;
-                private CreditCardRange[] ccr = creditCardRanges.clone();
+    public static CodeValidator createRangeValidator(final CreditCardProcessor.CreditCardRange[] creditCardRanges, final DigitValidator validator) {
+        return new CodeValidator(new RegexProcessor("(\\d+)") {
+            /**
+             * Default {@linkCreditCardProcessor.CreditCardRange} instances
+             */
+            private CreditCardProcessor.CreditCardRange[] ccr = creditCardRanges.clone();
 
-                @Override
-                public String process(final String value) {
-                    if (super.match(value) != null) {
-                        int length = value.length();
-                        for (CreditCardRange range : ccr) {
-                            if (validLength(length, range)) {
-                                if (Objects.isNull(range.high)) {
-                                    if (value.startsWith(range.low)) {
-                                        return value;
-                                    }
-                                } else if (range.low.compareTo(value) <= 0 && range.high.compareTo(value.substring(0, range.high.length())) >= 0) {
+            @Override
+            public String processOrThrow(final String value) {
+                if (Objects.nonNull(super.match(value))) {
+                    int length = value.length();
+                    for (final CreditCardProcessor.CreditCardRange range : ccr) {
+                        if (validLength(length, range)) {
+                            if (Objects.isNull(range.getHigh())) {
+                                if (value.startsWith(range.getLow())) {
                                     return value;
                                 }
+                            } else if (range.getLow().compareTo(value) <= 0 && range.getHigh().compareTo(value.substring(0, range.getHigh().length())) >= 0) {
+                                return value;
                             }
                         }
                     }
-                    return null;
                 }
+                return null;
+            }
 
-                @Override
-                public boolean validate(final String value) {
-                    return Objects.nonNull(this.validate(value));
-                }
-
-                @Override
-                public String[] match(final String value) {
-                    return new String[]{this.process(value)};
-                }
-            }, validator);
-    }
-
-    /**
-     * Tests whether the given flag is on.  If the flag is not a power of 2
-     * (ie. 3) this tests whether the combination of flags is on.
-     *
-     * @param options The options specified.
-     * @param flag    Flag value to check.
-     * @return whether the specified flag value is on.
-     */
-    private boolean isOn(long options, long flag) {
-        return (options & flag) > 0;
+            @Override
+            public String[] match(final String value) {
+                return new String[]{this.processOrThrow(value)};
+            }
+        }, validator);
     }
 }

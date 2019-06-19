@@ -1,7 +1,30 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.ISBN10DigitProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -42,68 +65,28 @@ import lombok.ToString;
 public final class ISBN10DigitValidator extends BaseDigitValidator {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -4526411926089151556L;
+
+    /**
      * Singleton ISBN-10 Check Digit instance
      */
-    public static final DigitProcessorValidator ISBN10_CHECK_DIGIT = new ISBN10DigitValidator();
+    private static final DigitValidator ISBN10_CHECK_DIGIT = new ISBN10DigitValidator();
 
     /**
      * Construct a modulus 11 Check Digit routine for ISBN-10.
      */
     public ISBN10DigitValidator() {
-        super(11);  // CHECKSTYLE IGNORE MagicNumber
+        super(new ISBN10DigitProcessor());
     }
 
     /**
-     * Calculates the <i>weighted</i> value of a charcter in the
-     * code at a specified position.
+     * Returns {@link DigitValidator} instance
      *
-     * <p>For ISBN-10 (from right to left) digits are weighted
-     * by their position.</p>
-     *
-     * @param charValue The numeric value of the character.
-     * @param leftPos   The position of the character in the code, counting from left to right
-     * @param rightPos  The positionof the character in the code, counting from right to left
-     * @return The weighted value of the character.
+     * @return {@link DigitValidator} instance
      */
-    @Override
-    protected int weightedValue(int charValue, int leftPos, int rightPos) {
-        return charValue * rightPos;
-    }
-
-    /**
-     * <p>Convert a character at a specified position to an
-     * integer value.</p>
-     *
-     * <p>Character 'X' check digit converted to 10.</p>
-     *
-     * @param character The character to convert.
-     * @param leftPos   The position of the character in the code, counting from left to right
-     * @param rightPos  The position of the character in the code, counting from right to left
-     * @return The integer value of the character.
-     * @throws InvalidParameterException if an error occurs.
-     */
-    @Override
-    protected int toInt(char character, int leftPos, int rightPos) throws InvalidParameterException {
-        if (rightPos == 1 && character == 'X') {
-            return 10;
-        }
-        return super.toInt(character, leftPos, rightPos);
-    }
-
-    /**
-     * <p>Convert an integer value to a character at a specified position.</p>
-     *
-     * <p>Value '10' for position 1 (check digit) converted to 'X'.</p>
-     *
-     * @param charValue The integer value of the character.
-     * @return The converted character.
-     * @throws InvalidParameterException if an error occurs.
-     */
-    @Override
-    protected String toCheckDigit(int charValue) throws InvalidParameterException {
-        if (charValue == 10) {
-            return "X";
-        }
-        return super.toCheckDigit(charValue);
+    public static DigitValidator getInstance() {
+        return ISBN10_CHECK_DIGIT;
     }
 }

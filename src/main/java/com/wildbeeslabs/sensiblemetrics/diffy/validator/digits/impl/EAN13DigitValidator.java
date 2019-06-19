@@ -1,6 +1,30 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.EAN13DigitProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -39,38 +63,28 @@ import lombok.ToString;
 public final class EAN13DigitValidator extends BaseDigitValidator {
 
     /**
-     * Singleton EAN-13 Check Digit instance
+     * Default explicit serialVersionUID for interoperability
      */
-    public static final DigitProcessorValidator EAN13_CHECK_DIGIT = new EAN13DigitValidator();
+    private static final long serialVersionUID = 8782920895924593167L;
 
     /**
-     * weighting given to digits depending on their right position
+     * Singleton EAN-13 Check Digit instance
      */
-    private static final int[] POSITION_WEIGHT = new int[]{3, 1};
+    private static final DigitValidator EAN13_CHECK_DIGIT = new EAN13DigitValidator();
 
     /**
      * Construct a modulus 10 Check Digit routine for EAN/UPC.
      */
     public EAN13DigitValidator() {
-        super(10);
+        super(new EAN13DigitProcessor());
     }
 
     /**
-     * <p>Calculates the <i>weighted</i> value of a character in the
-     * code at a specified position.</p>
+     * Returns {@link DigitValidator} instance
      *
-     * <p>For EAN-13 (from right to left) <b>odd</b> digits are weighted
-     * with a factor of <b>one</b> and <b>even</b> digits with a factor
-     * of <b>three</b>.</p>
-     *
-     * @param charValue The numeric value of the character.
-     * @param leftPos   The position of the character in the code, counting from left to right
-     * @param rightPos  The positionof the character in the code, counting from right to left
-     * @return The weighted value of the character.
+     * @return {@link DigitValidator} instance
      */
-    @Override
-    protected int weightedValue(int charValue, int leftPos, int rightPos) {
-        int weight = POSITION_WEIGHT[rightPos % 2];
-        return charValue * weight;
+    public static DigitValidator getInstance() {
+        return EAN13_CHECK_DIGIT;
     }
 }

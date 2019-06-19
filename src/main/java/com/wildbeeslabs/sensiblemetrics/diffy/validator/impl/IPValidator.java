@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
 import com.google.common.collect.ImmutableSet;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -52,7 +53,7 @@ public class IPValidator implements Validator<String> {
      * @throws NullPointerException if source is {@code null}
      */
     public IPValidator(final String source) {
-        Objects.requireNonNull(source, "IP source should not be null");
+        ValidationUtils.notNull(source, "IP source should not be null");
         final String[] parts = source.split("[,;]");
         for (final String part : parts) {
             final String m = part.trim();
@@ -114,7 +115,7 @@ public class IPValidator implements Validator<String> {
         return true;
     }
 
-    private static String[] ipv4(final String ip) {
+    private String[] ipv4(final String ip) {
         final String[] ipp = ip.split("\\.");
         if (ipp.length != 4) {
             return null;
@@ -122,7 +123,7 @@ public class IPValidator implements Validator<String> {
         return ipp;
     }
 
-    private static String[] ipv6(final String ip) {
+    private String[] ipv6(final String ip) {
         final String[] ipp = ip.split(":");
         if (ipp.length != 8) {
             return null;

@@ -1,7 +1,30 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitProcessorValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.ISSNDigitProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -47,35 +70,28 @@ import lombok.ToString;
 public final class ISSNDigitValidator extends BaseDigitValidator {
 
     /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -7484235604108721545L;
+
+    /**
      * Singleton ISSN Check Digit instance
      */
-    public static final DigitProcessorValidator ISSN_CHECK_DIGIT = new ISSNDigitValidator();
+    private static final DigitValidator ISSN_CHECK_DIGIT = new ISSNDigitValidator();
 
     /**
      * Creates the instance using a checkdigit modulus of 11
      */
     public ISSNDigitValidator() {
-        super(11); // CHECKSTYLE IGNORE MagicNumber
+        super(new ISSNDigitProcessor());
     }
 
-    @Override
-    protected int weightedValue(int charValue, int leftPos, int rightPos) throws InvalidParameterException {
-        return charValue * (9 - leftPos);
-    }
-
-    @Override
-    protected String toCheckDigit(int charValue) throws InvalidParameterException {
-        if (charValue == 10) {
-            return "X";
-        }
-        return super.toCheckDigit(charValue);
-    }
-
-    @Override
-    protected int toInt(char character, int leftPos, int rightPos) throws InvalidParameterException {
-        if (rightPos == 1 && character == 'X') {
-            return 10;
-        }
-        return super.toInt(character, leftPos, rightPos);
+    /**
+     * Returns {@link DigitValidator} instance
+     *
+     * @return {@link DigitValidator} instance
+     */
+    public static DigitValidator getInstance() {
+        return ISSN_CHECK_DIGIT;
     }
 }

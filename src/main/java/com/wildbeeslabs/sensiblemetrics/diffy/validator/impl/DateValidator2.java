@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
 
 import java.text.DateFormat;
@@ -64,7 +65,7 @@ public class DateValidator2 implements Validator<String> {
      * Protected constructor for subclasses to use.
      */
     public DateValidator2(final String datePattern, final boolean strict) {
-        Objects.requireNonNull(datePattern, "Date pattern should not be null");
+        ValidationUtils.notNull(datePattern, "Date pattern should not be null");
         this.datePattern = datePattern;
         this.strict = strict;
     }
@@ -122,6 +123,13 @@ public class DateValidator2 implements Validator<String> {
         return true;
     }
 
+    /**
+     * Returns {@link DateValidator2} instance by input parameters
+     *
+     * @param datePattern - initial input date pattern {@link String}
+     * @param strict      - initial input strict flag
+     * @return {@link DateValidator2} instance
+     */
     public static DateValidator2 of(final String datePattern, final boolean strict) {
         return new DateValidator2(datePattern, strict);
     }

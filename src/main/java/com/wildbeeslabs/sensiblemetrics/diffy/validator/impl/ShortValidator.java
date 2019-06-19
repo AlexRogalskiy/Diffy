@@ -1,10 +1,34 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.ShortProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.text.Format;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -104,7 +128,7 @@ public class ShortValidator extends AbstractNumberValidator {
      *                   create for validation, default is STANDARD_FORMAT.
      */
     public ShortValidator(boolean strict, int formatType) {
-        super(strict, formatType, false);
+        super(new ShortProcessor(strict, formatType));
     }
 
     /**
@@ -117,7 +141,7 @@ public class ShortValidator extends AbstractNumberValidator {
      */
     @Override
     public boolean validate(final String value) {
-        return Objects.nonNull(this.parse(value, null, null));
+        return Objects.nonNull(this.getProcessor().processOrThrow(value));
     }
 
     /**
@@ -130,7 +154,7 @@ public class ShortValidator extends AbstractNumberValidator {
      */
     @Override
     public boolean validate(final String value, final String pattern) {
-        return Objects.nonNull(this.parse(value, pattern, null));
+        return Objects.nonNull(this.getProcessor().process(value, pattern));
     }
 
     /**
@@ -143,7 +167,7 @@ public class ShortValidator extends AbstractNumberValidator {
      */
     @Override
     public boolean validate(final String value, final Locale locale) {
-        return Objects.isNull(this.parse(value, null, locale));
+        return Objects.isNull(this.getProcessor().process(value, locale));
     }
 
     /**
@@ -156,8 +180,9 @@ public class ShortValidator extends AbstractNumberValidator {
      * @param locale  The locale to use for the date format, system default if null.
      * @return The parsed <code>Short</code> if valid or <code>null</code> if invalid.
      */
+    @Override
     public boolean validate(final String value, final String pattern, final Locale locale) {
-        return Objects.nonNull(this.parse(value, pattern, locale));
+        return Objects.nonNull(this.getProcessor().process(value, pattern, locale));
     }
 
     /**
@@ -183,6 +208,7 @@ public class ShortValidator extends AbstractNumberValidator {
      * specified range.
      */
     public boolean isInRange(final Short value, short min, short max) {
+        ValidationUtils.notNull(value, "Value should not be null");
         return this.isInRange(value.shortValue(), min, max);
     }
 
@@ -207,7 +233,8 @@ public class ShortValidator extends AbstractNumberValidator {
      * or equal to the minimum.
      */
     public boolean minValue(final Short value, short min) {
-        return minValue(value.shortValue(), min);
+        ValidationUtils.notNull(value, "Value should not be null");
+        return this.minValue(value.shortValue(), min);
     }
 
     /**
@@ -231,24 +258,7 @@ public class ShortValidator extends AbstractNumberValidator {
      * or equal to the maximum.
      */
     public boolean maxValue(final Short value, short max) {
-        return maxValue(value.shortValue(), max);
-    }
-
-    /**
-     * <p>Perform further validation and convert the <code>Number</code> to
-     * a <code>Short</code>.</p>
-     *
-     * @param value     The parsed <code>Number</code> object created.
-     * @param formatter The Format used to parse the value with.
-     * @return The parsed <code>Number</code> converted to a
-     * <code>Short</code> if valid or <code>null</code> if invalid.
-     */
-    @Override
-    protected Object processParsedValue(final Object value, final Format formatter) {
-        long longValue = ((Number) value).longValue();
-        if (longValue < Short.MIN_VALUE || longValue > Short.MAX_VALUE) {
-            return null;
-        }
-        return Short.valueOf((short) longValue);
+        ValidationUtils.notNull(value, "Value should not be null");
+        return this.maxValue(value.shortValue(), max);
     }
 }

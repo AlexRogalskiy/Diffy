@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -72,45 +73,18 @@ public class CreditCardValidator2 implements Validator<String> {
     private static final CreditCardValidator2 CREDIT_CARD_VALIDATOR = new CreditCardValidator2();
 
     /**
-     * Option specifying that no cards are allowed.  This is useful if
-     * you want only custom card types to validate so you turn off the
-     * default cards with this option.
-     * <pre>
-     * <code>
-     * CreditCardValidator2 v = new CreditCardValidator2(CreditCardValidator2.NONE);
-     * v.addAllowedCardType(customType);
-     * v.isValid(aCardNumber);
-     * </code>
-     * </pre>
-     *
-     * @since Validator 1.1.2
-     */
-    public static final int NONE = 0;
-
-    /**
-     * Option specifying that American Express cards are allowed.
-     */
-    public static final int AMEX = 1 << 0;
-
-    /**
-     * Option specifying that Visa cards are allowed.
-     */
-    public static final int VISA = 1 << 1;
-
-    /**
-     * Option specifying that Mastercard cards are allowed.
-     */
-    public static final int MASTERCARD = 1 << 2;
-
-    /**
-     * Option specifying that Discover cards are allowed.
-     */
-    public static final int DISCOVER = 1 << 3;
-
-    /**
      * The CreditCardTypes that are allowed to pass validation.
      */
     private final Collection<CreditCardType> cardTypes = new ArrayList<>();
+
+    /**
+     * Returns {@link CreditCardValidator2} instance
+     *
+     * @return {@link CreditCardValidator2} instance
+     */
+    public static CreditCardValidator2 getInstance() {
+        return CREDIT_CARD_VALIDATOR;
+    }
 
     /**
      * Create a new CreditCardValidator2 with default options.
@@ -126,7 +100,7 @@ public class CreditCardValidator2 implements Validator<String> {
      *                CreditCardValidator2.VISA + CreditCardValidator2.AMEX to specify that
      *                those are the only valid card types.
      */
-    public CreditCardValidator2(int options) {
+    public CreditCardValidator2(long options) {
         final Flags f = new Flags(options);
         if (f.isOn(VISA)) {
             this.cardTypes.add(new Visa());
@@ -280,14 +254,5 @@ public class CreditCardValidator2 implements Validator<String> {
             final String prefix2 = card.substring(0, 2);
             return (CARD_PREFIX.contains(prefix2) && (card.length() == 16));
         }
-    }
-
-    /**
-     * Returns {@link CreditCardValidator2} instance
-     *
-     * @return {@link CreditCardValidator2} instance
-     */
-    public static CreditCardValidator2 getInstance() {
-        return CREDIT_CARD_VALIDATOR;
     }
 }

@@ -1,12 +1,34 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.BaseTenDigitProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Arrays;
 
 /**
  * General Modulus 10 Check Digit calculation/validation.
@@ -99,6 +121,7 @@ import java.util.Arrays;
  * @version $Revision: 1739356 $
  * @since Validator 1.6
  */
+
 /**
  * Ten {@link BaseDigitValidator} implementation
  */
@@ -107,19 +130,20 @@ import java.util.Arrays;
 @ToString(callSuper = true)
 public final class BaseTenDigitValidator extends BaseDigitValidator {
 
-    private final int[] postitionWeight;
-    private final boolean useRightPos;
-    private final boolean sumWeightedDigits;
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = -5631310551677335065L;
 
     /**
      * Construct a modulus 10 Check Digit routine with the specified weighting
      * from left to right.
      *
-     * @param postitionWeight the weighted values to apply based on the
-     *                        character position
+     * @param posititionWeight the weighted values to apply based on the
+     *                         character position
      */
-    public BaseTenDigitValidator(int[] postitionWeight) {
-        this(postitionWeight, false, false);
+    public BaseTenDigitValidator(int[] posititionWeight) {
+        this(posititionWeight, false, false);
     }
 
     /**
@@ -140,18 +164,15 @@ public final class BaseTenDigitValidator extends BaseDigitValidator {
      * indicating whether its from the left or right and whether the weighted
      * digits should be summed.
      *
-     * @param postitionWeight   the weighted values to apply based on the
+     * @param posititionWeight  the weighted values to apply based on the
      *                          character position
      * @param useRightPos       <code>true</code> if use positionWeights from right to
      *                          left
      * @param sumWeightedDigits <code>true</code> if sum the digits of the
      *                          weighted value
      */
-    public BaseTenDigitValidator(final int[] postitionWeight, boolean useRightPos, boolean sumWeightedDigits) {
-        super(10);
-        this.postitionWeight = Arrays.copyOf(postitionWeight, postitionWeight.length);
-        this.useRightPos = useRightPos;
-        this.sumWeightedDigits = sumWeightedDigits;
+    public BaseTenDigitValidator(final int[] posititionWeight, boolean useRightPos, boolean sumWeightedDigits) {
+        super(new BaseTenDigitProcessor(posititionWeight, useRightPos, sumWeightedDigits));
     }
 
     /**
@@ -175,48 +196,11 @@ public final class BaseTenDigitValidator extends BaseDigitValidator {
     }
 
     /**
-     * Convert a character at a specified position to an integer value.
-     * <p>
-     * <b>Note:</b> this implementation only handlers values that
-     * Character.getNumericValue(char) returns a non-negative number.
+     * Returns {@link DigitValidator} instance
      *
-     * @param character The character to convert
-     * @param leftPos   The position of the character in the code, counting from
-     *                  left to right (for identifying the position in the string)
-     * @param rightPos  The position of the character in the code, counting from
-     *                  right to left (not used here)
-     * @return The integer value of the character
-     * @throws InvalidParameterException if Character.getNumericValue(char) returns a
-     *                                   negative number
+     * @return {@link DigitValidator} instance
      */
-    @Override
-    protected int toInt(char character, int leftPos, int rightPos) throws InvalidParameterException {
-        int num = Character.getNumericValue(character);
-        if (num < 0) {
-            throw new InvalidParameterException("Invalid Character[" + leftPos + "] = '" + character + "'");
-        }
-        return num;
-    }
-
-    /**
-     * Calculates the <i>weighted</i> value of a character in the code at a
-     * specified position.
-     *
-     * @param charValue The numeric value of the character.
-     * @param leftPos   The position of the character in the code, counting from
-     *                  left to right
-     * @param rightPos  The position of the character in the code, counting from
-     *                  right to left
-     * @return The weighted value of the character.
-     */
-    @Override
-    protected int weightedValue(int charValue, int leftPos, int rightPos) {
-        int pos = useRightPos ? rightPos : leftPos;
-        int weight = postitionWeight[(pos - 1) % postitionWeight.length];
-        int weightedValue = charValue * weight;
-        if (sumWeightedDigits) {
-            weightedValue = sumDigits(weightedValue);
-        }
-        return weightedValue;
+    public static DigitValidator of(final int[] posititionWeight, boolean useRightPos, boolean sumWeightedDigits) {
+        return new BaseTenDigitValidator(posititionWeight, useRightPos, sumWeightedDigits);
     }
 }
