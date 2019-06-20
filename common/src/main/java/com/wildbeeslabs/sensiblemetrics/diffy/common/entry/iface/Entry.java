@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingConsumer;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -224,5 +225,27 @@ public interface Entry<K, V> extends Serializable {
                 doThrow(t);
             }
         }
+    }
+
+    /**
+     * Constructs new {@link Entry} from the specified <code>Map.Entry</code>.
+     *
+     * @param entry - initial input {@link Map.Entry} to copy
+     * @throws IllegalArgumentException if the entry is null
+     */
+    static <K, V> Entry<K, V> entryOf(final Map.Entry<K, V> entry) {
+        ValidationUtils.notNull(entry, "Entry should not be null");
+        return DefaultEntry.of(entry.getKey(), entry.getValue());
+    }
+
+    /**
+     * Constructs new {@link Map.Entry} from the specified <code>Entry</code>.
+     *
+     * @param entry - initial input {@link Entry} to copy
+     * @throws IllegalArgumentException if the entry is null
+     */
+    static <K, V> Map.Entry<K, V> entryOf(final Entry<K, V> entry) {
+        ValidationUtils.notNull(entry, "Entry should not be null");
+        return new AbstractMap.SimpleImmutableEntry<>(entry.getFirst(), entry.getLast());
     }
 }

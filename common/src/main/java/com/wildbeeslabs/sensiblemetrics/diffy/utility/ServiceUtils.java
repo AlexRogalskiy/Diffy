@@ -138,7 +138,7 @@ public class ServiceUtils {
      * @throws NullPointerException if futures is {@code null}
      */
     public static <T> void getResultAsync(final Executor executor, final CompletableFuture<T>... futures) {
-        Objects.requireNonNull(futures, "Array of futures should not be null");
+        ValidationUtils.notNull(futures, "Array of futures should not be null");
         CompletableFuture.allOf(futures).whenCompleteAsync(DEFAULT_COMPLETABLE_ACTION, executor).join();
     }
 
@@ -152,7 +152,7 @@ public class ServiceUtils {
      * @throws NullPointerException if future is {@code null}
      */
     public static <T> T getResultAsync(final Executor executor, final CompletableFuture<T> future) {
-        Objects.requireNonNull(future, "Future should not be null");
+        ValidationUtils.notNull(future, "Future should not be null");
         return future.whenCompleteAsync(DEFAULT_COMPLETABLE_ACTION, executor).join();
     }
 
@@ -165,7 +165,7 @@ public class ServiceUtils {
      * @throws NullPointerException if future is {@code null}
      */
     public static <T> T getResultAsync(final CompletableFuture<T> future) {
-        Objects.requireNonNull(future, "Future should not be null");
+        ValidationUtils.notNull(future, "Future should not be null");
         return getResultAsync(Executors.newSingleThreadExecutor(), future);
     }
 
@@ -180,8 +180,8 @@ public class ServiceUtils {
      * @throws NullPointerException if predicate is {@code null}
      */
     public static <T> boolean contains(final Collection<T> list, final Predicate<? super T> predicate) {
-        Objects.requireNonNull(list, "List should not be null");
-        Objects.requireNonNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(list, "List should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
 
         return listOf(list).stream().filter(predicate).findFirst().isPresent();
     }
@@ -198,7 +198,7 @@ public class ServiceUtils {
      */
     @Nullable
     public static <T, R> R convert(final T value, final Converter<T, R> converter) {
-        Objects.requireNonNull(converter, "Converter should not be null");
+        ValidationUtils.notNull(converter, "Converter should not be null");
         return converter.convert(value);
     }
 
@@ -213,7 +213,7 @@ public class ServiceUtils {
      */
     @Nullable
     public static Object convert(final String value, final Class<?> toType, final String parserMethod) {
-        Objects.requireNonNull(toType, "Destination type should not be null");
+        ValidationUtils.notNull(toType, "Destination type should not be null");
         try {
             final Method method = toType.getMethod(parserMethod, String.class);
             return method.invoke(toType, value);
@@ -240,8 +240,8 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> Optional<T> reduce(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
-        Objects.requireNonNull(reducer, "Reducer should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(reducer, "Reducer should not be null");
 
         return streamOf(values).filter(predicate).reduce(reducer);
     }
@@ -260,9 +260,9 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T, K extends Throwable> T reduceOrThrow(final T[] values, final Predicate<T> predicate, final BinaryOperator<T> reducer, final Supplier<? extends K> supplier) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
-        Objects.requireNonNull(reducer, "Reducer should not be null");
-        Objects.requireNonNull(supplier, "Supplier should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(reducer, "Reducer should not be null");
+        ValidationUtils.notNull(supplier, "Supplier should not be null");
 
         try {
             return reduce(values, predicate, reducer).orElseThrow(supplier);
@@ -292,7 +292,7 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> Stream<T> streamOf(final Iterable<T> iterable) {
-        Objects.requireNonNull(iterable, "Iterable should not be null");
+        ValidationUtils.notNull(iterable, "Iterable should not be null");
         return (iterable instanceof Collection) ? ((Collection<T>) iterable).stream() : StreamSupport.stream(iterable.spliterator(), false);
     }
 
@@ -305,7 +305,7 @@ public class ServiceUtils {
             return null;
         }
         final Collection<? extends T> collection = collectionOf(iterable);
-        final T[] array = newArray(type, collection.size());
+        final T[] array = newArray3(type, collection.size());
         return collection.toArray(array);
     }
 
@@ -375,11 +375,6 @@ public class ServiceUtils {
         return iterableOf(elements).iterator();
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T[] newArray(final Class<T> type, int length) {
-        return (T[]) Array.newInstance(type, length);
-    }
-
     /**
      * Returns {@link Set} by input array of {@code T} items
      *
@@ -394,7 +389,7 @@ public class ServiceUtils {
 
     @NonNull
     public static <T> List<T> copyOf(final List<T> source, final int fromIndex, final int toIndex) {
-        Objects.requireNonNull(source, "Source list should not be null");
+        ValidationUtils.notNull(source, "Source list should not be null");
         return new ArrayList<>(source.subList(fromIndex, toIndex));
     }
 
@@ -436,8 +431,9 @@ public class ServiceUtils {
      */
     @NonNull
     public static <K, V> Map<K, V> zipOf(final List<K> keys, final List<V> values) {
-        Objects.requireNonNull(keys, "Keys should not be null");
-        Objects.requireNonNull(values, "Values should not be null");
+        ValidationUtils.notNull(keys, "Keys should not be null");
+        ValidationUtils.notNull(values, "Values should not be null");
+
         return IntStream.range(0, keys.size()).boxed().collect(Collectors.toMap(keys::get, values::get));
     }
 
@@ -452,9 +448,9 @@ public class ServiceUtils {
      */
     @NonNull
     static <K, V, O> Stream<O> zipOf(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, O> combiner) {
-        Objects.requireNonNull(first, "First stream should not be null!");
-        Objects.requireNonNull(last, "Last stream should not be null!");
-        Objects.requireNonNull(combiner, "Combiner should not be null!");
+        ValidationUtils.notNull(first, "First stream should not be null!");
+        ValidationUtils.notNull(last, "Last stream should not be null!");
+        ValidationUtils.notNull(combiner, "Combiner should not be null!");
 
         return StreamUtils.zip(first, last, combiner);
     }
@@ -475,9 +471,9 @@ public class ServiceUtils {
      */
     @NonNull
     static <K, V, T> Stream<T> zip2(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, T> combiner) {
-        Objects.requireNonNull(first, "Key stream should not be null!");
-        Objects.requireNonNull(last, "Value stream should not be null!");
-        Objects.requireNonNull(combiner, "Combiner should not be null!");
+        ValidationUtils.notNull(first, "Key stream should not be null!");
+        ValidationUtils.notNull(last, "Value stream should not be null!");
+        ValidationUtils.notNull(combiner, "Combiner should not be null!");
 
         final Spliterator<K> firsts = first.spliterator();
         final Spliterator<V> lasts = last.spliterator();
@@ -503,7 +499,8 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> List<Indexed<T>> zipOf(final Stream<T> stream) {
-        Objects.requireNonNull(stream, "Stream should not be null!");
+        ValidationUtils.notNull(stream, "Stream should not be null!");
+
         return StreamUtils.zipWithIndex(stream).collect(Collectors.toList());
     }
 
@@ -518,9 +515,9 @@ public class ServiceUtils {
      * @return {@link Map} by input {@link Stream} partitioned by {@link Predicate}
      */
     public static <T, A, M extends Collection<T>> Map<Boolean, M> partitionBy(@NonNull final Stream<T> stream, final Predicate<? super T> predicate, final Collector<T, A, M> collector) {
-        Objects.requireNonNull(stream, "Stream should not be null!");
-        Objects.requireNonNull(predicate, "Predicate should not be null!");
-        Objects.requireNonNull(collector, "Collector should not be null!");
+        ValidationUtils.notNull(stream, "Stream should not be null!");
+        ValidationUtils.notNull(predicate, "Predicate should not be null!");
+        ValidationUtils.notNull(collector, "Collector should not be null!");
 
         return stream.collect(Collectors.partitioningBy(predicate, collector));
     }
@@ -534,6 +531,7 @@ public class ServiceUtils {
      * @param converter - initial input {@link Converter}
      * @return {@link Supplier}
      */
+    @NonNull
     public static <T, R> Supplier<R> ifSupplierNotNullDo(final Supplier<T> supplier, final Converter<T, R> converter) {
         return () -> {
             final T val = supplier.get();
@@ -552,7 +550,8 @@ public class ServiceUtils {
      * @return {@link Stream}
      */
     public static <T> Stream<T> toStream(final T object) {
-        Objects.requireNonNull(object, "Object must not be null");
+        ValidationUtils.notNull(object, "Object must not be null");
+
         if (object instanceof Stream) {
             return (Stream<T>) object;
         }
@@ -601,7 +600,7 @@ public class ServiceUtils {
      */
     @SuppressWarnings("unchecked")
     public static <E extends Throwable> void doThrow(final Throwable throwable) throws E {
-        Objects.requireNonNull(throwable, "Throwable should not be null");
+        ValidationUtils.notNull(throwable, "Throwable should not be null");
         throw (E) throwable;
     }
 
@@ -614,12 +613,12 @@ public class ServiceUtils {
      */
     @SuppressWarnings("unchecked")
     public static <E extends Throwable> void throwAsUnchecked(final Exception exception) throws E {
-        Objects.requireNonNull(exception, "Exception should not be null");
+        ValidationUtils.notNull(exception, "Exception should not be null");
         throw (E) exception;
     }
 
     public static <T> Stream<T> enumerationAsStream3(final Enumeration<T> enumeration) {
-        Objects.requireNonNull(enumeration, "Enumeration should not be null");
+        ValidationUtils.notNull(enumeration, "Enumeration should not be null");
         return StreamSupport.stream(
             new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
                 public boolean tryAdvance(final Consumer<? super T> action) {
@@ -640,5 +639,46 @@ public class ServiceUtils {
         return () -> StreamSupport.stream(foo.spliterator(), false)
             .flatMap(i -> StreamSupport.stream(i.spliterator(), false))
             .iterator();
+    }
+
+    public static <T> T[] newArray(@NonNull final Class<? extends T[]> type, int size) {
+        ValidationUtils.notNull(type, "Class type should not be null");
+        ValidationUtils.isTrue(size >= 0, "Size should be greater than or equal zero");
+
+        return type.cast(Array.newInstance(type.getComponentType(), size));
+    }
+
+    public static <T> T[] newArray2(final Class<? extends T> type, int size) {
+        ValidationUtils.notNull(type, "Class type should not be null");
+        ValidationUtils.isTrue(size >= 0, "Size should be greater than or equal zero");
+
+        return (T[]) Array.newInstance(type, size);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T[] newArray3(final Class<T> type, int length) {
+        return (T[]) Array.newInstance(type, length);
+    }
+
+    public static <T> T[][] newMatrix(final Class<? extends T> type, int rowCount, int colCount) {
+        ValidationUtils.notNull(type, "Class type should not be null");
+        ValidationUtils.isTrue(rowCount >= 0, "Row count should be greater than or equal zero");
+        ValidationUtils.isTrue(colCount >= 0, "Column count should be greater than or equal zero");
+
+        return (T[][]) Array.newInstance(type, rowCount, colCount);
+    }
+
+    public static <T> T getInstance(@NonNull final Class<? extends T> type) {
+        ValidationUtils.notNull(type, "Class type should not be null");
+        try {
+            return type.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            log.error("ERROR: cannot initialize class instance={}, message={}", type, ex.getMessage());
+        } catch (NoSuchMethodException ex) {
+            log.error("ERROR: cannot execute method of class instance={}, message={}", type, ex.getMessage());
+        } catch (InvocationTargetException ex) {
+            log.error("ERROR: cannot get class instance={}, message={}", type, ex.getMessage());
+        }
+        return null;
     }
 }
