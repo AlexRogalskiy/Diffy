@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -58,7 +59,7 @@ public class CollectionOneToOneMatcher<T> extends AbstractMatcher<Iterable<? ext
     private final List<? extends Matcher<? super T>> matchers;
 
     public CollectionOneToOneMatcher(final List<? extends Matcher<? super T>> matchers) {
-        Objects.requireNonNull(matchers, "Matchers should not be null");
+        ValidationUtils.notNull(matchers, "Matchers should not be null");
         this.matchers = matchers;
     }
 

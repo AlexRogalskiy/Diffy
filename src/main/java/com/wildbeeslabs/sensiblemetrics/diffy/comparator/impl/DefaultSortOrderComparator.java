@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,7 @@ public abstract class DefaultSortOrderComparator<T> implements Function<SortMana
      */
     @Override
     public Comparator<? super T> apply(final SortManager.SortOrder order) {
-        Objects.requireNonNull(order, "Order should not be null!");
+        ValidationUtils.notNull(order, "Order should not be null!");
         final Comparator<? super T> comparator = getComparatorMap().getOrDefault(order.getProperty(), getDefaultComparator());
         return order.getDirection().isDescending() ? comparator.reversed() : comparator;
     }

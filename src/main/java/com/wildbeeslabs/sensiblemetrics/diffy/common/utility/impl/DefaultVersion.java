@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -58,7 +59,7 @@ public class DefaultVersion implements Comparable<DefaultVersion> {
      * @param parts must not be {@literal null} or empty.
      */
     public DefaultVersion(final int... parts) {
-        Objects.requireNonNull(parts, "Parts must not be null!");
+        ValidationUtils.notNull(parts, "Parts must not be null!");
         isTrue(parts.length > 0 && parts.length < 5, String.format("Invalid parts length. 0 < %s < 5", parts.length));
 
         this.major = parts[0];
@@ -79,7 +80,7 @@ public class DefaultVersion implements Comparable<DefaultVersion> {
      * @return returns version
      */
     public static DefaultVersion parse(final String version) {
-        Objects.requireNonNull(version, "Version must not be null or empty!");
+        ValidationUtils.notNull(version, "Version must not be null or empty!");
 
         final String[] parts = version.trim().split("\\.");
         final int[] intParts = new int[parts.length];

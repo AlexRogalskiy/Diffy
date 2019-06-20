@@ -27,6 +27,7 @@ import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -98,7 +99,8 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @throws NullPointerException if clazz argument is {@code null}
      */
     public AbstractDiffComparator(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
-        this.clazz = Objects.requireNonNull(clazz, "Class should not be null!");
+        ValidationUtils.notNull(clazz, "Class should not be null!");
+        this.clazz = clazz;
         this.comparator = Optional.ofNullable(comparator).orElse(DEFAULT_COMPARATOR);
         this.getPropertyMap().putAll(this.getFieldsMap(this.clazz));
         this.getPropertySet().addAll(this.getPropertyMap().keySet());
@@ -153,7 +155,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @throws NullPointerException if comparator is {@code null}
      */
     public void setComparator(final String property, final Comparator<?> comparator) {
-        Objects.requireNonNull(property, "Property should not be null!");
+        ValidationUtils.notNull(property, "Property should not be null!");
         log.debug("DEBUG <{}>: storing property by name={}, comparator={}", getClass().getName(), property, comparator);
         this.getPropertyComparatorMap().put(sanitize(property), comparator);
     }

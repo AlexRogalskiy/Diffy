@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.configuration.enumeration.ConfigurationKeyType;
 import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -107,7 +108,7 @@ public class DiffyConfigurationKey<T> {
      * @throws InvalidParameterException - if key name is invalid
      */
     private String checkName(final String keyName) {
-        Objects.requireNonNull(keyName, "Key should not be null");
+        ValidationUtils.notNull(keyName, "Key should not be null");
         if (!DEFAULT_KEY_NAME_PATTERN.matcher(keyName).matches()) {
             throw new InvalidParameterException(String.format("ERROR: invalid key name = {%s}", keyName));
         }

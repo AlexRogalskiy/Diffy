@@ -35,6 +35,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultChunk;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultPatch;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,8 +69,8 @@ public class DiffAlgorithmService<T> implements DiffAlgorithm<T> {
      */
     @Override
     public DefaultPatch<T> diff(final Iterable<T> original, final Iterable<T> revised) {
-        Objects.requireNonNull(original, "Original list must not be null");
-        Objects.requireNonNull(revised, "Revised list must not be null");
+        ValidationUtils.notNull(original, "Original list must not be null");
+        ValidationUtils.notNull(revised, "Revised list must not be null");
 
         try {
             final List<T> first = listOf(original);
@@ -92,8 +93,8 @@ public class DiffAlgorithmService<T> implements DiffAlgorithm<T> {
      * @throws IllegalStateException if a diff path could not be found.
      */
     protected PathNode buildPath(final List<T> original, final List<T> revised) {
-        Objects.requireNonNull(original, "Original sequence should not be null");
-        Objects.requireNonNull(revised, "Revised sequence should not be null");
+        ValidationUtils.notNull(original, "Original sequence should not be null");
+        ValidationUtils.notNull(revised, "Revised sequence should not be null");
 
         final int N = original.size();
         final int M = revised.size();
@@ -145,9 +146,9 @@ public class DiffAlgorithmService<T> implements DiffAlgorithm<T> {
      * @return A {@link DefaultPatch} script corresponding to the path.
      */
     protected DefaultPatch<T> buildRevision(final PathNode path, final List<T> original, final List<T> revised) {
-        Objects.requireNonNull(path, "Path node should not be null");
-        Objects.requireNonNull(original, "Original sequence should not be null");
-        Objects.requireNonNull(revised, "Revised sequence should not be null");
+        ValidationUtils.notNull(path, "Path node should not be null");
+        ValidationUtils.notNull(original, "Original sequence should not be null");
+        ValidationUtils.notNull(revised, "Revised sequence should not be null");
 
         PathNode root = path;
         final DefaultPatch<T> patch = new DefaultPatch<>();

@@ -113,6 +113,13 @@
         </developer>
     </developers>
 
+    <contributors>
+        <contributor>
+            <name>Alexander Rogalskiy</name>
+            <email>alexander.rogalsky@yandex.ru</email>
+        </contributor>
+    </contributors>
+
     <organization>
         <name>WildBees Labs, Inc.</name>
         <url>http://www.wildbeeslabs.com/</url>
@@ -216,6 +223,7 @@
         <maven.bundle.plugin.vesion>4.1.0</maven.bundle.plugin.vesion>
         <maven.project.reports.plugin.version>3.0.0</maven.project.reports.plugin.version>
         <maven.install.plugin.version>3.0.0-M1</maven.install.plugin.version>
+        <maven.scm.publish.plugin.version>3.0.0</maven.scm.publish.plugin.version>
     </properties>
 
     <build>
@@ -335,7 +343,8 @@
                         <configLocation>${project.basedir}/checkstyle/checkstyle.xml</configLocation>
                         <!--<headerLocation>${basedir}/license-header.txt</headerLocation>-->
                         <!--<suppressionsLocation>${basedir}/checkstyle-suppressions.xml</suppressionsLocation>-->
-                        <!--<suppressionsFileExpression>${basedir}/checkstyle-suppressions.xml</suppressionsFileExpression>-->
+                        <suppressionsLocation>${project.basedir}/checkstyle/checkstyle-suppression.xml
+                        </suppressionsLocation>
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     </configuration>
                     <executions>
@@ -378,6 +387,9 @@
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${maven.jar.plugin.version}</version>
                     <configuration>
+                        <excludes>
+                            <exclude>com.wildbeeslabs.sensiblemetrics.diffy.examples</exclude>
+                        </excludes>
                         <archive>
                             <manifestEntries>
                                 <Automatic-Module-Name>${project.groupId}.${project.artifactId}</Automatic-Module-Name>
@@ -630,6 +642,17 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-publish-plugin</artifactId>
+                    <version>${maven.scm.publish.plugin.version}</version>
+                    <configuration>
+                        <ignorePathsToDelete>
+                            <ignorePathToDelete>${project.basedir}/src/main/javadoc</ignorePathToDelete>
+                        </ignorePathsToDelete>
+                    </configuration>
+                </plugin>
+
+                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
                     <version>${maven.properties.plugin.version}</version>
@@ -830,6 +853,7 @@
                             <additionalJOption>-Xdoclint:none</additionalJOption>
                             <useStandardDocletOptions>true</useStandardDocletOptions>
                             <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
+                            <excludePackageNames>com.wildbeeslabs.sensiblemetrics.diffy.examples</excludePackageNames>
                         </configuration>
                         <executions>
                             <execution>
@@ -885,6 +909,9 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven.javadoc.plugin.version}</version>
+                        <configuration>
+                            <excludePackageNames>com.wildbeeslabs.sensiblemetrics.diffy.examples</excludePackageNames>
+                        </configuration>
                         <reportSets>
                             <reportSet>
                                 <id>non-aggregate</id>
@@ -913,6 +940,11 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                         <version>${maven.source.plugin.version}</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>com.wildbeeslabs.sensiblemetrics.diffy.examples</exclude>
+                            </excludes>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -926,6 +958,9 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven.javadoc.plugin.version}</version>
+                        <configuration>
+                            <excludePackageNames>com.wildbeeslabs.sensiblemetrics.diffy.examples</excludePackageNames>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>

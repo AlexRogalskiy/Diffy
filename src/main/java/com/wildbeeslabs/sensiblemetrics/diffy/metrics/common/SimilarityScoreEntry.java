@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.common;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityScore;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,7 +31,7 @@ public class SimilarityScoreEntry<T, R> {
      *                        implementation may not accept nulls.
      */
     public SimilarityScoreEntry(final SimilarityScore<T, R> similarityScore, final T left) {
-        Objects.requireNonNull(similarityScore, "Similarity score should not be null");
+        ValidationUtils.notNull(similarityScore, "Similarity score should not be null");
         this.similarityScore = similarityScore;
         this.left = left;
     }

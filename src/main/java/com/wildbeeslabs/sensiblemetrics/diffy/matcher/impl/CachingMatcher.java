@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -61,7 +62,7 @@ public class CachingMatcher<T> extends AbstractMatcher<T> {
     protected final ConcurrentMap<? super T, Boolean> map;
 
     public CachingMatcher(final Matcher<? super T> matcher, final ConcurrentMap<? super T, Boolean> map) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
         this.map = Optional.ofNullable(map).orElseGet(() -> new ConcurrentHashMap<>());
     }

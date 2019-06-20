@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventListenerAdapter;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ import java.util.Objects;
 public interface MatcherEventListenerAdapter<T, S> extends EventListenerAdapter<T, S, BaseMatcherEvent<T, S>, MatcherEventListener<T, S>> {
 
     default void addListener(final MatcherEventListener<T, S> listener, final boolean allowDuplicate) {
-        Objects.requireNonNull(listener, "Listener should not be null");
+        ValidationUtils.notNull(listener, "Listener should not be null");
         if (allowDuplicate) {
             this.addListener(listener);
         } else if (!this.containsListener(listener)) {

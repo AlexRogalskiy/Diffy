@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.event.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.Event;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -69,7 +70,7 @@ public abstract class BaseEvent<T> implements Event<T> {
      * @param cause  - initial input error source {@link Throwable}
      */
     public BaseEvent(final T source, final Throwable cause) {
-        Objects.requireNonNull(source, "Event source should not be null");
+        ValidationUtils.notNull(source, "Event source should not be null");
         this.source = source;
         this.cause = cause;
         this.timestamp = System.currentTimeMillis();

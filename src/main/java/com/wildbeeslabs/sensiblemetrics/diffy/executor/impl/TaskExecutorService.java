@@ -33,6 +33,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingConsumer;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingSupplier;
 import com.wildbeeslabs.sensiblemetrics.diffy.executor.property.TaskExecutorProperty;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.experimental.UtilityClass;
 
 import java.time.Duration;
@@ -60,7 +61,7 @@ public class TaskExecutorService {
      * @throws NullPointerException if task executor property is {@code null}
      */
     public static ThreadPoolExecutor getExecutor(final TaskExecutorProperty property, final RejectedExecutionHandler handler) {
-        Objects.requireNonNull(property, "Task executor property should not be null");
+        ValidationUtils.notNull(property, "Task executor property should not be null");
         final ThreadPoolExecutor executor = new ThreadPoolExecutor(
             property.getExecutor().getCorePoolSize(),
             property.getExecutor().getMaxPoolSize(),
@@ -79,7 +80,7 @@ public class TaskExecutorService {
      * @throws NullPointerException if threadFactory is {@code null}
      */
     public static ThreadPoolExecutor getExecutor(final ThreadFactory threadFactory) {
-        Objects.requireNonNull(threadFactory, "Thread factory should not be null");
+        ValidationUtils.notNull(threadFactory, "Thread factory should not be null");
         final ThreadPoolExecutor executor = getExecutor(DEFAULT_PROPERTY_FILE);
         executor.setThreadFactory(threadFactory);
         return executor;
@@ -267,7 +268,7 @@ public class TaskExecutorService {
      * @throws NullPointerException timeout is {@code null}
      */
     private static <T> T execute(final Duration timeout, final Future<T> future) {
-        Objects.requireNonNull(timeout, "Timeout should not be null");
+        ValidationUtils.notNull(timeout, "Timeout should not be null");
         long timeoutInMillis = timeout.toMillis();
         try {
             return future.get(timeoutInMillis, TimeUnit.MILLISECONDS);

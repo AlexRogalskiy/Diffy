@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityScore;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -21,8 +22,8 @@ public class CosineScore implements SimilarityScore<Map<CharSequence, Integer>, 
      */
     @Override
     public Double apply(final Map<CharSequence, Integer> leftVector, final Map<CharSequence, Integer> rightVector) {
-        Objects.requireNonNull(leftVector, "Left vector should not be null");
-        Objects.requireNonNull(rightVector, "Right vector should not be null");
+        ValidationUtils.notNull(leftVector, "Left vector should not be null");
+        ValidationUtils.notNull(rightVector, "Right vector should not be null");
 
         final Set<CharSequence> intersection = getIntersection(leftVector, rightVector);
         final double dotProduct = dot(leftVector, rightVector, intersection);

@@ -66,6 +66,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class ReflectionUtils {
 
     /**
@@ -821,16 +822,18 @@ public class ReflectionUtils {
      * @throws NullPointerException if value is {@code null}
      */
     public static <T> T convertToType(final Class<T> clazz, final Object value, final String errorMessage) {
-        Objects.requireNonNull(clazz, "Class should not be null");
-        Objects.requireNonNull(value, "Value should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(value, "Value should not be null");
+
         if (!clazz.isAssignableFrom(value.getClass())) {
             throw new IllegalArgumentException(errorMessage);
         }
         return (T) value;
     }
 
+    @NonNull
     public static <T> Function<String, T> newInstanceOf(final Class<T> clazz) {
-        Objects.requireNonNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
         return input -> {
             try {
                 return clazz.getConstructor().newInstance();

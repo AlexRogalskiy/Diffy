@@ -28,6 +28,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterExceptio
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.PatternType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.ComparatorBiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -74,7 +75,7 @@ public class RegexValueMatcher<T> extends ComparatorBiMatcher<T> {
      * @throws NullPointerException     if pattern is {@code null}
      */
     public RegexValueMatcher(final String pattern) throws IllegalArgumentException {
-        Objects.requireNonNull(pattern, "Pattern should not be null");
+        ValidationUtils.notNull(pattern, "Pattern should not be null");
         this.expectedPattern = this.getPattern(pattern);
     }
 

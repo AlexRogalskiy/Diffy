@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.executor.factory;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +53,7 @@ public class DefaultThreadFactoryBuilder {
      * @throws NullPointerException if name prefix is {@code null}
      */
     public DefaultThreadFactoryBuilder setNamePrefix(final String namePrefix) {
-        Objects.requireNonNull(namePrefix, "Name prefix should not be null");
+        ValidationUtils.notNull(namePrefix, "Name prefix should not be null");
         this.namePrefix = namePrefix;
         return this;
     }

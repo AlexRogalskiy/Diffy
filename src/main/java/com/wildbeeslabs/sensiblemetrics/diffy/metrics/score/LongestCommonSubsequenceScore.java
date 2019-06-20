@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityScore;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 
 import java.util.Objects;
 
@@ -20,8 +21,8 @@ public class LongestCommonSubsequenceScore implements SimilarityScore<CharSequen
      */
     @Override
     public Integer apply(final CharSequence left, final CharSequence right) {
-        Objects.requireNonNull(left, "Left sequence should not be null");
-        Objects.requireNonNull(right, "Right sequence should not be null");
+        ValidationUtils.notNull(left, "Left sequence should not be null");
+        ValidationUtils.notNull(right, "Right sequence should not be null");
 
         return longestCommonSubsequence(left, right).length();
     }

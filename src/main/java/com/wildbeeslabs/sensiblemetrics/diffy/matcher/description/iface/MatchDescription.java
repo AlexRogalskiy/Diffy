@@ -37,6 +37,7 @@ import java.io.Serializable;
  * @version 1.1
  * @since 1.0
  */
+@SuppressWarnings("unchecked")
 public interface MatchDescription extends Serializable {
 
     /**

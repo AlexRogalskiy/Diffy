@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -135,8 +136,8 @@ public class LevenshteinDistance implements SimilarityDistance<CharSequence, Int
      * @return result distance, or -1
      */
     private static int limitedCompare(final CharSequence left, final CharSequence right, final int threshold) {
-        Objects.requireNonNull(left, "Left sequence should not be null");
-        Objects.requireNonNull(right, "Right sequence should not be null");
+        ValidationUtils.notNull(left, "Left sequence should not be null");
+        ValidationUtils.notNull(right, "Right sequence should not be null");
 
         CharSequence leftSequence = left;
         CharSequence rightSequence = right;
@@ -305,8 +306,8 @@ public class LevenshteinDistance implements SimilarityDistance<CharSequence, Int
      * @throws IllegalArgumentException if either CharSequence input is {@code null}
      */
     private static int unlimitedCompare(final CharSequence left, final CharSequence right) {
-        Objects.requireNonNull(left, "Left sequence should not be null");
-        Objects.requireNonNull(right, "Right sequence should not be null");
+        ValidationUtils.notNull(left, "Left sequence should not be null");
+        ValidationUtils.notNull(right, "Right sequence should not be null");
 
         CharSequence leftSequence = left;
         CharSequence rightSequence = right;

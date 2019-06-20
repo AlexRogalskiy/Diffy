@@ -2,6 +2,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.common.LevenshteinResultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -133,8 +134,8 @@ public class LevenshteinDetailedDistance implements SimilarityDistance<CharSeque
      * @return result distance, or -1
      */
     private static LevenshteinResultEntry limitedCompare(final CharSequence left, final CharSequence right, final int threshold) { //NOPMD
-        Objects.requireNonNull(left, "Left sequence should not be null");
-        Objects.requireNonNull(right, "Right sequence should not be null");
+        ValidationUtils.notNull(left, "Left sequence should not be null");
+        ValidationUtils.notNull(right, "Right sequence should not be null");
 
         CharSequence leftSequence = left;
         CharSequence rightSequence = right;
@@ -314,8 +315,8 @@ public class LevenshteinDetailedDistance implements SimilarityDistance<CharSeque
      * @throws IllegalArgumentException if either CharSequence input is {@code null}
      */
     private static LevenshteinResultEntry unlimitedCompare(final CharSequence left, final CharSequence right) {
-        Objects.requireNonNull(left, "Left sequence should not be null");
-        Objects.requireNonNull(right, "Right sequence should not be null");
+        ValidationUtils.notNull(left, "Left sequence should not be null");
+        ValidationUtils.notNull(right, "Right sequence should not be null");
         /*
            The difference between this impl. and the previous is that, rather
            than creating and retaining a matrix of size s.length() + 1 by t.length() + 1,

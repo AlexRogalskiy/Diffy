@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Chunk;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -65,8 +66,8 @@ public abstract class DefaultDelta<T> implements Delta<T> {
      * @param revised  DefaultChunk describing the revised text. Must not be {@code null}.
      */
     public DefaultDelta(final Chunk<T> original, final Chunk<T> revised) {
-        Objects.requireNonNull(original, "Original chunk should not be null");
-        Objects.requireNonNull(revised, "Revised chunk should not be null");
+        ValidationUtils.notNull(original, "Original chunk should not be null");
+        ValidationUtils.notNull(revised, "Revised chunk should not be null");
 
         this.original = original;
         this.revised = revised;

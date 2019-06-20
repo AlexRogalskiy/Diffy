@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -42,8 +43,8 @@ public class HammingDistance implements SimilarityDistance<CharSequence, Integer
      */
     @Override
     public Integer apply(final CharSequence left, final CharSequence right) {
-        Objects.requireNonNull(left, "Left sequence should not be nul");
-        Objects.requireNonNull(right, "Rigth sequence should not be nul");
+        ValidationUtils.notNull(left, "Left sequence should not be nul");
+        ValidationUtils.notNull(right, "Rigth sequence should not be nul");
 
         if (left.length() != right.length()) {
             throw new IllegalArgumentException("CharSequences must have the same length");

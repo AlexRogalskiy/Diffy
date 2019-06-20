@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityScore;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Getter;
 
 import java.util.Locale;
@@ -25,7 +26,7 @@ public class FuzzyScore implements SimilarityScore<CharSequence, Integer> {
      * @throws IllegalArgumentException This is thrown if the {@link Locale} parameter is {@code null}.
      */
     public FuzzyScore(final Locale locale) {
-        Objects.requireNonNull(locale, "Locale should not be null");
+        ValidationUtils.notNull(locale, "Locale should not be null");
         this.locale = locale;
     }
 
@@ -54,8 +55,8 @@ public class FuzzyScore implements SimilarityScore<CharSequence, Integer> {
      */
     @Override
     public Integer apply(final CharSequence first, final CharSequence last) {
-        Objects.requireNonNull(first, "First sequence should not be null");
-        Objects.requireNonNull(last, "Last sequence should not be null");
+        ValidationUtils.notNull(first, "First sequence should not be null");
+        ValidationUtils.notNull(last, "Last sequence should not be null");
 
         final String termLowerCase = first.toString().toLowerCase(locale);
         final String queryLowerCase = last.toString().toLowerCase(locale);

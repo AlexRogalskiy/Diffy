@@ -80,8 +80,8 @@ import java.util.Objects;
  * @since IBANEntry 1.3.0
  */
 @Data
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class BigDecimalValidator2 extends AbstractNumberValidator {
 
     /**

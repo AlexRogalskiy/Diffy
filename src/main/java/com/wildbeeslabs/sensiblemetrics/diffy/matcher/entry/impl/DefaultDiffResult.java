@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffEntry;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -87,9 +88,9 @@ public class DefaultDiffResult<T> implements Iterable<DiffEntry<?>> {
      * @throws IllegalArgumentException if {@code first}, {@code last} or {@code diffEntryList} is {@code null}
      */
     public DefaultDiffResult(final T first, final T last, final List<DiffEntry<?>> diffs, final ToStringStyle style) {
-        Objects.requireNonNull(first, "First object should not be null");
-        Objects.requireNonNull(last, "Last object should not be null");
-        Objects.requireNonNull(diffs, "Collection of diff entries should not be null");
+        ValidationUtils.notNull(first, "First object should not be null");
+        ValidationUtils.notNull(last, "Last object should not be null");
+        ValidationUtils.notNull(diffs, "Collection of diff entries should not be null");
 
         this.diffEntryList = diffs;
         this.first = first;

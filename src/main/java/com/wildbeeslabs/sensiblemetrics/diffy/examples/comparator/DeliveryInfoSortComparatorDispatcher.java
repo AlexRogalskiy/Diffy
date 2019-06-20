@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.ComparatorDispatc
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +72,7 @@ public class DeliveryInfoSortComparatorDispatcher implements ComparatorDispatche
      */
     @Override
     public Comparator<? super DeliveryInfo> getComparator(final SortManager sortManager) {
-        Objects.requireNonNull(sortManager, "Sort manager should not be null!");
+        ValidationUtils.notNull(sortManager, "Sort manager should not be null!");
         final List<Comparator<? super DeliveryInfo>> comparatorList = StreamSupport.stream(sortManager.spliterator(), false)
             .map(this.getSortOrderComparator())
             .collect(Collectors.toList());

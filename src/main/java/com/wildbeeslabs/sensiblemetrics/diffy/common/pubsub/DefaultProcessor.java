@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.pubsub;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.Event;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
@@ -82,7 +83,7 @@ public class DefaultProcessor<T> implements Processor<Event<T>, String> {
 
     @Override
     public void onNext(final Event<T> item) {
-        Objects.requireNonNull(item, "Item should not be null");
+        ValidationUtils.notNull(item, "Item should not be null");
         this.dataItems.add("item value = " + item + " after processing");
         log("processing item: [" + item + "] ...");
     }

@@ -2,6 +2,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.score.LongestCommonSubsequenceScore;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -33,8 +34,8 @@ public class LongestCommonSubsequenceDistance implements SimilarityDistance<Char
      */
     @Override
     public Integer apply(final CharSequence left, final CharSequence right) {
-        Objects.requireNonNull(left, "Left sequence should not be null");
-        Objects.requireNonNull(right, "Right sequence should not be null");
+        ValidationUtils.notNull(left, "Left sequence should not be null");
+        ValidationUtils.notNull(right, "Right sequence should not be null");
 
         return left.length() + right.length() - 2 * this.longestCommonSubsequence.apply(left, right);
     }

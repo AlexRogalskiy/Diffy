@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.NonNull;
 
 import java.io.Serializable;
@@ -61,7 +62,7 @@ public interface ComparatorDispatcher<T> extends Serializable {
      */
     @NonNull
     default BiMatcher<T> equalBy(final SortManager sortManager) {
-        Objects.requireNonNull(sortManager, "SortManager should not be null");
+        ValidationUtils.notNull(sortManager, "SortManager should not be null");
         return (final T a, final T b) -> Objects.compare(a, b, this.getComparator(sortManager)) == 0;
     }
 
@@ -74,7 +75,7 @@ public interface ComparatorDispatcher<T> extends Serializable {
      */
     @NonNull
     default BinaryOperator<T> maxBy(final SortManager sortManager) {
-        Objects.requireNonNull(sortManager, "SortManager should not be null");
+        ValidationUtils.notNull(sortManager, "SortManager should not be null");
         return (final T a, final T b) -> Objects.compare(a, b, this.getComparator(sortManager)) > 0 ? a : b;
     }
 
@@ -87,7 +88,7 @@ public interface ComparatorDispatcher<T> extends Serializable {
      */
     @NonNull
     default BinaryOperator<T> minBy(final SortManager sortManager) {
-        Objects.requireNonNull(sortManager, "SortManager should not be null");
+        ValidationUtils.notNull(sortManager, "SortManager should not be null");
         return (final T a, final T b) -> Objects.compare(a, b, this.getComparator(sortManager)) < 0 ? a : b;
     }
 }

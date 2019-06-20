@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.*;
 
 import java.util.Objects;
@@ -54,7 +55,7 @@ public class StringMatcher extends AbstractMatcher<String> {
     private final StringMatcher.MatchModeType modeType;
 
     public StringMatcher(final String value, final StringMatcher.MatchModeType modeType) {
-        Objects.requireNonNull(modeType, "Mode type should not be null");
+        ValidationUtils.notNull(modeType, "Mode type should not be null");
         this.value = value;
         this.modeType = modeType;
     }

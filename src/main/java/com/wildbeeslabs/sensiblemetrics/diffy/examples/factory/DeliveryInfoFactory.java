@@ -30,6 +30,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoDi
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparatorDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -123,8 +124,8 @@ public class DeliveryInfoFactory {
      */
     @Factory
     public static DeliveryInfoSortOrderComparator createSortOrderComparator(final Map<String, Comparator<? super DeliveryInfo>> comparatorMap, final Comparator<? super DeliveryInfo> comparator) {
-        Objects.requireNonNull(comparatorMap, "Map should not be null!");
-        Objects.requireNonNull(comparator, "Comparator should not be null!");
+        ValidationUtils.notNull(comparatorMap, "Map should not be null!");
+        ValidationUtils.notNull(comparator, "Comparator should not be null!");
 
         return new DeliveryInfoSortOrderComparator(comparatorMap, comparator);
     }
@@ -137,7 +138,7 @@ public class DeliveryInfoFactory {
      */
     @Factory
     public static DeliveryInfoSortComparatorDispatcher createSortOrder(final DeliveryInfoSortOrderComparator sortOrderComparator) {
-        Objects.requireNonNull(sortOrderComparator, "Comparator should not be null");
+        ValidationUtils.notNull(sortOrderComparator, "Comparator should not be null");
         return new DeliveryInfoSortComparatorDispatcher(sortOrderComparator);
     }
 }

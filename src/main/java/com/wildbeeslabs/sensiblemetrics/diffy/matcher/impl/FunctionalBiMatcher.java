@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -50,7 +51,7 @@ public class FunctionalBiMatcher<T, R> extends AbstractBiMatcher<T, T> {
     private final Function<T, ? extends R> function;
 
     public FunctionalBiMatcher(final Function<T, ? extends R> function) {
-        Objects.requireNonNull(function, "Function should not be null");
+        ValidationUtils.notNull(function, "Function should not be null");
         this.function = function;
     }
 

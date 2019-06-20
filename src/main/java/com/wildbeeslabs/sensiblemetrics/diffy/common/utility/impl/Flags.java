@@ -159,18 +159,6 @@ public class Flags implements Serializable, Cloneable {
         }
     }
 
-
-    /**
-     * The hash code is based on the current state of the flags.
-     *
-     * @return the hash code for this object.
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return (int) this.flags;
-    }
-
     /**
      * Returns a 64 length String with the first flag on the right and the
      * 64th flag on the left.  A 1 indicates the flag is on, a 0 means it's
