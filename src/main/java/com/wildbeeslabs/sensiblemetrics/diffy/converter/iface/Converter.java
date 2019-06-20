@@ -49,6 +49,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.toUnmo
  * @since 1.0
  */
 @FunctionalInterface
+@SuppressWarnings("unchecked")
 public interface Converter<T, R> {
 
     /**
