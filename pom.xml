@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
-    <artifactId>diffy</artifactId>
+    <artifactId>diffy-parent</artifactId>
     <version>1.1.0</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
-    <name>Diffy</name>
+    <name>Diffy Parent</name>
     <url>https://github.com/AlexRogalskiy/Diffy</url>
-    <description>Diffy core API</description>
+    <description>Diffy parent API</description>
     <inceptionYear>2019</inceptionYear>
 
     <issueManagement>
@@ -238,6 +238,7 @@
         <maven.install.plugin.version>3.0.0-M1</maven.install.plugin.version>
         <maven.scm.publish.plugin.version>3.0.0</maven.scm.publish.plugin.version>
         <maven.changes.plugin.version>2.12.1</maven.changes.plugin.version>
+        <maven.taglist.plugin.version>2.4</maven.taglist.plugin.version>
     </properties>
 
     <build>
@@ -394,27 +395,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven.deploy.plugin.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven.jar.plugin.version}</version>
-                    <configuration>
-                        <excludes>
-                            <exclude>com.wildbeeslabs.sensiblemetrics.diffy.examples</exclude>
-                        </excludes>
-                        <archive>
-                            <manifestEntries>
-                                <Automatic-Module-Name>${project.groupId}.${project.artifactId}</Automatic-Module-Name>
-                            </manifestEntries>
-                            <manifest>
-                                <addClasspath>true</addClasspath>
-                                <classpathPrefix>modules/</classpathPrefix>
-                            </manifest>
-                        </archive>
-                        <outputDirectory>${project.build.directory}/modules</outputDirectory>
-                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -652,6 +632,19 @@
                         <serverId>ossrh</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>taglist-maven-plugin</artifactId>
+                    <version>${maven.taglist.plugin.version}</version>
+                    <configuration>
+                        <tags>
+                            <tag>TODO</tag>
+                            <tag>NOPMD</tag>
+                            <tag>NOTE</tag>
+                        </tags>
                     </configuration>
                 </plugin>
 
@@ -1287,4 +1280,9 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <modules>
+        <module>core</module>
+        <module>common</module>
+    </modules>
 </project>

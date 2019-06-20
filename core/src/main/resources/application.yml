@@ -1,0 +1,7 @@
+# Diffy configuration
+---
+executor:
+  corePoolSize: 5
+  maxPoolSize: 10
+  keepAliveTimeout: 0
+  queueSize: 8192

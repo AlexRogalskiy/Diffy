@@ -43,6 +43,7 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class FieldMatcher<T> extends AbstractMatcher<Class<T>> {
 
     /**
