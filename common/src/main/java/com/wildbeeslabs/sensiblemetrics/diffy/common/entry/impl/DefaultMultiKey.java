@@ -141,7 +141,7 @@ public class DefaultMultiKey<T> implements MultiKey<T> {
      * @param keys the array of keys, not null
      * @throws IllegalArgumentException if the key array is null
      */
-    public DefaultMultiKey(final T[] keys) {
+    public DefaultMultiKey(final T... keys) {
         this(keys, true);
     }
 
@@ -207,6 +207,7 @@ public class DefaultMultiKey<T> implements MultiKey<T> {
      */
     @Override
     public T getKey(int index) {
+        ValidationUtils.isTrue(index >= 0 && index < this.keys.length, "Index is out of array bounds");
         return this.keys[index];
     }
 
