@@ -23,24 +23,23 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
-import static java.util.Arrays.asList;
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 
 @Data
 @EqualsAndHashCode
 @ToString
-public class DefaultMultiValue<K, V> implements Entry<K, List<V>> {
+public class DefaultListEntry<K, V> implements Entry<K, List<V>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -63,8 +62,8 @@ public class DefaultMultiValue<K, V> implements Entry<K, List<V>> {
      * @param map the map
      * @param key the key
      */
-    public DefaultMultiValue(final K first, final V last) {
-        this(first, asList(last));
+    public DefaultListEntry(final K first, final V last) {
+        this(first, Collections.singletonList(last));
     }
 
     /**
@@ -73,7 +72,7 @@ public class DefaultMultiValue<K, V> implements Entry<K, List<V>> {
      * @param map the map
      * @param key the key
      */
-    public DefaultMultiValue(final K first, final List<V> last) {
+    public DefaultListEntry(final K first, final List<V> last) {
         this.first = first;
         this.last = Optional.ofNullable(last).orElseGet(Collections::emptyList);
     }
@@ -86,7 +85,7 @@ public class DefaultMultiValue<K, V> implements Entry<K, List<V>> {
      * @throws IllegalArgumentException if the value is set to this map entry
      */
     public boolean addValue(final V value) {
-        return this.last.add(value);
+        return CollectionUtils.addIgnoreNull(this.last, value);
     }
 
     /**
@@ -96,7 +95,17 @@ public class DefaultMultiValue<K, V> implements Entry<K, List<V>> {
      * @return the old value
      * @throws IllegalArgumentException if the value is set to this map entry
      */
-    public void addValues(final Collection<V> values) {
-        CollectionUtils.addAll(this.last, listOf(values).iterator());
+    public void addValues(final Iterable<V> values) {
+        streamOf(values).forEach(this::addValue);
+    }
+
+    /**
+     * Returns entry last value {@link List}
+     *
+     * @return entry last value {@link List}
+     */
+    @Override
+    public List<V> getLast() {
+        return ImmutableList.<V>builder().addAll(this.last).build();
     }
 }

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
+import com.google.common.collect.ImmutableMap;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +32,8 @@ import lombok.ToString;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 
 /**
  * Default tied map {@link Entry} implementatino
@@ -41,7 +44,7 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode
 @ToString
-public class DefaultTiedMapEntry<K, V> implements Entry<K, Map<K, V>> {
+public class DefaultMapEntry<T, K, V> implements Entry<T, Map<K, V>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -49,12 +52,12 @@ public class DefaultTiedMapEntry<K, V> implements Entry<K, Map<K, V>> {
     private static final long serialVersionUID = -921490395669655850L;
 
     /**
-     * The key
+     * Default {@code T} key
      */
-    private final K first;
+    private final T first;
 
     /**
-     * The map underlying the entry/iterator
+     * Default {@link Map} value
      */
     private final Map<K, V> last;
 
@@ -64,17 +67,7 @@ public class DefaultTiedMapEntry<K, V> implements Entry<K, Map<K, V>> {
      * @param map the map
      * @param key the key
      */
-    public DefaultTiedMapEntry(final K first, final V last) {
-        this(first, Collections.singletonMap(first, last));
-    }
-
-    /**
-     * Constructs a new entry with the given Map and key.
-     *
-     * @param map the map
-     * @param key the key
-     */
-    public DefaultTiedMapEntry(final K first, final Map<K, V> last) {
+    public DefaultMapEntry(final T first, final Map<K, V> last) {
         this.first = first;
         this.last = Optional.ofNullable(last).orElseGet(Collections::emptyMap);
     }
@@ -84,7 +77,7 @@ public class DefaultTiedMapEntry<K, V> implements Entry<K, Map<K, V>> {
      *
      * @return the key
      */
-    public K getKey() {
+    public T getKey() {
         return this.first;
     }
 
@@ -93,8 +86,8 @@ public class DefaultTiedMapEntry<K, V> implements Entry<K, Map<K, V>> {
      *
      * @return the value
      */
-    public V getValue() {
-        return this.last.get(this.first);
+    public V getValue(final K key) {
+        return this.last.get(key);
     }
 
     /**
@@ -104,7 +97,39 @@ public class DefaultTiedMapEntry<K, V> implements Entry<K, Map<K, V>> {
      * @return the old value
      * @throws IllegalArgumentException if the value is set to this map entry
      */
-    public Object setValue(final V value) {
-        return this.last.put(this.getKey(), value);
+    public V addValue(final K key, final V value) {
+        return this.last.put(key, value);
+    }
+
+    /**
+     * Sets the value associated with the key direct onto the map.
+     *
+     * @param value the new value
+     * @return the old value
+     * @throws IllegalArgumentException if the value is set to this map entry
+     */
+    public V addValue(final Map.Entry<K, V> entry) {
+        return this.last.put(entry.getKey(), entry.getValue());
+    }
+
+    /**
+     * Sets the value associated with the key direct onto the map.
+     *
+     * @param values the new value
+     * @return the old value
+     * @throws IllegalArgumentException if the value is set to this map entry
+     */
+    public void addValues(final Iterable<Map.Entry<K, V>> values) {
+        streamOf(values).forEach(this::addValue);
+    }
+
+    /**
+     * Returns entry last value {@link Map}
+     *
+     * @return entry last value {@link Map}
+     */
+    @Override
+    public Map<K, V> getLast() {
+        return ImmutableMap.<K, V>builder().putAll(this.last).build();
     }
 }

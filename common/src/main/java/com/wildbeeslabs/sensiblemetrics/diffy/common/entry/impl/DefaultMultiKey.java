@@ -170,9 +170,9 @@ public class DefaultMultiKey<T> implements MultiKey<T> {
      * @since Commons Collections 3.1
      */
     public DefaultMultiKey(final T[] keys, boolean makeClone) {
-        ValidationUtils.notNull(keys, "Keys should not be null");
+        ValidationUtils.notNull(keys, "Array of keys should not be null");
         if (makeClone) {
-            this.keys = (T[]) keys.clone();
+            this.keys = keys.clone();
         } else {
             this.keys = keys;
         }
@@ -191,7 +191,7 @@ public class DefaultMultiKey<T> implements MultiKey<T> {
      */
     @Override
     public T[] getKeys() {
-        return (T[]) keys.clone();
+        return this.keys.clone();
     }
 
     /**
@@ -207,7 +207,7 @@ public class DefaultMultiKey<T> implements MultiKey<T> {
      */
     @Override
     public T getKey(int index) {
-        ValidationUtils.isTrue(index >= 0 && index < this.keys.length, "Index is out of array bounds");
+        ValidationUtils.isTrue(index >= 0 && index < this.size(), "Index is out of array bounds");
         return this.keys[index];
     }
 
@@ -229,7 +229,7 @@ public class DefaultMultiKey<T> implements MultiKey<T> {
      */
     private void calculateHashCode(final T[] keys) {
         int total = 0;
-        for (int i = 0; i < keys.length; i++) {
+        for (int i = 0; i < ArrayUtils.getLength(keys); i++) {
             if (Objects.nonNull(keys[i])) {
                 total ^= keys[i].hashCode();
             }
@@ -245,7 +245,7 @@ public class DefaultMultiKey<T> implements MultiKey<T> {
      * @return the instance with recalculated hash code
      */
     private Object readResolve() {
-        this.calculateHashCode(keys);
+        this.calculateHashCode(this.keys);
         return this;
     }
 }

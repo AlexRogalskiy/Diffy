@@ -36,6 +36,7 @@ import lombok.*;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Default {@link Entry} implementation
@@ -110,6 +111,29 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     @NonNull
     public Map.Entry<K, V> entry() {
         return new AbstractMap.SimpleImmutableEntry<>(this.getFirst(), this.getLast());
+    }
+
+    /**
+     * Returns {@link Map.Entry} instance
+     *
+     * @return {@link Map.Entry} instance
+     */
+    @NonNull
+    public Map.Entry<K, V> entry(final Supplier<K> keySupplier, final Supplier<V> valueSupplier) {
+        final K newKey = Optional.ofNullable(this.getFirst()).orElseGet(keySupplier);
+        final V newValue = Optional.ofNullable(this.getLast()).orElseGet(valueSupplier);
+        return new AbstractMap.SimpleImmutableEntry<>(newKey, newValue);
+    }
+
+    /**
+     * Returns {@link Map.Entry} instance
+     *
+     * @return {@link Map.Entry} instance
+     */
+    @NonNull
+    public Map.Entry<K, V> entry(final Supplier<V> valueSupplier) {
+        final V newValue = Optional.ofNullable(this.getLast()).orElseGet(valueSupplier);
+        return new AbstractMap.SimpleImmutableEntry<>(this.getFirst(), newValue);
     }
 
     /**
