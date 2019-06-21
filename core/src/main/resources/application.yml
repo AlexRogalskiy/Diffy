@@ -1,4 +1,4 @@
-# Diffy configuration
+# Diffy core configuration
 ---
 executor:
   corePoolSize: 5

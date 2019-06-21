@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Implementation-Title: diffy
 Implementation-Version: 1.0.0-RELEASE
 Implementation-Vendor: SensibleMetrics, Inc.
-Implementation-Vendor-Id: com.wildbeeslabs.sensiblemetrics.diffy
+Implementation-Vendor-Id: com.wildbeeslabs.sensiblemetrics.diffy.core
 Archiver-Version: Plexus Archiver
 Application-Version: 1.0.0-RElEASE
 Built-By: SensibleMetrics, Inc.

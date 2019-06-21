@@ -16,7 +16,7 @@
     <packaging>jar</packaging>
 
     <name>Diffy Common</name>
-    <url>https://github.com/AlexRogalskiy/Diffy</url>
+    <url>https://github.com/AlexRogalskiy/Diffy/common</url>
     <description>Diffy common API</description>
     <inceptionYear>2019</inceptionYear>
 
@@ -49,7 +49,7 @@
                     <version>${maven.jar.plugin.version}</version>
                     <configuration>
                         <excludes>
-                            <exclude>com.wildbeeslabs.sensiblemetrics.diffy.examples</exclude>
+                            <exclude>com.wildbeeslabs.sensiblemetrics.diffy.common.examples</exclude>
                         </excludes>
                         <archive>
                             <manifestEntries>
@@ -90,8 +90,8 @@
                                 Java type objects
                             </Bunlder-Description>
                             <Import-Package>*</Import-Package>
-                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.examples.*</Private-Package>
-                            <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.*;-noimport:=true
+                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.common.examples.*</Private-Package>
+                            <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.common.*;-noimport:=true
                             </Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
                         </instructions>

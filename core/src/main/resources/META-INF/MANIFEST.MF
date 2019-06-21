@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Implementation-Title: diffy
 Implementation-Version: 1.0.0-RELEASE
 Implementation-Vendor: SensibleMetrics, Inc.
-Implementation-Vendor-Id: com.wildbeeslabs.sensiblemetrics.diffy
+Implementation-Vendor-Id: com.wildbeeslabs.sensiblemetrics.diffy.core
 Archiver-Version: Plexus Archiver
 Application-Version: 1.0.0-RElEASE
 Built-By: SensibleMetrics, Inc.
 Bundle-Name: diffy
 Bundle-SymbolicName: io.diffy
 Bundle-Description: Diffy is a simple-easy library to provide the differences between any Java type objects
-Bundle-DocURL: http://github.com/AlexRogalskiy/diffy
+Bundle-DocURL: http://github.com/AlexRogalskiy/diffy/core
 Bundle-License: https://mit-license.org/
 Bundle-ManifestVersion: 2
 Bundle-Version: 1.0.0

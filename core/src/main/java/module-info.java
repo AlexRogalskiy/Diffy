@@ -1,7 +1,7 @@
 /**
  * Diffy API module info
  */
-open module com.wildbeeslabs.sensiblemtrics.diffy {
+open module com.wildbeeslabs.sensiblemtrics.diffy.core {
     requires static lombok;
     requires slf4j.api;
     requires jsr305;
@@ -27,12 +27,26 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires org.jsoup;
     requires commons.validator;
 
-    // exports comparator interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
-    // exports converter interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
-    // exports matcher interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
-    // exports entry interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface;
+    // exports core configuration
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.enumeration;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.impl;
+    // exports core entry
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.entry.delta;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.entry.node;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.entry.utils;
+    // exports core property
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.property.enumeration;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.property.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.property.impl;
+    // exports core service
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.service.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.service.impl;
+    // exports core sort
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.sort;
+    // exports core stream
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.stream.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.stream.impl;
+    // exports core utils
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.utils;
 }

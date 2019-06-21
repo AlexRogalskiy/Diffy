@@ -1,7 +1,7 @@
 /**
  * Diffy API module info
  */
-open module com.wildbeeslabs.sensiblemtrics.diffy {
+open module com.wildbeeslabs.sensiblemtrics.diffy.common {
     requires static lombok;
     requires slf4j.api;
     requires jsr305;
@@ -27,12 +27,42 @@ open module com.wildbeeslabs.sensiblemtrics.diffy {
     requires org.jsoup;
     requires commons.validator;
 
-    // exports comparator interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface;
-    // exports converter interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.converter.iface;
-    // exports matcher interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface;
-    // exports entry interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface;
+    // exports common annotation
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.annotation;
+    // exports common context
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.context;
+    // exports common entry
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.entry.view;
+    // exports common enumeration
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
+    // exports common event
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.event.impl;
+    // exports common exception
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.exception;
+    // exports common executor
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.configuration;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.factory;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.handler;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.impl;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.property;
+    // exports common helpers
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
+    // exports common interfaces
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces;
+    // exports common messaging
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.messaging;
+    // exports common service
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.service;
+    // exports common sort
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.converter.sort;
+    // exports common stream
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.stream.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.stream.impl;
+    // exports common utils
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 }
