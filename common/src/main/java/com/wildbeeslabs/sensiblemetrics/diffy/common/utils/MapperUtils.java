@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -64,15 +64,21 @@ public class MapperUtils {
      */
     static {
         objectMapper = new ObjectMapper();
+        //final SimpleModule module = new SimpleModule("UnQuote");
+        //module.addSerializer(new UnQuotesSerializer());
+        //objectMapper.registerModule(module);
+
         objectMapper.setDefaultMergeable(Boolean.TRUE);
         objectMapper.setLocale(Locale.getDefault());
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         objectMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        objectMapper.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES);
         objectMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
         objectMapper.enable(JsonGenerator.Feature.ESCAPE_NON_ASCII);
+        objectMapper.disable(JsonGenerator.Feature.QUOTE_FIELD_NAMES);
+        objectMapper.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES);
+        objectMapper.enable(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS);
 
         objectMapper.disable(SerializationFeature.INDENT_OUTPUT);
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
