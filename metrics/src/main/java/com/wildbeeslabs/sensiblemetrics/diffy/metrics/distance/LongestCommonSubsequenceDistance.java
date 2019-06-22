@@ -23,14 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityDistance;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.score.LongestCommonSubsequenceScore;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.Objects;
 
 /**
  * Longest common {@link SimilarityDistance} implementation
@@ -48,7 +46,7 @@ public class LongestCommonSubsequenceDistance implements SimilarityDistance<Char
     /**
      * Calculates an edit distance between two <code>CharSequence</code>'s <code>left</code> and
      * <code>right</code> as: <code>left.length() + right.length() - 2 * LCS(left, right)</code>, where
-     * <code>LCS</code> is given in {@link LongestCommonSubsequence#apply(CharSequence, CharSequence)}.
+     * <code>LCS</code> is given in {@link LongestCommonSubsequenceDistance#apply(CharSequence, CharSequence)}.
      *
      * @param left  first character sequence
      * @param right second character sequence

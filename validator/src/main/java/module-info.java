@@ -26,16 +26,19 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.validator {
     requires java.compiler;
     requires org.jsoup;
     requires commons.validator;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.common;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.processor;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.matcher;
 
     // exports validator digits
-    exports com.wildbeeslabs.sensiblemetrics.diffy.validator.iface;
-    exports com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
-    // exports validator enumeration
-    exports com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
     // exports validator exception
     exports com.wildbeeslabs.sensiblemetrics.diffy.validator.exception;
     // exports validator interfaces
     exports com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces;
+    // exports validator helpers
+    exports com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers;
     // exports validator service
     exports com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
     // exports validator utils

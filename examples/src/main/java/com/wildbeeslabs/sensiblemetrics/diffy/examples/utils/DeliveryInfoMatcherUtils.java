@@ -24,10 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.utils;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractFieldMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.TypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.AbstractFieldMatcher;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
@@ -36,32 +35,33 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Custom {@link DeliveryInfo} {@link AbstractMatcher} implementation
+ * Custom {@link DeliveryInfo} matcher utilities implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class DeliveryInfoMatcherUtils {
 
     /**
-     * Determines delivery info "Type" field matcher {@link Matcher}
+     * Determines delivery info "Type" field matcher {@link TypeSafeMatcher}
      */
     public static final Function<Integer, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_TYPE_MATCHER = type -> value -> Objects.equals(type, value.getType());
 
     /**
-     * Determines delivery info "Gid" field matcher {@link Matcher}
+     * Determines delivery info "Gid" field matcher {@link TypeSafeMatcher}
      */
     public static final Function<String, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_GID_MATCHER = gid -> value -> Objects.equals(gid, value.getGid());
 
     /**
-     * Determines delivery info "Created date" matcher {@link Matcher}
+     * Determines delivery info "Created date" matcher {@link TypeSafeMatcher}
      */
     public static final Function<Date, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_CREATED_DATE_MATCHER = date -> value -> Objects.equals(date, value.getCreatedAt());
 
     /**
-     * Determines delivery info "Updated date" matcher {@link Matcher}
+     * Determines delivery info "Updated date" matcher {@link TypeSafeMatcher}
      */
     public static final Function<Date, TypeSafeMatcher<? super DeliveryInfo>> DELIVERY_UPDATED_DATE_MATCHER = date -> value -> Objects.equals(date, value.getUpdatedAt());
 

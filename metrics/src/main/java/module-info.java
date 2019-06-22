@@ -26,13 +26,16 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.metrics {
     requires java.compiler;
     requires org.jsoup;
     requires commons.validator;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.common;
 
-    // exports comparator interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.comparator.iface;
-    // exports converter interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.converter.iface;
-    // exports matcher interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.matcher.iface;
-    // exports entry interfaces
-    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.matcher.entry.iface;
+    // exports metrics distance
+    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
+    // exports metrics entry
+    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.entry;
+    // exports metrics helpers
+    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.helpers;
+    // exports metrics entry
+    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces;
+    // exports metrics score
+    exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 }

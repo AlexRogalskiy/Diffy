@@ -26,6 +26,9 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.examples {
     requires java.compiler;
     requires org.jsoup;
     requires commons.validator;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.comparator;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.common;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.matcher;
 
     // exports examples comparator
     exports com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;

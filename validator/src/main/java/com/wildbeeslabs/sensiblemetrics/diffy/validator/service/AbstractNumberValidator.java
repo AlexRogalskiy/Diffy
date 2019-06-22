@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.AbstractNumberProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.AbstractNumberProcessor;
 import lombok.*;
 
 import java.util.Locale;
@@ -74,12 +74,8 @@ public abstract class AbstractNumberValidator extends AbstractFormatValidator<St
      * Construct an instance with specified <i>strict</i>
      * and <i>decimal</i> parameters.
      *
-     * @param strict         <code>true</code> if strict
-     *                       <code>Format</code> parsing should be used.
-     * @param formatType     The <code>NumberFormat</code> type to
-     *                       create for validation, default is STANDARD_FORMAT.
-     * @param allowFractions <code>true</code> if fractions are
-     *                       allowed or <code>false</code> if integers only.
+     * @param processor <code>true</code> if fractions are
+     *                  allowed or <code>false</code> if integers only.
      */
     public AbstractNumberValidator(final AbstractNumberProcessor processor) {
         ValidationUtils.notNull(processor, "Processor should not be null");

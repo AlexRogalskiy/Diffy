@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.handler;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.handler;
 
 import lombok.extern.slf4j.Slf4j;
 

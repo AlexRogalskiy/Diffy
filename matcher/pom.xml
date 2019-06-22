@@ -20,6 +20,11 @@
     <description>Diffy matcher API</description>
     <inceptionYear>2019</inceptionYear>
 
+    <properties>
+        <diffy-common.version>1.1.0</diffy-common.version>
+        <!--<diffy-core.version>1.1.0</diffy-core.version>-->
+    </properties>
+
     <build>
         <defaultGoal>clean checkstyle:check spotbugs:check javadoc:javadoc</defaultGoal>
         <directory>${project.basedir}/target</directory>
@@ -100,4 +105,17 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-common</artifactId>
+            <version>${diffy-common.version}</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.wildbeeslabs.sensiblemetrics</groupId>-->
+            <!--<artifactId>diffy-core</artifactId>-->
+            <!--<version>${diffy-core.version}</version>-->
+        <!--</dependency>-->
+    </dependencies>
 </project>

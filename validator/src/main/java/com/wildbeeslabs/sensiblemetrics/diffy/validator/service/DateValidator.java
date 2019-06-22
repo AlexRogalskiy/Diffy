@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.DateProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.DateProcessor;
 
 import java.text.DateFormat;
 import java.util.Locale;

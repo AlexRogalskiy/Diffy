@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.GenericValidator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.GenericValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

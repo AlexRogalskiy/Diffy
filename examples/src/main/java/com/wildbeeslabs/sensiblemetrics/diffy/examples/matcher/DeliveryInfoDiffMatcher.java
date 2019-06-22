@@ -23,26 +23,24 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractFieldMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultDiffMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.InstanceMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.TypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.AbstractFieldMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.DefaultDiffMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.InstanceMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.Contract;
 
 import java.util.Date;
 import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Custom {@link DeliveryInfo} {@link AbstractMatcher} implementation
+ * Custom {@link DeliveryInfo} {@link DefaultDiffMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -52,6 +50,7 @@ import java.util.function.Function;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class DeliveryInfoDiffMatcher extends DefaultDiffMatcher<DeliveryInfo> {
 
     /**
@@ -197,7 +196,6 @@ public class DeliveryInfoDiffMatcher extends DefaultDiffMatcher<DeliveryInfo> {
      * @return {@link DeliveryInfoDiffMatcher}
      */
     @Factory
-    @Contract(" -> new")
     public static DeliveryInfoDiffMatcher of() {
         return new DeliveryInfoDiffMatcher();
     }

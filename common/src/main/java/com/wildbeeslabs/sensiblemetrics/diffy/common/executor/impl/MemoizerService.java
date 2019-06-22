@@ -1,6 +1,29 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.impl;
+/*
+ * The MIT License
+ *
+ * Copyright 2019 WildBees Labs, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces.Processor;
 
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -29,10 +52,10 @@ import java.util.concurrent.*;
  * @param <O> the type of the output of the calculation
  * @since 3.6
  */
-public class MemoizerService<I, O, E extends Throwable> implements ThrowingProcessor<I, O, E> {
+public class MemoizerService<I, O> implements Processor<I, O> {
 
     private final ConcurrentMap<I, Future<O>> cache = new ConcurrentHashMap<>();
-    private final ThrowingProcessor<I, O, E> computable;
+    private final Processor<I, O> computable;
     private final boolean recalculate;
 
     /**
@@ -47,7 +70,7 @@ public class MemoizerService<I, O, E extends Throwable> implements ThrowingProce
      *
      * @param computable the computation whose results should be memorized
      */
-    public MemoizerService(final ThrowingProcessor<I, O, E> computable) {
+    public MemoizerService(final Processor<I, O> computable) {
         this(computable, false);
     }
 
@@ -62,7 +85,7 @@ public class MemoizerService<I, O, E extends Throwable> implements ThrowingProce
      * @param recalculate determines whether the computation should be recalculated on
      *                    subsequent calls if the previous call failed
      */
-    public MemoizerService(final ThrowingProcessor<I, O, E> computable, final boolean recalculate) {
+    public MemoizerService(final Processor<I, O> computable, final boolean recalculate) {
         this.computable = computable;
         this.recalculate = recalculate;
     }
@@ -84,7 +107,7 @@ public class MemoizerService<I, O, E extends Throwable> implements ThrowingProce
      * @throws InterruptedException thrown if the calculation is interrupted
      */
     @Override
-    public O processOrThrow(final I arg) throws E {
+    public O process(final I arg) {
         while (true) {
             Future<O> future = this.cache.get(arg);
             if (future == null) {

@@ -26,6 +26,8 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.core {
     requires java.compiler;
     requires org.jsoup;
     requires commons.validator;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.common;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.matcher;
 
     // exports core configuration
     exports com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.enumeration;
@@ -39,14 +41,10 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.core {
     exports com.wildbeeslabs.sensiblemetrics.diffy.core.property.enumeration;
     exports com.wildbeeslabs.sensiblemetrics.diffy.core.property.iface;
     exports com.wildbeeslabs.sensiblemetrics.diffy.core.property.impl;
+    // exports core interfaces
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces;
     // exports core service
-    exports com.wildbeeslabs.sensiblemetrics.diffy.core.service.iface;
-    exports com.wildbeeslabs.sensiblemetrics.diffy.core.service.impl;
-    // exports core sort
-    exports com.wildbeeslabs.sensiblemetrics.diffy.core.sort;
-    // exports core stream
-    exports com.wildbeeslabs.sensiblemetrics.diffy.core.stream.iface;
-    exports com.wildbeeslabs.sensiblemetrics.diffy.core.stream.impl;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.core.service;
     // exports core utils
     exports com.wildbeeslabs.sensiblemetrics.diffy.core.utils;
 }

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
+import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityDistance;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.score.JaccardScore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

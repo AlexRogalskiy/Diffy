@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.TimeProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.TimeProcessor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -35,7 +34,7 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 /**
- * Time {@link Validator} implementation
+ * Time {@link AbstractCalendarValidator} implementation
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

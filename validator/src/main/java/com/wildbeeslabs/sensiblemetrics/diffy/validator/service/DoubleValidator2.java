@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -88,7 +88,6 @@ public class DoubleValidator2 implements Validator<Double> {
      * @param error - initial input error value
      * @return double {@link Validator}
      */
-    @Contract("_, _ -> new")
     @Factory
     public static Validator<Double> closeTo(double value, double error) {
         return new DoubleValidator2(value, error);

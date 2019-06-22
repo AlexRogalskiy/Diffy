@@ -20,6 +20,12 @@
     <description>Diffy converter API</description>
     <inceptionYear>2019</inceptionYear>
 
+    <properties>
+        <diffy-common.version>1.1.0</diffy-common.version>
+        <diffy-matcher.version>1.1.0</diffy-matcher.version>
+        <diffy-validator.version>1.1.0</diffy-validator.version>
+    </properties>
+
     <build>
         <defaultGoal>clean checkstyle:check spotbugs:check javadoc:javadoc</defaultGoal>
         <directory>${project.basedir}/target</directory>
@@ -90,7 +96,8 @@
                                 Java type objects
                             </Bunlder-Description>
                             <Import-Package>*</Import-Package>
-                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.converter.examples.*</Private-Package>
+                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.converter.examples.*
+                            </Private-Package>
                             <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.converter.*;-noimport:=true
                             </Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
@@ -100,4 +107,22 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-common</artifactId>
+            <version>${diffy-common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-matcher</artifactId>
+            <version>${diffy-matcher.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-validator</artifactId>
+            <version>${diffy-validator.version}</version>
+        </dependency>
+    </dependencies>
 </project>

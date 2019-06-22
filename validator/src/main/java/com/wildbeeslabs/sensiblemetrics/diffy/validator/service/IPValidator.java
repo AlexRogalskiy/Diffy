@@ -24,8 +24,8 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.google.common.collect.ImmutableSet;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -68,6 +68,16 @@ public class IPValidator implements Validator<String> {
             }
             this.masks.add(mask);
         }
+    }
+
+    /**
+     * Returns {@link IPValidator} by input parameters
+     *
+     * @param value - initial input value {@link String}
+     * @return {@link IPValidator}
+     */
+    public static IPValidator of(final String value) {
+        return new IPValidator(value);
     }
 
     /**
@@ -129,15 +139,5 @@ public class IPValidator implements Validator<String> {
             return null;
         }
         return ipp;
-    }
-
-    /**
-     * Returns {@link IPValidator} by input parameters
-     *
-     * @param value - initial input value {@link String}
-     * @return {@link IPValidator}
-     */
-    public static IPValidator of(final String value) {
-        return new IPValidator(value);
     }
 }

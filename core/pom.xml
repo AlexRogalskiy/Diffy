@@ -30,6 +30,9 @@
         <sonar.language>java</sonar.language>
 
         <surefire.forkNumber>0</surefire.forkNumber>
+
+        <diffy-common.version>1.1.0</diffy-common.version>
+        <diffy-matcher.version>1.1.0</diffy-matcher.version>
     </properties>
 
     <build>
@@ -112,4 +115,17 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-common</artifactId>
+            <version>${diffy-common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-matcher</artifactId>
+            <version>${diffy-matcher.version}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.configuration;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.configuration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.property.TaskExecutorProperty;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.property.TaskExecutorProperty;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.MapperUtils;
 
 import javax.annotation.Nullable;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.MapperUtils.fromYaml;
 
 /**
  * Task executor configuration
@@ -42,6 +41,6 @@ public class TaskExecutorConfiguration {
      */
     @Nullable
     public static TaskExecutorProperty getProperty(final String fileName) {
-        return fromYaml(fileName, TaskExecutorProperty.class);
+        return MapperUtils.fromYaml(fileName, TaskExecutorProperty.class);
     }
 }
