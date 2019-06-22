@@ -78,6 +78,25 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven.javadoc.plugin.version}</version>
+                    <configuration>
+                        <excludePackageNames>com.wildbeeslabs.sensiblemetrics.diffy.processor.examples
+                        </excludePackageNames>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>${maven.bundle.plugin.vesion}</version>
@@ -106,6 +125,49 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>disable-java8-doclint</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven.javadoc.plugin.version}</version>
+                        <configuration>
+                            <doctitle>${project.name} API Reference (${project.version})</doctitle>
+                            <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
+                            <locale>en_US</locale>
+                            <linksource>true</linksource>
+                            <notimestamp>true</notimestamp>
+                            <quiet>true</quiet>
+                            <docencoding>UTF-8</docencoding>
+                            <version>false</version>
+                            <author>true</author>
+                            <keywords>true</keywords>
+                            <additionalJOption>-Xdoclint:none</additionalJOption>
+                            <useStandardDocletOptions>true</useStandardDocletOptions>
+                            <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
+                            <excludePackageNames>com.wildbeeslabs.sensiblemetrics.diffy.processor.examples
+                            </excludePackageNames>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
