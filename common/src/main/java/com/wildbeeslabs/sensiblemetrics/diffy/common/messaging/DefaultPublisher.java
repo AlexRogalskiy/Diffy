@@ -63,7 +63,7 @@ public class DefaultPublisher<T> implements Publisher<Event<T>> {
         try {
             this.terminated.get();
         } catch (ExecutionException e) {
-            System.out.println(e);
+            log.error(String.format("ERROR: execution exception, message = {%s}", e.getMessage()), e);
         }
     }
 
@@ -97,7 +97,7 @@ public class DefaultPublisher<T> implements Publisher<Event<T>> {
             this.isCanceled.set(true);
             synchronized (subscriptions) {
                 subscriptions.remove(this);
-                if (subscriptions.size() == 0) {
+                if (subscriptions.isEmpty()) {
                     this.shutdown();
                 }
             }
@@ -108,11 +108,7 @@ public class DefaultPublisher<T> implements Publisher<Event<T>> {
                 this.executor.execute(() -> {
                     int v = value.incrementAndGet();
                     log("publish item: [" + v + "] ...");
-                    this.subscriber.onNext(new Event<T>() {
-                        @Override
-                        public int hashCode() {
-                            return super.hashCode();
-                        }
+                    this.subscriber.onNext(new Event<>() {
                     });
                 });
             }
@@ -126,10 +122,10 @@ public class DefaultPublisher<T> implements Publisher<Event<T>> {
                 terminated.complete(null);
             });
         }
-    }
 
-    private void log(final String message, final Object... args) {
-        final String fullMessage = String.format(LOG_MESSAGE_FORMAT, currentThread().getName(), message);
-        log.debug(String.format(fullMessage, args));
+        private void log(final String message, final Object... args) {
+            final String fullMessage = String.format(LOG_MESSAGE_FORMAT, currentThread().getName(), message);
+            log.debug(String.format(fullMessage, args));
+        }
     }
 }

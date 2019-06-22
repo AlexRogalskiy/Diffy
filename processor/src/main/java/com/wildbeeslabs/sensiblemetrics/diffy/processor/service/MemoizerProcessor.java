@@ -21,9 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.processor.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces.Processor;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.interfaces.ThrowingProcessor;
 
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -52,7 +54,7 @@ import java.util.concurrent.*;
  * @param <O> the type of the output of the calculation
  * @since 3.6
  */
-public class MemoizerService<I, O> implements Processor<I, O> {
+public class MemoizerProcessor<I, O> implements ThrowingProcessor<I, O, BadOperationException> {
 
     private final ConcurrentMap<I, Future<O>> cache = new ConcurrentHashMap<>();
     private final Processor<I, O> computable;
@@ -60,7 +62,7 @@ public class MemoizerService<I, O> implements Processor<I, O> {
 
     /**
      * <p>
-     * Constructs a MemoizerService for the provided Computable calculation.
+     * Constructs a MemoizerProcessor for the provided Computable calculation.
      * </p>
      * <p>
      * If a calculation is thrown an exception for any reason, this exception
@@ -70,13 +72,13 @@ public class MemoizerService<I, O> implements Processor<I, O> {
      *
      * @param computable the computation whose results should be memorized
      */
-    public MemoizerService(final Processor<I, O> computable) {
+    public MemoizerProcessor(final Processor<I, O> computable) {
         this(computable, false);
     }
 
     /**
      * <p>
-     * Constructs a MemoizerService for the provided Computable calculation, with the
+     * Constructs a MemoizerProcessor for the provided Computable calculation, with the
      * option of whether a Computation that experiences an error should
      * recalculate on subsequent calls or return the same cached exception.
      * </p>
@@ -85,7 +87,7 @@ public class MemoizerService<I, O> implements Processor<I, O> {
      * @param recalculate determines whether the computation should be recalculated on
      *                    subsequent calls if the previous call failed
      */
-    public MemoizerService(final Processor<I, O> computable, final boolean recalculate) {
+    public MemoizerProcessor(final Processor<I, O> computable, final boolean recalculate) {
         this.computable = computable;
         this.recalculate = recalculate;
     }
@@ -102,18 +104,18 @@ public class MemoizerService<I, O> implements Processor<I, O> {
      * previous calculation, the method will attempt again to generate a value.
      * </p>
      *
-     * @param arg the argument for the calculation
+     * @param value the argument for the calculation
      * @return the result of the calculation
      * @throws InterruptedException thrown if the calculation is interrupted
      */
     @Override
-    public O process(final I arg) {
+    public O processOrThrow(final I value) throws BadOperationException {
         while (true) {
-            Future<O> future = this.cache.get(arg);
+            Future<O> future = this.cache.get(value);
             if (future == null) {
-                final Callable<O> eval = () -> (O) this.computable.process(arg);
+                final Callable<O> eval = () -> (O) this.computable.process(value);
                 final FutureTask<O> futureTask = new FutureTask<>(eval);
-                future = this.cache.putIfAbsent(arg, futureTask);
+                future = this.cache.putIfAbsent(value, futureTask);
                 if (Objects.isNull(future)) {
                     future = futureTask;
                     futureTask.run();
@@ -122,14 +124,14 @@ public class MemoizerService<I, O> implements Processor<I, O> {
             try {
                 return future.get();
             } catch (final CancellationException e) {
-                this.cache.remove(arg, future);
+                this.cache.remove(value, future);
             } catch (final ExecutionException e) {
                 if (this.recalculate) {
-                    this.cache.remove(arg, future);
+                    this.cache.remove(value, future);
                 }
                 throw launderException(e.getCause());
             } catch (InterruptedException e) {
-                throw new RuntimeException(String.format("ERROR: cannot process input task = {%s}", arg), e);
+                throw new BadOperationException(String.format("ERROR: cannot process input task = {%s}", value), e);
             }
         }
     }

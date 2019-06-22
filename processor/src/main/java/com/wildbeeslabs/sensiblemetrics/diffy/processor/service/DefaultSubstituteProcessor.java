@@ -75,10 +75,11 @@ public class DefaultSubstituteProcessor implements SubstituteProcessor {
     @Nullable
     public String processOrThrow(final String value) {
         ValidationUtils.notNull(value, "Value should not be null");
+        String result = value;
         for (int i = 0; i < this.markers.size(); ++i) {
-            return this.expand(value, this.markers.get(i), this.sources.get(i));
+            result = this.expand(result, this.markers.get(i), this.sources.get(i));
         }
-        return null;
+        return result;
     }
 
     /**
