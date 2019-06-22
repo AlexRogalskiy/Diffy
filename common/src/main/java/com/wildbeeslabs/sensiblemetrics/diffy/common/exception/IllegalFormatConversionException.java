@@ -21,45 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.util.UnknownFormatConversionException;
 
 /**
- * Method array {@link AbstractMatcher} implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Illegal format {@link UnknownFormatConversionException} implementation
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class IllegalFormatConversionException extends UnknownFormatConversionException {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = -100420889921088744L;
 
-    private final Matcher<? super Method[]> matcher;
+    private final Object expected;
+    private final Object found;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    /**
+     * Constructs an instance of this class with the mismatched conversion and the expected one.
+     */
+    public IllegalFormatConversionException(final String message, final Object expected, final Object found) {
+        super(message);
+        this.expected = expected;
+        this.found = found;
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public String getMessage() {
+        return String.format("Expected category %s but found %s", this.expected, this.found);
     }
 }

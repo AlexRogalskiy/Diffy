@@ -29,11 +29,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Field array {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -43,23 +43,23 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class FieldMatcher<T> extends AbstractMatcher<Class<T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = -2787672691781830929L;
 
-    private final Matcher<? super Method[]> matcher;
+    private final Matcher<? super Field[]> matcher;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
+    public FieldMatcher(final Matcher<? super Field[]> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 
     @Override
     public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
+        final Field[] result = Optional.ofNullable(target).map(Class::getDeclaredFields).orElse(null);
         return this.matcher.matches(result);
     }
 }

@@ -21,45 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.comparator.interfaces;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffEntry;
+import lombok.NonNull;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.io.Serializable;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Difference comparator declaration
  *
+ * @param <T> type of input element to be compared by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+@FunctionalInterface
+public interface DiffComparator<T> extends Serializable {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Returns {@link Iterable} collection of {@link DiffEntry} by initial arguments comparison {@code T}
+     *
+     * @param first - initial first argument to be compared by {@code T}
+     * @param last  - initial last argument to be compared with {@code T}
+     * @return {@link Iterable} collection of {@link DiffEntry}
      */
-    private static final long serialVersionUID = 6028062634714014542L;
-
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
-    }
-
-    @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
-    }
+    <S extends Iterable<? extends DiffEntry<?>>> @NonNull S diffCompare(final T first, final T last);
 }

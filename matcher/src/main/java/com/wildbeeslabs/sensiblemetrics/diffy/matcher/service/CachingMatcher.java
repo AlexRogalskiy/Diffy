@@ -29,11 +29,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Caching {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -43,23 +46,59 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class CachingMatcher<T> extends AbstractMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = -4812424558046288887L;
 
-    private final Matcher<? super Method[]> matcher;
+    /**
+     * Default {@link Matcher}
+     */
+    private final Matcher<? super T> matcher;
+    /**
+     * Default {@link ConcurrentMap}
+     */
+    protected final ConcurrentMap<? super T, Boolean> map;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
+    public CachingMatcher(final Matcher<? super T> matcher, final ConcurrentMap<? super T, Boolean> map) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
+        this.map = Optional.ofNullable(map).orElseGet(() -> new ConcurrentHashMap<>());
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public boolean matches(final T target) {
+        Boolean cached = this.map.get(target);
+        if (Objects.isNull(cached)) {
+            cached = this.onCacheMiss(target);
+        }
+        return cached;
+    }
+
+    protected boolean onCacheMiss(final T target) {
+        boolean cached = this.matcher.matches(target);
+        this.map.put(target, cached);
+        return cached;
+    }
+
+    public static class WithInlineEviction<S> extends CachingMatcher<S> {
+        private final int evictionSize;
+
+        public WithInlineEviction(final Matcher<? super S> matcher, final ConcurrentMap<? super S, Boolean> map, int evictionSize) {
+            super(matcher, map);
+            this.evictionSize = evictionSize;
+        }
+
+        @Override
+        protected boolean onCacheMiss(final S target) {
+            if (this.map.size() >= this.evictionSize) {
+                final Iterator<?> iterator = this.map.entrySet().iterator();
+                iterator.next();
+                iterator.remove();
+            }
+            return super.onCacheMiss(target);
+        }
     }
 }

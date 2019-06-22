@@ -21,45 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Field name {@link Validator} implementation
  *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * @param <T> type of validated value
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class FieldValidator<T> implements Validator<T> {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Default {@code T} value
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private final T value;
 
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    public FieldValidator(final T value) {
+        this.value = value;
     }
 
+    /**
+     * Returns true if input value {@code T} is valid, false - otherwise
+     *
+     * @param value - initial input value to be validated {@code T}
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public boolean validate(final T value) {
+        return Objects.equals(value, this.value);
+    }
+
+    /**
+     * Returns {@link FieldValidator} by input value {@code T}
+     *
+     * @param <T>   type of validated value
+     * @param value - initial input value {@code T}
+     * @return {@link FieldValidator}
+     */
+    @Factory
+    public static <T> FieldValidator<T> of(final T value) {
+        return new FieldValidator<>(value);
     }
 }

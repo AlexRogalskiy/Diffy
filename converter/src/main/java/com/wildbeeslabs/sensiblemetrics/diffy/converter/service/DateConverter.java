@@ -21,19 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.util.Date;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.DateUtils.toDate;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Default {@link Date} {@link AbstractConverter} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -42,24 +43,37 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class DateConverter extends AbstractConverter<String, Date> {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Initial date format pattern
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private final String format;
 
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    /**
+     * Default date converter constructor
+     */
+    public DateConverter() {
+        this(DateUtils.DEFAULT_DATE_FORMAT_PATTERN);
     }
 
+    /**
+     * Default date converter constructor with initial input date format {@link String}
+     *
+     * @param format - initial input date format
+     */
+    public DateConverter(@NonNull final String format) {
+        this.format = format;
+    }
+
+    /**
+     * Returns date value {@link Date} by input argument {@link String}
+     *
+     * @param value - initial argument value {@link String}
+     * @return converted integer value {@link Date}
+     */
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public Date valueOf(final String value) {
+        return DateUtils.toDate(value, getFormat());
     }
 }

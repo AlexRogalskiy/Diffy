@@ -23,20 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.stream.Collectors;
+import java.util.Date;
+import java.util.Objects;
 
 /**
- * Default {@link AbstractDiffMatcher} implementation
+ * Date {@link AbstractMatcher} implementation
  *
- * @param <T> type of input element to be matched by difference operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -44,42 +40,38 @@ import java.util.stream.Collectors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T, Entry<T, T>> {
+public final class DateMatcher extends AbstractMatcher<Date> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -5261047750917117837L;
+    private static final long serialVersionUID = 4257752341048054337L;
 
     /**
-     * Default difference matcher constructor
+     * Default date interval
      */
-    public DefaultDiffMatcher() {
-        super(null);
+    private final int interval;
+
+    /**
+     * Default date matcher constructor
+     *
+     * @param interval - initial input number of seconds before of current time
+     */
+    public DateMatcher(int interval) {
+        this.interval = interval;
     }
 
     /**
-     * Default difference matcher constructor with input {@link MatcherHandler}
+     * Returns binary flag by initial argument {@link Date} match comparison
      *
-     * @param handler - initial input {@link MatcherHandler}
-     */
-    public DefaultDiffMatcher(final MatcherHandler<T, Entry<T, T>> handler) {
-        super(handler);
-    }
-
-    /**
-     * Returns {@link Iterable} collection of {@link DiffMatchEntry}s
-     *
-     * @param value - initial input argument to be matched by
-     * @return {@link Iterable} collection of {@link DiffMatchEntry}s
+     * @param date - initial input {@link Date} value to be matched
+     * @return true - if initial value matches input {@link Date}, false - otherwise
      */
     @Override
-    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
-        return (S) this.getMatchers()
-            .stream()
-            .filter(m -> m.negate().matches(value))
-            .map(m -> DefaultDiffMatchEntry.of(value, m.getDescription()))
-            .collect(Collectors.toList());
+    public boolean matches(final Date date) {
+        if (Objects.isNull(date)) {
+            return false;
+        }
+        return date.getTime() <= System.currentTimeMillis() - ((long) interval * 1000);
     }
 }

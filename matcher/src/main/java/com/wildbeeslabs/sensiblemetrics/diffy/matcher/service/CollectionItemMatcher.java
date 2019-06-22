@@ -25,15 +25,15 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.util.Iterator;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Collection item {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -42,24 +42,33 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class CollectionItemMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = -1914863846310874204L;
 
-    private final Matcher<? super Method[]> matcher;
+    /**
+     * Default {@link Matcher}
+     */
+    private final Matcher<? super T> matcher;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
+    public CollectionItemMatcher(final Matcher<? super T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public boolean matches(final Iterable<? extends T> target) {
+        final Iterator var2 = ServiceUtils.listOf(target).iterator();
+        T value;
+        do {
+            if (!var2.hasNext()) {
+                return false;
+            }
+            value = (T) var2.next();
+        } while (!this.matcher.matches(value));
+        return true;
     }
 }

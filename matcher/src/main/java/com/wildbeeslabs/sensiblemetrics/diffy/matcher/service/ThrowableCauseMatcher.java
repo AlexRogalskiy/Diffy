@@ -23,18 +23,19 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Throwable cause {@link AbstractMatcher} implementation
  *
+ * @param <T> the type of the throwable being matched
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -42,24 +43,46 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class ThrowableCauseMatcher<T extends Throwable> extends AbstractMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = -7894738824768468436L;
 
-    private final Matcher<? super Method[]> matcher;
+    private final Matcher<T> matcher;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
+    public ThrowableCauseMatcher(final Matcher<T> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public boolean matches(final T item) {
+        return this.matcher.matches((T) item.getCause());
+    }
+
+    @Override
+    public void describe(final T item, final MatchDescription description) {
+        super.describe(item, description);
+        this.matcher.describeBy(item, description);
+    }
+
+    @Override
+    public void describeTo(final MatchDescription description) {
+        super.describeTo(description);
+        description.appendDescriptionOf(this.matcher);
+    }
+
+    /**
+     * Returns a matcher that verifies that the outer exception has a cause for which the supplied matcher
+     * evaluates to true.
+     *
+     * @param matcher to apply to the cause of the outer exception
+     * @param <T>     type of the outer exception
+     */
+    @Factory
+    public static <T extends Throwable> Matcher<T> of(final Matcher<T> matcher) {
+        return new ThrowableCauseMatcher<T>(matcher);
     }
 }

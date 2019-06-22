@@ -23,20 +23,20 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
- * Default {@link AbstractDiffMatcher} implementation
+ * Collection one-to-one {@link AbstractMatcher} implementation
  *
- * @param <T> type of input element to be matched by difference operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -45,41 +45,37 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuppressWarnings("unchecked")
-public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T, Entry<T, T>> {
+public class CollectionOneToOneMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -5261047750917117837L;
+    private static final long serialVersionUID = -2296393880356376030L;
 
     /**
-     * Default difference matcher constructor
+     * Default {@link List} of {@link Matcher}
      */
-    public DefaultDiffMatcher() {
-        super(null);
+    private final List<? extends Matcher<? super T>> matchers;
+
+    public CollectionOneToOneMatcher(final List<? extends Matcher<? super T>> matchers) {
+        ValidationUtils.notNull(matchers, "Matchers should not be null");
+        this.matchers = matchers;
     }
 
-    /**
-     * Default difference matcher constructor with input {@link MatcherHandler}
-     *
-     * @param handler - initial input {@link MatcherHandler}
-     */
-    public DefaultDiffMatcher(final MatcherHandler<T, Entry<T, T>> handler) {
-        super(handler);
-    }
-
-    /**
-     * Returns {@link Iterable} collection of {@link DiffMatchEntry}s
-     *
-     * @param value - initial input argument to be matched by
-     * @return {@link Iterable} collection of {@link DiffMatchEntry}s
-     */
     @Override
-    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
-        return (S) this.getMatchers()
-            .stream()
-            .filter(m -> m.negate().matches(value))
-            .map(m -> DefaultDiffMatchEntry.of(value, m.getDescription()))
-            .collect(Collectors.toList());
+    public boolean matches(Iterable<? extends T> target) {
+        if (target instanceof Collection && ((Collection) target).size() != this.matchers.size()) {
+            return false;
+        }
+        final Iterator<? extends Matcher<? super T>> iterator = this.matchers.iterator();
+        final Iterator<? extends T> var3 = ServiceUtils.listOf(target).iterator();
+        T value;
+        do {
+            if (!var3.hasNext()) {
+                return true;
+            }
+            value = var3.next();
+        } while (iterator.hasNext() && (iterator.next()).matches(value));
+        return false;
     }
 }

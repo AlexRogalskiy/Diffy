@@ -21,45 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.view;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.lang.reflect.Method;
-import java.util.Optional;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * {@link Entry} view declaration
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public interface EntryView {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * {@link EntryView.External} declaration
      */
-    private static final long serialVersionUID = 6028062634714014542L;
-
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class External {
     }
 
-    @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    /**
+     * {@link EntryView.Internal} declaration
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class Internal extends EntryView.External {
     }
 }

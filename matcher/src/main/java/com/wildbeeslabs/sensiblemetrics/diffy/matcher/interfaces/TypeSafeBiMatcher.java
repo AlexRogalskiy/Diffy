@@ -21,45 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.lang.reflect.Method;
-import java.util.Optional;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.BiMatchOperationException;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Type safe {@link BiMatcher} interface declaration
  *
+ * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+@FunctionalInterface
+public interface TypeSafeBiMatcher<T> extends BiMatcher<T> {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Compares provided objects by equality constraint
+     *
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
+     * @return true - if input values {@code T} matches, false - otherwise
      */
-    private static final long serialVersionUID = 6028062634714014542L;
-
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    default boolean matches(final T first, final T last) {
+        try {
+            return this.matchesSafe(first, last);
+        } catch (RuntimeException e) {
+            BiMatchOperationException.throwIncorrectMatch(first, last, e);
+        }
+        return false;
     }
 
-    @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
-    }
+    /**
+     * Returns binary flag depending on initial argument value by type safe comparison
+     *
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
+     * @return true - if input values {@code T} matches safely, false - otherwise
+     */
+    boolean matchesSafe(final T first, final T last);
 }

@@ -29,11 +29,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
-
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Fail-safe {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -42,24 +39,34 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class FailSafeMatcher<T> extends AbstractMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = 3063977367736961439L;
 
-    private final Matcher<? super Method[]> matcher;
+    /**
+     * Default {@link Matcher}
+     */
+    private final Matcher<? super T> matcher;
+    /**
+     * Default fallback match result
+     */
+    private final boolean fallback;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
+    public FailSafeMatcher(final Matcher<? super T> matcher, boolean fallback) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
+        this.fallback = fallback;
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public boolean matches(final T target) {
+        try {
+            return this.matcher.matches(target);
+        } catch (Exception e) {
+            return this.fallback;
+        }
     }
 }

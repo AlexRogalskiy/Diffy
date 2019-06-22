@@ -21,45 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.MatchRejectionException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
-
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Reject {@link MatcherHandler} implementation
  *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * @param <T> type of input element to be matched by operation
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+@EqualsAndHashCode
+@ToString
+public class RejectMatcherHandler<T, S> implements MatcherHandler<T, S> {
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Default {@link MatcherHandler}
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    public static final MatcherHandler INSTANCE = new RejectMatcherHandler<>();
 
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
-    }
-
+    /**
+     * {@link BaseMatcherEvent} handler by input event {@link BaseMatcherEvent}
+     *
+     * @param event - initial input event {@link BaseMatcherEvent} to handle
+     */
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public <E extends BaseMatcherEvent<T, S>> void handleEvent(final E event) {
+        MatchRejectionException.throwReject(event);
     }
 }

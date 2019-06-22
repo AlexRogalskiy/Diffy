@@ -23,17 +23,17 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Annotation {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -42,24 +42,22 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
-
+public class AnnotationMatcher<T> extends AbstractMatcher<Class<T>> {
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = 751699209527012087L;
 
-    private final Matcher<? super Method[]> matcher;
+    private final Matcher<? super Annotation[]> matcher;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
+    public AnnotationMatcher(final Matcher<? super Annotation[]> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 
     @Override
     public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
+        final Annotation[] result = Optional.ofNullable(target).map(Class::getAnnotations).orElse(null);
         return this.matcher.matches(result);
     }
 }

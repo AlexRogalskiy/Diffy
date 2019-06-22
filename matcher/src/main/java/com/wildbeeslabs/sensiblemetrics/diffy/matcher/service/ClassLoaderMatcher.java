@@ -29,11 +29,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * Classloader {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -42,24 +41,30 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class ClassLoaderMatcher<T extends ClassLoader> extends AbstractMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = 6863244641427331582L;
 
-    private final Matcher<? super Method[]> matcher;
+    /**
+     * Default {@link Matcher}
+     */
+    private final Matcher<? super ClassLoader> matcher;
 
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
+    public ClassLoaderMatcher(final Matcher<? super ClassLoader> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public boolean matches(final T target) {
+        for (ClassLoader current = target; Objects.nonNull(current); current = current.getParent()) {
+            if (this.matcher.matches(current)) {
+                return true;
+            }
+        }
+        return this.matcher.matches(null);
     }
 }

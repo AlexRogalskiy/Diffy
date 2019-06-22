@@ -23,20 +23,19 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 /**
- * Default {@link AbstractDiffMatcher} implementation
+ * Throwable message {@link AbstractMatcher} implementation
  *
- * @param <T> type of input element to be matched by difference operation
+ * @param <T> the type of the throwable being matched
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -45,41 +44,39 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @SuppressWarnings("unchecked")
-public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T, Entry<T, T>> {
+public class ThrowableMessageMatcher<T extends Throwable> extends AbstractMatcher<T> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -5261047750917117837L;
+    private static final long serialVersionUID = 8397771601288891746L;
 
-    /**
-     * Default difference matcher constructor
-     */
-    public DefaultDiffMatcher() {
-        super(null);
+    private final Matcher<String> matcher;
+
+    public ThrowableMessageMatcher(final Matcher<String> matcher) {
+        Objects.requireNonNull(matcher, "Matcher should not be null");
+        this.matcher = matcher;
     }
 
-    /**
-     * Default difference matcher constructor with input {@link MatcherHandler}
-     *
-     * @param handler - initial input {@link MatcherHandler}
-     */
-    public DefaultDiffMatcher(final MatcherHandler<T, Entry<T, T>> handler) {
-        super(handler);
-    }
-
-    /**
-     * Returns {@link Iterable} collection of {@link DiffMatchEntry}s
-     *
-     * @param value - initial input argument to be matched by
-     * @return {@link Iterable} collection of {@link DiffMatchEntry}s
-     */
     @Override
-    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
-        return (S) this.getMatchers()
-            .stream()
-            .filter(m -> m.negate().matches(value))
-            .map(m -> DefaultDiffMatchEntry.of(value, m.getDescription()))
-            .collect(Collectors.toList());
+    public boolean matches(final T item) {
+        return matcher.matches(item.getMessage());
+    }
+
+    @Override
+    public void describeBy(final T item, final MatchDescription description) {
+        super.describeBy(item, description);
+        this.matcher.describeBy(item.getMessage(), description);
+    }
+
+    @Override
+    public void describeTo(final MatchDescription description) {
+        super.describeTo(description);
+        description.appendDescriptionOf(this.matcher);
+    }
+
+    @Factory
+    public static <T extends Throwable> Matcher<T> of(final Matcher<String> matcher) {
+        return new ThrowableMessageMatcher<>(matcher);
     }
 }

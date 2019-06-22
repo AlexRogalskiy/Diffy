@@ -21,45 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Method array {@link AbstractMatcher} implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
- */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+@EqualsAndHashCode
+@ToString
+public final class DefaultCounter implements Serializable {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 6028062634714014542L;
+    private static final long serialVersionUID = -8069421485492009310L;
 
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    /**
+     * Hidden constructor.
+     */
+    private DefaultCounter() {
+        super();
     }
 
-    @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    /**
+     * It counts how many times each element provided occurred in an array and
+     * returns a dict with the element as key and the count as value.
+     *
+     * @param tokens array of tokens
+     * @return dict, where the elements are key, and the count the value
+     */
+    public static Map<CharSequence, Integer> of(final CharSequence[] tokens) {
+        final Map<CharSequence, Integer> innerCounter = new HashMap<>();
+        for (final CharSequence token : tokens) {
+            int value = innerCounter.getOrDefault(token, 0);
+            innerCounter.put(token, ++value);
+        }
+        return innerCounter;
     }
 }

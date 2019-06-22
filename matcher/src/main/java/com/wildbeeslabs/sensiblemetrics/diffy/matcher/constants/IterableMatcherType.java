@@ -21,45 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.constants;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.google.common.collect.Iterables;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.lang.reflect.Method;
-import java.util.Optional;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Method array {@link AbstractMatcher} implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Iterable matcher type {@link Enum}
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+@Getter
+@RequiredArgsConstructor
+public enum IterableMatcherType {
+    /**
+     * com.google.common.collect.Iterables
+     */
+    IS_EMPTY(Iterables::isEmpty);
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Iterable {@link Matcher} operator
      */
-    private static final long serialVersionUID = 6028062634714014542L;
-
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
-    }
-
-    @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
-    }
+    private final Matcher<Iterable<?>> matcher;
 }

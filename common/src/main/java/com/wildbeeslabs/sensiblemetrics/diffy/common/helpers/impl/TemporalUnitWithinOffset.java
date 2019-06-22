@@ -21,45 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.lang.reflect.Method;
-import java.util.Optional;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 
 /**
- * Method array {@link AbstractMatcher} implementation
+ * {@link TemporalUnitOffset} with less than or equal condition.
  *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * @since 3.7.0
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
+public class TemporalUnitWithinOffset extends TemporalUnitOffset {
 
-    /**
-     * Default explicit serialVersionUID for interoperability
-     */
-    private static final long serialVersionUID = 6028062634714014542L;
-
-    private final Matcher<? super Method[]> matcher;
-
-    public MethodMatcher(final Matcher<? super Method[]> matcher) {
-        ValidationUtils.notNull(matcher, "Matcher should not be null");
-        this.matcher = matcher;
+    public TemporalUnitWithinOffset(long value, final TemporalUnit unit) {
+        super(value, unit);
     }
 
+    /**
+     * Checks if difference between temporal values is less then or equal to offset.
+     *
+     * @param temporal1 first temporal value to be validated against second temporal value.
+     * @param temporal2 second temporal value.
+     * @return true if difference between temporal values is more than offset value.
+     */
     @Override
-    public boolean matches(final Class<T> target) {
-        final Method[] result = Optional.ofNullable(target).map(Class::getDeclaredMethods).orElse(null);
-        return this.matcher.matches(result);
+    public boolean isBeyondOffset(final Temporal temporal1, final Temporal temporal2) {
+        return getDifference(temporal1, temporal2) > value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getBeyondOffsetDifferenceDescription(final Temporal temporal1, final Temporal temporal2) {
+        return "within " + super.getBeyondOffsetDifferenceDescription(temporal1, temporal2);
     }
 }

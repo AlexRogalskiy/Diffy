@@ -24,19 +24,20 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffMatchEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.commons.lang3.ClassUtils;
 
-import java.util.stream.Collectors;
+import java.util.Comparator;
+
+import static java.util.Objects.nonNull;
 
 /**
- * Default {@link AbstractDiffMatcher} implementation
+ * Class {@link AbstractTypeSafeBiMatcher} implementation
  *
- * @param <T> type of input element to be matched by difference operation
+ * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -44,42 +45,38 @@ import java.util.stream.Collectors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T, Entry<T, T>> {
+public class ClassBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T, T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = -5261047750917117837L;
+    private static final long serialVersionUID = 4348698967622228549L;
 
     /**
-     * Default difference matcher constructor
+     * Default abstract matcher constructor
      */
-    public DefaultDiffMatcher() {
-        super(null);
+    public ClassBiMatcher() {
+        this(null);
     }
 
     /**
-     * Default difference matcher constructor with input {@link MatcherHandler}
+     * Default abstract matcher constructor with input {@link MatcherHandler} and {@link Comparator}
      *
      * @param handler - initial input {@link MatcherHandler}
      */
-    public DefaultDiffMatcher(final MatcherHandler<T, Entry<T, T>> handler) {
+    public ClassBiMatcher(final MatcherHandler<T, Entry<T, T>> handler) {
         super(handler);
     }
 
     /**
-     * Returns {@link Iterable} collection of {@link DiffMatchEntry}s
+     * Returns binary flag depending on initial argument value by type safe comparison
      *
-     * @param value - initial input argument to be matched by
-     * @return {@link Iterable} collection of {@link DiffMatchEntry}s
+     * @param first - initial input first value {@code T}
+     * @param last  - initial input last value {@code T}
+     * @return true - if input values {@code T} matches safely, false - otherwise
      */
     @Override
-    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
-        return (S) this.getMatchers()
-            .stream()
-            .filter(m -> m.negate().matches(value))
-            .map(m -> DefaultDiffMatchEntry.of(value, m.getDescription()))
-            .collect(Collectors.toList());
+    public boolean matchesSafe(final T first, final T last) {
+        return nonNull(first) && nonNull(last) && ClassUtils.isAssignable(first.getClass(), last.getClass());
     }
 }
