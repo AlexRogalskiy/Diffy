@@ -117,7 +117,6 @@ public class DefaultMapEntry<T, K, V> implements Entry<T, Map<K, V>> {
      * Sets the value associated with the key direct onto the map.
      *
      * @param values the new value
-     * @return the old value
      * @throws IllegalArgumentException if the value is set to this map entry
      */
     public void addValues(final Iterable<Map.Entry<K, V>> values) {

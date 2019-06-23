@@ -422,49 +422,6 @@
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.compiler.plugin.version}</version>
-                    <configuration>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${lombok.version}</version>
-                            </path>
-                        </annotationProcessorPaths>
-                        <executable>true</executable>
-                        <showDeprecation>true</showDeprecation>
-                        <debug>true</debug>
-                        <debuglevel>lines,vars,source</debuglevel>
-                        <optimize>false</optimize>
-                        <verbose>false</verbose>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <encoding>${project.reporting.outputEncoding}</encoding>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>default-testCompile</id>
-                            <phase>test-compile</phase>
-                            <goals>
-                                <goal>testCompile</goal>
-                            </goals>
-                            <configuration>
-                                <skip>true</skip>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.ow2.asm</groupId>
-                            <artifactId>asm</artifactId>
-                            <version>7.1</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${maven.assembly.plugin.version}</version>
                     <configuration>
@@ -898,6 +855,23 @@
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>${maven.compiler.plugin.version}</version>
                         <configuration>
+                            <annotationProcessorPaths>
+                                <path>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                    <version>${lombok.version}</version>
+                                </path>
+                            </annotationProcessorPaths>
+                            <executable>true</executable>
+                            <showDeprecation>true</showDeprecation>
+                            <debug>true</debug>
+                            <debuglevel>lines,vars,source</debuglevel>
+                            <optimize>false</optimize>
+                            <verbose>false</verbose>
+                            <source>${java.version}</source>
+                            <target>${java.version}</target>
+                            <encoding>${project.reporting.outputEncoding}</encoding>
+
                             <release>${java.version}</release>
                             <compilerArgs>
                                 <arg>-sourcepath</arg>
@@ -906,6 +880,25 @@
                                 </arg>
                             </compilerArgs>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <id>default-testCompile</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>testCompile</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>true</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.ow2.asm</groupId>
+                                <artifactId>asm</artifactId>
+                                <version>7.1</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>

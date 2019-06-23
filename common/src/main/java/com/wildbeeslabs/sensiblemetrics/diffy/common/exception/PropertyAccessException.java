@@ -89,7 +89,7 @@ public class PropertyAccessException extends RuntimeException {
      * Returns {@link PropertyAccessException} by input parameters
      *
      * @param throwable - initial input cause target {@link Throwable}
-     * @param target    - initial input raw message {@link String}
+     * @param message    - initial input raw message {@link String}
      * @param target    - initial input source target {@link Object}
      * @return {@link PropertyAccessException}
      */

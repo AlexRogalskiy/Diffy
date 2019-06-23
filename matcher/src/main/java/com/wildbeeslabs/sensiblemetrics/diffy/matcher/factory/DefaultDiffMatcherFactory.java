@@ -41,6 +41,7 @@ import static java.util.Arrays.asList;
  * @since 1.0
  */
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class DefaultDiffMatcherFactory {
 
     /**

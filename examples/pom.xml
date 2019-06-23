@@ -56,7 +56,6 @@
                     <configuration>
                         <archive>
                             <manifestEntries>
-                                <!--<Automatic-Module-Name>${project.groupId}.${project.artifactId}</Automatic-Module-Name>-->
                                 <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                                 <Bundle-Version>${project.version}</Bundle-Version>
                                 <Bundle-Name>${project.artifactId}</Bundle-Name>

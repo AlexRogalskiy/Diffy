@@ -93,7 +93,6 @@ public class DefaultListEntry<K, V> implements Entry<K, List<V>> {
      * Sets the value associated with the key direct onto the map.
      *
      * @param values the new value
-     * @return the old value
      * @throws IllegalArgumentException if the value is set to this map entry
      */
     public void addValues(final Iterable<V> values) {
