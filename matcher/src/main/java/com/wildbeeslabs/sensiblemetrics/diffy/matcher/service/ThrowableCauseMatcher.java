@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
@@ -53,7 +54,7 @@ public class ThrowableCauseMatcher<T extends Throwable> extends AbstractMatcher<
     private final Matcher<T> matcher;
 
     public ThrowableCauseMatcher(final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

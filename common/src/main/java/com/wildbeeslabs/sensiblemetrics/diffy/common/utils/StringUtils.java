@@ -47,10 +47,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.DoubleFunction;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.LongFunction;
+import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,6 +55,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.text.WordUtils.capitalize;
@@ -307,7 +305,7 @@ public class StringUtils {
      * @return sum length
      */
     public static int length(final String[] array) {
-        return ServiceUtils.streamOf(array).filter(org.apache.commons.lang3.StringUtils::isNoneBlank).map(String::length).mapToInt(Integer::intValue).sum();
+        return streamOf(array).filter(org.apache.commons.lang3.StringUtils::isNoneBlank).map(String::length).mapToInt(Integer::intValue).sum();
     }
 
     /**
@@ -604,7 +602,7 @@ public class StringUtils {
     }
 
     public static String readUrl(final String url) {
-        Objects.requireNonNull(url, "Url should not be null");
+        ValidationUtils.notNull(url, "Url should not be null");
         try {
             return Jsoup.connect(url).get().html();
         } catch (IOException ex) {
@@ -625,5 +623,45 @@ public class StringUtils {
             ),
             separator
         );
+    }
+
+    public static <E> Stream<E> getFilteredStream(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
+        return stream.flatMap(line -> Arrays.stream(String.valueOf(line).split(tokenDelim)))
+            .map(String::trim)
+            .map(item -> tokenFilter.apply(item))
+            .filter(org.apache.commons.lang3.StringUtils::isNotBlank)
+            .map(item -> (E) item);
+    }
+
+    public static <T> String joinWithPrefixPostfix(final Collection<T> list, final String delimiter, final String prefix, final String postfix) {
+        return streamOf(list).map(Objects::toString).collect(Collectors.joining(delimiter, prefix, postfix));
+    }
+
+    public static Map<Integer, List<String>> getMapByLength(final String... array) {
+        return streamOf(array).filter(Objects::nonNull).collect(Collectors.groupingBy(String::length));
+    }
+
+    public static List<String> split(final String value, final String delimiter, final Predicate<? super String> predicate) {
+        return Arrays.stream(String.valueOf(value).split(delimiter))
+            .map(String::trim)
+            .filter(predicate)
+            .collect(Collectors.toList());
+    }
+
+    public static <T> String replace(final String input, final Pattern regex, final Function<Matcher, String> function) {
+        final StringBuffer resultString = new StringBuffer();
+        final Matcher regexMatcher = regex.matcher(input);
+        while (regexMatcher.find()) {
+            regexMatcher.appendReplacement(resultString, function.apply(regexMatcher));
+        }
+        regexMatcher.appendTail(resultString);
+        return resultString.toString();
+    }
+
+    public static List<Character> splitToListOfChars(final String value) {
+        return Optional.ofNullable(value).orElse(EMPTY)
+            .chars()
+            .mapToObj(item -> (char) item)
+            .collect(Collectors.toList());
     }
 }

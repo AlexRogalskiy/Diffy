@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TemporalOffset;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -57,7 +58,7 @@ public abstract class TemporalUnitOffset implements TemporalOffset<Temporal> {
      * @throws IllegalArgumentException if the given value is negative.
      */
     public TemporalUnitOffset(long value, TemporalUnit unit) {
-        Objects.requireNonNull(unit, "Unit should be not null");
+        ValidationUtils.notNull(unit, "Unit should be not null");
         checkThatValueIsPositive(value);
         this.value = value;
         this.unit = unit;

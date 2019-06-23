@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Patch;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultChunk;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultPatch;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.core.entry.delta.ChangeDelta;
 import com.wildbeeslabs.sensiblemetrics.diffy.core.entry.utils.BinaryDiffResult;
 import com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces.DiffAlgorithm;
@@ -80,9 +81,9 @@ public class DiffUtils {
      * revised sequences. Never {@code null}.
      */
     public static <T> Patch<T> diff(final List<T> original, final List<T> revised, final DiffAlgorithm<T> algorithm) {
-        Objects.requireNonNull(original, "Original list should not be null");
-        Objects.requireNonNull(revised, "Revised list should not be null");
-        Objects.requireNonNull(algorithm, "Difference algorithm should not be null");
+        ValidationUtils.notNull(original, "Original list should not be null");
+        ValidationUtils.notNull(revised, "Revised list should not be null");
+        ValidationUtils.notNull(algorithm, "Difference algorithm should not be null");
 
         return algorithm.diff(original, revised);
     }

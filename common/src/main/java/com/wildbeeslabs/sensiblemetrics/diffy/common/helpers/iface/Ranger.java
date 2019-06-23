@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.NonNull;
 import org.apache.commons.collections.comparators.ComparableComparator;
 
@@ -114,9 +115,9 @@ public interface Ranger<T> extends Serializable {
      * @param consumer   - initial input {@link BiConsumer} operator
      */
     static <T> void ifAllPresent(final Optional<T> lowerBound, final Optional<T> upperBound, final BiConsumer<T, T> consumer) {
-        Objects.requireNonNull(lowerBound, "Optional lower bound should not be null!");
-        Objects.requireNonNull(upperBound, "Optional upper bound should not be null!");
-        Objects.requireNonNull(consumer, "Binary consumer operator should not be null!");
+        ValidationUtils.notNull(lowerBound, "Optional lower bound should not be null!");
+        ValidationUtils.notNull(upperBound, "Optional upper bound should not be null!");
+        ValidationUtils.notNull(consumer, "Binary consumer operator should not be null!");
 
         mapIfAllPresent(lowerBound, upperBound, (l, u) -> {
             consumer.accept(l, u);
@@ -135,9 +136,9 @@ public interface Ranger<T> extends Serializable {
      * @return {@link Optional} of {@link BiFunction} operator result {@code R}
      */
     static <T, R> Optional<R> mapIfAllPresent(final Optional<T> lowerBound, final Optional<T> upperBound, final BiFunction<T, T, R> function) {
-        Objects.requireNonNull(lowerBound, "Optional lower bound should not be null!");
-        Objects.requireNonNull(upperBound, "Optional upper bound should not be null!");
-        Objects.requireNonNull(function, "Binary function operator should not be null!");
+        ValidationUtils.notNull(lowerBound, "Optional lower bound should not be null!");
+        ValidationUtils.notNull(upperBound, "Optional upper bound should not be null!");
+        ValidationUtils.notNull(function, "Binary function operator should not be null!");
 
         return lowerBound.flatMap(l -> upperBound.map(u -> function.apply(l, u)));
     }

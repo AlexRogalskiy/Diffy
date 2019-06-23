@@ -29,6 +29,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -71,8 +72,8 @@ public class ComparatorUtils {
      * Lexicographic order {@link CharSequence} comparator
      */
     public final static Comparator<CharSequence> LEXICOGRAPHIC_ORDER = (s1, s2) -> {
-        Objects.requireNonNull(s1, "First string should not be null");
-        Objects.requireNonNull(s2, "Last string should not be null");
+        ValidationUtils.notNull(s1, "First string should not be null");
+        ValidationUtils.notNull(s2, "Last string should not be null");
 
         final int lens1 = s1.length();
         final int lens2 = s2.length();

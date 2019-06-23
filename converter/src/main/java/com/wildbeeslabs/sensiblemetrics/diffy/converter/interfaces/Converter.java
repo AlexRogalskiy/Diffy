@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces;
 
 import com.google.common.base.Function;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.exception.ConvertOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BiMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
@@ -94,7 +95,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     default <V> Converter<V, R> compose(final Converter<? super V, ? extends T> before) {
-        Objects.requireNonNull(before, "Converter should not be null!");
+        ValidationUtils.notNull(before, "Converter should not be null!");
         return (final V v) -> convert(before.convert(v));
     }
 
@@ -109,7 +110,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     default <V> Converter<T, V> andThen(final Converter<? super R, ? extends V> after) {
-        Objects.requireNonNull(after, "Converter should not be null!");
+        ValidationUtils.notNull(after, "Converter should not be null!");
         return (final T t) -> after.convert(convert(t));
     }
 
@@ -133,7 +134,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Validator<T> toValidator(final Predicate<T> predicate) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
 
@@ -146,7 +147,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Predicate<T> toPredicate(final Validator<T> validator) {
-        Objects.requireNonNull(validator, "Validator should not be null");
+        ValidationUtils.notNull(validator, "Validator should not be null");
         return (value) -> {
             try {
                 return validator.validate(value);
@@ -165,7 +166,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Matcher<T> toMatcher(final Predicate<T> predicate) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
 
@@ -178,7 +179,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Predicate<T> convert(final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         return matcher::matches;
     }
 
@@ -191,7 +192,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> BiMatcher<T> toBiMatcher(final BiPredicate<T, T> predicate) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
 
@@ -204,7 +205,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> BiPredicate<T, T> toBiPredicate(final BiMatcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         return matcher::matches;
     }
 
@@ -217,7 +218,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T, R> Converter<T, R> toConverter(final Function<T, R> function) {
-        Objects.requireNonNull(function, "Function should not be null");
+        ValidationUtils.notNull(function, "Function should not be null");
         return function::apply;
     }
 
@@ -230,7 +231,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T, R> Function<T, R> toFunction(final Converter<T, R> converter) {
-        Objects.requireNonNull(converter, "Converter should not be null");
+        ValidationUtils.notNull(converter, "Converter should not be null");
         return converter::convert;
     }
 

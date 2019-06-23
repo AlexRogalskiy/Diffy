@@ -40,11 +40,6 @@ import java.util.regex.Pattern;
 public class ValidationUtils {
 
     /**
-     * CreditCardProcessor used in wrapper method.
-     */
-//    private static final CreditCardValidator CREDIT_CARD_VALIDATOR = new CreditCardValidator();
-
-    /**
      * <p>Checks if the value matches the regular expression.</p>
      *
      * @param value  The value validation is being performed on.
@@ -52,7 +47,7 @@ public class ValidationUtils {
      * @return true if matches the regular expression.
      */
     public static boolean matchRegexp(final String value, final String regexp) {
-        if (Objects.isNull(regexp) || regexp.length() <= 0) {
+        if (StringUtils.isBlank(regexp)) {
             return false;
         }
         return Pattern.matches(regexp, value);
@@ -216,7 +211,7 @@ public class ValidationUtils {
      * @return true if the value's length is less than the specified maximum.
      */
     public static boolean maxLength(final String value, int max, int lineEndLength) {
-        int adjustAmount = adjustForLineEnding(value, lineEndLength);
+        final int adjustAmount = adjustForLineEnding(value, lineEndLength);
         return ((value.length() + adjustAmount) <= max);
     }
 

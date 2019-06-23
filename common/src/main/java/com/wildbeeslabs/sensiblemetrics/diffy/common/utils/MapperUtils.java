@@ -309,8 +309,9 @@ public class MapperUtils {
      * @throws NullPointerException if clazz is {@code null}
      */
     public static <T> T fromYaml(final String fileName, final Class<T> clazz) {
-        Objects.requireNonNull(fileName, "File name should not be null");
-        Objects.requireNonNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(fileName, "File name should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
+
         final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             final URL url = MapperUtils.class.getClassLoader().getResource(fileName);

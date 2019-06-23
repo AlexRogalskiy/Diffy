@@ -121,9 +121,9 @@ public interface Entry<K, V> extends Serializable {
      * @throws NullPointerException if consumer is {@code null}
      */
     static <K, V> void ifAllPresent(final Optional<K> first, final Optional<V> last, final BiConsumer<K, V> consumer) {
-        Objects.requireNonNull(first, "Optional entry first value should not be null!");
-        Objects.requireNonNull(last, "Optional entry last value should not be null!");
-        Objects.requireNonNull(consumer, "Binary consumer operator should not be null!");
+        ValidationUtils.notNull(first, "Optional entry first value should not be null!");
+        ValidationUtils.notNull(last, "Optional entry last value should not be null!");
+        ValidationUtils.notNull(consumer, "Binary consumer operator should not be null!");
 
         mapIfAllPresent(first, last, (f, l) -> {
             consumer.accept(f, l);
@@ -146,9 +146,9 @@ public interface Entry<K, V> extends Serializable {
      * @throws NullPointerException if function is {@code null}
      */
     static <K, V, R> Optional<R> mapIfAllPresent(final Optional<K> first, final Optional<V> last, final BiFunction<K, V, R> function) {
-        Objects.requireNonNull(first, "Optional entry first value should not be null!");
-        Objects.requireNonNull(last, "Optional entry last value should not be null!");
-        Objects.requireNonNull(function, "Binary function operator should not be null!");
+        ValidationUtils.notNull(first, "Optional entry first value should not be null!");
+        ValidationUtils.notNull(last, "Optional entry last value should not be null!");
+        ValidationUtils.notNull(function, "Binary function operator should not be null!");
 
         return first.flatMap(f -> last.map(l -> function.apply(f, l)));
     }
@@ -211,9 +211,9 @@ public interface Entry<K, V> extends Serializable {
      * @param runnable - initial input {@link Executable} operator
      */
     static <T> void ifPresentOrElse(final Optional<T> optional, final Consumer<T> consumer, final Runnable runnable) {
-        Objects.requireNonNull(optional, "Optional should not be null");
-        Objects.requireNonNull(consumer, "Consumer should not be null");
-        Objects.requireNonNull(runnable, "Runnable should not be null");
+        ValidationUtils.notNull(optional, "Optional should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(runnable, "Runnable should not be null");
 
         if (optional.isPresent()) {
             optional.ifPresent(consumer);

@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -65,7 +66,7 @@ public class Offset<T extends Number> {
      * @throws IllegalArgumentException if the given value is negative.
      */
     public static <T extends Number> Offset<T> offset(final T value) {
-        Objects.requireNonNull(value, "Offset should not be null");
+        ValidationUtils.notNull(value, "Offset should not be null");
         assert value.doubleValue() >= 0d : "An offset value should be greater than or equal to zero";
         return new Offset<>(value, false);
     }
@@ -88,7 +89,7 @@ public class Offset<T extends Number> {
      * @throws IllegalArgumentException if the given value is negative.
      */
     public static <T extends Number> Offset<T> strictOffset(final T value) {
-        Objects.requireNonNull(value, "Offset should not be null");
+        ValidationUtils.notNull(value, "Offset should not be null");
         assert value.doubleValue() > 0d : "A strict offset value should be greater than zero";
         return new Offset<>(value, true);
     }

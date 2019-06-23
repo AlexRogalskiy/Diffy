@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.State;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Transition;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -181,7 +182,7 @@ public class DefaultState<T> implements State<T, DefaultTransition<T>>, Comparab
      */
     @Override
     public int compareTo(final DefaultState<T> state) {
-        Objects.requireNonNull(state, "State should not be null");
+        ValidationUtils.notNull(state, "State should not be null");
         return state.id - this.id;
     }
 

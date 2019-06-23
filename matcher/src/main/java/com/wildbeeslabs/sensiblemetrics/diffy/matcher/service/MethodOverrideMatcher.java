@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
@@ -56,7 +57,7 @@ public class MethodOverrideMatcher<T extends Method> extends AbstractMatcher<T> 
     private final Matcher<? super Parameter[]> matcher;
 
     public MethodOverrideMatcher(final Matcher<? super Parameter[]> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

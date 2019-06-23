@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces.Processor;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -72,7 +73,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     @NonNull
     default <R, E extends Throwable> ThrowingConsumer<R, E> map(final Processor<R, T> converter) {
-        Objects.requireNonNull(converter, "Converter should not be null");
+        ValidationUtils.notNull(converter, "Converter should not be null");
         return (value) -> this.accept(converter.process(value));
     }
 
@@ -82,7 +83,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param supplier - initial input {@link ThrowingSupplier}
      */
     default void accept(final ThrowingSupplier<T, E> supplier) {
-        Objects.requireNonNull(supplier, "Supplier should not be null");
+        ValidationUtils.notNull(supplier, "Supplier should not be null");
         this.accept(supplier.get());
     }
 
@@ -94,7 +95,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     @NonNull
     default <R, E extends Throwable> ThrowingConsumer<R, E> accept(final Processor<R, T> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return (value) -> this.accept(processor.process(value));
     }
 
@@ -128,7 +129,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     @NonNull
     default <R> ThrowingConsumer<R, E> collect(final Processor<R, Stream<T>> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return (value) -> processor.process(value).forEach(this::accept);
     }
 
@@ -140,7 +141,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     @NonNull
     default <R> Processor<Stream<T>, Stream<R>> collectAfter(final Processor<T, R> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return (value) -> value.peek(this::accept).map(processor::process);
     }
 
@@ -152,7 +153,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     @NonNull
     default <R> ThrowingConsumer<Stream<R>, E> collectBefore(final Processor<R, T> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return (value) -> value.map(processor::process).forEach(this::accept);
     }
 
@@ -166,7 +167,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     @NonNull
     static <T, E extends Throwable> ThrowingConsumer<T, E> accept(final ThrowingConsumer<T, E> consumer) {
-        Objects.requireNonNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
         return consumer::accept;
     }
 
@@ -180,7 +181,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @throws IllegalArgumentException if consumer produces exception
      */
     static <T, E extends Throwable> void acceptOrThrow(final ThrowingConsumer<T, E> consumer, final T value) {
-        Objects.requireNonNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
         try {
             consumer.acceptOrThrow(value);
         } catch (Throwable t) {
@@ -199,8 +200,8 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      */
     @NonNull
     static <T, E extends Exception> ThrowingConsumer<T, E> wrapConsumer(final ThrowingConsumer<T, E> consumer, final Class<E> clazz) {
-        Objects.requireNonNull(consumer, "Consumer should not be null");
-        Objects.requireNonNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
 
         return (value) -> {
             try {

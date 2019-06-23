@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -74,7 +75,7 @@ public interface ThrowingBinaryConsumer<T, U, E extends Throwable> extends BiCon
      * @throws IllegalArgumentException if consumer produces exception
      */
     static <T, U, E extends Throwable> void acceptOrThrow(final ThrowingBinaryConsumer<T, U, E> consumer, final T first, final U last) {
-        Objects.requireNonNull(consumer, "Binary consumer should not be null");
+        ValidationUtils.notNull(consumer, "Binary consumer should not be null");
         try {
             consumer.acceptOrThrow(first, last);
         } catch (Throwable t) {
@@ -94,8 +95,8 @@ public interface ThrowingBinaryConsumer<T, U, E extends Throwable> extends BiCon
      */
     @NonNull
     static <T, U, E extends Exception> ThrowingBinaryConsumer<T, U, E> wrapConsumer(final ThrowingBinaryConsumer<T, U, E> consumer, final Class<E> clazz) {
-        Objects.requireNonNull(consumer, "Consumer should not be null");
-        Objects.requireNonNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
 
         return (first, last) -> {
             try {

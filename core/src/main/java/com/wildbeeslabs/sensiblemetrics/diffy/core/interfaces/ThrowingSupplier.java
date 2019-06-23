@@ -91,7 +91,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param consumer - initial input {@link ThrowingConsumer}
      */
     default void accept(final ThrowingConsumer<T, E> consumer) {
-        Objects.requireNonNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
         consumer.accept(this.get());
     }
 
@@ -103,7 +103,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     @NonNull
     default <R, E extends Throwable> ThrowingSupplier<R, E> accept(final Processor<T, R> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return () -> processor.process(this.get());
     }
 
@@ -125,7 +125,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> stream(final Processor<T, R> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return () -> generate(this::get).map(processor::process);
     }
 
@@ -137,7 +137,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> streamBefore(final Processor<T, R> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return () -> generate(() -> processor.process(this.get()));
     }
 
@@ -149,7 +149,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> streamAfter(final Processor<Stream<T>, Stream<R>> processor) {
-        Objects.requireNonNull(processor, "Processor should not be null");
+        ValidationUtils.notNull(processor, "Processor should not be null");
         return () -> processor.process(generate(this::get));
     }
 
@@ -193,7 +193,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     @NonNull
     static <T, E extends Throwable> ThrowingSupplier<T, E> get(final ThrowingSupplier<T, E> supplier) {
-        Objects.requireNonNull(supplier, "Supplier should not be null");
+        ValidationUtils.notNull(supplier, "Supplier should not be null");
         return supplier::get;
     }
 
@@ -208,7 +208,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     @Nullable
     static <T, E extends Throwable> T getOrThrow(final ThrowingSupplier<T, E> supplier) {
-        Objects.requireNonNull(supplier, "Supplier should not be null");
+        ValidationUtils.notNull(supplier, "Supplier should not be null");
         try {
             return supplier.getOrThrow();
         } catch (Throwable t) {
@@ -227,8 +227,8 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      */
     @NonNull
     static <T, E extends Exception> ThrowingSupplier<T, E> wrapConsumer(final ThrowingSupplier<T, E> supplier, final Class<E> clazz) {
-        Objects.requireNonNull(supplier, "Supplier should not be null");
-        Objects.requireNonNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(supplier, "Supplier should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
 
         return () -> {
             try {
