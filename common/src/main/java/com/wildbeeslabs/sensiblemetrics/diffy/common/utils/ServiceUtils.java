@@ -65,6 +65,15 @@ import static org.apache.commons.lang3.StringUtils.join;
 public class ServiceUtils {
 
     /**
+     * Default {@link Function} mappings
+     */
+    public static final Function<Optional<?>, List<?>> toList = option -> collect(option, Collectors.toList());
+    public static final Function<Optional<?>, Set<?>> toSet = option -> collect(option, Collectors.toSet());
+    public static final Function<Optional<?>, LinkedList<?>> toLinkedList = option -> collect(option, toLinkedList());
+    public static final Function<Optional<?>, List<?>> toUnmodifiableList = option -> collect(option, toUnmodifiableList());
+    public static final Function<Optional<?>, Set<?>> toUnmodifiableSet = option -> collect(option, toUnmodifiableSet());
+
+    /**
      * Default completable {@link BiConsumer} action
      */
     private static final BiConsumer<? super Object, ? super Throwable> DEFAULT_COMPLETABLE_ACTION = (response, error) -> {
@@ -92,7 +101,7 @@ public class ServiceUtils {
         });
     }
 
-    public static <T> Collector<T, ?, List<T>> lastN(int n) {
+    public static <T> Collector<T, ?, List<T>> toListWithLast(int n) {
         ValidationUtils.isTrue(n > 0, "Number should be positive");
         return Collector.<T, Deque<T>, List<T>>of(ArrayDeque::new, (acc, t) -> {
             if (acc.size() == n) {
