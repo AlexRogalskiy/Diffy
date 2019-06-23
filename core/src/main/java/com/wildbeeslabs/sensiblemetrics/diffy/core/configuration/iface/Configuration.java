@@ -94,7 +94,6 @@ public interface Configuration<T> {
      * Updates current key by input {@link DiffyConfigurationKey}
      *
      * @param key - initial input {@link DiffyConfigurationKey}
-     * @return {@link DiffyConfigurationKey}
      */
     void updateKey(final DiffyConfigurationKey<T> key);
 

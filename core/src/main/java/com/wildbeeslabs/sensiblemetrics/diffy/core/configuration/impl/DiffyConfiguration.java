@@ -116,7 +116,6 @@ public class DiffyConfiguration<T> implements Configuration<T> {
      * Updates current key by input {@link DiffyConfigurationKey}
      *
      * @param key - initial input {@link DiffyConfigurationKey} to be updated
-     * @return {@link DiffyConfigurationKey}
      */
     @Override
     public void updateKey(final DiffyConfigurationKey<T> key) {
