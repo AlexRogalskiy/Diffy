@@ -26,17 +26,18 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces;
 import com.codepoetics.protonpack.StreamUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.BiMatchOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -45,8 +46,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils.arrayMemberEquals;
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils.isTrue;
 import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -65,16 +64,28 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     /**
      * Default {@link BiMatcher} operator
      */
-    Function<Matcher<Object>, BiMatcher<?>> DEFAULT_BIMATCHER = (final Matcher<Object> matcher) -> (value1, value2) -> matcher.allMatch(value1, value2);
+    Function<Matcher<Object>, BiMatcher<?>> DEFAULT_BIMATCHER_FUNC = matcher -> (value1, value2) -> matcher.allMatch(value1, value2);
+    /**
+     * Default {@link BiMatcher} to {@Link BiPredicate}
+     */
+    Function<BiMatcher<Object>, BiPredicate<?, ?>> TO_BIPREDICATE = matcher -> matcher::matches;
+    /**
+     * Default {@link BiPredicate} to {@Link BiMatcher}
+     */
+    Function<BiPredicate<Object, Object>, BiMatcher<?>> TO_BIMATCHER = predicate -> predicate::test;
 
     /**
      * Default null {@link BiMatcher}
      */
-    BiMatcher<?> DEFAULT_NULL_BIMATCHER = DEFAULT_BIMATCHER.apply(Objects::isNull);
+    BiMatcher<?> DEFAULT_NULL_BIMATCHER = DEFAULT_BIMATCHER_FUNC.apply(Objects::isNull);
     /**
      * Default non-null {@link BiMatcher}
      */
-    BiMatcher<?> DEFAULT_NON_NULL_BIMATCHER = DEFAULT_BIMATCHER.apply(Objects::nonNull);
+    BiMatcher<?> DEFAULT_NON_NULL_BIMATCHER = DEFAULT_BIMATCHER_FUNC.apply(Objects::nonNull);
+    /**
+     * Default random boolean {@link BiMatcher}
+     */
+    BiMatcher<?> DEFAULT_BOOLEAN_MATCHER = (value1, value2) -> new Random().nextBoolean();
 
     /**
      * Default true {@link BiMatcher}
@@ -98,40 +109,40 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     /**
      * Default array {@link BiMatcher}
      */
-    Function<Class<?>, BiMatcher<?>> DEFAULT_ARRAY_BIMATCHER = (final Class<?> clazz) -> (first, last) -> ReflectionUtils.arrayMemberEquals(clazz, first, last);
+    Function<Class<?>, BiMatcher<?>> DEFAULT_ARRAY_BIMATCHER_FUNC = clazz -> (first, last) -> ReflectionUtils.arrayMemberEquals(clazz, first, last);
     /**
      * Default class {@link BiMatcher}
      */
-    Function<Class<?>, BiMatcher<?>> DEFAULT_INSTANCE_BIMATCHER = (final Class<?> clazz) -> DEFAULT_BIMATCHER.apply(clazz::isInstance);
+    Function<Class<?>, BiMatcher<?>> DEFAULT_INSTANCE_BIMATCHER_FUNC = clazz -> DEFAULT_BIMATCHER_FUNC.apply(clazz::isInstance);
     /**
      * Default equals {@link BiMatcher}
      */
-    Function<Object, BiMatcher<?>> DEFAULT_EQUALS_BIMATCHER = (final Object object) -> DEFAULT_BIMATCHER.apply(value -> Objects.equals(object, value));
+    Function<Object, BiMatcher<?>> DEFAULT_EQUALS_BIMATCHER_FUNC = object -> DEFAULT_BIMATCHER_FUNC.apply(value -> Objects.equals(object, value));
     /**
      * Default class nestmate {@link BiMatcher}
      */
-    Function<Class<?>, BiMatcher<?>> DEFAULT_NESTMATE_BIMATCHER = (final Class<?> clazz) -> DEFAULT_BIMATCHER.apply(value -> value.getClass().isNestmateOf(clazz));
+    Function<Class<?>, BiMatcher<?>> DEFAULT_NESTMATE_BIMATCHER_FUNC = clazz -> DEFAULT_BIMATCHER_FUNC.apply(value -> value.getClass().isNestmateOf(clazz));
     /**
      * Default assignable {@link BiMatcher}
      */
-    Function<Class<?>, BiMatcher<?>> DEFAULT_ASSIGNABLE_BIMATCHER = (final Class<?> clazz) -> DEFAULT_BIMATCHER.apply(value -> clazz.isAssignableFrom(value.getClass()));
+    Function<Class<?>, BiMatcher<?>> DEFAULT_ASSIGNABLE_BIMATCHER_FUNC = clazz -> DEFAULT_BIMATCHER_FUNC.apply(value -> clazz.isAssignableFrom(value.getClass()));
     /**
      * Default identity {@link BiMatcher}
      */
-    Function<Object, BiMatcher<?>> DEFAULT_IDENTITY_BIMATCHER = (final Object identity) -> DEFAULT_BIMATCHER.apply(value -> Objects.equals(identity, identityToString(value)));
+    Function<Object, BiMatcher<?>> DEFAULT_IDENTITY_BIMATCHER_FUNC = identity -> DEFAULT_BIMATCHER_FUNC.apply(value -> Objects.equals(identity, identityToString(value)));
 
     /**
      * Default unique {@link BiMatcher}
      */
-    Function<Set<Entry<?, ?>>, BiMatcher<?>> DEFAULT_UNIQUE_BIMATCHER = (final Set<Entry<?, ?>> set) -> (value1, value2) -> set.add(of(value1, value2));
+    Function<Set<Entry<?, ?>>, BiMatcher<?>> DEFAULT_UNIQUE_BIMATCHER_FUNC = set -> (value1, value2) -> set.add(of(value1, value2));
     /**
      * Default exist {@link BiMatcher}
      */
-    Function<Collection<?>, BiMatcher<?>> DEFAULT_EXIST_BIMATCHER = (final Collection<?> collection) -> (value1, value2) -> collection.contains(of(value1, value2));
+    Function<Collection<?>, BiMatcher<?>> DEFAULT_EXIST_BIMATCHER_FUNC = collection -> (value1, value2) -> collection.contains(of(value1, value2));
     /**
      * Default boolean {@link Matcher}
      */
-    Function<Boolean, BiMatcher<?>> DEFAULT_BOOLEAN_MATCHER = (final Boolean flag) -> DEFAULT_EQUALS_BIMATCHER.apply(flag);
+    Function<Boolean, BiMatcher<?>> DEFAULT_BOOLEAN_MATCHER_FUNC = flag -> DEFAULT_EQUALS_BIMATCHER_FUNC.apply(flag);
 
     /**
      * Compares provided objects by equality constraint

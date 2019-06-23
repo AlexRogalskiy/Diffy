@@ -26,12 +26,12 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces;
 import com.codepoetics.protonpack.StreamUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.MatchOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -42,6 +42,7 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -66,9 +67,13 @@ import static org.apache.commons.lang3.StringUtils.join;
 public interface Matcher<T> extends BaseMatcher<T, T> {
 
     /**
-     * Default {@link Matcher} to {@link BiMatcher}
+     * Default {@link Matcher} to {@link Predicate}
      */
-    Function<Matcher<Object>, Matcher<?>> DEFAULT_MATCHER = (final Matcher<Object> matcher) -> matcher::matches;
+    Function<Matcher<Object>, Predicate<?>> TO_PREDICATE = matcher -> matcher::matches;
+    /**
+     * Default {@link Predicate} to {@link Matcher}
+     */
+    Function<Predicate<Object>, Matcher<?>> TO_MATCHER = predicate -> predicate::test;
 
     /**
      * Default null {@link Matcher}
@@ -78,6 +83,10 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * Default non-null {@link Matcher}
      */
     Matcher<?> DEFAULT_NOTNULL_MATCHER = Objects::nonNull;
+    /**
+     * Default random boolean {@link Matcher}
+     */
+    Matcher<?> DEFAULT_BOOLEAN_MATCHER = predicate -> new Random().nextBoolean();
 
     /**
      * Default true {@link Matcher}
@@ -117,40 +126,40 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     /**
      * Default annotation class {@link Matcher}
      */
-    Function<Set<Annotation>, Matcher<Class<Annotation>>> DEFAULT_ANNOTATION_MATCHER = (final Set<Annotation> annotations) -> value -> Objects.nonNull(getAnnotation(annotations, value));
+    Function<Set<Annotation>, Matcher<Class<Annotation>>> DEFAULT_ANNOTATION_MATCHER_FUNC = annotations -> value -> Objects.nonNull(getAnnotation(annotations, value));
     /**
      * Default class {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> clazz::isInstance;
+    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER_FUNC = clazz -> clazz::isInstance;
     /**
      * Default equals {@link Matcher}
      */
-    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER = (final Object object) -> value -> Objects.equals(object, value);
+    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER_FUNC = object -> value -> Objects.equals(object, value);
     /**
      * Default class nestmate {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER = (final Class<?> clazz) -> value -> value.getClass().isNestmateOf(clazz);
+    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER_FUNC = clazz -> value -> value.getClass().isNestmateOf(clazz);
     /**
      * Default assignable {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_ASSIGNABLE_MATCHER = (final Class<?> clazz) -> value -> value.getClass().isAssignableFrom(clazz);
+    Function<Class<?>, Matcher<?>> DEFAULT_ASSIGNABLE_MATCHER_FUNC = clazz -> value -> value.getClass().isAssignableFrom(clazz);
     /**
      * Default identity {@link Matcher}
      */
-    Function<Object, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final Object identity) -> value -> Objects.equals(identity, identityToString(value));
+    Function<Object, Matcher<?>> DEFAULT_IDENTITY_MATCHER_FUNC = identity -> value -> Objects.equals(identity, identityToString(value));
 
     /**
      * Default unique {@link Matcher}
      */
-    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> value -> set.add(value);
+    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER_FUNC = set -> value -> set.add(value);
     /**
      * Default exist {@link Matcher}
      */
-    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER = (final Collection<?> collection) -> collection::contains;
+    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER_FUNC = collection -> collection::contains;
     /**
      * Default boolean {@link Matcher}
      */
-    Function<Boolean, Matcher<Boolean>> DEFAULT_BOOLEAN_MATCHER = (final Boolean flag) -> flag::equals;
+    Function<Boolean, Matcher<Boolean>> DEFAULT_BOOLEAN_MATCHER_FUNC = flag -> flag::equals;
 
     /**
      * Returns {@link Collection} of {@code T} items filtered by input {@link Matcher}
