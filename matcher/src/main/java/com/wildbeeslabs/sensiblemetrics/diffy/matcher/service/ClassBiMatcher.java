@@ -45,6 +45,7 @@ import static java.util.Objects.nonNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class ClassBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T, T>> {
 
     /**

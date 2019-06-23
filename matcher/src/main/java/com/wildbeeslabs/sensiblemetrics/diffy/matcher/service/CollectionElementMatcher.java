@@ -42,6 +42,7 @@ import java.util.Iterator;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class CollectionElementMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
 
     /**

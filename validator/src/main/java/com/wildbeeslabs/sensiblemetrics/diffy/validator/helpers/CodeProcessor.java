@@ -171,7 +171,7 @@ public final class CodeProcessor implements GenericProcessor<String, Object, Inv
      * Construct a code validator with a specified regular expression
      * validator, minimum/maximum length
      *
-     * @param validator The format regular expression validator
+     * @param regexProcessor The format regular expression validator
      * @param minLength The minimum length of the code
      * @param maxLength The maximum length of the code
      * @param validator The check digit validation routine
