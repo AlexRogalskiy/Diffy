@@ -133,7 +133,6 @@ public interface ThrowingProcessor<F, T, E extends Throwable> extends Processor<
      * Wraps input {@link ThrowingProcessor} by input exception {@link Class}
      *
      * @param <F>       type of consumed value
-     * @param <F>       type of supplied value
      * @param <E>       type of exception value
      * @param processor - initial input {@link ThrowingProcessor}
      * @param clazz     - initial input {@link Class}
