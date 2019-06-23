@@ -28,14 +28,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterE
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ArrayUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
 import javax.lang.model.SourceVersion;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -53,6 +51,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.zip.GZIPInputStream;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
@@ -663,5 +662,51 @@ public class StringUtils {
             .chars()
             .mapToObj(item -> (char) item)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Unzips compressed string to raw format string output
+     *
+     * @param value input string.
+     * @return String Unzip raw string.
+     * @throws Exception On unzip operation.
+     * @see Exception
+     */
+    public static String ungzip(final String value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        try {
+            return ungzip(value.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String ungzip(final byte[] bytes) throws Exception {
+        if (isGZIPStream(bytes)) {
+            final InputStreamReader isr = new InputStreamReader(new GZIPInputStream(new ByteArrayInputStream(bytes)), StandardCharsets.UTF_8);
+            final StringWriter sw = new StringWriter();
+            final char[] chars = new char[1024];
+            for (int len; (len = isr.read(chars)) > 0; ) {
+                sw.write(chars, 0, len);
+            }
+            return sw.toString();
+        }
+        return (new String(bytes, 0, bytes.length, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Checks whether input array of bytes is GZIP formatted or not
+     *
+     * @param bytes input array of bytes.
+     * @return boolean true - if GZIP formatted, false - otherwise.
+     */
+    private static boolean isGZIPStream(final byte[] bytes) {
+        if (ArrayUtils.isEmpty(bytes)) {
+            return false;
+        }
+        return (bytes[0] == (byte) GZIPInputStream.GZIP_MAGIC)
+            && (bytes[1] == (byte) (GZIPInputStream.GZIP_MAGIC >>> Byte.SIZE));
     }
 }

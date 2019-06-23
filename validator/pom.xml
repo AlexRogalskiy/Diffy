@@ -125,7 +125,6 @@
                             <doctitle>${project.name} API Reference (${project.version})</doctitle>
                             <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
                             <locale>en_US</locale>
-                            <source>8</source>
                             <linksource>true</linksource>
                             <notimestamp>true</notimestamp>
                             <quiet>true</quiet>

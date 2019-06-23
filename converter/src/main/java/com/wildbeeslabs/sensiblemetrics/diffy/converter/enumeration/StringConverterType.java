@@ -91,6 +91,7 @@ public enum StringConverterType {
     ENCODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::encodeUtf8),
     DECODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::decodeUtf8),
     FETCH_URL(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::readUrl),
+    UN_GZIP(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::ungzip),
     /**
      * org.apache.commons.text.StringEscapeUtils
      */

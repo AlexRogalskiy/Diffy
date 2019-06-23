@@ -59,7 +59,7 @@ public class MapperUtils {
     /**
      * Model mapper property settings {@link ObjectMapper}
      * Default property matching strategy is set to Strict see {@link MatchingStrategies}
-     * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
+     * Custom mappings are added using {@link ObjectMapper#addMappings(PropertyMap)}
      */
     static {
         objectMapper = new ObjectMapper();
