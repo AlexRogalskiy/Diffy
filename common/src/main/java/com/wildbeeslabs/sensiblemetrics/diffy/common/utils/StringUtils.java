@@ -70,7 +70,7 @@ import static org.apache.commons.text.WordUtils.capitalizeFully;
 @Slf4j
 @UtilityClass
 @SuppressWarnings("unchecked")
-public class Str1ingUtils {
+public class StringUtils {
 
     /**
      * Default alpha-numeric regex
