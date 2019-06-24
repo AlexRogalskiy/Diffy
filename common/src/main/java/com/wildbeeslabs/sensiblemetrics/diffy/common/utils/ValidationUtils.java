@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.utils;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator2;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.DateValidator;

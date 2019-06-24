@@ -33,13 +33,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.wildbeeslabs.sensiblemetrics.diffy.utils.ValidationUtils;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.msgpack.jackson.dataformat.MessagePackFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -73,6 +78,11 @@ public class MapperUtils {
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
+        //final CarSerializer carSerializer = new CarSerializer(Car.class);
+        //final SimpleModule module = new SimpleModule("CarSerializer", new Version(2, 1, 3, null, null, null));
+        //module.addSerializer(Car.class, carSerializer);
+        //objectMapper.registerModule(module);
+
         objectMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
         objectMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
         objectMapper.enable(JsonGenerator.Feature.ESCAPE_NON_ASCII);
@@ -86,9 +96,9 @@ public class MapperUtils {
         objectMapper.disable(DeserializationFeature.UNWRAP_ROOT_VALUE);
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
         objectMapper.disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
         objectMapper.disable(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS);
+        objectMapper.disable(MapperFeature.DEFAULT_VIEW_INCLUSION);
 
         objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
@@ -310,8 +320,8 @@ public class MapperUtils {
      * @throws NullPointerException if clazz is {@code null}
      */
     public static <T> T fromYaml(final String fileName, final Class<T> clazz) {
-        Objects.requireNonNull(fileName, "File name should not be null");
-        Objects.requireNonNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(fileName, "File name should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
         final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             final URL url = MapperUtils.class.getClassLoader().getResource(fileName);
@@ -320,5 +330,44 @@ public class MapperUtils {
             log.error(String.format("ERROR: cannot read properties from file = {%s}", fileName), e);
         }
         return null;
+    }
+
+    /**
+     * Returns serialized value {@link String} from input parameters
+     *
+     * @param <T>     type of object to be converted to
+     * @param value   - initial input {@code T} value to be serialized
+     * @param pattern - initial input date pattern
+     * @return serialized value {@code T} as string
+     */
+    public static <T> String writeAsString(final T value, final String pattern) throws JsonProcessingException {
+        ValidationUtils.isTrue(StringUtils.isNotBlank(pattern), "Pattern should not be null or empty");
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        objectMapper.setDateFormat(dateFormat);
+        return objectMapper.writeValueAsString(value);
+    }
+
+    /**
+     * Returns serialized value {@code T} as bytes from input parameters
+     *
+     * @param <T>   type of object to be converted to
+     * @param value - initial input {@code T} value to be serialized
+     * @return serialized value {@code T} as byte array
+     */
+    public static <T> byte[] writeUsingCborAsBytes(final T value) throws JsonProcessingException {
+        final ObjectMapper objectMapper = new ObjectMapper(new CBORFactory());
+        return objectMapper.writeValueAsBytes(value);
+    }
+
+    /**
+     * Returns serialized value {@code T} as bytes from input parameters
+     *
+     * @param <T>   type of object to be converted to
+     * @param value - initial input {@code T} value to be serialized
+     * @return serialized value {@code T} as byte array
+     */
+    public static <T> byte[] writeUsingMessagePackAsBytes(final T value) throws JsonProcessingException {
+        final ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
+        return objectMapper.writeValueAsBytes(value);
     }
 }
