@@ -86,7 +86,6 @@
                     <extensions>true</extensions>
                     <configuration>
                         <instructions>
-                            <source>8</source>
                             <minmemory>128m</minmemory>
                             <maxmemory>1024m</maxmemory>
                             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
