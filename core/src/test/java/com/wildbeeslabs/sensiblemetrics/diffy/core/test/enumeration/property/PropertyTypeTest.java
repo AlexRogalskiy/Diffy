@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.test.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.test.enumeration.property;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.constants.ClassMatcherType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration.PropertyType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,16 +31,17 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link ClassMatcherType} unit test
+ * {@link PropertyType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public class ClassValidatorTypeTest {
+public class PropertyTypeTest {
 
     /**
      * Default {@link ExpectedException} rule
@@ -49,36 +50,48 @@ public class ClassValidatorTypeTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void test_check_ClassValidatorType_ByEnum() {
-        assertThat(ClassMatcherType.IS_INNER.toString(), IsEqual.equalTo("IS_INNER"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE.toString(), IsEqual.equalTo("IS_PRIMITIVE"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER.toString(), IsEqual.equalTo("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_PropertyType_ByEnum() {
+        assertThat(PropertyType.METHOD.toString(), IsEqual.equalTo("METHOD"));
+        assertThat(PropertyType.FIELD.toString(), IsEqual.equalTo("FIELD"));
+        assertThat(PropertyType.GENERIC.toString(), IsEqual.equalTo("GENERIC"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByName() {
-        assertEquals(ClassMatcherType.IS_INNER, ClassMatcherType.valueOf("IS_INNER"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE, ClassMatcherType.valueOf("IS_PRIMITIVE"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER, ClassMatcherType.valueOf("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_PropertyType_ByName() {
+        assertEquals(PropertyType.METHOD, PropertyType.valueOf("METHOD"));
+        assertEquals(PropertyType.FIELD, PropertyType.valueOf("FIELD"));
+        assertEquals(PropertyType.GENERIC, PropertyType.valueOf("GENERIC"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByUndefinedName() {
+    public void test_check_PropertyType_ByPropertyType() {
+        assertEquals(PropertyType.FIELD, PropertyType.fromName("FIELD"));
+        assertEquals(PropertyType.METHOD, PropertyType.fromName("METHOD"));
+        assertEquals(PropertyType.GENERIC, PropertyType.fromName("GENERIC"));
+    }
+
+    @Test
+    public void test_check_PropertyType_ByUndefinedName() {
         // when
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf("UNDEFINED"));
+        assertEquals(null, PropertyType.valueOf("UNDEFINED"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByNullableEnumName() {
+    public void test_check_PropertyType_ByEmptyPropertyName() {
+        assertNull("Property type is not null", PropertyType.fromName(null));
+    }
+
+    @Test
+    public void test_check_PropertyType_ByNullableEnumName() {
         // when
         thrown.expect(NullPointerException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf(null));
+        assertEquals(null, PropertyType.valueOf(null));
     }
 }

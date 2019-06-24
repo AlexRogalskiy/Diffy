@@ -21,26 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.test.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.test.enumeration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.constants.ClassMatcherType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStatusType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link ClassMatcherType} unit test
+ * {@link MatcherStatusType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public class ClassValidatorTypeTest {
+public class MatcherStatusTypeTest {
 
     /**
      * Default {@link ExpectedException} rule
@@ -49,36 +49,43 @@ public class ClassValidatorTypeTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void test_check_ClassValidatorType_ByEnum() {
-        assertThat(ClassMatcherType.IS_INNER.toString(), IsEqual.equalTo("IS_INNER"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE.toString(), IsEqual.equalTo("IS_PRIMITIVE"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER.toString(), IsEqual.equalTo("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_MatcherStatusType_ByEnum() {
+        assertThat(MatcherStatusType.ENABLE.toString(), IsEqual.equalTo("ENABLE"));
+        assertThat(MatcherStatusType.DISABLE.toString(), IsEqual.equalTo("DISABLE"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByName() {
-        assertEquals(ClassMatcherType.IS_INNER, ClassMatcherType.valueOf("IS_INNER"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE, ClassMatcherType.valueOf("IS_PRIMITIVE"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER, ClassMatcherType.valueOf("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_MatcherStatusType_ByName() {
+        assertEquals(MatcherStatusType.ENABLE, MatcherStatusType.valueOf("ENABLE"));
+        assertEquals(MatcherStatusType.DISABLE, MatcherStatusType.valueOf("DISABLE"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByUndefinedName() {
+    public void test_check_MatcherStatusType_ByBoolean() {
+        assertEquals(MatcherStatusType.ENABLE, MatcherStatusType.from(true));
+        assertEquals(MatcherStatusType.DISABLE, MatcherStatusType.from(false));
+
+        assertTrue(MatcherStatusType.ENABLE.isEnable());
+        assertFalse(MatcherStatusType.DISABLE.isEnable());
+    }
+
+    @Test
+    public void test_check_MatcherStatusType_ByUndefinedName() {
         // when
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf("UNDEFINED"));
+        assertEquals(null, MatcherStatusType.valueOf("UNDEFINED"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByNullableEnumName() {
+    public void test_check_MatcherStatusType_ByNullableEnumName() {
         // when
         thrown.expect(NullPointerException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf(null));
+        assertEquals(null, MatcherStatusType.valueOf(null));
     }
 }

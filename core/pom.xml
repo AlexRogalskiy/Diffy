@@ -33,6 +33,7 @@
 
         <diffy-common.version>1.1.0</diffy-common.version>
         <diffy-matcher.version>1.1.0</diffy-matcher.version>
+        <diffy-examples.version>1.1.0</diffy-examples.version>
 
         <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.core.examples</exclude.packages>
     </properties>
@@ -228,6 +229,12 @@
             <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
             <artifactId>diffy-matcher</artifactId>
             <version>${diffy-matcher.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-examples</artifactId>
+            <version>${diffy-examples.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

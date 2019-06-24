@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.test.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.test.enumeration.property;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.constants.ClassMatcherType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration.PropertyAccessorType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,13 +34,13 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link ClassMatcherType} unit test
+ * {@link PropertyAccessorType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public class ClassValidatorTypeTest {
+public class PropertyAccessorTypeTest {
 
     /**
      * Default {@link ExpectedException} rule
@@ -49,36 +49,44 @@ public class ClassValidatorTypeTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void test_check_ClassValidatorType_ByEnum() {
-        assertThat(ClassMatcherType.IS_INNER.toString(), IsEqual.equalTo("IS_INNER"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE.toString(), IsEqual.equalTo("IS_PRIMITIVE"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER.toString(), IsEqual.equalTo("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_PropertyAccessorType_ByEnum() {
+        assertThat(PropertyAccessorType.ALL.toString(), IsEqual.equalTo("ALL"));
+        assertThat(PropertyAccessorType.CREATOR.toString(), IsEqual.equalTo("CREATOR"));
+        assertThat(PropertyAccessorType.FIELD.toString(), IsEqual.equalTo("FIELD"));
+        assertThat(PropertyAccessorType.GETTER.toString(), IsEqual.equalTo("GETTER"));
+        assertThat(PropertyAccessorType.IS_GETTER.toString(), IsEqual.equalTo("IS_GETTER"));
+        assertThat(PropertyAccessorType.SETTER.toString(), IsEqual.equalTo("SETTER"));
+        assertThat(PropertyAccessorType.NONE.toString(), IsEqual.equalTo("NONE"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByName() {
-        assertEquals(ClassMatcherType.IS_INNER, ClassMatcherType.valueOf("IS_INNER"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE, ClassMatcherType.valueOf("IS_PRIMITIVE"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER, ClassMatcherType.valueOf("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_PropertyAccessorType_ByName() {
+        assertEquals(PropertyAccessorType.ALL, PropertyAccessorType.valueOf("ALL"));
+        assertEquals(PropertyAccessorType.CREATOR, PropertyAccessorType.valueOf("CREATOR"));
+        assertEquals(PropertyAccessorType.FIELD, PropertyAccessorType.valueOf("FIELD"));
+        assertEquals(PropertyAccessorType.GETTER, PropertyAccessorType.valueOf("GETTER"));
+        assertEquals(PropertyAccessorType.IS_GETTER, PropertyAccessorType.valueOf("IS_GETTER"));
+        assertEquals(PropertyAccessorType.SETTER, PropertyAccessorType.valueOf("SETTER"));
+        assertEquals(PropertyAccessorType.NONE, PropertyAccessorType.valueOf("NONE"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByUndefinedName() {
+    public void test_check_PropertyAccessorType_ByUndefinedName() {
         // when
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf("UNDEFINED"));
+        assertEquals(null, PropertyAccessorType.valueOf("UNDEFINED"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByNullableEnumName() {
+    public void test_check_PropertyAccessorType_ByNullableEnumName() {
         // when
         thrown.expect(NullPointerException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf(null));
+        assertEquals(null, PropertyAccessorType.valueOf(null));
     }
 }

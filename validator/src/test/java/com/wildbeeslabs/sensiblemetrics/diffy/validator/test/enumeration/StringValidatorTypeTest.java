@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.test.enumeration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.enumeration.StringMatcherType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.constants.StringMatcherType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;

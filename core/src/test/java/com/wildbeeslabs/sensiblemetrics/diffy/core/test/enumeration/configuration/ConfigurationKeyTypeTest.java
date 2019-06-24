@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.test.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.test.enumeration.configuration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.constants.ClassMatcherType;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.enumeration.ConfigurationKeyType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,13 +34,13 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link ClassMatcherType} unit test
+ * {@link ConfigurationKeyType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
  */
-public class ClassValidatorTypeTest {
+public class ConfigurationKeyTypeTest {
 
     /**
      * Default {@link ExpectedException} rule
@@ -49,36 +49,34 @@ public class ClassValidatorTypeTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void test_check_ClassValidatorType_ByEnum() {
-        assertThat(ClassMatcherType.IS_INNER.toString(), IsEqual.equalTo("IS_INNER"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE.toString(), IsEqual.equalTo("IS_PRIMITIVE"));
-        assertThat(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER.toString(), IsEqual.equalTo("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_ConfigurationKeyType_ByEnum() {
+        assertThat(ConfigurationKeyType.READ_ONLY.toString(), IsEqual.equalTo("READ_ONLY"));
+        assertThat(ConfigurationKeyType.READ_WRITE.toString(), IsEqual.equalTo("READ_WRITE"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByName() {
-        assertEquals(ClassMatcherType.IS_INNER, ClassMatcherType.valueOf("IS_INNER"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE, ClassMatcherType.valueOf("IS_PRIMITIVE"));
-        assertEquals(ClassMatcherType.IS_PRIMITIVE_OR_WRAPPER, ClassMatcherType.valueOf("IS_PRIMITIVE_OR_WRAPPER"));
+    public void test_check_ConfigurationKeyType_ByName() {
+        assertEquals(ConfigurationKeyType.READ_ONLY, ConfigurationKeyType.valueOf("READ_ONLY"));
+        assertEquals(ConfigurationKeyType.READ_WRITE, ConfigurationKeyType.valueOf("READ_WRITE"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByUndefinedName() {
+    public void test_check_ConfigurationKeyType_ByUndefinedName() {
         // when
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf("UNDEFINED"));
+        assertEquals(null, ConfigurationKeyType.valueOf("UNDEFINED"));
     }
 
     @Test
-    public void test_check_ClassValidatorType_ByNullableEnumName() {
+    public void test_check_ConfigurationKeyType_ByNullableEnumName() {
         // when
         thrown.expect(NullPointerException.class);
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, ClassMatcherType.valueOf(null));
+        assertEquals(null, ConfigurationKeyType.valueOf(null));
     }
 }
