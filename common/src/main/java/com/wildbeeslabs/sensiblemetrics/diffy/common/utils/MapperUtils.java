@@ -34,6 +34,8 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +68,8 @@ public class MapperUtils {
         //final SimpleModule module = new SimpleModule("UnQuote");
         //module.addSerializer(new UnQuotesSerializer());
         //objectMapper.registerModule(module);
+        objectMapper.registerModule(new Jdk8Module());
+        objectMapper.registerModule(new JavaTimeModule());
 
         objectMapper.setDefaultMergeable(Boolean.TRUE);
         objectMapper.setLocale(Locale.getDefault());

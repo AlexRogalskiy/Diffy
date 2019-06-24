@@ -26,6 +26,8 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.common {
     requires java.compiler;
     requires org.jsoup;
     requires commons.validator;
+    requires com.fasterxml.jackson.datatype.jdk8;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
     // exports common annotation
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.annotation;
