@@ -23,8 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -32,9 +33,6 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Collection one-to-one {@link AbstractMatcher} implementation
@@ -46,6 +44,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class CollectionOneToOneMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
 
     /**
@@ -69,7 +68,7 @@ public class CollectionOneToOneMatcher<T> extends AbstractMatcher<Iterable<? ext
             return false;
         }
         final Iterator<? extends Matcher<? super T>> iterator = this.matchers.iterator();
-        final Iterator<? extends T> var3 = listOf(target).iterator();
+        final Iterator<? extends T> var3 = ServiceUtils.listOf(target).iterator();
         T value;
         do {
             if (!var3.hasNext()) {

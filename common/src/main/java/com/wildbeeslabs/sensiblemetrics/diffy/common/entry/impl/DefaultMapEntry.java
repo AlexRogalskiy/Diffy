@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
 import com.google.common.collect.ImmutableMap;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -33,7 +34,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
 
 /**
  * Default tied map {@link Entry} implementatino
@@ -64,8 +65,8 @@ public class DefaultMapEntry<T, K, V> implements Entry<T, Map<K, V>> {
     /**
      * Constructs a new entry with the given Map and key.
      *
-     * @param map the map
-     * @param key the key
+     * @param first the map
+     * @param last  the key
      */
     public DefaultMapEntry(final T first, final Map<K, V> last) {
         this.first = first;
@@ -104,7 +105,7 @@ public class DefaultMapEntry<T, K, V> implements Entry<T, Map<K, V>> {
     /**
      * Sets the value associated with the key direct onto the map.
      *
-     * @param value the new value
+     * @param entry the new value
      * @return the old value
      * @throws IllegalArgumentException if the value is set to this map entry
      */
@@ -116,11 +117,10 @@ public class DefaultMapEntry<T, K, V> implements Entry<T, Map<K, V>> {
      * Sets the value associated with the key direct onto the map.
      *
      * @param values the new value
-     * @return the old value
      * @throws IllegalArgumentException if the value is set to this map entry
      */
     public void addValues(final Iterable<Map.Entry<K, V>> values) {
-        streamOf(values).forEach(this::addValue);
+        ServiceUtils.streamOf(values).forEach(this::addValue);
     }
 
     /**

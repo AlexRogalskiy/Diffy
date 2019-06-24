@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidOperationException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
@@ -115,7 +115,7 @@ public class DateUtils {
             formatter.setLenient(true);
             return formatter.parse(date);
         } catch (ParseException e) {
-            log.error(formatMessage("ERROR: cannot parse date by format={%s}", dateFormat));
+            log.error(StringUtils.formatMessage("ERROR: cannot parse date by format={%s}", dateFormat));
             InvalidOperationException.throwInvalidParseFormat(date, e);
         }
         return null;

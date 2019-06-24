@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.wrapInBraces;
 
 /**
  * Path node implementation

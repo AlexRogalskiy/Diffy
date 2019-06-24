@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface.Transition;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Transition;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.collections.comparators.ComparableComparator;
@@ -42,6 +42,7 @@ import java.util.Optional;
  */
 @Data
 @EqualsAndHashCode
+@SuppressWarnings("unchecked")
 public class DefaultTransition<T> implements Transition<T, DefaultState<T>>, Serializable, Cloneable {
 
     /**

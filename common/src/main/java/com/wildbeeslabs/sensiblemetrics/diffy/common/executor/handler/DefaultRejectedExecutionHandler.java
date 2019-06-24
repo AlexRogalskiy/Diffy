@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.handler;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.handler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,15 +40,14 @@ public class DefaultRejectedExecutionHandler implements RejectedExecutionHandler
      *
      * @param runnable - initial input {@link Runnable} task
      * @param executor - initial input {@link ThreadPoolExecutor}
-     * @throws InterruptedException if current thread is interrupted
+     * @throws RejectedExecutionException if current thread is being interrupted
      */
     @Override
     public void rejectedExecution(final Runnable runnable, final ThreadPoolExecutor executor) {
         try {
             executor.getQueue().put(runnable);
         } catch (InterruptedException e) {
-            log.error("ERROR: cannot handle queued task: {}, message: {}", runnable, e.getMessage(), e);
-            throw new RejectedExecutionException(e);
+            throw new RejectedExecutionException(String.format("ERROR: cannot handle queued task: {}, message: {}", runnable, e.getMessage()), e);
         }
     }
 }

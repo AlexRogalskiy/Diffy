@@ -26,16 +26,15 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.MatcherEventListenerAdapter;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.MatcherEventListenerAdapter;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Abstract base matcher implementation
@@ -136,7 +135,7 @@ public abstract class AbstractBaseMatcher<T, S> implements MatcherEventListenerA
      */
     @Override
     public void addListeners(final Iterable<MatcherEventListener<T, S>> listeners) {
-        listOf(listeners).forEach(this::addListener);
+        ServiceUtils.listOf(listeners).forEach(this::addListener);
     }
 
     /**

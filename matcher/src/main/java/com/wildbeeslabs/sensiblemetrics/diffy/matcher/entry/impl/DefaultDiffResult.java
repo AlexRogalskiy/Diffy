@@ -23,15 +23,18 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Default {@link Iterable} difference result implementation

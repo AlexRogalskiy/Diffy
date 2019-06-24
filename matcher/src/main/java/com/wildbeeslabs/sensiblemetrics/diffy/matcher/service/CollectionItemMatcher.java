@@ -23,16 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Iterator;
-import java.util.Objects;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Collection item {@link AbstractMatcher} implementation
@@ -44,6 +42,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class CollectionItemMatcher<T> extends AbstractMatcher<Iterable<? extends T>> {
 
     /**
@@ -63,7 +62,7 @@ public class CollectionItemMatcher<T> extends AbstractMatcher<Iterable<? extends
 
     @Override
     public boolean matches(final Iterable<? extends T> target) {
-        final Iterator var2 = listOf(target).iterator();
+        final Iterator var2 = ServiceUtils.listOf(target).iterator();
         T value;
         do {
             if (!var2.hasNext()) {

@@ -29,9 +29,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStatusType.DISABLE;
-import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStatusType.ENABLE;
-
 /**
  * Matcher mode type {@link Enum} to process malformed and unexpected data
  * <p>
@@ -44,10 +41,10 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.Matcher
 @Getter
 @RequiredArgsConstructor
 public enum BiMatcherModeType implements BaseMatcherMode {
-    STRICT(ENABLE, true),
-    SILENT(DISABLE, false),
-    LENIENT(DISABLE, true),
-    SEALED(ENABLE, false);
+    STRICT(MatcherStatusType.ENABLE, true),
+    SILENT(MatcherStatusType.DISABLE, false),
+    LENIENT(MatcherStatusType.DISABLE, true),
+    SEALED(MatcherStatusType.ENABLE, false);
 
     /**
      * {@link MatcherStatusType} status
@@ -74,7 +71,7 @@ public enum BiMatcherModeType implements BaseMatcherMode {
      */
     @Override
     public boolean isEnable() {
-        return Objects.equals(this.getStatus(), ENABLE);
+        return Objects.equals(this.getStatus(), MatcherStatusType.ENABLE);
     }
 
     /**

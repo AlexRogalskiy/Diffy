@@ -23,10 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.*;
-
-import java.util.Objects;
 
 /**
  * String {@link AbstractMatcher} implementation
@@ -38,6 +36,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class StringMatcher extends AbstractMatcher<String> {
 
     /**

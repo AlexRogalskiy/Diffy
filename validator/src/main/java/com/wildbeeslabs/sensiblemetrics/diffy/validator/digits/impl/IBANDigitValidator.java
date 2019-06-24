@@ -23,12 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.IBANDigitProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.security.InvalidParameterException;
 
 /**
  * <b>IBAN</b> (International Bank Account Number) Check Digit calculation/validation.

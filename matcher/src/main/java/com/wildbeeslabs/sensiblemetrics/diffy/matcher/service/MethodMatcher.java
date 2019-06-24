@@ -23,14 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -43,6 +42,7 @@ import java.util.Optional;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class MethodMatcher<T> extends AbstractMatcher<Class<T>> {
 
     /**

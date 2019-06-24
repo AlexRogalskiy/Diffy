@@ -24,10 +24,12 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.service;
 
 import com.google.common.collect.Sets;
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.interfaces.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -37,10 +39,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.DEFAULT_COMPARATOR;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.*;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils.*;
 
 /**
  * Abstract difference comparator implementation by input object instance
@@ -54,6 +53,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitiz
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
 
     /**
@@ -101,7 +101,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public AbstractDiffComparator(final Class<? extends T> clazz, final Comparator<? super T> comparator) {
         ValidationUtils.notNull(clazz, "Class should not be null!");
         this.clazz = clazz;
-        this.comparator = Optional.ofNullable(comparator).orElse(DEFAULT_COMPARATOR);
+        this.comparator = Optional.ofNullable(comparator).orElse(ComparatorUtils.DEFAULT_COMPARATOR);
         this.getPropertyMap().putAll(this.getFieldsMap(this.clazz));
         this.getPropertySet().addAll(this.getPropertyMap().keySet());
     }
@@ -112,7 +112,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param properties - initial input {@link Iterable} collection of properties {@link String} to exclude from comparison
      */
     public void excludeProperties(final Iterable<String> properties) {
-        listOf(properties).forEach(this::excludeProperty);
+        ServiceUtils.listOf(properties).forEach(this::excludeProperty);
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void includeProperties(final Iterable<String> properties) {
         this.getPropertySet().clear();
-        listOf(properties).forEach(this::includeProperty);
+        ServiceUtils.listOf(properties).forEach(this::includeProperty);
     }
 
     /**
@@ -157,7 +157,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public void setComparator(final String property, final Comparator<?> comparator) {
         ValidationUtils.notNull(property, "Property should not be null!");
         log.debug("DEBUG <{}>: storing property by name={}, comparator={}", getClass().getName(), property, comparator);
-        this.getPropertyComparatorMap().put(sanitize(property), comparator);
+        this.getPropertyComparatorMap().put(StringUtils.sanitize(property), comparator);
     }
 
     /**
@@ -179,7 +179,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void removeComparator(final String property) {
         log.debug("DEBUG: <{}>: removing comparator for property={}", getClass().getName(), property);
-        this.getPropertyComparatorMap().remove(sanitize(property));
+        this.getPropertyComparatorMap().remove(StringUtils.sanitize(property));
     }
 
     /**
@@ -188,7 +188,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      * @param properties - initial input {@link Iterable} collection of properties {@link String}
      */
     protected void removeComparators(final Iterable<String> properties) {
-        listOf(properties).forEach(this::removeComparator);
+        ServiceUtils.listOf(properties).forEach(this::removeComparator);
     }
 
     /**
@@ -216,7 +216,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     @SuppressWarnings("unchecked")
     protected Comparator<?> getPropertyComparator(final String property) {
-        return this.getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+        return this.getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
     }
 
     /**

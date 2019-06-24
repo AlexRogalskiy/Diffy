@@ -38,8 +38,6 @@ import static java.lang.Thread.currentThread;
 public class DefaultSubmissionPublisher<T> extends SubmissionPublisher<Event<T>> {
 
     private static final String LOG_MESSAGE_FORMAT = "Publisher >> [%s] %s%n";
-    private final int MAX_ITEM_TO_PUBLISH = 5;
-
     private final ScheduledFuture<?> periodicTask;
     private final ScheduledExecutorService scheduler;
 
@@ -47,34 +45,20 @@ public class DefaultSubmissionPublisher<T> extends SubmissionPublisher<Event<T>>
 
     public DefaultSubmissionPublisher(final Executor executor, int maxBufferCapacity, long period, final TimeUnit unit) {
         super(executor, maxBufferCapacity);
-
-        // if using the default, normally the ForkJoinPool.commonPool(), call:
-        // super();
         i = new AtomicInteger(0);
 
         this.scheduler = new ScheduledThreadPoolExecutor(1);
         this.periodicTask = this.scheduler.scheduleAtFixedRate(() -> {
             final Event<T> item = this.supplier.get();
-
             log("publishing item: " + item + " ...");
-
             this.submit(item);
 
             log("estimateMaximumLag: " + super.estimateMaximumLag());
             log("estimateMinimumDemand: " + super.estimateMinimumDemand());
-
-//            if (item == MAX_ITEM_TO_PUBLISH) {
-//                close();
-//            }
-
         }, 0, period, unit);
     }
 
     @Override
-    public void subscribe(final Subscriber<? super Event<T>> subscriber) {
-        super.subscribe(subscriber);
-    }
-
     public void close() {
         log("shutting down...");
         final List<Subscriber<? super Event<T>>> subscribers = this.getSubscribers();
@@ -86,17 +70,7 @@ public class DefaultSubmissionPublisher<T> extends SubmissionPublisher<Event<T>>
         super.close();
     }
 
-    private final Supplier<? extends Event<T>> supplier = new Supplier<>() {
-        @Override
-        public Event<T> get() {
-            int value = i.incrementAndGet();
-            return new Event<T>() {
-                @Override
-                public int hashCode() {
-                    return super.hashCode();
-                }
-            };
-        }
+    private final Supplier<? extends Event<T>> supplier = (Supplier<Event<T>>) () -> new Event<T>() {
     };
 
     private void log(final String message, final Object... args) {

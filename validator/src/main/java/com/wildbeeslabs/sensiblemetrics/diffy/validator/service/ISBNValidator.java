@@ -23,10 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.ISBNProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.EAN13DigitValidator;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.ISBN10DigitValidator;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers.CodeProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers.ISBNProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 
 import java.util.Objects;
 
@@ -34,9 +33,9 @@ import java.util.Objects;
  * <b>ISBN-10</b> and <b>ISBN-13</b> Code Validation.
  * <p>
  * This validator validates the code is either a valid ISBN-10
- * (using a {@link CodeValidator} with the {@link ISBN10DigitValidator.ISBN10_CHECK_DIGIT})
- * or a valid ISBN-13 code (using a {@link CodeValidator} with the
- * the {@link EAN13DigitValidator.EAN13_CHECK_DIGIT} routine).
+ * (using a {@link CodeProcessor} with the {@code ISBN10DigitValidator.ISBN10_CHECK_DIGIT})
+ * or a valid ISBN-13 code (using a {@link CodeProcessor} with the
+ * the {@code EAN13DigitValidator.EAN13_CHECK_DIGIT} routine).
  * <p>
  * The <code>validate()</code> methods return the ISBN code with formatting
  * characters removed if valid or <code>null</code> if invalid.

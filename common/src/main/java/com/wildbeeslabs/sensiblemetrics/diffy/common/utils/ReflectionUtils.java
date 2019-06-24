@@ -21,15 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.IllegalAccessException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MethodInvocationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.PropertyAccessException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.IllegalAccessException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.MethodInvocationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.PropertyAccessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -49,11 +49,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.TypeUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.sanitize;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -76,11 +74,11 @@ public class ReflectionUtils {
      * @return matchable class instance {@link Class}
      */
     public static <T> Class<T> getMatchableClass(final Class<T> expectedClass) {
-        return DEFAULT_PRIMITIVE_TYPES
+        return TypeUtils.DEFAULT_PRIMITIVE_TYPES
             .keySet()
             .stream()
             .filter(type -> type.equals(expectedClass))
-            .map(DEFAULT_PRIMITIVE_TYPES::get)
+            .map(TypeUtils.DEFAULT_PRIMITIVE_TYPES::get)
             .map(v -> (Class<T>) v)
             .findFirst()
             .orElse(expectedClass);
@@ -93,7 +91,7 @@ public class ReflectionUtils {
      * @return true - if input class is of primitive numeric type, false - otherwise
      */
     public static boolean isPrimitiveNumericType(final Class<?> clazz) {
-        return DEFAULT_PRIMITIVE_NUMERIC_TYPES.contains(clazz);
+        return TypeUtils.DEFAULT_PRIMITIVE_NUMERIC_TYPES.contains(clazz);
     }
 
     /**
@@ -118,8 +116,8 @@ public class ReflectionUtils {
         } else if (isPrimitiveType(clazz) || isPrimitiveWrapperType(clazz)) {
             return true;
         }
-        return FINAL_SIMPLE_TYPES.stream().anyMatch(type -> type.equals(clazz))
-            || EXTENDABLE_SIMPLE_TYPES.stream().anyMatch(type -> type.isAssignableFrom(clazz));
+        return TypeUtils.FINAL_SIMPLE_TYPES.stream().anyMatch(type -> type.equals(clazz))
+            || TypeUtils.EXTENDABLE_SIMPLE_TYPES.stream().anyMatch(type -> type.isAssignableFrom(clazz));
     }
 
     /**
@@ -139,7 +137,7 @@ public class ReflectionUtils {
      * @return true - if input class is of primitive wrapper type, false - otherwise
      */
     public static boolean isPrimitiveWrapperType(final Class<?> clazz) {
-        return Objects.nonNull(clazz) && DEFAULT_PRIMITIVE_WRAPPER_TYPES.contains(clazz);
+        return Objects.nonNull(clazz) && TypeUtils.DEFAULT_PRIMITIVE_WRAPPER_TYPES.contains(clazz);
     }
 
     /**
@@ -158,14 +156,14 @@ public class ReflectionUtils {
         try {
             constructor = clazz.getDeclaredConstructor();
         } catch (final NoSuchMethodException e) {
-            BadOperationException.throwError(formatMessage("ERROR: missing default constructor for class: {%s}", clazz.getName()), e);
+            BadOperationException.throwError(StringUtils.formatMessage("ERROR: missing default constructor for class: {%s}", clazz.getName()), e);
             return null;
         }
         try {
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (Exception e) {
-            BadOperationException.throwError(formatMessage("ERROR: cannot create instance by class: {%s}", clazz), e);
+            BadOperationException.throwError(StringUtils.formatMessage("ERROR: cannot create instance by class: {%s}", clazz), e);
         }
         return null;
     }
@@ -177,7 +175,7 @@ public class ReflectionUtils {
      * @return traversable collection of types {@link Set}
      */
     public static Set<Class<?>> typesOf(final Object... values) {
-        return streamOf(values).filter(Objects::nonNull).map(Object::getClass).collect(Collectors.toSet());
+        return ServiceUtils.streamOf(values).filter(Objects::nonNull).map(Object::getClass).collect(Collectors.toSet());
     }
 
     /**
@@ -188,7 +186,7 @@ public class ReflectionUtils {
      * @return true - if shared type is assigned by input collection of argument types, fales - otherwise
      */
     public static boolean allAssignableFrom(final Class<?> sharedType, final Iterable<? extends Class<?>> types) {
-        final Iterable<? extends Class<?>> traversableType = listOf(types);
+        final Iterable<? extends Class<?>> traversableType = ServiceUtils.listOf(types);
         return !StreamSupport.stream(traversableType.spliterator(), false).allMatch(sharedType::isAssignableFrom);
     }
 
@@ -200,7 +198,7 @@ public class ReflectionUtils {
      * @return property value of input object {@link Object}
      */
     public static Object getProperty(final Object value, final String propertyName) {
-        return getProperty(value, sanitize(propertyName), Object.class);
+        return getProperty(value, StringUtils.sanitize(propertyName), Object.class);
     }
 
     /**
@@ -249,7 +247,7 @@ public class ReflectionUtils {
         if (member instanceof Method) {
             return ((Method) member).getGenericReturnType();
         }
-        IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: no such class member = {%s}, neither a field nor a method", member));
+        IllegalAccessException.throwInvalidAccess(StringUtils.formatMessage("ERROR: no such class member = {%s}, neither a field nor a method", member));
         return null;
     }
 
@@ -323,7 +321,7 @@ public class ReflectionUtils {
      */
     public static Field[] getAllFields(final List<Class<?>> classes) {
         final Set<Field> fields = new HashSet<>();
-        listOf(classes).forEach(clazz -> fields.addAll(asList(clazz.getDeclaredFields())));
+        ServiceUtils.listOf(classes).forEach(clazz -> fields.addAll(asList(clazz.getDeclaredFields())));
         return fields.toArray(new Field[fields.size()]);
     }
 
@@ -481,7 +479,7 @@ public class ReflectionUtils {
      * @return collection of persistent fields {@link List}
      */
     public static List<Field> getAllPersistentFields(final Class clazz) {
-        return streamOf(getAllFields(clazz)).filter(ReflectionUtils::isPersistentField).collect(Collectors.toList());
+        return ServiceUtils.streamOf(getAllFields(clazz)).filter(ReflectionUtils::isPersistentField).collect(Collectors.toList());
     }
 
     /**
@@ -535,7 +533,7 @@ public class ReflectionUtils {
         } else if (javaType instanceof Class) {
             return (Class) javaType;
         }
-        IllegalAccessException.throwInvalidAccess(formatMessage("ERROR: cannot get class by type: {%s}", javaType));
+        IllegalAccessException.throwInvalidAccess(StringUtils.formatMessage("ERROR: cannot get class by type: {%s}", javaType));
         return null;
     }
 
@@ -728,19 +726,19 @@ public class ReflectionUtils {
         final Class<?> returnType = getter.getReturnType();
 
         if (Comparable.class.isAssignableFrom(returnType) || returnType.isPrimitive()) {
-            Collections.sort(listOf(list),
+            Collections.sort(ServiceUtils.listOf(list),
                 (e1, e2) -> {
                     try {
                         final Comparable<Object> val1 = (Comparable<Object>) getter.invoke(e1);
                         final Comparable<Object> val2 = (Comparable<Object>) getter.invoke(e2);
                         return val1.compareTo(val2);
                     } catch (Exception e) {
-                        BadOperationException.throwError(formatMessage("ERROR: cannot invoke getter method: {%s} on field: {%s} of first: {%s} / last: {%s}", getter.getName(), field, e1, e2), e);
+                        BadOperationException.throwError(StringUtils.formatMessage("ERROR: cannot invoke getter method: {%s} on field: {%s} of first: {%s} / last: {%s}", getter.getName(), field, e1, e2), e);
                     }
                     return 0;
                 });
         } else {
-            BadOperationException.throwError(formatMessage("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", join(list, "|"), field, returnType.getName()));
+            BadOperationException.throwError(StringUtils.formatMessage("ERROR: cannot compare list: {%s} by field: {%s} of type: {%s}", join(list, "|"), field, returnType.getName()));
         }
         return list;
     }
@@ -783,7 +781,7 @@ public class ReflectionUtils {
                     return this.getParameterType(methodOptional.get());
                 }
             }
-            BadOperationException.throwError(formatMessage("ERROR: cannot determine correct type for method={%s}", getMethodName()));
+            BadOperationException.throwError(StringUtils.formatMessage("ERROR: cannot determine correct type for method={%s}", getMethodName()));
             return null;
         }
 
@@ -923,6 +921,6 @@ public class ReflectionUtils {
     }
 
     public static <T extends Annotation> T getAnnotation(final Iterable<Annotation> annotations, final Class<T> annotationType) {
-        return streamOf(annotations).filter(type -> annotationType.isInstance(type)).findFirst().map(type -> annotationType.cast(type)).orElse(null);
+        return ServiceUtils.streamOf(annotations).filter(type -> annotationType.isInstance(type)).findFirst().map(type -> annotationType.cast(type)).orElse(null);
     }
 }

@@ -23,12 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Match operation {@link RuntimeException} implementation
@@ -80,6 +81,6 @@ public class ConvertOperationException extends RuntimeException {
      */
     @Factory
     public static final ConvertOperationException throwIncorrectConversion(final Object target, final Throwable throwable) {
-        throw new ConvertOperationException(formatMessage("ERROR: cannot process convert operation on target = {%s}", target), throwable);
+        throw new ConvertOperationException(StringUtils.formatMessage("ERROR: cannot process convert operation on target = {%s}", target), throwable);
     }
 }

@@ -23,7 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -32,7 +34,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.iterableOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.iterableOf;
 import static java.util.Arrays.asList;
 
 /**
@@ -55,14 +57,14 @@ public class MethodOverrideMatcher<T extends Method> extends AbstractMatcher<T> 
     private final Matcher<? super Parameter[]> matcher;
 
     public MethodOverrideMatcher(final Matcher<? super Parameter[]> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 
     @Override
     public boolean matches(final T target) {
         final Set<Class<?>> duplicates = new HashSet();
-        final Iterator<Class<?>> var3 = iterableOf(target.getParameterTypes()).iterator();
+        final Iterator<Class<?>> var3 = ServiceUtils.iterableOf(target.getParameterTypes()).iterator();
 
         Class<?> typeDefinition;
         do {
@@ -90,7 +92,7 @@ public class MethodOverrideMatcher<T extends Method> extends AbstractMatcher<T> 
     }
 
     private boolean matches(final T target, final Class<?> typeDefinition) {
-        final Iterator<Method> var3 = iterableOf(typeDefinition.getDeclaredMethods()).iterator();
+        final Iterator<Method> var3 = ServiceUtils.iterableOf(typeDefinition.getDeclaredMethods()).iterator();
 
         while (var3.hasNext()) {
             final Method methodDescription = var3.next();

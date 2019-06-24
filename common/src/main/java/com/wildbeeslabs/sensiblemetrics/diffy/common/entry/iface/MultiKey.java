@@ -35,9 +35,25 @@ import java.io.Serializable;
  */
 public interface MultiKey<T> extends Serializable {
 
+    /**
+     * Returns array of {@code T} keys
+     *
+     * @return array of {@code T} keys
+     */
     T[] getKeys();
 
+    /**
+     * Returns {@code T} key by input index
+     *
+     * @param index - initial input index to fetch by
+     * @return {@code T} item
+     */
     T getKey(int index);
 
+    /**
+     * Returns size of current array
+     *
+     * @return size of current array
+     */
     int size();
 }

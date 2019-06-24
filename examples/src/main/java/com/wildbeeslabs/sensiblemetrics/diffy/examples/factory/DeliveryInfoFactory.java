@@ -24,21 +24,20 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.factory;
 
 import com.google.common.collect.ImmutableMap;
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.interfaces.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortComparatorDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator.DeliveryInfoSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
 import java.util.Map;
-import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.DEFAULT_COMPARATOR;
+import static com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils.ComparatorUtils.DEFAULT_COMPARATOR;
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingDouble;
 
@@ -51,6 +50,7 @@ import static java.util.Comparator.comparingDouble;
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class DeliveryInfoFactory {
 
     /**

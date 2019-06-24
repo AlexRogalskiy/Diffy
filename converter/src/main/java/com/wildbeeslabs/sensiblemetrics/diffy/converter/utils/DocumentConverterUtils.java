@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.utils;
 
 import com.google.gson.*;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Document converter utilities implementation
@@ -129,7 +130,6 @@ public class DocumentConverterUtils {
             id.addProperty("$oid", dbObject.toString());
             return id;
         }
-
-        throw new IllegalArgumentException(formatMessage("ERROR: unsupported object type: {%s}", dbObject.getClass().getSimpleName()));
+        throw new IllegalArgumentException(StringUtils.formatMessage("ERROR: unsupported object type: {%s}", dbObject.getClass().getSimpleName()));
     }
 }

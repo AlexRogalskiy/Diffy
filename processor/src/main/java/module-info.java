@@ -26,6 +26,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.processor {
     requires java.compiler;
     requires org.jsoup;
     requires commons.validator;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.common;
 
     // exports processor digits
     exports com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.iface;
@@ -34,6 +35,4 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.processor {
     exports com.wildbeeslabs.sensiblemetrics.diffy.processor.interfaces;
     // exports processor service
     exports com.wildbeeslabs.sensiblemetrics.diffy.processor.service;
-    // exports processor utils
-    exports com.wildbeeslabs.sensiblemetrics.diffy.processor.utils;
 }

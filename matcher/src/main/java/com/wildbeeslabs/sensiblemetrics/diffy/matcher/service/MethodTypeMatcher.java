@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.*;
 
 import java.lang.reflect.Method;
@@ -38,6 +39,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class MethodTypeMatcher<T extends Method> extends AbstractMatcher<T> {
 
     /**
@@ -48,7 +50,7 @@ public class MethodTypeMatcher<T extends Method> extends AbstractMatcher<T> {
     private final MethodTypeMatcher.SortType sort;
 
     public MethodTypeMatcher(final MethodTypeMatcher.SortType sort) {
-        Objects.requireNonNull(sort, "Sort type should not be null");
+        ValidationUtils.notNull(sort, "Sort type should not be null");
         this.sort = sort;
     }
 

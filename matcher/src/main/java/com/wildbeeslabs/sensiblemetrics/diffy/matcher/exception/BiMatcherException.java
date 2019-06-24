@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

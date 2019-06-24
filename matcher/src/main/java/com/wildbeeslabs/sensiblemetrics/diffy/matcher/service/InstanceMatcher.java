@@ -23,15 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInQuotes;
 import static java.lang.String.join;
 
 /**
@@ -84,7 +84,7 @@ public class InstanceMatcher extends AbstractMatcher<Object> {
      */
     @Override
     public void describeBy(final Object value, final MatchDescription description) {
-        description.append(value).append(join("matches", wrapInQuotes.apply(this.matchableClazz.getName())));
+        description.append(value).append(String.join("matches", StringUtils.wrapInQuotes.apply(this.matchableClazz.getName())));
     }
 
     /**

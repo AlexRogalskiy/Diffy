@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.iface.GenericProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.interfaces.GenericProcessor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -135,7 +135,7 @@ public class RegexProcessor implements GenericProcessor<String, String, InvalidP
      * Construct a validator that matches any one of the set of regular
      * expressions with the specified case sensitivity.
      *
-     * @param regexs        The set of regular expressions this validator will
+     * @param regexes       The set of regular expressions this validator will
      *                      validate against
      * @param caseSensitive when <code>true</code> matching is <i>case
      *                      sensitive</i>, otherwise matching is <i>case in-sensitive</i>
@@ -163,7 +163,7 @@ public class RegexProcessor implements GenericProcessor<String, String, InvalidP
      * <i>groups</i> matched if valid or <code>null</code> if invalid
      */
     @Override
-    public String processOrThrow(final String value) {
+    public String processOrThrow(final String value) throws InvalidParameterException {
         if (Objects.isNull(value)) {
             return null;
         }
@@ -184,7 +184,7 @@ public class RegexProcessor implements GenericProcessor<String, String, InvalidP
                 return buffer.toString();
             }
         }
-        return null;
+        throw new InvalidParameterException("ERROR: invalid input value={%s}");
     }
 
     /**

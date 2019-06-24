@@ -27,14 +27,13 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Abstract {@link Matcher} implementation
+ * Abstract {@link BiMatcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy

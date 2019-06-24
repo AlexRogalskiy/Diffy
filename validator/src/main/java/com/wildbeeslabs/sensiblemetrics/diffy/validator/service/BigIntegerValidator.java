@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.BigIntegerProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.BigIntegerProcessor;
 
 import java.math.BigInteger;
 import java.util.Locale;

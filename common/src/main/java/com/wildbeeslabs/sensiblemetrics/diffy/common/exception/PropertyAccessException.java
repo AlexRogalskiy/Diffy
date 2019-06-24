@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.exception;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Property access {@link RuntimeException} implementation
@@ -81,19 +82,19 @@ public class PropertyAccessException extends RuntimeException {
      */
     @Factory
     public static final PropertyAccessException throwIllegalAccess(final String propertyName, final Object propertyValue, final Throwable throwable) {
-        throw new PropertyAccessException(formatMessage("ERROR: cannot access property = {%s} with value = {%s}", propertyName, propertyValue), throwable);
+        throw new PropertyAccessException(StringUtils.formatMessage("ERROR: cannot access property = {%s} with value = {%s}", propertyName, propertyValue), throwable);
     }
 
     /**
      * Returns {@link PropertyAccessException} by input parameters
      *
      * @param throwable - initial input cause target {@link Throwable}
-     * @param target    - initial input raw message {@link String}
+     * @param message    - initial input raw message {@link String}
      * @param target    - initial input source target {@link Object}
      * @return {@link PropertyAccessException}
      */
     @Factory
     public static final PropertyAccessException throwIllegalAccess(final Throwable throwable, final String message, final Object... target) {
-        throw new PropertyAccessException(formatMessage(message, target), throwable);
+        throw new PropertyAccessException(StringUtils.formatMessage(message, target), throwable);
     }
 }

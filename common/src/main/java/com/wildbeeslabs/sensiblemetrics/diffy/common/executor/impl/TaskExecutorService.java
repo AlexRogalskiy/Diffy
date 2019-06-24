@@ -21,25 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ExecutionOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.TimeoutOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.configuration.TaskExecutorConfiguration;
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.handler.DefaultRejectedExecutionHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingConsumer;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingSupplier;
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.property.TaskExecutorProperty;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.ExecutionOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.TimeoutOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.configuration.TaskExecutorConfiguration;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.handler.DefaultRejectedExecutionHandler;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface.Executable;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.property.TaskExecutorProperty;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.experimental.UtilityClass;
 
 import java.time.Duration;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Task executor service implementation
@@ -97,13 +96,13 @@ public class TaskExecutorService {
     }
 
     /**
-     * Executes input {@link ThrowingSupplier} task with corresponding {@link ThrowingConsumer} by {@link ExecutorService} and {@link Duration} timeout
+     * Executes input {@link Supplier} task with corresponding {@link Consumer} by {@link ExecutorService} and {@link Duration} timeout
      *
      * @param timeout  - initial input {@link Duration} timeout
-     * @param consumer - initial input {@link ThrowingConsumer} task
-     * @param supplier - initial input {@link ThrowingSupplier} task
+     * @param consumer - initial input {@link Consumer} task
+     * @param supplier - initial input {@link Supplier} task
      */
-    public static <T, E extends Throwable> void execute(final Duration timeout, final ThrowingConsumer<T, E> consumer, final ThrowingSupplier<T, E> supplier) {
+    public static <T> void execute(final Duration timeout, final Consumer<T> consumer, final Supplier<T> supplier) {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             execute(timeout, consumer, supplier, executorService);
@@ -122,7 +121,11 @@ public class TaskExecutorService {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             executeSupplier(timeout, () -> {
-                executable.execute();
+                try {
+                    executable.execute();
+                } catch (Throwable t) {
+                    throw new RuntimeException(t);
+                }
                 return null;
             }, executorService);
         } finally {
@@ -146,14 +149,14 @@ public class TaskExecutorService {
     }
 
     /**
-     * Executes input {@link ThrowingSupplier} task by {@link Duration} timeout
+     * Executes input {@link Supplier} task by {@link Duration} timeout
      *
      * @param <T>      type of executable task result
      * @param timeout  - initial input {@link Duration} timeout
-     * @param supplier - initial input {@link ThrowingSupplier} task
-     * @return {@link ThrowingSupplier} task result {@code T}
+     * @param supplier - initial input {@link Supplier} task
+     * @return {@link Supplier} task result {@code T}
      */
-    public static <T, E extends Throwable> T execute(final Duration timeout, final ThrowingSupplier<T, E> supplier) {
+    public static <T> T execute(final Duration timeout, final Supplier<T> supplier) {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             return executeSupplier(timeout, supplier, executorService);
@@ -188,7 +191,11 @@ public class TaskExecutorService {
      */
     public static void execute(final Duration timeout, final Executable executable, final ExecutorService executor) {
         executeSupplier(timeout, () -> {
-            executable.execute();
+            try {
+                executable.execute();
+            } catch (Throwable t) {
+                throw new RuntimeException(t);
+            }
             return null;
         }, executor);
     }
@@ -218,15 +225,15 @@ public class TaskExecutorService {
     }
 
     /**
-     * Executes input {@link ThrowingSupplier} task by {@link ExecutorService} and {@link Duration} timeout
+     * Executes input {@link Supplier} task by {@link ExecutorService} and {@link Duration} timeout
      *
      * @param <T>      type of executable task result
      * @param timeout  - initial input {@link Duration} timeout
-     * @param supplier - initial input {@link ThrowingSupplier} task
+     * @param supplier - initial input {@link Supplier} task
      * @param executor - initial input {@link ExecutorService}
-     * @return {@link ThrowingSupplier} task result {@code T}
+     * @return {@link Supplier} task result {@code T}
      */
-    private static <T, E extends Throwable> T executeSupplier(final Duration timeout, final ThrowingSupplier<T, E> supplier, final ExecutorService executor) {
+    private static <T> T executeSupplier(final Duration timeout, final Supplier<T> supplier, final ExecutorService executor) {
         final Callable<T> callable = () -> {
             try {
                 return supplier.get();
@@ -238,16 +245,16 @@ public class TaskExecutorService {
     }
 
     /**
-     * Executes input {@link ThrowingConsumer} task by {@link ExecutorService} and {@link Duration} timeout
+     * Executes input {@link Consumer} task by {@link ExecutorService} and {@link Duration} timeout
      *
      * @param <T>      type of executable task result
      * @param timeout  - initial input {@link Duration} timeout
-     * @param consumer - initial input {@link ThrowingConsumer} task
-     * @param supplier - initial input {@link ThrowingSupplier} task
+     * @param consumer - initial input {@link Consumer} task
+     * @param supplier - initial input {@link Supplier} task
      * @param executor - initial input {@link ExecutorService}
-     * @return {@link ThrowingConsumer} task result {@code T}
+     * @return {@link Consumer} task result {@code T}
      */
-    private static <T, E extends Throwable> void execute(final Duration timeout, final ThrowingConsumer<T, E> consumer, final ThrowingSupplier<T, E> supplier, final ExecutorService executor) {
+    private static <T, E extends Throwable> void execute(final Duration timeout, final Consumer<T> consumer, final Supplier<T> supplier, final ExecutorService executor) {
         final Runnable runnable = () -> {
             try {
                 consumer.accept(supplier.get());
@@ -259,7 +266,7 @@ public class TaskExecutorService {
     }
 
     /**
-     * Executes input {@link ThrowingSupplier} task by {@link ExecutorService} and {@link Duration} timeout
+     * Executes input {@link Supplier} task by {@link ExecutorService} and {@link Duration} timeout
      *
      * @param <T>     type of executable task result
      * @param timeout - initial input {@link Duration} timeout

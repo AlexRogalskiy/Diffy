@@ -26,15 +26,14 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl.DefaultMatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.DiffMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.*;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Abstract matcher implementation
@@ -47,6 +46,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public abstract class AbstractDiffMatcher<T, S> implements DiffMatcher<T> {
 
     /**
@@ -85,7 +85,7 @@ public abstract class AbstractDiffMatcher<T, S> implements DiffMatcher<T> {
      * @param matchers - initial input {@link Iterable} collection of {@link Matcher}s
      */
     public AbstractDiffMatcher<T, S> exclude(final Iterable<Matcher<? super T>> matchers) {
-        listOf(matchers).forEach(this::exclude);
+        ServiceUtils.listOf(matchers).forEach(this::exclude);
         return this;
     }
 
@@ -108,7 +108,7 @@ public abstract class AbstractDiffMatcher<T, S> implements DiffMatcher<T> {
      */
     public AbstractDiffMatcher<T, S> include(final Iterable<Matcher<? super T>> matchers) {
         this.getMatchers().clear();
-        listOf(matchers).forEach(this::include);
+        ServiceUtils.listOf(matchers).forEach(this::include);
         return this;
     }
 

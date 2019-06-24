@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  * @see "http://www.faqs.org/rfcs/rfc1519.html"
  * @since 2.0
  */
-public class SubnetUtils {
+public final class SubnetUtils {
 
     private static final String IP_ADDRESS = "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})";
     private static final String SLASH_FORMAT = IP_ADDRESS + "/(\\d{1,3})";

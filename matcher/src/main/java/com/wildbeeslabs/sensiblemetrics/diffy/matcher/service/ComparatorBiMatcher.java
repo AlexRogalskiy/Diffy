@@ -24,10 +24,10 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -35,12 +35,11 @@ import lombok.ToString;
 import java.util.Comparator;
 import java.util.Optional;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils.compare;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
 import static java.lang.String.join;
+import static java.util.Objects.compare;
 
 /**
- * Comparator {@link BiMatcher} implementation
+ * Comparator {@link AbstractTypeSafeBiMatcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -50,6 +49,7 @@ import static java.lang.String.join;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T, T>> {
 
     /**
@@ -109,6 +109,6 @@ public class ComparatorBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T
      */
     @Override
     public <R extends Entry<T, T>> void describeBy(final R value, final MatchDescription description) {
-        description.append(value).append(join("matches", wrapInBraces.apply(this.getComparator())));
+        description.append(value).append(String.join("matches", StringUtils.wrapInBraces.apply(this.getComparator())));
     }
 }

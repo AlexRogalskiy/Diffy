@@ -21,17 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.core.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.test.utils;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.google.common.collect.Lists;
-import com.wildbeeslabs.sensiblemetrics.diffy.AbstractDeliveryInfoDiffTest;
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.factory.DefaultDiffComparatorFactory;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.service.DefaultDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffEntryView;
-import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.factory.DefaultDiffComparatorFactory;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.core.test.AbstractDeliveryInfoDiffTest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -48,7 +48,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.MapperUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.MapperUtils.*;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNull;

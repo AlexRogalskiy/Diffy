@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.intefaces;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces;
 
 import java.io.Serializable;
 import java.util.Locale;
@@ -33,9 +33,31 @@ import java.util.Locale;
  */
 public interface GenericValidator<T> extends Validator<T>, Serializable {
 
+    /**
+     * Returns validation flag by input parameters
+     *
+     * @param value   - initial input value {@code T}
+     * @param pattern - initial input pattern {@link String}
+     * @param locale  - initial input locale {@link Locale}
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
     boolean validate(final T value, final String pattern, final Locale locale);
 
+    /**
+     * Returns validation flag by input parameters
+     *
+     * @param value  - initial input value {@code T}
+     * @param locale - initial input locale {@link Locale}
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
     boolean validate(final T value, final Locale locale);
 
+    /**
+     * Returns validation flag by input parameters
+     *
+     * @param value   - initial input value {@code T}
+     * @param pattern - initial input pattern {@link String}
+     * @return true - if input value {@code T} is valid, false - otherwise
+     */
     boolean validate(final T value, final String pattern);
 }

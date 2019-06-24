@@ -28,9 +28,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.common.collect.ImmutableMap;
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.view.EntryView;
 import lombok.*;
 
 import java.util.AbstractMap;
@@ -69,13 +69,13 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     /**
      * Default entry first value {@code K}
      */
-    @JsonView(DiffEntryView.External.class)
+    @JsonView(EntryView.External.class)
     @JsonProperty("first")
     private K first;
     /**
      * Default entry last value {@code V}
      */
-    @JsonView(DiffEntryView.External.class)
+    @JsonView(EntryView.External.class)
     @JsonProperty("last")
     private V last;
 
@@ -94,9 +94,9 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     }
 
     /**
-     * Returns {@link Map} of current {@link NameValueEntry}
+     * Returns {@link Map} of current {@link Entry}
      *
-     * @return {@link Map} of current {@link NameValueEntry}
+     * @return {@link Map} of current {@link Entry}
      */
     @NonNull
     public Map<K, V> map() {

@@ -23,13 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityDistance;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityDistance;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.Objects;
 
 /**
  * Hamming {@link SimilarityDistance} implementation

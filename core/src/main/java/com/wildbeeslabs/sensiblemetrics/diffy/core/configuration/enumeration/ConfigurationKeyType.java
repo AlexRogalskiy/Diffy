@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.configuration.enumeration;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.enumeration;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

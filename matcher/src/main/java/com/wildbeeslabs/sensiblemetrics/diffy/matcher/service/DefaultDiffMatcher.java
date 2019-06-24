@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T, Entry<T, T>> {
 
     /**

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.executor.factory;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.factory;
 
 import java.util.ArrayList;
 import java.util.Collection;

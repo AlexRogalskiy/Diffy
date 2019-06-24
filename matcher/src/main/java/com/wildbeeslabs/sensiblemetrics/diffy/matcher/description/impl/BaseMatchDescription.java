@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,8 +32,8 @@ import lombok.ToString;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.listOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.*;
 import static java.util.Arrays.asList;
 
 /**

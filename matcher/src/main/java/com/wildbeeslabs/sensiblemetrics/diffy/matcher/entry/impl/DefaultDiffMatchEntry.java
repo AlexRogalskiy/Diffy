@@ -27,13 +27,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffMatchEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffMatchEntryView;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.*;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.getRandomString;
 
 /**
  * Default difference match entry implementation
@@ -101,7 +100,7 @@ public class DefaultDiffMatchEntry implements DiffMatchEntry<Object> {
     public static DefaultDiffMatchEntry of(final Object value, final MatchDescription description) {
         return DefaultDiffMatchEntry
             .builder()
-            .id(getRandomString())
+            .id(StringUtils.getRandomString())
             .value(value)
             .description(description)
             .build();

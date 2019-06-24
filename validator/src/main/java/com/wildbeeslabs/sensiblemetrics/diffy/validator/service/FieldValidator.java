@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 
 import java.util.Objects;
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.matcher;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.test.enumeration;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import org.hamcrest.core.IsEqual;

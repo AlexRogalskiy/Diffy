@@ -21,18 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.configuration.enumeration.ConfigurationKeyType;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.enumeration.ConfigurationKeyType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -104,7 +103,7 @@ public class DiffyConfigurationKey<T> {
      *
      * @param keyName - initial input key name {@link String}
      * @return key name {@link String}
-     * @throws NullPointerException if keyName is {@code null}
+     * @throws NullPointerException      if keyName is {@code null}
      * @throws InvalidParameterException - if key name is invalid
      */
     private String checkName(final String keyName) {

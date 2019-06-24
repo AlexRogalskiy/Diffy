@@ -23,13 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.VerhoeffDigitProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
+
+import java.security.InvalidParameterException;
 
 /**
  * <b>Verhoeff</b> (Dihedral) Check Digit calculation/validation.

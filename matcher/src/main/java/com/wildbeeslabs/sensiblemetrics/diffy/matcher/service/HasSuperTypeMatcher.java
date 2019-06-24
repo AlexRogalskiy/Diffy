@@ -23,7 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -34,7 +36,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.iterableOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.iterableOf;
 
 /**
  * Has super type {@link AbstractMatcher} implementation
@@ -56,7 +58,7 @@ public class HasSuperTypeMatcher<T extends Iterable<Class<?>>> extends AbstractM
     private final Matcher<? super Type> matcher;
 
     public HasSuperTypeMatcher(final Matcher<? super Type> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 
@@ -76,7 +78,7 @@ public class HasSuperTypeMatcher<T extends Iterable<Class<?>>> extends AbstractM
     }
 
     private boolean hasInterface(final Class<?> typeDefinition, final Set<Class<?>> checkedInterfaces) {
-        final Iterator<Class<?>> var3 = iterableOf(typeDefinition.getInterfaces()).iterator();
+        final Iterator<Class<?>> var3 = ServiceUtils.iterableOf(typeDefinition.getInterfaces()).iterator();
         Class<?> interfaceType;
         do {
             do {

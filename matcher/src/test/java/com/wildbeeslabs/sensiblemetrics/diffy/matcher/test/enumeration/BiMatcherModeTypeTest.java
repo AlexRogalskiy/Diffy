@@ -21,12 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.matcher;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.test.enumeration;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.BiMatcherModeType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStatusType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.NameableType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;

@@ -23,8 +23,6 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.interfaces;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingProcessor;
-
 import java.io.Serializable;
 
 /**

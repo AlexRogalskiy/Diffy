@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.TypeSafeMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

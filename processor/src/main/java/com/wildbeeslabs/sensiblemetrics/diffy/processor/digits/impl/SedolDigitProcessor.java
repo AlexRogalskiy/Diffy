@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.iface.DigitProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.BaseDigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -55,7 +55,7 @@ import lombok.ToString;
  */
 
 /**
- * Sedol {@link BaseDigitValidator} implementation
+ * Sedol {@link BaseDigitProcessor} implementation
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -130,9 +130,7 @@ public final class SedolDigitProcessor extends BaseDigitProcessor {
     protected int toInt(char character, int leftPos, int rightPos) throws InvalidParameterException {
         final int charValue = Character.getNumericValue(character);
         final int charMax = rightPos == 1 ? 9 : MAX_ALPHANUMERIC_VALUE;
-        if (charValue < 0 || charValue > charMax) {
-            throw new InvalidParameterException("Invalid Character[" + leftPos + "," + rightPos + "] = '" + charValue + "' out of range 0 to " + charMax);
-        }
+        ValidationUtils.isTrue(charValue < 0 || charValue > charMax, "Invalid Character[" + leftPos + "," + rightPos + "] = '" + charValue + "' out of range 0 to " + charMax);
         return charValue;
     }
 }

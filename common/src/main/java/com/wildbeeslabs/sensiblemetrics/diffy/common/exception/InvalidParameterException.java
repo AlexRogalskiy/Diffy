@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.exception;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Invalid parameter {@link RuntimeException} implementation
@@ -102,6 +103,6 @@ public class InvalidParameterException extends RuntimeException {
      */
     @Factory
     public static final InvalidParameterException throwError(final String message, final Object... args) {
-        throw new InvalidParameterException(formatMessage(message, args));
+        throw new InvalidParameterException(StringUtils.formatMessage(message, args));
     }
 }

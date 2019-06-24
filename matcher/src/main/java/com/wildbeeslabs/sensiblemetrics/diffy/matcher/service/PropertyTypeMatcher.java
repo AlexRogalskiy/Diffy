@@ -23,9 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.impl.AbstractPropertyInfo;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.impl.AbstractPropertyInfo;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -53,7 +54,7 @@ public class PropertyTypeMatcher<T extends AbstractPropertyInfo<?>> extends Abst
     private final Matcher<? super PropertyType> matcher;
 
     public PropertyTypeMatcher(final Matcher<? super PropertyType> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

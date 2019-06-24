@@ -25,14 +25,14 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatchOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.DispatchEventException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.DispatchEventException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.BiMatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeBiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.TypeSafeBiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -40,9 +40,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType.*;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getMethodType;
 
 /**
  * Abstract type safe binary matcher implementation by input class instance {@link Class}
@@ -56,6 +53,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.get
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<T, S> implements TypeSafeBiMatcher<T> {
 
     /**
@@ -66,7 +64,7 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
     /**
      * Default method type instance
      */
-    private static final ReflectionUtils.ReflectionMethodType DEFAULT_METHOD_TYPE = getMethodType("matchesSafe", 2, 0);
+    private static final ReflectionUtils.ReflectionMethodType DEFAULT_METHOD_TYPE = ReflectionUtils.getMethodType("matchesSafe", 2, 0);
 
     /**
      * Default input argument class instance
@@ -134,18 +132,18 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
      */
     @Override
     public boolean matches(final T first, final T last) {
-        this.emit(first, last, MATCH_START);
+        this.emit(first, last, MatcherEventType.MATCH_START);
         boolean result = false;
         try {
-            this.emit(first, last, MATCH_BEFORE);
+            this.emit(first, last, MatcherEventType.MATCH_BEFORE);
             result = this.matchesInstance(first) && this.matchesInstance(last) && this.matchesSafe(first, last);
-            this.emit(first, last, fromSuccess(result));
-            this.emit(first, last, MATCH_AFTER);
+            this.emit(first, last, MatcherEventType.fromSuccess(result));
+            this.emit(first, last, MatcherEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.emit(first, last, MATCH_ERROR);
+            this.emit(first, last, MatcherEventType.MATCH_ERROR);
             BiMatchOperationException.throwIncorrectMatch(first, last, e);
         } finally {
-            this.emit(first, last, MATCH_COMPLETE);
+            this.emit(first, last, MatcherEventType.MATCH_COMPLETE);
         }
         return result;
     }

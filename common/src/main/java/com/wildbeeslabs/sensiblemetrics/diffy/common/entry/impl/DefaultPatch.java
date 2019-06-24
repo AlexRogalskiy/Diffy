@@ -25,11 +25,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Patch;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.apache.commons.collections.comparators.ComparableComparator;
 
 import java.util.*;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Copy from https://code.google.com/p/java-diff-utils/.
@@ -39,12 +41,36 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
  * @param <T> The type of the compared elements in the 'lines'.
  * @author <a href="dm.naumenko@gmail.com">Dmitry Naumenko</a>
  */
+@Data
+@EqualsAndHashCode
+@ToString
+@SuppressWarnings("unchecked")
 public class DefaultPatch<T> implements Patch<T> {
 
     /**
      * Default {@link List} of {@link Delta}s
      */
     private final List<Delta<T>> deltas = new LinkedList<>();
+    /**
+     * Default {@link Comparator} instance
+     */
+    private final Comparator<? super Delta<T>> comparator;
+
+    /**
+     * Default patch constructor
+     */
+    public DefaultPatch() {
+        this(null);
+    }
+
+    /**
+     * Default patch constructor by input parameters
+     *
+     * @param comparator - initial input {@link Comparator} instance
+     */
+    public DefaultPatch(final Comparator<? super Delta<T>> comparator) {
+        this.comparator = Optional.ofNullable(comparator).orElseGet(ComparableComparator::getInstance);
+    }
 
     /**
      * Apply this patch to the given target
@@ -55,7 +81,7 @@ public class DefaultPatch<T> implements Patch<T> {
      */
     @Override
     public Iterable<T> applyTo(final Iterable<T> target) throws IllegalStateException {
-        final List<T> result = listOf(target);
+        final List<T> result = ServiceUtils.listOf(target);
         final ListIterator<Delta<T>> it = getDeltas().listIterator(this.deltas.size());
         while (it.hasPrevious()) {
             it.previous().applyTo(result);
@@ -79,7 +105,7 @@ public class DefaultPatch<T> implements Patch<T> {
      */
     @Override
     public List<Delta<T>> getDeltas() {
-        Collections.sort(this.deltas, (Comparator<? super Delta<T>>) ComparatorUtils.DeltaComparator.INSTANCE);
+        Collections.sort(this.deltas, this.comparator);
         return this.deltas;
     }
 }

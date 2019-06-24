@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.exception;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Timeout {@link RuntimeException} implementation
@@ -79,7 +80,7 @@ public class TimeoutOperationException extends RuntimeException {
      */
     @Factory
     public static final TimeoutOperationException throwTimeoutError(final Object target) {
-        throw new TimeoutOperationException(formatMessage("ERROR: cannot process target = {%s} due to timeout", target));
+        throw new TimeoutOperationException(StringUtils.formatMessage("ERROR: cannot process target = {%s} due to timeout", target));
     }
 
     /**

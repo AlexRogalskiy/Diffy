@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.intefaces;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ValidationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.exception.ValidationException;
 import lombok.NonNull;
 
-import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Validator interface declaration
@@ -82,7 +82,7 @@ public interface Validator<T> {
      */
     @NonNull
     static <T> boolean validate(final T value, final Validator<T> validator) {
-        Objects.requireNonNull(validator, "Validator should not be null");
+        ValidationUtils.notNull(validator, "Validator should not be null");
         try {
             return validator.validate(value);
         } catch (Throwable throwable) {
@@ -91,16 +91,17 @@ public interface Validator<T> {
     }
 
     /**
-     * Returns {@link Validator} that first applies the specified {@link Converter} and then
-     * validates the specified {@link Validator} against the result of the {@link Converter}.
+     * Returns {@link Validator} that first applies the specified {@link Function} and then
+     * validates the specified {@link Validator} against the result of the {@link Function}.
      *
-     * @param converter - initial input {@link Converter}
+     * @param converter - initial input {@link Function}
      * @param validator - initial input {@link Validator}
      */
     @NonNull
-    static <T, V> Validator<T> where(final Converter<T, V> converter, final Validator<? super V> validator) {
-        Objects.requireNonNull(converter, "Converter should not be null");
-        Objects.requireNonNull(validator, "Validator should not be null");
-        return input -> validator.validate(converter.convert(input));
+    static <T, V> Validator<T> where(final Function<T, V> converter, final Validator<? super V> validator) {
+        ValidationUtils.notNull(converter, "Converter should not be null");
+        ValidationUtils.notNull(validator, "Validator should not be null");
+
+        return (input) -> validator.validate(converter.apply(input));
     }
 }

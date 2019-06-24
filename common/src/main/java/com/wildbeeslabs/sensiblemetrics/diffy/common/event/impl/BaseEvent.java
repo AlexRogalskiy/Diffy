@@ -23,13 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.event.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.Event;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.Objects;
 
 /**
  * Default base {@link Event} implementation
@@ -42,7 +40,7 @@ import java.util.Objects;
 public abstract class BaseEvent<T> implements Event<T> {
 
     /**
-     * Default event {@link Object} source
+     * Default event {@code T} source
      */
     private transient T source;
     /**
@@ -71,6 +69,7 @@ public abstract class BaseEvent<T> implements Event<T> {
      */
     public BaseEvent(final T source, final Throwable cause) {
         ValidationUtils.notNull(source, "Event source should not be null");
+
         this.source = source;
         this.cause = cause;
         this.timestamp = System.currentTimeMillis();

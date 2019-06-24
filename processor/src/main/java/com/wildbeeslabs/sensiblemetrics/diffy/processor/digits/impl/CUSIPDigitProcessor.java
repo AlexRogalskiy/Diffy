@@ -23,15 +23,14 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.iface.DigitProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.BaseDigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Cusip {@link BaseDigitValidator} implementation
+ * Cusip {@link BaseDigitProcessor} implementation
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

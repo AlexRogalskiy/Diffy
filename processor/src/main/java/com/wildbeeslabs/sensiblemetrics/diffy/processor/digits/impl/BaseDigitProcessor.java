@@ -23,9 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.iface.DigitProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -48,7 +47,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 
 /**
- * Base {@link DigitValidator} implementation
+ * Base {@link DigitProcessor} implementation
  */
 @Data
 @EqualsAndHashCode

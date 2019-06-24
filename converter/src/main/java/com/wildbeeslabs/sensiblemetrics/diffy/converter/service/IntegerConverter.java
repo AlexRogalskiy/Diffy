@@ -37,7 +37,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntConverter extends NumericConverter<Integer> {
+public class IntegerConverter extends NumericConverter<Integer> {
 
     /**
      * Returns integer value {@link Integer} by input argument {@link String}

@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.property.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.property.enumeration.NameableType;
 
 /**
  * Tokenizes property accessor names to an array of simple property names according to the JavaBeans convention

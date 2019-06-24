@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.property;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.test.enumeration.property;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.NameableType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration.PropertyType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;

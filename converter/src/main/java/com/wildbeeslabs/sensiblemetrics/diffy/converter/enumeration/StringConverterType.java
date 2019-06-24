@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.enumeration;
 
 import com.google.common.base.Strings;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.RegexUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.RegexUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -67,31 +67,31 @@ public enum StringConverterType {
     /**
      * com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils
      */
-    SORT(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::sort),
-    COMPRESS(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::compress),
-    REVERSE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::reverse),
-    NATIVE_TO_ASCII(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::native2Ascii),
-    CAPITALIZE_WORD_FULLY(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWordFull),
-    CAPITALIZE_TITLE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::titleCaseWord),
-    BASE64_ENCODE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::toBase64),
-    BASE64_DECODE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::fromBase64),
-    FROM_FILE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile),
-    FROM_FILE2(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile2),
-    FROM_FILE3(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readFile3),
-    RANDOM_PASSWORD(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::generatePassword),
-    WRAP_STRING(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapStr),
-    STRIP_SLASHES(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::stripSlashes),
-    CHOMP_LEADING_SLASH(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::chompLeadingSlash),
-    CHOMP_TRAILING_SLASH(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::chompTrailingSlash),
-    FIRST_PATH_SEGMENT(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::firstPathSegment),
-    SANITIZE(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::sanitizeRequest),
-    REMOVE_FORWARD_SLASHES(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::removeAdjacentForwardSlashes),
-    HTML_TO_TEXT(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::html2Text),
-    HOST(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::getHost),
-    ENCODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::encodeUtf8),
-    DECODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::decodeUtf8),
-    FETCH_URL(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::readUrl),
-    ESCAPE_JS(com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils::javaScriptEscape),
+    SORT(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::sort),
+    COMPRESS(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::compress),
+    REVERSE(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::reverse),
+    NATIVE_TO_ASCII(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::native2Ascii),
+    CAPITALIZE_WORD_FULLY(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::titleCaseWordFull),
+    CAPITALIZE_TITLE(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::titleCaseWord),
+    BASE64_ENCODE(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::toBase64),
+    BASE64_DECODE(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::fromBase64),
+    FROM_FILE(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::readFile),
+    FROM_FILE2(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::readFile2),
+    FROM_FILE3(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::readFile3),
+    RANDOM_PASSWORD(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::generatePassword),
+    WRAP_STRING(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.wrapStr),
+    STRIP_SLASHES(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::stripSlashes),
+    CHOMP_LEADING_SLASH(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::chompLeadingSlash),
+    CHOMP_TRAILING_SLASH(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::chompTrailingSlash),
+    FIRST_PATH_SEGMENT(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::firstPathSegment),
+    SANITIZE(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::sanitizeRequest),
+    REMOVE_FORWARD_SLASHES(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::removeAdjacentForwardSlashes),
+    HTML_TO_TEXT(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::html2Text),
+    HOST(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::getHost),
+    ENCODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::encodeUtf8),
+    DECODE_UTF8(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::decodeUtf8),
+    FETCH_URL(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::readUrl),
+    UN_GZIP(com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils::ungzip),
     /**
      * org.apache.commons.text.StringEscapeUtils
      */

@@ -23,8 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.iface.GenericProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.interfaces.GenericProcessor;
 
+/**
+ * Digit {@link GenericProcessor} interface declaration
+ */
 public interface DigitProcessor extends GenericProcessor<String, String, InvalidParameterException> {
 }

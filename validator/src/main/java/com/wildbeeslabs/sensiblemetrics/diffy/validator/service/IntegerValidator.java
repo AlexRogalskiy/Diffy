@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.IntegerProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.IntegerProcessor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

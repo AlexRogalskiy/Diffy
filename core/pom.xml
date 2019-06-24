@@ -30,6 +30,12 @@
         <sonar.language>java</sonar.language>
 
         <surefire.forkNumber>0</surefire.forkNumber>
+
+        <diffy-common.version>1.1.0</diffy-common.version>
+        <diffy-matcher.version>1.1.0</diffy-matcher.version>
+        <diffy-examples.version>1.1.0</diffy-examples.version>
+
+        <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.core.examples</exclude.packages>
     </properties>
 
     <build>
@@ -61,11 +67,10 @@
                     <version>${maven.jar.plugin.version}</version>
                     <configuration>
                         <excludes>
-                            <exclude>com.wildbeeslabs.sensiblemetrics.diffy.core.examples</exclude>
+                            <exclude>${exclude.packages}</exclude>
                         </excludes>
                         <archive>
                             <manifestEntries>
-                                <!--<Automatic-Module-Name>${project.groupId}.${project.artifactId}</Automatic-Module-Name>-->
                                 <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                                 <Bundle-Version>${project.version}</Bundle-Version>
                                 <Bundle-Name>${project.artifactId}</Bundle-Name>
@@ -112,4 +117,126 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>disable-java8-doclint</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven.javadoc.plugin.version}</version>
+                        <configuration>
+                            <minmemory>128m</minmemory>
+                            <maxmemory>1024m</maxmemory>
+                            <doctitle>${project.name} API Reference (${project.version})</doctitle>
+                            <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
+                            <locale>en_US</locale>
+                            <linksource>true</linksource>
+                            <notimestamp>true</notimestamp>
+                            <quiet>true</quiet>
+                            <docencoding>UTF-8</docencoding>
+                            <version>false</version>
+                            <author>true</author>
+                            <keywords>true</keywords>
+                            <additionalJOption>-Xdoclint:none</additionalJOption>
+                            <useStandardDocletOptions>true</useStandardDocletOptions>
+                            <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
+                            <excludePackageNames>${exclude.packages}</excludePackageNames>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven.source.plugin.version}</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>${exclude.packages}</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven.javadoc.plugin.version}</version>
+                        <configuration>
+                            <excludePackageNames>${exclude.packages}</excludePackageNames>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven.gpg.plugin.version}</version>
+                        <configuration>
+                            <useAgent>false</useAgent>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-common</artifactId>
+            <version>${diffy-common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-matcher</artifactId>
+            <version>${diffy-matcher.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
+            <artifactId>diffy-examples</artifactId>
+            <version>${diffy-examples.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

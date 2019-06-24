@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
@@ -36,8 +37,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.executor.impl.TaskExecutorService.execute;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.executor.impl.TaskExecutorService.execute;
 
 /**
  * Default {@link MatcherHandler} implementation
@@ -94,7 +94,7 @@ public class DefaultMatcherHandler<T, S> implements MatcherHandler<T, S> {
     @Override
     public <E extends BaseMatcherEvent<T, S>> void handleEvent(final E event) {
         if (this.isEnableMode(event)) {
-            listOf(event.getMatcher().getListeners())
+            ServiceUtils.listOf(event.getMatcher().getListeners())
                 .stream()
                 .filter(Objects::nonNull)
                 .forEach(listener -> execute(DEFAULT_TIMEOUT, () -> this.invokeEventListener(event, listener), this.getExecutor()));

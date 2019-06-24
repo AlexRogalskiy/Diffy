@@ -21,17 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.CreditCardValidator2;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.DateValidator;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.EmailValidator;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.impl.UrlValidator;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.DateFormat;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -43,19 +37,7 @@ import java.util.regex.Pattern;
  * @since 2017-08-07
  */
 @UtilityClass
-public final class ValidationUtils {
-
-    private static final long serialVersionUID = -7212095066891517618L;
-
-    /**
-     * UrlValidator used in wrapper method.
-     */
-    private static final UrlValidator URL_VALIDATOR = new UrlValidator();
-
-    /**
-     * CreditCardProcessor used in wrapper method.
-     */
-//    private static final CreditCardValidator CREDIT_CARD_VALIDATOR = new CreditCardValidator();
+public class ValidationUtils {
 
     /**
      * <p>Checks if the value matches the regular expression.</p>
@@ -65,7 +47,7 @@ public final class ValidationUtils {
      * @return true if matches the regular expression.
      */
     public static boolean matchRegexp(final String value, final String regexp) {
-        if (Objects.isNull(regexp) || regexp.length() <= 0) {
+        if (StringUtils.isBlank(regexp)) {
             return false;
         }
         return Pattern.matches(regexp, value);
@@ -129,36 +111,6 @@ public final class ValidationUtils {
      */
     public static boolean isDouble(final String value) {
         return Objects.nonNull(FormatUtils.formatDouble(value));
-    }
-
-    /**
-     * <p>Checks if the field is a valid date.  The <code>Locale</code> is
-     * used with <code>java.text.DateFormat</code>.  The setLenient method
-     * is set to <code>false</code> for all.</p>
-     *
-     * @param value  The value validation is being performed on.
-     * @param locale The locale to use for the date format, defaults to the
-     *               system default if null.
-     * @return true if the value can be converted to a Date.
-     */
-    public static boolean isDate(final String value, final Locale locale) {
-        return DateValidator.getInstance().validate(value, locale);
-    }
-
-    /**
-     * <p>Checks if the field is a valid date.  The pattern is used with
-     * <code>java.text.SimpleDateFormat</code>.  If strict is true, then the
-     * length will be checked so '2/12/1999' will not pass validation with
-     * the format 'MM/dd/yyyy' because the month isn't two digits.
-     * The setLenient method is set to <code>false</code> for all.</p>
-     *
-     * @param value       The value validation is being performed on.
-     * @param datePattern The pattern passed to <code>SimpleDateFormat</code>.
-     * @param strict      Whether or not to have an exact match of the datePattern.
-     * @return true if the value can be converted to a Date.
-     */
-    public static boolean isDate(final String value, final String datePattern, boolean strict) {
-        return DateValidator.of(strict, DateFormat.SHORT).validate(value, datePattern);
     }
 
     /**
@@ -240,38 +192,6 @@ public final class ValidationUtils {
     }
 
     /**
-     * Checks if the field is a valid credit card number.
-     *
-     * @param value The value validation is being performed on.
-     * @return true if the value is valid Credit Card Number.
-     */
-    public static boolean isCreditCard(final String value) {
-        return CreditCardValidator2.getInstance().validate(value);
-    }
-
-    /**
-     * <p>Checks if a field has a valid e-mail address.</p>
-     *
-     * @param value The value validation is being performed on.
-     * @return true if the value is valid Email Address.
-     */
-    public static boolean isEmail(final String value) {
-        return EmailValidator.getInstance().validate(value);
-    }
-
-    /**
-     * <p>Checks if a field is a valid url address.</p>
-     * If you need to modify what is considered valid then
-     * consider using the UrlValidator directly.
-     *
-     * @param value The value validation is being performed on.
-     * @return true if the value is valid Url.
-     */
-    public static boolean isUrl(final String value) {
-        return URL_VALIDATOR.validate(value);
-    }
-
-    /**
      * <p>Checks if the value's length is less than or equal to the max.</p>
      *
      * @param value The value validation is being performed on.
@@ -291,7 +211,7 @@ public final class ValidationUtils {
      * @return true if the value's length is less than the specified maximum.
      */
     public static boolean maxLength(final String value, int max, int lineEndLength) {
-        int adjustAmount = adjustForLineEnding(value, lineEndLength);
+        final int adjustAmount = adjustForLineEnding(value, lineEndLength);
         return ((value.length() + adjustAmount) <= max);
     }
 

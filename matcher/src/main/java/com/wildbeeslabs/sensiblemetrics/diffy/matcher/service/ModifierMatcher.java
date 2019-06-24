@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.*;
 
 import java.util.Objects;
@@ -47,7 +48,7 @@ public class ModifierMatcher<T> extends AbstractMatcher<Class<T>> {
     private final ModifierMatcher.OperatorMode operatorMode;
 
     public ModifierMatcher(final ModifierMatcher.OperatorMode operatorMode) {
-        Objects.requireNonNull(operatorMode, "Operator mode should not be null");
+        ValidationUtils.notNull(operatorMode, "Operator mode should not be null");
         this.operatorMode = operatorMode;
     }
 

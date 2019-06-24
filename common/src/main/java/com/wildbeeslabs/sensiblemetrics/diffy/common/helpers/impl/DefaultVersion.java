@@ -21,17 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils.isTrue;
 
 /**
  * Value object to represent a Version consisting of major, minor and bugfix part.
@@ -60,17 +58,17 @@ public class DefaultVersion implements Comparable<DefaultVersion> {
      */
     public DefaultVersion(final int... parts) {
         ValidationUtils.notNull(parts, "Parts must not be null!");
-        isTrue(parts.length > 0 && parts.length < 5, String.format("Invalid parts length. 0 < %s < 5", parts.length));
+        ValidationUtils.isTrue(parts.length > 0 && parts.length < 5, String.format("Invalid parts length. 0 < %s < 5", parts.length));
 
         this.major = parts[0];
         this.minor = parts.length > 1 ? parts[1] : 0;
         this.bugfix = parts.length > 2 ? parts[2] : 0;
         this.build = parts.length > 3 ? parts[3] : 0;
 
-        isTrue(major >= 0, "Major version must be greater or equal zero!");
-        isTrue(minor >= 0, "Minor version must be greater or equal zero!");
-        isTrue(bugfix >= 0, "Bugfix version must be greater or equal zero!");
-        isTrue(build >= 0, "Build version must be greater or equal zero!");
+        ValidationUtils.isTrue(major >= 0, "Major version must be greater or equal zero!");
+        ValidationUtils.isTrue(minor >= 0, "Minor version must be greater or equal zero!");
+        ValidationUtils.isTrue(bugfix >= 0, "Bugfix version must be greater or equal zero!");
+        ValidationUtils.isTrue(build >= 0, "Build version must be greater or equal zero!");
     }
 
     /**

@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.NameableType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingPredicate;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTokenizer;
-import com.wildbeeslabs.sensiblemetrics.diffy.property.iface.NamingTransformer;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration.NameableType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.iface.NamingPredicate;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.iface.NamingTokenizer;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.property.iface.NamingTransformer;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +40,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.TypeUtils.DEFAULT_PRIMITIVE_TYPES;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.TypeUtils.DEFAULT_PRIMITIVE_TYPES;
 import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 /**
@@ -48,6 +48,7 @@ import static org.apache.commons.lang3.StringUtils.uncapitalize;
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class PropertyUtils {
 
     /**

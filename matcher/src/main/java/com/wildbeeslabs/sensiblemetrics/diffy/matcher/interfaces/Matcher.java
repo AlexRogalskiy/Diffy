@@ -21,14 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces;
 
 import com.codepoetics.protonpack.StreamUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherModeType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.MatchOperationException;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -39,14 +42,13 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getAnnotation;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.*;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.wrapInBraces;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils.getAnnotation;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.ObjectUtils.identityToString;
@@ -65,9 +67,13 @@ import static org.apache.commons.lang3.StringUtils.join;
 public interface Matcher<T> extends BaseMatcher<T, T> {
 
     /**
-     * Default {@link Matcher} to {@link BiMatcher}
+     * Default {@link Matcher} to {@link Predicate}
      */
-    Function<Matcher<Object>, Matcher<?>> DEFAULT_MATCHER = (final Matcher<Object> matcher) -> matcher::matches;
+    Function<Matcher<Object>, Predicate<?>> TO_PREDICATE = matcher -> matcher::matches;
+    /**
+     * Default {@link Predicate} to {@link Matcher}
+     */
+    Function<Predicate<Object>, Matcher<?>> TO_MATCHER = predicate -> predicate::test;
 
     /**
      * Default null {@link Matcher}
@@ -77,6 +83,10 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * Default non-null {@link Matcher}
      */
     Matcher<?> DEFAULT_NOTNULL_MATCHER = Objects::nonNull;
+    /**
+     * Default random boolean {@link Matcher}
+     */
+    Matcher<?> DEFAULT_BOOLEAN_MATCHER = predicate -> new Random().nextBoolean();
 
     /**
      * Default true {@link Matcher}
@@ -116,40 +126,40 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     /**
      * Default annotation class {@link Matcher}
      */
-    Function<Set<Annotation>, Matcher<Class<Annotation>>> DEFAULT_ANNOTATION_MATCHER = (final Set<Annotation> annotations) -> value -> Objects.nonNull(getAnnotation(annotations, value));
+    Function<Set<Annotation>, Matcher<Class<Annotation>>> DEFAULT_ANNOTATION_MATCHER_FUNC = annotations -> value -> Objects.nonNull(getAnnotation(annotations, value));
     /**
      * Default class {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER = (final Class<?> clazz) -> clazz::isInstance;
+    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER_FUNC = clazz -> clazz::isInstance;
     /**
      * Default equals {@link Matcher}
      */
-    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER = (final Object object) -> value -> Objects.equals(object, value);
+    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER_FUNC = object -> value -> Objects.equals(object, value);
     /**
      * Default class nestmate {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER = (final Class<?> clazz) -> value -> value.getClass().isNestmateOf(clazz);
+    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER_FUNC = clazz -> value -> value.getClass().isNestmateOf(clazz);
     /**
      * Default assignable {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_ASSIGNABLE_MATCHER = (final Class<?> clazz) -> value -> value.getClass().isAssignableFrom(clazz);
+    Function<Class<?>, Matcher<?>> DEFAULT_ASSIGNABLE_MATCHER_FUNC = clazz -> value -> value.getClass().isAssignableFrom(clazz);
     /**
      * Default identity {@link Matcher}
      */
-    Function<Object, Matcher<?>> DEFAULT_IDENTITY_MATCHER = (final Object identity) -> value -> Objects.equals(identity, identityToString(value));
+    Function<Object, Matcher<?>> DEFAULT_IDENTITY_MATCHER_FUNC = identity -> value -> Objects.equals(identity, identityToString(value));
 
     /**
      * Default unique {@link Matcher}
      */
-    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER = (final Set set) -> value -> set.add(value);
+    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER_FUNC = set -> value -> set.add(value);
     /**
      * Default exist {@link Matcher}
      */
-    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER = (final Collection<?> collection) -> collection::contains;
+    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER_FUNC = collection -> collection::contains;
     /**
      * Default boolean {@link Matcher}
      */
-    Function<Boolean, Matcher<Boolean>> DEFAULT_BOOLEAN_MATCHER = (final Boolean flag) -> flag::equals;
+    Function<Boolean, Matcher<Boolean>> DEFAULT_BOOLEAN_MATCHER_FUNC = flag -> flag::equals;
 
     /**
      * Returns {@link Collection} of {@code T} items filtered by input {@link Matcher}
@@ -162,8 +172,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return ServiceUtils.listOf(values).stream().filter(matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -192,9 +202,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final int skip, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        assert skip >= 0 : "Skip count should be positive or zero";
-        return listOf(values).stream().skip(skip).filter(matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        ValidationUtils.isTrue(skip >= 0, "Skip count should be positive or zero");
+        return ServiceUtils.listOf(values).stream().skip(skip).filter(matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -223,8 +233,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> Optional<T> matchFirstIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher::matches).findFirst();
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return ServiceUtils.listOf(values).stream().filter(matcher::matches).findFirst();
     }
 
     /**
@@ -252,8 +262,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> Optional<T> matchLastIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher::matches).reduce((first, last) -> last);
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return ServiceUtils.listOf(values).stream().filter(matcher::matches).reduce((first, last) -> last);
     }
 
     /**
@@ -280,8 +290,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).stream().filter(matcher.negate()::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return ServiceUtils.listOf(values).stream().filter(matcher.negate()::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -308,11 +318,11 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> void process(final Supplier<Iterable<T>> supplier, final Matcher<T> matcher, final Consumer<T> consumer) {
-        Objects.requireNonNull(supplier, "Supplier should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        Objects.requireNonNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(supplier, "Supplier should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
 
-        streamOf(supplier.get()).filter(matcher::matches).forEach(consumer::accept);
+        ServiceUtils.streamOf(supplier.get()).filter(matcher::matches).forEach(consumer::accept);
     }
 
     /**
@@ -326,9 +336,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> void generate(final Supplier<T> supplier, final int limit, final Matcher<T> matcher, final Consumer<T> consumer) {
-        Objects.requireNonNull(supplier, "Supplier should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        Objects.requireNonNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(supplier, "Supplier should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
 
         assert limit >= 0 : "Limit count should be positive or zero";
         Stream.generate(() -> supplier.get()).limit(limit).filter(matcher::matches).forEach(consumer::accept);
@@ -342,8 +352,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @param comparator - initial input {@link Comparator}
      */
     static <T> Stream<List<T>> groupBy(final Iterable<T> iterable, final Comparator<T> comparator) {
-        Objects.requireNonNull(comparator, "Matcher should not be null");
-        return StreamUtils.groupRuns(streamOf(iterable), comparator);
+        ValidationUtils.notNull(comparator, "Matcher should not be null");
+        return StreamUtils.groupRuns(ServiceUtils.streamOf(iterable), comparator);
     }
 
     /**
@@ -357,10 +367,10 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T, A, M extends Collection<T>> Map<Boolean, M> mapBy(@Nullable final Iterable<T> values, final Matcher<T> matcher, final Collector<T, A, M> collector) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        Objects.requireNonNull(collector, "Collector should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(collector, "Collector should not be null");
 
-        return streamOf(values).collect(Collectors.partitioningBy(matcher::matches, collector));
+        return ServiceUtils.streamOf(values).collect(Collectors.partitioningBy(matcher::matches, collector));
     }
 
     /**
@@ -387,9 +397,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> skipUntil(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntil(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipUntil(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -402,9 +412,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> skipUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntilInclusive(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipUntilInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -417,9 +427,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> skipWhile(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhile(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipWhile(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -432,9 +442,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> skipWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhileInclusive(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipWhileInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -447,9 +457,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> takeWhile(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhile(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeWhile(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -462,9 +472,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> takeWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhileInclusive(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeWhileInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -477,9 +487,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> takeUntil(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeUntil(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeUntil(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -492,9 +502,9 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> List<T> takeUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
-        Objects.requireNonNull(stream, "Stream should not be null");
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeUntilInclusive(stream, matcher::matches).collect(toUnmodifiableList());
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeUntilInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
     }
 
     /**
@@ -507,8 +517,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> boolean remove(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        return listOf(values).removeIf(matcher::matches);
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return ServiceUtils.listOf(values).removeIf(matcher::matches);
     }
 
     /**
@@ -534,8 +544,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> void removeFirst(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        matchFirstIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        matchFirstIf(values, matcher).ifPresent(entry -> ServiceUtils.listOf(values).remove(entry));
     }
 
     /**
@@ -560,8 +570,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> void removeLast(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
-        matchLastIf(values, matcher).ifPresent(entry -> listOf(values).remove(entry));
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        matchLastIf(values, matcher).ifPresent(entry -> ServiceUtils.listOf(values).remove(entry));
     }
 
     /**
@@ -589,8 +599,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> boolean test(final Supplier<T> supplier, final Matcher<T> matcher) {
-        Objects.requireNonNull(supplier, "Supplier should not be null!");
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(supplier, "Supplier should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
 
         try {
             return matcher.matches(supplier.get());
@@ -618,8 +628,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> andAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", join(matchers, "|")));
+        ValidationUtils.notNull(matchers, "Matchers should not be null!");
+        return ServiceUtils.reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::and, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical AND", join(matchers, "|")));
     }
 
     /**
@@ -640,8 +650,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> orAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", join(matchers, "|")));
+        ValidationUtils.notNull(matchers, "Matchers should not be null!");
+        return ServiceUtils.reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::or, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical OR", join(matchers, "|")));
     }
 
     /**
@@ -662,8 +672,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xorAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", join(matchers, "|")));
+        ValidationUtils.notNull(matchers, "Matchers should not be null!");
+        return ServiceUtils.reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::xor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XOR", join(matchers, "|")));
     }
 
     /**
@@ -684,8 +694,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> nandAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", join(matchers, "|")));
+        ValidationUtils.notNull(matchers, "Matchers should not be null!");
+        return ServiceUtils.reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::nand, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NAND", join(matchers, "|")));
     }
 
     /**
@@ -706,8 +716,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> norAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", join(matchers, "|")));
+        ValidationUtils.notNull(matchers, "Matchers should not be null!");
+        return ServiceUtils.reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::nor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical NOR", join(matchers, "|")));
     }
 
     /**
@@ -728,8 +738,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     static <T> Matcher<T> xnorAll(final Matcher<T>... matchers) {
-        Objects.requireNonNull(matchers, "Matchers should not be null!");
-        return reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
+        ValidationUtils.notNull(matchers, "Matchers should not be null!");
+        return ServiceUtils.reduceOrThrow(matchers, (final Matcher<T> m) -> m.getMode().isEnable(), Matcher::xnor, () -> InvalidParameterException.throwError("Unable to combine matchers = {%s} via logical XNOR", join(matchers, "|")));
     }
 
     /**
@@ -756,7 +766,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     static <T> Matcher<T> identity(final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         return matcher::matches;
     }
 
@@ -796,8 +806,8 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      * @throws NullPointerException if description is {@code null}
      */
     default void describeBy(final T value, final MatchDescription description) {
-        Objects.requireNonNull(description, "Description should not be null");
-        description.append(value).append(wrapInBraces.apply(this.getDescription()));
+        ValidationUtils.notNull(description, "Description should not be null");
+        description.append(value).append(StringUtils.wrapInBraces.apply(this.getDescription()));
     }
 
     /**
@@ -826,7 +836,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     default Matcher<T> and(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
         return (final T t) -> this.matches(t) && matcher.matches(t);
     }
 
@@ -844,7 +854,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     default Matcher<T> not(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
         return (Matcher<T>) matcher.negate();
     }
 
@@ -864,7 +874,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     default Matcher<T> or(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
         return (final T t) -> this.matches(t) || matcher.matches(t);
     }
 
@@ -884,7 +894,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     default Matcher<T> xor(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
         return (final T t) -> this.matches(t) ^ matcher.matches(t);
     }
 
@@ -904,7 +914,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     default Matcher<T> nand(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
         return (final T t) -> not(and(matcher)).matches(t);
     }
 
@@ -924,7 +934,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     default Matcher<T> nor(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
         return (final T t) -> not(or(matcher)).matches(t);
     }
 
@@ -944,7 +954,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
      */
     @NonNull
     default Matcher<T> xnor(final Matcher<? super T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null!");
+        ValidationUtils.notNull(matcher, "Matcher should not be null!");
         return (final T t) -> not(xor(matcher)).matches(t);
     }
 
@@ -957,7 +967,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     default boolean allMatch(@Nullable final T... values) {
-        return streamOf(values).allMatch(this::matches);
+        return ServiceUtils.streamOf(values).allMatch(this::matches);
     }
 
     /**
@@ -969,7 +979,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     default boolean noneMatch(@Nullable final T... values) {
-        return streamOf(values).noneMatch(this::matches);
+        return ServiceUtils.streamOf(values).noneMatch(this::matches);
     }
 
     /**
@@ -981,6 +991,6 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     @SuppressWarnings("varargs")
     default boolean anyMatch(@Nullable final T... values) {
-        return streamOf(values).anyMatch(this::matches);
+        return ServiceUtils.streamOf(values).anyMatch(this::matches);
     }
 }

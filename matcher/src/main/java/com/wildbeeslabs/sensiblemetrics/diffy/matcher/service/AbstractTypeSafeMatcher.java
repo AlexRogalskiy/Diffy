@@ -24,13 +24,13 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.DispatchEventException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.DispatchEventException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.TypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.TypeSafeMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -38,9 +38,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.Optional;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType.*;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.getMethodType;
 
 /**
  * Abstract type safe matcher implementation by input class instance {@link Class}
@@ -54,6 +51,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.get
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> implements TypeSafeMatcher<T> {
 
     /**
@@ -64,7 +62,7 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
     /**
      * Default method type instance
      */
-    private static final ReflectionUtils.ReflectionMethodType DEFAULT_METHOD_TYPE = getMethodType("matchesSafe", 1, 0);
+    private static final ReflectionUtils.ReflectionMethodType DEFAULT_METHOD_TYPE = ReflectionUtils.getMethodType("matchesSafe", 1, 0);
 
     /**
      * Default input argument class instance
@@ -131,18 +129,18 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @Override
     public final boolean matches(final T value) {
-        this.dispatch(value, MATCH_START);
+        this.dispatch(value, MatcherEventType.MATCH_START);
         boolean result = false;
         try {
-            this.dispatch(value, MATCH_BEFORE);
+            this.dispatch(value, MatcherEventType.MATCH_BEFORE);
             result = this.matchesInstance(value) && this.matchesSafe(value);
-            this.dispatch(value, fromSuccess(result));
-            this.dispatch(value, MATCH_AFTER);
+            this.dispatch(value, MatcherEventType.fromSuccess(result));
+            this.dispatch(value, MatcherEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.dispatch(value, MATCH_ERROR);
+            this.dispatch(value, MatcherEventType.MATCH_ERROR);
             MatchOperationException.throwIncorrectMatch(value, e);
         } finally {
-            this.dispatch(value, MATCH_COMPLETE);
+            this.dispatch(value, MatcherEventType.MATCH_COMPLETE);
         }
         return result;
     }

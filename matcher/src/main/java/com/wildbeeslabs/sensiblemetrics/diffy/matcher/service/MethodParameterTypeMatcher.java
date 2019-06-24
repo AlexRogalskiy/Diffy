@@ -23,7 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -41,6 +42,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class MethodParameterTypeMatcher<T extends Parameter> extends AbstractMatcher<T> {
 
     /**
@@ -51,7 +53,7 @@ public class MethodParameterTypeMatcher<T extends Parameter> extends AbstractMat
     private final Matcher<? super Class<?>> matcher;
 
     public MethodParameterTypeMatcher(final Matcher<? super Class<?>> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         this.matcher = matcher;
     }
 

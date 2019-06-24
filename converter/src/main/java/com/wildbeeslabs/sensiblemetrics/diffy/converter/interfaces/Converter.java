@@ -21,13 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter.interfacs;
+package com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces;
 
 import com.google.common.base.Function;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.exception.ConvertOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
@@ -35,9 +37,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.toUnmodifiableList;
 
 /**
  * Converter interface declaration
@@ -96,7 +95,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     default <V> Converter<V, R> compose(final Converter<? super V, ? extends T> before) {
-        Objects.requireNonNull(before, "Converter should not be null!");
+        ValidationUtils.notNull(before, "Converter should not be null!");
         return (final V v) -> convert(before.convert(v));
     }
 
@@ -111,7 +110,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     default <V> Converter<T, V> andThen(final Converter<? super R, ? extends V> after) {
-        Objects.requireNonNull(after, "Converter should not be null!");
+        ValidationUtils.notNull(after, "Converter should not be null!");
         return (final T t) -> after.convert(convert(t));
     }
 
@@ -135,7 +134,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Validator<T> toValidator(final Predicate<T> predicate) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
 
@@ -148,7 +147,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Predicate<T> toPredicate(final Validator<T> validator) {
-        Objects.requireNonNull(validator, "Validator should not be null");
+        ValidationUtils.notNull(validator, "Validator should not be null");
         return (value) -> {
             try {
                 return validator.validate(value);
@@ -167,7 +166,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Matcher<T> toMatcher(final Predicate<T> predicate) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
 
@@ -180,7 +179,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> Predicate<T> convert(final Matcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         return matcher::matches;
     }
 
@@ -193,7 +192,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> BiMatcher<T> toBiMatcher(final BiPredicate<T, T> predicate) {
-        Objects.requireNonNull(predicate, "Predicate should not be null");
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
         return predicate::test;
     }
 
@@ -206,7 +205,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T> BiPredicate<T, T> toBiPredicate(final BiMatcher<T> matcher) {
-        Objects.requireNonNull(matcher, "Matcher should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
         return matcher::matches;
     }
 
@@ -219,7 +218,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T, R> Converter<T, R> toConverter(final Function<T, R> function) {
-        Objects.requireNonNull(function, "Function should not be null");
+        ValidationUtils.notNull(function, "Function should not be null");
         return function::apply;
     }
 
@@ -232,7 +231,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T, R> Function<T, R> toFunction(final Converter<T, R> converter) {
-        Objects.requireNonNull(converter, "Converter should not be null");
+        ValidationUtils.notNull(converter, "Converter should not be null");
         return converter::convert;
     }
 
@@ -247,7 +246,7 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T, R> R[] toArray(final T[] values, final Converter<? super T, R> converter) {
-        return (R[]) streamOf(values).map(converter::convert).toArray();
+        return (R[]) ServiceUtils.streamOf(values).map(converter::convert).toArray();
     }
 
     /**
@@ -261,6 +260,6 @@ public interface Converter<T, R> {
      */
     @NonNull
     static <T, R> List<R> toList(final Iterable<? extends T> values, final Converter<? super T, R> converter) {
-        return streamOf(values).map(converter::convert).collect(toUnmodifiableList());
+        return ServiceUtils.streamOf(values).map(converter::convert).collect(ServiceUtils.toUnmodifiableList());
     }
 }

@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.validator.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.DoubleProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.DoubleProcessor;
 
 import java.util.Locale;
 import java.util.Objects;

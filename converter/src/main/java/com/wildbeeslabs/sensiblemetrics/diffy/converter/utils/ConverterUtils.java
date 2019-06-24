@@ -25,18 +25,60 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter.utils;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.Converter;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.beanutils.ConversionException;
 
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Converter utilities implementation
  */
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class ConverterUtils {
+
+    /**
+     * Returns {@link Supplier} by input parameters
+     *
+     * @param <T>       type of value to convert from
+     * @param <R>       type of value to convert to
+     * @param supplier  - initial input {@link Supplier}
+     * @param converter - initial input {@link Converter}
+     * @return {@link Supplier}
+     */
+    @NonNull
+    public static <T, R> Supplier<R> ifSupplierNotNullDo(final Supplier<T> supplier, final Converter<T, R> converter) {
+        return () -> {
+            final T val = supplier.get();
+            if (Objects.isNull(val)) {
+                return null;
+            }
+            return converter.convert(val);
+        };
+    }
+
+    /**
+     * Returns converted value by converter instance {@link Converter}
+     *
+     * @param <T>       type of input element to be converted from by operation
+     * @param <R>       type of input element to be converted to by operation
+     * @param value     - initial argument value to be converted
+     * @param converter - initial converter to process on {@link Converter}
+     * @return converted value
+     * @throws NullPointerException if converter is {@code null}
+     */
+    @Nullable
+    public static <T, R> R convert(final T value, final Converter<T, R> converter) {
+        ValidationUtils.notNull(converter, "Converter should not be null");
+        return converter.convert(value);
+    }
 
     public static <T> T convertTo(final T obj, final Class<T> dest) {
         if (Objects.isNull(obj)) {

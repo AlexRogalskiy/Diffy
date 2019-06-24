@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.stream.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.stream.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.stream.iface.Streamable;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.stream.iface.Streamable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

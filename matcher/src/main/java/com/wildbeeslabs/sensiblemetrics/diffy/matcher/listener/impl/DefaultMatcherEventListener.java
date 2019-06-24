@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventListener;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BaseMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -23,10 +23,10 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.factory;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.DiffMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.DefaultDiffMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.DiffMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.DefaultDiffMatcher;
 import lombok.experimental.UtilityClass;
 
 import java.util.Optional;
@@ -41,6 +41,7 @@ import static java.util.Arrays.asList;
  * @since 1.0
  */
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class DefaultDiffMatcherFactory {
 
     /**

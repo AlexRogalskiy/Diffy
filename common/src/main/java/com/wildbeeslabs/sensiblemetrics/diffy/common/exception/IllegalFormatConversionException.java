@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.exception;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.exception;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

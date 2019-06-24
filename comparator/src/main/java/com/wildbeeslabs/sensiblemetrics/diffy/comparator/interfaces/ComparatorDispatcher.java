@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.interfaces;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BiMatcher;
 import lombok.NonNull;
 
 import java.io.Serializable;

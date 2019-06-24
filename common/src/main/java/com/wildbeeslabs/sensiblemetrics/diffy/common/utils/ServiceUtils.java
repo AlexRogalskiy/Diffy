@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
 import com.codepoetics.protonpack.Indexed;
 import com.codepoetics.protonpack.StreamUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BadOperationException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 import static java.util.Arrays.asList;
 import static java.util.Spliterator.ORDERED;
 import static java.util.Spliterators.spliteratorUnknownSize;
@@ -64,6 +63,15 @@ import static org.apache.commons.lang3.StringUtils.join;
 @UtilityClass
 @SuppressWarnings("unchecked")
 public class ServiceUtils {
+
+    /**
+     * Default {@link Function} mappings
+     */
+    public static final Function<Optional<?>, List<?>> toList = option -> collect(option, Collectors.toList());
+    public static final Function<Optional<?>, Set<?>> toSet = option -> collect(option, Collectors.toSet());
+    public static final Function<Optional<?>, LinkedList<?>> toLinkedList = option -> collect(option, toLinkedList());
+    public static final Function<Optional<?>, List<?>> toUnmodifiableList = option -> collect(option, toUnmodifiableList());
+    public static final Function<Optional<?>, Set<?>> toUnmodifiableSet = option -> collect(option, toUnmodifiableSet());
 
     /**
      * Default completable {@link BiConsumer} action
@@ -91,6 +99,21 @@ public class ServiceUtils {
             first.addAll(second);
             return first;
         });
+    }
+
+    public static <T> Collector<T, ?, List<T>> toListWithLast(int n) {
+        ValidationUtils.isTrue(n > 0, "Number should be positive");
+        return Collector.<T, Deque<T>, List<T>>of(ArrayDeque::new, (acc, t) -> {
+            if (acc.size() == n) {
+                acc.pollFirst();
+            }
+            acc.add(t);
+        }, (acc1, acc2) -> {
+            while (acc2.size() < n && !acc1.isEmpty()) {
+                acc2.addFirst(acc1.pollLast());
+            }
+            return acc2;
+        }, ArrayList::new);
     }
 
     /**
@@ -187,26 +210,10 @@ public class ServiceUtils {
     }
 
     /**
-     * Returns converted value by converter instance {@link Converter}
-     *
-     * @param <T>       type of input element to be converted from by operation
-     * @param <R>       type of input element to be converted to by operation
-     * @param value     - initial argument value to be converted
-     * @param converter - initial converter to process on {@link Converter}
-     * @return converted value
-     * @throws NullPointerException if converter is {@code null}
-     */
-    @Nullable
-    public static <T, R> R convert(final T value, final Converter<T, R> converter) {
-        ValidationUtils.notNull(converter, "Converter should not be null");
-        return converter.convert(value);
-    }
-
-    /**
      * Returns converted from string value to type {@link Class} by method name {@link String}
      *
      * @param value        - initial argument value to be converted {@link String}
-     * @param toType       - initial type to be converted to {@link Converter}
+     * @param toType       - initial type to be converted to {@link Class}
      * @param parserMethod - initial method name to process the conversion {@link String}
      * @return converted value {@link Object}
      * @throws NullPointerException if toType is {@code null}
@@ -326,7 +333,7 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> Stream<T> streamOf(final Iterator<T> iterator, final boolean parallel) {
-        Objects.requireNonNull(iterator, "Source iteratorOf should not be null");
+        ValidationUtils.notNull(iterator, "Source iteratorOf should not be null");
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, 0), parallel);
     }
 
@@ -350,7 +357,7 @@ public class ServiceUtils {
      */
     @NonNull
     public static <T> List<T> listOf(final Iterable<T> iterable) {
-        return streamOf(iterable).collect(Collectors.toList());
+        return streamOf(iterable).collect(toList());
     }
 
     /**
@@ -367,7 +374,7 @@ public class ServiceUtils {
 
     @NonNull
     public static <T> Iterable<T> iterableOf(final T... elements) {
-        return streamOf(elements).collect(Collectors.toList());
+        return streamOf(elements).collect(toList());
     }
 
     @NonNull
@@ -417,7 +424,7 @@ public class ServiceUtils {
      */
     @SuppressWarnings("varargs")
     public static <T> List<T> concatOf(final List<T>... collections) {
-        return streamOf(collections).flatMap(Collection::stream).collect(Collectors.toList());
+        return streamOf(collections).flatMap(Collection::stream).collect(toList());
     }
 
     /**
@@ -500,8 +507,7 @@ public class ServiceUtils {
     @NonNull
     public static <T> List<Indexed<T>> zipOf(final Stream<T> stream) {
         ValidationUtils.notNull(stream, "Stream should not be null!");
-
-        return StreamUtils.zipWithIndex(stream).collect(Collectors.toList());
+        return StreamUtils.zipWithIndex(stream).collect(toList());
     }
 
     /**
@@ -520,26 +526,6 @@ public class ServiceUtils {
         ValidationUtils.notNull(collector, "Collector should not be null!");
 
         return stream.collect(Collectors.partitioningBy(predicate, collector));
-    }
-
-    /**
-     * Returns {@link Supplier} by input parameters
-     *
-     * @param <T>       type of value to convert from
-     * @param <R>       type of value to convert to
-     * @param supplier  - initial input {@link Supplier}
-     * @param converter - initial input {@link Converter}
-     * @return {@link Supplier}
-     */
-    @NonNull
-    public static <T, R> Supplier<R> ifSupplierNotNullDo(final Supplier<T> supplier, final Converter<T, R> converter) {
-        return () -> {
-            final T val = supplier.get();
-            if (Objects.isNull(val)) {
-                return null;
-            }
-            return converter.convert(val);
-        };
     }
 
     /**
@@ -680,5 +666,132 @@ public class ServiceUtils {
             log.error("ERROR: cannot get class instance={}, message={}", type, ex.getMessage());
         }
         return null;
+    }
+
+    public static <T, U> List<U> map(final Iterable<T> itemList, final Function<T, U> mapper) {
+        return streamOf(itemList)
+            .filter(Objects::nonNull)
+            .map(mapper)
+            .collect(toList());
+    }
+
+    public static <T, U> Optional<U> flatMap(final Optional<T> value, final Function<T, Optional<U>> mapper) {
+        ValidationUtils.notNull(mapper, "Mapper should not be null");
+        if (Objects.isNull(value) || !value.isPresent()) {
+            return Optional.empty();
+        }
+        return mapper.apply(value.get());
+    }
+
+    public static <T> List<T> convertToList(final Optional<T> value) {
+        return Optional.ofNullable(value).map(Optional::get).map(Collections::singletonList).orElse(Collections.emptyList());
+    }
+
+    //List<String> list = collect(opt, toList());
+    //Set<String>  set  = collect(opt, toSet());
+    public static <R, A, T> R collect(final Optional<T> value, final Collector<? super T, A, R> collector) {
+        ValidationUtils.notNull(collector, "Collector should not be null");
+        final A container = collector.supplier().get();
+        Optional.ofNullable(value).ifPresent(v -> collector.accumulator().accept(container, v.get()));
+        return collector.finisher().apply(container);
+    }
+
+    public static <T> List<Stream<T>> convertFlat(final List<Optional<T>> itemList) {
+        return (List<Stream<T>>) streamOf(itemList)
+            .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
+            .collect(toList());
+    }
+
+    public static <T> List<T> convert(final List<Optional<T>> itemList) {
+        return streamOf(itemList)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(toList());
+    }
+
+    public static <T, M> M convertTo(final T[] array, final IntPredicate indexPredicate, final Collector<T, ?, M> collector) {
+        ValidationUtils.notNull(array, "Array should not be null");
+        return IntStream
+            .range(0, array.length)
+            .filter(indexPredicate)
+            .mapToObj(i -> array[i])
+            .collect(collector);
+    }
+
+    public static <T> T[] arrayOf(final T[] first, final T[] second) {
+        return (T[]) Stream.concat(streamOf(first), streamOf(second)).toArray();
+    }
+
+    public static <A, B, C> Function<A, C> composeBefore(final Function<A, B> f1, final Function<B, C> f2) {
+        ValidationUtils.notNull(f1, "First function should not be null");
+        ValidationUtils.notNull(f2, "Last function should not be null");
+        return f1.andThen(f2);
+    }
+
+    public static <A, B, C> Function<A, C> composeAfter(final Function<B, C> f1, final Function<A, B> f2) {
+        ValidationUtils.notNull(f1, "First function should not be null");
+        ValidationUtils.notNull(f2, "Last function should not be null");
+        return f1.compose(f2);
+    }
+
+    public static <T, K> Map<K, Integer> getMapSumBy(final Stream<T> stream, final Function<T, K> keys, final Function<T, Integer> values) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(keys, "Keys function should not be null");
+        ValidationUtils.notNull(values, "Values function should not be null");
+        return stream.collect(Collectors.toMap(keys, values, Integer::sum));
+    }
+
+    public static <E, K, U> Map<K, List<U>> toMapList(final Stream<E> stream, final Function<E, K> groupingBy, final Function<E, U> mapper) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(groupingBy, "GroupingBy function should not be null");
+        ValidationUtils.notNull(mapper, "Mapper function should not be null");
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.mapping(mapper, Collectors.toList())));
+    }
+
+    public static <E> Map<Integer, Long> countOf(final Stream<E> stream, final Function<E, Integer> groupingBy) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(groupingBy, "GroupingBy function should not be null");
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.counting()));
+    }
+
+    public static <E, K, U> Map<K, Set<U>> toMapSet(final Stream<E> stream, final Function<E, K> groupingBy, final Function<E, U> mapper) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(groupingBy, "GroupingBy function should not be null");
+        ValidationUtils.notNull(mapper, "Mapper function should not be null");
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.mapping(mapper, Collectors.toSet())));
+    }
+
+    public static <T, K> Map<K, Optional<T>> getMapMaxBy(final Stream<T> stream, final Function<T, K> groupingBy, final Comparator<? super T> comparator) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(groupingBy, "GroupingBy function should not be null");
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.maxBy(comparator)));
+    }
+
+    public static <T, K> Map<K, Optional<T>> getMapMinBy(final Stream<T> stream, final Function<T, K> groupingBy, final Comparator<? super T> comparator) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(groupingBy, "GroupingBy function should not be null");
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+        return stream.collect(Collectors.groupingBy(groupingBy, Collectors.minBy(comparator)));
+    }
+
+    public static <T> Optional<T> getMaxBy(final Stream<T> stream, final Comparator<? super T> comparator) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+        return stream.collect(Collectors.maxBy(comparator));
+    }
+
+    public static <T> Optional<T> getMinBy(final Stream<T> stream, final Comparator<? super T> comparator) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+        return stream.collect(Collectors.minBy(comparator));
+    }
+
+    public static <K, T> Map<K, List<T>> getSortedMapByKey(final Map<K, List<T>> map, final Comparator<? super K> comparator) {
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+        return Optional.ofNullable(map).orElseGet(Collections::emptyMap)
+            .entrySet().stream()
+            .sorted(Map.Entry.comparingByKey(comparator))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 }

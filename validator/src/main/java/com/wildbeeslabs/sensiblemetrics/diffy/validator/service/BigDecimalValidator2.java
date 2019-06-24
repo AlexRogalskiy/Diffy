@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.AbstractNumberProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.BigDecimalProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.AbstractNumberProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.BigDecimalProcessor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

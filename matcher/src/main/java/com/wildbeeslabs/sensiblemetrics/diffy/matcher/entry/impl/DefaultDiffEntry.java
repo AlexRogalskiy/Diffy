@@ -29,9 +29,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffEntryView;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.*;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.getRandomString;
 
 /**
  * Default difference entry implementation
@@ -96,7 +95,7 @@ public class DefaultDiffEntry implements DiffEntry<Object> {
     public static DefaultDiffEntry of(final String propertyName, final Object first, final Object last) {
         return DefaultDiffEntry
             .builder()
-            .id(getRandomString())
+            .id(StringUtils.getRandomString())
             .propertyName(propertyName)
             .first(first)
             .last(last)

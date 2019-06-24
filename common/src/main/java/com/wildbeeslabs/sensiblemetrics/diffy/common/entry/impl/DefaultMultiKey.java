@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.MultiKey;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -55,6 +55,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public class DefaultMultiKey<T> implements MultiKey<T> {
 
     /**

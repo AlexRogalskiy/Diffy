@@ -27,7 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventDispatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

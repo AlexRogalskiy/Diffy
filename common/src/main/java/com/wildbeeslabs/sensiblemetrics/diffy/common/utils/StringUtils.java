@@ -21,11 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ArrayUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -42,14 +45,16 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
+import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.zip.GZIPInputStream;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.text.WordUtils.capitalize;
@@ -64,6 +69,7 @@ import static org.apache.commons.text.WordUtils.capitalizeFully;
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class StringUtils {
 
     /**
@@ -71,23 +77,22 @@ public class StringUtils {
      */
     public static final String DEFAULT_ALPHANUMERIC_REGEX = "[^a-zA-Z0-9]";
     /**
-     * Defautl first path segment {@link Pattern}
+     * Default first path segment {@link Pattern}
      */
     public static final Pattern FIRST_PATH_FRAGMENT_PATTERN = Pattern.compile("^([/]?[\\w\\-\\.]+[/]?)");
     /**
      * Default host:port and protocol:\\host:port
      */
     private static final Pattern HOST_PORT_PATTERN = Pattern.compile(".*?\\[?([0-9a-zA-Z\\-%._:]*)\\]?:([0-9]+)");
+
     /**
      * Default braces wrapper {@link Function}
      */
     public static final Function<Object, String> wrapInBraces = s -> "( " + s + " )";
-
     /**
      * Default brackets wrapper {@link Function}
      */
     public static final Function<Object, String> wrapInBrackets = s -> "[ " + s + " ]";
-
     /**
      * Default quotes wrapper {@link Function}
      */
@@ -96,47 +101,39 @@ public class StringUtils {
     /**
      * Default string wrapper {@link Function}
      */
-    public static final Function<String, String> wrapStr = s -> formatNative(s);
-
+    public static final Function<String, String> wrapStr = StringUtils::formatNative;
     /**
      * Default character wrapper {@link Function}
      */
     public static final Function<Character, String> wrapChar = s -> "\" " + toNativeSyntax(s) + " \"";
-
     /**
      * Default short wrapper {@link Function}
      */
     public static final Function<Short, String> wrapShort = s -> "< " + s + " S>";
-
     /**
      * Default long wrapper {@link Function}
      */
-    public static final Function<Long, String> wrapLong = s -> "< " + s + " L>";
-
+    public static final LongFunction<String> wrapLong = s -> "< " + s + " L>";
     /**
      * Default float wrapper {@link Function}
      */
     public static final Function<Float, String> wrapFloat = s -> "< " + s + " F>";
-
     /**
      * Default double wrapper {@link Function}
      */
-    public static final Function<Double, String> wrapDouble = s -> "< " + s + " D>";
-
+    public static final DoubleFunction<String> wrapDouble = s -> "< " + s + " D>";
     /**
      * Default int wrapper {@link Function}
      */
-    public static final Function<Integer, String> wrapInt = s -> "< " + s + " I>";
-
+    public static final IntFunction<String> wrapInt = s -> "< " + s + " I>";
     /**
      * Default array wrapper {@link Function}
      */
     public static final Function<Object[], String> wrapArray = s -> "< " + join(s, "|") + " A>";
-
     /**
      * Default escape wrapper {@link Function}
      */
-    public static Function<String, String> wrapInEscapeHtml = s -> "'" + escapeHtml(s) + "'";
+    public static final Function<String, String> wrapInEscapeHtml = s -> "'" + escapeHtml(s) + "'";
 
     /**
      * Default numeric pattern format
@@ -168,11 +165,11 @@ public class StringUtils {
      * @see SourceVersion#isName(CharSequence)
      */
     public static boolean isValidPackage(final String packageName) {
-        Objects.requireNonNull(packageName, "package name must not be null");
+        ValidationUtils.notNull(packageName, "package name must not be null");
         if (packageName.equals(DEFAULT_PACKAGE_NAME)) {
             return true;
         }
-        assert org.apache.commons.lang3.StringUtils.isNotBlank(packageName) : "package name must not contain only whitespace";
+        ValidationUtils.isTrue(org.apache.commons.lang3.StringUtils.isNotBlank(packageName), "package name must not contain only whitespace");
         return Arrays.stream(DOT_PATTERN.split(packageName, -1)).allMatch(SourceVersion::isName);
     }
 
@@ -186,7 +183,7 @@ public class StringUtils {
     });
 
     private static String formatNative(final String value) {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < value.length(); i++) {
             sb.append(toNativeSyntax(value.charAt(i)));
         }
@@ -296,7 +293,7 @@ public class StringUtils {
         if (value.length() > 1 && Character.isUpperCase(value.charAt(1)) && Character.isUpperCase(value.charAt(0))) {
             return value;
         }
-        char chars[] = value.toCharArray();
+        final char[] chars = value.toCharArray();
         chars[0] = Character.toLowerCase(chars[0]);
         return String.valueOf(chars);
     }
@@ -329,7 +326,7 @@ public class StringUtils {
      * @return the ASCII string
      */
     public static String native2Ascii(final String value) {
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < value.length(); i++) {
             char aChar = value.charAt(i);
             if ((aChar < 0x0020) || (aChar > 0x007e)) {
@@ -362,7 +359,8 @@ public class StringUtils {
             return null;
         }
         final StringBuilder compStr = new StringBuilder(value.length());
-        int count = 0, len = value.length();
+        int count = 0;
+        int len = value.length();
         for (int i = 0; i < len; i++) {
             count++;
             if (i + 1 >= value.length() || value.codePointAt(i) != value.codePointAt(i + 1)) {
@@ -467,46 +465,40 @@ public class StringUtils {
     }
 
     public static String readFile(final String filename) {
-        Objects.requireNonNull(filename);
+        ValidationUtils.notNull(filename, "File name should not be null");
         final StringBuilder sb = new StringBuilder();
         try (final BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while (Objects.nonNull(line = br.readLine())) {
                 sb.append(line);
-                if (Objects.nonNull(line)) {
-                    sb.append(System.lineSeparator());
-                }
+                sb.append(System.lineSeparator());
             }
-        } catch (FileNotFoundException ex) {
-            log.error(String.format("ERROR: cannot found file=%s, message=%s", filename, ex.getMessage()));
         } catch (IOException ex) {
-            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, ex.getMessage()));
+            log.error(String.format("ERROR: cannot process read operation on file={%s}, message={%s}", filename, ex.getMessage()));
         }
         return sb.toString();
     }
 
     public static String readFile2(final String filename) {
-        Objects.requireNonNull(filename);
+        ValidationUtils.notNull(filename, "File name should not be null");
         final StringBuilder sb = new StringBuilder();
         try {
             final List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
-            lines.stream().map((line) -> {
+            lines.stream().map(line -> {
                 sb.append(line);
                 return line;
-            }).forEach((_item) -> {
-                sb.append(System.lineSeparator());
-            });
-        } catch (IOException ex) {
-            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, ex.getMessage()));
+            }).forEach(_item -> sb.append(System.lineSeparator()));
+        } catch (IOException e) {
+            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, e.getMessage()));
         }
         return sb.toString();
     }
 
     public static String readFile3(final String filename) {
-        Objects.requireNonNull(filename);
+        ValidationUtils.notNull(filename, "File name should not be null");
         final StringBuilder sb = new StringBuilder();
-        try {
-            Files.lines(Paths.get(filename)).forEachOrdered(s -> {
+        try (final Stream<String> stream = Files.lines(Paths.get(filename))) {
+            stream.forEachOrdered(s -> {
                 sb.append(s);
                 sb.append(System.lineSeparator());
             });
@@ -517,14 +509,14 @@ public class StringUtils {
     }
 
     public static String generatePassword(final String algorithm) {
-        Objects.requireNonNull(algorithm, "Algorithm should be null");
+        ValidationUtils.notNull(algorithm, "Algorithm should be null");
         try {
             final SecureRandom random = SecureRandom.getInstance(algorithm);
             byte[] passwordBytes = new byte[16];
             random.nextBytes(passwordBytes);
             return new String(org.apache.commons.codec.binary.Base64.encodeBase64(passwordBytes), StandardCharsets.UTF_8).replace("=", "");
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Unable to load SHA1PRNG", e);
+            throw new InvalidParameterException(String.format("Unable to load algorithm={%s}", algorithm), e);
         }
     }
 
@@ -593,24 +585,24 @@ public class StringUtils {
         return matcher.matches() ? matcher.group(1) : null;
     }
 
-    public static String encodeUtf8(final String url) {
+    public static String encodeUtf8(final String value) {
         try {
-            return URLEncoder.encode(url, StandardCharsets.UTF_8.name());
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Unable to encode using charset");
+            throw new BadOperationException(String.format("Unable to encode input value={%s}", value), e);
         }
     }
 
-    public static String decodeUtf8(final String url) {
+    public static String decodeUtf8(final String value) {
         try {
-            return URLDecoder.decode(url, StandardCharsets.UTF_8.name());
+            return URLDecoder.decode(value, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Unable to encode using charset");
+            throw new BadOperationException(String.format("Unable to decode input value={%s}", value), e);
         }
     }
 
     public static String readUrl(final String url) {
-        Objects.requireNonNull(url, "Url should not be null");
+        ValidationUtils.notNull(url, "Url should not be null");
         try {
             return Jsoup.connect(url).get().html();
         } catch (IOException ex) {
@@ -619,66 +611,9 @@ public class StringUtils {
         return null;
     }
 
-    /**
-     * Turn JavaScript special characters into escaped characters.
-     *
-     * @param input the input string
-     * @return the string with escaped characters
-     */
-    public static String javaScriptEscape(final String input) {
-        StringBuilder filtered = new StringBuilder(input.length());
-        char prevChar = '\u0000';
-        char c;
-        for (int i = 0; i < input.length(); i++) {
-            c = input.charAt(i);
-            if (c == '"') {
-                filtered.append("\\\"");
-            } else if (c == '\'') {
-                filtered.append("\\'");
-            } else if (c == '\\') {
-                filtered.append("\\\\");
-            } else if (c == '/') {
-                filtered.append("\\/");
-            } else if (c == '\t') {
-                filtered.append("\\t");
-            } else if (c == '\n') {
-                if (prevChar != '\r') {
-                    filtered.append("\\n");
-                }
-            } else if (c == '\r') {
-                filtered.append("\\n");
-            } else if (c == '\f') {
-                filtered.append("\\f");
-            } else if (c == '\b') {
-                filtered.append("\\b");
-            }
-            // No '\v' in Java, use octal value for VT ascii char
-            else if (c == '\013') {
-                filtered.append("\\v");
-            } else if (c == '<') {
-                filtered.append("\\u003C");
-            } else if (c == '>') {
-                filtered.append("\\u003E");
-            }
-            // Unicode for PS (line terminator in ECMA-262)
-            else if (c == '\u2028') {
-                filtered.append("\\u2028");
-            }
-            // Unicode for LS (line terminator in ECMA-262)
-            else if (c == '\u2029') {
-                filtered.append("\\u2029");
-            } else {
-                filtered.append(c);
-            }
-            prevChar = c;
-
-        }
-        return filtered.toString();
-    }
-
     public static String splitCamelCase(final String s, final String separator) {
         if (isNullOrEmpty(s)) {
-            return "";
+            return EMPTY;
         }
         return s.replaceAll(
             String.format("%s|%s|%s",
@@ -688,5 +623,91 @@ public class StringUtils {
             ),
             separator
         );
+    }
+
+    public static <E> Stream<E> getFilteredStream(final Stream<E> stream, final Function<CharSequence, CharSequence> tokenFilter, final String tokenDelim) {
+        return stream.flatMap(line -> Arrays.stream(String.valueOf(line).split(tokenDelim)))
+            .map(String::trim)
+            .map(item -> tokenFilter.apply(item))
+            .filter(org.apache.commons.lang3.StringUtils::isNotBlank)
+            .map(item -> (E) item);
+    }
+
+    public static <T> String joinWithPrefixPostfix(final Collection<T> list, final String delimiter, final String prefix, final String postfix) {
+        return streamOf(list).map(Objects::toString).collect(Collectors.joining(delimiter, prefix, postfix));
+    }
+
+    public static Map<Integer, List<String>> getMapByLength(final String... array) {
+        return streamOf(array).filter(Objects::nonNull).collect(Collectors.groupingBy(String::length));
+    }
+
+    public static List<String> split(final String value, final String delimiter, final Predicate<? super String> predicate) {
+        return Arrays.stream(String.valueOf(value).split(delimiter))
+            .map(String::trim)
+            .filter(predicate)
+            .collect(Collectors.toList());
+    }
+
+    public static <T> String replace(final String input, final Pattern regex, final Function<Matcher, String> function) {
+        final StringBuffer resultString = new StringBuffer();
+        final Matcher regexMatcher = regex.matcher(input);
+        while (regexMatcher.find()) {
+            regexMatcher.appendReplacement(resultString, function.apply(regexMatcher));
+        }
+        regexMatcher.appendTail(resultString);
+        return resultString.toString();
+    }
+
+    public static List<Character> splitToListOfChars(final String value) {
+        return Optional.ofNullable(value).orElse(EMPTY)
+            .chars()
+            .mapToObj(item -> (char) item)
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Unzips compressed string to raw format string output
+     *
+     * @param value input string.
+     * @return String Unzip raw string.
+     * @throws Exception On unzip operation.
+     * @see Exception
+     */
+    public static String ungzip(final String value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        try {
+            return ungzip(value.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String ungzip(final byte[] bytes) throws Exception {
+        if (isGZIPStream(bytes)) {
+            final InputStreamReader isr = new InputStreamReader(new GZIPInputStream(new ByteArrayInputStream(bytes)), StandardCharsets.UTF_8);
+            final StringWriter sw = new StringWriter();
+            final char[] chars = new char[1024];
+            for (int len; (len = isr.read(chars)) > 0; ) {
+                sw.write(chars, 0, len);
+            }
+            return sw.toString();
+        }
+        return (new String(bytes, 0, bytes.length, StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Checks whether input array of bytes is GZIP formatted or not
+     *
+     * @param bytes input array of bytes.
+     * @return boolean true - if GZIP formatted, false - otherwise.
+     */
+    private static boolean isGZIPStream(final byte[] bytes) {
+        if (ArrayUtils.isEmpty(bytes)) {
+            return false;
+        }
+        return (bytes[0] == (byte) GZIPInputStream.GZIP_MAGIC)
+            && (bytes[1] == (byte) (GZIPInputStream.GZIP_MAGIC >>> Byte.SIZE));
     }
 }

@@ -21,14 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.stream.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.stream.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.stream.impl.LazyStreamable;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.stream.impl.LazyStreamable;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;

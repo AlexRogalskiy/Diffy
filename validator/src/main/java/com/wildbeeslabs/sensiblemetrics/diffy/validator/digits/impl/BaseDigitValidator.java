@@ -23,14 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl.BaseDigitProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface.DigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+
+import java.security.InvalidParameterException;
 
 /**
  * Abstract <b>Modulus</b> Check digit calculation/validation.
@@ -68,7 +69,7 @@ public abstract class BaseDigitValidator implements DigitValidator {
     /**
      * Construct modulus check digit routine for a specified modulus.
      *
-     * @param modulus The modulus value to use for the check digit calculation
+     * @param processor The processor value to use for the check digit calculation
      */
     public BaseDigitValidator(final BaseDigitProcessor processor) {
         ValidationUtils.notNull(processor, "Processor should not be null");

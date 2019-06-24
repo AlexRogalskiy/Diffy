@@ -23,10 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BaseMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BaseMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -39,6 +38,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
 
     /**
@@ -50,7 +50,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
      * Default binary matcher event constructor by input parameters
      *
      * @param source  - initial input event source {@code T}
-     * @param matcher - initial input {@link BiMatcher}
+     * @param matcher - initial input {@link BaseMatcher}
      * @param type    - initial input event type {@link MatcherEventType}
      */
     public BiMatcherEvent(final S source, final BaseMatcher<T, S> matcher, final MatcherEventType type) {
@@ -61,7 +61,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
      * Creates new {@link BiMatcherEvent}
      *
      * @param source  - initial input event source {@code T}
-     * @param matcher - initial input {@link BiMatcher}
+     * @param matcher - initial input {@link BaseMatcher}
      * @param status  - initial input match status
      * @return {@link BiMatcherEvent}
      */
@@ -74,7 +74,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
      * Creates new {@link BiMatcherEvent}
      *
      * @param source  - initial input event source {@code T}
-     * @param matcher - initial input {@link BiMatcher}
+     * @param matcher - initial input {@link BaseMatcher}
      * @param type    - initial input event type {@link MatcherEventType}
      * @return {@link BiMatcherEvent}
      */

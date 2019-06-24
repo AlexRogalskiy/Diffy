@@ -23,14 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.core.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.changeset.entry.ChangeDelta;
-import com.wildbeeslabs.sensiblemetrics.diffy.changeset.service.iface.DiffAlgorithm;
-import com.wildbeeslabs.sensiblemetrics.diffy.core.service.impl.DiffAlgorithmService;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Patch;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultChunk;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultPatch;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.entry.delta.ChangeDelta;
 import com.wildbeeslabs.sensiblemetrics.diffy.core.entry.utils.BinaryDiffResult;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces.DiffAlgorithm;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.service.DiffAlgorithmService;
 import lombok.experimental.UtilityClass;
 
 import java.io.ByteArrayInputStream;
@@ -40,6 +41,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -79,9 +81,9 @@ public class DiffUtils {
      * revised sequences. Never {@code null}.
      */
     public static <T> Patch<T> diff(final List<T> original, final List<T> revised, final DiffAlgorithm<T> algorithm) {
-        Objects.requireNonNull(original, "Original list should not be null");
-        Objects.requireNonNull(revised, "Revised list should not be null");
-        Objects.requireNonNull(algorithm, "Difference algorithm should not be null");
+        ValidationUtils.notNull(original, "Original list should not be null");
+        ValidationUtils.notNull(revised, "Revised list should not be null");
+        ValidationUtils.notNull(algorithm, "Difference algorithm should not be null");
 
         return algorithm.diff(original, revised);
     }
@@ -95,7 +97,7 @@ public class DiffUtils {
      * @return the revised text
      * @throws IllegalStateException if can't apply patch
      */
-    public static <T> Iterable<T> patch(final Iterable<T> original, final DefaultPatch<T> patch) throws IllegalStateException {
+    public static <T> Iterable<T> patch(final Iterable<T> original, final DefaultPatch<T> patch) {
         return patch.applyTo(original);
     }
 
@@ -111,7 +113,8 @@ public class DiffUtils {
         final List<String[]> rawChunk = new ArrayList<>();
         DefaultPatch<String> patch = new DefaultPatch<>();
 
-        int old_ln = 0, new_ln = 0;
+        int old_ln = 0;
+        int new_ln = 0;
         String tag;
         String rest;
         for (final String line : diff) {
@@ -121,10 +124,10 @@ public class DiffUtils {
                 }
                 continue;
             }
-            Matcher m = unifiedDiffChunkRe.matcher(line);
+            final Matcher m = unifiedDiffChunkRe.matcher(line);
             if (m.find()) {
                 // Process the lines in the previous chunk
-                if (rawChunk.size() != 0) {
+                if (!rawChunk.isEmpty()) {
                     List<String> oldChunkLines = new ArrayList<>();
                     List<String> newChunkLines = new ArrayList<>();
 
@@ -163,7 +166,7 @@ public class DiffUtils {
             }
         }
 
-        if (rawChunk.size() != 0) {
+        if (!rawChunk.isEmpty()) {
             final List<String> oldChunkLines = new ArrayList<>();
             final List<String> newChunkLines = new ArrayList<>();
             for (String[] raw_line : rawChunk) {
@@ -201,19 +204,18 @@ public class DiffUtils {
             ret.add("--- " + original);
             ret.add("+++ " + revised);
 
-            List<Delta<String>> patchDeltas = new ArrayList<>(patch.getDeltas());
-
-            List<Delta<String>> deltas = new ArrayList<>();
+            final List<Delta<String>> patchDeltas = new ArrayList<>(patch.getDeltas());
+            final List<Delta<String>> deltas = new ArrayList<>();
             Delta<String> delta = patchDeltas.get(0);
             deltas.add(delta);
             if (patchDeltas.size() > 1) {
                 for (int i = 1; i < patchDeltas.size(); i++) {
                     int position = delta.getOriginal().getPosition();
-                    Delta<String> nextDelta = patchDeltas.get(i);
+                    final Delta<String> nextDelta = patchDeltas.get(i);
                     if ((position + delta.getOriginal().size() + contextSize) >= (nextDelta.getOriginal().getPosition() - contextSize)) {
                         deltas.add(nextDelta);
                     } else {
-                        List<String> curBlock = processDeltas(originalLines, deltas, contextSize);
+                        final List<String> curBlock = processDeltas(originalLines, deltas, contextSize);
                         ret.addAll(curBlock);
                         deltas.clear();
                         deltas.add(nextDelta);
@@ -225,7 +227,7 @@ public class DiffUtils {
             ret.addAll(curBlock);
             return ret;
         }
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     /**
@@ -321,21 +323,9 @@ public class DiffUtils {
     }
 
     public static BinaryDiffResult diff(final Path actual, final byte[] expected) throws IOException {
-        InputStream expectedStream = new ByteArrayInputStream(expected);
-        InputStream actualStream = null;
-        boolean threw = true;
-        try {
-            actualStream = Files.newInputStream(actual);
-            BinaryDiffResult result = diff(actualStream, expectedStream);
-            threw = false;
-            return result;
-        } finally {
-            try {
-                if (actualStream != null) actualStream.close();
-            } catch (IOException e) {
-                // Only rethrow if it doesn't shadow an exception thrown from the inner try block
-                if (!threw) throw e;
-            }
+        final InputStream expectedStream = new ByteArrayInputStream(expected);
+        try (final InputStream actualStream = Files.newInputStream(actual)) {
+            return diff(actualStream, expectedStream);
         }
     }
 

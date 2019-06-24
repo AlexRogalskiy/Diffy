@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 /**
  * Processor interface declaration
@@ -55,7 +55,7 @@ public interface Processor<T, R> {
      */
     @NonNull
     default <V> Processor<V, R> before(final Processor<? super V, ? extends T> before) {
-        Objects.requireNonNull(before, "Before processor should not be null");
+        ValidationUtils.notNull(before, "Before processor should not be null");
         return (value) -> this.process(before.process(value));
     }
 
@@ -65,7 +65,7 @@ public interface Processor<T, R> {
      */
     @NonNull
     default <V> Processor<T, V> after(final Processor<? super R, ? extends V> after) {
-        Objects.requireNonNull(after, "After processor should not be null");
+        ValidationUtils.notNull(after, "After processor should not be null");
         return (value) -> after.process(this.process(value));
     }
 

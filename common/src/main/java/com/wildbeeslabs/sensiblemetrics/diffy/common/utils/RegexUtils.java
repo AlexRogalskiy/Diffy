@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utility;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
 import lombok.experimental.UtilityClass;
 
@@ -86,7 +86,7 @@ public class RegexUtils {
          * Constructs a new CheckedPatternSyntaxException equivalent to the given {@link
          * PatternSyntaxException}.
          *
-         * <p>Consider calling this constructor with the result of {@link RegexUtil#regexError}.
+         * <p>Consider calling this constructor with the result of {@code RegexUtil#regexError}.
          *
          * @param pse the PatternSyntaxException to be wrapped
          */

@@ -24,7 +24,6 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.digits.iface.DigitProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.impl.BaseDigitValidator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -55,7 +54,7 @@ import lombok.ToString;
  */
 
 /**
- * Ean13 {@link BaseDigitValidator} implementation
+ * Ean13 {@link BaseDigitProcessor} implementation
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

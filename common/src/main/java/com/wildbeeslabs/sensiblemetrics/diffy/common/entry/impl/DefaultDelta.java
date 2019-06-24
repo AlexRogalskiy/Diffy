@@ -27,12 +27,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Chunk;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.util.Objects;
 
 /**
  * Default {@link Delta} implementation

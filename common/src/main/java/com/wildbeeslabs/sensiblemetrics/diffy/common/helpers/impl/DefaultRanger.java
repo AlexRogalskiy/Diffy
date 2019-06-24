@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface.Ranger;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Ranger;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public final class DefaultRanger<T> implements Ranger<T> {
 
     /**
@@ -84,8 +86,8 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * @param comparator the comparator to be used, null for natural ordering
      */
     private DefaultRanger(final T lowerBound, final T upperBound, final Comparator<? super T> comparator) {
-        Objects.requireNonNull(lowerBound, "Lower bound should not be null");
-        Objects.requireNonNull(upperBound, "Upper bound should not be null");
+        ValidationUtils.notNull(lowerBound, "Lower bound should not be null");
+        ValidationUtils.notNull(upperBound, "Upper bound should not be null");
 
         this.comparator = Optional.ofNullable(comparator).orElseGet(ComparableComparator::getInstance);
         if (this.getComparator().compare(lowerBound, upperBound) < 1) {
@@ -284,7 +286,7 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * @return -1, 0 or +1 depending on the element's location relative to the range
      */
     public int compareTo(final T element) {
-        Objects.requireNonNull(element, "Element should not be null");
+        ValidationUtils.notNull(element, "Element should not be null");
         if (this.isAfter(element)) {
             return -1;
         } else if (this.isBefore(element)) {
@@ -367,7 +369,7 @@ public final class DefaultRanger<T> implements Ranger<T> {
      * @return true - if current {@link Ranger} equals to input {@link Ranger}, false - otherwise
      */
     public boolean isEqual(final Ranger<T> otherRange) {
-        Objects.requireNonNull(otherRange, "Range should not be null");
+        ValidationUtils.notNull(otherRange, "Range should not be null");
         return Objects.equals(this.getLowerBound(), otherRange.getLowerBound()) && Objects.equals(this.getUpperBound(), otherRange.getUpperBound());
     }
 

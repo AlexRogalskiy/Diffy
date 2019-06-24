@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.configuration.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl.DiffyConfigurationKey;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.impl.DiffyConfigurationKey;
 
 import java.util.Map;
 
@@ -94,7 +94,6 @@ public interface Configuration<T> {
      * Updates current key by input {@link DiffyConfigurationKey}
      *
      * @param key - initial input {@link DiffyConfigurationKey}
-     * @return {@link DiffyConfigurationKey}
      */
     void updateKey(final DiffyConfigurationKey<T> key);
 

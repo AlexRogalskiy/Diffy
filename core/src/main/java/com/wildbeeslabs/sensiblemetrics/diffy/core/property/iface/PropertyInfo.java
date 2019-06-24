@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.property.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.property.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.property.enumeration.PropertyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.property.enumeration.PropertyType;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;

@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.test;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils.ComparatorUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.AddressInfo;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

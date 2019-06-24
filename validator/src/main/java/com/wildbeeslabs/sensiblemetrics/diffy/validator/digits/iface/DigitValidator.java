@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 
 import java.io.Serializable;
 

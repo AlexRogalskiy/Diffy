@@ -35,7 +35,8 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.wildbeeslabs.sensiblemetrics.diffy.utils.ValidationUtils;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -48,13 +49,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.listOf;
 
 /**
  * Mapper utilities implementation
  */
 @Slf4j
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class MapperUtils {
 
     /**
@@ -65,13 +67,15 @@ public class MapperUtils {
     /**
      * Model mapper property settings {@link ObjectMapper}
      * Default property matching strategy is set to Strict see {@link MatchingStrategies}
-     * Custom mappings are added using {@link ModelMapper#addMappings(PropertyMap)}
+     * Custom mappings are added using {@link ObjectMapper#addMappings(PropertyMap)}
      */
     static {
         objectMapper = new ObjectMapper();
         //final SimpleModule module = new SimpleModule("UnQuote");
         //module.addSerializer(new UnQuotesSerializer());
         //objectMapper.registerModule(module);
+        objectMapper.registerModule(new Jdk8Module());
+        objectMapper.registerModule(new JavaTimeModule());
 
         objectMapper.setDefaultMergeable(Boolean.TRUE);
         objectMapper.setLocale(Locale.getDefault());
@@ -322,6 +326,9 @@ public class MapperUtils {
     public static <T> T fromYaml(final String fileName, final Class<T> clazz) {
         ValidationUtils.notNull(fileName, "File name should not be null");
         ValidationUtils.notNull(clazz, "Class should not be null");
+        ValidationUtils.notNull(fileName, "File name should not be null");
+        ValidationUtils.notNull(clazz, "Class should not be null");
+
         final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             final URL url = MapperUtils.class.getClassLoader().getResource(fileName);

@@ -21,22 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.configuration.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.configuration.iface.Configuration;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.iface.Configuration;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.TreeMap;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.listOf;
 
 /**
  * Diffy {@link Configuration} implementation
@@ -46,6 +45,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public class DiffyConfiguration<T> implements Configuration<T> {
 
     /**
@@ -116,7 +116,6 @@ public class DiffyConfiguration<T> implements Configuration<T> {
      * Updates current key by input {@link DiffyConfigurationKey}
      *
      * @param key - initial input {@link DiffyConfigurationKey} to be updated
-     * @return {@link DiffyConfigurationKey}
      */
     @Override
     public void updateKey(final DiffyConfigurationKey<T> key) {

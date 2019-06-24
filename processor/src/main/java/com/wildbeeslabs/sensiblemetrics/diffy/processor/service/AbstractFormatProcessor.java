@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.processor.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidFormatException;
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.iface.GenericFormatProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.interfaces.GenericFormatProcessor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -43,6 +43,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public abstract class AbstractFormatProcessor<T, V> implements GenericFormatProcessor<T, V, InvalidFormatException> {
 
     /**

@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.enumeration.configuration;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.test.enumeration.configuration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.configuration.enumeration.ConfigurationKeyType;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.configuration.enumeration.ConfigurationKeyType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;

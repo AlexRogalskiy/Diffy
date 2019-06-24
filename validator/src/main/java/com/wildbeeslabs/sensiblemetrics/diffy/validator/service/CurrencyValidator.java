@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.CurrencyProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.CurrencyProcessor;
 
 /**
  * <p><b>Currency Validation</b> and Conversion routines (<code>java.math.BigDecimal</code>).</p>

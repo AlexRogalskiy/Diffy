@@ -25,22 +25,20 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.iface.ThrowingConsumer;
-import com.wildbeeslabs.sensiblemetrics.diffy.executor.iface.Executable;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.lang.reflect.Executable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.doThrow;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.zipOf;
 
 /**
  * Entry interface declaration
@@ -51,6 +49,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.zipOf;
  * @version 1.1
  * @since 1.0
  */
+@SuppressWarnings("unchecked")
 public interface Entry<K, V> extends Serializable {
 
     /**
@@ -122,9 +121,9 @@ public interface Entry<K, V> extends Serializable {
      * @throws NullPointerException if consumer is {@code null}
      */
     static <K, V> void ifAllPresent(final Optional<K> first, final Optional<V> last, final BiConsumer<K, V> consumer) {
-        Objects.requireNonNull(first, "Optional entry first value should not be null!");
-        Objects.requireNonNull(last, "Optional entry last value should not be null!");
-        Objects.requireNonNull(consumer, "Binary consumer operator should not be null!");
+        ValidationUtils.notNull(first, "Optional entry first value should not be null!");
+        ValidationUtils.notNull(last, "Optional entry last value should not be null!");
+        ValidationUtils.notNull(consumer, "Binary consumer operator should not be null!");
 
         mapIfAllPresent(first, last, (f, l) -> {
             consumer.accept(f, l);
@@ -147,9 +146,9 @@ public interface Entry<K, V> extends Serializable {
      * @throws NullPointerException if function is {@code null}
      */
     static <K, V, R> Optional<R> mapIfAllPresent(final Optional<K> first, final Optional<V> last, final BiFunction<K, V, R> function) {
-        Objects.requireNonNull(first, "Optional entry first value should not be null!");
-        Objects.requireNonNull(last, "Optional entry last value should not be null!");
-        Objects.requireNonNull(function, "Binary function operator should not be null!");
+        ValidationUtils.notNull(first, "Optional entry first value should not be null!");
+        ValidationUtils.notNull(last, "Optional entry last value should not be null!");
+        ValidationUtils.notNull(function, "Binary function operator should not be null!");
 
         return first.flatMap(f -> last.map(l -> function.apply(f, l)));
     }
@@ -201,28 +200,28 @@ public interface Entry<K, V> extends Serializable {
      */
     @NonNull
     static <K, V> List<Entry<K, V>> of(final List<K> keys, final List<V> values) {
-        return zipOf(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+        return ServiceUtils.zipOf(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 
     /**
-     * Invokes the given {@link ThrowingConsumer} if the {@link Optional} is present or the {@link Executable} if not
+     * Invokes the given {@link Consumer} if the {@link Optional} is present or the {@link Executable} if not
      *
-     * @param optional   - initial input {@link Optional} value
-     * @param consumer   - initial input {@link ThrowingConsumer} operator
-     * @param executable - initial input {@link Executable} operator
+     * @param optional - initial input {@link Optional} value
+     * @param consumer - initial input {@link Consumer} operator
+     * @param runnable - initial input {@link Executable} operator
      */
-    static <T, E extends Throwable> void ifPresentOrElse(final Optional<T> optional, final ThrowingConsumer<T, E> consumer, final Executable executable) {
-        Objects.requireNonNull(optional, "Optional should not be null");
-        Objects.requireNonNull(consumer, "Consumer should not be null");
-        Objects.requireNonNull(executable, "Executable should not be null");
+    static <T> void ifPresentOrElse(final Optional<T> optional, final Consumer<T> consumer, final Runnable runnable) {
+        ValidationUtils.notNull(optional, "Optional should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(runnable, "Runnable should not be null");
 
         if (optional.isPresent()) {
             optional.ifPresent(consumer);
         } else {
             try {
-                executable.execute();
+                runnable.run();
             } catch (Throwable t) {
-                doThrow(t);
+                ServiceUtils.doThrow(t);
             }
         }
     }

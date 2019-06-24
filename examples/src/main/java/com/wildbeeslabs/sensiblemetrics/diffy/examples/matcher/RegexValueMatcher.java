@@ -23,12 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.BiMatcherException;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.PatternType;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.ComparatorBiMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.BiMatcherException;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.ComparatorBiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -38,7 +37,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * Custom regular expression {@link BiMatcher} implementation
+ * Custom regular expression {@link ComparatorBiMatcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -48,6 +47,7 @@ import java.util.regex.PatternSyntaxException;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class RegexValueMatcher<T> extends ComparatorBiMatcher<T> {
 
     /**

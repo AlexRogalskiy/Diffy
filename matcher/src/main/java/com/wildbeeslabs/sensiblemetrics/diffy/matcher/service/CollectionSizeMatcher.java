@@ -23,13 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Collection;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
 
 /**
  * Collection size {@link AbstractMatcher} implementation
@@ -62,6 +61,6 @@ public class CollectionSizeMatcher<T extends Iterable<?>> extends AbstractMatche
         if (target instanceof Collection) {
             return ((Collection) target).size() == this.size;
         }
-        return listOf((Iterable<T>) target).size() == this.size;
+        return ServiceUtils.listOf((Iterable<T>) target).size() == this.size;
     }
 }

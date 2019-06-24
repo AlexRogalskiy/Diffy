@@ -24,7 +24,6 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.view;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.view.DiffEntryView;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -38,14 +37,14 @@ import lombok.NoArgsConstructor;
 public interface EntryView {
 
     /**
-     * {@link DiffEntryView.External} declaration
+     * {@link EntryView.External} declaration
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     class External {
     }
 
     /**
-     * {@link DiffEntryView.Internal} declaration
+     * {@link EntryView.Internal} declaration
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     class Internal extends EntryView.External {

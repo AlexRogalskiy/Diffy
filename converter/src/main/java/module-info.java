@@ -26,6 +26,9 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.converter {
     requires java.compiler;
     requires org.jsoup;
     requires commons.validator;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.common;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.matcher;
+    requires com.wildbeeslabs.sensiblemtrics.diffy.validator;
 
     // exports converter enumerations
     exports com.wildbeeslabs.sensiblemetrics.diffy.converter.enumeration;

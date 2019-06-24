@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.RegexProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.RegexProcessor;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 
 import java.util.Objects;
 import java.util.regex.Pattern;

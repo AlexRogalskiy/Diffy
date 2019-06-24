@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.service.DefaultDiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

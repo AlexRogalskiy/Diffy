@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -30,8 +31,7 @@ import lombok.ToString;
 
 import java.util.Date;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.DateUtils.DEFAULT_DATE_FORMAT_PATTERN;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.DateUtils.toDate;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.DateUtils.toDate;
 
 /**
  * Default {@link Date} {@link AbstractConverter} implementation
@@ -54,7 +54,7 @@ public class DateConverter extends AbstractConverter<String, Date> {
      * Default date converter constructor
      */
     public DateConverter() {
-        this(DEFAULT_DATE_FORMAT_PATTERN);
+        this(DateUtils.DEFAULT_DATE_FORMAT_PATTERN);
     }
 
     /**
@@ -74,6 +74,6 @@ public class DateConverter extends AbstractConverter<String, Date> {
      */
     @Override
     public Date valueOf(final String value) {
-        return toDate(value, getFormat());
+        return DateUtils.toDate(value, getFormat());
     }
 }

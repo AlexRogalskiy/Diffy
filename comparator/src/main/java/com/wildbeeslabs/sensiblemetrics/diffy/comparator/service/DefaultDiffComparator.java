@@ -23,10 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils.ComparatorUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.iface.DiffEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.entry.impl.DefaultDiffEntry;
-import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -40,10 +42,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.setAccessible;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitize;
-
 /**
  * Difference comparator implementation by input class {@link Class} / comparator instance {@link Comparator}
  *
@@ -56,6 +54,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.sanitiz
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
 
     /**
@@ -110,7 +109,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                 return new ComparatorUtils.DefaultNullSafeArrayComparator<>();
             }
         }
-        return this.getPropertyComparatorMap().getOrDefault(sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+        return this.getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
     }
 
     /**
@@ -132,14 +131,14 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
 
     private DiffEntry<?> processProperty(final T first, final T last, final String property) {
         try {
-            setAccessible(this.getPropertyMap().get(property));
+            ReflectionUtils.setAccessible(this.getPropertyMap().get(property));
             final Object firstValue = this.getPropertyMap().get(property).get(first);
             final Object lastValue = this.getPropertyMap().get(property).get(last);
             if (!Objects.equals(compare(firstValue, lastValue, property), SortManager.SortDirection.EQ)) {
                 return DefaultDiffEntry.of(property, firstValue, lastValue);
             }
         } catch (IllegalAccessException e) {
-            log.error(formatMessage("ERROR: cannot process property: {%s}, message: {%s}", property, e.getMessage()));
+            log.error(StringUtils.formatMessage("ERROR: cannot process property: {%s}, message: {%s}", property, e.getMessage()));
         }
         return null;
     }

@@ -21,14 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventListenerAdapter;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
-
-import java.util.Objects;
 
 /**
  * Matcher {@link EventListenerAdapter} interface declaration

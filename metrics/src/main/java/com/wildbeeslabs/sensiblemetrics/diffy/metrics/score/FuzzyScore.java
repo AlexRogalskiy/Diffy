@@ -23,12 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.metrics.iface.SimilarityScore;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityScore;
 import lombok.Getter;
 
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Fuzzy {@link SimilarityScore} implementation

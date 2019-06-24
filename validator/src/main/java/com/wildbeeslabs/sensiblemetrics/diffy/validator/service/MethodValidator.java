@@ -23,12 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 
 import java.lang.reflect.Method;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ReflectionUtils.arrayMemberEquals;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils.arrayMemberEquals;
 
 /**
  * Method name {@link Validator} implementation

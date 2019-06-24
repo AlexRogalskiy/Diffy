@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.AbstractCalendarProcessor;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.AbstractCalendarProcessor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -60,10 +60,7 @@ public abstract class AbstractCalendarValidator extends AbstractFormatValidator<
      * Construct an instance with the specified <i>strict</i>,
      * <i>time</i> and <i>date</i> style parameters.
      *
-     * @param strict    <code>true</code> if strict
-     *                  <code>Format</code> parsing should be used.
-     * @param dateStyle the date style to use for Locale validation.
-     * @param timeStyle the time style to use for Locale validation.
+     * @param processor the time style to use for Locale validation.
      */
     public AbstractCalendarValidator(final AbstractCalendarProcessor processor) {
         ValidationUtils.notNull(processor, "Processor should not be null");

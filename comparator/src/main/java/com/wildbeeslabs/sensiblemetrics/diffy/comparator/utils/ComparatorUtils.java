@@ -21,13 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils;
 
 import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Iterables;
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl.DefaultTransition;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -46,9 +48,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.listOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.ServiceUtils.streamOf;
 
 /**
  * Comparator utilities implementation {@link Comparator}
@@ -73,8 +72,8 @@ public class ComparatorUtils {
      * Lexicographic order {@link CharSequence} comparator
      */
     public final static Comparator<CharSequence> LEXICOGRAPHIC_ORDER = (s1, s2) -> {
-        Objects.requireNonNull(s1, "First string should not be null");
-        Objects.requireNonNull(s2, "Last string should not be null");
+        ValidationUtils.notNull(s1, "First string should not be null");
+        ValidationUtils.notNull(s2, "Last string should not be null");
 
         final int lens1 = s1.length();
         final int lens2 = s2.length();
@@ -694,6 +693,7 @@ public class ComparatorUtils {
          * @param last  - initial input last argument
          * @return 0 if the arguments are identical and {@code c.compare(a, b)} otherwise.
          */
+        @Override
         default int compare(final T first, final T last) {
             return safeCompare(first, last);
         }
@@ -1800,7 +1800,7 @@ public class ComparatorUtils {
          * @param comparators - initial input array of {@link Comparator}
          */
         public DefaultMultiComparator(final Comparator<? super T>... comparators) {
-            this.comparators = streamOf(comparators).collect(Collectors.toList());
+            this.comparators = ServiceUtils.streamOf(comparators).collect(Collectors.toList());
         }
 
         /**
@@ -1809,7 +1809,7 @@ public class ComparatorUtils {
          * @param comparators - initial input {@link Iterable} collection of {@link Comparator}s
          */
         public DefaultMultiComparator(final Iterable<Comparator<? super T>> comparators) {
-            this.comparators = listOf(comparators);
+            this.comparators = ServiceUtils.listOf(comparators);
         }
 
         /**
@@ -2193,77 +2193,6 @@ public class ComparatorUtils {
         @Override
         public int compare(final Object obj1, final Object obj2) {
             return ((Comparable) obj1).compareTo(obj2);
-        }
-    }
-
-    /**
-     * Transition {@link Comparator} implementation
-     *
-     * @param T type of transition item
-     */
-    @Data
-    @EqualsAndHashCode
-    @ToString
-    public static class TransitionComparator<T> implements Comparator<DefaultTransition<T>> {
-
-        /**
-         * Default transition end point marker
-         */
-        private final boolean toFirst;
-
-        /**
-         * Default transition {@link Comparator}
-         */
-        public final Comparator<? super T> comparator;
-
-        /**
-         * Default transition comparator constructor by input parameters
-         *
-         * @param toFirst - initial input transition end point marker
-         */
-        public TransitionComparator(final boolean toFirst) {
-            this(toFirst, Comparator.comparing(Object::toString));
-        }
-
-        /**
-         * Default transition comparator constructor by input parameters
-         *
-         * @param toFirst    - initial input transition end point marker
-         * @param comparator - initial input {@link Comparator}
-         */
-        public TransitionComparator(final boolean toFirst, @Nullable final Comparator<? super T> comparator) {
-            this.toFirst = toFirst;
-            this.comparator = Optional.ofNullable(comparator).orElseGet(ComparableComparator::getInstance);
-        }
-
-        /**
-         * Compares by (min, reverse max, to) or (to, min, reverse max).
-         */
-        @Override
-        public int compare(final DefaultTransition<T> t1, final DefaultTransition<T> t2) {
-            if (this.toFirst) {
-                if (t1.getTo() != t2.getTo()) {
-                    if (Objects.isNull(t1.getTo())) return -1;
-                    else if (Objects.isNull(t2.getTo())) return 1;
-                    else if (t1.getTo().getNumber() < t2.getTo().getNumber()) return -1;
-                    else if (t1.getTo().getNumber() > t2.getTo().getNumber()) return 1;
-                }
-            }
-
-            if (Objects.compare(t1.getMin(), t2.getMin(), this.getComparator()) < 0) return -1;
-            if (Objects.compare(t1.getMin(), t2.getMin(), this.getComparator()) > 0) return 1;
-            if (Objects.compare(t1.getMax(), t2.getMax(), this.getComparator()) > 0) return -1;
-            if (Objects.compare(t1.getMax(), t2.getMax(), this.getComparator()) > 0) return 1;
-
-            if (!this.toFirst) {
-                if (t1.getTo() != t2.getTo()) {
-                    if (Objects.isNull(t1.getTo())) return -1;
-                    else if (Objects.isNull(t2.getTo())) return 1;
-                    else if (t1.getTo().getNumber() < t2.getTo().getNumber()) return -1;
-                    else if (t1.getTo().getNumber() > t2.getTo().getNumber()) return 1;
-                }
-            }
-            return 0;
         }
     }
 }

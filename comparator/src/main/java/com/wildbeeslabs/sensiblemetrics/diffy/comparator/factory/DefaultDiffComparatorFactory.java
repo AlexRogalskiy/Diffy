@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.factory;
+package com.wildbeeslabs.sensiblemetrics.diffy.comparator.factory;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.DiffComparator;
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultDiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.interfaces.DiffComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.service.DefaultDiffComparator;
 import lombok.experimental.UtilityClass;
 
 import java.util.Comparator;
@@ -38,6 +38,7 @@ import java.util.Comparator;
  * @since 1.0
  */
 @UtilityClass
+@SuppressWarnings("unchecked")
 public class DefaultDiffComparatorFactory {
 
     /**

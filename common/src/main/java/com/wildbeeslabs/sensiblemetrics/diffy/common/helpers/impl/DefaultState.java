@@ -21,17 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface.State;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface.Transition;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.State;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Transition;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.collections.comparators.ComparableComparator;
 
-import java.io.Serializable;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -42,7 +42,8 @@ import java.util.*;
 @Data
 @EqualsAndHashCode
 @ToString
-public class DefaultState<T> implements Serializable, State<T, DefaultTransition<T>>, Comparable<DefaultState<T>> {
+@SuppressWarnings("unchecked")
+public class DefaultState<T> implements State<T, DefaultTransition<T>>, Comparable<DefaultState<T>> {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -161,7 +162,7 @@ public class DefaultState<T> implements Serializable, State<T, DefaultTransition
      */
     private DefaultTransition<T>[] getSortedTransitionArray(final boolean to_first) {
         final DefaultTransition<T>[] transitionArray = this.transitions.toArray(new DefaultTransition[this.transitions.size()]);
-        Arrays.sort(transitionArray, new ComparatorUtils.TransitionComparator(to_first));
+        Arrays.sort(transitionArray, new TransitionComparator(to_first));
         return transitionArray;
     }
 
@@ -181,7 +182,76 @@ public class DefaultState<T> implements Serializable, State<T, DefaultTransition
      */
     @Override
     public int compareTo(final DefaultState<T> state) {
-        Objects.requireNonNull(state, "State should not be null");
+        ValidationUtils.notNull(state, "State should not be null");
         return state.id - this.id;
+    }
+
+    /**
+     * Transition {@link Comparator} implementation
+     */
+    @Data
+    @EqualsAndHashCode
+    @ToString
+    public static class TransitionComparator<T> implements Comparator<DefaultTransition<T>> {
+
+        /**
+         * Default transition end point marker
+         */
+        private final boolean toFirst;
+
+        /**
+         * Default transition {@link Comparator}
+         */
+        public final Comparator<? super T> comparator;
+
+        /**
+         * Default transition comparator constructor by input parameters
+         *
+         * @param toFirst - initial input transition end point marker
+         */
+        public TransitionComparator(final boolean toFirst) {
+            this(toFirst, Comparator.comparing(Object::toString));
+        }
+
+        /**
+         * Default transition comparator constructor by input parameters
+         *
+         * @param toFirst    - initial input transition end point marker
+         * @param comparator - initial input {@link Comparator}
+         */
+        public TransitionComparator(final boolean toFirst, @Nullable final Comparator<? super T> comparator) {
+            this.toFirst = toFirst;
+            this.comparator = Optional.ofNullable(comparator).orElseGet(ComparableComparator::getInstance);
+        }
+
+        /**
+         * Compares by (min, reverse max, to) or (to, min, reverse max).
+         */
+        @Override
+        public int compare(final DefaultTransition<T> t1, final DefaultTransition<T> t2) {
+            if (this.toFirst) {
+                if (t1.getTo() != t2.getTo()) {
+                    if (Objects.isNull(t1.getTo())) return -1;
+                    else if (Objects.isNull(t2.getTo())) return 1;
+                    else if (t1.getTo().getNumber() < t2.getTo().getNumber()) return -1;
+                    else if (t1.getTo().getNumber() > t2.getTo().getNumber()) return 1;
+                }
+            }
+
+            if (Objects.compare(t1.getMin(), t2.getMin(), this.getComparator()) < 0) return -1;
+            if (Objects.compare(t1.getMin(), t2.getMin(), this.getComparator()) > 0) return 1;
+            if (Objects.compare(t1.getMax(), t2.getMax(), this.getComparator()) > 0) return -1;
+            if (Objects.compare(t1.getMax(), t2.getMax(), this.getComparator()) > 0) return 1;
+
+            if (!this.toFirst) {
+                if (t1.getTo() != t2.getTo()) {
+                    if (Objects.isNull(t1.getTo())) return -1;
+                    else if (Objects.isNull(t2.getTo())) return 1;
+                    else if (t1.getTo().getNumber() < t2.getTo().getNumber()) return -1;
+                    else if (t1.getTo().getNumber() > t2.getTo().getNumber()) return 1;
+                }
+            }
+            return 0;
+        }
     }
 }

@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter;
+package com.wildbeeslabs.sensiblemetrics.diffy.converter.test.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.iface.Converter;
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.impl.DateConverter;
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.exception.ConvertOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.service.DateConverter;
 import lombok.Getter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Before;

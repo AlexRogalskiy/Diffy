@@ -21,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface;
+
+import java.io.Serializable;
 
 /**
  * State interface declaration
@@ -32,7 +34,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.utils.iface;
  * @version 1.0.0
  * @since 2017-08-07
  */
-public interface State<C, T> {
+public interface State<C, T> extends Serializable {
 
     State<C, T> add(final T transition);
 

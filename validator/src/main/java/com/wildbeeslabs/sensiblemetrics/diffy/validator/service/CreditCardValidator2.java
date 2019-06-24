@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.impl.Flags;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.impl.AbstractTypeSafeMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl.Flags;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.AbstractTypeSafeMatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -35,7 +35,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.processor.impl.CreditCardProcessor.*;
+import static com.wildbeeslabs.sensiblemetrics.diffy.validator.service.CreditCardValidator.*;
 import static java.util.Arrays.asList;
 
 /**
@@ -65,6 +65,7 @@ import static java.util.Arrays.asList;
  * <a href="http://www.merriampark.com/anatomycc.htm">here</a>.
  * </p>
  */
+@SuppressWarnings("unchecked")
 public class CreditCardValidator2 implements Validator<String> {
 
     /**

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.ConvertOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.exception.ConvertOperationException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -43,7 +43,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BoolLiteralConverter extends AbstractConverter<String, Boolean> {
+public class BooleanLiteralConverter extends AbstractConverter<String, Boolean> {
 
     /**
      * Default true string marker
@@ -68,7 +68,7 @@ public class BoolLiteralConverter extends AbstractConverter<String, Boolean> {
     /**
      * Default boolean converter constructor
      */
-    public BoolLiteralConverter() {
+    public BooleanLiteralConverter() {
         this(DEFAULT_TRUE_STRING, DEFAULT_FALSE_STRING);
     }
 
@@ -78,7 +78,7 @@ public class BoolLiteralConverter extends AbstractConverter<String, Boolean> {
      * @param trueStrings  - initial input array of true {@link String}s
      * @param falseStrings - initial input array of false {@link String}s
      */
-    public BoolLiteralConverter(final String[] trueStrings, final String[] falseStrings) {
+    public BooleanLiteralConverter(final String[] trueStrings, final String[] falseStrings) {
         this.trueStrings = trueStrings;
         this.falseStrings = falseStrings;
     }

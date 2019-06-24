@@ -21,14 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.exception;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.utility.StringUtils.formatMessage;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Invalid format {@link RuntimeException} implementation
@@ -80,6 +81,6 @@ public class InvalidFormatException extends RuntimeException {
      */
     @Factory
     public static final InvalidFormatException throwInvalidFormat(final Object target, final Throwable throwable) {
-        throw new InvalidFormatException(formatMessage("ERROR: unsupported format on target = {%s}", target), throwable);
+        throw new InvalidFormatException(StringUtils.formatMessage("ERROR: unsupported format on target = {%s}", target), throwable);
     }
 }

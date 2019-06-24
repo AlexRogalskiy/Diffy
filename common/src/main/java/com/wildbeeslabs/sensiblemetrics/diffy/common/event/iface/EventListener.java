@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,7 +38,7 @@ import java.util.Objects;
 public interface EventListener<T, S, E extends Event<S>> {
 
     /**
-     * {@link MatcherEventListener} on start {@link BaseMatcherEvent}
+     * {@link EventListener} on start {@code E}
      *
      * @param event - initial input event {@code E}
      */
@@ -47,7 +46,7 @@ public interface EventListener<T, S, E extends Event<S>> {
     }
 
     /**
-     * {@link MatcherEventListener} on before {@link BaseMatcherEvent}
+     * {@link EventListener} on before {@code E}
      *
      * @param event - initial input event {@code E}
      */
@@ -55,7 +54,7 @@ public interface EventListener<T, S, E extends Event<S>> {
     }
 
     /**
-     * {@link MatcherEventListener} on after {@link BaseMatcherEvent}
+     * {@link EventListener} on after {@code E}
      *
      * @param event - initial input event {@code E}
      */
@@ -63,7 +62,7 @@ public interface EventListener<T, S, E extends Event<S>> {
     }
 
     /**
-     * {@link MatcherEventListener} on complete {@link BaseMatcherEvent}
+     * {@link EventListener} on complete {@code E}
      *
      * @param event - initial input event {@code E}
      */
@@ -78,7 +77,7 @@ public interface EventListener<T, S, E extends Event<S>> {
      * @throws NullPointerException if listener is {@code null}
      */
     default Class<? extends EventListener<T, S, E>> getListenerType(final EventListener<T, S, E> listener) {
-        Objects.requireNonNull(listener, "Listener should not be null");
+        ValidationUtils.notNull(listener, "Listener should not be null");
         for (final EventListener<T, S, E> listenerType : this.getSupportedListeners()) {
             if (listenerType.getClass().isAssignableFrom(listener.getClass())) {
                 return (Class<? extends EventListener<T, S, E>>) listenerType.getClass();

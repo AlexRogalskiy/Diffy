@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.impl.DefaultSortOrderComparator;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.service.DefaultSortOrderComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

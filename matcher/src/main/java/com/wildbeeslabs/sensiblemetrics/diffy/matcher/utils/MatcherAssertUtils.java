@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.utils;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.impl.StringMatchDescription;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.Matcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.experimental.UtilityClass;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;

@@ -23,8 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.exception.MatchRejectionException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.MatchRejectionException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

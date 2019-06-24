@@ -23,10 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
-import org.jetbrains.annotations.Contract;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -86,7 +85,6 @@ public class BigDecimalValidator implements Validator<BigDecimal> {
      * @param error - initial input {@link BigDecimal} error
      * @return big decimal {@link Validator}
      */
-    @Contract("_, _ -> new")
     @Factory
     public static Validator<BigDecimal> of(final BigDecimal value, final BigDecimal error) {
         return new BigDecimalValidator(value, error);

@@ -23,11 +23,11 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.comparator;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.comparator.iface.ComparatorDispatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.interfaces.ComparatorDispatcher;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils.ComparatorUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.model.DeliveryInfo;
-import com.wildbeeslabs.sensiblemetrics.diffy.sort.SortManager;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ComparatorUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.utility.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,6 @@ import lombok.ToString;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;

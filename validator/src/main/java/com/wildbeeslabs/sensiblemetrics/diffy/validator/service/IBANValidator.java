@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.iface.Validator;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 import org.apache.commons.validator.routines.RegexValidator;
 import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit;
 

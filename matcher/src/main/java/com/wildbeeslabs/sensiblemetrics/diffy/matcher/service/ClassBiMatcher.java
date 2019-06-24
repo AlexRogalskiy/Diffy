@@ -25,7 +25,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.iface.BiMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -36,7 +35,7 @@ import java.util.Comparator;
 import static java.util.Objects.nonNull;
 
 /**
- * Class {@link BiMatcher} implementation
+ * Class {@link AbstractTypeSafeBiMatcher} implementation
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy
@@ -46,6 +45,7 @@ import static java.util.Objects.nonNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class ClassBiMatcher<T> extends AbstractTypeSafeBiMatcher<T, Entry<T, T>> {
 
     /**
