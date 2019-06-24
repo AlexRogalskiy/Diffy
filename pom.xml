@@ -146,6 +146,7 @@
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -870,9 +871,8 @@
                             <verbose>false</verbose>
                             <source>${java.version}</source>
                             <target>${java.version}</target>
-                            <encoding>${project.reporting.outputEncoding}</encoding>
-
                             <release>${java.version}</release>
+                            <encoding>${project.reporting.outputEncoding}</encoding>
                             <compilerArgs>
                                 <arg>-sourcepath</arg>
                                 <arg>
