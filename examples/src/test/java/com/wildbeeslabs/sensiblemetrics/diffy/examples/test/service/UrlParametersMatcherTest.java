@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.examples.test.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.examples.matcher.UrlParametersMatcher;
-import com.wildbeeslabs.sensiblemetrics.diffy.validator.matcher.test.AbstractDiffTest;
+import com.wildbeeslabs.sensiblemetrics.diffy.examples.test.AbstractDiffTest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
