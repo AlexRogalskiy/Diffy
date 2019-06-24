@@ -74,6 +74,21 @@ public class ServiceUtils {
     public static final Function<Optional<?>, Set<?>> toUnmodifiableSet = option -> collect(option, toUnmodifiableSet());
 
     /**
+     * Default {@link Function} increment / decrement counters
+     */
+    public static final Function<Integer, IntUnaryOperator> INCREMENT_BY = value -> i -> i + value;
+    public static final Function<Integer, IntUnaryOperator> DECREMENT_BY = value -> i -> i - value;
+
+    /**
+     * Default counter increment by one
+     */
+    public static final IntUnaryOperator INCREMENT = i -> i + 1;
+    /**
+     * Default counter decrement by one
+     */
+    public static final IntUnaryOperator DECREMENT = i -> i - 1;
+
+    /**
      * Default completable {@link BiConsumer} action
      */
     private static final BiConsumer<? super Object, ? super Throwable> DEFAULT_COMPLETABLE_ACTION = (response, error) -> {
