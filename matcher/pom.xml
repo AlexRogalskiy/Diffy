@@ -59,7 +59,6 @@
                         </excludes>
                         <archive>
                             <manifestEntries>
-                                <!--<Automatic-Module-Name>${project.groupId}.${project.artifactId}</Automatic-Module-Name>-->
                                 <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                                 <Bundle-Version>${project.version}</Bundle-Version>
                                 <Bundle-Name>${project.artifactId}</Bundle-Name>
@@ -120,6 +119,9 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven.javadoc.plugin.version}</version>
                         <configuration>
+                            <source>8</source>
+                            <minmemory>128m</minmemory>
+                            <maxmemory>1024m</maxmemory>
                             <doctitle>${project.name} API Reference (${project.version})</doctitle>
                             <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
                             <locale>en_US</locale>

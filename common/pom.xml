@@ -118,6 +118,9 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>${maven.javadoc.plugin.version}</version>
                         <configuration>
+                            <source>8</source>
+                            <minmemory>128m</minmemory>
+                            <maxmemory>1024m</maxmemory>
                             <doctitle>${project.name} API Reference (${project.version})</doctitle>
                             <windowtitle>${project.name} API Reference (${project.version})</windowtitle>
                             <locale>en_US</locale>
