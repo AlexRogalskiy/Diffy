@@ -27,6 +27,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.matcher {
     requires org.jsoup;
     requires commons.validator;
     requires com.wildbeeslabs.sensiblemtrics.diffy.common;
+    requires json.path;
 
     // exports matcher description
     exports com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface;

@@ -23,8 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.utils;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.Converter;
 import lombok.NonNull;
@@ -32,9 +31,15 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.beanutils.ConversionException;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -43,6 +48,15 @@ import java.util.function.Supplier;
 @UtilityClass
 @SuppressWarnings("unchecked")
 public class ConverterUtils {
+
+    /**
+     * Default converter mappings
+     */
+    private static final Map<Class<? extends Object>, Converter<?, ? extends Object>> typeTransformers = Collections.unmodifiableMap(createTypeTransformers());
+    /**
+     * An empty array.  Used to invoke accessors via reflection.
+     */
+    public static final Object[] NULL_ARGUMENTS = {};
 
     /**
      * Returns {@link Supplier} by input parameters
@@ -259,7 +273,20 @@ public class ConverterUtils {
         }
     }
 
-    public static int convertToint(final Object obj) {
+    private static <T> Map<Class<? extends Object>, Converter<T, ? extends Object>> createTypeTransformers() {
+        return ImmutableMap.<Class<? extends Object>, Converter<T, ? extends Object>>builder()
+            .put(Boolean.TYPE, (Converter<T, Boolean>) input -> Boolean.valueOf(input.toString()))
+            .put(Character.TYPE, (Converter<T, Character>) input -> Character.valueOf(input.toString().charAt(0)))
+            .put(Byte.TYPE, (Converter<T, Byte>) input -> Byte.valueOf(input.toString()))
+            .put(Short.TYPE, (Converter<T, Short>) input -> Short.valueOf(input.toString()))
+            .put(Integer.TYPE, (Converter<T, Integer>) input -> Integer.valueOf(input.toString()))
+            .put(Long.TYPE, (Converter<T, Long>) input -> Long.valueOf(input.toString()))
+            .put(Float.TYPE, (Converter<T, Float>) input -> Float.valueOf(input.toString()))
+            .put(Double.TYPE, (Converter<T, Double>) input -> Double.valueOf(input.toString()))
+            .build();
+    }
+
+    public static int convertToInteger(final Object obj) {
         if (Objects.isNull(obj)) {
             return 0;
         }
@@ -272,7 +299,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to int");
     }
 
-    public static Integer convertToInt(final Object obj) {
+    public static Integer convertToIntegerWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return null;
         }
@@ -286,7 +313,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to Integer");
     }
 
-    public static short convertToshort(final Object obj) {
+    public static short convertToShort(final Object obj) {
         if (Objects.isNull(obj)) {
             return 0;
         }
@@ -299,7 +326,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to short");
     }
 
-    public static Short convertToShort(final Object obj) {
+    public static Short convertToShortWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return null;
         }
@@ -313,7 +340,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to Short");
     }
 
-    public static long convertTolong(final Object obj) {
+    public static long convertToLong(final Object obj) {
         if (Objects.isNull(obj)) {
             return 0;
         }
@@ -326,7 +353,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to long");
     }
 
-    public static Long convertToLong(final Object obj) {
+    public static Long convertToLongWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return null;
         }
@@ -340,7 +367,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert value '" + obj + "' As " + obj.getClass().getName() + " to Long");
     }
 
-    public static byte convertTobyte(final Object obj) {
+    public static byte convertToByte(final Object obj) {
         if (Objects.isNull(obj)) {
             return 0;
         }
@@ -353,7 +380,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to byte");
     }
 
-    public static Byte convertToByte(final Object obj) {
+    public static Byte convertToByteWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return null;
         }
@@ -367,7 +394,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to Byte");
     }
 
-    public static float convertTofloat(final Object obj) {
+    public static float convertToFloat(final Object obj) {
         if (Objects.isNull(obj)) {
             return 0f;
         }
@@ -380,7 +407,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to float");
     }
 
-    public static Float convertToFloat(final Object obj) {
+    public static Float convertToFloatWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return null;
         }
@@ -394,7 +421,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to Float");
     }
 
-    public static double convertTodouble(final Object obj) {
+    public static double convertToDouble(final Object obj) {
         if (Objects.isNull(obj)) {
             return 0.0;
         }
@@ -407,7 +434,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to float");
     }
 
-    public static Double convertToDouble(final Object obj) {
+    public static Double convertToDoubleWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return null;
         }
@@ -421,7 +448,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to Float");
     }
 
-    public static char convertTochar(final Object obj) {
+    public static char convertToChararacter(final Object obj) {
         if (Objects.isNull(obj)) {
             return ' ';
         }
@@ -434,7 +461,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to char");
     }
 
-    public static Character convertToChar(final Object obj) {
+    public static Character convertToCharacterWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return null;
         }
@@ -451,7 +478,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to Character");
     }
 
-    public static boolean convertTobool(final Object obj) {
+    public static boolean convertToBoolean(final Object obj) {
         if (Objects.isNull(obj)) {
             return false;
         }
@@ -470,7 +497,7 @@ public class ConverterUtils {
         throw new ConversionException("Primitive: Can not convert " + obj.getClass().getName() + " to boolean");
     }
 
-    public static Boolean convertToBool(final Object obj) {
+    public static Boolean convertToBooleanWrapper(final Object obj) {
         if (Objects.isNull(obj)) {
             return false;
         }
@@ -548,7 +575,30 @@ public class ConverterUtils {
                 }
             } catch (NumberFormatException ignored) {
             }
-            return Optional.absent();
+            return Optional.empty();
         };
+    }
+
+    /**
+     * Returns a transformer for the given primitive type.
+     *
+     * @param aType the primitive type whose transformer to return
+     * @return a transformer that will convert strings into that type,
+     * or null if the given type is not a primitive type
+     */
+    public static <T> Converter<T, ? extends Object> getTypeTransformer(final Class<? extends Object> aType) {
+        return (Converter<T, ? extends Object>) typeTransformers.get(aType);
+    }
+
+    public static <T> Object convertType(final Class<?> newType, final T value) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        ValidationUtils.notNull(newType, "Type should not be null");
+        final Class<?>[] types = {value.getClass()};
+        try {
+            final Constructor<?> constructor = newType.getConstructor(types);
+            final Object[] arguments = {value};
+            return constructor.newInstance(arguments);
+        } catch (NoSuchMethodException e) {
+            return Optional.ofNullable(getTypeTransformer(newType)).map(c -> c.convert(value)).orElse(null);
+        }
     }
 }
