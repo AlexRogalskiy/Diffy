@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 
@@ -33,6 +36,9 @@ import java.util.Objects;
  *
  * @param <T> type of validated value
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class FieldValidator<T> implements Validator<T> {
 
     /**

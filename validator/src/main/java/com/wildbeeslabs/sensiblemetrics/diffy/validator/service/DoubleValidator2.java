@@ -26,11 +26,17 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.jetbrains.annotations.Contract;
 
 /**
  * Double {@link Validator} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class DoubleValidator2 implements Validator<Double> {
 
     /**

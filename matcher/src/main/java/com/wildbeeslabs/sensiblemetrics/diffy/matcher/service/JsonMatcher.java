@@ -29,6 +29,8 @@ import com.jayway.jsonpath.ReadContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +40,9 @@ import java.io.IOException;
  *
  * @param <T> type of matcher item
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class JsonMatcher<T> extends AbstractTypeSafeMatcher<T> {
     private final Matcher<? super ReadContext> jsonMatcher;
 

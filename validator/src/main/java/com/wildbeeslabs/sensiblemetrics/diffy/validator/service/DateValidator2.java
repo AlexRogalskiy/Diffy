@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,6 +46,9 @@ import java.util.Optional;
  * @version $Revision: 1739358 $
  * @since Validator 1.1
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class DateValidator2 implements Validator<String> {
 
     /**

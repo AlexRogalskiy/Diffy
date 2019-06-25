@@ -27,10 +27,16 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.JsonPathException;
 import com.jayway.jsonpath.ReadContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Without json path {@link AbstractTypeSafeMatcher} implementation
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class WithoutJsonPath extends AbstractTypeSafeMatcher<ReadContext> {
     private final JsonPath jsonPath;
 

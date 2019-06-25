@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.net.IDN;
 import java.util.Arrays;
@@ -70,6 +73,9 @@ import java.util.Objects;
  * @version $Revision: 1781829 $
  * @since Validator 1.4
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class DomainValidator implements Validator<String> {
 
     private static final int MAX_DOMAIN_LENGTH = 253;

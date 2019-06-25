@@ -26,6 +26,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.processor.service;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces.Processor;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.interfaces.ThrowingProcessor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -54,6 +57,9 @@ import java.util.concurrent.*;
  * @param <O> the type of the output of the calculation
  * @since 3.6
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class MemoizerProcessor<I, O> implements ThrowingProcessor<I, O, BadOperationException> {
 
     private final ConcurrentMap<I, Future<O>> cache = new ConcurrentHashMap<>();

@@ -26,6 +26,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -34,6 +37,9 @@ import java.math.MathContext;
 /**
  * Big decimal {@link Validator} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class BigDecimalValidator implements Validator<BigDecimal> {
 
     /**

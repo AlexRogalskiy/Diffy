@@ -26,6 +26,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers.CodeProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers.ISBNProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 
@@ -61,6 +64,9 @@ import java.util.Objects;
  * @version $Revision: 1715435 $
  * @since Validator 1.4
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class ISBNValidator implements Validator<String> {
 
     /**

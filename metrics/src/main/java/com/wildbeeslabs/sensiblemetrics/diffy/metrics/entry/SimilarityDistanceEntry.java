@@ -29,17 +29,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * Similarity distance entry
+ *
+ * @param <T> type of left item
+ * @param <R> type of right item
+ */
 @Data
 @EqualsAndHashCode
 @ToString
 public class SimilarityDistanceEntry<T, R> {
-
     /**
-     * Edit distance.
+     * Default edit distance
      */
     private final SimilarityDistance<T, R> similarityDistance;
     /**
-     * Left parameter used in distance function.
+     * Default left parameter
      */
     private final T left;
 
@@ -52,7 +57,7 @@ public class SimilarityDistanceEntry<T, R> {
      *                           implementation may not accept nulls.
      */
     public SimilarityDistanceEntry(final SimilarityDistance<T, R> similarityDistance, final T left) {
-        ValidationUtils.notNull(similarityDistance, "Similariy distance should not be null");
+        ValidationUtils.notNull(similarityDistance, "Similarity distance should not be null");
         this.similarityDistance = similarityDistance;
         this.left = left;
     }
@@ -67,6 +72,6 @@ public class SimilarityDistanceEntry<T, R> {
      * @return the similarity score between two CharSequences
      */
     public R apply(final T right) {
-        return this.similarityDistance.apply(left, right);
+        return this.similarityDistance.apply(this.left, right);
     }
 }

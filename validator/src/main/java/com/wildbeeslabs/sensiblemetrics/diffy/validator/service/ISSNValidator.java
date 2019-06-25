@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers.ISSNProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 
@@ -67,6 +70,9 @@ import java.util.Objects;
  *
  * @since 1.5.0
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class ISSNValidator implements Validator<String> {
 
     /**

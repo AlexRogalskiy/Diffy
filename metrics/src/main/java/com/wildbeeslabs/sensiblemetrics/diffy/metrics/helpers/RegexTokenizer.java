@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.helpers;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.Tokenizer;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -35,6 +38,9 @@ import java.util.regex.Pattern;
 /**
  * Regex {@link Tokenizer} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class RegexTokenizer implements Tokenizer<CharSequence, CharSequence> {
 
     /**

@@ -25,10 +25,16 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityScore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Longest common {@link SimilarityScore} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class LongestCommonSubsequenceScore implements SimilarityScore<CharSequence, Integer> {
 
     /**

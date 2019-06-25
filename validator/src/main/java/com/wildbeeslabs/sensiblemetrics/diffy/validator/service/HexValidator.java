@@ -24,12 +24,18 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 
 /**
  * Hex {@link Validator} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class HexValidator implements Validator<String> {
 
     /**

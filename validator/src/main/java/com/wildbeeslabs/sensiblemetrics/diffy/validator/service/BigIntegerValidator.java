@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.BigIntegerProcessor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.math.BigInteger;
 import java.util.Locale;
@@ -73,6 +76,9 @@ import java.util.Objects;
  * @version $Revision: 1739356 $
  * @since Validator 1.3.0
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class BigIntegerValidator extends AbstractNumberValidator {
 
     /**

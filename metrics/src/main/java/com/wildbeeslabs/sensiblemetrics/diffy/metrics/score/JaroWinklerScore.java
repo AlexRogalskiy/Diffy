@@ -25,12 +25,18 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityScore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Arrays;
 
 /**
  * Jaro-Winkler {@link SimilarityScore} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class JaroWinklerScore implements SimilarityScore<CharSequence, Double> {
 
     /**

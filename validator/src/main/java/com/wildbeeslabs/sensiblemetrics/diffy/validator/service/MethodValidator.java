@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.lang.reflect.Method;
 
@@ -33,6 +36,9 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtil
 /**
  * Method name {@link Validator} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class MethodValidator implements Validator<Method> {
 
     /**

@@ -65,6 +65,9 @@ import static java.util.Arrays.asList;
  * <a href="http://www.merriampark.com/anatomycc.htm">here</a>.
  * </p>
  */
+@Data
+@EqualsAndHashCode
+@ToString
 @SuppressWarnings("unchecked")
 public class CreditCardValidator2 implements Validator<String> {
 

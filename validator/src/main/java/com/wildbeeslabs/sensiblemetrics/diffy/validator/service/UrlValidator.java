@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl.Flags;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
@@ -34,6 +37,12 @@ import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
+/**
+ * Url {@link Validator} implementation
+ */
+@Data
+@EqualsAndHashCode
+@ToString
 public class UrlValidator implements Validator<String> {
 
     /**

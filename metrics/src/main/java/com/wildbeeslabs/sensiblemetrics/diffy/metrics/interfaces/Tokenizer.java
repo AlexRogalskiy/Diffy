@@ -28,13 +28,14 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces;
  *
  * @param <T> type of token item
  */
+@FunctionalInterface
 public interface Tokenizer<T, R> {
 
     /**
-     * Returns an array of tokens {@code R}
+     * Returns an array of {@code R} tokens
      *
-     * @param text input text {@code T}
-     * @return array of tokens
+     * @param value - initial input {@code T} value
+     * @return array of {@code R} tokens
      */
-    R[] tokenize(final T text);
+    R[] tokenize(final T value);
 }

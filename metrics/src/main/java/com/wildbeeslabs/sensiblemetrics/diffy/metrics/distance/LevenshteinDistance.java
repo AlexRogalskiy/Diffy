@@ -38,9 +38,8 @@ import java.util.Arrays;
 @EqualsAndHashCode
 @ToString
 public class LevenshteinDistance implements SimilarityDistance<CharSequence, Integer> {
-
     /**
-     * Default instance.
+     * Default {@link LevenshteinDistance} instance
      */
     private static final LevenshteinDistance DEFAULT_INSTANCE = new LevenshteinDistance();
 

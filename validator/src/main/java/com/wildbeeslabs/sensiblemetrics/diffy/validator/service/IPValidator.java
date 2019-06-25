@@ -26,6 +26,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 import com.google.common.collect.ImmutableSet;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,6 +41,9 @@ import java.util.Set;
  * IP {@link Validator} implementation
  */
 @Slf4j
+@Data
+@EqualsAndHashCode
+@ToString
 public class IPValidator implements Validator<String> {
 
     /**

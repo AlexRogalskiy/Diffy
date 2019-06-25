@@ -39,7 +39,6 @@ import static org.apache.commons.lang3.StringUtils.join;
 @EqualsAndHashCode
 @ToString
 public class StringExtractor {
-
     /**
      * Default context length
      */

@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.validator.routines.DomainValidator;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
@@ -44,6 +47,9 @@ import java.util.regex.Pattern;
  * @version $Revision: 1723573 $
  * @since Validator 1.4
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class EmailValidator implements Validator<String> {
 
     /**

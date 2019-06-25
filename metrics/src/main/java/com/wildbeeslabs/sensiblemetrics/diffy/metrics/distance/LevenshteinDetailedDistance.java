@@ -34,19 +34,18 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Levenshtein {@link SimilarityDistance} implementation
+ * Levenshtein detailed {@link SimilarityDistance} implementation
  */
 @Data
 @EqualsAndHashCode
 @ToString
 public class LevenshteinDetailedDistance implements SimilarityDistance<CharSequence, LevenshteinResultEntry> {
-
     /**
-     * Default instance.
+     * Default {@link LevenshteinDetailedDistance} instance
      */
     private static final LevenshteinDetailedDistance DEFAULT_INSTANCE = new LevenshteinDetailedDistance();
     /**
-     * Threshold.
+     * Default threshold
      */
     private final Integer threshold;
 

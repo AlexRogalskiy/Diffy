@@ -43,7 +43,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,7 +52,10 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class DiffUtils {
 
-    private static Pattern unifiedDiffChunkRe = Pattern.compile("^@@\\s+-(?:(\\d+)(?:,(\\d+))?)\\s+\\+(?:(\\d+)(?:,(\\d+))?)\\s+@@$");
+    /**
+     * Default unified diff chunk regex
+     */
+    private static final Pattern DEFAULT_DIFF_CHUNK_REGEX = Pattern.compile("^@@\\s+-(?:(\\d+)(?:,(\\d+))?)\\s+\\+(?:(\\d+)(?:,(\\d+))?)\\s+@@$");
 
     /**
      * Computes the difference between the original and revised list of elements
@@ -124,7 +126,7 @@ public class DiffUtils {
                 }
                 continue;
             }
-            final Matcher m = unifiedDiffChunkRe.matcher(line);
+            final Matcher m = DEFAULT_DIFF_CHUNK_REGEX.matcher(line);
             if (m.find()) {
                 // Process the lines in the previous chunk
                 if (!rawChunk.isEmpty()) {

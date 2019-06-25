@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.apache.commons.validator.routines.RegexValidator;
 import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit;
 
@@ -37,6 +40,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @since 1.5.0
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class IBANValidator implements Validator<String> {
 
     private final Map<String, ValidatorEntry> formatValidators;

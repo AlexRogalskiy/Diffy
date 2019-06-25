@@ -31,22 +31,22 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Longest common {@link SimilarityDistance} implementation
+ * Longest common sub-sequence {@link SimilarityDistance} implementation
  */
 @Data
 @EqualsAndHashCode
 @ToString
-public class LongestCommonSubsequenceDistance implements SimilarityDistance<CharSequence, Integer> {
+public class LongestCommonSubSequenceDistance implements SimilarityDistance<CharSequence, Integer> {
 
     /**
      * Object for calculating the longest common subsequence that we can then normalize in apply.
      */
-    private final LongestCommonSubsequenceScore longestCommonSubsequence = new LongestCommonSubsequenceScore();
+    private final LongestCommonSubsequenceScore longestCommonSubSequence = new LongestCommonSubsequenceScore();
 
     /**
      * Calculates an edit distance between two <code>CharSequence</code>'s <code>left</code> and
      * <code>right</code> as: <code>left.length() + right.length() - 2 * LCS(left, right)</code>, where
-     * <code>LCS</code> is given in {@link LongestCommonSubsequenceDistance#apply(CharSequence, CharSequence)}.
+     * <code>LCS</code> is given in {@link LongestCommonSubSequenceDistance#apply(CharSequence, CharSequence)}.
      *
      * @param left  first character sequence
      * @param right second character sequence
@@ -57,7 +57,6 @@ public class LongestCommonSubsequenceDistance implements SimilarityDistance<Char
     public Integer apply(final CharSequence left, final CharSequence right) {
         ValidationUtils.notNull(left, "Left sequence should not be null");
         ValidationUtils.notNull(right, "Right sequence should not be null");
-
-        return left.length() + right.length() - 2 * this.longestCommonSubsequence.apply(left, right);
+        return left.length() + right.length() - 2 * this.longestCommonSubSequence.apply(left, right);
     }
 }

@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +45,9 @@ import java.util.Objects;
  * @version $Revision: 1783032 $
  * @since IBANEntry 1.4
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class InetAddressValidator implements Validator<String> {
 
     private static final int IPV4_MAX_OCTET_VALUE = 255;

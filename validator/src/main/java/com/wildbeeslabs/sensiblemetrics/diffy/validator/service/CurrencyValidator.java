@@ -24,6 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.CurrencyProcessor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * <p><b>Currency Validation</b> and Conversion routines (<code>java.math.BigDecimal</code>).</p>
@@ -48,6 +51,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.CurrencyProcesso
  * @version $Revision: 1739356 $
  * @since Validator 1.3.0
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class CurrencyValidator extends BigDecimalValidator2 {
 
     /**

@@ -32,7 +32,7 @@ import java.util.function.Function;
 /**
  * Validator interface declaration
  *
- * @param <T> type of validated value
+ * @param <T> type of validated item
  */
 @FunctionalInterface
 @SuppressWarnings("unchecked")

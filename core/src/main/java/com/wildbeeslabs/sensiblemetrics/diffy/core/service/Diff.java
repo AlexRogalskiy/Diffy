@@ -82,7 +82,7 @@ public class Diff {
 
     private List<String> linesFromBufferedReader(final BufferedReader reader) throws IOException {
         String line;
-        List<String> lines = new ArrayList<>();
+        final List<String> lines = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
             lines.add(line);
         }

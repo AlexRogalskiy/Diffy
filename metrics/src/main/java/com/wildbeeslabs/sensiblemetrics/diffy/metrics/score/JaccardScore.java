@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityScore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,6 +35,9 @@ import java.util.Set;
 /**
  * Jaccard {@link SimilarityScore} implementation
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class JaccardScore implements SimilarityScore<CharSequence, Double> {
 
     /**

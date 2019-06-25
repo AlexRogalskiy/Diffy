@@ -24,11 +24,15 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.entry;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Class that represents a credit card range.
  */
 @Data
+@EqualsAndHashCode
+@ToString
 public class CreditCardRange {
     private final String low;
     private final String high;

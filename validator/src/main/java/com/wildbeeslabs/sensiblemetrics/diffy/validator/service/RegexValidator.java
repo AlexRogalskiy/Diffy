@@ -25,6 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.processor.service.RegexProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -76,6 +79,9 @@ import java.util.regex.Pattern;
  * @version $Revision: 1739356 $
  * @since Validator 1.4
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class RegexValidator implements Validator<String> {
 
     /**

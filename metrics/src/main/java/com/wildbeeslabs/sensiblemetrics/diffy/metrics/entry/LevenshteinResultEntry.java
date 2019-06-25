@@ -37,19 +37,19 @@ import lombok.ToString;
 @ToString
 public class LevenshteinResultEntry {
     /**
-     * Edit distance.
+     * Default distance
      */
     private final Integer distance;
     /**
-     * Insert character count.
+     * Default insert character count
      */
     private final Integer insertCount;
     /**
-     * Delete character count.
+     * Default delete character count
      */
     private final Integer deleteCount;
     /**
-     * Substitute character count.
+     * Default substitute character count
      */
     private final Integer substituteCount;
 

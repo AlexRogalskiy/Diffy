@@ -31,7 +31,10 @@ import com.wildbeeslabs.sensiblemetrics.diffy.validator.entry.CreditCardRange;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers.CodeProcessor;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.helpers.CodeProcessorValidator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
 import org.apache.commons.validator.routines.CodeValidator;
 
 import java.util.ArrayList;
@@ -96,6 +99,9 @@ import java.util.Objects;
  * @version $Revision: 1782740 $
  * @since Validator 1.4
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class CreditCardValidator implements Validator<String> {
 
     /**

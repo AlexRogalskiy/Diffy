@@ -25,14 +25,18 @@ package com.wildbeeslabs.sensiblemetrics.diffy.metrics.score;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces.SimilarityScore;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Locale;
 
 /**
  * Fuzzy {@link SimilarityScore} implementation
  */
-@Getter
+@Data
+@EqualsAndHashCode
+@ToString
 public class FuzzyScore implements SimilarityScore<CharSequence, Integer> {
 
     /**

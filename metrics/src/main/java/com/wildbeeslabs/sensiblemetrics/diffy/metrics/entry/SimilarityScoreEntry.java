@@ -29,6 +29,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * Similarity score entry
+ *
+ * @param <T> type of left item
+ * @param <R> type of right item
+ */
 @Data
 @EqualsAndHashCode
 @ToString

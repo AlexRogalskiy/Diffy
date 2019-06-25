@@ -23,14 +23,21 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.metrics.interfaces;
 
+/**
+ * Similarity score interface declaration
+ *
+ * @param <T> type of left item
+ * @param <R> type of right item
+ */
+@FunctionalInterface
 public interface SimilarityScore<T, R> {
 
     /**
-     * Compares two CharSequences.
+     * Returns comparison result by input parameters
      *
-     * @param left  the first CharSequence
-     * @param right the second CharSequence
-     * @return the similarity score between two CharSequences
+     * @param left  - initial input left {@code T} item
+     * @param right - initial input right {@code T} item
+     * @return the similarity score between two {@code T} items
      */
     R apply(final T left, final T right);
 }
