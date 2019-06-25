@@ -27,6 +27,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.formatter {
     requires org.jsoup;
     requires commons.validator;
     requires com.wildbeeslabs.sensiblemtrics.diffy.common;
+    requires org.joda.time;
 
     // exports formatter exception
     exports com.wildbeeslabs.sensiblemetrics.diffy.formatter.exception;

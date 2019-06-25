@@ -23,25 +23,19 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.service;
 
-import java.lang.ref.WeakReference;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Weak {@link Consumer} interface declaration
+ * Random {@link Consumer} implementation
  *
- * @param <T> type of consumer item
+ * @param <T> type of consumer items
  */
-public class WeakConsumer<T> implements Consumer<T> {
-
-    private final WeakReference<Consumer<T>> reference;
-
-    public WeakConsumer(final Consumer<T> consumer) {
-        reference = new WeakReference<>(consumer);
-    }
+public class RandomServerSorter<T> implements Consumer<List<T>> {
 
     @Override
-    public void accept(final T t) {
-        Optional.ofNullable(this.reference.get()).ifPresent(i -> i.accept(t));
+    public void accept(final List<T> values) {
+        Collections.shuffle(values);
     }
 }

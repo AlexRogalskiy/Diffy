@@ -78,6 +78,7 @@ import java.lang.reflect.InvocationTargetException;
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public class BeanToPropertyConverter<T, R> implements Converter<T, R> {
 
     /**

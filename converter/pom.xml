@@ -228,5 +228,11 @@
             <artifactId>diffy-validator</artifactId>
             <version>${diffy-validator.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180813</version>
+        </dependency>
     </dependencies>
 </project>

@@ -72,4 +72,5 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.common {
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface;
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.impl;
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.property;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit;
 }

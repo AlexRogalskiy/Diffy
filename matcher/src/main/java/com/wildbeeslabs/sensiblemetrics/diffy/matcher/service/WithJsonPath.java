@@ -36,6 +36,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
  *
  * @param <T> type of matcher item
  */
+@SuppressWarnings("unchecked")
 public class WithJsonPath<T> extends AbstractTypeSafeMatcher<ReadContext> {
     private final JsonPath jsonPath;
     private final Matcher<T> matcher;

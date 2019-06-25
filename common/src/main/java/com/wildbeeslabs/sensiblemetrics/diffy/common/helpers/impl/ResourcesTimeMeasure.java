@@ -40,7 +40,7 @@ import lombok.ToString;
 @ToString
 public abstract class ResourcesTimeMeasure implements TimeMeasure {
 
-    public static final String DEFAULT_RESOURCE_BUNDLE_NAME = "com.wildbeeslabs.jentle.algorithms.date.i18n.Resources_EN";
+    public static final String DEFAULT_RESOURCE_BUNDLE_NAME = "com.wildbeeslabs.sensiblemetrics.diffy.common.i18n.Resources_EN";
 
     private long maxQuantity = 0;
     private long millisPerUnit = 1;
@@ -51,9 +51,9 @@ public abstract class ResourcesTimeMeasure implements TimeMeasure {
      *
      * @return resource key prefix
      */
-    abstract protected String getResourceKeyPrefix();
+    public abstract String getResourceKeyPrefix();
 
-    protected String getResourceBundleName() {
+    public String getResourceBundleName() {
         return ResourcesTimeMeasure.DEFAULT_RESOURCE_BUNDLE_NAME;
     }
 

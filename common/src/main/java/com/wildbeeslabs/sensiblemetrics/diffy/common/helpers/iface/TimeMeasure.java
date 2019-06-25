@@ -46,12 +46,12 @@ public interface TimeMeasure extends Comparable<TimeMeasure> {
      * to be used as a threshold for the next largest time unit (e.g. if one
      * <code>Second</code> represents 1000ms, and <code>Second</code> has a
      * maxQuantity of 5, then if the difference between compared timestamps is
-     * larger than 5000ms, PrettyTime will move on to the next smallest TimeUnit
+     * larger than 5000ms, PrettyTime will move on to the next smallest TimeUnitType
      * for calculation; <code>Minute</code>, by default)
      * <p>
      * millisPerUnit * maxQuantity = maxAllowedMs
      * <p>
-     * If maxQuantity is zero, it will be equal to the next highest      <code>TimeUnit.getMillisPerUnit() /
+     * If maxQuantity is zero, it will be equal to the next highest      <code>TimeUnitType.getMillisPerUnit() /
      * this.getMillisPerUnit()</code> or infinity if there are no greater
      * TimeUnits
      *

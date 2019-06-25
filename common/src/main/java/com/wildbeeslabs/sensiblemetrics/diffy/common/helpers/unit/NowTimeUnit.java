@@ -21,41 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.LocalTimeMeasure;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl.ResourcesTimeMeasure;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
-
 /**
- * Default {@link LocalTimeMeasure} implementation
+ * Now time unit implementation
  *
  * @author Alex
  * @version 1.0.0
  * @since 2017-08-07
  */
 @Data
-@EqualsAndHashCode
-@ToString
-public class DefaultLocalTime implements LocalTimeMeasure {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class NowTimeUnit extends ResourcesTimeMeasure implements TimeMeasure {
 
-    private String timeZone;
-
-    public DefaultLocalTime(final String timeZone) {
-        this.timeZone = timeZone;
+    public NowTimeUnit() {
+        setMaxQuantity(1000L * 60L);
     }
 
     @Override
-    public Instant nowInstant() {
-        return Instant.now();
+    public String getResourceKeyPrefix() {
+        return "Now";
     }
 
     @Override
-    public ZoneOffset getDefaultTimeZone() {
-        return ZoneOffset.of(this.timeZone);
+    public boolean isPrecise() {
+        return false;
     }
 }
