@@ -12,7 +12,7 @@ branches:
     - stable
     - /^release.*$/
 jdk:
-  - oraclejdk11
+  #- oraclejdk11
   - openjdk11
   #- openjdk12
 addons:
