@@ -47,6 +47,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.s
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public abstract class Resources extends ListResourceBundle {
 
     @Override

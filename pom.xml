@@ -219,6 +219,7 @@
         <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
         <maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
         <maven.sonar.plugin.version>3.6.0.1398</maven.sonar.plugin.version>
+        <maven.javaformat.plugin.version>0.0.6</maven.javaformat.plugin.version>
         <maven.scm.plugin.version>1.11.2</maven.scm.plugin.version>
         <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
         <maven.spotbugs.plugin.version>3.1.11</maven.spotbugs.plugin.version>
@@ -372,7 +373,8 @@
                                 <goal>check</goal>
                             </goals>
                             <configuration>
-                                <failOnViolation>true</failOnViolation>
+                                <consoleOutput>true</consoleOutput>
+                                <failsOnError>true</failsOnError>
                             </configuration>
                         </execution>
                     </executions>
@@ -580,6 +582,12 @@
                             <tag>NOTE</tag>
                         </tags>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.spring.javaformat</groupId>
+                    <artifactId>spring-javaformat-maven-plugin</artifactId>
+                    <version>${maven.javaformat.plugin.version}</version>
                 </plugin>
 
                 <plugin>
@@ -884,6 +892,17 @@
                         </configuration>
                         <executions>
                             <execution>
+                                <id>default-compile</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <configuration>
+                                    <showDeprecation>true</showDeprecation>
+                                    <showWarnings>true</showWarnings>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>default-testCompile</id>
                                 <phase>test-compile</phase>
                                 <goals>
@@ -891,6 +910,8 @@
                                 </goals>
                                 <configuration>
                                     <skip>true</skip>
+                                    <showDeprecation>true</showDeprecation>
+                                    <showWarnings>true</showWarnings>
                                 </configuration>
                             </execution>
                         </executions>
