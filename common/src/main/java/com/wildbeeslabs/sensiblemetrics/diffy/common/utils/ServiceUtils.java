@@ -30,6 +30,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterE
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.Nullable;
 import java.io.Closeable;
@@ -808,5 +809,23 @@ public class ServiceUtils {
             .entrySet().stream()
             .sorted(Map.Entry.comparingByKey(comparator))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    }
+
+    public static <T> List<T> subList(final List<T> list, int skip, int size) {
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        ValidationUtils.isTrue(skip > 0, "Skip value should not be negative");
+        ValidationUtils.isTrue(size > 0, "Size value should not be negative");
+
+        int total = list.size();
+        int from = skip;
+        from = Math.max(0, from);
+        int to = from + size;
+        if (from >= total || to <= 0 || from >= to) {
+            return Collections.emptyList();
+        }
+        to = Math.min(total, to);
+        return list.subList(from, to);
     }
 }

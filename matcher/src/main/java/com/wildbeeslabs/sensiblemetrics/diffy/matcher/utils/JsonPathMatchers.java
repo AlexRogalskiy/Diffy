@@ -23,9 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.utils;
 
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Predicate;
-import com.jayway.jsonpath.ReadContext;
+import com.jayway.jsonpath.*;
+import com.jayway.jsonpath.spi.cache.CacheProvider;
+import com.jayway.jsonpath.spi.cache.NOOPCache;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.JsonMatcher;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.service.WithJsonPath;
@@ -38,6 +38,14 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher.
 
 @UtilityClass
 public class JsonPathMatchers {
+
+    static {
+        CacheProvider.setCache(new NOOPCache());
+    }
+
+    public Configuration getConfig() {
+        return Configuration.defaultConfiguration().addOptions(Option.SUPPRESS_EXCEPTIONS);
+    }
 
     public static <T> Matcher<? super Object> hasJsonPath(final String jsonPath, final Matcher<T> resultMatcher) {
         return isJson(withJsonPath(jsonPath, resultMatcher));
