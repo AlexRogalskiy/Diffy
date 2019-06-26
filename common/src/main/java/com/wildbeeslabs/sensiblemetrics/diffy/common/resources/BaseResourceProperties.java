@@ -46,10 +46,11 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.l
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class BaseResourceProperties extends Properties {
 
     public <R extends BaseResource> Collection<R> getProperties() {
-        return (Collection<R>) listOf(this.defaults.values()).stream().collect(Collectors.toList());
+        return listOf(this.defaults.values()).stream().map(n -> (R) n).collect(Collectors.toList());
     }
 
     public <R extends BaseResource> void setProperties(final Map<Object, R> properties) {

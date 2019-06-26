@@ -40,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public class BeanMatcher<T> implements Matcher<T> {
     /**
      * Name of the property whose value will be predicated
