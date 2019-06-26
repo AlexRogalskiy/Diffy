@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
 
 /**
@@ -36,9 +37,9 @@ public interface TimeFormatProvider {
 
     /**
      * Return the appropriate {@link TimeFormat} for the given
-     * {@link ITimeUnit}
+     * {@link TimeMeasure}
      *
-     * @param timeUnit
+     * @param timeMeasure
      * @return
      */
     TimeFormat getFormat(final TimeMeasure timeMeasure);

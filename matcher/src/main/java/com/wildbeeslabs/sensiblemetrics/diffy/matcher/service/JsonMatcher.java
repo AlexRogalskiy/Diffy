@@ -29,6 +29,7 @@ import com.jayway.jsonpath.ReadContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 

@@ -92,7 +92,7 @@ public class SimpleTimeFormat implements TimeFormat {
 
     private String format(final Duration duration, boolean round) {
         final String sign = this.getSign(duration);
-        final String unit = this.getGramaticallyCorrectName(duration, round);
+        final String unit = this.getGrammaticallyCorrectName(duration, round);
         long quantity = this.getQuantity(duration, round);
         return this.applyPattern(sign, unit, quantity);
     }
@@ -112,7 +112,7 @@ public class SimpleTimeFormat implements TimeFormat {
         return Math.abs(round ? duration.getQuantityRounded(this.roundingTolerance) : duration.getQuantity());
     }
 
-    protected String getGramaticallyCorrectName(final Duration duration, boolean round) {
+    protected String getGrammaticallyCorrectName(final Duration duration, boolean round) {
         String result = this.getSingularName(duration);
         if ((Math.abs(this.getQuantity(duration, round)) == 0) || (Math.abs(this.getQuantity(duration, round)) > 1)) {
             result = this.getPluralName(duration);

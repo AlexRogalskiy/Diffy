@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 WildBees Labs, Inc.
+ * Copyright 2018 WildBees Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.formatter.resources;
 
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.JsonPathException;
-import com.jayway.jsonpath.ReadContext;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.description.iface.MatchDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Without json path {@link AbstractTypeSafeMatcher} implementation
+ * Default base resource entry implementation
+ *
+ * @author Alex
+ * @version 1.0.0
+ * @since 2017-08-07
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class WithoutJsonPath extends AbstractTypeSafeMatcher<ReadContext> {
-    private final JsonPath jsonPath;
+@EqualsAndHashCode
+@ToString
+public class BaseResource {
 
-    public WithoutJsonPath(final JsonPath jsonPath) {
-        this.jsonPath = jsonPath;
+    protected final String name;
+    protected final String pattern;
+    protected final Long priority;
+
+    public BaseResource(final String name, final String pattern) {
+        this(name, pattern, null);
     }
 
-    @Override
-    public boolean matchesSafe(final ReadContext actual) {
-        try {
-            actual.read(this.jsonPath);
-            return false;
-        } catch (JsonPathException e) {
-            return true;
-        }
+    public BaseResource(final String name, final String pattern, final Long priority) {
+        this.name = name;
+        this.pattern = pattern;
+        this.priority = priority;
     }
 
-    @Override
-    public void describeTo(final MatchDescription description) {
-        description.appendText("without json path ").append(this.jsonPath.getPath());
+    public Object[] toArray() {
+        return new Object[]{this.name, this.pattern, this.priority};
     }
 }
