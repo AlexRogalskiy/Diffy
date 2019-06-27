@@ -27,6 +27,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Map;
+import java.util.function.BiConsumer;
+
 /**
  * A positive index.
  *
@@ -49,6 +52,10 @@ public class Index {
     public static Index atIndex(int value) {
         assert value >= 0 : "The value of the index should not be negative";
         return new Index(value);
+    }
+
+    public BiConsumer<Map<Integer, Integer>, Double> accumulator(final Integer size) {
+        return (map, value) -> map.merge((int) (value / size), 1, (a, b) -> a + 1);
     }
 
     private Index(int value) {

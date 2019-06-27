@@ -13,8 +13,13 @@ import java.util.Date;
 @EqualsAndHashCode
 @ToString
 public class Period {
-
+    /**
+     * Default start {@link Date} period
+     */
     private final Date start;
+    /**
+     * Default end {@link Date} period
+     */
     private final Date end;
 
     /**

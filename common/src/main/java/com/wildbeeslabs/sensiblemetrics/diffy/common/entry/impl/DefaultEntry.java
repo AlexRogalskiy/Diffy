@@ -33,6 +33,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.view.EntryView;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Optional;
@@ -114,9 +115,9 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     }
 
     /**
-     * Returns {@link Map.Entry} instance
+     * Returns new {@link Map.Entry} instance
      *
-     * @return {@link Map.Entry} instance
+     * @return new {@link Map.Entry} instance
      */
     @NonNull
     public Map.Entry<K, V> entry(final Supplier<K> keySupplier, final Supplier<V> valueSupplier) {
@@ -126,14 +127,24 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     }
 
     /**
-     * Returns {@link Map.Entry} instance
+     * Returns new {@link Map.Entry} instance
      *
-     * @return {@link Map.Entry} instance
+     * @return new {@link Map.Entry} instance
      */
     @NonNull
     public Map.Entry<K, V> entry(final Supplier<V> valueSupplier) {
         final V newValue = Optional.ofNullable(this.getLast()).orElseGet(valueSupplier);
         return new AbstractMap.SimpleImmutableEntry<>(this.getFirst(), newValue);
+    }
+
+    /**
+     * Returns new {@link Entry} instance
+     *
+     * @return new {@link Entry} instance
+     */
+    @NotNull
+    public Supplier<Entry<K, V>> supplier() {
+        return () -> DefaultEntry.of(this.getFirst(), this.getLast());
     }
 
     /**

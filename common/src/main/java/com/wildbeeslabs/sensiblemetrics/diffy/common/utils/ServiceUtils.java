@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
 import java.io.Closeable;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
@@ -88,6 +89,22 @@ public class ServiceUtils {
      * Default counter decrement by one
      */
     public static final IntUnaryOperator DECREMENT = i -> i - 1;
+
+    @NonNull
+    public static <K, V> BinaryOperator<Map<K, V>> combinerFirst() {
+        return (map1, map2) -> {
+            map2.forEach((k, v) -> map1.merge(k, v, (v1, v2) -> v1));
+            return map1;
+        };
+    }
+
+    @NotNull
+    public static <K, V> BinaryOperator<Map<K, V>> combinerLast() {
+        return (map1, map2) -> {
+            map2.forEach((k, v) -> map1.merge(k, v, (v1, v2) -> v2));
+            return map1;
+        };
+    }
 
     /**
      * Default completable {@link BiConsumer} action

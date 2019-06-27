@@ -187,6 +187,10 @@ public interface Entry<K, V> extends Serializable {
      */
     @NonNull
     static <K, V, R extends Entry<K, V>> R[] of(final K[] keys, final V[] values, final BiFunction<K, V, R> operator) {
+        ValidationUtils.notNull(keys, "Keys should not be null");
+        ValidationUtils.notNull(values, "Values should not be null");
+        ValidationUtils.notNull(operator, "Operator should not be null");
+
         final R[] result = (R[]) new Entry[keys.length];
         Arrays.setAll(result, i -> operator.apply(keys[i], values[i]));
         return result;
@@ -254,7 +258,7 @@ public interface Entry<K, V> extends Serializable {
     /**
      * Constructs new {@link Function} from the specified <code>Function</code>.
      *
-     * @param entry - initial input {@link Function} to constructor from
+     * @param function - initial input {@link Function} to construct from
      * @throws IllegalArgumentException if the function is null
      */
     static <K, V> Function<K, Entry<K, V>> toEntry(final Function<K, V> function) {

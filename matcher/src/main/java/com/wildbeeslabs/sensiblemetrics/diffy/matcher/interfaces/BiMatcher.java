@@ -37,10 +37,7 @@ import lombok.NonNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -358,6 +355,17 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     default <R extends Entry<T, T>> boolean anyMatch(@Nullable final Iterable<R> values) {
         return ServiceUtils.listOf(values).stream().anyMatch(v -> this.matches(v.getFirst(), v.getLast()));
+    }
+
+    /**
+     * Returns {@link BinaryOperator} by input {@link BiMatcher} parameters
+     *
+     * @param <T> type of input element to be matched by operation
+     * @return {@link BinaryOperator}
+     */
+    @NonNull
+    static <T> BinaryOperator<BiMatcher<T>> combiner() {
+        return (matcher1, matcher2) -> andAll(matcher1, matcher2);
     }
 
     /**
