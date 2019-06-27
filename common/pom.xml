@@ -22,6 +22,9 @@
 
     <properties>
         <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.common.examples</exclude.packages>
+
+        <validation-api.version>2.0.1.Final</validation-api.version>
+        <commons-io.version>2.6</commons-io.version>
     </properties>
 
     <build>
@@ -207,4 +210,20 @@
             </build>
         </profile>
     </profiles>
+
+    <dependencies>
+        <!-- Javax validation library dependencies -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation-api.version}</version>
+        </dependency>
+
+        <!-- Commons-io library dependencies -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+    </dependencies>
 </project>

@@ -36,9 +36,12 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.zipOf;
 
 /**
  * Entry interface declaration
@@ -200,7 +203,7 @@ public interface Entry<K, V> extends Serializable {
      */
     @NonNull
     static <K, V> List<Entry<K, V>> of(final List<K> keys, final List<V> values) {
-        return ServiceUtils.zipOf(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+        return zipOf(keys, values).entrySet().stream().map(entry -> DefaultEntry.of(entry.getKey(), entry.getValue())).collect(Collectors.toList());
     }
 
     /**
@@ -246,5 +249,16 @@ public interface Entry<K, V> extends Serializable {
     static <K, V> Map.Entry<K, V> entryOf(final Entry<K, V> entry) {
         ValidationUtils.notNull(entry, "Entry should not be null");
         return new AbstractMap.SimpleImmutableEntry<>(entry.getFirst(), entry.getLast());
+    }
+
+    /**
+     * Constructs new {@link Function} from the specified <code>Function</code>.
+     *
+     * @param entry - initial input {@link Function} to constructor from
+     * @throws IllegalArgumentException if the function is null
+     */
+    static <K, V> Function<K, Entry<K, V>> toEntry(final Function<K, V> function) {
+        ValidationUtils.notNull(function, "Function should not be null");
+        return key -> DefaultEntry.of(key, function.apply(key));
     }
 }

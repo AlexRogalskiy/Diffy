@@ -670,7 +670,7 @@ public class ServiceUtils {
         return (T[][]) Array.newInstance(type, rowCount, colCount);
     }
 
-    public static <T> T getInstance(@NonNull final Class<? extends T> type) {
+    public static <T> T getInstance(final Class<? extends T> type) {
         ValidationUtils.notNull(type, "Class type should not be null");
         try {
             return type.getDeclaredConstructor().newInstance();

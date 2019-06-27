@@ -30,6 +30,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.common {
     requires jackson.dataformat.msgpack;
     requires com.fasterxml.jackson.datatype.jdk8;
     requires com.fasterxml.jackson.datatype.jsr310;
+    requires java.validation;
 
     // exports common annotation
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.annotation;

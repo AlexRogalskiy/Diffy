@@ -44,6 +44,7 @@ import java.io.IOException;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class JsonMatcher<T> extends AbstractTypeSafeMatcher<T> {
     private final Matcher<? super ReadContext> jsonMatcher;
 
