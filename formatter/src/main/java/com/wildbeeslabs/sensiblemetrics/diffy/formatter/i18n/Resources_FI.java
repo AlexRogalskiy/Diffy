@@ -27,10 +27,12 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit.DayTimeUnit;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.resources.BaseResourceBundle;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces.TimeFormatProvider;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.service.SimpleTimeFormat;
 import lombok.*;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -46,8 +48,24 @@ import java.util.concurrent.ConcurrentMap;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Resources_FI extends Resources implements TimeFormatProvider {
-
+    /**
+     * Default tolerance constant
+     */
     private static final int tolerance = 50;
+    /**
+     * Default {@link Locale} {@code "FI"}
+     */
+    private static final Locale LOCALE = new Locale("fi");
+    /**
+     * Default {@link Resources_FI} instance
+     */
+    private static final Resources_FI INSTANCE = new Resources_FI();
+
+    private Object[][] resources;
+
+    private Resources_FI() {
+        this.loadResources();
+    }
 
     private static final Object[][] CONTENTS = new Object[][]{
         {"JustNowPattern", "%u"},
@@ -248,5 +266,21 @@ public class Resources_FI extends Resources implements TimeFormatProvider {
         private String getUnitName(final TimeMeasure unit) {
             return unit.getClass().getSimpleName();
         }
+    }
+
+    /**
+     * Loads {@link BaseResourceBundle} items
+     */
+    public void loadResources() {
+        this.resources = BaseResourceBundle.getInstance(LOCALE).getResources();
+    }
+
+    /**
+     * Returns new {@link Resources_FI}
+     *
+     * @return new {@link Resources_FI}
+     */
+    public static Resources_FI getInstance() {
+        return INSTANCE;
     }
 }

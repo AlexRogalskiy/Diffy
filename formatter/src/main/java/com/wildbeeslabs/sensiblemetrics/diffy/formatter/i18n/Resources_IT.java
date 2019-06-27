@@ -23,9 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.formatter.i18n;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.resources.BaseResourceBundle;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Locale;
 
 /**
  * Default resources bundle [IT]
@@ -38,6 +41,20 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Resources_IT extends Resources {
+    /**
+     * Default {@link Locale} {@code "IT"}
+     */
+    private static final Locale LOCALE = new Locale("it");
+    /**
+     * Default {@link Resources_IT} instance
+     */
+    private static final Resources_IT INSTANCE = new Resources_IT();
+
+    private Object[][] resources;
+
+    private Resources_IT() {
+        this.loadResources();
+    }
 
     private static final Object[][] OBJECTS = new Object[][]{
         {"CenturyPattern", "%n %u"},
@@ -136,8 +153,19 @@ public class Resources_IT extends Resources {
         {"AbstractTimeUnitSingularName", ""},
         {"AbstractTimeUnitPluralName", ""}};
 
-    @Override
-    protected Object[][] getResources() {
-        return Resources_IT.OBJECTS;
+    /**
+     * Loads {@link BaseResourceBundle} items
+     */
+    public void loadResources() {
+        this.resources = BaseResourceBundle.getInstance(LOCALE).getResources();
+    }
+
+    /**
+     * Returns new {@link Resources_IT}
+     *
+     * @return new {@link Resources_IT}
+     */
+    public static Resources_IT getInstance() {
+        return INSTANCE;
     }
 }

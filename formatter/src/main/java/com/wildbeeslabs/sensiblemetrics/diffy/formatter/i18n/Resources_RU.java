@@ -27,11 +27,14 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit.*;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.resources.BaseResourceBundle;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces.TimeFormatProvider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Locale;
 
 /**
  * Default resources bundle [RU]
@@ -44,6 +47,20 @@ import org.apache.commons.lang3.StringUtils;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Resources_RU extends Resources implements TimeFormatProvider {
+    /**
+     * Default {@link Locale} {@code "RU"}
+     */
+    private static final Locale LOCALE = new Locale("ru");
+    /**
+     * Default {@link Resources_RU} instance
+     */
+    private static final Resources_RU INSTANCE = new Resources_RU();
+
+    private Object[][] resources;
+
+    private Resources_RU() {
+        this.loadResources();
+    }
 
     private static final Object[][] OBJECTS = new Object[0][0];
     private static final int tolerance = 50;
@@ -177,5 +194,21 @@ public class Resources_RU extends Resources implements TimeFormatProvider {
             return new TimeFormatAided("год", "года", "лет");
         }
         return null;
+    }
+
+    /**
+     * Loads {@link BaseResourceBundle} items
+     */
+    public void loadResources() {
+        this.resources = BaseResourceBundle.getInstance(LOCALE).getResources();
+    }
+
+    /**
+     * Returns new {@link Resources_RU}
+     *
+     * @return new {@link Resources_RU}
+     */
+    public static Resources_RU getInstance() {
+        return INSTANCE;
     }
 }

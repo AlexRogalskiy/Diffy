@@ -27,11 +27,14 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit.*;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.resources.BaseResourceBundle;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces.TimeFormatProvider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Locale;
 
 /**
  * Default resources bundle [KK]
@@ -44,12 +47,19 @@ import org.apache.commons.lang3.StringUtils;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Resources_KK extends Resources implements TimeFormatProvider {
+    /**
+     * Default {@link Locale} {@code "KK"}
+     */
+    private static final Locale LOCALE = new Locale("kk");
+    /**
+     * Default {@link Resources_KK} instance
+     */
+    private static final Resources_KK INSTANCE = new Resources_KK();
 
-    private static final Object[][] OBJECTS = new Object[0][0];
+    private Object[][] resources;
 
-    @Override
-    protected Object[][] getResources() {
-        return Resources_KK.OBJECTS;
+    private Resources_KK() {
+        this.loadResources();
     }
 
     private static class KkTimeFormat implements TimeFormat {
@@ -175,5 +185,21 @@ public class Resources_KK extends Resources implements TimeFormatProvider {
             return new KkTimeFormat("жыл", "жылдан");
         }
         return null;
+    }
+
+    /**
+     * Loads {@link BaseResourceBundle} items
+     */
+    public void loadResources() {
+        this.resources = BaseResourceBundle.getInstance(LOCALE).getResources();
+    }
+
+    /**
+     * Returns new {@link Resources_KK}
+     *
+     * @return new {@link Resources_KK}
+     */
+    public static Resources_KK getInstance() {
+        return INSTANCE;
     }
 }

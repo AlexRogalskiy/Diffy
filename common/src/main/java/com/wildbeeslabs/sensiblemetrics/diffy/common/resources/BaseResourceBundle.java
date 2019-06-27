@@ -23,63 +23,84 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.resources;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 
 /**
- * Default base resource bundle implementation
+ * Base {@link ListResourceBundle} implementation
  *
  * @author Alex
  * @version 1.0.0
  * @since 2017-08-07
  */
-@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class BaseResourceBundle extends ListResourceBundle {
+    /**
+     * Default bundle source {@link String}
+     */
+    protected static final String DEFAULT_BUNDLE_SOURCE = "i18n";
+    /**
+     * Default bundle source {@link String}
+     */
+    protected static final String DEFAULT_BUNDLE_NAME = "messages";
+    /**
+     * Default bundle {@link Locale}
+     */
+    protected static final Locale DEFAULT_BUNDLE_LOCALE = Locale.ENGLISH;
+    /**
+     * Default bundle {@link Control}
+     */
+    protected static final Control DEFAULT_BUNDLE_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_PROPERTIES);
 
     /**
-     * Default bundle source
+     * Default bundle {@link String}
      */
-    protected static final String DEFAULT_BUNDLE_SOURCE = "/src/main/resources/i18n";
+    protected final String source;
     /**
-     * Default bundle locale
+     * Default bundle {@link Locale}
      */
-    protected static final Locale DEFAULT_BUNDLE_LOCALE = Locale.US;
+    protected final Locale locale;
     /**
-     * Default bundle source
+     * Default bundle {@link Control}
      */
-    protected String source;
-    /**
-     * Default bundle locale
-     */
-    protected Locale locale;
+    protected final Control control;
+
     /**
      * Default resource properties
      */
     protected ResourceBundle resources = null;
 
     public BaseResourceBundle() {
-        this(BaseResourceBundle.DEFAULT_BUNDLE_LOCALE);
+        this(DEFAULT_BUNDLE_LOCALE);
     }
 
     public BaseResourceBundle(final Locale locale) {
-        this(BaseResourceBundle.DEFAULT_BUNDLE_SOURCE, locale);
+        this(DEFAULT_BUNDLE_NAME, locale);
     }
 
     public BaseResourceBundle(final String source, final Locale locale) {
-        this.source = source;
-        this.locale = locale;
+        this(source, locale, DEFAULT_BUNDLE_CONTROL);
+    }
+
+    public BaseResourceBundle(final String source, final Locale locale, final Control control) {
+        this.source = Optional.ofNullable(source).orElse(DEFAULT_BUNDLE_NAME);
+        this.locale = Optional.ofNullable(locale).orElse(DEFAULT_BUNDLE_LOCALE);
+        this.control = Optional.ofNullable(control).orElse(DEFAULT_BUNDLE_CONTROL);
+        this.loadResources();
     }
 
     protected void loadResources() {
-        this.resources = ResourceBundle.getBundle(this.source, this.locale);
+        final URL[] url = {BaseResourceBundle.class.getClassLoader().getResource(DEFAULT_BUNDLE_SOURCE)};
+        this.resources = ResourceBundle.getBundle(this.source, this.locale, new URLClassLoader(url));
     }
 
     public String getBundleName() {
@@ -100,16 +121,62 @@ public class BaseResourceBundle extends ListResourceBundle {
         return this.resources.containsKey(key);
     }
 
-    //    public Object[][] getContents() {
-//        return this.getProperties().stream().map((item) -> item.toArray()).collect(CCollectionUtils.toArray(Object[][]::new));
-//    }
+    public Object[] getKeysAsArray() {
+        return this.resources.keySet().stream().filter(Objects::nonNull).toArray(Object[]::new);
+    }
+
+    public Object[] getValuesAsArray() {
+        return this.resources.keySet().stream().filter(Objects::nonNull).map(key -> this.resources.getObject(key)).toArray(Object[]::new);
+    }
+
+    public Object[][] getResources() {
+        return this.getContents();
+    }
+
+    @Override
     public Enumeration<String> getKeys() {
-        return (Enumeration<String>) this.resources.getKeys();
+        return this.resources.getKeys();
     }
 
     @Override
     protected Object[][] getContents() {
-        return (Object[][]) this.resources.keySet().stream().filter(Objects::nonNull).map((item) -> new Object[]{item, this.resources.getObject(item)}).toArray();
+        return this.resources.keySet().stream().filter(Objects::nonNull).map(key -> new Object[]{key, this.resources.getObject(key)}).toArray(Object[][]::new);
+    }
+
+    /**
+     * Returns new {@link BaseResourceBundle} instance by input parameters
+     *
+     * @param locale - initial input {@link Locale}
+     * @return new {@link BaseResourceBundle} instance
+     */
+    @Factory
+    public static BaseResourceBundle getInstance(final Locale locale) {
+        return new BaseResourceBundle(locale);
+    }
+
+    /**
+     * Returns new {@link BaseResourceBundle} instance by input parameters
+     *
+     * @param source - initial input {@link String}
+     * @param locale - initial input {@link Locale}
+     * @param loader - initial input {@link ClassLoader}
+     * @return new {@link BaseResourceBundle} instance
+     */
+    @Factory
+    public static BaseResourceBundle getInstance(final String source, final Locale locale, final ClassLoader loader) {
+        return BaseResourceBundle.getInstance(source, locale, loader);
+    }
+
+    /**
+     * Returns new {@link BaseResourceBundle} instance by input parameters
+     *
+     * @param source - initial input {@link String}
+     * @param locale - initial input {@link Locale}
+     * @return new {@link BaseResourceBundle} instance
+     */
+    @Factory
+    public static ResourceBundle getInstance(final String source, final Locale locale) {
+        return new BaseResourceBundle(source, locale);
     }
 
     public static Control getMyControl() {

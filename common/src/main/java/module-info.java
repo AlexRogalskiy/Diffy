@@ -65,6 +65,8 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.common {
     // exports common property
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.property.enumeration;
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.property.impl;
+    // exports common resources
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.resources;
     // exports common executor
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.configuration;
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.factory;

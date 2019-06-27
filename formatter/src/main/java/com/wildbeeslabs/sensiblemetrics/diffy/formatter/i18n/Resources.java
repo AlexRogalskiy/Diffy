@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.formatter.i18n;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.service.SimpleTimeFormat;
@@ -199,6 +200,13 @@ public abstract class Resources extends ListResourceBundle {
             return getInstance(this.clazz);
         }
 
+        /**
+         * Returns {@link CsTimeFormat} by input {@link ResourceBundle}
+         *
+         * @param bundle - initial input {@link ResourceBundle} instance
+         * @return {@link CsTimeFormat}
+         */
+        @Factory
         public CsTimeFormat build(final ResourceBundle bundle) {
             return new CsTimeFormat(this.resourceKeyPrefix, bundle, this.names);
         }

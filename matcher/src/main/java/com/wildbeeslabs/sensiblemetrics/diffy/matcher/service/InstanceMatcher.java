@@ -44,6 +44,7 @@ import static java.lang.String.join;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class InstanceMatcher extends AbstractMatcher<Object> {
 
     /**

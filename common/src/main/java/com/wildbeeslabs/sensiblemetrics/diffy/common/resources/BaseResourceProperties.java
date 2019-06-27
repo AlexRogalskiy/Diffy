@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.resources;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -34,6 +36,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.listOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
 
 /**
  * Default base resource properties implementation
@@ -66,6 +69,10 @@ public class BaseResourceProperties extends Properties {
         }
     }
 
+    public void removeProperties(final Object... keys) {
+        streamOf(keys).forEach(this::removeProperty);
+    }
+
     public boolean removeProperty(final Object key) {
         if (Objects.nonNull(key)) {
             this.defaults.remove(key);
@@ -82,6 +89,7 @@ public class BaseResourceProperties extends Properties {
     }
 
     public void loadProperties(final String source) {
+        ValidationUtils.notNull(source, "Source should not be null");
         try (final InputStream in = this.getClass().getClassLoader().getResourceAsStream(source)) {
             this.defaults.load(in);
         } catch (IOException ex) {
@@ -103,5 +111,15 @@ public class BaseResourceProperties extends Properties {
 
     public void clearProperties() {
         this.defaults.clear();
+    }
+
+    /**
+     * Returns new instance {@link BaseResourceProperties}
+     *
+     * @return new instance {@link BaseResourceProperties}
+     */
+    @Factory
+    public static BaseResourceProperties getInstance() {
+        return new BaseResourceProperties();
     }
 }

@@ -28,11 +28,13 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit.DecadeTimeUnit;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit.MillenniumTimeUnit;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.resources.BaseResourceBundle;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces.TimeFormatProvider;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,6 +52,20 @@ import java.util.concurrent.ConcurrentMap;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Resources_JA extends Resources implements TimeFormatProvider {
+    /**
+     * Default {@link Locale} {@code "JA"}
+     */
+    private static final Locale LOCALE = new Locale("ja");
+    /**
+     * Default {@link Resources_JA} instance
+     */
+    private static final Resources_JA INSTANCE = new Resources_JA();
+
+    private Object[][] resources;
+
+    private Resources_JA() {
+        this.loadResources();
+    }
 
     private static final Object[][] OBJECTS = new Object[][]{
         {"CenturyPattern", "%n%u"},
@@ -379,5 +395,21 @@ public class Resources_JA extends Resources implements TimeFormatProvider {
             this.pastPluralName = pastPluralName;
             return this;
         }
+    }
+
+    /**
+     * Loads {@link BaseResourceBundle} items
+     */
+    public void loadResources() {
+        this.resources = BaseResourceBundle.getInstance(LOCALE).getResources();
+    }
+
+    /**
+     * Returns new {@link Resources_JA}
+     *
+     * @return new {@link Resources_JA}
+     */
+    public static Resources_JA getInstance() {
+        return INSTANCE;
     }
 }

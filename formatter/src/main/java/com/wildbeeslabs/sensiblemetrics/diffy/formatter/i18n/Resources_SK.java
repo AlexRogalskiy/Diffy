@@ -26,10 +26,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.formatter.i18n;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit.*;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.resources.BaseResourceBundle;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces.TimeFormatProvider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Locale;
 
 /**
  * Default resources bundle [SK]
@@ -42,6 +45,20 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Resources_SK extends Resources implements TimeFormatProvider {
+    /**
+     * Default {@link Locale} {@code "SK"}
+     */
+    private static final Locale LOCALE = new Locale("sk");
+    /**
+     * Default {@link Resources_SK} instance
+     */
+    private static final Resources_SK INSTANCE = new Resources_SK();
+
+    private Object[][] resources;
+
+    private Resources_SK() {
+        this.loadResources();
+    }
 
     private static final Object[][] OBJECTS = new Object[][]{
         {"CenturyPattern", "%n %u"},
@@ -205,5 +222,21 @@ public class Resources_SK extends Resources implements TimeFormatProvider {
                 .build(this);
         }
         return null;
+    }
+
+    /**
+     * Loads {@link BaseResourceBundle} items
+     */
+    public void loadResources() {
+        this.resources = BaseResourceBundle.getInstance(LOCALE).getResources();
+    }
+
+    /**
+     * Returns new {@link Resources_SK}
+     *
+     * @return new {@link Resources_SK}
+     */
+    public static Resources_SK getInstance() {
+        return INSTANCE;
     }
 }

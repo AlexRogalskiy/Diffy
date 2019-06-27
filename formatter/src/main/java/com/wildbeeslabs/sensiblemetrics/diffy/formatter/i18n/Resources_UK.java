@@ -27,11 +27,14 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeFormat;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.TimeMeasure;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit.*;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.resources.BaseResourceBundle;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces.TimeFormatProvider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Locale;
 
 /**
  * Default resources bundle [UK]
@@ -44,6 +47,20 @@ import org.apache.commons.lang3.StringUtils;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Resources_UK extends Resources implements TimeFormatProvider {
+    /**
+     * Default {@link Locale} {@code "UK"}
+     */
+    private static final Locale LOCALE = new Locale("uk");
+    /**
+     * Default {@link Resources_UK} instance
+     */
+    private static final Resources_UK INSTANCE = new Resources_UK();
+
+    private Object[][] resources;
+
+    private Resources_UK() {
+        this.loadResources();
+    }
 
     private static final Object[][] OBJECTS = new Object[0][0];
     private static final int tolerance = 50;
@@ -78,7 +95,7 @@ public class Resources_UK extends Resources implements TimeFormatProvider {
         }
 
         @Override
-        public String decorate(final Duration duration, String time) {
+        public String decorate(final Duration duration, final String time) {
             return performDecoration(
                 duration.isInPast(),
                 duration.isInFuture(),
@@ -87,7 +104,7 @@ public class Resources_UK extends Resources implements TimeFormatProvider {
         }
 
         @Override
-        public String decorateUnrounded(final Duration duration, String time) {
+        public String decorateUnrounded(final Duration duration, final String time) {
             return performDecoration(
                 duration.isInPast(),
                 duration.isInFuture(),
@@ -95,7 +112,7 @@ public class Resources_UK extends Resources implements TimeFormatProvider {
                 time);
         }
 
-        private String performDecoration(boolean past, boolean future, long quantity, String time) {
+        private String performDecoration(boolean past, boolean future, long quantity, final String time) {
             // consider http://translate.sourceforge.net/wiki/l10n/pluralforms
             int pluralIdx = (quantity % 10 == 1 && quantity % 100 != 11 ? 0 : (quantity % 10 >= 2 && quantity % 10 <= 4 && (quantity % 100 < 10 || quantity % 100 >= 20)) ? 1 : 2);
             if (pluralIdx > Resources_UK.slavicPluralForms) {
@@ -178,5 +195,21 @@ public class Resources_UK extends Resources implements TimeFormatProvider {
             return new TimeFormatAided("рік", "роки", "років");
         }
         return null;
+    }
+
+    /**
+     * Loads {@link BaseResourceBundle} items
+     */
+    public void loadResources() {
+        this.resources = BaseResourceBundle.getInstance(LOCALE).getResources();
+    }
+
+    /**
+     * Returns new {@link Resources_UK}
+     *
+     * @return new {@link Resources_UK}
+     */
+    public static Resources_UK getInstance() {
+        return INSTANCE;
     }
 }
