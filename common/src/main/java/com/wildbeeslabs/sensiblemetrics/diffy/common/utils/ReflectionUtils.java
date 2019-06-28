@@ -43,15 +43,11 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
-import java.util.Collections;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.sanitize;
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -241,6 +237,7 @@ public class ReflectionUtils {
      * @return type of the supplied argument {@link Member}
      */
     public static Type typeOf(@NonNull final Member member) {
+        ValidationUtils.notNull(member, "Member should not be null");
         if (member instanceof Field) {
             return ((Field) member).getGenericType();
         }
@@ -257,7 +254,8 @@ public class ReflectionUtils {
      * @param clazz - class to reflect on {@link Class}
      * @return list of super-classes of the supplied {@link Class}
      */
-    public static List<Class<?>> getAllSuperclasses(@NonNull final Class<?> clazz) {
+    public static List<Class<?>> getAllSuperclasses(final Class<?> clazz) {
+        ValidationUtils.notNull(clazz, "Class type should not be null");
         final List<Class<?>> classes = new ArrayList<>();
         Class<?> superclass = clazz.getSuperclass();
         while (Objects.nonNull(superclass)) {
@@ -396,7 +394,9 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has subclass implementation, false - otherwise
      */
-    public static boolean isSubClass(@NonNull final Method parent, @NonNull final Method toCheck) {
+    public static boolean isSubClass(final Method parent, final Method toCheck) {
+        ValidationUtils.notNull(parent, "Parent method should not be null");
+        ValidationUtils.notNull(toCheck, "Checked method should not be null");
         return parent.getDeclaringClass().isAssignableFrom(toCheck.getDeclaringClass());
     }
 
@@ -407,7 +407,9 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has same name, false - otherwise
      */
-    public static boolean sameMethodName(@NonNull final Method parent, @NonNull final Method toCheck) {
+    public static boolean sameMethodName(final Method parent, @NonNull final Method toCheck) {
+        ValidationUtils.notNull(parent, "Parent method should not be null");
+        ValidationUtils.notNull(toCheck, "Checked method should not be null");
         return parent.getName().equals(toCheck.getName());
     }
 
@@ -418,7 +420,9 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has covariant return type, false - otherwise
      */
-    public static boolean returnTypeCovariant(@NonNull final Method parent, @NonNull final Method toCheck) {
+    public static boolean returnTypeCovariant(final Method parent, final Method toCheck) {
+        ValidationUtils.notNull(parent, "Parent method should not be null");
+        ValidationUtils.notNull(toCheck, "Checked method should not be null");
         return parent.getReturnType().isAssignableFrom(toCheck.getReturnType());
     }
 
@@ -429,7 +433,9 @@ public class ReflectionUtils {
      * @param toCheck - initial method type to be checked {@link Method}
      * @return true - if method has same arguments, false - otherwise
      */
-    public static boolean sameArguments(@NonNull final Method parent, @NonNull final Method toCheck) {
+    public static boolean sameArguments(final Method parent, final Method toCheck) {
+        ValidationUtils.notNull(parent, "Parent method should not be null");
+        ValidationUtils.notNull(toCheck, "Checked method should not be null");
         return Arrays.equals(parent.getParameterTypes(), toCheck.getParameterTypes());
     }
 

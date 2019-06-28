@@ -48,9 +48,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import java.util.stream.*;
 import java.util.zip.GZIPInputStream;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -709,5 +707,30 @@ public class StringUtils {
         }
         return (bytes[0] == (byte) GZIPInputStream.GZIP_MAGIC)
             && (bytes[1] == (byte) (GZIPInputStream.GZIP_MAGIC >>> Byte.SIZE));
+    }
+
+    public static List<String> toBinaryString(final IntStream stream) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        return stream.mapToObj(n -> Integer.toBinaryString(n)).collect(Collectors.toList());
+    }
+
+    public static Collection<Double> toDouble(final Stream<String> stream) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        return stream.flatMapToDouble(n -> DoubleStream.of(Double.parseDouble(n))).boxed().collect(Collectors.toList());
+    }
+
+    public static Collection<Integer> toInt(final Stream<String> stream) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        return stream.flatMapToInt(n -> IntStream.of(Integer.parseInt(n))).boxed().collect(Collectors.toList());
+    }
+
+    public static Collection<Long> toLong(final Stream<String> stream) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        return stream.flatMapToLong(n -> LongStream.of(Long.parseLong(n))).boxed().collect(Collectors.toList());
+    }
+
+    public static Collection<Character> toCodePoints(final String value) {
+        ValidationUtils.notNull(value, "Value should not be null");
+        return value.codePoints().mapToObj(c -> (char) c).collect(Collectors.toList());
     }
 }

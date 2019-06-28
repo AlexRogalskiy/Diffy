@@ -90,6 +90,24 @@ public class ServiceUtils {
      */
     public static final IntUnaryOperator DECREMENT = i -> i - 1;
 
+    /**
+     * Returns {@link BiConsumer} by input parameters
+     *
+     * @param size - initial input range size
+     * @return {@link BiConsumer}
+     */
+    @NonNull
+    public static BiConsumer<Map<Integer, Integer>, Double> accumulator(final int size) {
+        return (map, val) -> map.merge((int) (val / size), 1, (a, b) -> a + 1);
+    }
+
+    /**
+     * Returns {@link BinaryOperator}
+     *
+     * @param <K> type of key item
+     * @param <V> type of value item
+     * @return {@link BinaryOperator}
+     */
     @NonNull
     public static <K, V> BinaryOperator<Map<K, V>> combinerFirst() {
         return (map1, map2) -> {
@@ -98,12 +116,30 @@ public class ServiceUtils {
         };
     }
 
+    /**
+     * Returns {@link BinaryOperator}
+     *
+     * @param <K> type of key item
+     * @param <V> type of value item
+     * @return {@link BinaryOperator}
+     */
     @NotNull
     public static <K, V> BinaryOperator<Map<K, V>> combinerLast() {
         return (map1, map2) -> {
             map2.forEach((k, v) -> map1.merge(k, v, (v1, v2) -> v2));
             return map1;
         };
+    }
+
+    /**
+     * Returns {@link HashMap} {@link Supplier}
+     *
+     * @param <K> type of key item
+     * @param <V> type of value item
+     * @return {@link Supplier}
+     */
+    public static <K, V> Supplier<Map<K, V>> supplier() {
+        return HashMap::new;
     }
 
     /**
@@ -150,7 +186,7 @@ public class ServiceUtils {
     }
 
     /**
-     * Returns a {@link Collector} to create an unmodifiable {@link List}.
+     * Returns a {@link Collector} to create an unmodifiable {@link List}
      *
      * @return will never be {@literal null}.
      */
@@ -159,12 +195,26 @@ public class ServiceUtils {
     }
 
     /**
-     * Returns a {@link Collector} to create an unmodifiable {@link Set}.
+     * Returns a {@link Collector} to create an unmodifiable {@link Set}
      *
      * @return will never be {@literal null}.
      */
     public static <T> Collector<T, ?, Set<T>> toUnmodifiableSet() {
         return collectingAndThen(toSet(), Collections::unmodifiableSet);
+    }
+
+    /**
+     * Returns a {@link Collector} to create an unmodifiable {@link List}
+     *
+     * @return will never be {@literal null}.
+     */
+    public static <T, A extends List<T>> Collector<T, A, List<T>> toImmutableList(final Supplier<A> supplier) {
+        return Collector.of(
+            supplier,
+            List::add, (left, right) -> {
+                left.addAll(right);
+                return left;
+            }, Collections::unmodifiableList);
     }
 
     /**
@@ -183,6 +233,61 @@ public class ServiceUtils {
             BadOperationException.throwError(String.format("ERROR: cannot process enum type: {%s} by class: {%s}", enumType, propValue), e);
         }
         return null;
+    }
+
+    public static <K, V> Map<K, V> toCheckedMap(final Map rawMap, final Class<? extends K> keyType, final Class<? extends V> valueType, boolean strict) throws ClassCastException {
+        ValidationUtils.notNull(rawMap, "Raw map should not be null");
+        final Map<K, V> m2 = new HashMap<>(rawMap.size() * 4 / 3 + 1);
+        final Iterator it = rawMap.entrySet().iterator();
+        while (it.hasNext()) {
+            final Map.Entry e = (Map.Entry) it.next();
+            try {
+                m2.put(keyType.cast(e.getKey()), valueType.cast(e.getValue()));
+            } catch (ClassCastException ex) {
+                log.error(String.format("ERROR: cannot convert map key=%s, value=%s to key type=%s, key value=%s, message=%s", e.getKey(), e.getValue(), keyType, valueType, ex.getMessage()));
+                if (strict) {
+                    throw ex;
+                }
+            }
+        }
+        return m2;
+    }
+
+    /**
+     * @param <E>
+     * @param rawList
+     * @param type
+     * @param strict
+     * @return
+     * @throws ClassCastException
+     */
+    public static <E> List<E> toCheckedList(final List rawList, final Class<? extends E> type, boolean strict) throws ClassCastException {
+        ValidationUtils.notNull(rawList, "Raw list should not be null");
+        final List<E> l = (rawList instanceof RandomAccess) ? new ArrayList<>(rawList.size()) : new LinkedList<>();
+        final Iterator it = rawList.iterator();
+        while (it.hasNext()) {
+            final Object e = it.next();
+            try {
+                l.add(type.cast(e));
+            } catch (ClassCastException ex) {
+                log.error(String.format("ERROR: cannot convert list value=%s to type=%s, message=%s", e, type, ex.getMessage()));
+                if (strict) {
+                    throw ex;
+                }
+            }
+        }
+        return l;
+    }
+
+    public static <T, E extends T> void append(final Collection<T> collection1, final Collection<E> collection2, int count) {
+        ValidationUtils.notNull(collection1, "First collection should not be null");
+        ValidationUtils.notNull(collection2, "Last collection should not be null");
+        ValidationUtils.isTrue(count > 0, "Count should be positive");
+
+        final Iterator<E> it2 = collection2.iterator();
+        for (int i = 0; i < count && it2.hasNext(); i++) {
+            collection1.add(it2.next());
+        }
     }
 
     /**
@@ -553,7 +658,7 @@ public class ServiceUtils {
      * @param collector - initial input {@link Collector}
      * @return {@link Map} by input {@link Stream} partitioned by {@link Predicate}
      */
-    public static <T, A, M extends Collection<T>> Map<Boolean, M> partitionBy(@NonNull final Stream<T> stream, final Predicate<? super T> predicate, final Collector<T, A, M> collector) {
+    public static <T, A, M extends Collection<T>> Map<Boolean, M> partitionBy(final Stream<T> stream, final Predicate<? super T> predicate, final Collector<T, A, M> collector) {
         ValidationUtils.notNull(stream, "Stream should not be null!");
         ValidationUtils.notNull(predicate, "Predicate should not be null!");
         ValidationUtils.notNull(collector, "Collector should not be null!");
@@ -660,7 +765,7 @@ public class ServiceUtils {
             .iterator();
     }
 
-    public static <T> T[] newArray(@NonNull final Class<? extends T[]> type, int size) {
+    public static <T> T[] newArray(final Class<? extends T[]> type, int size) {
         ValidationUtils.notNull(type, "Class type should not be null");
         ValidationUtils.isTrue(size >= 0, "Size should be greater than or equal zero");
 
@@ -724,9 +829,14 @@ public class ServiceUtils {
     //Set<String>  set  = collect(opt, toSet());
     public static <R, A, T> R collect(final Optional<T> value, final Collector<? super T, A, R> collector) {
         ValidationUtils.notNull(collector, "Collector should not be null");
+
         final A container = collector.supplier().get();
         Optional.ofNullable(value).ifPresent(v -> collector.accumulator().accept(container, v.get()));
         return collector.finisher().apply(container);
+    }
+
+    public static <T> Stream<T> streamOf(final Collection<T> collection) {
+        return Optional.ofNullable(collection).map(Collection::stream).orElseGet(Stream::empty);
     }
 
     public static <T> List<Stream<T>> convertFlat(final List<Optional<T>> itemList) {

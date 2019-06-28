@@ -28,7 +28,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.cache.interfaces.Clock;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
 import java.util.*;
@@ -78,14 +77,13 @@ public class CacheService<K, V> {
         /**
          * Default cache {@code V} value
          */
-        @Getter
         private final V value;
         /**
          * Default access time
          */
         private volatile long accessTime;
         /**
-         * Default {@link clock} instance
+         * Default {@link Clock} instance
          */
         private final Clock clock;
 

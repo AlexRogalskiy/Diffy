@@ -21,47 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.util.Collection;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Collection size {@link AbstractMatcher} implementation
+ * Atomic implementation
  *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * @param <T> type of stored value
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class CollectionSizeMatcher<T extends Iterable<?>> extends AbstractMatcher<T> {
+public abstract class Atomic<T> {
+    /**
+     * Default value
+     */
+    private T value;
 
     /**
-     * Default explicit serialVersionUID for interoperability
+     * Default atomic state type
      */
-    private static final long serialVersionUID = 192869149014232374L;
+    private enum State {NEW, INITIALIZING, INITIALIZED}
+
+    private final AtomicReference<State> init = new AtomicReference<>(State.NEW);
 
     /**
-     * Default collection side
+     * Creates new atomic instance by input value
+     *
+     * @param value - initial input {@code T} value to store by
      */
-    private final int size;
-
-    public CollectionSizeMatcher(int size) {
-        this.size = size;
+    public Atomic(final T value) {
+        this.initialize(value);
     }
 
-    @Override
-    public boolean matches(final T target) {
-        if (target instanceof Collection) {
-            return ((Collection) target).size() == this.size;
+    protected final void initialize(final T value) {
+        if (!this.init.compareAndSet(State.NEW, State.INITIALIZING)) {
+            throw new IllegalStateException("ERROR: unexpected atomic state");
         }
-        return ServiceUtils.listOf((Iterable<T>) target).size() == this.size;
+        this.value = value;
+        //this.init.set(State.INITIALIZED);
+    }
+
+    protected final T getValue() {
+        this.checkInit();
+        return this.value;
+    }
+
+    private void checkInit() {
+        if (this.init.get() != State.INITIALIZED) {
+            throw new IllegalStateException("ERROR: atomic is not initialized");
+        }
     }
 }
+

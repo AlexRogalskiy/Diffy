@@ -21,47 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.util.Collection;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
- * Collection size {@link AbstractMatcher} implementation
+ * Default {@link Atomic} implementation
  *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * @param <T> type of stored value
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@SuppressWarnings("unchecked")
-public class CollectionSizeMatcher<T extends Iterable<?>> extends AbstractMatcher<T> {
-
+public class DefaultAtomic<T> extends Atomic<T> implements Serializable {
     /**
      * Default explicit serialVersionUID for interoperability
      */
-    private static final long serialVersionUID = 192869149014232374L;
+    private static final long serialVersionUID = -5144778766505005160L;
 
     /**
-     * Default collection side
+     * Default atomic constructor by input parameters
+     *
+     * @param value - initial input {@code T] value
      */
-    private final int size;
-
-    public CollectionSizeMatcher(int size) {
-        this.size = size;
+    public DefaultAtomic(final T value) {
+        super(value);
     }
 
-    @Override
-    public boolean matches(final T target) {
-        if (target instanceof Collection) {
-            return ((Collection) target).size() == this.size;
-        }
-        return ServiceUtils.listOf((Iterable<T>) target).size() == this.size;
+    private void readObject(final ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        final T value = (T) stream.readObject();
+        this.initialize(value);
+    }
+
+    private void writeObject(final ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+        stream.writeObject(this.getValue());
     }
 }
