@@ -58,6 +58,9 @@ public class Resources_KK extends Resources implements TimeFormatProvider {
 
     private Object[][] resources;
 
+    /**
+     * Default resources constructor
+     */
     private Resources_KK() {
         this.loadResources();
     }

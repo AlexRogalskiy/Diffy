@@ -58,6 +58,9 @@ public class Resources_RU extends Resources implements TimeFormatProvider {
 
     private Object[][] resources;
 
+    /**
+     * Default resources constructor
+     */
     private Resources_RU() {
         this.loadResources();
     }

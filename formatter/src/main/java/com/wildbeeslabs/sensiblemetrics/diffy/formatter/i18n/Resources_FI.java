@@ -63,95 +63,12 @@ public class Resources_FI extends Resources implements TimeFormatProvider {
 
     private Object[][] resources;
 
+    /**
+     * Default resources constructor
+     */
     private Resources_FI() {
         this.loadResources();
     }
-
-    private static final Object[][] CONTENTS = new Object[][]{
-        {"JustNowPattern", "%u"},
-        {"JustNowPastSingularName", "hetki"},
-        {"JustNowFutureSingularName", "hetken"},
-        {"JustNowPastSuffix", "sitten"},
-        {"JustNowFutureSuffix", "päästä"},
-        {"MillisecondPattern", "%u"},
-        {"MillisecondPluralPattern", "%n %u"},
-        {"MillisecondPastSingularName", "millisekunti"},
-        {"MillisecondPastPluralName", "millisekuntia"},
-        {"MillisecondFutureSingularName", "millisekunnin"},
-        {"MillisecondPastSuffix", "sitten"},
-        {"MillisecondFutureSuffix", "päästä"},
-        {"SecondPattern", "%u"},
-        {"SecondPluralPattern", "%n %u"},
-        {"SecondPastSingularName", "sekunti"},
-        {"SecondPastPluralName", "sekuntia"},
-        {"SecondFutureSingularName", "sekunnin"},
-        {"SecondPastSuffix", "sitten"},
-        {"SecondFutureSuffix", "päästä"},
-        {"MinutePattern", "%u"},
-        {"MinutePluralPattern", "%n %u"},
-        {"MinutePastSingularName", "minuutti"},
-        {"MinutePastPluralName", "minuuttia"},
-        {"MinuteFutureSingularName", "minuutin"},
-        {"MinutePastSuffix", "sitten"},
-        {"MinuteFutureSuffix", "päästä"},
-        {"HourPattern", "%u"},
-        {"HourPluralPattern", "%n %u"},
-        {"HourPastSingularName", "tunti"},
-        {"HourPastPluralName", "tuntia"},
-        {"HourFutureSingularName", "tunnin"},
-        {"HourPastSuffix", "sitten"},
-        {"HourFutureSuffix", "päästä"},
-        {"DayPattern", "%u"},
-        {"DayPluralPattern", "%n %u"},
-        {"DayPastSingularName", "eilen"},
-        {"DayPastPluralName", "päivää"},
-        {"DayFutureSingularName", "huomenna"},
-        {"DayFuturePluralName", "päivän"},
-        {"DayPastSuffix", "sitten"},
-        {"DayFutureSuffix", "päästä"},
-        {"WeekPattern", "%u"},
-        {"WeekPluralPattern", "%n %u"},
-        {"WeekPastSingularName", "viikko"},
-        {"WeekPastPluralName", "viikkoa"},
-        {"WeekFutureSingularName", "viikon"},
-        {"WeekFuturePluralName", "viikon"},
-        {"WeekPastSuffix", "sitten"},
-        {"WeekFutureSuffix", "päästä"},
-        {"MonthPattern", "%u"},
-        {"MonthPluralPattern", "%n %u"},
-        {"MonthPastSingularName", "kuukausi"},
-        {"MonthPastPluralName", "kuukautta"},
-        {"MonthFutureSingularName", "kuukauden"},
-        {"MonthPastSuffix", "sitten"},
-        {"MonthFutureSuffix", "päästä"},
-        {"YearPattern", "%u"},
-        {"YearPluralPattern", "%n %u"},
-        {"YearPastSingularName", "vuosi"},
-        {"YearPastPluralName", "vuotta"},
-        {"YearFutureSingularName", "vuoden"},
-        {"YearPastSuffix", "sitten"},
-        {"YearFutureSuffix", "päästä"},
-        {"DecadePattern", "%u"},
-        {"DecadePluralPattern", "%n %u"},
-        {"DecadePastSingularName", "vuosikymmen"},
-        {"DecadePastPluralName", "vuosikymmentä"},
-        {"DecadeFutureSingularName", "vuosikymmenen"},
-        {"DecadePastSuffix", "sitten"},
-        {"DecadeFutureSuffix", "päästä"},
-        {"CenturyPattern", "%u"},
-        {"CenturyPluralPattern", "%n %u"},
-        {"CenturyPastSingularName", "vuosisata"},
-        {"CenturyPastPluralName", "vuosisataa"},
-        {"CenturyFutureSingularName", "vuosisadan"},
-        {"CenturyPastSuffix", "sitten"},
-        {"CenturyFutureSuffix", "päästä"},
-        {"MillenniumPattern", "%u"},
-        {"MillenniumPluralPattern", "%n %u"},
-        {"MillenniumPastSingularName", "vuosituhat"},
-        {"MillenniumPastPluralName", "vuosituhatta"},
-        {"MillenniumFutureSingularName", "vuosituhannen"},
-        {"MillenniumPastSuffix", "sitten"},
-        {"MillenniumFutureSuffix", "päästä"},};
 
     private volatile ConcurrentMap<TimeMeasure, TimeFormat> formatMap = new ConcurrentHashMap<>();
 
@@ -161,11 +78,6 @@ public class Resources_FI extends Resources implements TimeFormatProvider {
             this.formatMap.putIfAbsent(timeUnit, new FiTimeFormat(this, timeUnit));
         }
         return this.formatMap.get(timeUnit);
-    }
-
-    @Override
-    protected Object[][] getResources() {
-        return Resources_FI.CONTENTS;
     }
 
     @Data
