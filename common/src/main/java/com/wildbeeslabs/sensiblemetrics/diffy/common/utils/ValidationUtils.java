@@ -192,6 +192,22 @@ public class ValidationUtils {
     }
 
     /**
+     * <p>Checks if a value is within a range (min &amp; max specified
+     * in the vars attribute).</p>
+     *
+     * @param index The value validation is being performed on.
+     * @param size  The minimum value of the range.
+     * @param desc  The maximum value of the range.
+     * @return true if the value is in the specified range.
+     */
+    public static int checkElementIndex(int index, int size, final String desc) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException(String.format("ERROR: index = {%s} out of bounds = {%s}, message = {%s}", index, size, desc));
+        }
+        return index;
+    }
+
+    /**
      * <p>Checks if the value's length is less than or equal to the max.</p>
      *
      * @param value The value validation is being performed on.

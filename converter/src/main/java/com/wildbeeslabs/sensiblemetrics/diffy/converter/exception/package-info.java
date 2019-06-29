@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-@ParametersAreNullableByDefault
-package com.wildbeeslabs.sensiblemetrics.diffy.processor;
+@ParametersAreNonnullByDefault
+package com.wildbeeslabs.sensiblemetrics.diffy.converter.exception;
 
-import javax.annotation.ParametersAreNullableByDefault;
+import javax.annotation.ParametersAreNonnullByDefault;
