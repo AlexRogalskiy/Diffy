@@ -25,7 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.formatter.utils;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.exception.ExcessiveOrMissingFormatArgumentException;
 import com.wildbeeslabs.sensiblemetrics.diffy.formatter.exception.IllegalFormatConversionCategoryException;
-import com.wildbeeslabs.sensiblemetrics.diffy.formatter.helpers.ConversionCategory;
+import com.wildbeeslabs.sensiblemetrics.diffy.formatter.enumeration.ConversionCategory;
 import lombok.experimental.UtilityClass;
 
 import java.util.*;

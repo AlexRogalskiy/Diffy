@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.formatter.utils;
+package com.wildbeeslabs.sensiblemetrics.diffy.formatter.helpers;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.TimeUnitType;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;

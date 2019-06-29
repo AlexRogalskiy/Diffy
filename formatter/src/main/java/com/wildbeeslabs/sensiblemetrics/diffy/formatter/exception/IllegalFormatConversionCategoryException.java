@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.formatter.exception;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.formatter.helpers.ConversionCategory;
+import com.wildbeeslabs.sensiblemetrics.diffy.formatter.enumeration.ConversionCategory;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

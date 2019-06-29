@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.constants;
 
 import com.google.common.base.Strings;
+import com.jayway.jsonpath.JsonPath;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.RegexUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
@@ -83,7 +84,11 @@ public enum StringMatcherType {
      */
     IS_IDENTIFIER(javax.lang.model.SourceVersion::isIdentifier),
     IS_KEYWORD(javax.lang.model.SourceVersion::isKeyword),
-    IS_NAME(javax.lang.model.SourceVersion::isName);
+    IS_NAME(javax.lang.model.SourceVersion::isName),
+    /**
+     * com.jayway.jsonpath.JsonPath
+     */
+    IS_DEFINITE_PATH(JsonPath::isPathDefinite);
 
     /**
      * String {@link Matcher} operator

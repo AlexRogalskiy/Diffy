@@ -1,4 +1,4 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.formatter.helpers;
+package com.wildbeeslabs.sensiblemetrics.diffy.formatter.enumeration;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
