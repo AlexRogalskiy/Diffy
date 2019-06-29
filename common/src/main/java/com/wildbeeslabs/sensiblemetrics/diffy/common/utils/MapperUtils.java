@@ -37,6 +37,7 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -376,5 +380,35 @@ public class MapperUtils {
     public static <T> byte[] writeUsingMessagePackAsBytes(final T value) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
         return objectMapper.writeValueAsBytes(value);
+    }
+
+    public static String parse(final Object obj) {
+        final StringWriter writer = new StringWriter();
+        try {
+            final JsonGenerator generator = objectMapper.getFactory().createGenerator(writer);
+            objectMapper.writeValue(generator, obj);
+            writer.flush();
+            writer.close();
+            generator.close();
+            return writer.getBuffer().toString();
+        } catch (IOException e) {
+            throw new InvalidFormatException(String.format("ERROR: cannot parse input value = {%s}", obj), e);
+        }
+    }
+
+    public static <T> T parse(final String json, final Class<T> clazz) {
+        try {
+            return objectMapper.reader().forType(clazz).readValue(json);
+        } catch (IOException e) {
+            throw new InvalidFormatException(String.format("ERROR: cannot parse input value = {%s}", json), e);
+        }
+    }
+
+    public static <T> T parse(final InputStream jsonStream, final Class<T> clazz, final String charset) {
+        try {
+            return objectMapper.reader().forType(clazz).readValue(new InputStreamReader(jsonStream, charset));
+        } catch (IOException e) {
+            throw new InvalidFormatException(String.format("ERROR: cannot parse input value = {%s} with charset = {%s}", jsonStream, charset), e);
+        }
     }
 }

@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.utils;
 
 import com.google.common.collect.ImmutableMap;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.Converter;
 import lombok.NonNull;
@@ -35,10 +36,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -600,5 +600,127 @@ public class ConverterUtils {
         } catch (NoSuchMethodException e) {
             return Optional.ofNullable(getTypeTransformer(newType)).map(c -> c.convert(value)).orElse(null);
         }
+    }
+
+    public static <T> Double toDouble(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        if (Double.class.isAssignableFrom(value.getClass())) {
+            return (Double) value;
+        } else if (Integer.class.isAssignableFrom(value.getClass())) {
+            return ((Integer) value).doubleValue();
+        } else if (Long.class.isAssignableFrom(value.getClass())) {
+            return ((Long) value).doubleValue();
+        } else if (BigDecimal.class.isAssignableFrom(value.getClass())) {
+            return ((BigDecimal) value).doubleValue();
+        } else if (Float.class.isAssignableFrom(value.getClass())) {
+            return ((Float) value).doubleValue();
+        } else if (String.class.isAssignableFrom(value.getClass())) {
+            return Double.valueOf(value.toString());
+        }
+        throw new InvalidFormatException(String.format("ERROR: cannot parse value = {%s} to {%s}", value, Double.class.getName()));
+    }
+
+    public static <T> Long toLong(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        if (Long.class.isAssignableFrom(value.getClass())) {
+            return (Long) value;
+        } else if (Integer.class.isAssignableFrom(value.getClass())) {
+            return ((Integer) value).longValue();
+        } else if (Double.class.isAssignableFrom(value.getClass())) {
+            return ((Double) value).longValue();
+        } else if (BigDecimal.class.isAssignableFrom(value.getClass())) {
+            return ((BigDecimal) value).longValue();
+        } else if (Float.class.isAssignableFrom(value.getClass())) {
+            return ((Float) value).longValue();
+        } else if (String.class.isAssignableFrom(value.getClass())) {
+            return Long.valueOf(value.toString());
+        }
+        throw new InvalidFormatException(String.format("ERROR: cannot parse value = {%s} to {%s}", value, Long.class.getName()));
+    }
+
+    public static <T> Integer toInteger(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        if (Integer.class.isAssignableFrom(value.getClass())) {
+            return (Integer) value;
+        } else if (Long.class.isAssignableFrom(value.getClass())) {
+            return ((Long) value).intValue();
+        } else if (Double.class.isAssignableFrom(value.getClass())) {
+            return ((Double) value).intValue();
+        } else if (BigDecimal.class.isAssignableFrom(value.getClass())) {
+            return ((BigDecimal) value).intValue();
+        } else if (Float.class.isAssignableFrom(value.getClass())) {
+            return ((Float) value).intValue();
+        } else if (String.class.isAssignableFrom(value.getClass())) {
+            return Integer.valueOf(value.toString());
+        }
+        throw new InvalidFormatException(String.format("ERROR: cannot parse value = {%s} to {%s}", value, Integer.class.getName()));
+    }
+
+    public static <T> Float toFloat(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        if (Float.class.isAssignableFrom(value.getClass())) {
+            return (Float) value;
+        } else if (Integer.class.isAssignableFrom(value.getClass())) {
+            return ((Integer) value).floatValue();
+        } else if (Long.class.isAssignableFrom(value.getClass())) {
+            return ((Long) value).floatValue();
+        } else if (BigDecimal.class.isAssignableFrom(value.getClass())) {
+            return ((BigDecimal) value).floatValue();
+        } else if (Double.class.isAssignableFrom(value.getClass())) {
+            return ((Double) value).floatValue();
+        } else if (String.class.isAssignableFrom(value.getClass())) {
+            return Float.valueOf(value.toString());
+        }
+        throw new InvalidFormatException(String.format("ERROR: cannot parse value = {%s} to {%s}", value, Float.class.getName()));
+    }
+
+    public static <T> BigDecimal toBigDecimal(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        return new BigDecimal(value.toString());
+    }
+
+    public static <T> Boolean toBoolean(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        if (Boolean.class.isAssignableFrom(value.getClass())) {
+            return (Boolean) value;
+        }
+        throw new InvalidFormatException(String.format("ERROR: cannot parse value = {%s} to {%s}", value, Boolean.class.getName()));
+    }
+
+    public static <T> Date toDate(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        if (Date.class.isAssignableFrom(value.getClass())) {
+            return (Date) value;
+        } else if (Long.class.isAssignableFrom(value.getClass())) {
+            return new Date((Long) value);
+        } else if (String.class.isAssignableFrom(value.getClass())) {
+            try {
+                return DateFormat.getInstance().parse(value.toString());
+            } catch (ParseException e) {
+                throw new InvalidFormatException(e);
+            }
+        }
+        throw new InvalidFormatException(String.format("ERROR: cannot parse value = {%s} to {%s}", value, Date.class.getName()));
+    }
+
+    public static <T> BigInteger toBigInteger(final T value) {
+        if (Objects.isNull(value)) {
+            return null;
+        }
+        return new BigInteger(value.toString());
     }
 }
