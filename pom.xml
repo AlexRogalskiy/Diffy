@@ -475,7 +475,7 @@
                     <configuration>
                         <skipTests>${unit-tests.skip}</skipTests>
                         <forkCount>0</forkCount>
-                        <argLine>-Xmx50M</argLine>
+                        <argLine>-Xmx1024m</argLine>
                         <argLine>
                             --illegal-access=permit
                         </argLine>
@@ -618,6 +618,19 @@
                             </configuration>
                         </execution>
                     </executions>
+                </plugin>
+
+                <!-- Nexus stating plugins -->
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>${maven.nexus.staging.plugin.version}</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>test</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
                 </plugin>
 
                 <!-- Code coverage plugins -->
