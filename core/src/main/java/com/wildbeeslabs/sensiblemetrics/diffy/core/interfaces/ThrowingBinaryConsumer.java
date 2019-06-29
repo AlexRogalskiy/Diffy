@@ -73,6 +73,7 @@ public interface ThrowingBinaryConsumer<T, U, E extends Throwable> extends BiCon
      * @param first    - initial input first argument {@code T} to be consumed
      * @param last     - initial input last argument {@code U} to be consumed
      * @throws IllegalArgumentException if consumer produces exception
+     * @throws IllegalArgumentException if consumer is {@code null}
      */
     static <T, U, E extends Throwable> void acceptOrThrow(final ThrowingBinaryConsumer<T, U, E> consumer, final T first, final U last) {
         ValidationUtils.notNull(consumer, "Binary consumer should not be null");

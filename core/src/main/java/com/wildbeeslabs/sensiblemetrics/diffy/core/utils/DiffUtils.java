@@ -81,6 +81,9 @@ public class DiffUtils {
      * @param algorithm The diff algorithm. Must not be {@code null}.
      * @return The patch describing the difference between the original and
      * revised sequences. Never {@code null}.
+     * @throws IllegalArgumentException if original is {@code null}
+     * @throws IllegalArgumentException if revised is {@code null}
+     * @throws IllegalArgumentException if algorithm is {@code null}
      */
     public static <T> Patch<T> diff(final List<T> original, final List<T> revised, final DiffAlgorithm<T> algorithm) {
         ValidationUtils.notNull(original, "Original list should not be null");

@@ -66,6 +66,8 @@ public class DiffAlgorithmService<T> implements DiffAlgorithm<T> {
      * {@inheritDoc}
      * <p>
      * Return empty diff if get the error while procession the difference.
+     * @throws IllegalArgumentException if original is {@code null}
+     * @throws IllegalArgumentException if revised is {@code null}
      */
     @Override
     public DefaultPatch<T> diff(final Iterable<T> original, final Iterable<T> revised) {
@@ -90,7 +92,8 @@ public class DiffAlgorithmService<T> implements DiffAlgorithm<T> {
      * @param original The original sequence.
      * @param revised  The revised sequence.
      * @return A minimum {@link PathNode Path} across the differences graph.
-     * @throws IllegalStateException if a diff path could not be found.
+     * @throws IllegalStateException if original is {@code null}
+     * @throws IllegalArgumentException if revised is {@code null}
      */
     protected PathNode buildPath(final List<T> original, final List<T> revised) {
         ValidationUtils.notNull(original, "Original sequence should not be null");
@@ -144,6 +147,9 @@ public class DiffAlgorithmService<T> implements DiffAlgorithm<T> {
      * @param original The original sequence.
      * @param revised  The revised sequence.
      * @return A {@link DefaultPatch} script corresponding to the path.
+     * @throws IllegalStateException if path is {@code null}
+     * @throws IllegalStateException if original is {@code null}
+     * @throws IllegalStateException if revised is {@code null}
      */
     protected DefaultPatch<T> buildRevision(final PathNode path, final List<T> original, final List<T> revised) {
         ValidationUtils.notNull(path, "Path node should not be null");

@@ -29,7 +29,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -76,19 +75,21 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * Returns {@link ThrowingSupplier} by input parameters
      *
      * @param <R>       type of supplied value
-     * @param converter - initial input {@link Processor} operator
+     * @param processor - initial input {@link Processor} operator
      * @return {@link ThrowingSupplier}
+     * @throws IllegalStateException if processor is {@code null}
      */
     @NonNull
-    default <R, E extends Throwable> ThrowingSupplier<R, E> map(final Processor<T, R> converter) {
-        ValidationUtils.notNull(converter, "Converter should not be null");
-        return () -> converter.process(this.get());
+    default <R, E extends Throwable> ThrowingSupplier<R, E> map(final Processor<T, R> processor) {
+        ValidationUtils.notNull(processor, "Processor should not be null");
+        return () -> processor.process(this.get());
     }
 
     /**
      * Accepts current {@link ThrowingSupplier} by input {@link ThrowingConsumer}
      *
      * @param consumer - initial input {@link ThrowingConsumer}
+     * @throws IllegalArgumentException if consumer is {@code null}
      */
     default void accept(final ThrowingConsumer<T, E> consumer) {
         ValidationUtils.notNull(consumer, "Consumer should not be null");
@@ -100,6 +101,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R, E extends Throwable> ThrowingSupplier<R, E> accept(final Processor<T, R> processor) {
@@ -122,6 +124,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> stream(final Processor<T, R> processor) {
@@ -134,6 +137,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> streamBefore(final Processor<T, R> processor) {
@@ -146,6 +150,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R> ThrowingSupplier<Stream<R>, E> streamAfter(final Processor<Stream<T>, Stream<R>> processor) {
@@ -190,6 +195,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param <E>      type of throwable value
      * @param supplier - initial input {@link ThrowingSupplier} operator
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if supplier is {@code null}
      */
     @NonNull
     static <T, E extends Throwable> ThrowingSupplier<T, E> get(final ThrowingSupplier<T, E> supplier) {
@@ -204,7 +210,7 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param <E>      type of throwable value
      * @param supplier - initial input {@link ThrowingSupplier} operator
      * @return supplier value {@code T}
-     * @throws IllegalArgumentException if supplier produces exception
+     * @throws IllegalArgumentException if supplier is {@code null}
      */
     @Nullable
     static <T, E extends Throwable> T getOrThrow(final ThrowingSupplier<T, E> supplier) {
@@ -224,6 +230,8 @@ public interface ThrowingSupplier<T, E extends Throwable> extends Supplier<T> {
      * @param supplier - initial input {@link ThrowingSupplier}
      * @param clazz    - initial input {@link Class}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if supplier is {@code null}
+     * @throws IllegalArgumentException if clazz is {@code null}
      */
     @NonNull
     static <T, E extends Exception> ThrowingSupplier<T, E> wrapConsumer(final ThrowingSupplier<T, E> supplier, final Class<E> clazz) {

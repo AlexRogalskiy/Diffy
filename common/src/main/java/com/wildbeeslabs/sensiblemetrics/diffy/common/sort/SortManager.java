@@ -25,9 +25,9 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.sort;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.stream.iface.Streamable;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.*;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -37,7 +37,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager.NullPriority.NATIVE;
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -74,7 +73,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * Creates a new {@link SortManager} instance.
      *
      * @param orders must negate be {@literal null} or contain {@literal null}.
-     * @throws NullPointerException if orders is {@code null}
+     * @throws IllegalArgumentException if orders are {@code null}
      */
     public SortManager(final List<SortOrder> orders) {
         ValidationUtils.notNull(orders, "Orders should not be null!");
@@ -119,7 +118,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      *
      * @param properties must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
-     * @throws NullPointerException if properties is {@code null}
+     * @throws IllegalArgumentException if properties are {@code null}
      */
     public static SortManager by(final String... properties) {
         ValidationUtils.notNull(properties, "Properties should not be null!");
@@ -131,7 +130,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      *
      * @param orders must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
-     * @throws NullPointerException if orders is {@code null}
+     * @throws IllegalArgumentException if orders are {@code null}
      */
     public static SortManager by(final List<SortOrder> orders) {
         ValidationUtils.notNull(orders, "Orders should not be null!");
@@ -143,7 +142,7 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      *
      * @param sortOrder must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
-     * @throws NullPointerException if sortOrder is {@code null}
+     * @throws IllegalArgumentException if sortOrders are {@code null}
      */
     public static SortManager by(final SortOrder... sortOrder) {
         ValidationUtils.notNull(sortOrder, "SortOrder should not be null!");
@@ -156,8 +155,8 @@ public class SortManager implements Streamable<SortManager.SortOrder> {
      * @param direction  must negate be {@literal null}.
      * @param properties must negate be {@literal null}.
      * @return sort stream instance {@link SortManager}
-     * @throws NullPointerException if direction is {@code null}
-     * @throws NullPointerException if properties is {@code null}
+     * @throws IllegalArgumentException if direction is {@code null}
+     * @throws IllegalArgumentException if properties are {@code null}
      */
     public static SortManager by(final SortDirection direction, final String... properties) {
         ValidationUtils.notNull(direction, "Sort direction should not be null!");

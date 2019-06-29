@@ -83,6 +83,7 @@ public interface ThrowingBinaryProcessor<F, T, R, E extends Throwable> {
      * @param <V>   type of converted value
      * @param after - initial input {@link Processor} operator
      * @return {@link ThrowingBinaryProcessor}
+     * @throws IllegalArgumentException if after is {@code null}
      */
     @NonNull
     default <V, E extends Throwable> ThrowingBinaryProcessor<F, T, V, E> after(final Processor<R, V> after) {

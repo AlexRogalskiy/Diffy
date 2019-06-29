@@ -29,7 +29,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.NonNull;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -68,19 +67,21 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * Returns {@link ThrowingConsumer} by input parameters
      *
      * @param <R>       type of consumed value
-     * @param converter - initial input {@link Processor} operator
+     * @param processor - initial input {@link Processor} operator
      * @return {@link ThrowingConsumer}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
-    default <R, E extends Throwable> ThrowingConsumer<R, E> map(final Processor<R, T> converter) {
-        ValidationUtils.notNull(converter, "Converter should not be null");
-        return (value) -> this.accept(converter.process(value));
+    default <R, E extends Throwable> ThrowingConsumer<R, E> map(final Processor<R, T> processor) {
+        ValidationUtils.notNull(processor, "Processor should not be null");
+        return (value) -> this.accept(processor.process(value));
     }
 
     /**
      * Consumes by current {@link ThrowingConsumer} input {@link ThrowingSupplier}
      *
      * @param supplier - initial input {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if supplier is {@code null}
      */
     default void accept(final ThrowingSupplier<T, E> supplier) {
         ValidationUtils.notNull(supplier, "Supplier should not be null");
@@ -92,6 +93,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingConsumer}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R, E extends Throwable> ThrowingConsumer<R, E> accept(final Processor<R, T> processor) {
@@ -126,6 +128,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R> ThrowingConsumer<R, E> collect(final Processor<R, Stream<T>> processor) {
@@ -138,6 +141,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R> Processor<Stream<T>, Stream<R>> collectAfter(final Processor<T, R> processor) {
@@ -150,6 +154,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      *
      * @param processor - initial input {@link Processor}
      * @return {@link ThrowingSupplier}
+     * @throws IllegalArgumentException if processor is {@code null}
      */
     @NonNull
     default <R> ThrowingConsumer<Stream<R>, E> collectBefore(final Processor<R, T> processor) {
@@ -164,6 +169,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param <E>      type of throwable value
      * @param consumer - initial input {@link ThrowingConsumer} operator
      * @return {@link ThrowingConsumer}
+     * @throws IllegalArgumentException if consumer is {@code null}
      */
     @NonNull
     static <T, E extends Throwable> ThrowingConsumer<T, E> accept(final ThrowingConsumer<T, E> consumer) {
@@ -178,7 +184,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param <E>      type of throwable value
      * @param consumer - initial input {@link ThrowingConsumer} operator
      * @param value    - initial input {@code T} value to be consumed
-     * @throws IllegalArgumentException if consumer produces exception
+     * @throws IllegalArgumentException if consumer is {@code null}
      */
     static <T, E extends Throwable> void acceptOrThrow(final ThrowingConsumer<T, E> consumer, final T value) {
         ValidationUtils.notNull(consumer, "Consumer should not be null");
@@ -197,6 +203,8 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @param consumer - initial input {@link ThrowingConsumer}
      * @param clazz    - initial input {@link Class}
      * @return {@link ThrowingConsumer}
+     * @throws IllegalArgumentException if consumer is {@code null}
+     * @throws IllegalArgumentException if clazz is {@code null}
      */
     @NonNull
     static <T, E extends Exception> ThrowingConsumer<T, E> wrapConsumer(final ThrowingConsumer<T, E> consumer, final Class<E> clazz) {

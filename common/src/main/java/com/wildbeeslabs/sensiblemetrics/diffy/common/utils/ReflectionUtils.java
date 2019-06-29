@@ -235,6 +235,7 @@ public class ReflectionUtils {
      *
      * @param member - initial argument to reflect on {@link Member}
      * @return type of the supplied argument {@link Member}
+     * @throws IllegalArgumentException if member is {@code null}
      */
     public static Type typeOf(@NonNull final Member member) {
         ValidationUtils.notNull(member, "Member should not be null");
@@ -253,6 +254,7 @@ public class ReflectionUtils {
      *
      * @param clazz - class to reflect on {@link Class}
      * @return list of super-classes of the supplied {@link Class}
+     * @throws IllegalArgumentException if clazz is {@code null}
      */
     public static List<Class<?>> getAllSuperclasses(final Class<?> clazz) {
         ValidationUtils.notNull(clazz, "Class type should not be null");
