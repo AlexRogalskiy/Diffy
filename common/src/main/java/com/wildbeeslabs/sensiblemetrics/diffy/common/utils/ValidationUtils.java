@@ -368,7 +368,7 @@ public class ValidationUtils {
      * @param msg message to output if validation fails
      */
     public static void notNull(final Object obj, final String msg) {
-        if (Objects.nonNull(obj)) {
+        if (Objects.isNull(obj)) {
             throw new IllegalArgumentException(msg);
         }
     }
