@@ -53,7 +53,7 @@ import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
 
 /**
- * Matcher interface declaration {@link BaseMatcher}
+ * RegexMatcher interface declaration {@link BaseMatcher}
  *
  * @param <T> type of input element to be matched by operation
  * @author Alexander Rogalskiy

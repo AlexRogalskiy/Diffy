@@ -119,7 +119,7 @@ public enum StringConverterType {
     MD5_HEX(DigestUtils::md5Hex),
     MD2_HEX(DigestUtils::md2Hex),
     /**
-     * java.util.regex.Matcher
+     * java.util.regex.RegexMatcher
      */
     REGEX_QUOTE_REPLACE(java.util.regex.Matcher::quoteReplacement),
     /**

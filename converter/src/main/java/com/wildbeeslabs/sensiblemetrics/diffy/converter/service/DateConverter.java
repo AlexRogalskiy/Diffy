@@ -24,14 +24,12 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.DateUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
 
 import java.util.Date;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.DateUtils.toDate;
 
 /**
  * Default {@link Date} {@link AbstractConverter} implementation
@@ -62,7 +60,8 @@ public class DateConverter extends AbstractConverter<String, Date> {
      *
      * @param format - initial input date format
      */
-    public DateConverter(@NonNull final String format) {
+    public DateConverter(final String format) {
+        ValidationUtils.notNull(format, "Format should not be null");
         this.format = format;
     }
 

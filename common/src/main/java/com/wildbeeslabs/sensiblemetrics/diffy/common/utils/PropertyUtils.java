@@ -57,6 +57,7 @@ public class PropertyUtils {
     public static final String GETTER_ACCESSOR_PREFIX = "get";
     public static final String SETTER_ACCESSOR_PREFIX = "set";
     public static final String BOOLEAN_ACCESSOR_PREFIX = "is";
+    public static final String ADD_ACCESSOR_PREFIX = "add";
 
     /**
      * Default camel case tokenizer pattern {@link Pattern}
@@ -80,6 +81,12 @@ public class PropertyUtils {
     public static final NamingPredicate DEFAULT_PROPERTY_SETTER_PREDICATE = (propertyName, propertyType) ->
         PropertyType.FIELD.equals(propertyType)
             || propertyName.startsWith(SETTER_ACCESSOR_PREFIX) && propertyName.length() > 3;
+    /**
+     * Default property adder {@link NamingPredicate}
+     */
+    public static final NamingPredicate DEFAULT_PROPERTY_ADD_PREDICATE = (propertyName, propertyType) ->
+        PropertyType.FIELD.equals(propertyType)
+            || propertyName.startsWith(ADD_ACCESSOR_PREFIX) && propertyName.length() > 3;
     /**
      * Default property valid {@link NamingPredicate}
      */

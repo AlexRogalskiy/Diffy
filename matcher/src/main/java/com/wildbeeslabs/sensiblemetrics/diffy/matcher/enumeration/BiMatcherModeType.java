@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Objects;
 
 /**
- * Matcher mode type {@link Enum} to process malformed and unexpected data
+ * RegexMatcher mode type {@link Enum} to process malformed and unexpected data
  * <p>
  * 2 basic implementations are provided:
  * <ul>

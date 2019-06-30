@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 
 /**
- * Matcher handler declaration
+ * RegexMatcher handler declaration
  *
  * @param <T> type of input element to be handled by operation
  */

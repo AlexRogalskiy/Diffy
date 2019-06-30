@@ -28,7 +28,7 @@ import lombok.NonNull;
 import java.util.Objects;
 
 /**
- * Matcher status type {@link Enum}
+ * RegexMatcher status type {@link Enum}
  */
 public enum MatcherStatusType {
     ENABLE,

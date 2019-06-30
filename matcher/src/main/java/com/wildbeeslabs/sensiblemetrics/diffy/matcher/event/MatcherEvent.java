@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Matcher {@link BaseMatcherEvent} implementation
+ * RegexMatcher {@link BaseMatcherEvent} implementation
  *
  * @param <T> type of input element to be matched by operation
  */

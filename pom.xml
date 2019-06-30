@@ -526,6 +526,11 @@
                     <version>${maven.surefire.plugin.version}</version>
                     <configuration>
                         <skipTests>${unit-tests.skip}</skipTests>
+                        <reuseForks>true</reuseForks>
+                        <parallel>classes</parallel>
+                        <threadCount>20</threadCount>
+                        <reportFormat>plain</reportFormat>
+                        <trimStackTrace>false</trimStackTrace>
                         <forkCount>0</forkCount>
                         <argLine>-Xmx1024m</argLine>
                         <argLine>

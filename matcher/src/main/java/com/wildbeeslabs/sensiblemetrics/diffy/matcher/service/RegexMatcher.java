@@ -21,15 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * Regex {@link AbstractMatcher} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -38,21 +42,35 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class RegexMatcher extends AbstractMatcher<String> {
 
     /**
-     * Returns integer value {@link Integer} by input argument {@link String}
+     * Default regex format
+     */
+    private String regex;
+    /**
+     * Default pattern format
+     */
+    private Pattern pattern;
+
+    public RegexMatcher(final String regex, final int code) {
+        this.regex = regex;
+        try {
+            this.pattern = Pattern.compile(regex, code);
+        } catch (PatternSyntaxException e) {
+            throw new InvalidFormatException(String.format("ERROR: cannot process regex = {%s} with code = {%s}", regex, code), e);
+        }
+    }
+
+    /**
+     * Checks whether the input matches the regular expression
      *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
+     * @param value - initial input value to be matched
+     * @return
      */
     @Override
-    protected Integer valueOf(final String value) {
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
-            InvalidFormatException.throwInvalidFormat(value, e);
-        }
-        return null;
+    public boolean matches(final String value) {
+        final Matcher matcher = this.pattern.matcher(value);
+        return matcher.find();
     }
 }

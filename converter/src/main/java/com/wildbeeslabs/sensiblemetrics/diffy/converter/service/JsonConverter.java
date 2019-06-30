@@ -17,6 +17,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.Converter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +27,14 @@ import org.json.JSONString;
 
 /**
  * Simple json {@link Converter} implementation
+ *
+ * @author Alexander Rogalskiy
+ * @version 1.1
+ * @since 1.0
  */
+@Data
+@EqualsAndHashCode
+@ToString
 public class JsonConverter implements Converter<String, Object> {
     /**
      * Default number regex pattern {@link String}

@@ -29,7 +29,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BaseMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.listener.iface.MatcherEventListener;
 
 /**
- * Matcher {@link EventListenerAdapter} interface declaration
+ * RegexMatcher {@link EventListenerAdapter} interface declaration
  *
  * @param <T> type of input element to be matched by operation
  */

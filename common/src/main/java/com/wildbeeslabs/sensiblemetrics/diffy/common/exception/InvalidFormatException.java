@@ -29,8 +29,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
-
 /**
  * Invalid format {@link RuntimeException} implementation
  */
@@ -70,6 +68,17 @@ public class InvalidFormatException extends RuntimeException {
      */
     public InvalidFormatException(final String message, final Throwable cause) {
         super(message, cause);
+    }
+
+    /**
+     * Returns {@link InvalidFormatException} instance by input parameters
+     *
+     * @param message - initial input raw message {@link String}
+     * @return {@link InvalidFormatException}
+     */
+    @Factory
+    public static final InvalidFormatException throwError(final String message) {
+        throw new InvalidFormatException(message);
     }
 
     /**

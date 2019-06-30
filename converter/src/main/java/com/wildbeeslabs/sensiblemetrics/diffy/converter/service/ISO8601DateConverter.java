@@ -23,13 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * Converts a String to a Date
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -38,21 +37,17 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class ISO8601DateConverter extends DateConverter {
 
     /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
+     * Default iso-8601 date pattern
      */
-    @Override
-    protected Integer valueOf(final String value) {
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
-            InvalidFormatException.throwInvalidFormat(value, e);
-        }
-        return null;
+    private final static String ISO_8601_DATE_PATTERN = "yyyy-MM-dd";
+
+    /**
+     * Default date converter constructor
+     */
+    public ISO8601DateConverter() {
+        super(ISO_8601_DATE_PATTERN);
     }
 }

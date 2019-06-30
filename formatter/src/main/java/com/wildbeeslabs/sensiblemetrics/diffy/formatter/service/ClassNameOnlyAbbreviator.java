@@ -21,38 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.formatter.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces.Abbreviator;
 
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Default class name only {@link Abbreviator}
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class ClassNameOnlyAbbreviator implements Abbreviator {
 
-    /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
-     */
-    @Override
-    protected Integer valueOf(final String value) {
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
-            InvalidFormatException.throwInvalidFormat(value, e);
+    public String abbreviate(String fqClassName) {
+        // we ignore the fact that the separator character can also be a dollar
+        // If the inner class is org.good.AClass#Inner, returning
+        // AClass#Inner seems most appropriate
+        int lastIndex = fqClassName.lastIndexOf(DOT);
+        if (lastIndex != -1) {
+            return fqClassName.substring(lastIndex + 1, fqClassName.length());
+        } else {
+            return fqClassName;
         }
-        return null;
     }
 }

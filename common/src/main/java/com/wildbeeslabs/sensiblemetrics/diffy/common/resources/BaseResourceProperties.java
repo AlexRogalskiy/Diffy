@@ -113,6 +113,15 @@ public class BaseResourceProperties extends Properties {
         this.defaults.clear();
     }
 
+    public String getValue(final String value) {
+        ValidationUtils.notNull(value, "Value should not be null");
+        int index = 0;
+        while (index < value.length() && !Character.isLetterOrDigit(value.charAt(index))) {
+            index++;
+        }
+        return this.defaults.getProperty(value.substring(index));
+    }
+
     /**
      * Returns new instance {@link BaseResourceProperties}
      *

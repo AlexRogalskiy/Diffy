@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -80,6 +81,11 @@ public class BigDecimalConverter extends NumericConverter<BigDecimal> {
      */
     @Override
     protected BigDecimal valueOf(final String value) {
-        return new BigDecimal(value);
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            InvalidFormatException.throwInvalidFormat(value, e);
+        }
+        return null;
     }
 }

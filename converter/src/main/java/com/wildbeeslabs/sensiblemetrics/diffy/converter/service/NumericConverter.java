@@ -30,7 +30,7 @@ import lombok.ToString;
 /**
  * Default {@link Number} {@link AbstractConverter} implementation
  *
- * @param <R> type of input value {@link Number} to be converted to
+ * @param <T> type of input value {@link Number} to be converted to
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -38,5 +38,5 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class NumericConverter<R extends Number> extends AbstractConverter<String, R> {
+public abstract class NumericConverter<T extends Number> extends AbstractConverter<String, T> {
 }

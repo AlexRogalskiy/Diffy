@@ -32,7 +32,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.Matcher
 import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStatusType.ENABLE;
 
 /**
- * Matcher mode type {@link Enum} to process malformed and unexpected data
+ * RegexMatcher mode type {@link Enum} to process malformed and unexpected data
  * <p>
  * 2 basic implementations are provided:
  * <ul>

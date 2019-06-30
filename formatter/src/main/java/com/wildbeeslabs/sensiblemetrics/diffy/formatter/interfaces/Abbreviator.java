@@ -21,38 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
-
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+package com.wildbeeslabs.sensiblemetrics.diffy.formatter.interfaces;
 
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Default abbreviator {@link Formatter}
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
-
+@FunctionalInterface
+public interface Abbreviator extends Formatter<String> {
     /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
+     * Default name separator
      */
+    char DOT = '.';
+    /**
+     * The maximum number of package separators (dots) that abbreviation
+     * algorithms can handle. Class or logger names with more separators will have
+     * their first MAX_DOTS parts shortened.
+     */
+    public static final int MAX_DOTS = 16;
+
     @Override
-    protected Integer valueOf(final String value) {
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
-            InvalidFormatException.throwInvalidFormat(value, e);
-        }
-        return null;
+    default CharSequence format(final String value) {
+        return this.abbreviate(value);
     }
+
+    String abbreviate(final String in);
 }

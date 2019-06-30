@@ -29,8 +29,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * A converter to parse enums
  *
+ * @param <T> the enum type
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -38,19 +39,28 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class EnumConverter<T extends Enum<T>> extends AbstractConverter<String, T> {
+
+    private final Class<T> clazz;
 
     /**
-     * Returns integer value {@link Integer} by input argument {@link String}
+     * Constructs a new converter.
      *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
+     * @param clazz the enum class
      */
+    public EnumConverter(Class<T> clazz) {
+        this.clazz = clazz;
+    }
+
     @Override
-    protected Integer valueOf(final String value) {
+    public T valueOf(final String value) {
         try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
+            try {
+                return Enum.valueOf(clazz, value);
+            } catch (IllegalArgumentException e) {
+                return Enum.valueOf(clazz, value.toUpperCase());
+            }
+        } catch (Exception e) {
             InvalidFormatException.throwInvalidFormat(value, e);
         }
         return null;

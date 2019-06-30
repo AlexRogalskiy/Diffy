@@ -31,7 +31,7 @@ import lombok.experimental.UtilityClass;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 /**
- * Matcher assertion utilities implementation
+ * RegexMatcher assertion utilities implementation
  */
 @UtilityClass
 public class MatcherAssertUtils {

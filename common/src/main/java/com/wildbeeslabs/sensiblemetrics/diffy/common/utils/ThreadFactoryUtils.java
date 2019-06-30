@@ -26,9 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 import com.google.common.base.Supplier;
 import lombok.experimental.UtilityClass;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -39,7 +37,19 @@ public class ThreadFactoryUtils {
     /**
      * Default {@link ThreadFactory} instance
      */
-    private static final ThreadFactory INSTANCE = Executors.defaultThreadFactory();
+    private static final ThreadFactory THREAD_FACTORY = Executors.defaultThreadFactory();
+    /**
+     * Default scheduled executor pool size
+     */
+    public static final int SCHEDULED_EXECUTOR_POOL_SIZE = 8;
+    /**
+     * Default number of idle threads to retain in a context's executor service
+     */
+    public static final int CORE_POOL_SIZE = 0;
+    /**
+     * Default maximum number of threads to allow in a context's executor service
+     */
+    public static final int MAX_POOL_SIZE = 32;
 
     /**
      * Create a new {@link ThreadFactory} that produces daemon threads with a given name format.
@@ -56,17 +66,28 @@ public class ThreadFactoryUtils {
 
             @Override
             public Thread newThread(final Runnable runnable) {
-                final Thread t = INSTANCE.newThread(runnable);
-                t.setDaemon(true);
+                final Thread t = THREAD_FACTORY.newThread(runnable);
+                if (!t.isDaemon()) {
+                    t.setDaemon(true);
+                }
                 t.setName(String.format(messageFormat, this.count.getAndIncrement()));
                 return t;
             }
         };
     }
 
+    public static ScheduledExecutorService newScheduledExecutorService() {
+        return new ScheduledThreadPoolExecutor(SCHEDULED_EXECUTOR_POOL_SIZE, THREAD_FACTORY);
+    }
+
+    public static ExecutorService newExecutorService() {
+        return new ThreadPoolExecutor(CORE_POOL_SIZE, MAX_POOL_SIZE, 0L, TimeUnit.MILLISECONDS, new SynchronousQueue<>(), THREAD_FACTORY);
+    }
+
     public static <T> Callable<T> threadRenaming(final Callable<T> task, final Supplier<String> nameSupplier) {
         ValidationUtils.notNull(task, "Callable task should not be null");
         ValidationUtils.notNull(nameSupplier, "Name supplier should not be null");
+
         return () -> {
             final Thread currentThread = Thread.currentThread();
             final String oldName = currentThread.getName();
@@ -79,6 +100,16 @@ public class ThreadFactoryUtils {
                 }
             }
         };
+    }
+
+    /**
+     * Shuts down an executor service
+     *
+     * @param executorService - initial input executor service to shut down
+     */
+    public static void shutdown(final ExecutorService executorService) {
+        ValidationUtils.notNull(executorService, "Executor service should not be null");
+        executorService.shutdownNow();
     }
 
     /**

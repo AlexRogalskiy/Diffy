@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * Convert a string to a float
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -38,18 +38,12 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class FloatConverter extends NumericConverter<Float> {
 
-    /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
-     */
     @Override
-    protected Integer valueOf(final String value) {
+    public Float valueOf(final String value) {
         try {
-            return Integer.valueOf(value);
+            return Float.parseFloat(value);
         } catch (NumberFormatException e) {
             InvalidFormatException.throwInvalidFormat(value, e);
         }

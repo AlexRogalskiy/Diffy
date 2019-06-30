@@ -23,13 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * List {@link AbstractConverter} implementation
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -38,21 +40,10 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class ListConverter extends AbstractConverter<String, List<String>> {
 
-    /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
-     */
     @Override
-    protected Integer valueOf(final String value) {
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
-            InvalidFormatException.throwInvalidFormat(value, e);
-        }
-        return null;
+    public List<String> valueOf(final String value) {
+        return Arrays.asList(value.split(","));
     }
 }

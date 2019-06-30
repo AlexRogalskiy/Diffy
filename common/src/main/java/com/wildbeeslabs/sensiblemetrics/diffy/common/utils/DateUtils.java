@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
-
-import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils.formatMessage;
 
 /**
  * Date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
@@ -116,7 +114,7 @@ public class DateUtils {
             return formatter.parse(date);
         } catch (ParseException e) {
             log.error(StringUtils.formatMessage("ERROR: cannot parse date by format={%s}", dateFormat));
-            InvalidOperationException.throwInvalidParseFormat(date, e);
+            InvalidFormatException.throwInvalidFormat(date, e);
         }
         return null;
     }

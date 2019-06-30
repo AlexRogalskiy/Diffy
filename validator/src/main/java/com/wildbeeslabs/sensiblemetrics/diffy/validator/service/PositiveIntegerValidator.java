@@ -21,38 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
- *
- * @author Alexander Rogalskiy
- * @version 1.1
- * @since 1.0
+ * Positive integer {@link Validator} implementation
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class PositiveIntegerValidator implements Validator<String> {
 
-    /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
-     */
     @Override
-    protected Integer valueOf(final String value) {
+    public boolean validate(final String value) throws InvalidParameterException {
         try {
-            return Integer.valueOf(value);
+            int n = Integer.parseInt(value);
+            if (n < 0) {
+                return false;
+            }
         } catch (NumberFormatException e) {
-            InvalidFormatException.throwInvalidFormat(value, e);
+            InvalidParameterException.throwError(String.format("ERROR: input value = {%s} should be positive", value), e);
         }
-        return null;
+        return true;
     }
 }

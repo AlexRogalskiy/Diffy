@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Matcher event type {@link Enum}
+ * RegexMatcher event type {@link Enum}
  */
 public enum MatcherEventType {
     MATCH_START,

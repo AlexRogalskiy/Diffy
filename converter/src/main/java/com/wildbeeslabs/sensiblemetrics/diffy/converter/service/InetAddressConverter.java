@@ -28,8 +28,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * Converts {@link String}s to {@link InetAddress}
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -38,19 +41,13 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class InetAddressConverter extends AbstractConverter<String, InetAddress> {
 
-    /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
-     */
     @Override
-    protected Integer valueOf(final String value) {
+    public InetAddress valueOf(final String value) {
         try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
+            return InetAddress.getByName(value);
+        } catch (UnknownHostException e) {
             InvalidFormatException.throwInvalidFormat(value, e);
         }
         return null;

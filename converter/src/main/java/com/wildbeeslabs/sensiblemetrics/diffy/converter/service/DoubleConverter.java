@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * Convert a string to a double
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -38,18 +38,12 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class DoubleConverter extends NumericConverter<Double> {
 
-    /**
-     * Returns integer value {@link Integer} by input argument {@link String}
-     *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
-     */
     @Override
-    protected Integer valueOf(final String value) {
+    public Double valueOf(final String value) {
         try {
-            return Integer.valueOf(value);
+            return Double.parseDouble(value);
         } catch (NumberFormatException e) {
             InvalidFormatException.throwInvalidFormat(value, e);
         }

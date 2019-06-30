@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface;
 
 /**
- * Duration time declaration (measure quantity of time unit
+ * DurationHelper time declaration (measure quantity of time unit
  * {@link TimeMeasure} instances)
  *
  * @author Alex

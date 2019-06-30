@@ -23,14 +23,19 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
+import com.google.common.base.Converter;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Default {@link Integer} {@link NumericConverter} implementation
+ * Default list {@link AbstractConverter} implementation
  *
+ * @param <T> the element converter type
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -38,21 +43,31 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class IntegerConverter extends NumericConverter<Integer> {
+public class DefaultListConverter<T> extends AbstractConverter<String, List<T>> {
+
+    private final ListConverter splitter;
+    private final Converter<String, T> converter;
 
     /**
-     * Returns integer value {@link Integer} by input argument {@link String}
+     * Constructs a new converter.
      *
-     * @param value - initial argument value {@link String}
-     * @return converted integer value {@link Integer}
+     * @param splitter  to split value into list of arguments
+     * @param converter to convert list of arguments to target element type
      */
+    public DefaultListConverter(final ListConverter splitter, final Converter<String, T> converter) {
+        ValidationUtils.notNull(splitter, "Splitter should not be null");
+        ValidationUtils.notNull(converter, "Converter should not be null");
+
+        this.splitter = splitter;
+        this.converter = converter;
+    }
+
     @Override
-    protected Integer valueOf(final String value) {
-        try {
-            return Integer.valueOf(value);
-        } catch (NumberFormatException e) {
-            InvalidFormatException.throwInvalidFormat(value, e);
+    public List<T> valueOf(final String value) {
+        final List<T> result = new ArrayList<>();
+        for (final String param : this.splitter.convert(value)) {
+            result.add(this.converter.convert(param));
         }
-        return null;
+        return result;
     }
 }
