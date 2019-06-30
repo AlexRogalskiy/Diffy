@@ -21,23 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces;
+
+import java.util.function.Function;
 
 /**
- * Custom time format provider declaration
+ * Tri processor interface declaration
  *
- * @author Alex
- * @version 1.0.0
- * @since 2017-08-07
+ * @param <A> type of first processed value
+ * @param <B> type of second processed value
+ * @param <C> type of third processed value
+ * @param <R> type of processing result
  */
-public interface TimeFormatProvider {
+@FunctionalInterface
+public interface TriProcessor<A, B, C, R> {
 
-    /**
-     * Return the appropriate {@link TimeFormat} for the given
-     * {@link TimeMeasure}
-     *
-     * @param timeUnit
-     * @return
-     */
-    TimeFormat getFormat(final TimeMeasure timeUnit);
+    R apply(final A a, final B b, final C c);
+
+    default <V> TriProcessor<A, B, C, V> andThen(final Function<? super R, ? extends V> after) {
+        return (final A a, final B b, final C c) -> after.apply(this.apply(a, b, c));
+    }
 }

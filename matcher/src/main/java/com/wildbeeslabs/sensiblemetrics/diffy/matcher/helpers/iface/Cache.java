@@ -1,4 +1,4 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers.iface;
 
 import com.jayway.jsonpath.InvalidJsonException;
 import com.jayway.jsonpath.JsonPath;

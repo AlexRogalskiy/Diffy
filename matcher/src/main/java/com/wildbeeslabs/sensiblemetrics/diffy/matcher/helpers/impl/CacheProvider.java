@@ -1,7 +1,8 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers.impl;
 
 import com.jayway.jsonpath.JsonPathException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers.iface.Cache;
 
 import java.util.Objects;
 

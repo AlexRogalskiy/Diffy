@@ -265,4 +265,28 @@ public interface Entry<K, V> extends Serializable {
         ValidationUtils.notNull(function, "Function should not be null");
         return key -> DefaultEntry.of(key, function.apply(key));
     }
+
+    /**
+     * Applies the mapping for each key in the map. If your mapping function is not injective,
+     * make sure you call {@code mergeKeys} or that you provide a merge function when calling
+     * {@code collect}
+     *
+     * @param mapper - the key mapping to be applied
+     * @param <K1>   the type to map the keys into
+     * @return a new MapStream
+     */
+    default <K1> Entry<K1, V> mapKeys(final Function<? super K, ? extends K1> mapper) {
+        return DefaultEntry.of(mapper.apply(this.getFirst()), this.getLast());
+    }
+
+    /**
+     * Applies the mapping for each value in the map.
+     *
+     * @param mapper - the value mapping to be applied
+     * @param <V1>   the type to map the values into
+     * @return a new MapStream
+     */
+    default <V1> Entry<K, V1> mapValues(final Function<? super V, ? extends V1> mapper) {
+        return DefaultEntry.of(this.getFirst(), mapper.apply(this.getLast()));
+    }
 }

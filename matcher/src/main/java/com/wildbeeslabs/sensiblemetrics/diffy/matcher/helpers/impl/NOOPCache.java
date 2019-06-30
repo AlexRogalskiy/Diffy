@@ -1,6 +1,7 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers;
+package com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers.impl;
 
 import com.jayway.jsonpath.JsonPath;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.helpers.iface.Cache;
 
 public class NOOPCache implements Cache {
 
