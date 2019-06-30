@@ -27,7 +27,6 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Iterables;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.*;
@@ -48,6 +47,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.*;
 
 /**
  * Comparator utilities implementation {@link Comparator}
@@ -724,6 +725,58 @@ public class ComparatorUtils {
             .filter(c -> c != 0)
             .findFirst()
             .orElseGet(() -> Integer.compare(o1.size(), o2.size()));
+    }
+
+    public static <T> Comparator<Optional<T>> emptiesFirst(final Comparator<? super T> valueComparator) {
+        ValidationUtils.notNull(valueComparator, "Comparator should not be null");
+        return Comparator.comparing(o -> o.orElse(null), Comparator.nullsFirst(valueComparator));
+    }
+
+    public static <T> Comparator<Optional<T>> emptiesLast(final Comparator<? super T> valueComparator) {
+        ValidationUtils.notNull(valueComparator, "Comparator should not be null");
+        return Comparator.comparing(o -> o.orElse(null), Comparator.nullsLast(valueComparator));
+    }
+
+    /**
+     * Returns {@code true} if each element in {@code iterable} after the first is <i>strictly</i>
+     * greater than the element that preceded it, according to the specified comparator. Note that
+     * this is always true when the iterable has fewer than two elements.
+     */
+    public static <T> boolean isInStrictOrder(final Iterable<? extends T> iterable, final Comparator<T> comparator) {
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+        final Iterator<? extends T> it = (Iterator<? extends T>) iteratorOf(iterable);
+        if (it.hasNext()) {
+            T prev = it.next();
+            while (it.hasNext()) {
+                final T next = it.next();
+                if (comparator.compare(prev, next) >= 0) {
+                    return false;
+                }
+                prev = next;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Returns {@code true} if each element in {@code iterable} after the first is greater than or
+     * equal to the element that preceded it, according to the specified comparator. Note that this is
+     * always true when the iterable has fewer than two elements.
+     */
+    public static <T> boolean isInOrder(final Iterable<? extends T> iterable, final Comparator<T> comparator) {
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+        final Iterator<? extends T> it = (Iterator<? extends T>) iteratorOf(iterable);
+        if (it.hasNext()) {
+            T prev = it.next();
+            while (it.hasNext()) {
+                final T next = it.next();
+                if (comparator.compare(prev, next) > 0) {
+                    return false;
+                }
+                prev = next;
+            }
+        }
+        return true;
     }
 
     /**
@@ -1800,7 +1853,7 @@ public class ComparatorUtils {
          * @param comparators - initial input array of {@link Comparator}
          */
         public DefaultMultiComparator(final Comparator<? super T>... comparators) {
-            this.comparators = ServiceUtils.streamOf(comparators).collect(Collectors.toList());
+            this.comparators = streamOf(comparators).collect(Collectors.toList());
         }
 
         /**
@@ -1809,7 +1862,7 @@ public class ComparatorUtils {
          * @param comparators - initial input {@link Iterable} collection of {@link Comparator}s
          */
         public DefaultMultiComparator(final Iterable<Comparator<? super T>> comparators) {
-            this.comparators = ServiceUtils.listOf(comparators);
+            this.comparators = listOf(comparators);
         }
 
         /**

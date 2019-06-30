@@ -25,6 +25,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
 import com.codepoetics.protonpack.Indexed;
 import com.codepoetics.protonpack.StreamUtils;
+import com.google.common.collect.ImmutableSet;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import lombok.NonNull;
@@ -69,8 +70,8 @@ public class ServiceUtils {
     /**
      * Default {@link Function} mappings
      */
-    public static final Function<Optional<?>, List<?>> toList = option -> collect(option, Collectors.toList());
-    public static final Function<Optional<?>, Set<?>> toSet = option -> collect(option, Collectors.toSet());
+    public static final Function<Optional<?>, List<?>> toList = option -> collect(option, toList());
+    public static final Function<Optional<?>, Set<?>> toSet = option -> collect(option, toSet());
     public static final Function<Optional<?>, LinkedList<?>> toLinkedList = option -> collect(option, toLinkedList());
     public static final Function<Optional<?>, List<?>> toUnmodifiableList = option -> collect(option, toUnmodifiableList());
     public static final Function<Optional<?>, Set<?>> toUnmodifiableSet = option -> collect(option, toUnmodifiableSet());
@@ -158,6 +159,47 @@ public class ServiceUtils {
     };
 
     /**
+     * Default accumulator
+     *
+     * @param <E> type of enum value
+     */
+    public static final class Accumulator<E extends Enum<E>> {
+
+        public static final Collector<Enum<?>, ?, ImmutableSet<? extends Enum<?>>> TO_IMMUTABLE_ENUM_SET =
+            (Collector)
+                Collector.<Enum, Accumulator, ImmutableSet<?>>of(
+                    Accumulator::new,
+                    Accumulator::add,
+                    Accumulator::combine,
+                    Accumulator::toImmutableSet,
+                    Collector.Characteristics.UNORDERED);
+
+        private EnumSet<E> set;
+
+        public void add(final E e) {
+            if (Objects.isNull(this.set)) {
+                this.set = EnumSet.of(e);
+            } else {
+                this.set.add(e);
+            }
+        }
+
+        public Accumulator<E> combine(final Accumulator<E> other) {
+            if (Objects.isNull(this.set)) {
+                return other;
+            } else if (Objects.isNull(other.set)) {
+                return this;
+            }
+            this.set.addAll(other.set);
+            return this;
+        }
+
+        public ImmutableSet<E> toImmutableSet() {
+            return (Objects.isNull(this.set)) ? ImmutableSet.of() : ImmutableSet.copyOf(this.set);
+        }
+    }
+
+    /**
      * Returns {@link LinkedList} representation of {@link Collector}
      *
      * @param <T> type of collecting item
@@ -204,11 +246,21 @@ public class ServiceUtils {
     }
 
     /**
+     * Returns a {@link Collector} to create an unmodifiable {@link Set}
+     *
+     * @return will never be {@literal null}.
+     */
+    public static <T extends Enum<T>> Collector<Enum<T>, ?, Set<Enum<T>>> toUnmodifiableEnumSet() {
+        return collectingAndThen(toSet(), Collections::unmodifiableSet);
+        //(Collector) Accumulator.TO_IMMUTABLE_ENUM_SET;
+    }
+
+    /**
      * Returns a {@link Collector} to create an unmodifiable {@link List}
      *
      * @return will never be {@literal null}.
      */
-    public static <T, A extends List<T>> Collector<T, A, List<T>> toImmutableList(final Supplier<A> supplier) {
+    public static <T, A extends List<T>> Collector<T, A, List<T>> toUnmodifiableList(final Supplier<A> supplier) {
         return Collector.of(
             supplier,
             List::add, (left, right) -> {
