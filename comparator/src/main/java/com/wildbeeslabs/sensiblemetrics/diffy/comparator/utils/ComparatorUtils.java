@@ -45,7 +45,9 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.*;
@@ -88,6 +90,30 @@ public class ComparatorUtils {
         }
         return lens1 - lens2;
     };
+
+    @NonNull
+    public static <T, Y> Collector<T, ?, Optional<T>> maxBy(final Function<T, Y> operator, final Comparator<Y> comparator) {
+        ValidationUtils.notNull(operator, "Operator string should not be null");
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+
+        return Collectors.maxBy((a, b) -> {
+            final Y element1 = operator.apply(a);
+            final Y element2 = operator.apply(b);
+            return comparator.compare(element1, element2);
+        });
+    }
+
+    @NonNull
+    public static <T, Y> Collector<T, ?, Optional<T>> minBy(final Function<T, Y> operator, final Comparator<Y> comparator) {
+        ValidationUtils.notNull(operator, "Operator string should not be null");
+        ValidationUtils.notNull(comparator, "Comparator should not be null");
+
+        return Collectors.minBy((a, b) -> {
+            Y element1 = operator.apply(a);
+            Y element2 = operator.apply(b);
+            return comparator.compare(element1, element2);
+        });
+    }
 
     /**
      * Default class {@link Comparator}
