@@ -43,6 +43,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry.of;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.streamOf;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.toUnmodifiableList;
 import static org.apache.commons.lang3.ObjectUtils.identityToString;
 import static org.apache.commons.lang3.StringUtils.join;
 
@@ -381,7 +383,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return ServiceUtils.listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(ServiceUtils.toUnmodifiableList());
+        return ServiceUtils.listOf(values).stream().filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -414,7 +416,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> Collection<R> matchIf(@Nullable final Iterable<R> values, final int skip, final BiMatcher<T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         ValidationUtils.isTrue(skip >= 0, "Skip count should be positive or zero");
-        return ServiceUtils.listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(ServiceUtils.toUnmodifiableList());
+        return ServiceUtils.listOf(values).stream().skip(skip).filter(entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -508,7 +510,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     @NonNull
     static <T, R extends Entry<T, T>> Collection<R> removeIf(@Nullable final Iterable<R> values, final BiMatcher<T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return ServiceUtils.listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(ServiceUtils.toUnmodifiableList());
+        return ServiceUtils.listOf(values).stream().filter(entry -> matcher.negate().matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -540,7 +542,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>, A, M extends Collection<R>> Map<Boolean, M> mapBy(@Nullable final Iterable<R> values, final BiMatcher<T> matcher, final Collector<R, A, M> collector) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         ValidationUtils.notNull(collector, "Collector should not be null");
-        return ServiceUtils.streamOf(values).collect(Collectors.partitioningBy(entry -> matcher.matches(entry.getFirst(), entry.getLast()), collector));
+        return streamOf(values).collect(Collectors.partitioningBy(entry -> matcher.matches(entry.getFirst(), entry.getLast()), collector));
     }
 
     /**
@@ -586,7 +588,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
      */
     static <T> Stream<List<T>> aggregate(final Iterable<T> iterable, final BiMatcher<T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.aggregate(ServiceUtils.streamOf(iterable), matcher::matches);
+        return StreamUtils.aggregate(streamOf(iterable), matcher::matches);
     }
 
     /**
@@ -602,7 +604,23 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> List<R> skipUntil(final Stream<R> stream, final BiMatcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.skipUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T, R extends Entry<T, T>> List<R> skipUntilInclusive(final Stream<R> stream, final BiMatcher<T> matcher) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipUntilInclusive(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -618,7 +636,23 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> List<R> skipWhile(final Stream<R> stream, final BiMatcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.skipWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T, R extends Entry<T, T>> List<R> skipWhileInclusive(final Stream<R> stream, final BiMatcher<T> matcher) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.skipWhileInclusive(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
     }
 
     /**
@@ -634,7 +668,69 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     static <T, R extends Entry<T, T>> List<R> takeWhile(final Stream<R> stream, final BiMatcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.takeWhile(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T, R extends Entry<T, T>> List<R> takeWhileInclusive(final Stream<R> stream, final BiMatcher<T> matcher) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeWhileInclusive(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T, R extends Entry<T, T>> List<R> takeUntil(final Stream<R> stream, final BiMatcher<T> matcher) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeUntil(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
+    }
+
+    /**
+     * Returns {@link List} by input {@link Stream} of {@code T} items filtered by {@link BiMatcher}
+     *
+     * @param <T>     type of input element to be matched by operation
+     * @param <R>     type of entry item
+     * @param stream  - initial input {@link Stream}
+     * @param matcher - initial input {@link BiMatcher}
+     * @return {@link List} of {@code T} items
+     */
+    @NonNull
+    static <T, R extends Entry<T, T>> List<R> takeUntilInclusive(final Stream<R> stream, final BiMatcher<T> matcher) {
+        ValidationUtils.notNull(stream, "Stream should not be null");
+        ValidationUtils.notNull(matcher, "Matcher should not be null");
+        return StreamUtils.takeUntilInclusive(stream, entry -> matcher.matches(entry.getFirst(), entry.getLast())).collect(toUnmodifiableList());
+    }
+
+    /**
+     * Returns {@link Stream} of {@link List} by input {@link Stream} of {@code T} items grouped by {@link Comparator}
+     *
+     * @param <T>        type of input element to be matched by operation
+     * @param <R>        type of entry item
+     * @param stream     - initial input {@link Stream}
+     * @param comparator - initial input {@link Matcher}
+     * @return {@link Stream} of {@link List} with {@code T} items
+     */
+    @NonNull
+    static <T, R extends Entry<T, T>> Stream<List<R>> groupBy(final Stream<R> stream, final Comparator<R> comparator) {
+        return StreamUtils.groupRuns(stream, comparator);
     }
 
     /**

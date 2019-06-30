@@ -46,6 +46,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils.getAnnotation;
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.toUnmodifiableList;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Objects.isNull;
 import static org.apache.commons.lang3.ObjectUtils.identityToString;
@@ -405,7 +406,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return ServiceUtils.listOf(values).stream().filter(matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return ServiceUtils.listOf(values).stream().filter(matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -436,7 +437,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> Collection<T> matchIf(@Nullable final Iterable<T> values, final int skip, final Matcher<T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
         ValidationUtils.isTrue(skip >= 0, "Skip count should be positive or zero");
-        return ServiceUtils.listOf(values).stream().skip(skip).filter(matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return ServiceUtils.listOf(values).stream().skip(skip).filter(matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -523,7 +524,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     @NonNull
     static <T> Collection<T> removeIf(@Nullable final Iterable<T> values, final Matcher<T> matcher) {
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return ServiceUtils.listOf(values).stream().filter(matcher.negate()::matches).collect(ServiceUtils.toUnmodifiableList());
+        return ServiceUtils.listOf(values).stream().filter(matcher.negate()::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -631,7 +632,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipUntil(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntil(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.skipUntil(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -646,7 +647,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipUntilInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.skipUntilInclusive(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -661,7 +662,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipWhile(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhile(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.skipWhile(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -676,7 +677,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> skipWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.skipWhileInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.skipWhileInclusive(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -691,7 +692,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeWhile(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhile(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.takeWhile(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -706,7 +707,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeWhileInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeWhileInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.takeWhileInclusive(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -721,7 +722,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeUntil(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeUntil(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.takeUntil(stream, matcher::matches).collect(toUnmodifiableList());
     }
 
     /**
@@ -736,7 +737,20 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     static <T> List<T> takeUntilInclusive(final Stream<T> stream, final Matcher<T> matcher) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         ValidationUtils.notNull(matcher, "Matcher should not be null");
-        return StreamUtils.takeUntilInclusive(stream, matcher::matches).collect(ServiceUtils.toUnmodifiableList());
+        return StreamUtils.takeUntilInclusive(stream, matcher::matches).collect(toUnmodifiableList());
+    }
+
+    /**
+     * Returns {@link Stream} of {@link List} by input {@link Stream} of {@code T} items grouped by {@link Comparator}
+     *
+     * @param <T>        type of input element to be matched by operation
+     * @param stream     - initial input {@link Stream}
+     * @param comparator - initial input {@link Matcher}
+     * @return {@link Stream} of {@link List} with {@code T} items
+     */
+    @NonNull
+    static <T> Stream<List<T>> groupBy(final Stream<T> stream, final Comparator<T> comparator) {
+        return StreamUtils.groupRuns(stream, comparator);
     }
 
     /**
