@@ -58,14 +58,14 @@ public enum ConversionCategory {
     TIME(new Class<?>[]{Long.class, Calendar.class, Date.class}, "tT"),
 
     /**
-     * In a format string, multiple conversions may be applied to the same parameter. This is
+     * ParamType a format string, multiple conversions may be applied to the same parameter. This is
      * seldomly needed, but the following is an example of such use:
      *
      * <pre>
      *   format("Test %1$c %1$d", (int)42);
      * </pre>
      * <p>
-     * In this example, the first parameter is interpreted as both a character and an int, therefore
+     * ParamType this example, the first parameter is interpreted as both a character and an int, therefore
      * the parameter must be compatible with both conversion, and can therefore neither be char nor
      * long. This intersection of conversions is called CHAR_AND_INT.
      *
@@ -80,7 +80,7 @@ public enum ConversionCategory {
     INT_AND_TIME(new Class<?>[]{Long.class}, null),
 
     /**
-     * Use if no object of any type can be passed as parameter. In this case, the only legal value
+     * Use if no object of any type can be passed as parameter. ParamType this case, the only legal value
      * is null. This is seldomly needed, and indicates an error in most cases. For example:
      *
      * <pre>

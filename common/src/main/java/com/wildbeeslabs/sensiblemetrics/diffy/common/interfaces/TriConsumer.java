@@ -21,44 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import java.util.Map;
-import java.util.function.BiConsumer;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces;
 
 /**
- * A positive index.
+ * Tri consumer interface declaration
  *
- * @author Alex Ruiz
+ * @param <T> type of first consumed value
+ * @param <U> type of second consumed value
+ * @param <R> type of third consumed value
  */
-@Data
-@EqualsAndHashCode
-@ToString
-public class Index {
-
-    public final int value;
+@FunctionalInterface
+public interface TriConsumer<T, U, R> {
 
     /**
-     * Creates a new {@link Index}.
+     * Consumes input values
      *
-     * @param value the value of the index.
-     * @return the created {@code Index}.
-     * @throws IllegalArgumentException if the given value is negative.
+     * @param t - initial input first argument to be consumed
+     * @param u - initial input second argument to be consumed
+     * @param r - initial input third argument to be consumed
      */
-    public static Index atIndex(int value) {
-        assert value >= 0 : "The value of the index should not be negative";
-        return new Index(value);
-    }
-
-    public BiConsumer<Map<Integer, Integer>, Double> accumulator(final Integer size) {
-        return (map, value) -> map.merge((int) (value / size), 1, (a, b) -> a + 1);
-    }
-
-    private Index(final int value) {
-        this.value = value;
-    }
+    void consume(final T t, final U u, final R r);
 }

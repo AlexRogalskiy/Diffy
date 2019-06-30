@@ -31,7 +31,7 @@ import java.util.function.Function;
 /**
  * Entry {@link Function} type {@link Enum}
  */
-public enum EntryFunction implements Function<Entry<?, ?>, Object> {
+public enum EntryFunctionType implements Function<Entry<?, ?>, Object> {
     KEY {
         @Override
         public @Nullable

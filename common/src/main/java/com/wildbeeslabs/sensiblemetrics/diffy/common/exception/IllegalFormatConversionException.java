@@ -41,8 +41,13 @@ public class IllegalFormatConversionException extends UnknownFormatConversionExc
      * Default explicit serialVersionUID for interoperability
      */
     private static final long serialVersionUID = -100420889921088744L;
-
+    /**
+     * Default expected value
+     */
     private final Object expected;
+    /**
+     * Default found value
+     */
     private final Object found;
 
     /**

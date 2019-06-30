@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public final class ValueWrapper implements Serializable {
 
@@ -41,7 +42,7 @@ public final class ValueWrapper implements Serializable {
      * @return a wrapper for the supplied value
      */
     public static ValueWrapper create(Object value) {
-        return (value == null ? nullValueWrapper : new ValueWrapper(value));
+        return (Objects.isNull(value) ? nullValueWrapper : new ValueWrapper(value));
     }
 
     private final Serializable value;
@@ -53,7 +54,7 @@ public final class ValueWrapper implements Serializable {
      * Reads and stores the supplied value's runtime type, string representation, and
      * identity hash code.
      */
-    private ValueWrapper(Object value) {
+    private ValueWrapper(final Object value) {
         this.value = value instanceof Serializable ? (Serializable) value : null;
         this.type = value != null ? value.getClass() : null;
         String stringValue;

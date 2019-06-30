@@ -23,42 +23,18 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.Map;
-import java.util.function.BiConsumer;
-
-/**
- * A positive index.
- *
- * @author Alex Ruiz
- */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Index {
+public class IntWrapper {
 
-    public final int value;
+    private int value;
 
-    /**
-     * Creates a new {@link Index}.
-     *
-     * @param value the value of the index.
-     * @return the created {@code Index}.
-     * @throws IllegalArgumentException if the given value is negative.
-     */
-    public static Index atIndex(int value) {
-        assert value >= 0 : "The value of the index should not be negative";
-        return new Index(value);
-    }
-
-    public BiConsumer<Map<Integer, Integer>, Double> accumulator(final Integer size) {
-        return (map, value) -> map.merge((int) (value / size), 1, (a, b) -> a + 1);
-    }
-
-    private Index(final int value) {
-        this.value = value;
+    public static IntWrapper of(final int i) {
+        return new IntWrapper(i);
     }
 }

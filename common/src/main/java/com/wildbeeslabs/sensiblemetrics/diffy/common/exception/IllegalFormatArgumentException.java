@@ -35,17 +35,26 @@ import java.util.MissingFormatArgumentException;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ExcessiveOrMissingFormatArgumentException extends MissingFormatArgumentException {
-    private static final long serialVersionUID = 17000126L;
+public class IllegalFormatArgumentException extends MissingFormatArgumentException {
 
+    /**
+     * Default explicit serialVersionUID for interoperability
+     */
+    private static final long serialVersionUID = 5587502326682779522L;
+    /**
+     * Default expected value
+     */
     private final int expected;
+    /**
+     * Default found value
+     */
     private final int found;
 
     /**
      * Constructs an instance of this class with the actual argument length and the expected
      * one.
      */
-    public ExcessiveOrMissingFormatArgumentException(final String message, int expected, int found) {
+    public IllegalFormatArgumentException(final String message, int expected, int found) {
         super(message);
         this.expected = expected;
         this.found = found;

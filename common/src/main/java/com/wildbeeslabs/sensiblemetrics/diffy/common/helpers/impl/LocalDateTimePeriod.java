@@ -45,8 +45,8 @@ import java.util.*;
 @ToString
 public class LocalDateTimePeriod {
 
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private final LocalDateTime start;
+    private final LocalDateTime end;
 
     public LocalDateTimePeriod(final LocalDateTime start, final LocalDateTime end) {
         this.start = start;

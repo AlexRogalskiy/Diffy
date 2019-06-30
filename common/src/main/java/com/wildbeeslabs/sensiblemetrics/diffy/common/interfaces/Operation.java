@@ -21,44 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.interfaces;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidOperationException;
 
-import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 /**
- * A positive index.
+ * Operation {@link BiFunction} interface declaration
  *
- * @author Alex Ruiz
+ * @param <T> type of operand value
+ * @param <R> type of operation result
+ * @author alexander.rogalskiy
+ * @version 1.0
+ * @since 2018-11-30
  */
-@Data
-@EqualsAndHashCode
-@ToString
-public class Index {
-
-    public final int value;
+@FunctionalInterface
+public interface Operation<T, R> extends BiFunction<T, T, R> {
 
     /**
-     * Creates a new {@link Index}.
+     * Returns {@code R} by input arguments
      *
-     * @param value the value of the index.
-     * @return the created {@code Index}.
-     * @throws IllegalArgumentException if the given value is negative.
+     * @param x - initial input first {@code T} argument
+     * @param y - initial input last {@code T} argument
+     * @return {@code R} result of operation
      */
-    public static Index atIndex(int value) {
-        assert value >= 0 : "The value of the index should not be negative";
-        return new Index(value);
-    }
-
-    public BiConsumer<Map<Integer, Integer>, Double> accumulator(final Integer size) {
-        return (map, value) -> map.merge((int) (value / size), 1, (a, b) -> a + 1);
-    }
-
-    private Index(final int value) {
-        this.value = value;
+    default R safeApply(final T x, final T y) {
+        try {
+            return this.apply(x, y);
+        } catch (Exception e) {
+            throw new InvalidOperationException(e);
+        }
     }
 }
+

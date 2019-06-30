@@ -187,7 +187,7 @@ public class LevenshteinDistance implements SimilarityDistance<CharSequence, Int
          * upper right instead of the lower left of the matrix.
          *
          * As a concrete example, suppose s is of length 5, t is of length 7,
-         * and our threshold is 1. In this case we're going to walk a stripe of
+         * and our threshold is 1. ParamType this case we're going to walk a stripe of
          * length 3. The matrix would look like so:
          *
          * <pre>

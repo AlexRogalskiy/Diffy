@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2019 WildBees Labs, Inc.
+ * Copyright 2018 WildBees Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,44 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.Arrays;
 
 /**
- * A positive index.
- *
- * @author Alex Ruiz
+ * Default scheme type {@link Enum}
  */
-@Data
-@EqualsAndHashCode
-@ToString
-public class Index {
+@Getter
+@RequiredArgsConstructor
+public enum SchemeType {
+    HTTP("http"),
+    HTTPS("https"),
+    WS("ws"),
+    WSS("wss");
 
-    public final int value;
+    private final String value;
 
-    /**
-     * Creates a new {@link Index}.
-     *
-     * @param value the value of the index.
-     * @return the created {@code Index}.
-     * @throws IllegalArgumentException if the given value is negative.
-     */
-    public static Index atIndex(int value) {
-        assert value >= 0 : "The value of the index should not be negative";
-        return new Index(value);
+    @JsonCreator
+    public static SchemeType forValue(final String value) {
+        return Arrays.stream(values())
+            .filter(type -> type.getValue().equalsIgnoreCase(value))
+            .findFirst()
+            .orElse(null);
     }
 
-    public BiConsumer<Map<Integer, Integer>, Double> accumulator(final Integer size) {
-        return (map, value) -> map.merge((int) (value / size), 1, (a, b) -> a + 1);
-    }
-
-    private Index(final int value) {
-        this.value = value;
+    @JsonValue
+    public String toValue() {
+        return value;
     }
 }

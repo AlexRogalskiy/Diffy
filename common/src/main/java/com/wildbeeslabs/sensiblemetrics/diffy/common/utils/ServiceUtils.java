@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 import com.codepoetics.protonpack.Indexed;
 import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.ImmutableSet;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.IntOperationType;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import lombok.NonNull;

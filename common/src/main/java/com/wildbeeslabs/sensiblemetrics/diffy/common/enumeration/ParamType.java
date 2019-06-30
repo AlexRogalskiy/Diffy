@@ -21,30 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * Path interface declaration
- *
- * @version 1.1
- * @since 1.0
+ * Default param type {@link Enum}
  */
-public interface Path {
+public enum ParamType {
+    HEADER,
+    QUERY;
 
-    /**
-     * Is this node a {@code SnakeNode node}?
-     *
-     * @return true if this is a {@code SnakeNode node}
-     */
-    boolean isSnake();
+    private static Map<String, ParamType> names = new LinkedHashMap<String, ParamType>();
 
-    /**
-     * Is this a bootstrap node?
-     * <p>
-     * ParamType bootstrap nodes one of the two coordinates is
-     * less than zero.
-     *
-     * @return tru if this is a bootstrap node.
-     */
-    boolean isBootstrap();
+    @JsonCreator
+    public static ParamType forValue(final String value) {
+        return names.get(value.toLowerCase());
+    }
+
+    @JsonValue
+    public String toValue() {
+        for (final Map.Entry<String, ParamType> entry : names.entrySet()) {
+            if (entry.getValue() == this) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    static {
+        names.put("header", HEADER);
+        names.put("query", QUERY);
+    }
 }

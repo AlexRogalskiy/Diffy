@@ -73,7 +73,7 @@ public abstract class PathNode implements Path {
     /**
      * Is this a bootstrap node?
      * <p>
-     * In bootstrap nodes one of the two coordinates is
+     * ParamType bootstrap nodes one of the two coordinates is
      * less than zero.
      *
      * @return tru if this is a bootstrap node.

@@ -43,8 +43,8 @@ import java.util.Objects;
 @ToString
 public class LocalDatePeriod {
 
-    private LocalDate start;
-    private LocalDate end;
+    private final LocalDate start;
+    private final LocalDate end;
 
     public LocalDatePeriod(final LocalDate start, final LocalDate end) {
         this.start = start;
