@@ -48,6 +48,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.i
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class HasSuperTypeMatcher<T extends Iterable<Class<?>>> extends AbstractMatcher<T> {
 
     /**

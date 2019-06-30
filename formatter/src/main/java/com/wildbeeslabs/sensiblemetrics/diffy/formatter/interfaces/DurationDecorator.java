@@ -27,7 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;
 
 /**
  * Custom duration format declaration (represents string-based formatted
- * duration {@link IDuration} instances)
+ * duration {@link Duration} instances)
  *
  * @author Alex
  * @version 1.0.0
@@ -36,47 +36,47 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.iface.Duration;
 public interface DurationDecorator {
 
     /**
-     * Returns string-formatted (with rounding) duration {@link IDuration}
+     * Returns string-formatted (with rounding) duration {@link Duration}
      * instance
      *
-     * @param duration - the current duration {@link IDuration} instance from
+     * @param duration - the current duration {@link Duration} instance from
      *                 which the time string should be decorated
-     * @return string-formatted (with rounding) duration {@link IDuration}
+     * @return string-formatted (with rounding) duration {@link Duration}
      * output
      */
     String format(final Duration duration);
 
     /**
-     * Returns string-formatted (without rounding) duration {@link IDuration}
+     * Returns string-formatted (without rounding) duration {@link Duration}
      * instance
      *
-     * @param duration - the current duration {@link IDuration} instance from
+     * @param duration - the current duration {@link Duration} instance from
      *                 which the time string should be decorated
-     * @return string-formatted (without rounding) duration {@link IDuration}
+     * @return string-formatted (without rounding) duration {@link Duration}
      * output
      */
     String formatUnrounded(final Duration duration);
 
     /**
-     * Returns string-formatted (with rounding) duration {@link IDuration}
+     * Returns string-formatted (with rounding) duration {@link Duration}
      * instance with past/future prefix/suffix decoration
      *
-     * @param duration - the current duration {@link IDuration} instance from
+     * @param duration - the current duration {@link Duration} instance from
      *                 which the time string should be decorated
      * @param time     - formatted time string
-     * @return string-formatted (with rounding) duration {@link IDuration}
+     * @return string-formatted (with rounding) duration {@link Duration}
      * output
      */
     String decorate(final Duration duration, final String time);
 
     /**
-     * Returns string-formatted (without rounding) duration {@link IDuration}
+     * Returns string-formatted (without rounding) duration {@link Duration}
      * instance with past/future prefix/suffix decoration
      *
-     * @param duration - the current duration {@link IDuration} instance from
+     * @param duration - the current duration {@link Duration} instance from
      *                 which the time string should be decorated
      * @param time     - formatted time string
-     * @return string-formatted (without rounding) duration {@link IDuration}
+     * @return string-formatted (without rounding) duration {@link Duration}
      * output
      */
     String decorateUnrounded(final Duration duration, final String time);

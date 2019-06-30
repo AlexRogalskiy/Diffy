@@ -59,8 +59,8 @@
                             <exclude>${exclude.packages}</exclude>
                         </excludes>
                         <archive>
+                            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
                             <manifestEntries>
-                                <!--<Automatic-Module-Name>${project.groupId}.${project.artifactId}</Automatic-Module-Name>-->
                                 <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                                 <Bundle-Version>${project.version}</Bundle-Version>
                                 <Bundle-Name>${project.artifactId}</Bundle-Name>
@@ -73,10 +73,35 @@
                             <manifest>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>modules/</classpathPrefix>
+                                <classpathLayoutType>simple</classpathLayoutType>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                                <addExtensions>false</addExtensions>
                             </manifest>
                         </archive>
                         <outputDirectory>${project.build.directory}/modules</outputDirectory>
                     </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.moditect</groupId>
+                    <artifactId>moditect-maven-plugin</artifactId>
+                    <version>${maven.moditect.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>add-module-infos</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>add-module-info</goal>
+                            </goals>
+                            <configuration>
+                                <overwriteExistingFiles>true</overwriteExistingFiles>
+                                <module>
+                                    <moduleInfoFile>${project.build.sourceDirectory}/module-info.java</moduleInfoFile>
+                                </module>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <plugin>
@@ -85,7 +110,7 @@
                     <version>${maven.bundle.plugin.vesion}</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <instructions>
+                        <instructions combine.children="append">
                             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                             <Bundle-Version>${project.version}</Bundle-Version>
                             <Bundle-Name>${project.artifactId}</Bundle-Name>
@@ -129,7 +154,7 @@
                             <linksource>true</linksource>
                             <notimestamp>true</notimestamp>
                             <quiet>true</quiet>
-                            <docencoding>UTF-8</docencoding>
+                            <docencoding>${project.reporting.outputEncoding}</docencoding>
                             <version>false</version>
                             <author>true</author>
                             <keywords>true</keywords>
@@ -137,6 +162,10 @@
                             <useStandardDocletOptions>true</useStandardDocletOptions>
                             <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
                             <excludePackageNames>${exclude.packages}</excludePackageNames>
+                            <show>private</show>
+                            <nohelp>false</nohelp>
+                            <failOnError>false</failOnError>
+                            <sourcepath>${project.basedir}/src/main/java</sourcepath>
                         </configuration>
                         <executions>
                             <execution>

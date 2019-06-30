@@ -251,8 +251,6 @@ public class TaskExecutorService {
      * @param timeout  - initial input {@link Duration} timeout
      * @param consumer - initial input {@link Consumer} task
      * @param supplier - initial input {@link Supplier} task
-     * @param executor - initial input {@link ExecutorService}
-     * @return {@link Consumer} task result {@code T}
      */
     private static <T, E extends Throwable> void execute(final Duration timeout, final Consumer<T> consumer, final Supplier<T> supplier, final ExecutorService executor) {
         final Runnable runnable = () -> {

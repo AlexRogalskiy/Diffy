@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,8 +20,14 @@
     </issueManagement>
 
     <ciManagement>
-        <system>Travis-ci</system>
+        <system>Travis</system>
         <url>https://travis-ci.com/AlexRogalskiy/Diffy</url>
+        <notifiers>
+            <notifier>
+                <address>alexander.rogalsky@yandex.ru</address>
+                <type>mail</type>
+            </notifier>
+        </notifiers>
     </ciManagement>
 
     <scm>
@@ -211,6 +217,7 @@
         <maven.surefire.plugin.version>3.0.0-M3</maven.surefire.plugin.version>
         <maven.license.plugin.version>1.4.0</maven.license.plugin.version>
         <maven.jacoco.plugin.version>0.8.3</maven.jacoco.plugin.version>
+        <maven.moditect.plugin.version>1.0.0.Beta2</maven.moditect.plugin.version>
         <maven.enforcer.plugin.version>3.0.0-M2</maven.enforcer.plugin.version>
         <maven.resources.plugin.version>3.1.0</maven.resources.plugin.version>
         <maven.shade.plugin.version>3.2.1</maven.shade.plugin.version>
@@ -224,6 +231,8 @@
         <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
         <maven.spotbugs.plugin.version>3.1.11</maven.spotbugs.plugin.version>
         <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
+        <maven.javancss.plugin.version>2.1</maven.javancss.plugin.version>
+        <maven.findbug.plugin.version>3.0.5</maven.findbug.plugin.version>
         <maven.checkstyle.plugin.lib.version>8.15</maven.checkstyle.plugin.lib.version>
         <maven.properties.plugin.version>1.0.0</maven.properties.plugin.version>
         <maven.javadoc.plugin.version>3.1.0</maven.javadoc.plugin.version>
@@ -357,9 +366,10 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${maven.checkstyle.plugin.version}</version>
                     <configuration>
+                        <excludes>**/test/java/**/*.java</excludes>
+                        <failOnViolation>true</failOnViolation>
                         <enableRulesSummary>false</enableRulesSummary>
                         <configLocation>${project.basedir}/checkstyle/checkstyle.xml</configLocation>
-                        <!--<suppressionsLocation>${basedir}/checkstyle-suppressions.xml</suppressionsLocation>-->
                         <suppressionsLocation>${project.basedir}/checkstyle/checkstyle-suppression.xml
                         </suppressionsLocation>
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -376,6 +386,45 @@
                                 <consoleOutput>true</consoleOutput>
                                 <failsOnError>true</failsOnError>
                             </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>javancss-maven-plugin</artifactId>
+                    <version>${maven.javancss.plugin.version}</version>
+                    <configuration>
+                        <ccnLimit>15</ccnLimit>
+                        <ncssLimit>100</ncssLimit>
+                        <failOnViolation>true</failOnViolation>
+                        <excludes>
+                            <exclude>**/tests/**/*.*</exclude>
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${maven.findbug.plugin.version}</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <failOnError>true</failOnError>
+                        <excludeFilterFile>${project.basedir}/findbugs/exclude.xml</excludeFilterFile>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
                         </execution>
                     </executions>
                 </plugin>
@@ -399,6 +448,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven.deploy.plugin.version}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -560,18 +612,6 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${maven.nexus.staging.plugin.version}</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    </configuration>
-                </plugin>
-
-                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>taglist-maven-plugin</artifactId>
                     <version>${maven.taglist.plugin.version}</version>
@@ -631,6 +671,15 @@
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>default-deploy</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>deploy</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
 
                 <!-- Code coverage plugins -->

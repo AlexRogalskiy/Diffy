@@ -46,6 +46,7 @@ import static java.util.Arrays.asList;
 @Data
 @EqualsAndHashCode
 @ToString
+@SuppressWarnings("unchecked")
 public class DefaultMatcherEventListener<T, S> implements MatcherEventListener<T, S> {
 
     /**

@@ -68,7 +68,7 @@ public class BeanMatcher<T> implements Matcher<T> {
 
     /**
      * Evaluates the given object by applying the {@code matches()}
-     * to a property value named by {@link #getPropertyName()}.
+     * to a property value
      *
      * @param value The object being evaluated
      * @return the result of the predicate evaluation

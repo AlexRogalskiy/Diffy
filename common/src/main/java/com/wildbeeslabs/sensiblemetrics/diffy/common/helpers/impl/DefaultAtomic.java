@@ -33,6 +33,7 @@ import java.io.Serializable;
  *
  * @param <T> type of stored value
  */
+@SuppressWarnings("unchecked")
 public class DefaultAtomic<T> extends Atomic<T> implements Serializable {
     /**
      * Default explicit serialVersionUID for interoperability
@@ -42,7 +43,7 @@ public class DefaultAtomic<T> extends Atomic<T> implements Serializable {
     /**
      * Default atomic constructor by input parameters
      *
-     * @param value - initial input {@code T] value
+     * @param value - initial input {@code T} value
      */
     public DefaultAtomic(final T value) {
         super(value);
