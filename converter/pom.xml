@@ -21,9 +21,13 @@
     <inceptionYear>2019</inceptionYear>
 
     <properties>
+        <pl.allergro.finance.tradukisto.version>1.8.0</pl.allergro.finance.tradukisto.version>
+
         <diffy-common.version>1.1.0</diffy-common.version>
         <diffy-matcher.version>1.1.0</diffy-matcher.version>
         <diffy-validator.version>1.1.0</diffy-validator.version>
+
+        <json.version>20180813</json.version>
 
         <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.converter.examples</exclude.packages>
     </properties>
@@ -260,10 +264,18 @@
             <version>${diffy-validator.version}</version>
         </dependency>
 
+        <!-- Finance library dependencies -->
+        <dependency>
+            <groupId>pl.allegro.finance</groupId>
+            <artifactId>tradukisto</artifactId>
+            <version>${pl.allergro.finance.tradukisto.version}</version>
+        </dependency>
+
+        <!-- Json library dependencies -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20180813</version>
+            <version>${json.version}</version>
         </dependency>
     </dependencies>
 </project>
