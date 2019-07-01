@@ -202,6 +202,7 @@
         <sonar.language>java</sonar.language>
 
         <surefire.forkNumber>0</surefire.forkNumber>
+        <gpg.passphrase>test</gpg.passphrase>
 
         <!-- Maven plugins -->
         <maven.versions.plugin.version>2.7</maven.versions.plugin.version>
@@ -285,6 +286,7 @@
                         <useReleaseProfile>false</useReleaseProfile>
                         <releaseProfiles>release</releaseProfiles>
                         <goals>deploy</goals>
+                        <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
                     </configuration>
                 </plugin>
 
@@ -532,10 +534,11 @@
                         <reportFormat>plain</reportFormat>
                         <trimStackTrace>false</trimStackTrace>
                         <forkCount>0</forkCount>
-                        <argLine>-Xmx1024m</argLine>
+                        <argLine>-XX:MaxPermSize=128m -Xmx1024m</argLine>
                         <argLine>
                             --illegal-access=permit
                         </argLine>
+                        <runOrder>alphabetical</runOrder>
                         <excludes>
                             <exclude>**/*IT.java</exclude>
                         </excludes>

@@ -39,6 +39,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class FailSafeMatcher<T> extends AbstractMatcher<T> {
 
     /**

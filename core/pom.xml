@@ -235,6 +235,7 @@
                         <version>${maven.gpg.plugin.version}</version>
                         <configuration>
                             <useAgent>false</useAgent>
+                            <passphrase>${gpg.passphrase}</passphrase>
                         </configuration>
                         <executions>
                             <execution>
