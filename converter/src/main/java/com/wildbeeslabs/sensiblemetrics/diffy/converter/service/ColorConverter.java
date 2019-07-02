@@ -1,10 +1,14 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.enumeration.ColorRgbType;
+import lombok.Data;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Data
 public class ColorConverter {
     private final int red;
     private final int green;
@@ -26,16 +30,12 @@ public class ColorConverter {
     /*
      * Guesses what format the input color is in.
      */
-    public static ColorConverter fromString(String value) {
-        for (final Converter converter : CONVERTERS) {
-            final ColorConverter color = converter.getColor(value);
-            if (color != null) {
-                return color;
-            }
-        }
-        throw new IllegalArgumentException(
-            String.format("Did not know how to convert %s into color", value)
-        );
+    public static ColorConverter fromString(final String value) {
+        return Arrays.stream(CONVERTERS)
+            .map(converter -> converter.getColor(value))
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(String.format("ERROR: cannot find color converter by value = {%s} ", value)));
     }
 
     public ColorConverter(int red, int green, int blue, double alpha) {

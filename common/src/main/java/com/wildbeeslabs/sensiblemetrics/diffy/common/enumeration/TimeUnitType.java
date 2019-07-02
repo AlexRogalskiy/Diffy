@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
+import lombok.NonNull;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,7 +33,7 @@ import java.time.temporal.TemporalAmount;
 import java.util.Optional;
 
 /**
- * Time unit enumeration
+ * Default time unit type {@link Enum}
  *
  * @author Alex
  * @version 1.0.0
@@ -158,6 +159,7 @@ public enum TimeUnitType {
      * @param code - time unit label
      * @return time unit type
      */
+    @NonNull
     public static TimeUnitType getByCode(final String code) {
         if (!StringUtils.isEmpty(code)) {
             for (final TimeUnitType unit : TimeUnitType.values()) {

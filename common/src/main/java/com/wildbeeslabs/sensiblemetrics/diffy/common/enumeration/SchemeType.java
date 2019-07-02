@@ -26,9 +26,12 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.exception.UnsupportedSchemeTypeException.throwUnsupportedSchemeType;
 
 /**
  * Default scheme type {@link Enum}
@@ -44,15 +47,16 @@ public enum SchemeType {
     private final String value;
 
     @JsonCreator
+    @NonNull
     public static SchemeType forValue(final String value) {
         return Arrays.stream(values())
             .filter(type -> type.getValue().equalsIgnoreCase(value))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> throwUnsupportedSchemeType(value));
     }
 
     @JsonValue
     public String toValue() {
-        return value;
+        return this.value;
     }
 }

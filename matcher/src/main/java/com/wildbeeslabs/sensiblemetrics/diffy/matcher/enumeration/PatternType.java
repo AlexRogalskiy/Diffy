@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -31,6 +33,14 @@ import java.util.Objects;
 public enum PatternType {
     STATIC,
     DYNAMIC;
+
+    @Nullable
+    public static PatternType fromName(final String name) {
+        return Arrays.stream(values())
+            .filter(type -> type.name().equalsIgnoreCase(name))
+            .findFirst()
+            .orElse(null);
+    }
 
     /**
      * Return binary flag based on current mode {@code STATIC}

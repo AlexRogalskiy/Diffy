@@ -24,10 +24,9 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;    // Nested types
 
 /**
- * Default url type {@link Enum}
+ * Default URL type {@link Enum}
  */
 public enum UrlType {
-
     SCHEME {
         @Override
         public boolean isAllowed(int c) {

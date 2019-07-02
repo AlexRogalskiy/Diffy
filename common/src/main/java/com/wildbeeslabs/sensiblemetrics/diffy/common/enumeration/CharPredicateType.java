@@ -23,6 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
+/**
+ * Default char predicate type {@link Enum}
+ */
 public enum CharPredicateType {
 
     /**
@@ -93,7 +96,8 @@ public enum CharPredicateType {
     ASCII_LETTERS {
         @Override
         public boolean test(final int codePoint) {
-            return ASCII_LOWERCASE_LETTERS.test(codePoint) || ASCII_UPPERCASE_LETTERS.test(codePoint);
+            return ASCII_LOWERCASE_LETTERS.test(codePoint)
+                || ASCII_UPPERCASE_LETTERS.test(codePoint);
         }
     },
 
@@ -105,10 +109,11 @@ public enum CharPredicateType {
     ASCII_ALPHA_NUMERALS {
         @Override
         public boolean test(final int codePoint) {
-            return ASCII_LOWERCASE_LETTERS.test(codePoint) || ASCII_UPPERCASE_LETTERS.test(codePoint)
+            return ASCII_LOWERCASE_LETTERS.test(codePoint)
+                || ASCII_UPPERCASE_LETTERS.test(codePoint)
                 || ARABIC_NUMERALS.test(codePoint);
         }
     };
 
-    abstract boolean test(int codePoint);
+    public abstract boolean test(int codePoint);
 }

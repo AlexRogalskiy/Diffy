@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +36,7 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Helper enumeration class to process credit cards
+ * Default credit card type {@link Enum}
  *
  * @author alexander.rogalskiy
  * @version 1.0
@@ -44,7 +45,6 @@ import static java.util.stream.Collectors.toList;
 @Getter
 @RequiredArgsConstructor
 public enum CreditCardType {
-
     AMERICAN_EXPRESS(15, 34, 37),
     CHINA_UNION_PAY_16(16, 62),
     CHINA_UNION_PAY_17(17, 62),
@@ -81,7 +81,7 @@ public enum CreditCardType {
     }
 
     private List<Integer> fromNumber(final int num) {
-        assert num > 0 : "Number should be greate that zero";
+        ValidationUtils.isTrue(num > 0, "Number should be positive");
         final List<Integer> list = new LinkedList<>();
         int tmp = num;
         while (tmp != 0) {

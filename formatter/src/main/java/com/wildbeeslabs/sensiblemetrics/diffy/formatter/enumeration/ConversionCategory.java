@@ -125,7 +125,7 @@ public enum ConversionCategory {
      * </blockquote>
      */
     public static ConversionCategory fromConversionChar(char c) {
-        for (ConversionCategory v : new ConversionCategory[]{GENERAL, CHAR, INT, FLOAT, TIME}) {
+        for (final ConversionCategory v : new ConversionCategory[]{GENERAL, CHAR, INT, FLOAT, TIME}) {
             if (v.chars.contains(String.valueOf(c))) {
                 return v;
             }
@@ -137,7 +137,7 @@ public enum ConversionCategory {
         return new HashSet<>(Arrays.asList(a));
     }
 
-    public static boolean isSubsetOf(ConversionCategory a, ConversionCategory b) {
+    public static boolean isSubsetOf(final ConversionCategory a, final ConversionCategory b) {
         return intersect(a, b) == a;
     }
 
@@ -166,19 +166,15 @@ public enum ConversionCategory {
             return a;
         }
 
-        Set<Class<? extends Object>> as = arrayToSet(a.types);
-        Set<Class<? extends Object>> bs = arrayToSet(b.types);
-        as.retainAll(bs); // intersection
-        for (ConversionCategory v :
-            new ConversionCategory[]{
-                CHAR, INT, FLOAT, TIME, CHAR_AND_INT, INT_AND_TIME, NULL
-            }) {
+        final Set<Class<? extends Object>> as = arrayToSet(a.types);
+        final Set<Class<? extends Object>> bs = arrayToSet(b.types);
+        as.retainAll(bs);
+        for (ConversionCategory v : new ConversionCategory[]{CHAR, INT, FLOAT, TIME, CHAR_AND_INT, INT_AND_TIME, NULL}) {
             Set<Class<? extends Object>> vs = arrayToSet(v.types);
             if (vs.equals(as)) {
                 return v;
             }
         }
-        // this should never happen
         throw new RuntimeException();
     }
 
@@ -207,19 +203,15 @@ public enum ConversionCategory {
             return INT;
         }
 
-        Set<Class<? extends Object>> as = arrayToSet(a.types);
-        Set<Class<? extends Object>> bs = arrayToSet(b.types);
+        final Set<Class<? extends Object>> as = arrayToSet(a.types);
+        final Set<Class<? extends Object>> bs = arrayToSet(b.types);
         as.addAll(bs); // union
-        for (ConversionCategory v :
-            new ConversionCategory[]{
-                NULL, CHAR_AND_INT, INT_AND_TIME, CHAR, INT, FLOAT, TIME
-            }) {
-            Set<Class<? extends Object>> vs = arrayToSet(v.types);
+        for (ConversionCategory v : new ConversionCategory[]{NULL, CHAR_AND_INT, INT_AND_TIME, CHAR, INT, FLOAT, TIME}) {
+            final Set<Class<? extends Object>> vs = arrayToSet(v.types);
             if (vs.equals(as)) {
                 return v;
             }
         }
-
         return GENERAL;
     }
 

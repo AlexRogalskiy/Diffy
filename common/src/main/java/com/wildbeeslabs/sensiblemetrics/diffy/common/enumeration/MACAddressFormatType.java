@@ -29,10 +29,12 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.function.BiFunction;
 
+/**
+ * Default mac address format type {@link Enum}
+ */
 @Getter
 @RequiredArgsConstructor
 public enum MACAddressFormatType {
-
     DASH_EVERY_2_DIGITS(MACAddressFormatType::line2Digits),
     COLON_EVERY_2_DIGITS(MACAddressFormatType::colon2Digits),
     DOT_EVERY_2_DIGITS(MACAddressFormatType::point2Digits),

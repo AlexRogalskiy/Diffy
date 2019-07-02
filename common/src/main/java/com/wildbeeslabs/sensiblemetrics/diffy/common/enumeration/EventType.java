@@ -23,12 +23,15 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
-import javax.annotation.Nullable;
+import lombok.NonNull;
+
 import java.util.Arrays;
 import java.util.List;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.exception.UnsupportedEventTypeException.throwUnsupportedEventType;
+
 /**
- * Event type {@link Enum}
+ * Default event type {@link Enum}
  */
 public enum EventType {
     MATCHER_EVENT,
@@ -42,12 +45,12 @@ public enum EventType {
      * @param name - initial input event type name {@link String}
      * @return {@link EventType}
      */
-    @Nullable
+    @NonNull
     public static EventType fromName(final String name) {
         return Arrays.stream(values())
             .filter(type -> type.name().equalsIgnoreCase(name))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> throwUnsupportedEventType(name));
     }
 
     /**

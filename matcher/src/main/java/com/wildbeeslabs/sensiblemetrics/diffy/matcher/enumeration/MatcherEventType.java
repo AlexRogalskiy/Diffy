@@ -25,9 +25,10 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration;
 
 import lombok.NonNull;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.UnsupportedMatcherEventTypeException.throwUnsupportedEventType;
 
 /**
  * RegexMatcher event type {@link Enum}
@@ -118,12 +119,12 @@ public enum MatcherEventType {
      * @param name - initial input event type {@link String}
      * @return {@link MatcherEventType}
      */
-    @Nullable
+    @NonNull
     public static MatcherEventType fromName(final String name) {
         return Arrays.stream(values())
             .filter(type -> type.name().equalsIgnoreCase(name))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> throwUnsupportedEventType(name));
     }
 
     /**

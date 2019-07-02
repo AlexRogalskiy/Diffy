@@ -23,15 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidOperationException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.exception.UnsupportedOperatorTypeException.throwUnsupportedOperatorType;
+
 /**
- * Operator type enumeration
+ * Default operator type {@link Enum}
  *
  * @author Alex
  * @version 1.0.0
@@ -40,17 +41,14 @@ import java.util.Arrays;
 @Getter
 @RequiredArgsConstructor
 public enum OperatorType {
-
     GTE(">="),
     LTE("<="),
     EQ("=="),
-
     /**
      * Type safe equals
      */
     TSEQ("==="),
     NE("!="),
-
     /**
      * Type safe not equals
      */
@@ -68,7 +66,6 @@ public enum OperatorType {
     MATCHES("MATCHES"),
     EMPTY("EMPTY"),
     SUBSETOF("SUBSETOF");
-
     /**
      * Default operator code
      */
@@ -79,6 +76,6 @@ public enum OperatorType {
         return Arrays.stream(values())
             .filter(type -> type.getOperatorCode().equalsIgnoreCase(operatorCode))
             .findFirst()
-            .orElseThrow(() -> new InvalidOperationException(String.format("ERROR: cannot find operator by code = {%s} ", operatorCode)));
+            .orElseThrow(() -> throwUnsupportedOperatorType(operatorCode));
     }
 }

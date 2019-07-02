@@ -26,6 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public enum ParamType {
     HEADER,
     QUERY;
 
-    private static Map<String, ParamType> names = new LinkedHashMap<String, ParamType>();
+    private static Map<String, ParamType> names = new LinkedHashMap<>();
 
     @JsonCreator
     public static ParamType forValue(final String value) {
@@ -44,6 +45,7 @@ public enum ParamType {
     }
 
     @JsonValue
+    @Nullable
     public String toValue() {
         for (final Map.Entry<String, ParamType> entry : names.entrySet()) {
             if (entry.getValue() == this) {

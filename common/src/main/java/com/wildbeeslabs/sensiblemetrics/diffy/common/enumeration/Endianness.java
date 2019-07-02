@@ -5,14 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Helper enumeration class to process LITTLE/BIG-endian values
+ * Default endianness type {@link Enum}
  *
  * @author alexander.rogalskiy
  * @version 1.0
  * @since 2017-12-12
  */
 public enum Endianness {
-
     LITTLE {
         @Override
         public short readShort(final InputStream stream) throws IOException {

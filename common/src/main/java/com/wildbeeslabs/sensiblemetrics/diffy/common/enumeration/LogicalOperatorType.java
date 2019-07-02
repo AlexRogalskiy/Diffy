@@ -23,12 +23,13 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidOperationException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.exception.UnsupportedLogicalOperatorTypeException.throwUnsupportedLogicalOperatorType;
 
 /**
  * Logical operator type enumeration
@@ -54,6 +55,6 @@ public enum LogicalOperatorType {
         return Arrays.stream(values())
             .filter(type -> type.getOperatorName().equalsIgnoreCase(operatorName))
             .findFirst()
-            .orElseThrow(() -> new InvalidOperationException(String.format("ERROR: cannot find operator by name = {%s}", operatorName)));
+            .orElseThrow(() -> throwUnsupportedLogicalOperatorType(operatorName));
     }
 }

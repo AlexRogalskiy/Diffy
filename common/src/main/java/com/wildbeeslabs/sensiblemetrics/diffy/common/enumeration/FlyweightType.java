@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
+import lombok.NonNull;
+
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Field;
@@ -39,13 +41,12 @@ import java.util.logging.Logger;
  * Default flyweight type {@link Enum}
  */
 public enum FlyweightType {
-
     /**
      * java.lang.Enum
      */
     ENUM(Enum.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return true;
         }
     },
@@ -54,7 +55,7 @@ public enum FlyweightType {
      */
     CLASS(Class.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return true;
         }
     },
@@ -70,7 +71,7 @@ public enum FlyweightType {
      */
     BOOLEAN(Boolean.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj == Boolean.TRUE || obj == Boolean.FALSE;
         }
     },
@@ -79,7 +80,7 @@ public enum FlyweightType {
      */
     INTEGER(Integer.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             int value = (Integer) obj;
             return value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE && obj == Integer.valueOf(value);
         }
@@ -89,7 +90,7 @@ public enum FlyweightType {
      */
     SHORT(Short.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             short value = (Short) obj;
             return value >= Short.MIN_VALUE && value <= Short.MAX_VALUE && obj == Short.valueOf(value);
         }
@@ -99,7 +100,7 @@ public enum FlyweightType {
      */
     BYTE(Byte.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             byte value = (Byte) obj;
             return value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE && obj == Byte.valueOf((Byte) obj);
         }
@@ -109,7 +110,7 @@ public enum FlyweightType {
      */
     LONG(Long.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             long value = (Long) obj;
             return value >= Long.MIN_VALUE && value <= Long.MAX_VALUE && obj == Long.valueOf(value);
         }
@@ -119,7 +120,7 @@ public enum FlyweightType {
      */
     BIGINTEGER(BigInteger.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj == BigInteger.ZERO || obj == BigInteger.ONE || obj == BigInteger.TEN;
         }
     },
@@ -128,7 +129,7 @@ public enum FlyweightType {
      */
     BIGDECIMAL(BigDecimal.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj == BigDecimal.ZERO || obj == BigDecimal.ONE || obj == BigDecimal.TEN;
         }
     },
@@ -137,7 +138,7 @@ public enum FlyweightType {
      */
     MATHCONTEXT(MathContext.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj == MathContext.UNLIMITED || obj == MathContext.DECIMAL32 || obj == MathContext.DECIMAL64 || obj == MathContext.DECIMAL128;
         }
     },
@@ -146,7 +147,7 @@ public enum FlyweightType {
      */
     CHARACTER(Character.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return (Character) obj <= Byte.MAX_VALUE && obj == Character.valueOf((Character) obj);
         }
     },
@@ -155,7 +156,7 @@ public enum FlyweightType {
      */
     LOCALE(Locale.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj instanceof Locale && GLOBAL_LOCALES.contains(obj);
         }
     },
@@ -165,7 +166,7 @@ public enum FlyweightType {
     LOGGER(Logger.class) {
         @Override
         @SuppressWarnings("deprecation")
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj == Logger.global;
         }
     },
@@ -174,7 +175,7 @@ public enum FlyweightType {
      */
     PROXY(Proxy.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj == Proxy.NO_PROXY;
         }
     },
@@ -183,7 +184,7 @@ public enum FlyweightType {
      */
     CODINGERRORACTION(CodingErrorAction.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return true;
         }
     },
@@ -192,7 +193,7 @@ public enum FlyweightType {
      */
     DATATYPECONSTANTS_FIELD(DatatypeConstants.Field.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return true;
         }
     },
@@ -201,7 +202,7 @@ public enum FlyweightType {
      */
     QNAME(QName.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             return obj == DatatypeConstants.DATETIME
                 || obj == DatatypeConstants.TIME
                 || obj == DatatypeConstants.DATE
@@ -220,7 +221,7 @@ public enum FlyweightType {
      */
     MISC(Void.class) {
         @Override
-        boolean isShared(final Object obj) {
+        protected boolean isShared(final Object obj) {
             boolean emptyCollection = obj == Collections.EMPTY_SET || obj == Collections.EMPTY_LIST || obj == Collections.EMPTY_MAP;
             boolean systemStream = obj == System.in || obj == System.out || obj == System.err;
             return emptyCollection || systemStream || obj == String.CASE_INSENSITIVE_ORDER;
@@ -263,7 +264,7 @@ public enum FlyweightType {
      * @param obj the object to check for
      * @return true, if shared
      */
-    abstract boolean isShared(final Object obj);
+    protected abstract boolean isShared(final Object obj);
 
     /**
      * Will return the Flyweight enum instance for the flyweight Class, or null if type isn't flyweight
@@ -271,7 +272,8 @@ public enum FlyweightType {
      * @param aClazz the class we need the FlyweightType instance for
      * @return the FlyweightType, or null
      */
-    static FlyweightType getFlyweightType(final Class<?> aClazz) {
+    @NonNull
+    public static FlyweightType getFlyweightType(final Class<?> aClazz) {
         if (aClazz.isEnum() || (Objects.nonNull(aClazz.getSuperclass()) && aClazz.getSuperclass().isEnum())) {
             return ENUM;
         }

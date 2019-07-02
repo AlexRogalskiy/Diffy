@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BaseMatcherMode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
