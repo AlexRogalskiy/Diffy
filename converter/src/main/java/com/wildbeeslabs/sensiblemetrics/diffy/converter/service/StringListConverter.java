@@ -23,19 +23,16 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
-import com.google.common.base.Converter;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Default list {@link AbstractConverter} implementation
+ * List {@link AbstractConverter} implementation
  *
- * @param <T> the element converter type
  * @author Alexander Rogalskiy
  * @version 1.1
  * @since 1.0
@@ -43,31 +40,10 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DefaultListConverter<T> extends AbstractConverter<String, List<T>> {
-
-    private final StringListConverter splitter;
-    private final Converter<String, T> converter;
-
-    /**
-     * Constructs a new converter.
-     *
-     * @param splitter  to split value into list of arguments
-     * @param converter to convert list of arguments to target element type
-     */
-    public DefaultListConverter(final StringListConverter splitter, final Converter<String, T> converter) {
-        ValidationUtils.notNull(splitter, "Splitter should not be null");
-        ValidationUtils.notNull(converter, "Converter should not be null");
-
-        this.splitter = splitter;
-        this.converter = converter;
-    }
+public class StringListConverter extends AbstractConverter<String, List<String>> {
 
     @Override
-    public List<T> valueOf(final String value) {
-        final List<T> result = new ArrayList<>();
-        for (final String param : this.splitter.convert(value)) {
-            result.add(this.converter.convert(param));
-        }
-        return result;
+    public List<String> valueOf(final String value) {
+        return Arrays.asList(value.split(","));
     }
 }

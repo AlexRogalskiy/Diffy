@@ -34,13 +34,16 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.TypeUtils.DEFAULT_PRIMITIVE_TYPES;
+import static java.lang.String.valueOf;
 import static org.apache.commons.lang3.StringUtils.uncapitalize;
 
 /**
@@ -173,4 +176,17 @@ public class PropertyUtils {
      * Default underscore property {@link NamingTokenizer}
      */
     public static NamingTokenizer DEFAULT_UNDERSCORE_TOKENIZER = (name, nameableType) -> DEFAULT_UNDERSCORE_PATTERN.split(name);
+
+    public static boolean isEmpty(final Object o) {
+        if (Objects.nonNull(o)) {
+            if (o instanceof Object[]) {
+                return ((Object[]) o).length == 0 || (((Object[]) o).length == 1 && isEmpty(((Object[]) o)[0]));
+            }
+            return ("".equals(valueOf(o)))
+                || "null".equals(valueOf(o))
+                || (o instanceof Collection && ((Collection) o).size() == 0)
+                || (o instanceof Map && ((Map) o).size() == 0);
+        }
+        return true;
+    }
 }

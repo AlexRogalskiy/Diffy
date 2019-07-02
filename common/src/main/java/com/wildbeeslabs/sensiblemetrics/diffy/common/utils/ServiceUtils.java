@@ -26,7 +26,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 import com.codepoetics.protonpack.Indexed;
 import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.ImmutableSet;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.IntOperationType;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import lombok.NonNull;
@@ -571,6 +570,11 @@ public class ServiceUtils {
     @NonNull
     public static <T> Iterator<T> iteratorOf(final T... elements) {
         return iterableOf(elements).iterator();
+    }
+
+    @NonNull
+    public static <T> List<T> listOf(final T... elements) {
+        return streamOf(elements).collect(toList());
     }
 
     /**

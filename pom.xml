@@ -527,6 +527,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
                     <configuration>
+                        <childDelegation>true</childDelegation>
                         <skipTests>${unit-tests.skip}</skipTests>
                         <reuseForks>true</reuseForks>
                         <parallel>classes</parallel>

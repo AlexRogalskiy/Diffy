@@ -16,30 +16,30 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
- * List {@link AbstractConverter} implementation
+ * Set {@link AbstractConverter} implementation
  */
-public class ListConverter extends AbstractConverter<Object, Object> {
+public class SetConverter extends AbstractConverter<Object, Object> {
 
     @Override
     public Object valueOf(final Object value) {
         final Class<?> type = value.getClass();
-        final List newList = new ArrayList();
+        final Set<Object> newSet = new LinkedHashSet();
         if (type.isArray()) {
-            newList.addAll(Arrays.asList(((Object[]) value)));
+            newSet.addAll(Arrays.asList(((Object[]) value)));
         } else if (Collection.class.isAssignableFrom(type)) {
-            newList.addAll((Collection<Object>) value);
+            newSet.addAll((Collection<Object>) value);
         } else if (Iterable.class.isAssignableFrom(type)) {
             for (final Object o : (Iterable<Object>) value) {
-                newList.add(o);
+                newSet.add(o);
             }
         }
-        return newList;
+        return newSet;
     }
 
     @Override

@@ -85,6 +85,16 @@ public interface Converter<T, R> {
     R convert(final T value);
 
     /**
+     * Returns binary flag by input arguments
+     *
+     * @param clazz - initial input {@link Class} value
+     * @return true - if input argument {@code T} can be converterd, false - otherwise
+     */
+    default boolean canConvert(final Class<T> clazz) {
+        return false;
+    }
+
+    /**
      * Returns composed {@link Converter} function that applies input {@link Converter}
      * function to its input, and then applies current {@link Converter} function to the result
      *
