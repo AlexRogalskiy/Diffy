@@ -976,6 +976,7 @@
                             <executable>true</executable>
                             <showDeprecation>true</showDeprecation>
                             <debug>true</debug>
+                            <fork>false</fork>
                             <debuglevel>lines,vars,source</debuglevel>
                             <optimize>false</optimize>
                             <verbose>false</verbose>
@@ -984,6 +985,7 @@
                             <release>${java.version}</release>
                             <encoding>${project.reporting.outputEncoding}</encoding>
                             <compilerArgs>
+                                <!--<XDignore.symbol.file />-->
                                 <arg>-sourcepath</arg>
                                 <arg>
                                     ${project.basedir}/src/main/java${path.separator}${project.basedir}/target/generated-sources/annotations${path.separator}/
