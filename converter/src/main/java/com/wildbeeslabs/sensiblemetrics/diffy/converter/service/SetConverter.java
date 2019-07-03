@@ -24,6 +24,7 @@ import java.util.Set;
 /**
  * Set {@link AbstractConverter} implementation
  */
+@SuppressWarnings("unchecked")
 public class SetConverter extends AbstractConverter<Object, Object> {
 
     @Override

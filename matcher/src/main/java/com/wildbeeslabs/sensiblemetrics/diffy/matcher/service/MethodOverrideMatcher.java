@@ -47,6 +47,7 @@ import static java.util.Arrays.asList;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class MethodOverrideMatcher<T extends Method> extends AbstractMatcher<T> {
 
     /**
