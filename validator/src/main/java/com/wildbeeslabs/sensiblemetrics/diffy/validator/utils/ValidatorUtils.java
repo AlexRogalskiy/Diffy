@@ -34,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.DateFormat;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -199,4 +200,32 @@ public class ValidatorUtils {
     public boolean isValidStrengthPassword(final String input) {
         return DEFAULT_PASSWORD_STRENGH_PATTERN.matcher(input).matches();
     }
+
+//    /**
+//     * Returns {@link Optional} of parsed input address {@link String}
+//     *
+//     * @param source - initial input address string
+//     * @return {@link Optional} of parsed input address {@link String}
+//     */
+//    public static Optional<String> getRFC822Email(final String source) {
+//        try {
+//            return Optional.ofNullable(new InternetAddress(source, true).getAddress());
+//        } catch (AddressException e) {
+//            return Optional.empty();
+//        }
+//    }
+
+//    /**
+//     * Returns {@link Optional} of parsed input address {@link String}
+//     *
+//     * @param source - initial input address string
+//     * @return {@link Optional} of parsed input address {@link String}
+//     */
+//    public static Optional<String> getRFC822Email(final String source) {
+//        try {
+//            return Optional.ofNullable(new InternetAddress(source, true).getAddress());
+//        } catch (AddressException e) {
+//            return Optional.empty();
+//        }
+//    }
 }

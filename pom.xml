@@ -236,6 +236,7 @@
         <maven.findbug.plugin.version>3.0.5</maven.findbug.plugin.version>
         <maven.checkstyle.plugin.lib.version>8.15</maven.checkstyle.plugin.lib.version>
         <maven.properties.plugin.version>1.0.0</maven.properties.plugin.version>
+        <maven.duplicate.finder.plugin.version>1.0.9</maven.duplicate.finder.plugin.version>
         <maven.javadoc.plugin.version>3.1.0</maven.javadoc.plugin.version>
         <maven.jxr.plugin.version>3.0.0</maven.jxr.plugin.version>
         <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
@@ -652,7 +653,6 @@
                 </plugin>
 
                 <plugin>
-                    <!-- this plugin allows us to ensure Java 7 API compatibility -->
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>animal-sniffer-maven-plugin</artifactId>
                     <version>${maven.sniffer.plugin.version}</version>
@@ -698,7 +698,29 @@
                     </executions>
                 </plugin>
 
-                <!-- Nexus stating plugins -->
+                <plugin>
+                    <groupId>com.ning.maven.plugins</groupId>
+                    <artifactId>maven-duplicate-finder-plugin</artifactId>
+                    <version>${maven.duplicate.finder.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <failBuildInCaseOfDifferentContentConflict>true
+                                </failBuildInCaseOfDifferentContentConflict>
+                                <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
+                                <ignoredResources>
+                                    <ignoredResource>.*</ignoredResource>
+                                </ignoredResources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- Nexus staging plugins -->
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>

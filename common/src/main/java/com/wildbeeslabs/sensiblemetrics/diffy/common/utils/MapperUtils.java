@@ -38,16 +38,14 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidFormatException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidOperationException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.msgpack.jackson.dataformat.MessagePackFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -351,7 +349,7 @@ public class MapperUtils {
      * @param pattern - initial input date pattern
      * @return serialized value {@code T} as string
      */
-    public static <T> String writeAsString(final T value, final String pattern) throws JsonProcessingException {
+    public static <T> String toDateString(final T value, final String pattern) throws JsonProcessingException {
         ValidationUtils.isTrue(StringUtils.isNotBlank(pattern), "Pattern should not be null or empty");
         final SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         objectMapper.setDateFormat(dateFormat);
@@ -365,7 +363,7 @@ public class MapperUtils {
      * @param value - initial input {@code T} value to be serialized
      * @return serialized value {@code T} as byte array
      */
-    public static <T> byte[] writeUsingCborAsBytes(final T value) throws JsonProcessingException {
+    public static <T> byte[] toBytesCbor(final T value) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper(new CBORFactory());
         return objectMapper.writeValueAsBytes(value);
     }
@@ -377,7 +375,7 @@ public class MapperUtils {
      * @param value - initial input {@code T} value to be serialized
      * @return serialized value {@code T} as byte array
      */
-    public static <T> byte[] writeUsingMessagePackAsBytes(final T value) throws JsonProcessingException {
+    public static <T> byte[] toBytesByMessagePack(final T value) throws JsonProcessingException {
         final ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
         return objectMapper.writeValueAsBytes(value);
     }
@@ -409,6 +407,25 @@ public class MapperUtils {
             return objectMapper.reader().forType(clazz).readValue(new InputStreamReader(jsonStream, charset));
         } catch (IOException e) {
             throw new InvalidFormatException(String.format("ERROR: cannot parse input value = {%s} with charset = {%s}", jsonStream, charset), e);
+        }
+    }
+
+    public static <T> List<T> fromFile(final String filename) {
+        ValidationUtils.notNull(filename, "File name should not be null");
+        try {
+            return objectMapper.readValue(new File(filename), new TypeReference<List<Object>>() {
+            });
+        } catch (Exception e) {
+            throw new InvalidOperationException(String.format("ERROR: cannot process file = {%s}", filename), e);
+        }
+    }
+
+    public static <T> void toFile(final String filename, final List<T> values) {
+        ValidationUtils.notNull(filename, "File name should not be null");
+        try {
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), values);
+        } catch (Exception e) {
+            throw new InvalidOperationException(String.format("ERROR: cannot write to file = {%s}", filename), e);
         }
     }
 }
