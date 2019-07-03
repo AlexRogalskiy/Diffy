@@ -38,6 +38,34 @@ import java.util.function.BiFunction;
  */
 @FunctionalInterface
 public interface Operation<T, R> extends BiFunction<T, T, R> {
+    /**
+     * First weight.
+     */
+    Operation FIRST = (a, b) -> a;
+
+    /**
+     * Second weight.
+     */
+    Operation SECOND = (a, b) -> b;
+    /**
+     * Sum of weights.
+     */
+    Operation<Double, Double> SUM = (a, b) -> a + b;
+
+    /**
+     * Multiplication of weights.
+     */
+    Operation<Double, Double> MULT = (a, b) -> a * b;
+
+    /**
+     * Minimum weight.
+     */
+    Operation<Double, Double> MIN = (a, b) -> Math.min(a, b);
+
+    /**
+     * Maximum weight.
+     */
+    Operation<Double, Double> MAX = (a, b) -> Math.max(a, b);
 
     /**
      * Returns {@code R} by input arguments

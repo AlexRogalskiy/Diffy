@@ -70,6 +70,10 @@ public class ComparatorUtils {
      * @see ComparableComparator#getInstance
      */
     public static final Comparator DEFAULT_COMPARATOR = ComparableComparator.getInstance();
+    /**
+     * Default equal {@link Comparator}
+     */
+    public static final Comparator DEFAULT_EQUAL_COMPARATOR = (first, last) -> 0;
 
     /**
      * Lexicographic order {@link CharSequence} comparator
@@ -2272,6 +2276,55 @@ public class ComparatorUtils {
         @Override
         public int compare(final Object obj1, final Object obj2) {
             return ((Comparable) obj1).compareTo(obj2);
+        }
+    }
+
+    /**
+     * A double comparator with adjustable tolerance.
+     *
+     * @author Dimitrios Michail
+     */
+    public static class ToleranceDoubleComparator implements Comparator<Double> {
+        /**
+         * Default tolerance used by the comparator.
+         */
+        public static final double DEFAULT_EPSILON = 1e-9;
+
+        private final double epsilon;
+
+        /**
+         * Construct a new comparator with a {@link #DEFAULT_EPSILON} tolerance.
+         */
+        public ToleranceDoubleComparator() {
+            this(DEFAULT_EPSILON);
+        }
+
+        /**
+         * Construct a new comparator with a specified tolerance.
+         *
+         * @param epsilon the tolerance
+         */
+        public ToleranceDoubleComparator(double epsilon) {
+            if (epsilon <= 0.0) {
+                throw new IllegalArgumentException("Tolerance must be positive");
+            }
+            this.epsilon = epsilon;
+        }
+
+        /**
+         * Compares two floating point values. Returns 0 if they are equal, -1 if {@literal o1 < o2}, 1
+         * otherwise
+         *
+         * @param o1 the first value
+         * @param o2 the second value
+         * @return 0 if they are equal, -1 if {@literal o1 < o2}, 1 otherwise
+         */
+        @Override
+        public int compare(final Double o1, final Double o2) {
+            if (Math.abs(o1 - o2) < this.epsilon) {
+                return 0;
+            }
+            return Double.compare(o1, o2);
         }
     }
 }

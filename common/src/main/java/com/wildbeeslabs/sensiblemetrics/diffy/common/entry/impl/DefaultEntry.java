@@ -36,6 +36,7 @@ import lombok.*;
 import javax.validation.constraints.NotNull;
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -160,5 +161,30 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
     @NonNull
     public static <K, V> Optional<Entry<K, V>> with(final Optional<K> first, final Optional<V> last) {
         return first.flatMap(f -> last.map(l -> DefaultEntry.of(f, l)));
+    }
+
+    /**
+     * Assess if this pair contains the vertex.
+     *
+     * @param item The vertex in question
+     * @return true if contains, false otherwise
+     */
+    public boolean hasItem(final Object item) {
+        return Objects.equals(item, this.getFirst()) || Objects.equals(item, this.getFirst());
+    }
+
+    /**
+     * Given on of the vertices of the pair, get the other.
+     *
+     * @param item one of the vertices
+     * @return the other vertex of the pair
+     */
+    public Object getOther(final Object item) {
+        if (Objects.equals(item, this.getFirst())) {
+            return this.getLast();
+        } else if (Objects.equals(item, this.getLast())) {
+            return this.getFirst();
+        }
+        return null;
     }
 }
