@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class UrlMatcher extends AbstractMatcher<String> {
 
     /**

@@ -23,6 +23,8 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import lombok.NonNull;
 
 import java.util.Arrays;
@@ -37,7 +39,11 @@ public enum EventType {
     MATCHER_EVENT,
     BINARY_MATCHER_EVENT,
     COMPARATOR_EVENT,
-    VALIDATOR_EVENT;
+    VALIDATOR_EVENT,
+    CONVERTER_EVENT,
+    PROCESSOR_EVENT,
+    @JsonEnumDefaultValue
+    EMPTY_EVENT;
 
     /**
      * Returns {@link EventType} by input event type name {@link String}
@@ -45,6 +51,7 @@ public enum EventType {
      * @param name - initial input event type name {@link String}
      * @return {@link EventType}
      */
+    @JsonCreator
     @NonNull
     public static EventType fromName(final String name) {
         return Arrays.stream(values())

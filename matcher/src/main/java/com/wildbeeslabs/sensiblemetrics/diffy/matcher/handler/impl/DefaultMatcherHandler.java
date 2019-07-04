@@ -121,7 +121,7 @@ public class DefaultMatcherHandler<T, S> implements MatcherHandler<T, S> {
      */
     private <E extends BaseMatcherEvent<T, S>> void invokeEventListener(final E event, final MatcherEventListener<T, S> listener) {
         //synchronized (this.mutex) {
-        switch (event.getType()) {
+        switch (event.getStateType()) {
             case MATCH_SUCCESS:
                 listener.onSuccess(event);
                 break;

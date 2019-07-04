@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.messaging;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.Event;
 import lombok.extern.slf4j.Slf4j;
 
@@ -109,6 +110,15 @@ public class DefaultPublisher<T> implements Publisher<Event<T>> {
                     int v = value.incrementAndGet();
                     log("publish item: [" + v + "] ...");
                     this.subscriber.onNext(new Event<>() {
+                        @Override
+                        public EventType getType() {
+                            return EventType.EMPTY_EVENT;
+                        }
+
+                        @Override
+                        public long getTimeStamp() {
+                            return 0;
+                        }
                     });
                 });
             }

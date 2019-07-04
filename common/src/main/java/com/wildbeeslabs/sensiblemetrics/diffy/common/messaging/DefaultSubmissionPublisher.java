@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.messaging;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.Event;
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,6 +72,15 @@ public class DefaultSubmissionPublisher<T> extends SubmissionPublisher<Event<T>>
     }
 
     private final Supplier<? extends Event<T>> supplier = (Supplier<Event<T>>) () -> new Event<T>() {
+        @Override
+        public EventType getType() {
+            return EventType.EMPTY_EVENT;
+        }
+
+        @Override
+        public long getTimeStamp() {
+            return 0;
+        }
     };
 
     private void log(final String message, final Object... args) {

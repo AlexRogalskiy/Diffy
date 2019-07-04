@@ -23,57 +23,76 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.LevelType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.EventState;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.UnsupportedMatcherEventTypeException.throwUnsupportedEventType;
+import static com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.UnsupportedMatcherStateEventTypeException.throwUnsupportedStateEventType;
 
 /**
- * RegexMatcher event type {@link Enum}
+ * Matcher {@link EventState} type {@link Enum}
  */
-public enum MatcherEventType {
-    MATCH_START,
-    MATCH_COMPLETE,
-    MATCH_SKIP,
-    MATCH_IGNORE,
-    MATCH_ERROR,
-    MATCH_BEFORE,
-    MATCH_AFTER,
-    MATCH_SUCCESS,
-    MATCH_FAILURE;
+@Getter
+@RequiredArgsConstructor
+public enum MatcherStateEventType implements EventState {
+    MATCH_START(LevelType.TRACE, "MATCH_START", "%s START context"),
+    MATCH_COMPLETE(LevelType.TRACE, "MATCH_COMPLETE", "%s COMPLETE context"),
+    MATCH_SKIP(LevelType.TRACE, "MATCH_SKIP", "%s SKIP context"),
+    MATCH_IGNORE(LevelType.TRACE, "MATCH_IGNORE", "%s IGNORE context"),
+    MATCH_ERROR(LevelType.TRACE, "MATCH_ERROR", "%s ERROR context"),
+    MATCH_BEFORE(LevelType.TRACE, "MATCH_BEFORE", "%s BEFORE context"),
+    MATCH_AFTER(LevelType.TRACE, "MATCH_AFTER", "%s AFTER context"),
+    MATCH_SUCCESS(LevelType.TRACE, "MATCH_SUCCESS", "%s SUCCESS context"),
+    MATCH_FAILURE(LevelType.TRACE, "MATCH_FAILURE", "%s FAILURE context");
 
     /**
-     * Returns {@link MatcherEventType} by input binary success flag
+     * Default {@link LevelType}
+     */
+    private final LevelType level;
+    /**
+     * Default {@link String} name
+     */
+    private final String name;
+    /**
+     * Default {@link String} message format
+     */
+    private final String messageFormat;
+
+    /**
+     * Returns {@link MatcherStateEventType} by input binary success flag
      *
      * @param value - initial input binary success flag
-     * @return {@link MatcherEventType}
+     * @return {@link MatcherStateEventType}
      */
     @NonNull
-    public static MatcherEventType fromSuccess(final boolean value) {
+    public static MatcherStateEventType fromSuccess(final boolean value) {
         return value ? MATCH_SUCCESS : MATCH_FAILURE;
     }
 
     /**
-     * Returns {@link MatcherEventType} by input binary start flag
+     * Returns {@link MatcherStateEventType} by input binary start flag
      *
      * @param value - initial input binary start flag
-     * @return {@link MatcherEventType}
+     * @return {@link MatcherStateEventType}
      */
     @NonNull
-    public static MatcherEventType fromStart(final boolean value) {
+    public static MatcherStateEventType fromStart(final boolean value) {
         return value ? MATCH_START : MATCH_COMPLETE;
     }
 
     /**
-     * Returns {@link MatcherEventType} by input binary before flag
+     * Returns {@link MatcherStateEventType} by input binary before flag
      *
      * @param value - initial input binary before flag
-     * @return {@link MatcherEventType}
+     * @return {@link MatcherStateEventType}
      */
     @NonNull
-    public static MatcherEventType fromBefore(final boolean value) {
+    public static MatcherStateEventType fromBefore(final boolean value) {
         return value ? MATCH_BEFORE : MATCH_AFTER;
     }
 
@@ -114,27 +133,27 @@ public enum MatcherEventType {
     }
 
     /**
-     * Returns {@link MatcherEventType} by input event type {@link String}
+     * Returns {@link MatcherStateEventType} by input event type {@link String}
      *
      * @param name - initial input event type {@link String}
-     * @return {@link MatcherEventType}
+     * @return {@link MatcherStateEventType}
      */
     @NonNull
-    public static MatcherEventType fromName(final String name) {
+    public static MatcherStateEventType fromName(final String name) {
         return Arrays.stream(values())
             .filter(type -> type.name().equalsIgnoreCase(name))
             .findFirst()
-            .orElseThrow(() -> throwUnsupportedEventType(name));
+            .orElseThrow(() -> throwUnsupportedStateEventType(name));
     }
 
     /**
-     * Returns binary flag based on input {@link MatcherEventType}es comparison
+     * Returns binary flag based on input {@link MatcherStateEventType}es comparison
      *
-     * @param s1 - initial input {@link MatcherEventType} to compare with
-     * @param s2 - initial input {@link MatcherEventType} to compare by
-     * @return true - if {@link MatcherEventType} are equal, false - otherwise
+     * @param s1 - initial input {@link MatcherStateEventType} to compare with
+     * @param s2 - initial input {@link MatcherStateEventType} to compare by
+     * @return true - if {@link MatcherStateEventType} are equal, false - otherwise
      */
-    public static boolean equals(final MatcherEventType s1, final MatcherEventType s2) {
+    public static boolean equals(final MatcherStateEventType s1, final MatcherStateEventType s2) {
         return Objects.equals(s1, s2);
     }
 }

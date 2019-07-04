@@ -27,7 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.DispatchEventException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStateEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.BiMatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.BiMatchOperationException;
@@ -132,18 +132,18 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
      */
     @Override
     public boolean matches(final T first, final T last) {
-        this.emit(first, last, MatcherEventType.MATCH_START);
+        this.emit(first, last, MatcherStateEventType.MATCH_START);
         boolean result = false;
         try {
-            this.emit(first, last, MatcherEventType.MATCH_BEFORE);
+            this.emit(first, last, MatcherStateEventType.MATCH_BEFORE);
             result = this.matchesInstance(first) && this.matchesInstance(last) && this.matchesSafe(first, last);
-            this.emit(first, last, MatcherEventType.fromSuccess(result));
-            this.emit(first, last, MatcherEventType.MATCH_AFTER);
+            this.emit(first, last, MatcherStateEventType.fromSuccess(result));
+            this.emit(first, last, MatcherStateEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.emit(first, last, MatcherEventType.MATCH_ERROR);
+            this.emit(first, last, MatcherStateEventType.MATCH_ERROR);
             BiMatchOperationException.throwIncorrectMatch(first, last, e);
         } finally {
-            this.emit(first, last, MatcherEventType.MATCH_COMPLETE);
+            this.emit(first, last, MatcherStateEventType.MATCH_COMPLETE);
         }
         return result;
     }
@@ -163,9 +163,9 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
      *
      * @param first - initial input first matchable value {@code T}
      * @param last  - initial input last matchable value {@code T}
-     * @param type  - initial input {@link MatcherEventType}
+     * @param type  - initial input {@link MatcherStateEventType}
      */
-    protected void emit(final T first, final T last, final MatcherEventType type) {
+    protected void emit(final T first, final T last, final MatcherStateEventType type) {
         log.info("Emitting event with type = {%s}, first value = {%s}, last value = {%s}", type, first, last);
         BiMatcherEvent<T, S> event = null;
         try {
@@ -181,9 +181,9 @@ public abstract class AbstractTypeSafeBiMatcher<T, S> extends AbstractBiMatcher<
      *
      * @param first - initial input first matchable value {@code T}
      * @param last  - initial input last matchable value {@code T}
-     * @param type  - initial input {@link MatcherEventType}
+     * @param type  - initial input {@link MatcherStateEventType}
      */
-    private void dispatch(final T first, final T last, final MatcherEventType type) {
+    private void dispatch(final T first, final T last, final MatcherStateEventType type) {
         final BiMatcherEvent<T, S> event = (BiMatcherEvent<T, S>) BiMatcherEvent.of(DefaultEntry.of(first, last), this, type);
         this.dispatch(event, new ApplicationContext());
     }

@@ -23,7 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.test.enumeration;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStateEventType;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.startsWith;
 
 /**
- * {@link MatcherEventType} unit test
+ * {@link MatcherStateEventType} unit test
  *
  * @author Alexander Rogalskiy
  * @version 1.1
@@ -51,50 +51,50 @@ public class MatcherEventTypeTest {
 
     @Test
     public void test_check_MatcherEventType_ByEnum() {
-        assertThat(MatcherEventType.MATCH_COMPLETE.toString(), IsEqual.equalTo("MATCH_COMPLETE"));
-        assertThat(MatcherEventType.MATCH_ERROR.toString(), IsEqual.equalTo("MATCH_ERROR"));
-        assertThat(MatcherEventType.MATCH_START.toString(), IsEqual.equalTo("MATCH_START"));
-        assertThat(MatcherEventType.MATCH_SUCCESS.toString(), IsEqual.equalTo("MATCH_SUCCESS"));
-        assertThat(MatcherEventType.MATCH_AFTER.toString(), IsEqual.equalTo("MATCH_AFTER"));
-        assertThat(MatcherEventType.MATCH_BEFORE.toString(), IsEqual.equalTo("MATCH_BEFORE"));
-        assertThat(MatcherEventType.MATCH_FAILURE.toString(), IsEqual.equalTo("MATCH_FAILURE"));
-        assertThat(MatcherEventType.MATCH_SKIP.toString(), IsEqual.equalTo("MATCH_SKIP"));
+        assertThat(MatcherStateEventType.MATCH_COMPLETE.toString(), IsEqual.equalTo("MATCH_COMPLETE"));
+        assertThat(MatcherStateEventType.MATCH_ERROR.toString(), IsEqual.equalTo("MATCH_ERROR"));
+        assertThat(MatcherStateEventType.MATCH_START.toString(), IsEqual.equalTo("MATCH_START"));
+        assertThat(MatcherStateEventType.MATCH_SUCCESS.toString(), IsEqual.equalTo("MATCH_SUCCESS"));
+        assertThat(MatcherStateEventType.MATCH_AFTER.toString(), IsEqual.equalTo("MATCH_AFTER"));
+        assertThat(MatcherStateEventType.MATCH_BEFORE.toString(), IsEqual.equalTo("MATCH_BEFORE"));
+        assertThat(MatcherStateEventType.MATCH_FAILURE.toString(), IsEqual.equalTo("MATCH_FAILURE"));
+        assertThat(MatcherStateEventType.MATCH_SKIP.toString(), IsEqual.equalTo("MATCH_SKIP"));
     }
 
     @Test
     public void test_check_MatcherEventType_ByName() {
-        assertEquals(MatcherEventType.MATCH_COMPLETE, MatcherEventType.valueOf("MATCH_COMPLETE"));
-        assertEquals(MatcherEventType.MATCH_ERROR, MatcherEventType.valueOf("MATCH_ERROR"));
-        assertEquals(MatcherEventType.MATCH_START, MatcherEventType.valueOf("MATCH_START"));
-        assertEquals(MatcherEventType.MATCH_SUCCESS, MatcherEventType.valueOf("MATCH_SUCCESS"));
-        assertEquals(MatcherEventType.MATCH_AFTER, MatcherEventType.valueOf("MATCH_AFTER"));
-        assertEquals(MatcherEventType.MATCH_BEFORE, MatcherEventType.valueOf("MATCH_BEFORE"));
-        assertEquals(MatcherEventType.MATCH_FAILURE, MatcherEventType.valueOf("MATCH_FAILURE"));
-        assertEquals(MatcherEventType.MATCH_SKIP, MatcherEventType.valueOf("MATCH_SKIP"));
+        assertEquals(MatcherStateEventType.MATCH_COMPLETE, MatcherStateEventType.valueOf("MATCH_COMPLETE"));
+        assertEquals(MatcherStateEventType.MATCH_ERROR, MatcherStateEventType.valueOf("MATCH_ERROR"));
+        assertEquals(MatcherStateEventType.MATCH_START, MatcherStateEventType.valueOf("MATCH_START"));
+        assertEquals(MatcherStateEventType.MATCH_SUCCESS, MatcherStateEventType.valueOf("MATCH_SUCCESS"));
+        assertEquals(MatcherStateEventType.MATCH_AFTER, MatcherStateEventType.valueOf("MATCH_AFTER"));
+        assertEquals(MatcherStateEventType.MATCH_BEFORE, MatcherStateEventType.valueOf("MATCH_BEFORE"));
+        assertEquals(MatcherStateEventType.MATCH_FAILURE, MatcherStateEventType.valueOf("MATCH_FAILURE"));
+        assertEquals(MatcherStateEventType.MATCH_SKIP, MatcherStateEventType.valueOf("MATCH_SKIP"));
     }
 
     @Test
     public void test_check_MatcherEventType_ByPropertyType() {
-        assertEquals(MatcherEventType.MATCH_COMPLETE, MatcherEventType.fromName("MATCH_COMPLETE"));
-        assertEquals(MatcherEventType.MATCH_ERROR, MatcherEventType.fromName("MATCH_ERROR"));
-        assertEquals(MatcherEventType.MATCH_START, MatcherEventType.fromName("MATCH_START"));
-        assertEquals(MatcherEventType.MATCH_SUCCESS, MatcherEventType.fromName("MATCH_SUCCESS"));
-        assertEquals(MatcherEventType.MATCH_AFTER, MatcherEventType.fromName("MATCH_AFTER"));
-        assertEquals(MatcherEventType.MATCH_BEFORE, MatcherEventType.fromName("MATCH_BEFORE"));
-        assertEquals(MatcherEventType.MATCH_FAILURE, MatcherEventType.fromName("MATCH_FAILURE"));
-        assertEquals(MatcherEventType.MATCH_SKIP, MatcherEventType.fromName("MATCH_SKIP"));
+        assertEquals(MatcherStateEventType.MATCH_COMPLETE, MatcherStateEventType.fromName("MATCH_COMPLETE"));
+        assertEquals(MatcherStateEventType.MATCH_ERROR, MatcherStateEventType.fromName("MATCH_ERROR"));
+        assertEquals(MatcherStateEventType.MATCH_START, MatcherStateEventType.fromName("MATCH_START"));
+        assertEquals(MatcherStateEventType.MATCH_SUCCESS, MatcherStateEventType.fromName("MATCH_SUCCESS"));
+        assertEquals(MatcherStateEventType.MATCH_AFTER, MatcherStateEventType.fromName("MATCH_AFTER"));
+        assertEquals(MatcherStateEventType.MATCH_BEFORE, MatcherStateEventType.fromName("MATCH_BEFORE"));
+        assertEquals(MatcherStateEventType.MATCH_FAILURE, MatcherStateEventType.fromName("MATCH_FAILURE"));
+        assertEquals(MatcherStateEventType.MATCH_SKIP, MatcherStateEventType.fromName("MATCH_SKIP"));
     }
 
     @Test
     public void test_check_MatcherEventType_ByBoolean() {
-        assertEquals(MatcherEventType.MATCH_SUCCESS, MatcherEventType.fromSuccess(true));
-        assertEquals(MatcherEventType.MATCH_FAILURE, MatcherEventType.fromSuccess(false));
+        assertEquals(MatcherStateEventType.MATCH_SUCCESS, MatcherStateEventType.fromSuccess(true));
+        assertEquals(MatcherStateEventType.MATCH_FAILURE, MatcherStateEventType.fromSuccess(false));
 
-        assertEquals(MatcherEventType.MATCH_BEFORE, MatcherEventType.fromBefore(true));
-        assertEquals(MatcherEventType.MATCH_AFTER, MatcherEventType.fromBefore(false));
+        assertEquals(MatcherStateEventType.MATCH_BEFORE, MatcherStateEventType.fromBefore(true));
+        assertEquals(MatcherStateEventType.MATCH_AFTER, MatcherStateEventType.fromBefore(false));
 
-        assertEquals(MatcherEventType.MATCH_START, MatcherEventType.fromStart(true));
-        assertEquals(MatcherEventType.MATCH_COMPLETE, MatcherEventType.fromStart(false));
+        assertEquals(MatcherStateEventType.MATCH_START, MatcherStateEventType.fromStart(true));
+        assertEquals(MatcherStateEventType.MATCH_COMPLETE, MatcherStateEventType.fromStart(false));
     }
 
     @Test
@@ -104,12 +104,12 @@ public class MatcherEventTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, MatcherEventType.valueOf("UNDEFINED"));
+        assertEquals(null, MatcherStateEventType.valueOf("UNDEFINED"));
     }
 
     @Test
     public void test_check_MatcherEventType_ByNullableName() {
-        assertNull(MatcherEventType.fromName(null));
+        assertNull(MatcherStateEventType.fromName(null));
     }
 
     @Test
@@ -119,6 +119,6 @@ public class MatcherEventTypeTest {
         thrown.expectMessage(startsWith("No enum constant"));
 
         // then
-        assertEquals(null, MatcherEventType.valueOf(null));
+        assertEquals(null, MatcherStateEventType.valueOf(null));
     }
 }

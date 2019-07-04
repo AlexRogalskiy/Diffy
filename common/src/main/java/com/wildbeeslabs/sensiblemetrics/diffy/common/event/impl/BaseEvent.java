@@ -69,7 +69,6 @@ public abstract class BaseEvent<T> implements Event<T> {
      */
     public BaseEvent(final T source, final Throwable cause) {
         ValidationUtils.notNull(source, "Event source should not be null");
-
         this.source = source;
         this.cause = cause;
         this.timestamp = System.currentTimeMillis();

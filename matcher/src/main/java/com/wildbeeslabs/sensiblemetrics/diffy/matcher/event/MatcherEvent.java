@@ -24,11 +24,14 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStateEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.Matcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Date;
 
 /**
  * RegexMatcher {@link BaseMatcherEvent} implementation
@@ -51,9 +54,9 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T, T> {
      *
      * @param source  - initial input event source {@code T}
      * @param matcher - initial input {BiMatcher}
-     * @param type    - initial input event type {@link MatcherEventType}
+     * @param type    - initial input event type {@link MatcherStateEventType}
      */
-    public MatcherEvent(final T source, final Matcher<T> matcher, final MatcherEventType type) {
+    public MatcherEvent(final T source, final Matcher<T> matcher, final MatcherStateEventType type) {
         super(source, matcher, type);
     }
 
@@ -67,7 +70,7 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T, T> {
      */
     @Factory
     public static <T> MatcherEvent<T> of(final T source, final Matcher<T> matcher, final boolean status) {
-        return of(source, matcher, MatcherEventType.fromSuccess(status));
+        return of(source, matcher, MatcherStateEventType.fromSuccess(status));
     }
 
     /**
@@ -75,11 +78,26 @@ public class MatcherEvent<T> extends BaseMatcherEvent<T, T> {
      *
      * @param source  - initial input event source {@code T}
      * @param matcher - initial input {@link Matcher}
-     * @param type    - initial input event type {@link MatcherEventType}
+     * @param type    - initial input event type {@link MatcherStateEventType}
      * @return {@link MatcherEvent}
      */
     @Factory
-    public static <T> MatcherEvent<T> of(final T source, final Matcher<T> matcher, final MatcherEventType type) {
+    public static <T> MatcherEvent<T> of(final T source, final Matcher<T> matcher, final MatcherStateEventType type) {
         return new MatcherEvent(source, matcher, type);
+    }
+
+    @Override
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public EventType getType() {
+        return EventType.MATCHER_EVENT;
+    }
+
+    @Override
+    public long getTimeStamp() {
+        return new Date().getTime();
     }
 }

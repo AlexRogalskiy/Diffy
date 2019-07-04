@@ -300,7 +300,7 @@ public class DomainValidator implements Validator<String> {
         "abbvie", // abbvie AbbVie Inc.
         "abc", // abc Disney Enterprises, Inc.
         "able", // able Able Inc.
-        "abogado", // abogado Top Level Domain Holdings Limited
+        "abogado", // abogado Top LevelType Domain Holdings Limited
         "abudhabi", // abudhabi Abu Dhabi Systems and Information Centre
         "academy", // academy Half Oaks, LLC
         "accenture", // accenture Accenture plc
@@ -393,7 +393,7 @@ public class DomainValidator implements Validator<String> {
         "bcn", // bcn Municipi de Barcelona
         "beats", // beats Beats Electronics, LLC
         "beauty", // beauty L&#39;Oréal
-        "beer", // beer Top Level Domain Holdings Limited
+        "beer", // beer Top LevelType Domain Holdings Limited
         "bentley", // bentley Bentley Motors Limited
         "berlin", // berlin dotBERLIN GmbH &amp; Co. KG
         "best", // best BestTLD Pty Ltd
@@ -439,7 +439,7 @@ public class DomainValidator implements Validator<String> {
         "broker", // broker DOTBROKER REGISTRY LTD
         "brother", // brother Brother Industries, Ltd.
         "brussels", // brussels DNS.be vzw
-        "budapest", // budapest Top Level Domain Holdings Limited
+        "budapest", // budapest Top LevelType Domain Holdings Limited
         "bugatti", // bugatti Bugatti International SA
         "build", // build Plan Bee LLC
         "builders", // builders Atomic Madison, LLC
@@ -468,7 +468,7 @@ public class DomainValidator implements Validator<String> {
         "careers", // careers Wild Corner, LLC
         "cars", // cars Uniregistry, Corp.
         "cartier", // cartier Richemont DNS Inc.
-        "casa", // casa Top Level Domain Holdings Limited
+        "casa", // casa Top LevelType Domain Holdings Limited
         "case", // case CNH Industrial N.V.
         "caseih", // caseih CNH Industrial N.V.
         "cash", // cash Delta Lake, LLC
@@ -530,14 +530,14 @@ public class DomainValidator implements Validator<String> {
         "condos", // condos Pine House, LLC
         "construction", // construction Fox Dynamite, LLC
         "consulting", // consulting United TLD Holdco, LTD.
-        "contact", // contact Top Level Spectrum, Inc.
+        "contact", // contact Top LevelType Spectrum, Inc.
         "contractors", // contractors Magic Woods, LLC
-        "cooking", // cooking Top Level Domain Holdings Limited
+        "cooking", // cooking Top LevelType Domain Holdings Limited
         "cookingchannel", // cookingchannel Lifestyle Domain Holdings, Inc.
         "cool", // cool Koko Lake, LLC
         "coop", // coop DotCooperation LLC
         "corsica", // corsica Collectivité Territoriale de Corse
-        "country", // country Top Level Domain Holdings Limited
+        "country", // country Top LevelType Domain Holdings Limited
         "coupon", // coupon Amazon Registry Services, Inc.
         "coupons", // coupons Black Island, LLC
         "courses", // courses OPEN UNIVERSITIES AUSTRALIA PTY LTD
@@ -575,7 +575,7 @@ public class DomainValidator implements Validator<String> {
         "dental", // dental Tin Birch, LLC
         "dentist", // dentist United TLD Holdco, Ltd
         "desi", // desi Desi Networks LLC
-        "design", // design Top Level Design, LLC
+        "design", // design Top LevelType Design, LLC
         "dev", // dev Charleston Road Registry Inc.
         "dhl", // dhl Deutsche Post AG
         "diamonds", // diamonds John Edge, LLC
@@ -645,10 +645,10 @@ public class DomainValidator implements Validator<String> {
         "fans", // fans Asiamix Digital Limited
         "farm", // farm Just Maple, LLC
         "farmers", // farmers Farmers Insurance Exchange
-        "fashion", // fashion Top Level Domain Holdings Limited
+        "fashion", // fashion Top LevelType Domain Holdings Limited
         "fast", // fast Amazon Registry Services, Inc.
         "fedex", // fedex Federal Express Corporation
-        "feedback", // feedback Top Level Spectrum, Inc.
+        "feedback", // feedback Top LevelType Spectrum, Inc.
         "ferrari", // ferrari Fiat Chrysler Automobiles N.V.
         "ferrero", // ferrero Ferrero Trading Lux S.A.
         "fiat", // fiat Fiat Chrysler Automobiles N.V.
@@ -662,7 +662,7 @@ public class DomainValidator implements Validator<String> {
         "firestone", // firestone Bridgestone Corporation
         "firmdale", // firmdale Firmdale Holdings Limited
         "fish", // fish Fox Woods, LLC
-        "fishing", // fishing Top Level Domain Holdings Limited
+        "fishing", // fishing Top LevelType Domain Holdings Limited
         "fit", // fit Minds + Machines Group Limited
         "fitness", // fitness Brice Orchard, LLC
         "flickr", // flickr Yahoo! Domain Services Inc.
@@ -703,7 +703,7 @@ public class DomainValidator implements Validator<String> {
         "game", // game Uniregistry, Corp.
         "games", // games United TLD Holdco Ltd.
         "gap", // gap The Gap, Inc.
-        "garden", // garden Top Level Domain Holdings Limited
+        "garden", // garden Top LevelType Domain Holdings Limited
         "gbiz", // gbiz Charleston Road Registry Inc.
         "gdn", // gdn Joint Stock Company "Navigation-information systems"
         "gea", // gea GEA Group Aktiengesellschaft
@@ -749,7 +749,7 @@ public class DomainValidator implements Validator<String> {
         "guitars", // guitars Uniregistry, Corp.
         "guru", // guru Pioneer Cypress, LLC
         "hair", // hair L&#39;Oreal
-        "hamburg", // hamburg Hamburg Top-Level-Domain GmbH
+        "hamburg", // hamburg Hamburg Top-LevelType-Domain GmbH
         "hangout", // hangout Charleston Road Registry Inc.
         "haus", // haus United TLD Holdco, LTD.
         "hbo", // hbo HBO Registry Services, Inc.
@@ -776,7 +776,7 @@ public class DomainValidator implements Validator<String> {
         "homesense", // homesense The TJX Companies, Inc.
         "honda", // honda Honda Motor Co., Ltd.
         "honeywell", // honeywell Honeywell GTLD LLC
-        "horse", // horse Top Level Domain Holdings Limited
+        "horse", // horse Top LevelType Domain Holdings Limited
         "hospital", // hospital Ruby Pike, LLC
         "host", // host DotHost Inc.
         "hosting", // hosting Uniregistry, Corp.
@@ -806,7 +806,7 @@ public class DomainValidator implements Validator<String> {
         "infiniti", // infiniti NISSAN MOTOR CO., LTD.
         "info", // info Afilias Limited
         "ing", // ing Charleston Road Registry Inc.
-        "ink", // ink Top Level Design, LLC
+        "ink", // ink Top LevelType Design, LLC
         "institute", // institute Outer Maple, LLC
         "insurance", // insurance fTLD Registry Services LLC
         "insure", // insure Pioneer Willow, LLC
@@ -923,7 +923,7 @@ public class DomainValidator implements Validator<String> {
         "ltda", // ltda InterNetX Corp.
         "lundbeck", // lundbeck H. Lundbeck A/S
         "lupin", // lupin LUPIN LIMITED
-        "luxe", // luxe Top Level Domain Holdings Limited
+        "luxe", // luxe Top LevelType Domain Holdings Limited
         "luxury", // luxury Luxury Partners LLC
         "macys", // macys Macys, Inc.
         "madrid", // madrid Comunidad de Madrid
@@ -954,7 +954,7 @@ public class DomainValidator implements Validator<String> {
         "menu", // menu Wedding TLD2, LLC
         "meo", // meo PT Comunicacoes S.A.
         "metlife", // metlife MetLife Services and Solutions, LLC
-        "miami", // miami Top Level Domain Holdings Limited
+        "miami", // miami Top LevelType Domain Holdings Limited
         "microsoft", // microsoft Microsoft Corporation
         "mil", // mil DoD Network Information Center
         "mini", // mini Bayerische Motoren Werke Aktiengesellschaft
@@ -1031,7 +1031,7 @@ public class DomainValidator implements Validator<String> {
         "ntt", // ntt NIPPON TELEGRAPH AND TELEPHONE CORPORATION
         "nyc", // nyc The City of New York by and through the New York City Department of Information Technology &amp; Telecommunications
         "obi", // obi OBI Group Holding SE &amp; Co. KGaA
-        "observer", // observer Top Level Spectrum, Inc.
+        "observer", // observer Top LevelType Spectrum, Inc.
         "off", // off Johnson Shareholdings, Inc.
         "office", // office Microsoft Corporation
         "okinawa", // okinawa BusinessRalliart inc.
@@ -1082,7 +1082,7 @@ public class DomainValidator implements Validator<String> {
         "pics", // pics Uniregistry, Corp.
         "pictet", // pictet Pictet Europe S.A.
         "pictures", // pictures Foggy Sky, LLC
-        "pid", // pid Top Level Spectrum, Inc.
+        "pid", // pid Top LevelType Spectrum, Inc.
         "pin", // pin Amazon Registry Services, Inc.
         "ping", // ping Ping Registry Provider, Inc.
         "pink", // pink Afilias Limited
@@ -1157,7 +1157,7 @@ public class DomainValidator implements Validator<String> {
         "rmit", // rmit Royal Melbourne Institute of Technology
         "rocher", // rocher Ferrero Trading Lux S.A.
         "rocks", // rocks United TLD Holdco, LTD.
-        "rodeo", // rodeo Top Level Domain Holdings Limited
+        "rodeo", // rodeo Top LevelType Domain Holdings Limited
         "rogers", // rogers Rogers Communications Canada Inc.
         "room", // room Amazon Registry Services, Inc.
         "rsvp", // rsvp Charleston Road Registry Inc.
@@ -1270,7 +1270,7 @@ public class DomainValidator implements Validator<String> {
         "supplies", // supplies Atomic Fields, LLC
         "supply", // supply Half Falls, LLC
         "support", // support Grand Orchard, LLC
-        "surf", // surf Top Level Domain Holdings Limited
+        "surf", // surf Top LevelType Domain Holdings Limited
         "surgery", // surgery Tin Avenue, LLC
         "suzuki", // suzuki SUZUKI MOTOR CORPORATION
         "swatch", // swatch The Swatch Group Ltd
@@ -1370,7 +1370,7 @@ public class DomainValidator implements Validator<String> {
         "viva", // viva Saudi Telecom Company
         "vivo", // vivo Telefonica Brasil S.A.
         "vlaanderen", // vlaanderen DNS.be vzw
-        "vodka", // vodka Top Level Domain Holdings Limited
+        "vodka", // vodka Top LevelType Domain Holdings Limited
         "volkswagen", // volkswagen Volkswagen Group of America Inc.
         "volvo", // volvo Volvo Holding Sverige Aktiebolag
         "vote", // vote Monolith Registry LLC
@@ -1392,12 +1392,12 @@ public class DomainValidator implements Validator<String> {
         "weber", // weber Saint-Gobain Weber SA
         "website", // website DotWebsite Inc.
         "wed", // wed Atgron, Inc.
-        "wedding", // wedding Top Level Domain Holdings Limited
+        "wedding", // wedding Top LevelType Domain Holdings Limited
         "weibo", // weibo Sina Corporation
         "weir", // weir Weir Group IP Limited
         "whoswho", // whoswho Who&#39;s Who Registry
         "wien", // wien punkt.wien GmbH
-        "wiki", // wiki Top Level Design, LLC
+        "wiki", // wiki Top LevelType Design, LLC
         "williamhill", // williamhill William Hill Organization Limited
         "win", // win First Registry Limited
         "windows", // windows Microsoft Corporation
@@ -1406,7 +1406,7 @@ public class DomainValidator implements Validator<String> {
         "wme", // wme William Morris Endeavor Entertainment, LLC
         "wolterskluwer", // wolterskluwer Wolters Kluwer N.V.
         "woodside", // woodside Woodside Petroleum Limited
-        "work", // work Top Level Domain Holdings Limited
+        "work", // work Top LevelType Domain Holdings Limited
         "works", // works Little Dynamite, LLC
         "world", // world Bitter Fields, LLC
         "wow", // wow Amazon Registry Services, Inc.
@@ -1518,7 +1518,7 @@ public class DomainValidator implements Validator<String> {
         "yamaxun", // yamaxun Amazon Registry Services, Inc.
         "yandex", // yandex YANDEX, LLC
         "yodobashi", // yodobashi YODOBASHI CAMERA CO.,LTD.
-        "yoga", // yoga Top Level Domain Holdings Limited
+        "yoga", // yoga Top LevelType Domain Holdings Limited
         "yokohama", // yokohama GMO Registry, Inc.
         "you", // you Amazon Registry Services, Inc.
         "youtube", // youtube Charleston Road Registry Inc.

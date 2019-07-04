@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.matcher.service;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.context.ApplicationContext;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.DispatchEventException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStateEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.event.MatcherEvent;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.exception.MatchOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.handler.iface.MatcherHandler;
@@ -129,18 +129,18 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      */
     @Override
     public final boolean matches(final T value) {
-        this.dispatch(value, MatcherEventType.MATCH_START);
+        this.dispatch(value, MatcherStateEventType.MATCH_START);
         boolean result = false;
         try {
-            this.dispatch(value, MatcherEventType.MATCH_BEFORE);
+            this.dispatch(value, MatcherStateEventType.MATCH_BEFORE);
             result = this.matchesInstance(value) && this.matchesSafe(value);
-            this.dispatch(value, MatcherEventType.fromSuccess(result));
-            this.dispatch(value, MatcherEventType.MATCH_AFTER);
+            this.dispatch(value, MatcherStateEventType.fromSuccess(result));
+            this.dispatch(value, MatcherStateEventType.MATCH_AFTER);
         } catch (RuntimeException e) {
-            this.dispatch(value, MatcherEventType.MATCH_ERROR);
+            this.dispatch(value, MatcherStateEventType.MATCH_ERROR);
             MatchOperationException.throwIncorrectMatch(value, e);
         } finally {
-            this.dispatch(value, MatcherEventType.MATCH_COMPLETE);
+            this.dispatch(value, MatcherStateEventType.MATCH_COMPLETE);
         }
         return result;
     }
@@ -159,9 +159,9 @@ public abstract class AbstractTypeSafeMatcher<T> extends AbstractMatcher<T> impl
      * Dispatches {@link MatcherEvent} by input parameters
      *
      * @param value - initial input matchable value {@code T}
-     * @param type  - initial input {@link MatcherEventType}
+     * @param type  - initial input {@link MatcherStateEventType}
      */
-    private void dispatch(final T value, final MatcherEventType type) {
+    private void dispatch(final T value, final MatcherStateEventType type) {
         this.dispatch(MatcherEvent.of(value, this, type), new ApplicationContext());
     }
 

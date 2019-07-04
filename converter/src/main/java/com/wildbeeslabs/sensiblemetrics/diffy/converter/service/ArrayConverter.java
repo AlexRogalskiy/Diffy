@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * Array {@link AbstractConverter} implementation
  */
+@SuppressWarnings("unchecked")
 public class ArrayConverter extends AbstractConverter<Object, Object> {
 
     private static final Map<Class, Converter<Object, Object>> CNV = new HashMap<>();

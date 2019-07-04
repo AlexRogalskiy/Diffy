@@ -23,43 +23,12 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 
-import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
-
-import java.io.Serializable;
-
-import static org.apache.commons.lang3.StringUtils.EMPTY;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.LevelType;
 
 /**
- * Event interface declaration
- *
- * @param <T> type of event item
+ * Type of event.
  */
-public interface Event<T> extends Serializable {
-
-    /**
-     * Default empty {@link Event} implementation
-     */
-    Event<?> EMPTY_EVENT = new Event<>() {
-        @Override
-        public String getName() {
-            return EMPTY;
-        }
-
-        @Override
-        public String getDescription() {
-            return EMPTY;
-        }
-
-        @Override
-        public EventType getType() {
-            return EventType.EMPTY_EVENT;
-        }
-
-        @Override
-        public long getTimeStamp() {
-            return 0;
-        }
-    };
+public interface EventState {
 
     /**
      * Name of event, should be unique.
@@ -67,30 +36,21 @@ public interface Event<T> extends Serializable {
      *
      * @return event name.
      */
-    default String getName() {
-        return this.getClass().getSimpleName();
-    }
+    String getName();
 
     /**
-     * Name of event, should be unique.
-     * Is logged by JDK logger.
+     * Level of event.
+     * Is used to check if the event is logged according to application/request settings.
      *
-     * @return event name.
+     * @return event trace level.
      */
-    default String getDescription() {
-        return this.getClass().getCanonicalName();
-    }
+    LevelType getLevel();
 
     /**
-     * The name of the event (case-insensitive). The name must be an XML name.
+     * Message format. Use {@link String#format(String, Object...)} format.
+     * Can be null. In that case message arguments are separated by space.
+     *
+     * @return message format
      */
-    EventType getType();
-
-    /**
-     * Used to indicate the <code>EventTarget</code> to which the event was
-     * originally dispatched.
-     */
-//    EventListenerAdapter<T> getTarget();
-
-    long getTimeStamp();
+    String getMessageFormat();
 }

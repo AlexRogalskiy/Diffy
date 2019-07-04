@@ -42,6 +42,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class FieldTypeMatcher<T extends Field> extends AbstractMatcher<T> {
 
     /**

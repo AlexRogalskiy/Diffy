@@ -24,11 +24,14 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStateEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BaseMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.Date;
 
 /**
  * Binary {@link BaseMatcherEvent} implementation
@@ -51,9 +54,9 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
      *
      * @param source  - initial input event source {@code T}
      * @param matcher - initial input {@link BaseMatcher}
-     * @param type    - initial input event type {@link MatcherEventType}
+     * @param type    - initial input event type {@link MatcherStateEventType}
      */
-    public BiMatcherEvent(final S source, final BaseMatcher<T, S> matcher, final MatcherEventType type) {
+    public BiMatcherEvent(final S source, final BaseMatcher<T, S> matcher, final MatcherStateEventType type) {
         super(source, matcher, type);
     }
 
@@ -67,7 +70,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
      */
     @Factory
     public static <T, S> BiMatcherEvent<T, S> of(final S source, final BaseMatcher<T, S> matcher, final boolean status) {
-        return of(source, matcher, MatcherEventType.fromSuccess(status));
+        return of(source, matcher, MatcherStateEventType.fromSuccess(status));
     }
 
     /**
@@ -75,11 +78,26 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
      *
      * @param source  - initial input event source {@code T}
      * @param matcher - initial input {@link BaseMatcher}
-     * @param type    - initial input event type {@link MatcherEventType}
+     * @param type    - initial input event type {@link MatcherStateEventType}
      * @return {@link BiMatcherEvent}
      */
     @Factory
-    public static <T, S> BiMatcherEvent<T, S> of(final S source, final BaseMatcher<T, S> matcher, final MatcherEventType type) {
+    public static <T, S> BiMatcherEvent<T, S> of(final S source, final BaseMatcher<T, S> matcher, final MatcherStateEventType type) {
         return new BiMatcherEvent(source, matcher, type);
+    }
+
+    @Override
+    public String getName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public EventType getType() {
+        return EventType.BINARY_MATCHER_EVENT;
+    }
+
+    @Override
+    public long getTimeStamp() {
+        return new Date().getTime();
     }
 }

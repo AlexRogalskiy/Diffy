@@ -24,7 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.matcher.event;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.impl.BaseEvent;
-import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherEventType;
+import com.wildbeeslabs.sensiblemetrics.diffy.matcher.enumeration.MatcherStateEventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.matcher.interfaces.BaseMatcher;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,49 +41,48 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
-
+    
     /**
      * Default explicit serialVersionUID for interoperability
      */
     private static final long serialVersionUID = 6800879300758322485L;
-
     /**
      * Default {@link BaseMatcher}
      */
     private final BaseMatcher<T, S> matcher;
     /**
-     * Default {@link MatcherEventType}
+     * Default {@link MatcherStateEventType}
      */
-    private final MatcherEventType type;
+    private final MatcherStateEventType stateType;
 
     /**
      * Default base matcher event constructor by input arguments
      *
-     * @param source  - initial input event source {@code S}
-     * @param matcher - initial input {@link BaseMatcher}
-     * @param type    - initial input {@link MatcherEventType}
+     * @param source    - initial input event source {@code S}
+     * @param matcher   - initial input {@link BaseMatcher}
+     * @param stateType - initial input {@link MatcherStateEventType}
      */
-    public BaseMatcherEvent(final S source, final BaseMatcher<T, S> matcher, final MatcherEventType type) {
+    public BaseMatcherEvent(final S source, final BaseMatcher<T, S> matcher, final MatcherStateEventType stateType) {
         super(source);
         this.matcher = matcher;
-        this.type = type;
+        this.stateType = stateType;
     }
 
     /**
-     * Returns binary flag based on current {@link MatcherEventType} {@code MATCH_SUCCESS}
+     * Returns binary flag based on current {@link MatcherStateEventType} {@code MATCH_SUCCESS}
      *
-     * @return true - if current {@link MatcherEventType} is {@code MATCH_SUCCESS}, false - otherwise
+     * @return true - if current {@link MatcherStateEventType} is {@code MATCH_SUCCESS}, false - otherwise
      */
     public boolean isSuccess() {
-        return Objects.equals(this.getType(), MatcherEventType.MATCH_SUCCESS);
+        return Objects.equals(this.getStateType(), MatcherStateEventType.MATCH_SUCCESS);
     }
 
     /**
-     * Returns binary flag based on current {@link MatcherEventType} {@code MATCH_FAILURE}
+     * Returns binary flag based on current {@link MatcherStateEventType} {@code MATCH_FAILURE}
      *
-     * @return true - if current {@link MatcherEventType} is {@code MATCH_FAILURE}, false - otherwise
+     * @return true - if current {@link MatcherStateEventType} is {@code MATCH_FAILURE}, false - otherwise
      */
     public boolean isFailure() {
-        return Objects.equals(this.getType(), MatcherEventType.MATCH_FAILURE);
+        return Objects.equals(this.getStateType(), MatcherStateEventType.MATCH_FAILURE);
     }
 }

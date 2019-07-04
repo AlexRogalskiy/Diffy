@@ -30,12 +30,12 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Unsupported matcher event type {@link RuntimeException} implementation
+ * Unsupported matcher state event type {@link RuntimeException} implementation
  */
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class UnsupportedMatcherEventTypeException extends RuntimeException {
+public class UnsupportedMatcherStateEventTypeException extends RuntimeException {
 
     /**
      * Default explicit serialVersionUID for interoperability
@@ -43,53 +43,53 @@ public class UnsupportedMatcherEventTypeException extends RuntimeException {
     private static final long serialVersionUID = -283997459472393191L;
 
     /**
-     * Unsupported matcher event type exception constructor with initial input message
+     * Unsupported matcher state event type exception constructor with initial input message
      *
      * @param message - initial input message {@link String}
      */
-    public UnsupportedMatcherEventTypeException(final String message) {
+    public UnsupportedMatcherStateEventTypeException(final String message) {
         super(message);
     }
 
     /**
-     * Unsupported matcher event type exception constructor with initial input {@link Throwable}
+     * Unsupported matcher state event type exception constructor with initial input {@link Throwable}
      *
      * @param cause - initial input cause target {@link Throwable}
      */
-    public UnsupportedMatcherEventTypeException(final Throwable cause) {
+    public UnsupportedMatcherStateEventTypeException(final Throwable cause) {
         super(cause);
     }
 
     /**
-     * Unsupported matcher event type exception constructor with initial input message and {@link Throwable}
+     * Unsupported matcher state event type exception constructor with initial input message and {@link Throwable}
      *
      * @param message - initial input source message {@link String}
      * @param cause   - initial input cause target {@link Throwable}
      */
-    public UnsupportedMatcherEventTypeException(final String message, final Throwable cause) {
+    public UnsupportedMatcherStateEventTypeException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Returns {@link UnsupportedMatcherEventTypeException} by input parameters
+     * Returns {@link UnsupportedMatcherStateEventTypeException} by input parameters
      *
      * @param target - initial input source target {@link Object}
-     * @return {@link UnsupportedMatcherEventTypeException}
+     * @return {@link UnsupportedMatcherStateEventTypeException}
      */
     @Factory
-    public static final UnsupportedMatcherEventTypeException throwUnsupportedEventType(final Object target) {
-        throw new UnsupportedMatcherEventTypeException(StringUtils.formatMessage("ERROR: cannot process matcher event type by input code = {%s}", target));
+    public static final UnsupportedMatcherStateEventTypeException throwUnsupportedStateEventType(final Object target) {
+        throw new UnsupportedMatcherStateEventTypeException(StringUtils.formatMessage("ERROR: cannot process matcher state event type by input code = {%s}", target));
     }
 
     /**
-     * Returns {@link UnsupportedMatcherEventTypeException} by input parameters
+     * Returns {@link UnsupportedMatcherStateEventTypeException} by input parameters
      *
      * @param message   - initial input raw message {@link String}
      * @param throwable - initial input cause target {@link Throwable}
-     * @return {@link UnsupportedMatcherEventTypeException}
+     * @return {@link UnsupportedMatcherStateEventTypeException}
      */
     @Factory
-    public static final UnsupportedMatcherEventTypeException throwError(final String message, final Throwable throwable) {
-        throw new UnsupportedMatcherEventTypeException(message, throwable);
+    public static final UnsupportedMatcherStateEventTypeException throwError(final String message, final Throwable throwable) {
+        throw new UnsupportedMatcherStateEventTypeException(message, throwable);
     }
 }
