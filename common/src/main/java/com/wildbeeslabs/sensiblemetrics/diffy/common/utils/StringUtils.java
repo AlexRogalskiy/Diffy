@@ -23,17 +23,19 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.BadOperationException;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterException;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.lang.model.SourceVersion;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -360,50 +362,6 @@ public class StringUtils {
         return new String(Base64.getDecoder().decode(value), StandardCharsets.UTF_8);
     }
 
-    public static String readFile(final String filename) {
-        ValidationUtils.notNull(filename, "File name should not be null");
-        final StringBuilder sb = new StringBuilder();
-        try (final BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while (Objects.nonNull(line = br.readLine())) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-            }
-        } catch (IOException ex) {
-            log.error(String.format("ERROR: cannot process read operation on file={%s}, message={%s}", filename, ex.getMessage()));
-        }
-        return sb.toString();
-    }
-
-    public static String readFile2(final String filename) {
-        ValidationUtils.notNull(filename, "File name should not be null");
-        final StringBuilder sb = new StringBuilder();
-        try {
-            final List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
-            lines.stream().map(line -> {
-                sb.append(line);
-                return line;
-            }).forEach(_item -> sb.append(System.lineSeparator()));
-        } catch (IOException e) {
-            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, e.getMessage()));
-        }
-        return sb.toString();
-    }
-
-    public static String readFile3(final String filename) {
-        ValidationUtils.notNull(filename, "File name should not be null");
-        final StringBuilder sb = new StringBuilder();
-        try (final Stream<String> stream = Files.lines(Paths.get(filename))) {
-            stream.forEachOrdered(s -> {
-                sb.append(s);
-                sb.append(System.lineSeparator());
-            });
-        } catch (IOException ex) {
-            log.error(String.format("ERROR: cannot process read operations on file=%s, message=%s", filename, ex.getMessage()));
-        }
-        return sb.toString();
-    }
-
     public static List<String> toBinaryString(final IntStream stream) {
         ValidationUtils.notNull(stream, "Stream should not be null");
         return stream.mapToObj(n -> Integer.toBinaryString(n)).collect(Collectors.toList());
@@ -427,5 +385,52 @@ public class StringUtils {
     public static Collection<Character> toCodePoints(final String value) {
         ValidationUtils.notNull(value, "Value should not be null");
         return value.codePoints().mapToObj(c -> (char) c).collect(Collectors.toList());
+    }
+
+    public static String encodeUtf8(final String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new BadOperationException(String.format("Unable to encode input value={%s}", value), e);
+        }
+    }
+
+    public static String decodeUtf8(final String value) {
+        try {
+            return URLDecoder.decode(value, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new BadOperationException(String.format("Unable to decode input value={%s}", value), e);
+        }
+    }
+
+    /**
+     * Returns generated identifier {@link String}
+     *
+     * @param length - initial input identifier length
+     * @return generated identifier {@link String}
+     */
+    public static String generateId(final int length) {
+        ValidationUtils.isTrue(length > 0, "Length should be positive number");
+        final StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            char next = (char) ('a' + (int) Math.floor(Math.random() * 26));
+            if (Math.random() < 0.5) {
+                next = Character.toUpperCase(next);
+            }
+            buffer.append(next);
+        }
+        return buffer.toString();
+    }
+
+    public static String generatePassword(final String algorithm) {
+        ValidationUtils.notNull(algorithm, "Algorithm should be null");
+        try {
+            final SecureRandom random = SecureRandom.getInstance(algorithm);
+            byte[] passwordBytes = new byte[16];
+            random.nextBytes(passwordBytes);
+            return new String(org.apache.commons.codec.binary.Base64.encodeBase64(passwordBytes), StandardCharsets.UTF_8).replace("=", "");
+        } catch (NoSuchAlgorithmException e) {
+            throw new InvalidParameterException(String.format("Unable to load algorithm={%s}", algorithm), e);
+        }
     }
 }

@@ -25,8 +25,8 @@ package com.wildbeeslabs.sensiblemetrics.diffy.comparator.service;
 
 import com.google.common.collect.Sets;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ParserUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.interfaces.DiffComparator;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils.ComparatorUtils;
@@ -157,7 +157,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
     public void setComparator(final String property, final Comparator<?> comparator) {
         ValidationUtils.notNull(property, "Property should not be null!");
         log.debug("DEBUG <{}>: storing property by name={}, comparator={}", getClass().getName(), property, comparator);
-        this.getPropertyComparatorMap().put(StringUtils.sanitize(property), comparator);
+        this.getPropertyComparatorMap().put(ParserUtils.sanitize(property), comparator);
     }
 
     /**
@@ -179,7 +179,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     public void removeComparator(final String property) {
         log.debug("DEBUG: <{}>: removing comparator for property={}", getClass().getName(), property);
-        this.getPropertyComparatorMap().remove(StringUtils.sanitize(property));
+        this.getPropertyComparatorMap().remove(ParserUtils.sanitize(property));
     }
 
     /**
@@ -216,7 +216,7 @@ public abstract class AbstractDiffComparator<T> implements DiffComparator<T> {
      */
     @SuppressWarnings("unchecked")
     protected Comparator<?> getPropertyComparator(final String property) {
-        return this.getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+        return this.getPropertyComparatorMap().getOrDefault(ParserUtils.sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
     }
 
     /**

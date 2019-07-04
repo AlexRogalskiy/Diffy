@@ -40,6 +40,7 @@ import java.util.Objects;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public final class DateMatcher extends AbstractMatcher<Date> {
 
     /**

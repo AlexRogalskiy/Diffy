@@ -194,7 +194,7 @@ public class ReflectionUtils {
      * @return property value of input object {@link Object}
      */
     public static Object getProperty(final Object value, final String propertyName) {
-        return getProperty(value, StringUtils.sanitize(propertyName), Object.class);
+        return getProperty(value, ParserUtils.sanitize(propertyName), Object.class);
     }
 
     /**

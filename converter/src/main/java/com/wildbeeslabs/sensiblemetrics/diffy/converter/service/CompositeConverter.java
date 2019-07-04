@@ -32,6 +32,7 @@ import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.l
 /**
  * Composite {@link AbstractConverter} implementation
  */
+@SuppressWarnings("unchecked")
 public class CompositeConverter extends AbstractConverter<Object, Object> {
 
     private final List<Converter<Object, Object>> converters;

@@ -101,9 +101,9 @@ public class PropertyUtils {
     public static final NamingTransformer DEFAULT_PROPERTY_GETTER_TRANSFORMER = (name, nameableType) -> {
         if (NameableType.METHOD.equals(nameableType)) {
             if (name.startsWith(GETTER_ACCESSOR_PREFIX) && name.length() > 3) {
-                return StringUtils.decapitalize(name.substring(3));
+                return ParserUtils.decapitalize(name.substring(3));
             } else if (name.startsWith(BOOLEAN_ACCESSOR_PREFIX) && name.length() > 2) {
-                return StringUtils.decapitalize(name.substring(2));
+                return ParserUtils.decapitalize(name.substring(2));
             }
         }
         return name;
@@ -162,7 +162,7 @@ public class PropertyUtils {
      */
     public static final NamingTransformer DEFAULT_PROPERTY_SETTER_TRANSFORMER = (name, nameableType) -> {
         if (NameableType.METHOD.equals(nameableType) && name.startsWith(SETTER_ACCESSOR_PREFIX) && name.length() > 3) {
-            return StringUtils.decapitalize(name.substring(3));
+            return ParserUtils.decapitalize(name.substring(3));
         }
         return name;
     };

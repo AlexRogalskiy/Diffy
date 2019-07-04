@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.comparator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.sort.SortManager;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ParserUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ReflectionUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils.ComparatorUtils;
@@ -109,7 +110,7 @@ public class DefaultDiffComparator<T> extends AbstractDiffComparator<T> {
                 return new ComparatorUtils.DefaultNullSafeArrayComparator<>();
             }
         }
-        return this.getPropertyComparatorMap().getOrDefault(StringUtils.sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
+        return this.getPropertyComparatorMap().getOrDefault(ParserUtils.sanitize(property), new ComparatorUtils.DefaultNullSafeObjectComparator());
     }
 
     /**
