@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,7 +37,9 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class StringReplacerUtils {
 
-    // ------------------------------------------------------------ Constructors
+    private static final String[] TOKENS = {"{", "}", "\\", "^", "|", "`"};
+
+    private static final String[] REPLACEMENTS = {"%7B", "%7D", "%5C", "%5E", "%7C", "%60"};
 
     /**
      * <p>Private constructor to avoid instantiation.</p>
@@ -798,5 +801,31 @@ public class StringReplacerUtils {
                 return null;
             }
         }
+    }
+
+    public static String encodeUnsafeCharacters(final String originalQueryString) {
+        if (StringUtils.isBlank(originalQueryString)) {
+            return null;
+        }
+        String result = originalQueryString;
+        for (int i = 0; i < TOKENS.length; i++) {
+            if (originalQueryString.contains(TOKENS[i])) {
+                result = result.replace(TOKENS[i], REPLACEMENTS[i]);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Splits URI address from query params and returns it.
+     *
+     * @param uri URI address in string format with query params
+     * @return URI address in string format without query params
+     */
+    public static String getHandlerPath(final String uri) {
+        if (StringUtils.isBlank(uri) || !uri.contains("?")) {
+            return uri;
+        }
+        return uri.substring(0, uri.indexOf("?"));
     }
 }

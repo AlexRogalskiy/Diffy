@@ -120,14 +120,7 @@ public class TaskExecutorService {
     public static void execute(final Duration timeout, final Executable executable) {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
-            executeSupplier(timeout, () -> {
-                try {
-                    executable.execute();
-                } catch (Throwable t) {
-                    throw new RuntimeException(t);
-                }
-                return null;
-            }, executorService);
+            execute(timeout, executable, executorService);
         } finally {
             executorService.shutdownNow();
         }
@@ -193,8 +186,8 @@ public class TaskExecutorService {
         executeSupplier(timeout, () -> {
             try {
                 executable.execute();
-            } catch (Throwable t) {
-                throw new RuntimeException(t);
+            } catch (Throwable throwable) {
+                InvalidParameterException.throwError(String.format("ERROR: cannot operate on input executable = {%s}", executable), throwable);
             }
             return null;
         }, executor);
@@ -238,8 +231,9 @@ public class TaskExecutorService {
             try {
                 return supplier.get();
             } catch (Throwable throwable) {
-                throw InvalidParameterException.throwError(String.format("ERROR: cannot operate on input supplier = {%s}", supplier), throwable);
+                InvalidParameterException.throwError(String.format("ERROR: cannot operate on input supplier = {%s}", supplier), throwable);
             }
+            return null;
         };
         return execute(timeout, executor.submit(callable));
     }
@@ -257,7 +251,7 @@ public class TaskExecutorService {
             try {
                 consumer.accept(supplier.get());
             } catch (Throwable throwable) {
-                throw InvalidParameterException.throwError(String.format("ERROR: cannot operate on input consumer = {%s}, supplier = {%s}", consumer, supplier), throwable);
+                InvalidParameterException.throwError(String.format("ERROR: cannot operate on input consumer = {%s}, supplier = {%s}", consumer, supplier), throwable);
             }
         };
         execute(timeout, executor.submit(runnable));
