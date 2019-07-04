@@ -42,6 +42,7 @@ import java.util.regex.PatternSyntaxException;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@SuppressWarnings("unchecked")
 public class RegexMatcher extends AbstractMatcher<String> {
 
     /**
