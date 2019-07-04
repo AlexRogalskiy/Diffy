@@ -107,6 +107,7 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>${maven.bundle.plugin.vesion}</version>
+                    <inherited>true</inherited>
                     <extensions>true</extensions>
                     <configuration>
                         <instructions combine.children="append">
@@ -121,11 +122,14 @@
                                 Java type objects
                             </Bunlder-Description>
                             <Import-Package>*</Import-Package>
-                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.metrics.examples.*</Private-Package>
-                            <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.metrics.*;-noimport:=true
+                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.metrics.examples.*
+                            </Private-Package>
+                            <Export-Package>
+                                com.wildbeeslabs.sensiblemetrics.diffy.metrics.examples.*;-noimport:=true;version=${project.version}
                             </Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
                         </instructions>
+                        <unpackBundle>true</unpackBundle>
                     </configuration>
                 </plugin>
             </plugins>

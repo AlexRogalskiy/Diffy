@@ -109,11 +109,10 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>${maven.bundle.plugin.vesion}</version>
+                    <inherited>true</inherited>
                     <extensions>true</extensions>
                     <configuration>
                         <instructions combine.children="append">
-                            <minmemory>128m</minmemory>
-                            <maxmemory>1024m</maxmemory>
                             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                             <Bundle-Version>${project.version}</Bundle-Version>
                             <Bundle-Name>${project.artifactId}</Bundle-Name>
@@ -127,10 +126,12 @@
                             <Import-Package>*</Import-Package>
                             <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.validator.examples.*
                             </Private-Package>
-                            <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.validator.*;-noimport:=true
+                            <Export-Package>
+                                com.wildbeeslabs.sensiblemetrics.diffy.validator.examples.*;-noimport:=true;version=${project.version}
                             </Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
                         </instructions>
+                        <unpackBundle>true</unpackBundle>
                     </configuration>
                 </plugin>
             </plugins>

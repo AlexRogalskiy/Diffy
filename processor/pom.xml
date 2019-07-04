@@ -108,6 +108,7 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>${maven.bundle.plugin.vesion}</version>
+                    <inherited>true</inherited>
                     <extensions>true</extensions>
                     <configuration>
                         <instructions combine.children="append">
@@ -124,10 +125,12 @@
                             <Import-Package>*</Import-Package>
                             <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.processor.examples.*
                             </Private-Package>
-                            <Export-Package>com.wildbeeslabs.sensiblemetrics.diffy.processor.*;-noimport:=true
+                            <Export-Package>
+                                com.wildbeeslabs.sensiblemetrics.diffy.processor.examples.*;-noimport:=true;version=${project.version}
                             </Export-Package>
                             <DynamicImport-Package>*</DynamicImport-Package>
                         </instructions>
+                        <unpackBundle>true</unpackBundle>
                     </configuration>
                 </plugin>
             </plugins>
