@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  *
  * @param <T> type of consumer items
  */
-public class RandomServerSorter<T> implements Consumer<List<T>> {
+public class RandomSortConsumer<T> implements Consumer<List<T>> {
 
     @Override
     public void accept(final List<T> values) {
