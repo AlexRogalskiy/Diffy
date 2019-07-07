@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Date utilities implementation {@link Date}, {@link LocalDate}, {@link LocalDateTime}
@@ -64,6 +65,14 @@ public class DateUtils {
      * Default date pattern
      */
     public static final String DEFAULT_DATE_PATTERN = "EEEEE, dd/MM/yyyy";
+
+    /**
+     * Default {@link SimpleDateFormat} instances
+     */
+    public static final ThreadLocal<SimpleDateFormat> DEFAULT_LOCALE_DATE_PATTERN_EXTENDED = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US));
+    public static final ThreadLocal<SimpleDateFormat> DEFAULT_LOCALE_DATE_PATTERN_STANDARD = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEEEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US));
+    public static final ThreadLocal<SimpleDateFormat> DEFAULT_LOCALE_DATE_PATTERN_SIMPLE = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE MMMM d HH:mm:ss yyyy", Locale.US));
+
     /**
      * Default time pattern
      */
