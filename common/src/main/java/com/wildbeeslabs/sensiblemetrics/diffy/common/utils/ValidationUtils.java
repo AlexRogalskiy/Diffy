@@ -251,7 +251,7 @@ public class ValidationUtils {
      * @return true if the value's length is more than the specified minimum.
      */
     public static boolean minLength(final String value, int min, int lineEndLength) {
-        int adjustAmount = adjustForLineEnding(value, lineEndLength);
+        final int adjustAmount = adjustForLineEnding(value, lineEndLength);
         return ((value.length() + adjustAmount) >= min);
     }
 
@@ -509,9 +509,37 @@ public class ValidationUtils {
      * @param upperBound - initial input upper bound
      * @throws IllegalStateException if bounds are invalid
      */
-    public void checkBounds(int lowerBound, int upperBound) throws IllegalStateException {
+    public static void checkBounds(int lowerBound, int upperBound) throws IllegalStateException {
         if ((lowerBound < 0) || (upperBound < 0 || lowerBound > upperBound)) {
             throw new IllegalArgumentException("ERROR: invalid lower={%s}, upper={%s} bounds");
+        }
+    }
+
+    public static <K, V> void checkEntryNotNull(final K key, final V value) {
+        if (Objects.isNull(key)) {
+            throw new NullPointerException("null key in entry: null=" + value);
+        } else if (Objects.isNull(value)) {
+            throw new NullPointerException("null value in entry: " + key + "=null");
+        }
+    }
+
+    public static int checkPositiveOrZero(int value, final String name) {
+        if (value < 0) {
+            throw new IllegalArgumentException(String.format("ERROR: {%s} cannot be negative but was: {%s}", name, value));
+        }
+        return value;
+    }
+
+    public static long checkPositiveOrZero(long value, final String name) {
+        if (value < 0) {
+            throw new IllegalArgumentException(String.format("ERROR: {%s} cannot be negative but was: {%s}", name, value));
+        }
+        return value;
+    }
+
+    public static void checkPositive(int value, String name) {
+        if (value <= 0) {
+            throw new IllegalArgumentException(String.format("ERROR: {%s} cannot be negative or zero but was: {%s}", name, value));
         }
     }
 }
