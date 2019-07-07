@@ -1012,4 +1012,8 @@ public class ServiceUtils {
         to = Math.min(total, to);
         return list.subList(from, to);
     }
+
+    public static <T> Map<T, T> subList(final T[][] value) {
+        return streamOf(value).collect(Collectors.collectingAndThen(Collectors.toMap((T[] data) -> data[0], (T[] data) -> data[1]), Collections::unmodifiableMap));
+    }
 }
