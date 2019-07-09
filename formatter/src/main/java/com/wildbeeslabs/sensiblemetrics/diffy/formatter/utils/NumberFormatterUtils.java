@@ -31,6 +31,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Locale;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -174,5 +175,73 @@ public class NumberFormatterUtils {
             return buff.toString();
         }
         return string;
+    }
+
+    /**
+     * Checks if the language is supported.
+     *
+     * @param languageCode language code, e.g. "en", "pt"
+     * @return true if the language is supported
+     */
+    public static boolean isLanguageSupported(String languageCode) {
+        Locale locale = new Locale(languageCode);
+
+        Locale[] possibleLocales = NumberFormat.getAvailableLocales();
+
+        boolean isLocaleSupported = false;
+
+        for (Locale possibleLocale : possibleLocales) {
+            // search if local is contained
+            if (possibleLocale.equals(locale)) {
+                isLocaleSupported = true;
+                break;
+            }
+        }
+
+        return isLocaleSupported;
+    }
+
+    /**
+     * Removes trailing and containing space.
+     */
+    private static String removeChar(String string, char remove) {
+
+        StringBuilder result = new StringBuilder();
+
+        int lastPosition = 0;
+        int position = 0;
+        while ((position = string.indexOf(remove, lastPosition)) != -1) {
+            result.append(string.substring(lastPosition, position));
+            lastPosition = position + 1;
+        }
+
+        result.append(string.substring(lastPosition, string.length()));
+
+        return result.toString();
+    }
+
+    /**
+     * Gives its best to parse the provided number.
+     *
+     * @param number       number to parse
+     * @param languageCode language code, e.g. "en", "pt"
+     * @return parsed number
+     * @throws ParseException ParseException
+     */
+    public static Number parse(String number, String languageCode)
+        throws ParseException {
+
+        if (!isLanguageSupported(languageCode)) {
+            throw new IllegalArgumentException("Language " + languageCode + " is not supported!");
+        }
+
+        Locale locale = new Locale(languageCode);
+
+        NumberFormat numberFormat = NumberFormat.getInstance(locale);
+
+        number = number.trim();
+        number = removeChar(number, ' ');
+
+        return numberFormat.parse(number);
     }
 }
