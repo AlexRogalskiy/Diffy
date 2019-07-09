@@ -26,7 +26,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
 import java.io.Serializable;
 
 /**
- * Entry interface declaration
+ * AttributeEntry interface declaration
  *
  * @param <T> type of entry first value
  * @author Alexander Rogalskiy

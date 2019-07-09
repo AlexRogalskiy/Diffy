@@ -1750,7 +1750,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Default map entry {@code Map.Entry} comparator implementation {@link Comparator}
+     * Default map entry {@code Map.AttributeEntry} comparator implementation {@link Comparator}
      */
     @Builder
     @Data

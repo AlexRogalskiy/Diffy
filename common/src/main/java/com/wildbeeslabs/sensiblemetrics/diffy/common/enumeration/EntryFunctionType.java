@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.function.Function;
 
 /**
- * Entry {@link Function} type {@link Enum}
+ * AttributeEntry {@link Function} type {@link Enum}
  */
 public enum EntryFunctionType implements Function<Entry<?, ?>, Object> {
     KEY {

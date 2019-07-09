@@ -44,7 +44,7 @@ import java.util.stream.Stream;
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.zipOf;
 
 /**
- * Entry interface declaration
+ * AttributeEntry interface declaration
  *
  * @param <K> type of entry first value
  * @param <V> type of entry last value
@@ -234,24 +234,24 @@ public interface Entry<K, V> extends Serializable {
     }
 
     /**
-     * Constructs new {@link Entry} from the specified <code>Map.Entry</code>.
+     * Constructs new {@link Entry} from the specified <code>Map.AttributeEntry</code>.
      *
      * @param entry - initial input {@link Map.Entry} to copy
      * @throws IllegalArgumentException if the entry is null
      */
     static <K, V> Entry<K, V> entryOf(final Map.Entry<K, V> entry) {
-        ValidationUtils.notNull(entry, "Entry should not be null");
+        ValidationUtils.notNull(entry, "AttributeEntry should not be null");
         return DefaultEntry.of(entry.getKey(), entry.getValue());
     }
 
     /**
-     * Constructs new {@link Map.Entry} from the specified <code>Entry</code>.
+     * Constructs new {@link Map.Entry} from the specified <code>AttributeEntry</code>.
      *
      * @param entry - initial input {@link Entry} to copy
      * @throws IllegalArgumentException if the entry is null
      */
     static <K, V> Map.Entry<K, V> entryOf(final Entry<K, V> entry) {
-        ValidationUtils.notNull(entry, "Entry should not be null");
+        ValidationUtils.notNull(entry, "AttributeEntry should not be null");
         return new AbstractMap.SimpleImmutableEntry<>(entry.getFirst(), entry.getLast());
     }
 
