@@ -33,6 +33,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -78,11 +80,13 @@ public class MapperUtils {
         //objectMapper.registerModule(module);
         objectMapper.registerModule(new Jdk8Module());
         objectMapper.registerModule(new JavaTimeModule());
+        //objectMapper.registerModule(new KotlinModule());
 
         objectMapper.setDefaultMergeable(Boolean.TRUE);
         objectMapper.setLocale(Locale.getDefault());
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        //objectMapper.setDateFormat(new StdDateFormat());
 
         //final CarSerializer carSerializer = new CarSerializer(Car.class);
         //final SimpleModule module = new SimpleModule("CarSerializer", new Version(2, 1, 3, null, null, null));
