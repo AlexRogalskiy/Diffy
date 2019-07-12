@@ -69,9 +69,9 @@ public class TargetLengthBasedClassNameAbbreviator implements Abbreviator {
         // printArray("lengthArray: ", lengthArray);
         for (int i = 0; i <= dotCount; i++) {
             if (i == 0) {
-                buf.append(value.substring(0, lengthArray[i] - 1));
+                buf.append(value, 0, lengthArray[i] - 1);
             } else {
-                buf.append(value.substring(dotIndexesArray[i - 1], dotIndexesArray[i - 1] + lengthArray[i]));
+                buf.append(value, dotIndexesArray[i - 1], dotIndexesArray[i - 1] + lengthArray[i]);
             }
             // System.out.println("i=" + i + ", buf=" + buf);
         }

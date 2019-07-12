@@ -723,4 +723,72 @@ public class ConverterUtils {
         }
         return new BigInteger(value.toString());
     }
+
+    public static boolean convertToBoolean(String prop, Object value) {
+        if (value == null) {
+            return false;
+        }
+        if (value instanceof Boolean) {
+            return ((Boolean) value).booleanValue();
+        }
+        if (value instanceof String) {
+            String str = (String) value;
+            if (str.equalsIgnoreCase("false")) {
+                return false;
+            }
+            if (str.equalsIgnoreCase("true")) {
+                return true;
+            }
+            throw new IllegalArgumentException("Invalid String value for property '" + prop + "': expected Boolean value.");
+        }
+        throw new IllegalArgumentException("Invalid value type (" + value.getClass() + ") for property '" + prop + "': expected Boolean value.");
+    }
+
+    public static int convertToInt(final String prop, final Object value, int minValue) {
+        int i;
+        if (Objects.isNull(value)) {
+            i = 0;
+        } else if (value instanceof Number) {
+            i = ((Number) value).intValue();
+        } else if (value instanceof String) {
+            try {
+                i = Integer.parseInt((String) value);
+            } catch (NumberFormatException nex) {
+                throw new IllegalArgumentException("Invalid String value for property '" + prop + "': expected a number (Integer).");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid value type (" + value.getClass() + ") for property '" + prop + "': expected Integer value.");
+        }
+
+        if (i < minValue) {
+            throw new IllegalArgumentException("Invalid numeric value (" + i
+                + ") for property '" + prop
+                + "': minimum is " + minValue + ".");
+        }
+        return i;
+    }
+
+    public static long convertToLong(final String prop, final Object value, long minValue) {
+        long i;
+        if (Objects.isNull(value)) {
+            i = 0;
+        } else if (value instanceof Number) {
+            i = ((Number) value).longValue();
+        } else if (value instanceof String) {
+            try {
+                i = Long.parseLong((String) value);
+            } catch (NumberFormatException nex) {
+                throw new IllegalArgumentException("Invalid String value for property '" + prop + "': expected a number (Long).");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid value type (" + value.getClass() + ") for property '" + prop + "': expected Long value.");
+        }
+
+        if (i < minValue) {
+            throw new IllegalArgumentException("Invalid numeric value (" + i
+                + ") for property '" + prop
+                + "': minimum is " + minValue + ".");
+        }
+        return i;
+    }
 }

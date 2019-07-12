@@ -1,12 +1,12 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.comparator.service;
+package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
+
+import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import lombok.Getter;
 
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
-
-import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This <i>consumer</i> class is used for calculating the min and max value
@@ -16,10 +16,10 @@ import static java.util.Objects.requireNonNull;
  * example, you can compute minimum and maximum values with:
  * <pre>{@code
  * final Stream<Integer> stream = ...
- * final MinMax<Integer> minMax = stream.collect(
- *         MinMax::of,
- *         MinMax::accept,
- *         MinMax::combine
+ * final MinMaxConsumer<Integer> minMax = stream.collect(
+ *         MinMaxConsumer::of,
+ *         MinMaxConsumer::accept,
+ *         MinMaxConsumer::combine
  *     );
  * }</pre>
  *
@@ -32,16 +32,20 @@ import static java.util.Objects.requireNonNull;
  * efficient parallel execution.
  * @since 3.0
  */
-public final class MinMax<C> implements Consumer<C> {
+@Getter
+public final class MinMaxConsumer<C> implements Consumer<C> {
 
-    private final Comparator<? super C> _comparator;
+    /**
+     * Default {@link Comparator} instance
+     */
+    private final Comparator<? super C> comparator;
 
-    private C _min;
-    private C _max;
-    private long _count = 0L;
+    private C min;
+    private C max;
+    private long count = 0L;
 
-    private MinMax(final Comparator<? super C> comparator) {
-        _comparator = requireNonNull(comparator);
+    private MinMaxConsumer(final Comparator<? super C> comparator) {
+        this.comparator = Objects.requireNonNull(comparator);
     }
 
     /**
@@ -51,54 +55,24 @@ public final class MinMax<C> implements Consumer<C> {
      */
     @Override
     public void accept(final C object) {
-        _min = min(_comparator, _min, object);
-        _max = max(_comparator, _max, object);
-        ++_count;
+        this.min = min(this.comparator, this.min, object);
+        this.max = max(this.comparator, this.max, object);
+        ++this.count;
     }
 
     /**
-     * Combine two {@code MinMax} objects.
+     * Combine two {@code MinMaxConsumer} objects.
      *
-     * @param other the other {@code MinMax} object to combine
+     * @param other the other {@code MinMaxConsumer} object to combine
      * @return {@code this}
-     * @throws java.lang.NullPointerException if the {@code other} object is
-     *                                        {@code null}.
+     * @throws NullPointerException if the {@code other} object is
+     *                              {@code null}.
      */
-    public MinMax<C> combine(final MinMax<C> other) {
-        _min = min(_comparator, _min, other._min);
-        _max = max(_comparator, _max, other._max);
-        _count += other._count;
-
+    public MinMaxConsumer<C> combine(final MinMaxConsumer<C> other) {
+        this.min = min(this.comparator, this.min, other.min);
+        this.max = max(this.comparator, this.max, other.max);
+        this.count += other.count;
         return this;
-    }
-
-    /**
-     * Return the current minimal object or {@code null} if no element has been
-     * accepted yet.
-     *
-     * @return the current minimal object
-     */
-    public C getMin() {
-        return _min;
-    }
-
-    /**
-     * Return the current maximal object or {@code null} if no element has been
-     * accepted yet.
-     *
-     * @return the current maximal object
-     */
-    public C getMax() {
-        return _max;
-    }
-
-    /**
-     * Returns the count of values recorded.
-     *
-     * @return the count of recorded values
-     */
-    public long getCount() {
-        return _count;
     }
 
     /**
@@ -107,8 +81,8 @@ public final class MinMax<C> implements Consumer<C> {
      * implement for this mutable object. If two object have the same state, it
      * has still the same state when updated with the same value.
      * <pre>{@code
-     * final MinMax mm1 = ...;
-     * final MinMax mm2 = ...;
+     * final MinMaxConsumer mm1 = ...;
+     * final MinMaxConsumer mm2 = ...;
      *
      * if (mm1.sameState(mm2)) {
      *     final long value = random.nextInt(1_000_000);
@@ -126,15 +100,8 @@ public final class MinMax<C> implements Consumer<C> {
      * the same state, {@code false} otherwise
      * @since 3.7
      */
-    public boolean sameState(final MinMax<C> other) {
-        return this == other ||
-            Objects.equals(_min, other._min) &&
-                Objects.equals(_max, other._max);
-    }
-
-    @Override
-    public String toString() {
-        return format("MinMax[count=%d, min=%s, max=%s]", _count, _min, _max);
+    public boolean sameState(final MinMaxConsumer<C> other) {
+        return this == other || Objects.equals(min, other.min) && Objects.equals(max, other.max);
     }
 
     /* *************************************************************************
@@ -153,8 +120,7 @@ public final class MinMax<C> implements Consumer<C> {
      * If only one value is {@code null}, the non {@code null} values is
      * returned.
      */
-    public static <T> T
-    min(final Comparator<? super T> comp, final T a, final T b) {
+    public static <T> T min(final Comparator<? super T> comp, final T a, final T b) {
         return a != null ? b != null ? comp.compare(a, b) <= 0 ? a : b : a : b;
     }
 
@@ -170,8 +136,7 @@ public final class MinMax<C> implements Consumer<C> {
      * If only one value is {@code null}, the non {@code null} values is
      * returned.
      */
-    public static <T> T
-    max(final Comparator<? super T> comp, final T a, final T b) {
+    public static <T> T max(final Comparator<? super T> comp, final T a, final T b) {
         return a != null ? b != null ? comp.compare(a, b) >= 0 ? a : b : a : b;
     }
 
@@ -187,23 +152,21 @@ public final class MinMax<C> implements Consumer<C> {
      * <pre>{@code
      * final Comparator<SomeObject> comparator = ...
      * final Stream<SomeObject> stream = ...
-     * final MinMax<SomeObject> moments = stream
+     * final MinMaxConsumer<SomeObject> moments = stream
      *     .collect(doubleMoments.toMinMax(comparator));
      * }</pre>
      *
      * @param comparator the {@code Comparator} to use
      * @param <T>        the type of the input elements
      * @return a {@code Collector} implementing the min-max reduction
-     * @throws java.lang.NullPointerException if the given {@code mapper} is
-     *                                        {@code null}
+     * @throws NullPointerException if the given {@code mapper} is
+     *                              {@code null}
      */
-    public static <T> Collector<T, ?, MinMax<T>>
-    toMinMax(final Comparator<? super T> comparator) {
-        requireNonNull(comparator);
-        return Collector.of(
-            () -> MinMax.of(comparator),
-            MinMax::accept,
-            MinMax::combine
+    public static <T> Collector<T, ?, MinMaxConsumer<T>> toMinMax(final Comparator<? super T> comparator) {
+        Objects.requireNonNull(comparator, "Comparator should not be null");
+        return Collector.of(() -> MinMaxConsumer.of(comparator),
+            MinMaxConsumer::accept,
+            MinMaxConsumer::combine
         );
     }
 
@@ -213,41 +176,42 @@ public final class MinMax<C> implements Consumer<C> {
      *
      * <pre>{@code
      * final Stream<SomeObject> stream = ...
-     * final MinMax<SomeObject> moments = stream
+     * final MinMaxConsumer<SomeObject> moments = stream
      *     .collect(doubleMoments.toMinMax(comparator));
      * }</pre>
      *
      * @param <C> the type of the input elements
      * @return a {@code Collector} implementing the min-max reduction
-     * @throws java.lang.NullPointerException if the given {@code mapper} is
-     *                                        {@code null}
+     * @throws NullPointerException if the given {@code mapper} is
+     *                              {@code null}
      */
-    public static <C extends Comparable<? super C>>
-    Collector<C, ?, MinMax<C>> toMinMax() {
+    public static <C extends Comparable<? super C>> Collector<C, ?, MinMaxConsumer<C>> toMinMax() {
         return toMinMax(Comparator.naturalOrder());
     }
 
     /**
-     * Create a new {@code MinMax} <i>consumer</i> with the given
-     * {@link java.util.Comparator}.
+     * Create a new {@code MinMaxConsumer} <i>consumer</i> with the given
+     * {@link Comparator}.
      *
      * @param comparator the comparator used for comparing two elements
      * @param <T>        the element type
-     * @return a new {@code MinMax} <i>consumer</i>
-     * @throws java.lang.NullPointerException if the {@code comparator} is
-     *                                        {@code null}.
+     * @return a new {@code MinMaxConsumer} <i>consumer</i>
+     * @throws NullPointerException if the {@code comparator} is
+     *                              {@code null}.
      */
-    public static <T> MinMax<T> of(final Comparator<? super T> comparator) {
-        return new MinMax<>(comparator);
+    @Factory
+    public static <T> MinMaxConsumer<T> of(final Comparator<? super T> comparator) {
+        return new MinMaxConsumer<>(comparator);
     }
 
     /**
-     * Create a new {@code MinMax} <i>consumer</i>.
+     * Create a new {@code MinMaxConsumer} <i>consumer</i>.
      *
      * @param <C> the element type
-     * @return a new {@code MinMax} <i>consumer</i>
+     * @return a new {@code MinMaxConsumer} <i>consumer</i>
      */
-    public static <C extends Comparable<? super C>> MinMax<C> of() {
+    @Factory
+    public static <C extends Comparable<? super C>> MinMaxConsumer<C> of() {
         return of(Comparator.naturalOrder());
     }
 
