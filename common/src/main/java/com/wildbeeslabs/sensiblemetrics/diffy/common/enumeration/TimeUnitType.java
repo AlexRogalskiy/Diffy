@@ -41,7 +41,6 @@ import java.util.Optional;
  */
 @ToString
 public enum TimeUnitType {
-
     MILLISECOND {
         @Override
         public Optional<? extends Duration> getDuration(long value) {

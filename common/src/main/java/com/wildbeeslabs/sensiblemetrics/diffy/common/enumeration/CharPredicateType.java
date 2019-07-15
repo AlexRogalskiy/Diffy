@@ -27,7 +27,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration;
  * Default char predicate type {@link Enum}
  */
 public enum CharPredicateType {
-
     /**
      * Tests code points against {@link Character#isLetter(int)}.
      *

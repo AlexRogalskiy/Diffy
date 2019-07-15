@@ -45,5 +45,5 @@ public enum EntryFunctionType implements Function<Entry<?, ?>, Object> {
         Object apply(final Entry<?, ?> entry) {
             return entry.getLast();
         }
-    };
+    }
 }

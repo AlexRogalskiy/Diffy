@@ -28,9 +28,11 @@ import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import lombok.NonNull;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.wildbeeslabs.sensiblemetrics.diffy.common.exception.UnsupportedEventTypeException.throwUnsupportedEventType;
+import static java.util.Arrays.asList;
 
 /**
  * Default event type {@link Enum}
@@ -66,6 +68,6 @@ public enum EventType {
      * @return {@link List} of all {@link EventType}s
      */
     public static List<EventType> valuesList() {
-        return Arrays.asList(EventType.values());
+        return Collections.unmodifiableList(asList(EventType.values()));
     }
 }

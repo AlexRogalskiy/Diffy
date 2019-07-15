@@ -133,7 +133,7 @@ public enum ConversionCategory {
         throw new IllegalArgumentException();
     }
 
-    private static <E> Set<E> arrayToSet(E[] a) {
+    private static <E> Set<E> arrayToSet(final E[] a) {
         return new HashSet<>(Arrays.asList(a));
     }
 
@@ -165,12 +165,11 @@ public enum ConversionCategory {
         if (b == GENERAL) {
             return a;
         }
-
         final Set<Class<? extends Object>> as = arrayToSet(a.types);
         final Set<Class<? extends Object>> bs = arrayToSet(b.types);
         as.retainAll(bs);
-        for (ConversionCategory v : new ConversionCategory[]{CHAR, INT, FLOAT, TIME, CHAR_AND_INT, INT_AND_TIME, NULL}) {
-            Set<Class<? extends Object>> vs = arrayToSet(v.types);
+        for (final ConversionCategory v : new ConversionCategory[]{CHAR, INT, FLOAT, TIME, CHAR_AND_INT, INT_AND_TIME, NULL}) {
+            final Set<Class<? extends Object>> vs = arrayToSet(v.types);
             if (vs.equals(as)) {
                 return v;
             }
@@ -202,11 +201,10 @@ public enum ConversionCategory {
             // Returning INT here to prevent returning GENERAL below.
             return INT;
         }
-
         final Set<Class<? extends Object>> as = arrayToSet(a.types);
         final Set<Class<? extends Object>> bs = arrayToSet(b.types);
         as.addAll(bs); // union
-        for (ConversionCategory v : new ConversionCategory[]{NULL, CHAR_AND_INT, INT_AND_TIME, CHAR, INT, FLOAT, TIME}) {
+        for (final ConversionCategory v : new ConversionCategory[]{NULL, CHAR_AND_INT, INT_AND_TIME, CHAR, INT, FLOAT, TIME}) {
             final Set<Class<? extends Object>> vs = arrayToSet(v.types);
             if (vs.equals(as)) {
                 return v;

@@ -44,6 +44,7 @@ public enum SchemeType {
     WS("ws"),
     WSS("wss");
 
+    @JsonValue
     private final String value;
 
     @JsonCreator
@@ -53,10 +54,5 @@ public enum SchemeType {
             .filter(type -> type.getValue().equalsIgnoreCase(value))
             .findFirst()
             .orElseThrow(() -> throwUnsupportedSchemeType(value));
-    }
-
-    @JsonValue
-    public String toValue() {
-        return this.value;
     }
 }
