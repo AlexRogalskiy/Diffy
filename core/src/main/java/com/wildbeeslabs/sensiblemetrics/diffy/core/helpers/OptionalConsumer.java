@@ -1,8 +1,12 @@
-package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
+package com.wildbeeslabs.sensiblemetrics.diffy.core.helpers;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface.Executor;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface.ThrowingExecutor;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces.ThrowingConsumer;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -16,15 +20,16 @@ import java.util.function.Consumer;
  *            </p>
  */
 public class OptionalConsumer<T> implements Consumer<Optional<T>> {
+
     /**
      * Default empty {@link Consumer} instance
      */
     private static final Consumer DEFAULT_EMPTY_CONSUMER = o -> {
     };
     /**
-     * Default empty {@link Runnable} instance
+     * Default empty {@link Executor} instance
      */
-    private static final Runnable DEFAULT_EMPTY_RUNNABLE = () -> {
+    private static final Executor DEFAULT_EMPTY_EXECUTOR = () -> {
     };
 
     /**
@@ -36,14 +41,14 @@ public class OptionalConsumer<T> implements Consumer<Optional<T>> {
      */
     private final Consumer<? super T> consumer;
     /**
-     * Default {@link Runnable} value
+     * Default {@link Executor} value
      */
-    private final Runnable runnable;
+    private final Executor executor;
 
     /**
      * Default optional consumer constructor by input arguments
      *
-     * @param optional - initial input {@code T} argument
+     * @param value - initial input {@code T} argument
      */
     private OptionalConsumer(final T value) {
         this(Optional.ofNullable(value));
@@ -62,13 +67,13 @@ public class OptionalConsumer<T> implements Consumer<Optional<T>> {
      * Default optional consumer constructor by input arguments
      *
      * @param optional - initial input {@link Optional} argument
-     * @param optional - initial input {@link Consumer} argument
-     * @param optional - initial input {@link Runnable} argument
+     * @param consumer - initial input {@link Consumer} argument
+     * @param executor - initial input {@link Executor} argument
      */
-    private OptionalConsumer(final Optional<T> optional, final Consumer<? super T> consumer, final Runnable runnable) {
+    private OptionalConsumer(final Optional<T> optional, final Consumer<? super T> consumer, final Executor executor) {
         this.optional = Optional.ofNullable(optional).orElseGet(Optional::empty);
         this.consumer = Optional.ofNullable(consumer).orElse(DEFAULT_EMPTY_CONSUMER);
-        this.runnable = Optional.ofNullable(runnable).orElse(DEFAULT_EMPTY_RUNNABLE);
+        this.executor = Optional.ofNullable(executor).orElse(DEFAULT_EMPTY_EXECUTOR);
     }
 
     public OptionalConsumer<T> ifPresent(final Consumer<? super T> consumer) {
@@ -77,22 +82,22 @@ public class OptionalConsumer<T> implements Consumer<Optional<T>> {
         return this;
     }
 
-    public OptionalConsumer<T> ifNotPresent(final Runnable runnable) {
-        ValidationUtils.notNull(runnable, "Runnable should not be null");
+    public OptionalConsumer<T> ifNotPresent(final Executor executor) {
+        ValidationUtils.notNull(executor, "Executor should not be null");
         if (!this.optional.isPresent()) {
-            runnable.run();
+            executor.execute();
         }
         return this;
     }
 
-    public void acceptOrElse(final Consumer<? super T> consumer, final Runnable runnable) {
+    public void acceptOrElse(final Consumer<? super T> consumer, final Executor executor) {
         ValidationUtils.notNull(consumer, "Consumer should not be null");
-        ValidationUtils.notNull(runnable, "Runnable should not be null");
+        ValidationUtils.notNull(executor, "Executor should not be null");
 
         if (this.optional.isPresent()) {
             consumer.accept(this.optional.get());
         } else {
-            runnable.run();
+            executor.execute();
         }
     }
 
@@ -101,8 +106,22 @@ public class OptionalConsumer<T> implements Consumer<Optional<T>> {
         if (optional.isPresent()) {
             this.consumer.accept(optional.get());
         } else {
-            this.runnable.run();
+            this.executor.execute();
         }
+    }
+
+    public <E extends Throwable> OptionalConsumer<T> ifPresent(final ThrowingConsumer<T, E> consumer) {
+        Objects.requireNonNull(consumer, "Consumer should not be null");
+        this.optional.ifPresent(consumer);
+        return this;
+    }
+
+    public <E extends Throwable> OptionalConsumer<T> ifNotPresent(final ThrowingExecutor<E> executor) {
+        Objects.requireNonNull(executor, "Executor should not be null");
+        if (!this.optional.isPresent()) {
+            executor.execute();
+        }
+        return this;
     }
 
     @Factory
@@ -121,19 +140,19 @@ public class OptionalConsumer<T> implements Consumer<Optional<T>> {
     }
 
     @Factory
-    public static <T> OptionalConsumer<T> ofNullable(final T value, final Consumer<? super T> consumer, final Runnable runnable) {
-        return new OptionalConsumer<>(Optional.ofNullable(value), consumer, runnable);
+    public static <T> OptionalConsumer<T> ofNullable(final T value, final Consumer<? super T> consumer, final Executor executor) {
+        return new OptionalConsumer<>(Optional.ofNullable(value), consumer, executor);
     }
 
-    public static <T> void ifPresentOrElse(final Optional<T> optional, final Consumer<? super T> consumer, final Runnable runnable) {
+    public static <T> void ifPresentOrElse(final Optional<T> optional, final Consumer<? super T> consumer, final Executor executor) {
         ValidationUtils.notNull(optional, "Optional should not be null");
         ValidationUtils.notNull(consumer, "Consumer should not be null");
-        ValidationUtils.notNull(runnable, "Runnable should not be null");
+        ValidationUtils.notNull(executor, "Executor should not be null");
 
         if (optional.isPresent()) {
             consumer.accept(optional.get());
         } else {
-            runnable.run();
+            executor.execute();
         }
     }
 }

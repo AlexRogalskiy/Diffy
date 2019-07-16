@@ -31,8 +31,6 @@ public interface Executor {
 
     /**
      * Executes any operation
-     *
-     * @throws {@link Throwable}
      */
-    void execute() throws Throwable;
+    void execute();
 }
