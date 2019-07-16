@@ -9,6 +9,8 @@ import com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces.ThrowingConsumer;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Optional {@link Consumer} implementation
@@ -108,6 +110,18 @@ public class OptionalConsumer<T> implements Consumer<Optional<T>> {
         } else {
             this.executor.execute();
         }
+    }
+
+    public OptionalConsumer<T> filter(final Predicate<T> predicate) {
+        ValidationUtils.notNull(predicate, "Predicate should not be null");
+        of(this.optional.filter(predicate));
+        return this;
+    }
+
+    public <U> OptionalConsumer<T> map(final Function<? super T, ? extends U> mapper) {
+        ValidationUtils.notNull(mapper, "Function should not be null");
+        of(this.optional.map(mapper));
+        return this;
     }
 
     public <E extends Throwable> OptionalConsumer<T> ifPresent(final ThrowingConsumer<T, E> consumer) {
