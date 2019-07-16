@@ -6,7 +6,6 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface.ThrowingExec
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.core.interfaces.ThrowingConsumer;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -114,24 +113,22 @@ public class OptionalConsumer<T> implements Consumer<Optional<T>> {
 
     public OptionalConsumer<T> filter(final Predicate<T> predicate) {
         ValidationUtils.notNull(predicate, "Predicate should not be null");
-        of(this.optional.filter(predicate));
-        return this;
+        return of(this.optional.filter(predicate));
     }
 
-    public <U> OptionalConsumer<T> map(final Function<? super T, ? extends U> mapper) {
+    public <U> OptionalConsumer<U> map(final Function<? super T, ? extends U> mapper) {
         ValidationUtils.notNull(mapper, "Function should not be null");
-        of(this.optional.map(mapper));
-        return this;
+        return of(this.optional.map(mapper));
     }
 
     public <E extends Throwable> OptionalConsumer<T> ifPresent(final ThrowingConsumer<T, E> consumer) {
-        Objects.requireNonNull(consumer, "Consumer should not be null");
+        ValidationUtils.notNull(consumer, "Consumer should not be null");
         this.optional.ifPresent(consumer);
         return this;
     }
 
     public <E extends Throwable> OptionalConsumer<T> ifNotPresent(final ThrowingExecutor<E> executor) {
-        Objects.requireNonNull(executor, "Executor should not be null");
+        ValidationUtils.notNull(executor, "Executor should not be null");
         if (!this.optional.isPresent()) {
             executor.execute();
         }
