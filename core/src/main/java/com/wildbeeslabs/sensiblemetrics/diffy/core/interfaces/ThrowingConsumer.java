@@ -114,9 +114,9 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
     }
 
     /**
-     * Returns {@link ThrowingSupplier} operator
+     * Returns {@link ThrowingConsumer} operator
      *
-     * @return {@link ThrowingSupplier}
+     * @return {@link ThrowingConsumer}
      */
     @NonNull
     default ThrowingConsumer<Stream<T>, E> collect() {
@@ -172,7 +172,7 @@ public interface ThrowingConsumer<T, E extends Throwable> extends Consumer<T> {
      * @throws IllegalArgumentException if consumer is {@code null}
      */
     @NonNull
-    static <T, E extends Throwable> ThrowingConsumer<T, E> accept(final ThrowingConsumer<T, E> consumer) {
+    static <T, E extends Throwable> ThrowingConsumer<T, E> identity(final ThrowingConsumer<T, E> consumer) {
         ValidationUtils.notNull(consumer, "Consumer should not be null");
         return consumer::accept;
     }

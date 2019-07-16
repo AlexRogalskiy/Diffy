@@ -29,7 +29,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.InvalidParameterE
 import com.wildbeeslabs.sensiblemetrics.diffy.common.exception.TimeoutOperationException;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.configuration.TaskExecutorConfiguration;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.handler.DefaultRejectedExecutionHandler;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface.Executable;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface.Executor;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.property.TaskExecutorProperty;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import lombok.experimental.UtilityClass;
@@ -112,12 +112,12 @@ public class TaskExecutorService {
     }
 
     /**
-     * Executes input {@link Executable} task by {@link Duration} timeout
+     * Executes input {@link Executor} task by {@link Duration} timeout
      *
      * @param timeout    - initial input {@link Duration} timeout
-     * @param executable - initial input {@link Executable} task
+     * @param executable - initial input {@link Executor} task
      */
-    public static void execute(final Duration timeout, final Executable executable) {
+    public static void execute(final Duration timeout, final Executor executable) {
         final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
             execute(timeout, executable, executorService);
@@ -176,13 +176,13 @@ public class TaskExecutorService {
     }
 
     /**
-     * Executes input {@link Executable} task by {@link ExecutorService} and {@link Duration} timeout
+     * Executes input {@link Executor} task by {@link ExecutorService} and {@link Duration} timeout
      *
      * @param timeout    - initial input {@link Duration} timeout
-     * @param executable - initial input {@link Executable} task
+     * @param executable - initial input {@link Executor} task
      * @param executor   - initial input {@link ExecutorService}
      */
-    public static void execute(final Duration timeout, final Executable executable, final ExecutorService executor) {
+    public static void execute(final Duration timeout, final Executor executable, final ExecutorService executor) {
         executeSupplier(timeout, () -> {
             try {
                 executable.execute();

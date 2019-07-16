@@ -24,10 +24,10 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface;
 
 /**
- * Executable interface declaration
+ * Executor interface declaration
  */
 @FunctionalInterface
-public interface Executable {
+public interface Executor {
 
     /**
      * Executes any operation
