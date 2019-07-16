@@ -39,7 +39,7 @@ public interface ThrowingExecutor<E extends Throwable> extends Executor {
      * @param executor - initial input {@link ThrowingExecutor} operator
      * @throws IllegalArgumentException if consumer is {@code null}
      */
-    static <T, E extends Throwable> void executeOrThrow(final ThrowingExecutor<E> executor) {
+    static <E extends Throwable> void executeOrThrow(final ThrowingExecutor<E> executor) {
         ValidationUtils.notNull(executor, "Executor should not be null");
         try {
             executor.executeOrThrow();
@@ -51,7 +51,6 @@ public interface ThrowingExecutor<E extends Throwable> extends Executor {
     /**
      * Wraps input {@link ThrowingExecutor} by input exception {@link Class}
      *
-     * @param <T>      type of consumed value
      * @param <E>      type of throwable value
      * @param executor - initial input {@link ThrowingExecutor}
      * @param clazz    - initial input {@link Class}
@@ -60,7 +59,7 @@ public interface ThrowingExecutor<E extends Throwable> extends Executor {
      * @throws IllegalArgumentException if clazz is {@code null}
      */
     @NonNull
-    static <T, E extends Exception> ThrowingExecutor<E> wrapConsumer(final ThrowingExecutor<E> executor, final Class<E> clazz) {
+    static <E extends Exception> ThrowingExecutor<E> wrapConsumer(final ThrowingExecutor<E> executor, final Class<E> clazz) {
         ValidationUtils.notNull(executor, "Executor should not be null");
         ValidationUtils.notNull(clazz, "Class should not be null");
 
