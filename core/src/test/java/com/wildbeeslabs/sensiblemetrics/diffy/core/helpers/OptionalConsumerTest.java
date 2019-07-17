@@ -1,11 +1,13 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.core.helpers;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.executor.iface.Executor;
+import org.apache.commons.lang3.LocaleUtils;
 import org.hamcrest.core.IsEqual;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -102,22 +104,6 @@ public class OptionalConsumerTest {
     }
 
     @Test
-    public void test_OptionalConsumer_whenIfPresent_Throw_Exception() {
-        // given
-        final OptionalConsumer<String> optionalConsumer = OptionalConsumer.of("test");
-
-        // when
-        thrown.expect(IllegalArgumentException.class);
-
-        // then
-        assertThat(optionalConsumer, is(not(nullValue())));
-        optionalConsumer.ifPresent(t -> {
-                throw new IllegalArgumentException();
-            }
-        );
-    }
-
-    @Test
     public void test_OptionalConsumer_whenIfNotPresent_Throw_Exception() {
         // given
         final OptionalConsumer<String> optionalConsumer = OptionalConsumer.of(null);
@@ -144,22 +130,6 @@ public class OptionalConsumerTest {
         // then
         assertThat(optionalConsumer, is(not(nullValue())));
         optionalConsumer.ifPresent(t -> {
-                throw new IllegalArgumentException();
-            }
-        );
-    }
-
-    @Test
-    public void test_OptionalConsumer_whenIfNotPresent_Throw_Exception() {
-        // given
-        final OptionalConsumer<String> optionalConsumer = OptionalConsumer.of(null);
-
-        // when
-        thrown.expect(IllegalArgumentException.class);
-
-        // then
-        assertThat(optionalConsumer, is(not(nullValue())));
-        optionalConsumer.ifNotPresent(() -> {
                 throw new IllegalArgumentException();
             }
         );
