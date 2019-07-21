@@ -27,9 +27,11 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.Event;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -110,14 +112,25 @@ public class DefaultPublisher<T> implements Publisher<Event<T>> {
                     int v = value.incrementAndGet();
                     log("publish item: [" + v + "] ...");
                     this.subscriber.onNext(new Event<>() {
+
+                        /**
+                         * Default {@link String} event identifier
+                         */
+                        private final String eventId = UUID.randomUUID().toString();
+
+                        @Override
+                        public String getEventId() {
+                            return this.eventId;
+                        }
+
                         @Override
                         public EventType getType() {
                             return EventType.EMPTY_EVENT;
                         }
 
                         @Override
-                        public long getTimeStamp() {
-                            return 0;
+                        public Instant getTimeStamp() {
+                            return Instant.now();
                         }
                     });
                 });

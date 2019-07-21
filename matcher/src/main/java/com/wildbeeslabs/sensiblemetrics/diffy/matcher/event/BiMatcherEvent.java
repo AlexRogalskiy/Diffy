@@ -31,7 +31,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * Binary {@link BaseMatcherEvent} implementation
@@ -97,7 +97,7 @@ public class BiMatcherEvent<T, S> extends BaseMatcherEvent<T, S> {
     }
 
     @Override
-    public long getTimeStamp() {
-        return new Date().getTime();
+    public Instant getTimeStamp() {
+        return Instant.now();
     }
 }

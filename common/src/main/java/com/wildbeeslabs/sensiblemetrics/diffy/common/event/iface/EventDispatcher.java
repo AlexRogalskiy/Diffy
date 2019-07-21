@@ -39,4 +39,28 @@ public interface EventDispatcher<T> {
      * @param context - initial input {@link ApplicationContext}
      */
     void dispatch(final T event, final ApplicationContext context);
+
+//    /**
+//     * Publish a collection of events on this bus (one, or multiple). The events will be dispatched to all subscribed
+//     * listeners.
+//     * <p>
+//     * Implementations may treat the given {@code events} as a single batch and distribute the events as such to
+//     * all subscribed EventListeners.
+//     *
+//     * @param events The collection of events to dispatch
+//     */
+//    default void publish(final T... events) {
+//        dispatch(asList(events));
+//    }
+//
+//    /**
+//     * Publish a collection of events on this bus (one, or multiple). The events will be dispatched to all subscribed
+//     * listeners.
+//     * <p>
+//     * Implementations may treat the given {@code events} as a single batch and distribute the events as such to
+//     * all subscribed EventListeners.
+//     *
+//     * @param events The collection of events to dispatch
+//     */
+//    void dispatch(final List<? extends T> events);
 }

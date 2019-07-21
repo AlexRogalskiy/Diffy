@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Base matcher event implementation
@@ -41,7 +42,7 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
-    
+
     /**
      * Default explicit serialVersionUID for interoperability
      */
@@ -54,6 +55,10 @@ public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
      * Default {@link MatcherStateEventType}
      */
     private final MatcherStateEventType stateType;
+    /**
+     * Default {@link String} event identifier
+     */
+    private final String eventId;
 
     /**
      * Default base matcher event constructor by input arguments
@@ -66,6 +71,7 @@ public abstract class BaseMatcherEvent<T, S> extends BaseEvent<S> {
         super(source);
         this.matcher = matcher;
         this.stateType = stateType;
+        this.eventId = UUID.randomUUID().toString();
     }
 
     /**

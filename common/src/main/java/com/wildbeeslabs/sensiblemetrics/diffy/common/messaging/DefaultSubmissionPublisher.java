@@ -27,7 +27,9 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface.Event;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -72,14 +74,25 @@ public class DefaultSubmissionPublisher<T> extends SubmissionPublisher<Event<T>>
     }
 
     private final Supplier<? extends Event<T>> supplier = (Supplier<Event<T>>) () -> new Event<T>() {
+
+        /**
+         * Default {@link String} event identifier
+         */
+        private final String eventId = UUID.randomUUID().toString();
+
+        @Override
+        public String getEventId() {
+            return this.eventId;
+        }
+
         @Override
         public EventType getType() {
             return EventType.EMPTY_EVENT;
         }
 
         @Override
-        public long getTimeStamp() {
-            return 0;
+        public Instant getTimeStamp() {
+            return Instant.now();
         }
     };
 

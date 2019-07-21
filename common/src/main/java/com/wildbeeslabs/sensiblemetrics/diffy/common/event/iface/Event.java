@@ -26,6 +26,8 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.enumeration.EventType;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
@@ -40,6 +42,11 @@ public interface Event<T> extends Serializable {
      * Default empty {@link Event} implementation
      */
     Event<?> EMPTY_EVENT = new Event<>() {
+        @Override
+        public String getEventId() {
+            return UUID.randomUUID().toString();
+        }
+
         @Override
         public String getName() {
             return EMPTY;
@@ -56,10 +63,17 @@ public interface Event<T> extends Serializable {
         }
 
         @Override
-        public long getTimeStamp() {
-            return 0;
+        public Instant getTimeStamp() {
+            return Instant.now();
         }
     };
+
+    /**
+     * Returns the identifier of the serialized event.
+     *
+     * @return the identifier of the serialized event
+     */
+    String getEventId();
 
     /**
      * Name of event, should be unique.
@@ -92,5 +106,10 @@ public interface Event<T> extends Serializable {
      */
 //    EventListenerAdapter<T> getTarget();
 
-    long getTimeStamp();
+    /**
+     * Returns the timestamp at which the event was first created.
+     *
+     * @return the timestamp at which the event was first created
+     */
+    Instant getTimeStamp();
 }
