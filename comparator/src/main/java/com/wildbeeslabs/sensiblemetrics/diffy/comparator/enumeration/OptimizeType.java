@@ -10,7 +10,7 @@ import java.util.Comparator;
  * @version 3.0
  * @since 1.0
  */
-public enum Optimize {
+public enum OptimizeType {
 
     /**
      * GA minimization
@@ -57,7 +57,7 @@ public enum Optimize {
      *
      * <pre>{@code
      * final Population<DoubleGene, Double> population = ...
-     * population.sort(Optimize.MINIMUM.<Double>descending());
+     * population.sort(OptimizeType.MINIMUM.<Double>descending());
      * }</pre>
      * <p>
      * The code example above will populationSort the population according it's fitness
@@ -79,7 +79,7 @@ public enum Optimize {
      *
      * <pre>{@code
      * final Population<DoubleGene, Double> population = ...
-     * population.sort(Optimize.MINIMUM.<Double>ascending());
+     * population.sort(OptimizeType.MINIMUM.<Double>ascending());
      * }</pre>
      * <p>
      * The code example above will populationSort the population according it's fitness

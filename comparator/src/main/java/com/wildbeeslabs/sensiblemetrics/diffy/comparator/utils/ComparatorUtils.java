@@ -27,8 +27,11 @@ import com.codepoetics.protonpack.StreamUtils;
 import com.google.common.collect.Iterables;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.annotation.Factory;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.AnnotationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.StringUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.annotation.Priority;
+import com.wildbeeslabs.sensiblemetrics.diffy.comparator.enumeration.PriorityType;
 import lombok.*;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.Serializable;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -2325,6 +2329,45 @@ public class ComparatorUtils {
                 return 0;
             }
             return Double.compare(o1, o2);
+        }
+    }
+
+    /**
+     * Comparator that compares objects based on the value on an {@link Priority @Priority}
+     * annotation.
+     *
+     * @param <T> The type of object to compare
+     * @author Allard Buijze
+     * @since 2.1.2
+     */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class PriorityAnnotationComparator<T> implements Comparator<T> {
+
+        /**
+         * Default {@link PriorityAnnotationComparator} instance
+         */
+        private static final PriorityAnnotationComparator INSTANCE = new PriorityAnnotationComparator();
+
+        /**
+         * Returns the instance of the comparator.
+         *
+         * @param <T> The type of values to compare
+         * @return a comparator comparing objects based on their @Priority annotations
+         */
+        @SuppressWarnings("unchecked")
+        public static <T> PriorityAnnotationComparator<T> getInstance() {
+            return INSTANCE;
+        }
+
+        @Override
+        public int compare(final T o1, final T o2) {
+            return Integer.compare(this.getPriority(o2.getClass()), this.getPriority(o1.getClass()));
+        }
+
+        private int getPriority(final AnnotatedElement annotatedElement) {
+            return (int) AnnotationUtils.findAnnotationAttributes(annotatedElement, Priority.class)
+                .map(m -> m.get("priority"))
+                .orElse(PriorityType.NEUTRAL);
         }
     }
 
