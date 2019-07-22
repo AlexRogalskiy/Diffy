@@ -7,7 +7,7 @@ import java.util.List;
  * Interface towards the Event Handling components of an application. This interface provides a friendlier API toward
  * the event bus. The EventGateway allows for components to easily publish events.
  */
-public interface EventGateway<T> extends MessageDispatchInterceptorSupport<T, Event<T>> {
+public interface EventGateway<T> extends EventDispatchInterceptorSupport<T, Event<T>> {
 
     /**
      * Publish a collection of events on this bus (one, or multiple). The events will be dispatched to all subscribed

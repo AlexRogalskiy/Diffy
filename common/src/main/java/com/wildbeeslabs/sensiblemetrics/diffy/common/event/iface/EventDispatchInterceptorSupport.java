@@ -10,7 +10,7 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.event.iface;
  *
  * @param <T> The type of Message the interceptor works with
  */
-public interface MessageDispatchInterceptorSupport<T, E extends Event<T>> {
+public interface EventDispatchInterceptorSupport<T, E extends Event<T>> {
 
     /**
      * Register the given DispatchInterceptor. After registration, the interceptor will be invoked for each Message
@@ -19,5 +19,5 @@ public interface MessageDispatchInterceptorSupport<T, E extends Event<T>> {
      * @param dispatchInterceptor The interceptor to register
      * @return a Registration, which may be used to remove the unregister the interceptor
      */
-    void registerDispatchInterceptor(final MessageDispatchInterceptor<T, ? super E> dispatchInterceptor);
+    void registerDispatchInterceptor(final EventDispatchInterceptor<T, ? super E> dispatchInterceptor);
 }
