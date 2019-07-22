@@ -31,6 +31,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.common {
     requires com.fasterxml.jackson.datatype.jdk8;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires java.validation;
+    requires micrometer.core;
 
     // exports common annotation
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.annotation;
@@ -76,4 +77,5 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.common {
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.impl;
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.executor.property;
     exports com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.unit;
+    exports com.wildbeeslabs.sensiblemetrics.diffy.common.event.monitor;
 }

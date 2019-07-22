@@ -28,6 +28,7 @@
         <diffy-validator.version>1.1.0</diffy-validator.version>
 
         <json.version>20180813</json.version>
+        <dom4j.version>1.6.1</dom4j.version>
 
         <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.converter.examples</exclude.packages>
     </properties>
@@ -128,7 +129,8 @@
                                 Java type objects
                             </Bunlder-Description>
                             <Import-Package>*</Import-Package>
-                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.converter.examples.*</Private-Package>
+                            <Private-Package>com.wildbeeslabs.sensiblemetrics.diffy.converter.examples.*
+                            </Private-Package>
                             <Export-Package>
                                 com.wildbeeslabs.sensiblemetrics.diffy.converter.*;-noimport:=true;version=${project.version}
                             </Export-Package>
@@ -278,6 +280,13 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${json.version}</version>
+        </dependency>
+
+        <!-- Dom4j library dependencies -->
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>${dom4j.version}</version>
         </dependency>
     </dependencies>
 </project>

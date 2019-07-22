@@ -27,6 +27,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.metrics {
     requires org.jsoup;
     requires commons.validator;
     requires com.wildbeeslabs.sensiblemtrics.diffy.common;
+    requires metrics.core;
 
     // exports metrics distance
     exports com.wildbeeslabs.sensiblemetrics.diffy.metrics.distance;

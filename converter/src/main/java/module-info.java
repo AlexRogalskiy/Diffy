@@ -30,6 +30,7 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.converter {
     requires com.wildbeeslabs.sensiblemtrics.diffy.matcher;
     requires com.wildbeeslabs.sensiblemtrics.diffy.validator;
     requires org.json;
+    requires dom4j;
 
     // exports converter enumerations
     exports com.wildbeeslabs.sensiblemetrics.diffy.converter.enumeration;
