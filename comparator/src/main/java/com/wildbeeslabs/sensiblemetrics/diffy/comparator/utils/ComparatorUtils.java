@@ -2371,6 +2371,42 @@ public class ComparatorUtils {
         }
     }
 
+    /**
+     * {@link Class} {@link Comparator} implementation
+     */
+    public static class ClassComparator<T> implements Comparator<Class<T>> {
+
+        @Override
+        public int compare(final Class<T> o1, final Class<T> o2) {
+            if (o1.isInterface() && !o2.isInterface()) {
+                return 1;
+            } else if (!o1.isInterface() && o2.isInterface()) {
+                return -1;
+            }
+            return Integer.compare(this.depthOf(o2), this.depthOf(o1));
+        }
+
+        private int depthOf(final Class<T> o1) {
+            int depth = 0;
+            Class<?> type = o1;
+            if (o1.isInterface()) {
+                while (type.getInterfaces().length > 0) {
+                    depth++;
+                    type = type.getInterfaces()[0];
+                }
+            } else {
+                while (type != null) {
+                    depth++;
+                    type = type.getSuperclass();
+                }
+            }
+            if (o1.isAnnotation()) {
+                depth += 1000;
+            }
+            return depth;
+        }
+    }
+}
 //    /**
 //     * {@link MediaType} {@link Comparator} implementation
 //     */
@@ -2417,4 +2453,3 @@ public class ComparatorUtils {
 //            return super.compareParameters(mediaType1, mediaType2);
 //        }
 //    };
-}
