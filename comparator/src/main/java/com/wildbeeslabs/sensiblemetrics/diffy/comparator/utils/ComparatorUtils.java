@@ -2406,6 +2406,84 @@ public class ComparatorUtils {
             return depth;
         }
     }
+
+    public static enum NaturalOrderingKeyComparator implements Comparator<String> {
+        INSTANCE;
+
+        /*
+         * (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
+        public int compare(final String s1, final String s2) {
+            int s1offset = 0;
+            int s2offset = 0;
+
+            while (s1offset < s1.length() && s2offset < s2.length()) {
+                final Part thisPart = extractPart(s1, s1offset);
+                final Part thatPart = extractPart(s2, s2offset);
+
+                int result = thisPart.compareTo(thatPart);
+
+                if (result != 0) {
+                    return result;
+                }
+
+                s1offset += thisPart.length();
+                s2offset += thatPart.length();
+            }
+
+            return 0;
+        }
+
+        private Part extractPart(final String source, final int offset) {
+            final StringBuilder builder = new StringBuilder();
+
+            char c = source.charAt(offset);
+            builder.append(c);
+
+            boolean isDigit = Character.isDigit(c);
+            for (int i = offset + 1; i < source.length(); i++) {
+
+                c = source.charAt(i);
+                if ((isDigit && !Character.isDigit(c)) || (!isDigit && Character.isDigit(c))) {
+                    break;
+                }
+                builder.append(c);
+            }
+            return new Part(builder.toString(), isDigit);
+        }
+
+        private static class Part implements Comparable<Part> {
+            private final String rawValue;
+            @Nullable
+            private final Long longValue;
+
+            public Part(final String value, final boolean isDigit) {
+                this.rawValue = value;
+                this.longValue = isDigit ? Long.valueOf(value) : null;
+            }
+
+            boolean isNumeric() {
+                return this.longValue != null;
+            }
+
+            int length() {
+                return this.rawValue.length();
+            }
+
+            /*
+             * (non-Javadoc)
+             * @see java.lang.Comparable#compareTo(java.lang.Object)
+             */
+            @Override
+            public int compareTo(final Part that) {
+                if (this.isNumeric() && that.isNumeric()) {
+                    return this.longValue.compareTo(that.longValue);
+                }
+                return this.rawValue.compareTo(that.rawValue);
+            }
+        }
+    }
 }
 //    /**
 //     * {@link MediaType} {@link Comparator} implementation
