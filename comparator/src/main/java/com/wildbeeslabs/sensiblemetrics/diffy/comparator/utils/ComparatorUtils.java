@@ -2484,6 +2484,14 @@ public class ComparatorUtils {
             }
         }
     }
+
+    public static class AscedingOrderComparator<T extends Comparable<T>> implements Comparator<T> {
+
+        @Override
+        public int compare(final T o1, final T o2) {
+            return o1.compareTo(o2);
+        }
+    }
 }
 //    /**
 //     * {@link MediaType} {@link Comparator} implementation
