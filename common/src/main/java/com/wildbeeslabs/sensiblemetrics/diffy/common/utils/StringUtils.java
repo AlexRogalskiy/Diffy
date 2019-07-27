@@ -433,4 +433,9 @@ public class StringUtils {
             throw new InvalidParameterException(String.format("Unable to load algorithm={%s}", algorithm), e);
         }
     }
+
+    public List<String> sortAlphabetic(List<String> combinations) {
+        Collections.sort(combinations, (o1, o2) -> (o1.toLowerCase()).compareToIgnoreCase(o2.toLowerCase()));
+        return combinations;
+    }
 }
