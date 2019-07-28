@@ -1325,5 +1325,6 @@
         <module>metrics</module>
         <module>examples</module>
         <module>formatter</module>
+        <module>generator</module>
     </modules>
 </project>
