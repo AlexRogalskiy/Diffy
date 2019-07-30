@@ -791,4 +791,13 @@ public class ConverterUtils {
         }
         return i;
     }
+
+    public static Class<?> getEnumType(final Class<?> targetType) {
+        Class<?> enumType = targetType;
+        while (Objects.nonNull(enumType) && !enumType.isEnum()) {
+            enumType = enumType.getSuperclass();
+        }
+        ValidationUtils.notNull(enumType, "The target type " + targetType.getName() + " does not refer to an enum");
+        return enumType;
+    }
 }
