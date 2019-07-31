@@ -5,7 +5,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.ConverterProv
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;
 
-public class CharacterToNumberFactory implements ConverterProvider<Character, Number> {
+public class CharacterToNumberProvider implements ConverterProvider<Character, Number> {
 
     @Override
     public <T extends Number> Converter<Character, T> getConverter(final Class<T> targetType) {

@@ -5,7 +5,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.ConverterProv
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.utils.ConverterUtils;
 import lombok.RequiredArgsConstructor;
 
-public class StringToEnumConverterFactory implements ConverterProvider<String, Enum> {
+public class StringToEnumConverterProvider implements ConverterProvider<String, Enum> {
 
     @Override
     public <T extends Enum> Converter<String, T> getConverter(final Class<T> targetType) {
