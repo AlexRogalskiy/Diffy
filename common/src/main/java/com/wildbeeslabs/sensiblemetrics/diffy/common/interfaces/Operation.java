@@ -51,6 +51,10 @@ public interface Operation<T, R> extends BiFunction<T, T, R> {
      * Sum of weights.
      */
     Operation<Double, Double> SUM = (a, b) -> a + b;
+    /**
+     * Sum of weights.
+     */
+    Operation<Boolean, Boolean> EITHER = (a, b) -> a ^ b;
 
     /**
      * Multiplication of weights.
