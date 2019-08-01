@@ -27,6 +27,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.exception.ValidationException;
 import lombok.NonNull;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
 /**
@@ -70,6 +71,16 @@ public interface Validator<T> {
     @NonNull
     default Validator<T> getValidatorFor(final T value) {
         return (Validator<T>) DEFAULT_TRUE_INSTANCE;
+    }
+
+    /**
+     * Returns validator description {@link String}
+     *
+     * @return validator description {@link String}
+     */
+    @Nullable
+    default String getDescription() {
+        return null;
     }
 
     /**
