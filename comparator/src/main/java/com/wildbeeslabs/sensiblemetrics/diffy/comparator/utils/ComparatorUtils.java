@@ -41,6 +41,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.File;
 import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -2407,7 +2408,7 @@ public class ComparatorUtils {
         }
     }
 
-    public static enum NaturalOrderingKeyComparator implements Comparator<String> {
+    public enum NaturalOrderingKeyComparator implements Comparator<String> {
         INSTANCE;
 
         /*
@@ -2427,11 +2428,9 @@ public class ComparatorUtils {
                 if (result != 0) {
                     return result;
                 }
-
                 s1offset += thisPart.length();
                 s2offset += thatPart.length();
             }
-
             return 0;
         }
 
@@ -2523,6 +2522,84 @@ public class ComparatorUtils {
                 }
             }
             return this.instanceOrder.length;
+        }
+    }
+
+    /**
+     * Default null-safe {@link String} case insensitive comparator implementation {@link DefaultCaseInsensitiveComparator}
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultCaseInsensitiveComparator extends DefaultNullSafeComparator<String> {
+
+        /**
+         * Default instance of {@link DeltaComparator}.
+         */
+        public static final Comparator INSTANCE = new DefaultCaseInsensitiveComparator();
+
+        /**
+         * Default null-safe string case insensitive comparator constructor
+         */
+        public DefaultCaseInsensitiveComparator() {
+            this(Comparator.comparing(Object::toString));
+        }
+
+        /**
+         * Default null-safe string case insensitive comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultCaseInsensitiveComparator(@Nullable final Comparator<? super String> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe string case insensitive comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultCaseInsensitiveComparator(@Nullable final Comparator<? super String> comparator, boolean nullsInPriority) {
+            super(Objects.isNull(comparator) ? String.CASE_INSENSITIVE_ORDER::compare : comparator, nullsInPriority);
+        }
+    }
+
+    /**
+     * Default null-safe {@link File} path comparator implementation {@link DefaultCaseInsensitiveComparator}
+     */
+    @EqualsAndHashCode(callSuper = true)
+    @ToString(callSuper = true)
+    public static class DefaultFilePathComparator extends DefaultNullSafeComparator<File> {
+
+        /**
+         * Default instance of {@link DeltaComparator}.
+         */
+        public static final Comparator INSTANCE = new DefaultFilePathComparator();
+
+        /**
+         * Default null-safe string case insensitive comparator constructor
+         */
+        public DefaultFilePathComparator() {
+            this(Comparator.comparing(Object::toString));
+        }
+
+        /**
+         * Default null-safe string case insensitive comparator constructor with initial comparator instance {@link Comparator}
+         *
+         * @param comparator - initial input comparator instance {@link Comparator}
+         */
+        public DefaultFilePathComparator(@Nullable final Comparator<? super File> comparator) {
+            this(comparator, false);
+        }
+
+        /**
+         * Default null-safe string case insensitive comparator constructor with input "null" priority argument {@link Boolean}
+         *
+         * @param comparator      - initial input comparator instance {@link Comparator}
+         * @param nullsInPriority - initial input "null" priority argument {@link Boolean}
+         */
+        public DefaultFilePathComparator(@Nullable final Comparator<? super File> comparator, boolean nullsInPriority) {
+            super(Objects.isNull(comparator) ? (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getPath(), o2.getPath()) : comparator, nullsInPriority);
         }
     }
 }

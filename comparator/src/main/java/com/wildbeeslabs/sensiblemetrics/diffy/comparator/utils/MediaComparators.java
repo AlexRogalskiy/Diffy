@@ -1,0 +1,75 @@
+//package com.wildbeeslabs.sensiblemetrics.diffy.comparator.utils;
+//
+//import lombok.experimental.UtilityClass;
+//import org.videolan.libvlc.Media;
+//
+//import java.util.Comparator;
+//
+//@UtilityClass
+//public class MediaComparators {
+//
+//    public static final Comparator<Media> byName = new Comparator<Media>() {
+//        @Override
+//        public int compare(Media m1, Media m2) {
+//            return String.CASE_INSENSITIVE_ORDER.compare(m1.getTitle(), m2.getTitle());
+//        }
+//
+//        ;
+//    };
+//
+//    public static final Comparator<Media> byMRL = new Comparator<Media>() {
+//        @Override
+//        public int compare(Media m1, Media m2) {
+//            return String.CASE_INSENSITIVE_ORDER.compare(m1.getLocation(), m2.getLocation());
+//        }
+//
+//        ;
+//    };
+//
+//    public static final Comparator<Media> byLength = new Comparator<Media>() {
+//        @Override
+//        public int compare(Media m1, Media m2) {
+//            if (m1.getLength() > m2.getLength()) return -1;
+//            if (m1.getLength() < m2.getLength()) return 1;
+//            else return 0;
+//        }
+//
+//        ;
+//    };
+//
+//    public static final Comparator<Media> byAlbum = new Comparator<Media>() {
+//        @Override
+//        public int compare(Media m1, Media m2) {
+//            int res = String.CASE_INSENSITIVE_ORDER.compare(m1.getAlbum(), m2.getAlbum());
+//            if (res == 0)
+//                res = byMRL.compare(m1, m2);
+//            return res;
+//        }
+//
+//        ;
+//    };
+//
+//    public static final Comparator<Media> byArtist = new Comparator<Media>() {
+//        @Override
+//        public int compare(Media m1, Media m2) {
+//            int res = String.CASE_INSENSITIVE_ORDER.compare(m1.getArtist(), m2.getArtist());
+//            if (res == 0)
+//                res = byAlbum.compare(m1, m2);
+//            return res;
+//        }
+//
+//        ;
+//    };
+//
+//    public static final Comparator<Media> byGenre = new Comparator<Media>() {
+//        @Override
+//        public int compare(Media m1, Media m2) {
+//            int res = String.CASE_INSENSITIVE_ORDER.compare(m1.getGenre(), m2.getGenre());
+//            if (res == 0)
+//                res = byArtist.compare(m1, m2);
+//            return res;
+//        }
+//
+//        ;
+//    };
+//}
