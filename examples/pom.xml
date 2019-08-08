@@ -21,11 +21,20 @@
     <inceptionYear>2019</inceptionYear>
 
     <properties>
+        <main.basedir>${project.basedir}/../..</main.basedir>
+        <profileProperties>src/test/resource/test.properties</profileProperties>
+        <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.examples.test</exclude.packages>
+
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.language>java</sonar.language>
+
+        <surefire.forkNumber>0</surefire.forkNumber>
+
         <diffy-common.version>1.1.0</diffy-common.version>
         <diffy-matcher.version>1.1.0</diffy-matcher.version>
         <diffy-comparator.version>1.1.0</diffy-comparator.version>
-
-        <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.examples.test</exclude.packages>
     </properties>
 
     <build>
@@ -246,6 +255,7 @@
     </profiles>
 
     <dependencies>
+        <!-- Diffy library dependencies -->
         <dependency>
             <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
             <artifactId>diffy-common</artifactId>

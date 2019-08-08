@@ -21,6 +21,17 @@
     <inceptionYear>2019</inceptionYear>
 
     <properties>
+        <main.basedir>${project.basedir}/../..</main.basedir>
+        <profileProperties>src/test/resource/test.properties</profileProperties>
+        <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.generator.examples</exclude.packages>
+
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.language>java</sonar.language>
+
+        <surefire.forkNumber>0</surefire.forkNumber>
+
         <pl.allergro.finance.tradukisto.version>1.8.0</pl.allergro.finance.tradukisto.version>
 
         <diffy-common.version>1.1.0</diffy-common.version>
@@ -29,8 +40,6 @@
 
         <json.version>20180813</json.version>
         <dom4j.version>1.6.1</dom4j.version>
-
-        <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.generator.examples</exclude.packages>
     </properties>
 
     <build>
@@ -252,11 +261,11 @@
     </profiles>
 
     <dependencies>
+        <!-- Diffy library dependencies -->
         <dependency>
             <groupId>com.wildbeeslabs.sensiblemetrics</groupId>
             <artifactId>diffy-common</artifactId>
             <version>${diffy-common.version}</version>
         </dependency>
-
     </dependencies>
 </project>

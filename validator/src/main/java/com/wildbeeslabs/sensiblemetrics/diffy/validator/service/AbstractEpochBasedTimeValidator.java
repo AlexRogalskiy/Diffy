@@ -32,7 +32,7 @@ public abstract class AbstractEpochBasedTimeValidator<T> implements Validator<T>
         if (value == null) {
             return true;
         }
-        int result = Long.compare(getEpochMillis(value, referenceClock), referenceClock.millis());
+        final int result = Long.compare(getEpochMillis(value, referenceClock), referenceClock.millis());
         return this.isValid(result);
     }
 

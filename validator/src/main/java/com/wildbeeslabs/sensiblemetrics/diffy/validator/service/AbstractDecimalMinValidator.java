@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
@@ -8,8 +9,9 @@ import java.math.BigDecimal;
  * Check that the number being validated is greater than or equal to the minimum
  * value specified.
  **/
+@Data
 public abstract class AbstractDecimalMinValidator<T> implements Validator<T> {
-    protected final BigDecimal minValue;
+    private final BigDecimal minValue;
     private final boolean inclusive;
 
     public AbstractDecimalMinValidator(final String minValue, final boolean inclusive) {
@@ -30,7 +32,7 @@ public abstract class AbstractDecimalMinValidator<T> implements Validator<T> {
         if (value == null) {
             return true;
         }
-        int comparisonResult = this.compare(value);
+        final int comparisonResult = this.compare(value);
         return this.inclusive ? comparisonResult >= 0 : comparisonResult > 0;
     }
 

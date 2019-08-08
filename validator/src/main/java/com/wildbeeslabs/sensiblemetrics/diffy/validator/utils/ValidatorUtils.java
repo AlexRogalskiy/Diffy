@@ -23,7 +23,9 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.utils;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Entry;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.service.CreditCardValidator2;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.service.DateValidator;
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.service.EmailValidator;
@@ -34,7 +36,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.IDN;
 import java.text.DateFormat;
+import java.time.Duration;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +82,19 @@ public class ValidatorUtils {
     private static final String TO_ESCAPE = "\\.[]{}()*+-?^$|";
 
     /**
+     * Default {@link Function} validators
+     */
+    public static final Function<Integer, Validator<CharSequence>> EAN_VALIDATOR = size -> value -> Optional.ofNullable(value).map(CharSequence::length).orElse(0) == size;
+    public static final Function<Entry<Duration, Boolean>, Validator<Duration>> DURATION_MIN_VALIDATOR = entry -> value -> {
+        int comparisonResult = entry.getFirst().compareTo(value);
+        return entry.getLast() ? comparisonResult <= 0 : comparisonResult < 0;
+    };
+    public static final Function<Entry<Duration, Boolean>, Validator<Duration>> DURATION_MAX_VALIDATOR = entry -> value -> {
+        int comparisonResult = entry.getFirst().compareTo(value);
+        return entry.getLast() ? comparisonResult >= 0 : comparisonResult > 0;
+    };
+
+    /**
      * UrlValidator used in wrapper method.
      */
     private static final UrlValidator URL_VALIDATOR = new UrlValidator();
@@ -101,16 +119,12 @@ public class ValidatorUtils {
      * A host string must be a domain string, an IPv4 address string, or "[", followed by an IPv6 address string,
      * followed by "]".
      */
-    private static final Pattern DOMAIN_PATTERN = Pattern.compile(
-        DOMAIN + "|\\[" + IP_V6_DOMAIN + "\\]", CASE_INSENSITIVE
-    );
+    private static final Pattern DOMAIN_PATTERN = Pattern.compile(DOMAIN + "|\\[" + IP_V6_DOMAIN + "\\]", CASE_INSENSITIVE);
 
     /**
      * Regular expression for the domain part of an email address (everything after '@')
      */
-    private static final Pattern EMAIL_DOMAIN_PATTERN = Pattern.compile(
-        DOMAIN + "|\\[" + IP_DOMAIN + "\\]|" + "\\[IPv6:" + IP_V6_DOMAIN + "\\]", CASE_INSENSITIVE
-    );
+    private static final Pattern EMAIL_DOMAIN_PATTERN = Pattern.compile(DOMAIN + "|\\[" + IP_DOMAIN + "\\]|" + "\\[IPv6:" + IP_V6_DOMAIN + "\\]", CASE_INSENSITIVE);
 
     /**
      * Checks the validity of the domain name used in an email. To be valid it should be either a valid host name, or an
@@ -119,7 +133,7 @@ public class ValidatorUtils {
      * @param domain domain to check for validity
      * @return {@code true} if the provided string is a valid domain, {@code false} otherwise
      */
-    public static boolean isValidEmailDomainAddress(String domain) {
+    public static boolean isValidEmailDomainAddress(final String domain) {
         return isValidDomainAddress(domain, EMAIL_DOMAIN_PATTERN);
     }
 
@@ -129,18 +143,17 @@ public class ValidatorUtils {
      * @param domain the domain to check for validity
      * @return {@code true} if the provided string is a valid domain, {@code false} otherwise
      */
-    public static boolean isValidDomainAddress(String domain) {
+    public static boolean isValidDomainAddress(final String domain) {
         return isValidDomainAddress(domain, DOMAIN_PATTERN);
     }
 
-    private static boolean isValidDomainAddress(String domain, Pattern pattern) {
+    private static boolean isValidDomainAddress(final String domain, final Pattern pattern) {
         // if we have a trailing dot the domain part we have an invalid email address.
         // the regular expression match would take care of this, but IDN.toASCII drops the trailing '.'
         if (domain.endsWith(".")) {
             return false;
         }
-
-        Matcher matcher = pattern.matcher(domain);
+        final Matcher matcher = pattern.matcher(domain);
         if (!matcher.matches()) {
             return false;
         }
@@ -151,11 +164,9 @@ public class ValidatorUtils {
         } catch (IllegalArgumentException e) {
             return false;
         }
-
         if (asciiString.length() > MAX_DOMAIN_PART_LENGTH) {
             return false;
         }
-
         return true;
     }
 

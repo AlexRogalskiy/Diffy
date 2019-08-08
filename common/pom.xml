@@ -21,10 +21,20 @@
     <inceptionYear>2019</inceptionYear>
 
     <properties>
+        <main.basedir>${project.basedir}/../..</main.basedir>
+        <profileProperties>src/test/resource/test.properties</profileProperties>
         <exclude.packages>com.wildbeeslabs.sensiblemetrics.diffy.common.examples</exclude.packages>
+
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.language>java</sonar.language>
+
+        <surefire.forkNumber>0</surefire.forkNumber>
 
         <validation-api.version>2.0.1.Final</validation-api.version>
         <commons-io.version>2.6</commons-io.version>
+        <micrometer-core.version>1.1.4</micrometer-core.version>
     </properties>
 
     <build>
@@ -261,7 +271,7 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
-            <version>1.1.4</version>
+            <version>${micrometer-core.version}</version>
         </dependency>
     </dependencies>
 </project>

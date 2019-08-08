@@ -37,9 +37,6 @@ import java.util.Objects;
  *
  * <p>This is a <i>base</i> class for building Date / Time
  * Validators using format parsing.</p>
- *
- * @version $Revision: 1739356 $
- * @since IBANEntry 1.3.0
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

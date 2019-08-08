@@ -29,6 +29,8 @@ open module com.wildbeeslabs.sensiblemtrics.diffy.validator {
     requires com.wildbeeslabs.sensiblemtrics.diffy.common;
     requires com.wildbeeslabs.sensiblemtrics.diffy.processor;
     requires com.wildbeeslabs.sensiblemtrics.diffy.matcher;
+    requires money.api;
+    requires java.money;
 
     // exports validator digits
     exports com.wildbeeslabs.sensiblemetrics.diffy.validator.digits.iface;

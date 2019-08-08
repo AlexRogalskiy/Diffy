@@ -1,21 +1,20 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
-import lombok.Data;
 
+import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 
 /**
  * Check that the number being validated is less than or equal to the maximum
  * value specified.
  */
-@Data
-public abstract class AbstractDecimalMaxValidator<T> implements Validator<T> {
-    private final BigDecimal maxValue;
+public class DecimalMinValidatorForMonetaryAmount implements Validator<MonetaryAmount> {
+    private final BigDecimal minValue;
     private final boolean inclusive;
 
-    public AbstractDecimalMaxValidator(final String maxValue, final boolean inclusive) {
-        this.maxValue = this.parseValue(maxValue);
+    public DecimalMinValidatorForMonetaryAmount(final String minValue, final boolean inclusive) {
+        this.minValue = this.parseValue(minValue);
         this.inclusive = inclusive;
     }
 
@@ -28,13 +27,11 @@ public abstract class AbstractDecimalMaxValidator<T> implements Validator<T> {
     }
 
     @Override
-    public boolean validate(final T value) {
+    public boolean validate(final MonetaryAmount value) {
         if (value == null) {
             return true;
         }
-        final int comparisonResult = this.compare(value);
-        return this.inclusive ? comparisonResult <= 0 : comparisonResult < 0;
+        final int comparisonResult = value.getNumber().numberValueExact(BigDecimal.class).compareTo(this.minValue);
+        return this.inclusive ? comparisonResult >= 0 : comparisonResult > 0;
     }
-
-    protected abstract int compare(final T number);
 }

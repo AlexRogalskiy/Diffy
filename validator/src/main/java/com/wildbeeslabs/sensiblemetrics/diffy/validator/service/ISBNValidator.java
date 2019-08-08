@@ -103,7 +103,7 @@ public class ISBNValidator implements Validator<String> {
      *                if valid ISBN-10 codes should be returned unchanged.
      * @return A singleton instance of the ISBN validator.
      */
-    public static ISBNValidator getInstance(boolean convert) {
+    public static ISBNValidator getInstance(final boolean convert) {
         return (convert ? ISBN_VALIDATOR : ISBN_VALIDATOR_NO_CONVERT);
     }
 
@@ -123,7 +123,7 @@ public class ISBNValidator implements Validator<String> {
      *                should be converted to ISBN-13 codes or <code>false</code>
      *                if valid ISBN-10 codes should be returned unchanged.
      */
-    public ISBNValidator(boolean convert) {
+    public ISBNValidator(final boolean convert) {
         this.processor = new ISBNProcessor(convert);
     }
 

@@ -20,7 +20,6 @@ import static java.util.regex.Pattern.CASE_INSENSITIVE;
  * for example emails with double quotes or comments.
  **/
 public class AbstractEmailValidator implements Validator<CharSequence> {
-
     private static final int MAX_LOCAL_PART_LENGTH = 64;
 
     private static final String LOCAL_PART_ATOM = "[a-z0-9!#$%&'*+/=?^_`{|}~\u0080-\uFFFF-]";

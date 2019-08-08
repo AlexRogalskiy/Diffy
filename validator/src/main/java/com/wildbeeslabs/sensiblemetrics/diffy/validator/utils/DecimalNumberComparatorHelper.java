@@ -24,6 +24,10 @@ public class DecimalNumberComparatorHelper {
         return BigDecimal.valueOf(number).compareTo(value);
     }
 
+    public static int compare(final Number number, final BigDecimal value) {
+        return BigDecimal.valueOf(number.doubleValue()).compareTo(value);
+    }
+
     public static int compare(final Number number, final BigDecimal value, final OptionalInt treatNanAs) {
         // In case of comparing numbers we need to check for special cases:
         // 1. Floating point numbers should consider nan/infinity as values hence they should
