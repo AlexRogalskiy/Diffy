@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.validator.service;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.validator.interfaces.Validator;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
  * Check that the number being validated is less than or equal to the maximum
  * value specified.
  */
+@Getter
 public abstract class AbstractDecimalMaxValidator<T> implements Validator<T> {
     private final BigDecimal maxValue;
     private final boolean inclusive;
