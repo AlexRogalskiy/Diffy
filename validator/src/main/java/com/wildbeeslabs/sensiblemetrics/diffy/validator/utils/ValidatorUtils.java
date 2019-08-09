@@ -82,7 +82,13 @@ public class ValidatorUtils {
     private static final String TO_ESCAPE = "\\.[]{}()*+-?^$|";
 
     /**
-     * Default {@link Function} validators
+     * Default {@link Validator}
+     */
+    public static final Validator<Integer> EVEN_VALIDATOR = value -> value % 2 == 0;
+    public static final Validator<Integer> ODD_VALIDATOR = value -> value % 2 == 1;
+
+    /**
+     * Default {@link Function} {@link Validator}
      */
     public static final Function<Integer, Validator<CharSequence>> EAN_VALIDATOR = size -> value -> Optional.ofNullable(value).map(CharSequence::length).orElse(0) == size;
     public static final Function<Entry<Duration, Boolean>, Validator<Duration>> DURATION_MIN_VALIDATOR = entry -> value -> {
