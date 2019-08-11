@@ -722,7 +722,7 @@
                     <version>${maven.nexus.staging.plugin.version}</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <serverId>test</serverId>
+                        <serverId>sonatype</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </configuration>
