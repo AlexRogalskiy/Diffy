@@ -159,7 +159,7 @@
 
         <unit-tests.skip>true</unit-tests.skip>
         <integration-tests.skip>true</integration-tests.skip>
-
+        <maven-deploy.skip>true</maven-deploy.skip>
         <docker.image.prefix>diffy</docker.image.prefix>
 
         <log4j.version>1.2.17</log4j.version>
@@ -447,7 +447,7 @@
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${maven.deploy.plugin.version}</version>
                     <configuration>
-                        <skip>true</skip>
+                        <skip>${maven-deploy.skip}</skip>
                     </configuration>
                 </plugin>
 
@@ -725,6 +725,10 @@
                         <serverId>sonatype</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        <tags>
+                            <!--<localUsername>${env.USER}</localUsername>-->
+                            <javaVersion>${java.version}</javaVersion>
+                        </tags>
                     </configuration>
                     <executions>
                         <execution>
