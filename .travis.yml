@@ -7,6 +7,8 @@ git:
   lfs_skip_smudge: true
 sudo: false
 branches:
+  except:
+    - /experimental-.*/
   only:
     - master
     - stable
@@ -48,3 +50,14 @@ cache:
   directories:
     - "$HOME/.m2/repository"
     - "$HOME/.sonar/cache"
+
+#stages:
+#  - build
+#  - test
+#
+#jobs:
+#  include:
+#    - stage: build
+#      script:
+#        - 'rm -rf $HOME/.m2/repository/io/hekate'
+#        - './mvnw clean install -B -DskipTests=true'
