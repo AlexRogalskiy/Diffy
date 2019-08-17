@@ -100,6 +100,7 @@ public class MapperUtils {
         //module.addSerializer(Car.class, carSerializer);
         //objectMapper.registerModule(module);
 
+        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         objectMapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
         objectMapper.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
         objectMapper.enable(JsonGenerator.Feature.ESCAPE_NON_ASCII);

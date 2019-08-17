@@ -1,11 +1,11 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.provider;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.Converter;
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.ConverterProvider;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.ConverterFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.utils.NumberUtils;
 import lombok.RequiredArgsConstructor;
 
-public class CharacterToNumberProvider implements ConverterProvider<Character, Number> {
+public class CharacterToNumberFactory implements ConverterFactory<Character, Number> {
 
     @Override
     public <T extends Number> Converter<Character, T> getConverter(final Class<T> targetType) {

@@ -24,6 +24,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.utils;
 
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -455,6 +456,18 @@ public class ValidationUtils {
             if (Objects.isNull(obj)) {
                 throw new IllegalArgumentException(msg);
             }
+        }
+    }
+
+    /**
+     * Validates that the array contains no null elements
+     *
+     * @param objects the array to test
+     * @param msg     message to output if validation fails
+     */
+    public static void notEmpty(final Object[] objects, final String msg) {
+        if (ArrayUtils.isEmpty(objects)) {
+            throw new IllegalArgumentException(msg);
         }
     }
 

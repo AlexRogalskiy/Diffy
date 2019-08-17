@@ -1,11 +1,11 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.provider;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.Converter;
-import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.ConverterProvider;
+import com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces.ConverterFactory;
 import com.wildbeeslabs.sensiblemetrics.diffy.converter.utils.ConverterUtils;
 import lombok.RequiredArgsConstructor;
 
-public class StringToEnumConverterProvider implements ConverterProvider<String, Enum> {
+public class StringToEnumConverterFactory implements ConverterFactory<String, Enum> {
 
     @Override
     public <T extends Enum> Converter<String, T> getConverter(final Class<T> targetType) {

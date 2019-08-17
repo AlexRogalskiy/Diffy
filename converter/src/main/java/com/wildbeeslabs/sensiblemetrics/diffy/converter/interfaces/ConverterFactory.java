@@ -3,10 +3,13 @@ package com.wildbeeslabs.sensiblemetrics.diffy.converter.interfaces;
 /**
  * A factory for "ranged" converters that can convert objects from S to subtypes of R.
  *
- * <p>Implementations may additionally implement {@link ConditionalConverter}.
+ * @param <S> the source type converters created by this factory can convert from
+ * @param <R> the target range (or base) type converters created by this factory can convert to;
+ *            for example {@link Number} for a set of number subtypes.
+ * @author Keith Donald
+ * @since 3.0
  */
-@FunctionalInterface
-public interface ConverterProvider<S, R> {
+public interface ConverterFactory<S, R> {
 
     /**
      * Get the converter to convert from S to target type T, where T is also an instance of R.
