@@ -100,6 +100,34 @@ public class ComparatorUtils {
         return lens1 - lens2;
     };
 
+
+    /**
+     * Comparator similar to {@link String#CASE_INSENSITIVE_ORDER}, but handles only ASCII characters
+     */
+    public static final Comparator<String> ASCII_CASE_INSENSITIVE_ORDER = (s1, s2) -> {
+        ValidationUtils.notNull(s1, "First string should not be null");
+        ValidationUtils.notNull(s2, "Last string should not be null");
+
+        int n1 = s1.length(), n2 = s2.length();
+        int n = n1 < n2 ? n1 : n2;
+        for (int i = 0; i < n; i++) {
+            char c1 = s1.charAt(i);
+            char c2 = s2.charAt(i);
+            if (c1 != c2) {
+                if (c1 >= 'A' && c1 <= 'Z') {
+                    c1 = (char) (c1 | 0x20);
+                }
+                if (c2 >= 'A' && c2 <= 'Z') {
+                    c2 = (char) (c2 | 0x20);
+                }
+                if (c1 != c2) {
+                    return c1 - c2;
+                }
+            }
+        }
+        return n1 - n2;
+    };
+
     @NonNull
     public static <T, Y> Collector<T, ?, Optional<T>> maxBy(final Function<T, Y> operator, final Comparator<Y> comparator) {
         ValidationUtils.notNull(operator, "Operator string should not be null");
