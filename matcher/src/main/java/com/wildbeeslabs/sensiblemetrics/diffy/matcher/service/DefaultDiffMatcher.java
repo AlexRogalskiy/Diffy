@@ -75,7 +75,7 @@ public class DefaultDiffMatcher<T> extends AbstractDiffMatcher<T, Entry<T, T>> {
      * @return {@link Iterable} collection of {@link DiffMatchEntry}s
      */
     @Override
-    public <S extends Iterable<? extends DiffMatchEntry<?>>> S diffMatch(final T value) {
+    public <S extends Iterable<? extends DiffMatchEntry>> S diffMatch(final T value) {
         return (S) this.getMatchers()
             .stream()
             .filter(m -> m.negate().matches(value))
