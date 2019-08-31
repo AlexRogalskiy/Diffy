@@ -67,37 +67,37 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     /**
      * Default {@link Matcher} to {@link Predicate}
      */
-    Function<Matcher<Object>, Predicate<?>> TO_PREDICATE = matcher -> matcher::matches;
+    Function<Matcher<Object>, Predicate> TO_PREDICATE = matcher -> matcher::matches;
     /**
      * Default {@link Predicate} to {@link Matcher}
      */
-    Function<Predicate<Object>, Matcher<?>> TO_MATCHER = predicate -> predicate::test;
+    Function<Predicate<Object>, Matcher> TO_MATCHER = predicate -> predicate::test;
 
     /**
      * Default null {@link Matcher}
      */
-    Matcher<?> DEFAULT_NULL_MATCHER = Objects::isNull;
+    Matcher DEFAULT_NULL_MATCHER = Objects::isNull;
     /**
      * Default non-null {@link Matcher}
      */
-    Matcher<?> DEFAULT_NOTNULL_MATCHER = Objects::nonNull;
+    Matcher DEFAULT_NOTNULL_MATCHER = Objects::nonNull;
     /**
      * Default random boolean {@link Matcher}
      */
-    Matcher<?> DEFAULT_BOOLEAN_MATCHER = predicate -> new Random().nextBoolean();
+    Matcher DEFAULT_BOOLEAN_MATCHER = predicate -> new Random().nextBoolean();
 
     /**
      * Default true {@link Matcher}
      */
-    Matcher<?> DEFAULT_TRUE_MATCHER = value -> true;
+    Matcher DEFAULT_TRUE_MATCHER = value -> true;
     /**
      * Default false {@link Matcher}
      */
-    Matcher<?> DEFAULT_FALSE_MATCHER = value -> false;
+    Matcher DEFAULT_FALSE_MATCHER = value -> false;
     /**
      * Default exception {@link Matcher}
      */
-    Matcher<?> DEFAULT_EXCEPTION_MATCHER = value -> {
+    Matcher DEFAULT_EXCEPTION_MATCHER = value -> {
         throw new MatchOperationException();
     };
     /**
@@ -115,11 +115,11 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     /**
      * Default public class {@link Matcher}
      */
-    Matcher<Class<?>> DEFAULT_PUBLIC_CLASS_MATCHER = value -> Modifier.isPublic(value.getModifiers());
+    Matcher<Class> DEFAULT_PUBLIC_CLASS_MATCHER = value -> Modifier.isPublic(value.getModifiers());
     /**
      * Default non-static class {@link Matcher}
      */
-    Matcher<Class<?>> DEFAULT_NON_STATIC_CLASS_MATCHER = value -> value.isMemberClass() && !isStatic(value.getModifiers());
+    Matcher<Class> DEFAULT_NON_STATIC_CLASS_MATCHER = value -> value.isMemberClass() && !isStatic(value.getModifiers());
 
     /**
      * Default annotation class {@link Matcher}
@@ -128,32 +128,32 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
     /**
      * Default class {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_INSTANCE_MATCHER_FUNC = clazz -> clazz::isInstance;
+    Function<Class, Matcher> DEFAULT_INSTANCE_MATCHER_FUNC = clazz -> clazz::isInstance;
     /**
      * Default equals {@link Matcher}
      */
-    Function<Object, Matcher<?>> DEFAULT_EQUALS_MATCHER_FUNC = object -> value -> Objects.equals(object, value);
+    Function<Object, Matcher> DEFAULT_EQUALS_MATCHER_FUNC = object -> value -> Objects.equals(object, value);
     /**
      * Default class nestmate {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_NESTMATE_MATCHER_FUNC = clazz -> value -> value.getClass().isNestmateOf(clazz);
+    Function<Class, Matcher> DEFAULT_NESTMATE_MATCHER_FUNC = clazz -> value -> value.getClass().isNestmateOf(clazz);
     /**
      * Default assignable {@link Matcher}
      */
-    Function<Class<?>, Matcher<?>> DEFAULT_ASSIGNABLE_MATCHER_FUNC = clazz -> value -> value.getClass().isAssignableFrom(clazz);
+    Function<Class, Matcher> DEFAULT_ASSIGNABLE_MATCHER_FUNC = clazz -> value -> value.getClass().isAssignableFrom(clazz);
     /**
      * Default identity {@link Matcher}
      */
-    Function<Object, Matcher<?>> DEFAULT_IDENTITY_MATCHER_FUNC = identity -> value -> Objects.equals(identity, identityToString(value));
+    Function<Object, Matcher> DEFAULT_IDENTITY_MATCHER_FUNC = identity -> value -> Objects.equals(identity, identityToString(value));
 
     /**
      * Default unique {@link Matcher}
      */
-    Function<Set, Matcher<?>> DEFAULT_UNIQUE_MATCHER_FUNC = set -> value -> set.add(value);
+    Function<Set, Matcher> DEFAULT_UNIQUE_MATCHER_FUNC = set -> value -> set.add(value);
     /**
      * Default exist {@link Matcher}
      */
-    Function<Collection<?>, Matcher<?>> DEFAULT_EXIST_MATCHER_FUNC = collection -> collection::contains;
+    Function<Collection, Matcher> DEFAULT_EXIST_MATCHER_FUNC = collection -> collection::contains;
     /**
      * Default boolean {@link Matcher}
      */

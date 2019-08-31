@@ -37,6 +37,7 @@ public interface MatcherEventListenerAdapter<T, S> extends EventListenerAdapter<
 
     default void addListener(final MatcherEventListener<T, S> listener, final boolean allowDuplicate) {
         ValidationUtils.notNull(listener, "Listener should not be null");
+
         if (allowDuplicate) {
             this.addListener(listener);
         } else if (!this.containsListener(listener)) {
