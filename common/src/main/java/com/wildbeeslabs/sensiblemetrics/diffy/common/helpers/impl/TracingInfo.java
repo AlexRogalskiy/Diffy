@@ -11,8 +11,7 @@ import java.util.List;
  * @author Libor Kramolis (libor.kramolis at oracle.com)
  * @since 2.3
  */
-final class TracingInfo {
-
+public final class TracingInfo {
     private final List<Message> messageList = new ArrayList<Message>();
 
     /**
@@ -103,7 +102,6 @@ final class TracingInfo {
      * It implements message formatting.
      */
     public static class Message {
-
         /**
          * Event type.
          */
@@ -161,5 +159,4 @@ final class TracingInfo {
             return text;
         }
     }
-
 }

@@ -76,7 +76,7 @@ public class Version implements Comparable<Version> {
         ValidationUtils.isTrue(isNotBlank(version), "Version must not be null o empty!");
 
         final String[] parts = version.trim().split("\\.");
-        int[] intParts = new int[parts.length];
+        final int[] intParts = new int[parts.length];
 
         for (int i = 0; i < parts.length; i++) {
             final String input = i == parts.length - 1 ? parts[i].replaceAll("\\D.*", "") : parts[i];
