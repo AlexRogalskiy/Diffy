@@ -1,9 +1,10 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.common.helpers.impl;
 
+import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ValidationUtils;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * The {@link Attributes} class stores name value pairs.
@@ -12,8 +13,7 @@ import java.util.Objects;
  * memory footprint, replace it.
  */
 public class Attributes<K, V> {
-
-    private Map<K, V> mNameValueMap = new HashMap<>();
+    private final Map<K, V> mNameValueMap = new HashMap<>();
 
     /**
      * Retrieves the value for the given key or null if attribute it not set.
@@ -22,7 +22,7 @@ public class Attributes<K, V> {
      * @return the value
      */
     public V getValue(final K key) {
-        return mNameValueMap.get(key);
+        return this.mNameValueMap.get(key);
     }
 
     /**
@@ -32,10 +32,10 @@ public class Attributes<K, V> {
      * @param value
      */
     public void setValue(final K key, final V value) {
-        Objects.requireNonNull(key, "key must not be null");
-        Objects.requireNonNull(value, "value must not be null");
+        ValidationUtils.notNull(key, "key must not be null");
+        ValidationUtils.notNull(value, "value must not be null");
 
-        mNameValueMap.put(key, value);
+        this.mNameValueMap.put(key, value);
     }
 
     /**
