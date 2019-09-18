@@ -210,7 +210,7 @@ public class ShortLocaleConverter extends DecimalLocaleConverter {
         }
 
         // now returns property Short
-        return new Short(parsed.shortValue());
+        return Short.valueOf(parsed.shortValue());
     }
 
 }

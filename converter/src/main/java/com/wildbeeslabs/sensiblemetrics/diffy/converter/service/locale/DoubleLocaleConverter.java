@@ -26,7 +26,6 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * if a conversion error occurs. The locale is the default locale for
      * this instance of the Java Virtual Machine and an unlocalized pattern is used
      * for the convertion.
-     *
      */
     public DoubleLocaleConverter() {
 
@@ -39,7 +38,7 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * if a conversion error occurs. The locale is the default locale for
      * this instance of the Java Virtual Machine.
      *
-     * @param locPattern    Indicate whether the pattern is localized or not
+     * @param locPattern Indicate whether the pattern is localized or not
      */
     public DoubleLocaleConverter(boolean locPattern) {
 
@@ -51,7 +50,7 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will throw a {@link org.apache.commons.beanutils.ConversionException}
      * if a conversion error occurs. An unlocalized pattern is used for the convertion.
      *
-     * @param locale        The locale
+     * @param locale The locale
      */
     public DoubleLocaleConverter(Locale locale) {
 
@@ -63,8 +62,8 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will throw a {@link org.apache.commons.beanutils.ConversionException}
      * if a conversion error occurs.
      *
-     * @param locale        The locale
-     * @param locPattern    Indicate whether the pattern is localized or not
+     * @param locale     The locale
+     * @param locPattern Indicate whether the pattern is localized or not
      */
     public DoubleLocaleConverter(Locale locale, boolean locPattern) {
 
@@ -76,8 +75,8 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will throw a {@link org.apache.commons.beanutils.ConversionException}
      * if a conversion error occurs. An unlocalized pattern is used for the convertion.
      *
-     * @param locale        The locale
-     * @param pattern       The convertion pattern
+     * @param locale  The locale
+     * @param pattern The convertion pattern
      */
     public DoubleLocaleConverter(Locale locale, String pattern) {
 
@@ -89,9 +88,9 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will throw a {@link org.apache.commons.beanutils.ConversionException}
      * if a conversion error occurs.
      *
-     * @param locale        The locale
-     * @param pattern       The convertion pattern
-     * @param locPattern    Indicate whether the pattern is localized or not
+     * @param locale     The locale
+     * @param pattern    The convertion pattern
+     * @param locPattern Indicate whether the pattern is localized or not
      */
     public DoubleLocaleConverter(Locale locale, String pattern, boolean locPattern) {
 
@@ -105,7 +104,7 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * this instance of the Java Virtual Machine and an unlocalized pattern is used
      * for the convertion.
      *
-     * @param defaultValue  The default value to be returned
+     * @param defaultValue The default value to be returned
      */
     public DoubleLocaleConverter(Object defaultValue) {
 
@@ -118,8 +117,8 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * if a conversion error occurs. The locale is the default locale for
      * this instance of the Java Virtual Machine.
      *
-     * @param defaultValue  The default value to be returned
-     * @param locPattern    Indicate whether the pattern is localized or not
+     * @param defaultValue The default value to be returned
+     * @param locPattern   Indicate whether the pattern is localized or not
      */
     public DoubleLocaleConverter(Object defaultValue, boolean locPattern) {
 
@@ -131,8 +130,8 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will return the specified default value
      * if a conversion error occurs. An unlocalized pattern is used for the convertion.
      *
-     * @param defaultValue  The default value to be returned
-     * @param locale        The locale
+     * @param defaultValue The default value to be returned
+     * @param locale       The locale
      */
     public DoubleLocaleConverter(Object defaultValue, Locale locale) {
 
@@ -144,9 +143,9 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will return the specified default value
      * if a conversion error occurs.
      *
-     * @param defaultValue  The default value to be returned
-     * @param locale        The locale
-     * @param locPattern    Indicate whether the pattern is localized or not
+     * @param defaultValue The default value to be returned
+     * @param locale       The locale
+     * @param locPattern   Indicate whether the pattern is localized or not
      */
     public DoubleLocaleConverter(Object defaultValue, Locale locale, boolean locPattern) {
 
@@ -158,9 +157,9 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will return the specified default value
      * if a conversion error occurs. An unlocalized pattern is used for the convertion.
      *
-     * @param defaultValue  The default value to be returned
-     * @param locale        The locale
-     * @param pattern       The convertion pattern
+     * @param defaultValue The default value to be returned
+     * @param locale       The locale
+     * @param pattern      The convertion pattern
      */
     public DoubleLocaleConverter(Object defaultValue, Locale locale, String pattern) {
 
@@ -172,10 +171,10 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * that will return the specified default value
      * if a conversion error occurs.
      *
-     * @param defaultValue  The default value to be returned
-     * @param locale        The locale
-     * @param pattern       The convertion pattern
-     * @param locPattern    Indicate whether the pattern is localized or not
+     * @param defaultValue The default value to be returned
+     * @param locale       The locale
+     * @param pattern      The convertion pattern
+     * @param locPattern   Indicate whether the pattern is localized or not
      */
     public DoubleLocaleConverter(Object defaultValue, Locale locale, String pattern, boolean locPattern) {
 
@@ -186,24 +185,20 @@ public class DoubleLocaleConverter extends DecimalLocaleConverter {
      * Convert the specified locale-sensitive input object into an output object of the
      * specified type. This method will return Double type.
      *
-     * @param value The input object to be converted
+     * @param value   The input object to be converted
      * @param pattern The pattern is used for the convertion
      * @return The converted value
-     *
      * @throws org.apache.commons.beanutils.ConversionException if conversion cannot be performed
-     *  successfully
-     * @throws ParseException if an error occurs parsing a String to a Number
+     *                                                          successfully
+     * @throws ParseException                                   if an error occurs parsing a String to a Number
      */
     @Override
     protected Object parse(Object value, String pattern) throws ParseException {
-        Number result = (Number) super.parse(value, pattern);
+        final Number result = (Number) super.parse(value, pattern);
         if (result instanceof Long) {
-            return new Double(result.doubleValue());
-        } else {
-            return (result);
+            return Double.valueOf(result.doubleValue());
         }
+        return result;
     }
-
-
 }
 

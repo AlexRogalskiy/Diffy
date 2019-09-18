@@ -309,6 +309,26 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${maven.enforcer.plugin.version}</version>
+                    <configuration>
+                        <rules>
+                            <banDuplicateClasses>
+                                <ignoreClasses>
+                                    <ignoreClass>javax.xml.*</ignoreClass>
+                                    <ignoreClass>javax.xml.namespace.*</ignoreClass>
+                                    <ignoreClass>javax.xml.stream.*</ignoreClass>
+                                    <ignoreClass>javax.xml.stream.util.*</ignoreClass>
+                                    <ignoreClass>javax.xml.stream.events.*</ignoreClass>
+                                    <ignoreClass>javax.xml.namespace.*</ignoreClass>
+                                    <ignoreClass>org.hamcrest.*</ignoreClass>
+                                    <ignoreClass>org.hamcrest.internal.*</ignoreClass>
+                                    <ignoreClass>org.hamcrest.internal.core.*</ignoreClass>
+                                </ignoreClasses>
+                                <findAllDuplicates>true</findAllDuplicates>
+                                <ignoreWhenIdentical>true</ignoreWhenIdentical>
+                            </banDuplicateClasses>
+                        </rules>
+                        <fail>true</fail>
+                    </configuration>
                     <executions>
                         <execution>
                             <id>require-jdk8</id>
