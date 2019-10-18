@@ -26,9 +26,6 @@ import java.math.BigInteger;
  */
 @UtilityClass
 public class MathUtilities {
-    private MathUtilities() {
-        super();
-    }
 
     /**
      * Calculate the minimum value from an array of values.
@@ -36,14 +33,13 @@ public class MathUtilities {
      * @param values Array of values.
      * @return minimum value of the provided set.
      */
-    public static long minimum(long... values) {
-        int len = values.length;
+    public static long minimum(final long... values) {
+        final int len = values.length;
         long current = values[0];
 
         for (int i = 1; i < len; i++) {
             current = Math.min(values[i], current);
         }
-
         return current;
     }
 
@@ -53,14 +49,13 @@ public class MathUtilities {
      * @param values Array of values.
      * @return minimum value of the provided set.
      */
-    public static long maximum(long... values) {
-        int len = values.length;
+    public static long maximum(final long... values) {
+        final int len = values.length;
         long current = values[0];
 
         for (int i = 1; i < len; i++) {
             current = Math.max(values[i], current);
         }
-
         return current;
     }
 
@@ -70,14 +65,13 @@ public class MathUtilities {
      * @param values Array of values.
      * @return minimum value of the provided set.
      */
-    public static double minimum(double... values) {
-        int len = values.length;
+    public static double minimum(final double... values) {
+        final int len = values.length;
         double current = values[0];
 
         for (int i = 1; i < len; i++) {
             current = Math.min(values[i], current);
         }
-
         return current;
     }
 
@@ -87,14 +81,13 @@ public class MathUtilities {
      * @param values Array of values.
      * @return minimum value of the provided set.
      */
-    public static double maximum(double... values) {
-        int len = values.length;
+    public static double maximum(final double... values) {
+        final int len = values.length;
         double current = values[0];
 
         for (int i = 1; i < len; i++) {
             current = Math.max(values[i], current);
         }
-
         return current;
     }
 
@@ -104,8 +97,8 @@ public class MathUtilities {
      * @param values Array of values.
      * @return minimum value of the provided set.
      */
-    public static BigInteger minimum(BigInteger... values) {
-        int len = values.length;
+    public static BigInteger minimum(final BigInteger... values) {
+        final int len = values.length;
         if (len == 1) {
             if (values[0] == null) {
                 throw new IllegalArgumentException("Cannot passed null BigInteger entry to minimum()");
@@ -120,7 +113,6 @@ public class MathUtilities {
             }
             current = values[i].min(current);
         }
-
         return current;
     }
 
@@ -130,8 +122,8 @@ public class MathUtilities {
      * @param values Array of values.
      * @return minimum value of the provided set.
      */
-    public static BigInteger maximum(BigInteger... values) {
-        int len = values.length;
+    public static BigInteger maximum(final BigInteger... values) {
+        final int len = values.length;
         if (len == 1) {
             if (values[0] == null) {
                 throw new IllegalArgumentException("Cannot passed null BigInteger entry to maximum()");
@@ -146,7 +138,6 @@ public class MathUtilities {
             }
             current = values[i].max(current);
         }
-
         return current;
     }
 
@@ -156,8 +147,8 @@ public class MathUtilities {
      * @param values Array of values.
      * @return minimum value of the provided set.
      */
-    public static BigDecimal minimum(BigDecimal... values) {
-        int len = values.length;
+    public static BigDecimal minimum(final BigDecimal... values) {
+        final int len = values.length;
         if (len == 1) {
             if (values[0] == null) {
                 throw new IllegalArgumentException("Cannot passed null BigDecimal entry to minimum()");
@@ -172,7 +163,6 @@ public class MathUtilities {
             }
             current = values[i].min(current);
         }
-
         return current;
     }
 
@@ -182,8 +172,8 @@ public class MathUtilities {
      * @param values Array of values.
      * @return maximum value of the provided set.
      */
-    public static BigDecimal maximum(BigDecimal... values) {
-        int len = values.length;
+    public static BigDecimal maximum(final BigDecimal... values) {
+        final int len = values.length;
         if (len == 1) {
             if (values[0] == null) {
                 throw new IllegalArgumentException("Cannot passed null BigDecimal entry to maximum()");
@@ -198,7 +188,6 @@ public class MathUtilities {
             }
             current = values[i].max(current);
         }
-
         return current;
     }
 }
