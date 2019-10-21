@@ -100,6 +100,28 @@ public class ComparatorUtils {
         return lens1 - lens2;
     };
 
+    /**
+     * Method name ascending lexicographic sort order, with {@link Method#toString()} as a tiebreaker
+     */
+    public static final Comparator<Method> DFEAULT_METHOD_NAME_ASCENDING_COMPARATOR = (m1, m2) -> {
+        final int comparison = m1.getName().compareTo(m2.getName());
+        if (comparison != 0) {
+            return comparison;
+        }
+        return m1.toString().compareTo(m2.toString());
+    };
+
+    /**
+     * DEFAULT sort order
+     */
+    public static final Comparator<Method> DEFAULT_METHOD_COMPARATOR = (m1, m2) -> {
+        int i1 = m1.getName().hashCode();
+        int i2 = m2.getName().hashCode();
+        if (i1 != i2) {
+            return i1 < i2 ? -1 : 1;
+        }
+        return DFEAULT_METHOD_NAME_ASCENDING_COMPARATOR.compare(m1, m2);
+    };
 
     /**
      * Comparator similar to {@link String#CASE_INSENSITIVE_ORDER}, but handles only ASCII characters
@@ -220,7 +242,7 @@ public class ComparatorUtils {
         if (i1 != i2) {
             return i1 < i2 ? -1 : 1;
         }
-        return NAME_ASCENDING.compare(m1, m2);
+        return DFEAULT_METHOD_NAME_ASCENDING_COMPARATOR.compare(m1, m2);
     };
 
     /**
