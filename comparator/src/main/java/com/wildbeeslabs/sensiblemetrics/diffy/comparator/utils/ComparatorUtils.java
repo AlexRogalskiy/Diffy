@@ -146,8 +146,8 @@ public class ComparatorUtils {
         ValidationUtils.notNull(comparator, "Comparator should not be null");
 
         return Collectors.minBy((a, b) -> {
-            Y element1 = operator.apply(a);
-            Y element2 = operator.apply(b);
+            final Y element1 = operator.apply(a);
+            final Y element2 = operator.apply(b);
             return comparator.compare(element1, element2);
         });
     }
@@ -2015,6 +2015,10 @@ public class ComparatorUtils {
             this.predefinedOrder = Objects.isNull(predefinedOrder) ? null : Arrays.copyOf(predefinedOrder, predefinedOrder.length);
         }
 
+        /*
+         * (non-Javadoc)
+         * @see java.util.NullSafeComparator#safeCompare(java.lang.Object, java.lang.Object)
+         */
         @Override
         public int safeCompare(final T first, final T last) {
             final int index1 = ArrayUtils.indexOf(this.getPredefinedOrder(), first);
@@ -2281,8 +2285,8 @@ public class ComparatorUtils {
         public DeltaComparator(@Nullable final Comparator<? super Delta<T>> comparator, boolean nullsInPriority) {
             super(Objects.isNull(comparator)
                 ? (o1, o2) -> {
-                final int posA = o1.getOriginal().getPosition();
-                final int posB = o2.getOriginal().getPosition();
+                final int posA = Objects.requireNonNull(o1.getOriginal()).getPosition();
+                final int posB = Objects.requireNonNull(o2.getOriginal()).getPosition();
                 if (posA > posB) {
                     return 1;
                 } else if (posA < posB) {
@@ -2391,6 +2395,10 @@ public class ComparatorUtils {
             return INSTANCE;
         }
 
+        /*
+         * (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
         @Override
         public int compare(final T o1, final T o2) {
             return Integer.compare(this.getPriority(o2.getClass()), this.getPriority(o1.getClass()));
@@ -2408,6 +2416,10 @@ public class ComparatorUtils {
      */
     public static class ClassComparator<T> implements Comparator<Class<T>> {
 
+        /*
+         * (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
         @Override
         public int compare(final Class<T> o1, final Class<T> o2) {
             if (o1.isInterface() && !o2.isInterface()) {
@@ -2538,11 +2550,15 @@ public class ComparatorUtils {
             this.instanceOrder = instanceOrder;
         }
 
+        /*
+         * (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
         @Override
         public int compare(final T o1, final T o2) {
             int i1 = this.getOrder(o1);
             int i2 = this.getOrder(o2);
-            return (i1 < i2 ? -1 : (i1 == i2 ? 0 : 1));
+            return (Integer.compare(i1, i2));
         }
 
         private int getOrder(@Nullable final T object) {
