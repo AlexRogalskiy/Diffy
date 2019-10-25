@@ -25,7 +25,6 @@ package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl;
 
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Delta;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface.Patch;
-import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -33,13 +32,14 @@ import org.apache.commons.collections.comparators.ComparableComparator;
 
 import java.util.*;
 
+import static com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils.listOf;
+
 /**
  * Copy from https://code.google.com/p/java-diff-utils/.
  * <p>
  * Describes the patch holding all deltas between the original and revised texts.
  *
  * @param <T> The type of the compared elements in the 'lines'.
- * @author <a href="dm.naumenko@gmail.com">Dmitry Naumenko</a>
  */
 @Data
 @EqualsAndHashCode
@@ -80,9 +80,9 @@ public class DefaultPatch<T> implements Patch<T> {
      * @throws IllegalStateException if can't apply patch
      */
     @Override
-    public Iterable<T> applyTo(final Iterable<T> target) throws IllegalStateException {
-        final List<T> result = ServiceUtils.listOf(target);
-        final ListIterator<Delta<T>> it = getDeltas().listIterator(this.deltas.size());
+    public Iterable<T> applyTo(final Iterable<T> target) {
+        final List<T> result = listOf(target);
+        final ListIterator<Delta<T>> it = this.getDeltas().listIterator(this.deltas.size());
         while (it.hasPrevious()) {
             it.previous().applyTo(result);
         }
@@ -105,7 +105,7 @@ public class DefaultPatch<T> implements Patch<T> {
      */
     @Override
     public List<Delta<T>> getDeltas() {
-        Collections.sort(this.deltas, this.comparator);
+        this.deltas.sort(this.comparator);
         return this.deltas;
     }
 }

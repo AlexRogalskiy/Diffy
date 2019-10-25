@@ -21,7 +21,7 @@ public class GeneralUtilities {
      * @param b A possibly null object to compare
      * @return true if equal, false if not
      */
-    public static boolean safeEquals(Object a, Object b) {
+    public static boolean safeEquals(final Object a, final Object b) {
         if (a == b) return true;
         if (a == null) return false;
         if (b == null) return false;
@@ -29,7 +29,7 @@ public class GeneralUtilities {
         return a.equals(b);
     }
 
-    private static Class<?> loadArrayClass(ClassLoader cl, String aName) {
+    private static Class<?> loadArrayClass(final ClassLoader cl, final String aName) {
         Class<?> componentType = null;
         int[] dimensions = null;
 
@@ -91,14 +91,14 @@ public class GeneralUtilities {
      * @return The class if it could be loaded from the classloader, or
      * null if it could not be found for any reason
      */
-    public static Class<?> loadClass(ClassLoader cl, String cName) {
+    public static Class<?> loadClass(final ClassLoader cl, final String cName) {
         if (cName.startsWith("[")) {
             return loadArrayClass(cl, cName);
         }
 
         try {
             return cl.loadClass(cName);
-        } catch (Throwable th) {
+        } catch (Exception th) {
             return null;
         }
     }
@@ -111,8 +111,8 @@ public class GeneralUtilities {
      *               but this cache
      * @return A weak hash clock implementation
      */
-    public static <K, V> WeakHashClock<K, V> getWeakHashClock(boolean isWeak) {
-        return new WeakHashClockImpl<K, V>(isWeak);
+    public static <K, V> WeakHashClock<K, V> getWeakHashClock(final boolean isWeak) {
+        return new WeakHashClockImpl<>(isWeak);
     }
 
     /**
@@ -123,8 +123,8 @@ public class GeneralUtilities {
      *               but this cache
      * @return A weak hash clock implementation
      */
-    public static <K> WeakHashLRU<K> getWeakHashLRU(boolean isWeak) {
-        return new WeakHashLRUImpl<K>(isWeak);
+    public static <K> WeakHashLRU<K> getWeakHashLRU(final boolean isWeak) {
+        return new WeakHashLRUImpl<>(isWeak);
     }
 
 }

@@ -102,7 +102,7 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
      */
     @NonNull
     public Map<K, V> map() {
-        return ImmutableMap.<K, V>builder().put(this.getFirst(), this.getLast()).build();
+        return ImmutableMap.<K, V>builder().put(Objects.requireNonNull(this.getFirst()), Objects.requireNonNull(this.getLast())).build();
     }
 
     /**
@@ -170,7 +170,7 @@ public class DefaultEntry<K, V> implements Entry<K, V> {
      * @return true if contains, false otherwise
      */
     public boolean hasItem(final Object item) {
-        return Objects.equals(item, this.getFirst()) || Objects.equals(item, this.getFirst());
+        return Objects.equals(item, this.getFirst()) || Objects.equals(item, this.getLast());
     }
 
     /**

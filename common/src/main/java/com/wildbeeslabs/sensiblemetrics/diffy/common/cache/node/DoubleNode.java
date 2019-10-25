@@ -8,7 +8,6 @@ import java.lang.ref.WeakReference;
  *
  * @param <K> key
  * @param <V> value
- * @author jwells
  */
 public class DoubleNode<K, V> {
     private final WeakReference<K> weakKey;
@@ -17,8 +16,8 @@ public class DoubleNode<K, V> {
     private DoubleNode<K, V> next;
     private K hardenedKey;
 
-    public DoubleNode(K key, V value, ReferenceQueue<? super K> queue) {
-        weakKey = new WeakReference<K>(key, queue);
+    public DoubleNode(final K key, final V value, final ReferenceQueue<? super K> queue) {
+        weakKey = new WeakReference<>(key, queue);
         this.value = value;
     }
 
@@ -26,7 +25,7 @@ public class DoubleNode<K, V> {
      * @return the previous
      */
     public DoubleNode<K, V> getPrevious() {
-        return previous;
+        return this.previous;
     }
 
     /**
@@ -40,7 +39,7 @@ public class DoubleNode<K, V> {
      * @return the next
      */
     public DoubleNode<K, V> getNext() {
-        return next;
+        return this.next;
     }
 
     /**
@@ -61,14 +60,14 @@ public class DoubleNode<K, V> {
      * @return the value
      */
     public V getValue() {
-        return value;
+        return this.value;
     }
 
     /**
      * @return the hardenedKey
      */
     public K getHardenedKey() {
-        return hardenedKey;
+        return this.hardenedKey;
     }
 
     /**
@@ -77,6 +76,4 @@ public class DoubleNode<K, V> {
     public void setHardenedKey(K hardenedKey) {
         this.hardenedKey = hardenedKey;
     }
-
-
 }

@@ -77,7 +77,7 @@ public class DefaultChunk<T> implements Chunk<T> {
      * @param target the sequence to verify against.
      */
     @Override
-    public void verify(final List<T> target) throws IllegalStateException {
+    public void verify(final List<T> target) {
         checkState(last() <= target.size(), "Incorrect DefaultChunk: the position of chunk > target size");
         for (int i = 0; i < size(); i++) {
             if (!Objects.equals(target.get(this.position + i), this.lines.get(i))) {

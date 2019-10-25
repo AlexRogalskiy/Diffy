@@ -38,8 +38,7 @@ public final class SimpleCache<K, V> {
      */
 
     @SuppressWarnings("serial")
-    final static class LimitMap<K, V>
-        extends LinkedHashMap<K, V> {
+    static final class LimitMap<K, V> extends LinkedHashMap<K, V> {
         final int mMaxSize;
 
         public LimitMap(int size) {

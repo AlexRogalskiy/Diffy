@@ -23,6 +23,7 @@
  */
 package com.wildbeeslabs.sensiblemetrics.diffy.common.entry.iface;
 
+import com.codepoetics.protonpack.StreamUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.entry.impl.DefaultEntry;
 import com.wildbeeslabs.sensiblemetrics.diffy.common.utils.ServiceUtils;
@@ -171,7 +172,7 @@ public interface Entry<K, V> extends Serializable {
      * @since 2.1
      */
     static <K, V, T> Stream<T> zip(final Stream<K> first, final Stream<V> last, final BiFunction<K, V, T> combiner) {
-        return zip(first, last, combiner);
+        return StreamUtils.zip(first, last, combiner);
     }
 
     /**
