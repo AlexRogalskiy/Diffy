@@ -574,7 +574,7 @@ public interface Matcher<T> extends BaseMatcher<T, T> {
         ValidationUtils.notNull(consumer, "Consumer should not be null");
 
         assert limit >= 0 : "Limit count should be positive or zero";
-        Stream.generate(() -> supplier.get()).limit(limit).filter(matcher::matches).forEach(consumer::accept);
+        Stream.generate(supplier::get).limit(limit).filter(matcher::matches).forEach(consumer::accept);
     }
 
     /**

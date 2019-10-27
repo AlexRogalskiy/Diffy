@@ -141,7 +141,7 @@ public interface BiMatcher<T> extends BaseMatcher<T, Entry<T, T>> {
     /**
      * Default boolean {@link Matcher}
      */
-    Function<Boolean, BiMatcher> DEFAULT_BOOLEAN_MATCHER_FUNC = flag -> DEFAULT_EQUALS_BIMATCHER_FUNC.apply(flag);
+    Function<Boolean, BiMatcher> DEFAULT_BOOLEAN_MATCHER_FUNC = DEFAULT_EQUALS_BIMATCHER_FUNC::apply;
 
     /**
      * Compares provided objects by equality constraint
