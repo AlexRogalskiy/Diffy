@@ -1,6 +1,7 @@
 package com.wildbeeslabs.sensiblemetrics.diffy.converter.service.locale;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.locale.BaseLocaleConverter;
 
 import java.math.BigDecimal;
