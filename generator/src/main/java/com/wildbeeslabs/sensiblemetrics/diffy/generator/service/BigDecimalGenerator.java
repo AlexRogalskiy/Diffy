@@ -8,6 +8,7 @@ import com.wildbeeslabs.sensiblemetrics.diffy.generator.utils.Ranges;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -77,21 +78,20 @@ public class BigDecimalGenerator extends DecimalGenerator<BigDecimal> {
         BigDecimal maxToUse = max;
         int power = status.size() + 1;
 
-        if (minToUse == null && maxToUse == null) {
+        if (Objects.isNull(minToUse) && Objects.isNull(maxToUse)) {
             maxToUse = TEN.pow(power);
             minToUse = maxToUse.negate();
         }
-
-        if (minToUse == null)
+        if (Objects.isNull(minToUse)) {
             minToUse = maxToUse.subtract(TEN.pow(power));
-        else if (maxToUse == null)
+        } else if (Objects.isNull(maxToUse)) {
             maxToUse = minToUse.add(TEN.pow(power));
+        }
+        final int scale = this.decideScale();
 
-        int scale = decideScale();
-
-        BigDecimal minShifted = minToUse.movePointRight(scale);
-        BigDecimal maxShifted = maxToUse.movePointRight(scale);
-        BigInteger range = maxShifted.toBigInteger().subtract(minShifted.toBigInteger());
+        final BigDecimal minShifted = minToUse.movePointRight(scale);
+        final BigDecimal maxShifted = maxToUse.movePointRight(scale);
+        final BigInteger range = maxShifted.toBigInteger().subtract(minShifted.toBigInteger());
 
         BigInteger generated;
         do {
