@@ -26,7 +26,7 @@ public class PayloadMatcher<T> extends AbstractMatcher<Event<T>> {
 
     @Override
     public boolean matches(final Event<T> item) {
-        return Event.class.isInstance(item) && this.payloadMatcher.matches(item);
+        return item != null && this.payloadMatcher.matches(item);
     }
 
     @Override

@@ -63,7 +63,7 @@ public class CollectionOneToOneMatcher<T> extends AbstractMatcher<Iterable<? ext
     }
 
     @Override
-    public boolean matches(Iterable<? extends T> target) {
+    public boolean matches(final Iterable<? extends T> target) {
         if (target instanceof Collection && ((Collection) target).size() != this.matchers.size()) {
             return false;
         }

@@ -47,7 +47,7 @@ public class BooleanMatcher<T> extends AbstractMatcher<T> {
 
     private final boolean matches;
 
-    public BooleanMatcher(boolean matches) {
+    public BooleanMatcher(final boolean matches) {
         this.matches = matches;
     }
 

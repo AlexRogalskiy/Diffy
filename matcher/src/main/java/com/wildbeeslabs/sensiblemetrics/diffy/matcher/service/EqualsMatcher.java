@@ -15,7 +15,7 @@ public class EqualsMatcher<T> extends AbstractMatcher<T> {
 
     private final T expectedValue;
 
-    public static <T> Matcher<T> equalTo(T item) {
+    public static <T> Matcher<T> equalTo(final T item) {
         return new EqualsMatcher<T>(item);
     }
 

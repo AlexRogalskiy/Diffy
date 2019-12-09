@@ -32,9 +32,8 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 /**
  * Logging {@link MatcherEventListener} implementation
@@ -138,6 +137,6 @@ public class LoggingMatcherEventListener<T, S> implements MatcherEventListener<T
      */
     @Override
     public Collection<? extends EventListener<T, S, BaseMatcherEvent<T, S>>> getSupportedListeners() {
-        return asList((EventListener<T, S, BaseMatcherEvent<T, S>>) INSTANCE);
+        return Collections.singletonList((EventListener<T, S, BaseMatcherEvent<T, S>>) INSTANCE);
     }
 }

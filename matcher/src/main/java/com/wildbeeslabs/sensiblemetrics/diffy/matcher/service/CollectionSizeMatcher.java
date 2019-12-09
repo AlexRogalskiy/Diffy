@@ -53,7 +53,7 @@ public class CollectionSizeMatcher<T extends Iterable<?>> extends AbstractMatche
      */
     private final int size;
 
-    public CollectionSizeMatcher(int size) {
+    public CollectionSizeMatcher(final int size) {
         this.size = size;
     }
 

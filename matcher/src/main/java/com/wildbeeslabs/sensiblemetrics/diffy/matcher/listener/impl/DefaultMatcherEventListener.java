@@ -31,10 +31,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 
@@ -112,6 +109,6 @@ public class DefaultMatcherEventListener<T, S> implements MatcherEventListener<T
      */
     @Override
     public Collection<? extends EventListener<T, S, BaseMatcherEvent<T, S>>> getSupportedListeners() {
-        return asList((EventListener<T, S, BaseMatcherEvent<T, S>>) INSTANCE);
+        return Collections.singletonList((EventListener<T, S, BaseMatcherEvent<T, S>>) INSTANCE);
     }
 }
