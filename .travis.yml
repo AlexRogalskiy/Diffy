@@ -31,20 +31,44 @@ addons:
       ##"EFloHmTj8WE5g+NJ0OPbXFYF5+YZ+az4K5seJgCjY+dxw8CbwyNCZPc0rxRbzxevf00hg/OywEfWQM1x9g6JuPvVeoR51kkqF1Ved7gTl4Xi5s7hLYltq2U/4e+iDPyRBJehelw1sclSSgQPQ66YDWlRq9zAT/9NJcz4Nbp89mTwZ9jrOPepy8U0iXwVg167OJhUWowGdv+g3Ffn0ZsuEXJ92XMgd3c7ypb39/c3W72rmL2iNNa/FdtIVRAmOS89371CFdh8vUx8qTGgUyofXfkJTnh1Ha8gf1taZTZsdnfgy9cL3S6wq/rpbbyxMnC6A8JpKRxPgXPCjVGPFgZWzQol8UpiNftnoR/7y4+q6cQJ1Nlo/NEdx+liXK6+WC96tzApf/8Wrsx7pYxSLEExSzeAb8gnSVY/qh9K5Ix8jcyPQPYWNrv8Lo59sbg5f0Lzg5qMAvk6FBJwvB/QCSD+ZUSCEvjhLBhugv9xi+UVVEzcMJMm7yFVeskBoInngD1rjIeZvA8asppJALHw7a9sluJvLQlntd0QYZlYipSwj9ayJYYXdn1sxxeUA2Ldlq9JhUHYo1oAIfD+varTYEksf7XJsCkc3HnlBW1rPdnUG5NHvFcwn2Y0lPcH7AZsL8duIiriq3OGEa9m/4OybkLlxvbKo/RVfp11vUSpJJZpdqk="
   apt:
     update: true
+
 before_install:
   - echo "MAVEN_OPTS='-Xmx2048m -XX:MaxPermSize=512m'" > ~/.mavenrc
   - sudo add-apt-repository -y ppa:linuxuprising/java
-install: true
+
+#install: true
+install:
+  - mvn --settings .travis/settings.xml install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
+
 before_script:
   - pip install --user codecov
   - curl http://www.jpm4j.org/install/script | sh
+  - if [ ! -z "$GPG_SECRET_KEYS" ]; then echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import; fi
+  - if [ ! -z "$GPG_OWNERTRUST" ]; then echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust; fi
+
 script:
   - mvn -U -B -V --fail-at-end -Dgpg.skip=true -Dfile.encoding=UTF-8 -DskipTests=true -Dmaven.javadoc.skip=true -DskipCheckStyle=true clean install -P update-sourcepath-for-lombok
   - mvn sonar:sonar -Dsonar.projectKey=AlexRogalskiy_Diffy -Dsonar.organization=alexrogalskiy-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+
 after_success:
   - mvn clean test jacoco:report
   - codecov --build "$TRAVIS_JOB_NUMBER-jdk11"
   - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+
+deploy:
+  - provider: script
+    script: .travis/deploy.sh
+    skip_cleanup: true
+    on:
+      repo: AlexRogalskiy/diffy
+      branch: master
+  - provider: script
+    script: .travis/deploy.sh
+    skip_cleanup: true
+    on:
+      repo: AlexRogalskiy/diffy
+      tags: true
+
 notifications:
   email:
     on_success: change
@@ -53,6 +77,7 @@ notifications:
 env:
   global:
     - secure: "YNE9GjEV52M9LawKTHLTgNcc8n7LG6884Xq2VGNstdz4xtqphunCZKWpVAPIDKrMdJDjZvji7PT1uZz7aleypSI3sXLjYjvXaGQ3bZ2G9zqCfMfHFTbAb1oW0zhy27gFsQ0+8/EvEd5xNrEuniBbo5ZRMz1WuHLSQvNiiR6QntCziTn0lgvrbnpsX1tFlWIONxvnaMcDFYyV7gDEODDn45ese05wAcqEl2tQBUfMu5BJZ1cw40qvuhfEK+M4Kui6/bcZZbCIRe0We0m4RlFx04G6xZ1GstQJCVDFIi7lZXY55EqAm+7d/XMQoCmmElEWV81GajyH1LOWZL9gq4ZED1TKSZUQcuWVIfANHpNxCzTNZ9fqD4g/MTa0rG2xfBJYcPd58eXuo2xWzZ/Wbkx5kFWr0xegG+6ctiySV7f4uy85n5V1loLTVOFLegJu00uGl4j6o0hHfE8Qc9+DupDB3WgPkKOW9ZMJGgT6v47uYr1qGnze9FhBMboFUPlbDEbbYdCrch4op9v/w1fzegX6QMWcDVa1nqTJ8uG7pbATkIk2AvAbDbofBtDcWq3neXr8zp2hdb/RIa6jeReGhIHiQ8eckhRoOW+eC3omOlqkX2+6rxoH3JtU4eSBovzXkOiq50xsm/vmzhCcLFlLEhyTV1GUQN8SzLzizanTtcAw6y0="
+
 cache:
   directories:
     - "$HOME/.m2/repository"
