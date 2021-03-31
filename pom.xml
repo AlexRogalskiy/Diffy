@@ -191,7 +191,7 @@
 
         <apache.commons.version>3.8.1</apache.commons.version>
         <joda-time.version>2.10.1</joda-time.version>
-        <guava.version>27.0.1-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <jetbrains.version>17.0.0</jetbrains.version>
         <classmate.version>1.5.0</classmate.version>
         <org.jsoup.version>1.12.1</org.jsoup.version>
