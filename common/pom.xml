@@ -33,7 +33,7 @@
         <surefire.forkNumber>0</surefire.forkNumber>
 
         <validation-api.version>2.0.1.Final</validation-api.version>
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <micrometer-core.version>1.1.4</micrometer-core.version>
         <generex.version>1.0.2</generex.version>
     </properties>
