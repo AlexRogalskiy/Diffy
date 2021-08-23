@@ -194,7 +194,7 @@
         <guava.version>27.0.1-jre</guava.version>
         <jetbrains.version>17.0.0</jetbrains.version>
         <classmate.version>1.5.0</classmate.version>
-        <org.jsoup.version>1.12.1</org.jsoup.version>
+        <org.jsoup.version>1.14.2</org.jsoup.version>
 
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
