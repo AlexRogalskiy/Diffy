@@ -186,7 +186,7 @@
         <commons-validator.version>1.6</commons-validator.version>
         <commons-text.version>1.6</commons-text.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <commons-net.version>3.6</commons-net.version>
+        <commons-net.version>3.9.0</commons-net.version>
         <commons-codec.version>1.11</commons-codec.version>
 
         <apache.commons.version>3.8.1</apache.commons.version>
